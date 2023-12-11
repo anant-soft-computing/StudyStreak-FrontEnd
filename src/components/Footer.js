@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from '../img/logo/Logo.png';
+import logo from "../img/logo/Logo.png";
 
 const Footer = () => {
   return (
@@ -53,7 +53,8 @@ const Footer = () => {
             <div className="col-xl-6 col-lg-6">
               <div className="footerarea__copyright__content footerarea__copyright__content__2">
                 <p>
-                  Copyright © <span>2023</span> by StudyStreak. All Rights Reserved.
+                  Copyright © <span>2023</span> by StudyStreak. All Rights
+                  Reserved.
                 </p>
               </div>
             </div>

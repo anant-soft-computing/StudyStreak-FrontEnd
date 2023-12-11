@@ -5,18 +5,12 @@ import img1 from "../../img/education/hero_shape2.png";
 import img2 from "../../img/education/hero_shape3.png";
 import img3 from "../../img/education/hero_shape4.png";
 import img4 from "../../img/education/hero_shape5.png";
-// import img5 from "../../img/herobanner/herobanner__1.png";
-// import img6 from "../../img/herobanner/herobanner__2.png";
-// import img7 from "../../img/herobanner/herobanner__3.png";
-// import img8 from "../../img/herobanner/herobanner__5.png";
-import DarkNight from "../DarkNight";
 import { Link } from "react-router-dom";
 import Footer from "../Footer";
 
 const Login = () => {
   return (
     <>
-      <DarkNight />
       <TopBar />
       <Navbar />
       <div className="body__wrapper">

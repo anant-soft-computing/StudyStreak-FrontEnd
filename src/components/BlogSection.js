@@ -33,7 +33,7 @@ const BlogSection = () => {
               </div>
               <div className="blogarea__text__wraper">
                 <h3>
-                  <Link to="#">
+                  <Link to="/">
                     It is a long established fact that a reader will be Standard
                     Part
                   </Link>
@@ -62,22 +62,22 @@ const BlogSection = () => {
                   <div className="blogarea__list">
                     <ul>
                       <li>
-                        <Link to="#">
+                        <Link to="http://facebook.com/">
                           <i className="icofont-facebook"></i>
                         </Link>
                       </li>
                       <li>
-                        <Link to="#">
+                        <Link to="https://www.youtube.com/">
                           <i className="icofont-youtube-play"></i>
                         </Link>
                       </li>
                       <li>
-                        <Link to="#">
+                        <Link to="https://www.instagram.com/">
                           <i className="icofont-instagram"></i>
                         </Link>
                       </li>
                       <li>
-                        <Link to="#">
+                        <Link to="http://twitter.com/">
                           <i className="icofont-twitter"></i>
                         </Link>
                       </li>
@@ -115,7 +115,7 @@ const BlogSection = () => {
               </div>
               <div className="blogarea__text__wraper blogarea__text__wraper__2">
                 <h3>
-                  <Link to="#">
+                  <Link to="/">
                     It is a long established fact that a reader will be Standard
                     Part
                   </Link>

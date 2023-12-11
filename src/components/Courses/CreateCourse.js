@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import DarkNight from "../DarkNight";
 import TopBar from "../Topbar";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
@@ -8,16 +7,15 @@ import img1 from "../../img/herobanner/herobanner__1.png";
 import img2 from "../../img/herobanner/herobanner__2.png";
 import img3 from "../../img/herobanner/herobanner__3.png";
 import img4 from "../../img/herobanner/herobanner__5.png";
-import dashboard8 from '../../img/dashbord/dashbord__8.jpg';
 import dashboard4 from '../../img/dashbord/dashbord__4.jpg';
 import dashboard5 from '../../img/dashbord/dashbord__5.jpg';
-import dashboard9 from '../../img/dashbord/dashbord__9.jpg';
 import dashboard7 from '../../img/dashbord/dashbord__7.jpg';
+import dashboard8 from '../../img/dashbord/dashbord__8.jpg';
+import dashboard9 from '../../img/dashbord/dashbord__9.jpg';
 
 const CreateCourse = () => {
   return (
     <>
-      <DarkNight />
       <TopBar />
       <Navbar />
       <div className="body__wrapper">

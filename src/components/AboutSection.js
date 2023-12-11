@@ -16,7 +16,7 @@ const AboutSection = () => {
           >
             <div className="section__title aboutarea__3__section__title">
               <div className="section__title__button">
-                <div className="default__small__button">Course List</div>
+                <div className="default__small__button">About Us</div>
               </div>
               <div className="section__title__heading">
                 <h2>

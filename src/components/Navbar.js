@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../img/logo/Logo.png";
+import Dashboard from "./Dashboard";
 
 const Navbar = () => {
   return (
@@ -37,10 +38,11 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li className="mega__menu position-static">
-                      <Link className="headerarea__has__dropdown" to="/">
+                      <Link className="headerarea__has__dropdown" to="/blogs">
                         Blogs
                       </Link>
                     </li>
+                    <Dashboard />
                     <li className="mega__menu position-static">
                       <Link className="headerarea__has__dropdown" to="/">
                         Contact Us

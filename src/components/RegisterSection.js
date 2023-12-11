@@ -16,17 +16,10 @@ const RegisterSection = () => {
             <div className="registerarea__wraper">
               <div className="section__title registerarea__section__title">
                 <div className="section__title__button">
-                  <div className="default__small__button">Course List</div>
+                  <div className="default__small__button">Register</div>
                 </div>
                 <div className="section__title__heading heading__underline">
                   <h2>Register Now</h2>
-                </div>
-              </div>
-              <div className="registerarea__content">
-                <div className="registerarea__video">
-                  <div className="registerarea__para">
-                    <p>Study Towards Your Dream Destination</p>
-                  </div>
                 </div>
               </div>
             </div>

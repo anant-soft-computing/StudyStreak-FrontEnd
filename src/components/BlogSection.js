@@ -13,10 +13,10 @@ const BlogSection = () => {
           <div className="col-xl-12">
             <div className="section__title text-center">
               <div className="section__title__button">
-                <div className="default__small__button">News & Blogs</div>
+                <div className="default__small__button">Blogs</div>
               </div>
               <div className="section__title__heading">
-                <h2>Latest News & Blog</h2>
+                <h2>Latest Blogs</h2>
               </div>
             </div>
           </div>
@@ -98,7 +98,7 @@ const BlogSection = () => {
               </div>
               <div className="blogarea__text__wraper blogarea__text__wraper__2">
                 <h3>
-                  <Link to="#">
+                  <Link to="/">
                     It is a long established fact that a reader will be Standard
                     Part
                   </Link>

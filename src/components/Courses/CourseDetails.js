@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import DarkNight from "../DarkNight";
 import TopBar from "../Topbar";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
@@ -11,7 +10,7 @@ import img4 from "../../img/herobanner/herobanner__5.png";
 import blog7 from "../../img/blog/blog_7.png";
 import blog8 from "../../img/blog/blog_8.png";
 import blog10 from "../../img/blog/blog_10.png";
-import video from "../../img/dashbord/video.png";
+import video from "../../img/dashbord/video.png"; 
 import teacher1 from "../../img/teacher/teacher__1.png";
 import teacher2 from "../../img/teacher/teacher__2.png";
 import teacher3 from "../../img/teacher/teacher__3.png";
@@ -30,7 +29,6 @@ import blogDetail8 from '../../img/blog-details/blog-details__8.png';
 const CourseDetails = () => {
   return (
     <>
-      <DarkNight />
       <TopBar />
       <Navbar />
       <div className="body__wrapper">
@@ -99,7 +97,6 @@ const CourseDetails = () => {
                             className="video-btn"
                             to="https://www.youtube.com/watch?v=vHdclsdkp28"
                           >
-                            {" "}
                             <img src={video} alt="" />
                           </Link>
                         </div>
@@ -297,20 +294,18 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         22 minutes
                                       </span>
                                       <Link to="lesson.html">
                                         <span className="question">
-                                          <i className="icofont-eye"></i>{" "}
+                                          <i className="icofont-eye"></i>
                                           Preview
                                         </span>
                                       </Link>
@@ -320,14 +315,12 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
                                         <i className="icofont-clock-time"></i>{" "}
                                         05 minutes
                                       </span>
@@ -343,15 +336,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         10 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -365,14 +356,12 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
                                         <i className="icofont-clock-time"></i>{" "}
                                         15 minutes
                                       </span>
@@ -387,14 +376,12 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
                                         <i className="icofont-clock-time"></i>{" "}
                                         08 minutes
                                       </span>
@@ -409,7 +396,6 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-file-text"></i>
                                       <h5>
-                                        {" "}
                                         <span>Lesson 03 Exam :</span>
                                       </h5>
                                     </div>
@@ -446,15 +432,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         22 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -468,15 +452,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         05 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -490,15 +472,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         10 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -512,15 +492,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         15 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -534,15 +512,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         08 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -556,7 +532,6 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-file-text"></i>
                                       <h5>
-                                        {" "}
                                         <span>Lesson 03 Exam :</span>
                                       </h5>
                                     </div>
@@ -596,15 +571,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         22 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -618,15 +591,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         05 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -640,15 +611,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         10 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -662,15 +631,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         15 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -684,15 +651,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         08 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -706,7 +671,6 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-file-text"></i>
                                       <h5>
-                                        {" "}
                                         <span>Lesson 03 Exam :</span>
                                       </h5>
                                     </div>
@@ -743,15 +707,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         22 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -765,15 +727,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         05 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -787,15 +747,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         10 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -809,15 +767,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         15 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -831,14 +787,12 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
                                         <i className="icofont-clock-time"></i>{" "}
                                         08 minutes
                                       </span>
@@ -853,7 +807,6 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-file-text"></i>
                                       <h5>
-                                        {" "}
                                         <span>Lesson 03 Exam :</span>
                                       </h5>
                                     </div>
@@ -890,15 +843,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         22 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -912,15 +863,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         05 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -934,15 +883,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         10 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -956,15 +903,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         15 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -978,15 +923,13 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        {" "}
                                         <span>Video :</span> Lorem ipsum dolor
                                         sit amet.
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
                                       <span className="time">
-                                        {" "}
-                                        <i className="icofont-clock-time"></i>{" "}
+                                        <i className="icofont-clock-time"></i>
                                         08 minutes
                                       </span>
                                       <Link to="lesson.html">
@@ -1000,7 +943,6 @@ const CourseDetails = () => {
                                     <div className="scc__info">
                                       <i className="icofont-file-text"></i>
                                       <h5>
-                                        {" "}
                                         <span>Lesson 03 Exam :</span>
                                       </h5>
                                     </div>
@@ -1383,7 +1325,7 @@ const CourseDetails = () => {
                                       </Link>
                                     </li>
                                     <li>
-                                      <Link to=" ">
+                                      <Link to="https://www.instagram.com/">
                                         <i className="icofont-instagram"></i>
                                       </Link>
                                     </li>
@@ -1473,7 +1415,7 @@ const CourseDetails = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link to=" ">
+                          <Link to="https://www.instagram.com/">
                             <i className="icofont-instagram"></i>
                           </Link>
                         </li>
@@ -2007,7 +1949,6 @@ const CourseDetails = () => {
                                 className="video-btn"
                                 to="https://www.youtube.com/watch?v=vHdclsdkp28"
                               >
-                                {" "}
                                 <img src={video} alt="" />
                               </Link>
                             </div>
@@ -2125,7 +2066,7 @@ const CourseDetails = () => {
                             </Link>
                           </li>
                           <li>
-                            <Link to=" ">
+                            <Link to="https://www.instagram.com/">
                               <i className="icofont-instagram"></i>
                             </Link>
                           </li>
@@ -2135,7 +2076,7 @@ const CourseDetails = () => {
                             </Link>
                           </li>
                           <li>
-                            <Link to=" ">
+                            <Link to="https://www.instagram.com/">
                               <i className="icofont-instagram"></i>
                             </Link>
                           </li>

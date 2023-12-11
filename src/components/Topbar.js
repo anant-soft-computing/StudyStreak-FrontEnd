@@ -37,7 +37,7 @@ const TopBar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/">
+                    <Link to="https://www.instagram.com/">
                       <i className="icofont-instagram"></i>
                     </Link>
                   </li>

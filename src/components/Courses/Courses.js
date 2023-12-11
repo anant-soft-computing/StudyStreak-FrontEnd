@@ -1,30 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import DarkNight from "../DarkNight";
 import Footer from "../Footer";
 import Navbar from "../Navbar";
 import TopBar from "../Topbar";
-// import img1 from "../../img/herobanner/herobanner__1.png";
-// import img2 from "../../img/herobanner/herobanner__2.png";
-// import img3 from "../../img/herobanner/herobanner__3.png";
-// import img4 from "../../img/herobanner/herobanner__5.png";
 import gridImg1 from "../../img/grid/grid_1.png";
-// import gridImg1Small from "../../img/grid/grid_small_1.jpg";
 import gridImg2 from "../../img/grid/grid_2.png";
-// import gridImg2Small from "../../img/grid/grid_small_2.jpg";
 import gridImg3 from "../../img/grid/grid_3.png";
-// import gridImg3Small from "../../img/grid/grid_small_3.jpg";
 import gridImg4 from "../../img/grid/grid_4.png";
-// import gridImg4Small from "../../img/grid/grid_small_4.jpg";
 import gridImg5 from "../../img/grid/grid_5.png";
-// import gridImg5Small from "../../img/grid/grid_small_5.jpg";
 import gridImg6 from "../../img/grid/grid_6.png";
-
 
 const Courses = () => {
   return (
     <>
-      <DarkNight />
       <TopBar />
       <Navbar />
       <div className="body__wrapper">

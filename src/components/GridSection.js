@@ -227,7 +227,6 @@ const GridSection = () => {
               </div>
             </div>
           </div>
-          {/* End of a single grid item */}
         </div>
       </div>
     </div>

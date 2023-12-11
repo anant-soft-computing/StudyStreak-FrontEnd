@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import video1 from "../img/icon/video.png";
 import register1 from "../img/register/register__1.png";
 import register2 from "../img/register/register__2.png";
 import register3 from "../img/register/register__3.png";
@@ -20,19 +19,13 @@ const RegisterSection = () => {
                   <div className="default__small__button">Course List</div>
                 </div>
                 <div className="section__title__heading heading__underline">
-                  <h2>
-                    Register Now
-                   
-                  </h2>
+                  <h2>Register Now</h2>
                 </div>
               </div>
               <div className="registerarea__content">
                 <div className="registerarea__video">
-                  
                   <div className="registerarea__para">
-                    <p>
-                      Study Towards Your Dream Destination
-                    </p>
+                    <p>Study Towards Your Dream Destination</p>
                   </div>
                 </div>
               </div>

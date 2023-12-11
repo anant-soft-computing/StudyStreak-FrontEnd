@@ -1,5 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import img1 from "../img/service/service__shape__1.png";
+import img2 from "../img/service/service__shape__bg__1.png";
+import img3 from "../img/icon/chat-app.png";
+import img4 from "../img/icon/machine-learning.png";
+import img5 from "../img/icon/virtual-reality.png";
+import img6 from "../img/icon/artificial-intelligence.png";
 
 const PopulerArea = () => {
   return (
@@ -11,7 +17,7 @@ const PopulerArea = () => {
             data-aos="fade-up"
           >
             <div className="service__animate__shape__1">
-              <img src="img/service/service__shape__1.png" alt="" />
+              <img src={img1} alt="" />
             </div>
             <div className="populerarea__content__wraper__2">
               <div className="section__title">
@@ -41,7 +47,7 @@ const PopulerArea = () => {
           </div>
           <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 service__wrap__content">
             <div className="service__animate__shape__2">
-              <img src="img/service/service__shape__bg__1.png" alt="" />
+              <img src={img2} alt="" />
             </div>
             <div className="row">
               <div
@@ -50,21 +56,21 @@ const PopulerArea = () => {
               >
                 <div className="single__service">
                   <div className="service__img">
-                    <img src="img/icon/chat-app.png" alt="" />
+                    <img src={img3} alt="" />
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="course-details.html">Instant Result</Link>
+                      <Link to="/course-details">Instant Result</Link>
                     </h3>
                   </div>
                 </div>
                 <div className="single__service">
                   <div className="service__img">
-                    <img src="img/icon/machine-learning.png" alt="" />
+                    <img src={img4} alt="" />
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="course-details.html">Real Time Tutor Support</Link>
+                      <Link to="/course-details">Real Time Tutor Support</Link>
                     </h3>
                   </div>
                   <div className="service__small__img">
@@ -90,11 +96,11 @@ const PopulerArea = () => {
               >
                 <div className="single__service ss_margin">
                   <div className="service__img">
-                    <img src="img/icon/virtual-reality.png" alt="" />
+                    <img src={img5} alt="" />
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="course-details.html">Live Classes</Link>
+                      <Link to="/course-details">Live Classes</Link>
                     </h3>
                   </div>
                   <div className="service__small__img">
@@ -115,11 +121,11 @@ const PopulerArea = () => {
                 </div>
                 <div className="single__service">
                   <div className="service__img">
-                    <img src="img/icon/artificial-intelligence.png" alt="" />
+                    <img src={img6} alt="" />
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="course-details.html">Great Community</Link>
+                      <Link to="/course-details">Great Community</Link>
                     </h3>
                   </div>
                   <div className="service__small__img">

@@ -16,6 +16,9 @@ const Dashboard = () => {
             </Link>
             <ul className="headerarea__submenu--third">
               <li>
+                <Link to="/dashboard/student-dashboard">Dashboard</Link>
+              </li>
+              <li>
                 <Link to="/dashboard/student-my-courses">My Courses</Link>
               </li>
             </ul>

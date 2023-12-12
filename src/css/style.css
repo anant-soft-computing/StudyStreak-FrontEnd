@@ -1050,12 +1050,15 @@ Header Area
   text-align: center;
 }
 
+.headerarea__main__menu nav ul {
+  margin-top: 15px;
+}
+
 .headerarea__main__menu nav ul>li {
   position: relative;
 }
 
 .headerarea__main__menu nav ul>li a {
-  margin-top: 17px;
   padding: 5px 20px;
   display: block;
   font-size: 16px;

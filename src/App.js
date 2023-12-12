@@ -9,6 +9,7 @@ import Blogs from "./pages/Blogs/Blogs";
 import BlogDetail from "./components/BlogDetail/BlogDetail";
 import Tests from "./pages/Tests/Tests";
 import MyCourses from "./components/Dashboard/Student/MyCourses";
+import Dashboard from "./components/Dashboard/Student/Dashboard";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/blog-detail" element={<BlogDetail />} />
         <Route path="/tests" element={<Tests />} />
         <Route path="/dashboard/student-my-courses" element={<MyCourses />} />
+        <Route path="/dashboard/student-dashboard" element={<Dashboard />} />
       </Routes>
     </Router>
   );

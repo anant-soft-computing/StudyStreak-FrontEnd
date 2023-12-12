@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import register1 from "../img/register/register__1.png";
-import register2 from "../img/register/register__2.png";
-import register3 from "../img/register/register__3.png";
+import register1 from "../../img/register/register__1.png";
+import register2 from "../../img/register/register__2.png";
+import register3 from "../../img/register/register__3.png";
 
 const RegisterSection = () => {
   return (

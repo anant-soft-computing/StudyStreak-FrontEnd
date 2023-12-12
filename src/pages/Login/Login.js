@@ -1,19 +1,19 @@
 import React, { useState } from "react";
-import Navbar from "../Navbar";
-import TopBar from "../Topbar";
 import img1 from "../../img/education/hero_shape2.png";
 import img2 from "../../img/education/hero_shape3.png";
 import img3 from "../../img/education/hero_shape4.png";
 import img4 from "../../img/education/hero_shape5.png";
 import { Link } from "react-router-dom";
-import Footer from "../Footer";
+import TopBar from "../../components/TopBar/TopBar";
+import NavBar from "../../components/NavBar/NavBar";
+import Footer from "../../components/Footer/Footer";
 
 const Login = () => {
   const [otp, setOtp] = useState(false);
   return (
     <>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="loginarea sp_top_100 sp_bottom_100">
@@ -150,10 +150,10 @@ const Login = () => {
 
                         <div className="login__social__option">
                           {otp ? (
-                            <Link onClick={() => setOtp(false)}>Log-in</Link>
+                            <Link onClick={() => setOtp(false)}>Log In</Link>
                           ) : (
                             <Link onClick={() => setOtp(true)}>
-                              Log-in with OTP
+                              Log In with OTP
                             </Link>
                           )}
                         </div>

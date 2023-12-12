@@ -1,14 +1,14 @@
 import React from "react";
-import Footer from "../../Footer";
-import TopBar from "../../Topbar";
-import Navbar from "../../Navbar";
+import Footer from "../../Footer/Footer";
 import { Link } from "react-router-dom";
+import TopBar from "../../TopBar/TopBar";
+import NavBar from "../../NavBar/NavBar";
 
 const MyCourses = () => {
   return (
     <>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>

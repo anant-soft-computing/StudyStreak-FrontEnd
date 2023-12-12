@@ -1,20 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Footer from "../Footer";
-import Navbar from "../Navbar";
-import TopBar from "../Topbar";
+import Footer from "../../components/Footer/Footer";
 import gridImg1 from "../../img/grid/grid_1.png";
 import gridImg2 from "../../img/grid/grid_2.png";
 import gridImg3 from "../../img/grid/grid_3.png";
 import gridImg4 from "../../img/grid/grid_4.png";
 import gridImg5 from "../../img/grid/grid_5.png";
 import gridImg6 from "../../img/grid/grid_6.png";
+import TopBar from "../../components/TopBar/TopBar";
+import NavBar from "../../components/NavBar/NavBar";
 
 const Courses = () => {
   return (
     <>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
@@ -205,7 +205,7 @@ const Courses = () => {
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 <img src={gridImg1} alt="gridImg1" />
                               </Link>
                             </div>
@@ -224,7 +224,7 @@ const Courses = () => {
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to="/course-details">
+                                  <Link to="/course-detail">
                                     Foundation course to under stand about
                                     softwere
                                   </Link>
@@ -281,7 +281,7 @@ const Courses = () => {
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 <img src={gridImg3} alt="grid" />
                               </Link>
                             </div>
@@ -300,7 +300,7 @@ const Courses = () => {
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to="/course-details">
+                                  <Link to="/course-detail">
                                     Minws course to under stand about solution
                                   </Link>
                                 </h3>
@@ -321,7 +321,7 @@ const Courses = () => {
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 <img src={gridImg4} alt="grid" />
                               </Link>
                             </div>
@@ -340,7 +340,7 @@ const Courses = () => {
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to="/course-details">
+                                  <Link to="/course-detail">
                                     Design course to under stand about solution
                                   </Link>
                                 </h3>
@@ -361,7 +361,7 @@ const Courses = () => {
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 <img src={gridImg5} alt="grid" />
                               </Link>
                             </div>
@@ -380,7 +380,7 @@ const Courses = () => {
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to="/course-details">
+                                  <Link to="/course-detail">
                                     Data course to under stand about solution
                                   </Link>
                                 </h3>
@@ -401,7 +401,7 @@ const Courses = () => {
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 <img src={gridImg6} alt="grid" />
                               </Link>
                             </div>
@@ -420,7 +420,7 @@ const Courses = () => {
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to="/course-details">
+                                  <Link to="/course-detail">
                                     Big data to under stand about solution
                                     pacage
                                   </Link>
@@ -442,7 +442,7 @@ const Courses = () => {
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 <img src={gridImg1} alt="grid" />
                               </Link>
                             </div>
@@ -461,7 +461,7 @@ const Courses = () => {
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to="/course-details">
+                                  <Link to="/course-detail">
                                     Foundation course to under stand about
                                     softwere
                                   </Link>
@@ -518,7 +518,7 @@ const Courses = () => {
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 <img src={gridImg3} alt="grid" />
                               </Link>
                             </div>
@@ -537,7 +537,7 @@ const Courses = () => {
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to="/course-details">
+                                  <Link to="/course-detail">
                                     Minws course to under stand about solution
                                   </Link>
                                 </h3>
@@ -565,7 +565,7 @@ const Courses = () => {
                         data-aos="fade-up"
                       >
                         <div className="gridarea__img">
-                          <Link to="/course-details">
+                          <Link to="/course-detail">
                             <img src={gridImg1} alt="grid" />
                           </Link>
                         </div>
@@ -583,7 +583,7 @@ const Courses = () => {
                           </div>
                           <div className="gridarea__heading">
                             <h3>
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 Become a product Manager learn the skills & job.
                               </Link>
                             </h3>
@@ -615,7 +615,7 @@ const Courses = () => {
                           </div>
                           <div className="gridarea__heading">
                             <h3>
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 Foundation course to under stand about softwere
                               </Link>
                             </h3>
@@ -631,7 +631,7 @@ const Courses = () => {
                         data-aos="fade-up"
                       >
                         <div className="gridarea__img">
-                          <Link to="/course-details">
+                          <Link to="/course-detail">
                             <img src={gridImg3} alt="grid" />
                           </Link>
                         </div>
@@ -649,7 +649,7 @@ const Courses = () => {
                           </div>
                           <div className="gridarea__heading">
                             <h3>
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 Strategy law and with for organization
                                 Foundation
                               </Link>
@@ -666,7 +666,7 @@ const Courses = () => {
                         data-aos="fade-up"
                       >
                         <div className="gridarea__img">
-                          <Link to="/course-details">
+                          <Link to="/course-detail">
                             <img src={gridImg4} alt="grid" />
                           </Link>
                         </div>
@@ -684,7 +684,7 @@ const Courses = () => {
                           </div>
                           <div className="gridarea__heading">
                             <h3>
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 The business Intelligence analyst with Course &
                                 2023
                               </Link>
@@ -701,7 +701,7 @@ const Courses = () => {
                         data-aos="fade-up"
                       >
                         <div className="gridarea__img">
-                          <Link to="/course-details">
+                          <Link to="/course-detail">
                             <img src={gridImg5} alt="grid" />
                           </Link>
                         </div>
@@ -719,7 +719,7 @@ const Courses = () => {
                           </div>
                           <div className="gridarea__heading">
                             <h3>
-                              <Link to="/course-details">
+                              <Link to="/course-detail">
                                 Become a product Manager learn the skills & job.
                               </Link>
                             </h3>

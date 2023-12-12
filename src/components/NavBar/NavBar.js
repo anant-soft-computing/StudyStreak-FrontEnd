@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../img/logo/Logo.png";
-import Dashboard from "./Dashboard";
+import logo from "../../img/logo/Logo.png";
+import Dashboard from "../Dashboard";
 
-const Navbar = () => {
+const NavBar = () => {
   return (
     <>
       <header>
@@ -33,7 +33,7 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li className="mega__menu position-static">
-                      <Link className="headerarea__has__dropdown" to="/">
+                      <Link className="headerarea__has__dropdown" to="/tests">
                         Tests
                       </Link>
                     </li>
@@ -68,4 +68,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavBar;

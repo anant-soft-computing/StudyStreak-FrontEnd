@@ -1,70 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import TopBar from "../Topbar";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
-import img1 from "../../img/herobanner/herobanner__1.png";
-import img2 from "../../img/herobanner/herobanner__2.png";
-import img3 from "../../img/herobanner/herobanner__3.png";
-import img4 from "../../img/herobanner/herobanner__5.png";
-import dashboard4 from '../../img/dashbord/dashbord__4.jpg';
-import dashboard5 from '../../img/dashbord/dashbord__5.jpg';
-import dashboard7 from '../../img/dashbord/dashbord__7.jpg';
-import dashboard8 from '../../img/dashbord/dashbord__8.jpg';
-import dashboard9 from '../../img/dashbord/dashbord__9.jpg';
+import TopBar from "../../components/TopBar/TopBar";
+import NavBar from "../../components/NavBar/NavBar";
+import Footer from "../../components/Footer/Footer";
+import dashboard4 from "../../img/dashbord/dashbord__4.jpg";
+import dashboard5 from "../../img/dashbord/dashbord__5.jpg";
+import dashboard7 from "../../img/dashbord/dashbord__7.jpg";
+import dashboard8 from "../../img/dashbord/dashbord__8.jpg";
+import dashboard9 from "../../img/dashbord/dashbord__9.jpg";
 
 const CreateCourse = () => {
   return (
     <>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
-          <div className="breadcrumbarea">
-            <div className="container">
-              <div className="row">
-                <div className="col-xl-12">
-                  <div className="breadcrumb__content__wraper" data-aos="fade-up">
-                    <div className="breadcrumb__title">
-                      <h2 className="heading">Create Course</h2>
-                    </div>
-                    <div className="breadcrumb__inner">
-                      <ul>
-                        <li>
-                          <Link to="/">Home</Link>
-                        </li>
-                        <li>Create Course</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="shape__icon__2">
-              <img
-                className=" shape__icon__img shape__icon__img__1"
-                src={img1}
-                alt=""
-              />
-              <img
-                className=" shape__icon__img shape__icon__img__2"
-                src={img2}
-                alt=""
-              />
-              <img
-                className=" shape__icon__img shape__icon__img__3"
-                src={img3}
-                alt=""
-              />
-              <img
-                className=" shape__icon__img shape__icon__img__4"
-                src={img4}
-                alt=""
-              />
-            </div>
-          </div>
           <div className="create__course sp_100">
             <div className="container">
               <div className="row">
@@ -535,50 +488,32 @@ const CreateCourse = () => {
                             <div className="row">
                               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div className="create__course__single__img">
-                                  <img
-                                    src={dashboard8}
-                                    alt=""
-                                  />
+                                  <img src={dashboard8} alt="" />
                                 </div>
                               </div>
                               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div className="create__course__single__img">
-                                  <img
-                                    src={dashboard4}
-                                    alt=""
-                                  />
+                                  <img src={dashboard4} alt="" />
                                 </div>
                               </div>
                               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div className="create__course__single__img">
-                                  <img
-                                    src={dashboard5}
-                                    alt=""
-                                  />
+                                  <img src={dashboard5} alt="" />
                                 </div>
                               </div>
                               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div className="create__course__single__img">
-                                  <img
-                                    src={dashboard9}
-                                    alt=""
-                                  />
+                                  <img src={dashboard9} alt="" />
                                 </div>
                               </div>
                               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div className="create__course__single__img">
-                                  <img
-                                    src={dashboard7}
-                                    alt=""
-                                  />
+                                  <img src={dashboard7} alt="" />
                                 </div>
                               </div>
                               <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
                                 <div className="create__course__single__img">
-                                  <img
-                                    src={dashboard8}
-                                    alt=""
-                                  />
+                                  <img src={dashboard8} alt="" />
                                 </div>
                               </div>
                             </div>
@@ -588,11 +523,6 @@ const CreateCourse = () => {
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-xl-4 col-lg-4 col-md-6 col-12">
-                      <div className="create__course__bottom__button">
-                        <Link to=" ">Preview</Link>
-                      </div>
-                    </div>
                     <div className="col-xl-8 col-lg-8 col-md-6 col-12">
                       <div className="create__course__bottom__button">
                         <Link to=" ">Create Course</Link>

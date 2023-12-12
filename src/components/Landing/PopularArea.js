@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import img1 from "../img/service/service__shape__1.png";
-import img2 from "../img/service/service__shape__bg__1.png";
-import img3 from "../img/icon/chat-app.png";
-import img4 from "../img/icon/machine-learning.png";
-import img5 from "../img/icon/virtual-reality.png";
-import img6 from "../img/icon/artificial-intelligence.png";
+import img1 from "../../img/service/service__shape__1.png";
+import img2 from "../../img/service/service__shape__bg__1.png";
+import img3 from "../../img/icon/chat-app.png";
+import img4 from "../../img/icon/machine-learning.png";
+import img5 from "../../img/icon/virtual-reality.png";
+import img6 from "../../img/icon/artificial-intelligence.png";
 
 const PopulerArea = () => {
   return (
@@ -60,7 +60,7 @@ const PopulerArea = () => {
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="/course-details">Instant Result</Link>
+                      <Link to="/course-detail">Instant Result</Link>
                     </h3>
                   </div>
                 </div>
@@ -70,7 +70,7 @@ const PopulerArea = () => {
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="/course-details">Real Time Tutor Support</Link>
+                      <Link to="/course-detail">Real Time Tutor Support</Link>
                     </h3>
                   </div>
                   <div className="service__small__img">
@@ -100,7 +100,7 @@ const PopulerArea = () => {
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="/course-details">Live Classes</Link>
+                      <Link to="/course-detail">Live Classes</Link>
                     </h3>
                   </div>
                   <div className="service__small__img">
@@ -125,7 +125,7 @@ const PopulerArea = () => {
                   </div>
                   <div className="service__content service__content__2">
                     <h3 className="logo_title">
-                      <Link to="/course-details">Great Community</Link>
+                      <Link to="/course-detail">Great Community</Link>
                     </h3>
                   </div>
                   <div className="service__small__img">

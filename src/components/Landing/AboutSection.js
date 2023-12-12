@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import about5 from "../img/about/about_5.png";
-import about6 from "../img/about/about_6.png";
-import about7 from "../img/about/about_7.png";
-import about9 from "../img/about/about_9.png";
+import about5 from "../../img/about/about_5.png";
+import about6 from "../../img/about/about_6.png";
+import about7 from "../../img/about/about_7.png";
+import about9 from "../../img/about/about_9.png";
 
 const AboutSection = () => {
   return (

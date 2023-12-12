@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import price1 from "../img/icon/price__1.png";
-import price2 from "../img/icon/price__2.png";
-import price3 from "../img/icon/price__3.png";
+import price1 from "../../img/icon/price__1.png";
+import price2 from "../../img/icon/price__2.png";
+import price3 from "../../img/icon/price__3.png";
 
 const PricingArea = () => {
   return (

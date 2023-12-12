@@ -10997,6 +10997,10 @@ Error
   color: var(--whiteColor);
 }
 
+.login__social__option a {
+  text-decoration: none;
+}
+
 .loginarea__wraper form .login__button a {
   width: 100%;
 }

@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import TopBar from "../Topbar";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
+import Footer from "../Footer/Footer";
 import blog7 from "../../img/blog/blog_7.png";
 import blog8 from "../../img/blog/blog_8.png";
 import blog10 from "../../img/blog/blog_10.png";
@@ -10,12 +8,14 @@ import video from "../../img/dashbord/video.png";
 import blogDetail6 from "../../img/blog-details/blog-details__6.png";
 import blogDetail7 from "../../img/blog-details/blog-details__7.png";
 import blogDetail8 from "../../img/blog-details/blog-details__8.png";
+import TopBar from "../TopBar/TopBar";
+import NavBar from "../NavBar/NavBar";
 
-const CourseDetails = () => {
+const CourseDetail = () => {
   return (
     <>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
@@ -1094,9 +1094,7 @@ const CourseDetails = () => {
                         </div>
                       </div>
                       <div className="course__summery__button">
-                        <Link className="default__button">
-                          Enroll Now
-                        </Link>
+                        <Link className="default__button">Enroll Now</Link>
                       </div>
                       <div className="course__summery__lists">
                         <ul>
@@ -1307,4 +1305,4 @@ const CourseDetails = () => {
   );
 };
 
-export default CourseDetails;
+export default CourseDetail;

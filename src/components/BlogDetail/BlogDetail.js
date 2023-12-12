@@ -1,7 +1,4 @@
 import React from "react";
-import TopBar from "../Topbar";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
 import { Link } from "react-router-dom";
 import blog10 from "../../img/blog/blog_10.png";
 import blog11 from "../../img/blog/blog_11.png";
@@ -17,12 +14,15 @@ import blog20 from "../../img/blog/blog_20.png";
 import blog21 from "../../img/blog/blog_21.png";
 import blog22 from "../../img/blog/blog_22.png";
 import blog23 from "../../img/blog/blog_23.png";
+import TopBar from "../TopBar/TopBar";
+import Footer from "../Footer/Footer";
+import NavBar from "../NavBar/NavBar";
 
-const BlogDetails = () => {
+const BlogDetail = () => {
   return (
     <>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
@@ -510,10 +510,7 @@ const BlogDetails = () => {
                       <input type="text" placeholder="Enter name*" />
                       <input type="text" placeholder="Enter your mail*" />
                       <input type="text" placeholder="Massage*" />
-                      <Link
-                        className="default__button"
-                        href="/blog-details"
-                      >
+                      <Link className="default__button" href="/blog-detail">
                         SEND MASSAGE
                       </Link>
                     </div>
@@ -526,34 +523,34 @@ const BlogDetails = () => {
                     <div className="populer__tag__list">
                       <ul>
                         <li>
-                          <Link to="/blog-details">Business</Link>
+                          <Link to="/blog-detail">Business</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">Design</Link>
+                          <Link to="/blog-detail">Design</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">apps</Link>
+                          <Link to="/blog-detail">apps</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">landing page</Link>
+                          <Link to="/blog-detail">landing page</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">data</Link>
+                          <Link to="/blog-detail">data</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">book</Link>
+                          <Link to="/blog-detail">book</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">Design</Link>
+                          <Link to="/blog-detail">Design</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">book</Link>
+                          <Link to="/blog-detail">book</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">landing page</Link>
+                          <Link to="/blog-detail">landing page</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">data</Link>
+                          <Link to="/blog-detail">data</Link>
                         </li>
                       </ul>
                     </div>
@@ -604,4 +601,4 @@ const BlogDetails = () => {
   );
 };
 
-export default BlogDetails;
+export default BlogDetail;

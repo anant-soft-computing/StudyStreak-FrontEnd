@@ -1,8 +1,8 @@
 import React from "react";
-import counter1 from "../img/counter/counter__1.png";
-import counter2 from "../img/counter/counter__2.png";
-import counter3 from "../img/counter/counter__3.png";
-import counter4 from "../img/counter/counter__4.png";
+import counter1 from "../../img/counter/counter__1.png";
+import counter2 from "../../img/counter/counter__2.png";
+import counter3 from "../../img/counter/counter__3.png";
+import counter4 from "../../img/counter/counter__4.png";
 
 const CounterArea = () => {
   return (

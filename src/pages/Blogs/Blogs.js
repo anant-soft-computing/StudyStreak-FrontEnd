@@ -1,7 +1,4 @@
 import React from "react";
-import TopBar from "../Topbar";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
 import { Link } from "react-router-dom";
 import blog6 from "../../img/blog/blog_6.png";
 import blog7 from "../../img/blog/blog_7.png";
@@ -19,12 +16,15 @@ import blog18 from "../../img/blog/blog_18.png";
 import blog19 from "../../img/blog/blog_19.png";
 import blog20 from "../../img/blog/blog_20.png";
 import video from "../../img/icon/video.png";
+import TopBar from "../../components/TopBar/TopBar";
+import NavBar from "../../components/NavBar/NavBar";
+import Footer from "../../components/Footer/Footer";
 
 const Blogs = () => {
   return (
     <>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
@@ -44,7 +44,7 @@ const Blogs = () => {
                     <div className="blogarea__text__wraper__2">
                       <div className="blogarea__heading__2">
                         <h3>
-                          <Link to="/blog-details">
+                          <Link to="/blog-detail">
                             Delivering What Consumers Really Value?
                           </Link>
                         </h3>
@@ -52,19 +52,19 @@ const Blogs = () => {
                       <div className="blogarea__list__2">
                         <ul>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-business-man-alt-2"></i>{" "}
                               Mirnsdo.H
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-speech-comments"></i> 0
                               Comments
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-eraser-alt"></i> Association
                             </Link>
                           </li>
@@ -79,7 +79,7 @@ const Blogs = () => {
                         </p>
                       </div>
                       <div className="blogarea__button__2">
-                        <Link to="/blog-details">
+                        <Link to="/blog-detail">
                           READ MORE
                           <i className="icofont-double-right"></i>
                         </Link>
@@ -115,7 +115,7 @@ const Blogs = () => {
                     <div className="blogarea__text__wraper__2">
                       <div className="blogarea__heading__2">
                         <h3>
-                          <Link to="/blog-details">
+                          <Link to="/blog-detail">
                             Here at First Baptist Cape Coral we believe!
                           </Link>
                         </h3>
@@ -123,19 +123,19 @@ const Blogs = () => {
                       <div className="blogarea__list__2">
                         <ul>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-business-man-alt-2"></i>
                               Mirnsdo.H
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-speech-comments"></i> 0
                               Comments
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-eraser-alt"></i> Association
                             </Link>
                           </li>
@@ -150,7 +150,7 @@ const Blogs = () => {
                         </p>
                       </div>
                       <div className="blogarea__button__2">
-                        <Link to="/blog-details">
+                        <Link to="/blog-detail">
                           READ MORE
                           <i className="icofont-double-right"></i>
                         </Link>
@@ -174,7 +174,7 @@ const Blogs = () => {
                     <div className="blogarea__text__wraper__2">
                       <div className="blogarea__heading__2">
                         <h3>
-                          <Link to="/blog-details">
+                          <Link to="/blog-detail">
                             We are praying for our community and for.
                           </Link>
                         </h3>
@@ -182,19 +182,19 @@ const Blogs = () => {
                       <div className="blogarea__list__2">
                         <ul>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-business-man-alt-2"></i>{" "}
                               Mirnsdo.H
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-speech-comments"></i> 0
                               Comments
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-eraser-alt"></i> Association
                             </Link>
                           </li>
@@ -209,7 +209,7 @@ const Blogs = () => {
                         </p>
                       </div>
                       <div className="blogarea__button__2">
-                        <Link to="/blog-details">
+                        <Link to="/blog-detail">
                           READ MORE
                           <i className="icofont-double-right"></i>
                         </Link>
@@ -233,7 +233,7 @@ const Blogs = () => {
                     <div className="blogarea__text__wraper__2">
                       <div className="blogarea__heading__2">
                         <h3>
-                          <Link to="/blog-details">
+                          <Link to="/blog-detail">
                             Delivering What Consumers Really Value?
                           </Link>
                         </h3>
@@ -241,19 +241,19 @@ const Blogs = () => {
                       <div className="blogarea__list__2">
                         <ul>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-business-man-alt-2"></i>
                               Mirnsdo.H
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-speech-comments"></i> 0
                               Comments
                             </Link>
                           </li>
                           <li>
-                            <Link to="/blog-details">
+                            <Link to="/blog-detail">
                               <i className="icofont-eraser-alt"></i> Association
                             </Link>
                           </li>
@@ -268,7 +268,7 @@ const Blogs = () => {
                         </p>
                       </div>
                       <div className="blogarea__button__2">
-                        <Link to="/blog-details">
+                        <Link to="/blog-detail">
                           READ MORE
                           <i className="icofont-double-right"></i>
                         </Link>
@@ -581,7 +581,7 @@ const Blogs = () => {
                       <input type="text" placeholder="Enter name*" />
                       <input type="text" placeholder="Enter your mail*" />
                       <input type="text" placeholder="Massage*" />
-                      <Link className="default__button" to="/blog-details">
+                      <Link className="default__button" to="/blog-detail">
                         SEND MASSAGE
                       </Link>
                     </div>
@@ -594,34 +594,34 @@ const Blogs = () => {
                     <div className="populer__tag__list">
                       <ul>
                         <li>
-                          <Link to="/blog-details">Business</Link>
+                          <Link to="/blog-detail">Business</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">Design</Link>
+                          <Link to="/blog-detail">Design</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">apps</Link>
+                          <Link to="/blog-detail">apps</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">landing page</Link>
+                          <Link to="/blog-detail">landing page</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">data</Link>
+                          <Link to="/blog-detail">data</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">book</Link>
+                          <Link to="/blog-detail">book</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">Design</Link>
+                          <Link to="/blog-detail">Design</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">book</Link>
+                          <Link to="/blog-detail">book</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">landing page</Link>
+                          <Link to="/blog-detail">landing page</Link>
                         </li>
                         <li>
-                          <Link to="/blog-details">data</Link>
+                          <Link to="/blog-detail">data</Link>
                         </li>
                       </ul>
                     </div>

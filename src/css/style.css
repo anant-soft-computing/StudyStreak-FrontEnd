@@ -2663,8 +2663,6 @@ Hero Banner Area
 
 .herobannerarea.herobannerarea__2 {
   background: var(--lightGrey11);
-  padding-top: 155px;
-  padding-bottom: 250px;
 }
 
 @media (min-width: 992px) and (max-width: 1365px) {
@@ -4661,8 +4659,7 @@ About Area
   background: var(--whiteColor);
   border-radius: 6px;
   z-index: 11;
-  box-shadow: 0 0 20px 0px #0d6efd;
-  margin-top: 65px;
+  box-shadow: 0 0 20px 10px rgba(95, 45, 237, 0.05);
 }
 
 .brandarea__wraper.brandarea__wraper__2 .brandarea__img {
@@ -5328,7 +5325,6 @@ Grid Area
 
 .gridarea.gridarea__2 {
   background: var(--whiteColor);
-  /* background: #f2e7fe; */
 }
 
 .gridarea__wraper {
@@ -14930,7 +14926,6 @@ Dark Mode
 }
 
 .logoSize {
-  margin-top: 7px;
   width: 150px;
   height: 50px;
 }

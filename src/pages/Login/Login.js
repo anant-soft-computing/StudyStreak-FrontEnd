@@ -150,10 +150,12 @@ const Login = () => {
 
                         <div className="login__social__option">
                           {otp ? (
-                            <Link onClick={() => setOtp(false)}>Log In</Link>
+                            <Link onClick={() => setOtp(false)}>
+                              Log In with Username or Email
+                            </Link>
                           ) : (
                             <Link onClick={() => setOtp(true)}>
-                              Log In with OTP
+                              Log In with Username or OTP
                             </Link>
                           )}
                         </div>
@@ -226,6 +228,16 @@ const Login = () => {
                                   className="common__login__input"
                                   type="password"
                                   placeholder="Password"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-xl-6">
+                              <div className="login__form">
+                                <label className="form__label">Phone No.</label>
+                                <input
+                                  className="common__login__input"
+                                  type="number"
+                                  placeholder="Your Phone No."
                                 />
                               </div>
                             </div>

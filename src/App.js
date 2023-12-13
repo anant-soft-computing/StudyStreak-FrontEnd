@@ -10,6 +10,7 @@ import BlogDetail from "./components/BlogDetail/BlogDetail";
 import Tests from "./pages/Tests/Tests";
 import MyCourses from "./components/Dashboard/Student/MyCourses";
 import Dashboard from "./components/Dashboard/Student/Dashboard";
+import ContactUs from "./pages/ContactUs/ContactUs";
 
 function App() {
   return (
@@ -17,14 +18,15 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/create-course" element={<CreateCourse />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/course-detail" element={<CourseDetail />} />
+        <Route path="/create-course" element={<CreateCourse />} />
+        <Route path="/tests" element={<Tests />} />
         <Route path="/blogs" element={<Blogs />} />
         <Route path="/blog-detail" element={<BlogDetail />} />
-        <Route path="/tests" element={<Tests />} />
-        <Route path="/dashboard/student-my-courses" element={<MyCourses />} />
         <Route path="/dashboard/student-dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/student-my-courses" element={<MyCourses />} />
+        <Route path="/contactUs" element={<ContactUs />} />
       </Routes>
     </Router>
   );

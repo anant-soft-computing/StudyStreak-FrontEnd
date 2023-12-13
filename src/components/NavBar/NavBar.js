@@ -44,7 +44,7 @@ const NavBar = () => {
                     </li>
                     <Dashboard />
                     <li className="mega__menu position-static">
-                      <Link className="headerarea__has__dropdown" to="/">
+                      <Link className="headerarea__has__dropdown" to="/contactUs">
                         Contact Us
                       </Link>
                     </li>

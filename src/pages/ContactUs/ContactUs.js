@@ -2,7 +2,7 @@ import React from "react";
 import TopBar from "../../components/TopBar/TopBar";
 import NavBar from "../../components/NavBar/NavBar";
 
-const Tests = () => {
+const ContactUs = () => {
   return (
     <>
       <TopBar />
@@ -11,11 +11,10 @@ const Tests = () => {
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
-        </div>
+            </div>
       </div>
-     
     </>
   );
 };
 
-export default Tests;
+export default ContactUs;

@@ -4,7 +4,7 @@ import Footer from "../Footer/Footer";
 import blog7 from "../../img/blog/blog_7.png";
 import blog8 from "../../img/blog/blog_8.png";
 import blog10 from "../../img/blog/blog_10.png";
-import video from "../../img/dashbord/video.png";
+import video from "../../img/icon/video.png";
 import blogDetail6 from "../../img/blog-details/blog-details__6.png";
 import blogDetail7 from "../../img/blog-details/blog-details__7.png";
 import blogDetail8 from "../../img/blog-details/blog-details__8.png";

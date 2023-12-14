@@ -8,11 +8,13 @@ import "slick-carousel/slick/slick-theme.css";
 const GridSection = () => {
 
   const settings = {
-    dots: true,
-    infinite: true,
-    speed: 1000,
+    dots: false,
+    speed: 2000,
     slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToScroll: 1,
+    infinite: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
   };
 
   return (

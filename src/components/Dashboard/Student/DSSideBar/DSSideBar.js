@@ -193,10 +193,35 @@ const DSSidebar = () => {
             </ul>
           </div>
         </div>
+        <div className="dashboard__inner sticky-top mt-4">
+          <div className="dashboard__nav__title">
+            <h6 className="mb-2">Upcoming Live Class</h6>
+          </div>
+          <hr />
+          <div className="dashboard__nav">
+            <div>Writing Task 1 - Letter Writing</div>
+            <div className="d-flex justify-content-between">
+              <div>Tommorrow, 06:00 PM</div>
+              <div>Add Reminder</div>
+            </div>
+          </div>
+        </div>
+        <div className="dashboard__inner sticky-top mt-4">
+          <div className="dashboard__nav__title">
+            <h6 className="mb-2">Next Lesson Due</h6>
+          </div>
+          <hr />
+          <div className="dashboard__nav">
+            <div>Writing Task 2 - Eassay Writing</div>
+            <div className="d-flex justify-content-between">
+              <div>Lesson No. 7</div>
+              <div>Take me to the lesson</div>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );
 };
 
 export default DSSidebar;
-  

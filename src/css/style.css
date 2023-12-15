@@ -14943,3 +14943,7 @@ Dark Mode
   width: 100%;
   height: 590px;
 }
+
+.nav-tabs {
+  border-bottom: none !important;
+}

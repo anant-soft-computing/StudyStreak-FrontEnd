@@ -11,6 +11,7 @@ import Tests from "./pages/Tests/Tests";
 import MyCourses from "./components/Dashboard/Student/MyCourses";
 import Dashboard from "./components/Dashboard/Student/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
+import ExamCreate from "./components/ExamCreate/ExamCreate";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/dashboard/student-dashboard" element={<Dashboard />} />
         <Route path="/dashboard/student-my-courses" element={<MyCourses />} />
         <Route path="/contactUs" element={<ContactUs />} />
+        <Route path="/exam-create" element={<ExamCreate />} />
       </Routes>
     </Router>
   );

@@ -1885,6 +1885,10 @@ const DragDrop = () => {
     }
   };
 
+  const handleDelete = (header) => {
+    setSelectedDivs((prev) => prev.filter((item) => item !== header));
+  };
+
   const generateHTMLContent = () => {
     const htmlContent = selectedDivs
       .map((header) => {
@@ -1955,16 +1959,36 @@ const DragDrop = () => {
         </div>
         <div className="box-right">
           {selectedDivs.map((header) => (
-            <React.Fragment key={header}>
+            <div
+              key={header}
+              className={
+                header === "header1" ? "header21Class" : "header2Class"
+              }
+            >
+              <div className="d-flex justify-content-end">
+                <button onClick={() => handleDelete(header)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-close"
+                  >
+                    <path d="M18 6L6 18M6 6l12 12"></path>
+                  </svg>
+                </button>
+              </div>
               <div
-                className={
-                  header === "header1" ? "header21Class" : "header2Class"
-                }
                 contentEditable
                 dangerouslySetInnerHTML={{ __html: divContents[header] }}
                 onBlur={(event) => handleContentChange(event, header)}
               />
-            </React.Fragment>
+            </div>
           ))}
         </div>
       </div>

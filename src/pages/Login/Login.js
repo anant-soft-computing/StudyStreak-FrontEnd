@@ -1,15 +1,130 @@
-import React, { useState } from "react";
-import img1 from "../../img/education/hero_shape2.png";
-import img2 from "../../img/education/hero_shape3.png";
-import img3 from "../../img/education/hero_shape4.png";
-import img4 from "../../img/education/hero_shape5.png";
-import { Link } from "react-router-dom";
+import React, { useReducer, useState } from "react";
+import { useDispatch } from "react-redux";
+import ajaxCall from "../../helpers/ajaxCall";
+import { authAction } from "../../store/authStore";
+import { Link, useNavigate } from "react-router-dom";
+import { setToLocalStorage } from "../../helpers/helperFunction";
+import Register from "./Register";
 import TopBar from "../../components/TopBar/TopBar";
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
 
+const intialLoginData = {
+  username: "",
+  password: "",
+};
+
+const reducerLogin = (state, action) => {
+  if (action.type === "reset") {
+    return {
+      ...state,
+    };
+  }
+  return { ...state, [action.type]: action.value };
+};
+
+const initialSubmit = {
+  isError: false,
+  errMsg: null,
+  isSubmitting: false,
+};
+
 const Login = () => {
-  const [otp, setOtp] = useState(false);
+  const [loginData, dispatchLogin] = useReducer(reducerLogin, intialLoginData);
+  const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [activeTab, setActiveTab] = useState("login");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const resetReducerForm = () => {
+    dispatchLogin({
+      type: "reset",
+    });
+  };
+
+  const setFormError = (errMsg) => {
+    setFormStatus({
+      isError: true,
+      errMsg,
+      isSubmitting: false,
+    });
+  };
+
+  const validateForm = () => {
+    if (!loginData.username) {
+      setFormError("User Name is required");
+      return false;
+    }
+    if (!loginData.password) {
+      setFormError("Password is required");
+      return false;
+    }
+    setFormStatus({
+      isError: false,
+      errMsg: null,
+      isSubmitting: false,
+    });
+    return true;
+  };
+
+  const doLogin = async (e) => {
+    resetReducerForm();
+    e.preventDefault();
+    if (!validateForm()) return;
+    const data = JSON.stringify(loginData);
+    try {
+      const response = await ajaxCall("/login/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: data,
+      });
+      if (response.status === 200) {
+        handleLoginSuccess(response);
+        navigate("/");
+      } else if (response.status === 400 || response.status === 404) {
+        setFormStatus({
+          isError: true,
+          errMsg: "Some Problem Occurred. Please try again.",
+          isSubmitting: false,
+        });
+      }
+    } catch (error) {
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    }
+  };
+
+  const handleLoginSuccess = (response) => {
+    const localObj = {
+      accessToken: response.data?.token?.access,
+      refreshToken: response.data?.token?.refresh,
+      user_type: response.data?.user_status,
+      userId: response.data?.userid,
+      username: loginData.username,
+    };
+    setToLocalStorage("loginInfo", localObj, true);
+    dispatch(
+      authAction.setAuthStatus({
+        username: loginData.username,
+        loggedIn: true,
+        accessToken: response.data?.token?.access,
+        refreshToken: response.data?.token?.refresh,
+        user_type: response.data?.user_status,
+        userId: response.data?.userid,
+      })
+    );
+    navigate("/");
+  };
+  const toggleForm = () => {
+    setActiveTab((prevTab) => (prevTab === "login" ? "signup" : "login"));
+  };
+
   return (
     <>
       <TopBar />
@@ -19,30 +134,25 @@ const Login = () => {
           <div className="loginarea sp_top_100 sp_bottom_100">
             <div className="container">
               <div className="row">
-                <div
-                  className="col-xl-8 col-md-8 offset-md-2"
-                  data-aos="fade-up"
-                >
-                  <ul
-                    className="nav tab__button__wrap text-center"
-                    id="myTab"
-                    role="tablist"
-                  >
-                    <li className="nav-item" role="presentation">
+                <div className="col-xl-8 col-md-8 offset-md-2">
+                  <ul className="nav tab__button__wrap text-center">
+                    <li className="nav-item">
                       <button
-                        className="single__tab__link active"
-                        data-bs-toggle="tab"
-                        data-bs-target="#projects__one"
+                        className={`single__tab__link ${
+                          activeTab === "login" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("login")}
                         type="button"
                       >
                         Login
                       </button>
                     </li>
-                    <li className="nav-item" role="presentation">
+                    <li className="nav-item">
                       <button
-                        className="single__tab__link"
-                        data-bs-toggle="tab"
-                        data-bs-target="#projects__two"
+                        className={`single__tab__link ${
+                          activeTab === "signup" ? "active" : ""
+                        }`}
+                        onClick={() => setActiveTab("signup")}
                         type="button"
                       >
                         Sign up
@@ -50,16 +160,11 @@ const Login = () => {
                     </li>
                   </ul>
                 </div>
-                <div
-                  className="tab-content tab__content__wrapper"
-                  id="myTabContent"
-                  data-aos="fade-up"
-                >
+                <div className="tab-content tab__content__wrapper">
                   <div
-                    className="tab-pane fade active show"
-                    id="projects__one"
-                    role="tabpanel"
-                    aria-labelledby="projects__one"
+                    className={`tab-pane fade ${
+                      activeTab === "login" ? "active show" : ""
+                    }`}
                   >
                     <div className="col-xl-8 col-md-8 offset-md-2">
                       <div className="loginarea__wraper">
@@ -67,106 +172,75 @@ const Login = () => {
                           <h5 className="login__title">Login</h5>
                           <p className="login__description">
                             Don't have an account yet?{" "}
-                            <Link to="/login">Sign up for free</Link>
+                            <Link to="/login" onClick={toggleForm}>
+                              Sign up for free
+                            </Link>
                           </p>
                         </div>
-                        {otp ? (
-                          <form action="#">
-                            <div className="login__form">
-                              <label className="form__label">
-                                Username or email
-                              </label>
-                              <input
-                                className="common__login__input"
-                                type="text"
-                                placeholder="Your username or email"
-                              />
+                        <form method="POST" onSubmit={doLogin}>
+                          <div className="login__form">
+                            <label className="form__label">Username</label>
+                            <input
+                              className="common__login__input"
+                              type="text"
+                              placeholder="Username or Email"
+                              value={loginData.username}
+                              onChange={(e) =>
+                                dispatchLogin({
+                                  type: "username",
+                                  value: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                          <div className="login__form">
+                            <label className="form__label">Password</label>
+                            <input
+                              className="common__login__input"
+                              type="password"
+                              name="password"
+                              placeholder="Password"
+                              value={loginData.password}
+                              onChange={(e) =>
+                                dispatchLogin({
+                                  type: "password",
+                                  value: e.target.value,
+                                })
+                              }
+                            />
+                          </div>
+                          <div className="login__form d-flex justify-content-between flex-wrap gap-2">
+                            <div className="form__check">
+                              <input type="checkbox" />
+                              <label>Remember me</label>
                             </div>
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">OTP</label>
-                                <div className="otp-input-container d-flex">
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                </div>
+                            <div className="text-end login__form__link">
+                              <Link>Forgot your password?</Link>
+                            </div>
+                          </div>
+                          <div className="login__button">
+                            {formStatus.isError && (
+                              <div className="text-danger d-flex justify-content-center mb-2">
+                                {formStatus.errMsg}
                               </div>
+                            )}
+                            <div className="d-flex justify-content-center">
+                              <button
+                                className="default__button"
+                                disabled={formStatus.isSubmitting}
+                              >
+                                Log In
+                              </button>
                             </div>
-                            <div className="login__button">
-                              <Link className="default__button">Log In</Link>
-                            </div>
-                          </form>
-                        ) : (
-                          <form action="#">
-                            <div className="login__form">
-                              <label className="form__label">
-                                Username or email
-                              </label>
-                              <input
-                                className="common__login__input"
-                                type="text"
-                                placeholder="Your username or email"
-                              />
-                            </div>
-                            <div className="login__form">
-                              <label className="form__label">Password</label>
-                              <input
-                                className="common__login__input"
-                                type="password"
-                                placeholder="Password"
-                              />
-                            </div>
-                            <div className="login__form d-flex justify-content-between flex-wrap gap-2">
-                              <div className="form__check">
-                                <input id="forgot" type="checkbox" />
-                                <label for="forgot">Remember me</label>
-                              </div>
-                              <div className="text-end login__form__link">
-                                <Link to="">Forgot your password?</Link>
-                              </div>
-                            </div>
-                            <div className="login__button">
-                              <Link className="default__button">Log In</Link>
-                            </div>
-                          </form>
-                        )}
-
-                        <div className="login__social__option">
-                          {otp ? (
-                            <Link onClick={() => setOtp(false)}>
-                              Log In with Username or Email
-                            </Link>
-                          ) : (
-                            <Link onClick={() => setOtp(true)}>
-                              Log In with Username or OTP
-                            </Link>
-                          )}
-                        </div>
+                          </div>
+                        </form>
                       </div>
                     </div>
                   </div>
                   <div
-                    className="tab-pane fade"
-                    id="projects__two"
-                    role="tabpanel"
-                    aria-labelledby="projects__two"
+                    className={`tab-pane fade ${
+                      activeTab === "signup" ? "active show" : ""
+                    }`}
                   >
                     <div className="col-xl-8 offset-md-2">
                       <div className="loginarea__wraper">
@@ -174,139 +248,16 @@ const Login = () => {
                           <h5 className="login__title">Sing Up</h5>
                           <p className="login__description">
                             Already have an account?{" "}
-                            <Link to="/login">Log In</Link>
+                            <Link to="/login" onClick={toggleForm}>
+                              Login
+                            </Link>
                           </p>
                         </div>
-                        <form action="#">
-                          <div className="row">
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">
-                                  First Name
-                                </label>
-                                <input
-                                  className="common__login__input"
-                                  type="text"
-                                  placeholder="First Name"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">Last Name</label>
-                                <input
-                                  className="common__login__input"
-                                  type="password"
-                                  placeholder="Last Name"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">Username</label>
-                                <input
-                                  className="common__login__input"
-                                  type="password"
-                                  placeholder="Username"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">Email</label>
-                                <input
-                                  className="common__login__input"
-                                  type="password"
-                                  placeholder="Your Email"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">Password</label>
-                                <input
-                                  className="common__login__input"
-                                  type="password"
-                                  placeholder="Password"
-                                />
-                              </div>
-                            </div>
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">Phone No.</label>
-                                <input
-                                  className="common__login__input"
-                                  type="number"
-                                  placeholder="Your Phone No."
-                                />
-                              </div>
-                            </div>
-                            <div className="col-xl-6">
-                              <div className="login__form">
-                                <label className="form__label">OTP</label>
-                                <div className="otp-input-container d-flex">
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                  <input
-                                    className="common__login__input"
-                                    type="number"
-                                    maxLength="1"
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="login__form d-flex justify-content-between flex-wrap gap-2">
-                            <div className="form__check">
-                              <input id="accept_pp" type="checkbox" />
-                              <label for="accept_pp">
-                                Accept the Terms and Privacy Policy
-                              </label>
-                            </div>
-                          </div>
-                          <div className="login__button">
-                            <Link className="default__button">Sign Up</Link>
-                          </div>
-                        </form>
+                        <Register />
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="login__shape__img educationarea__shape_image">
-                <img
-                  className="hero__shape hero__shape__1"
-                  src={img1}
-                  alt="Shape"
-                />
-                <img
-                  className="hero__shape hero__shape__2"
-                  src={img2}
-                  alt="Shape"
-                />
-                <img
-                  className="hero__shape hero__shape__3"
-                  src={img3}
-                  alt="Shape"
-                />
-                <img
-                  className="hero__shape hero__shape__4"
-                  src={img4}
-                  alt="Shape"
-                />
               </div>
             </div>
           </div>

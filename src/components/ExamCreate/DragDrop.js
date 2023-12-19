@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { saveAs } from "file-saver";
 import "../../css/index.css";
 
 const initialDivContents = {
@@ -1904,12 +1905,7 @@ const DragDrop = () => {
   const downloadHTMLFile = () => {
     const htmlContent = generateHTMLContent();
     const blob = new Blob([htmlContent], { type: "text/html" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "file.html";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    saveAs(blob, "file.html");
   };
 
   return (

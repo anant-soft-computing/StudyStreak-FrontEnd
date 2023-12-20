@@ -2,8 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../../img/logo/Logo.png";
 import Dashboard from "../Dashboard";
+import { deleteFromLocalStorage } from "../../helpers/helperFunction";
 
 const NavBar = () => {
+  const token = localStorage.getItem("loginInfo");
+
+  const logout = () => {
+    deleteFromLocalStorage("loginInfo");
+  }
   return (
     <>
       <header>
@@ -44,7 +50,10 @@ const NavBar = () => {
                     </li>
                     <Dashboard />
                     <li className="mega__menu position-static">
-                      <Link className="headerarea__has__dropdown" to="/contactUs">
+                      <Link
+                        className="headerarea__has__dropdown"
+                        to="/contactUs"
+                      >
                         Contact Us
                       </Link>
                     </li>
@@ -55,9 +64,15 @@ const NavBar = () => {
             <div className="col-xl-3 col-lg-3 col-md-6">
               <div className="headerarea__right">
                 <div className="headerarea__login">
-                  <Link to="/login">
-                    <div>Login | Register</div>
-                  </Link>
+                  {token ? (
+                    <Link to="/login" onClick={logout}>
+                      <div>Logout</div>
+                    </Link>
+                  ) : (
+                    <Link to="/login">
+                      <div>Login | Register</div>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

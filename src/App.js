@@ -12,23 +12,45 @@ import MyCourses from "./components/Dashboard/Student/MyCourses";
 import Dashboard from "./components/Dashboard/Student/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import ExamCreate from "./components/ExamCreate/ExamCreate";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<ProtectedRoute element={Main} />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/courses" element={<Courses />} />
-        <Route path="/course-detail" element={<CourseDetail />} />
-        <Route path="/create-course" element={<CreateCourse />} />
-        <Route path="/tests" element={<Tests />} />
-        <Route path="/blogs" element={<Blogs />} />
-        <Route path="/blog-detail" element={<BlogDetail />} />
-        <Route path="/dashboard/student-dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/student-my-courses" element={<MyCourses />} />
-        <Route path="/contactUs" element={<ContactUs />} />
-        <Route path="/exam-create" element={<ExamCreate />} />
+        <Route path="/courses" element={<ProtectedRoute element={Courses} />} />
+        <Route
+          path="/course-detail"
+          element={<ProtectedRoute element={CourseDetail} />}
+        />
+        <Route
+          path="/create-course"
+          element={<ProtectedRoute element={CreateCourse} />}
+        />
+        <Route path="/tests" element={<ProtectedRoute element={Tests} />} />
+        <Route path="/blogs" element={<ProtectedRoute element={Blogs} />} />
+        <Route
+          path="/blog-detail"
+          element={<ProtectedRoute element={BlogDetail} />}
+        />
+        <Route
+          path="/dashboard/student-dashboard"
+          element={<ProtectedRoute element={Dashboard} />}
+        />
+        <Route
+          path="/dashboard/student-my-courses"
+          element={<ProtectedRoute element={MyCourses} />}
+        />
+        <Route
+          path="/contactUs"
+          element={<ProtectedRoute element={ContactUs} />}
+        />
+        <Route
+          path="/exam-create"
+          element={<ProtectedRoute element={ExamCreate} />}
+        />
       </Routes>
     </Router>
   );

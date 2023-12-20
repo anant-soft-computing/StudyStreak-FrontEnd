@@ -52,11 +52,11 @@ const Login = () => {
 
   const validateForm = () => {
     if (!loginData.username) {
-      setFormError("User Name is required");
+      setFormError("User Name is Required");
       return false;
     }
     if (!loginData.password) {
-      setFormError("Password is required");
+      setFormError("Password is Required");
       return false;
     }
     setFormStatus({
@@ -87,7 +87,7 @@ const Login = () => {
       } else if (response.status === 400 || response.status === 404) {
         setFormStatus({
           isError: true,
-          errMsg: "Some Problem Occurred. Please try again.",
+          errMsg: response.data?.errors,
           isSubmitting: false,
         });
       }

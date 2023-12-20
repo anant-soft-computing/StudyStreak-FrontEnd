@@ -6,9 +6,7 @@ Storage.prototype.setObject = (key, value) => {
 
 const setToLocalStorage = (key, value, isObj) => {
   let data = value;
-  if (isObj) {
-    data = JSON.stringify(value);
-  }
+  if (isObj) data = JSON.stringify(value);
   localStorage.setItem(key, data);
   return true;
 };
@@ -21,7 +19,7 @@ const getFromLocalStorage = (key, isObj) => {
   return -1;
 };
 
-const deleteFromLocalStroage = (key) => {
+const deleteFromLocalStorage = (key) => {
   localStorage.removeItem(key);
 };
 
@@ -51,6 +49,6 @@ const getRefreshToken = async (refreshToken) => {
 export {
   setToLocalStorage,
   getFromLocalStorage,
-  deleteFromLocalStroage,
+  deleteFromLocalStorage,
   getRefreshToken,
 };

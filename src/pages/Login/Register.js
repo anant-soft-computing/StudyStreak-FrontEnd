@@ -51,27 +51,35 @@ const Register = () => {
 
   const validateForm = () => {
     if (!signUpData.first_name) {
-      setFormError("First Name is required");
+      setFormError("First Name is Required");
       return false;
     }
     if (!signUpData.last_name) {
-      setFormError("Last Name is required");
+      setFormError("Last Name is Required");
       return false;
     }
     if (!signUpData.username) {
-      setFormError("User Name is required");
+      setFormError("User Name is Required");
       return false;
     }
     if (!signUpData.email) {
-      setFormError("Email is required");
+      setFormError("Email is Required");
       return false;
     }
     if (!signUpData.password) {
-      setFormError("Password is required");
+      setFormError("Password is Required");
+      return false;
+    }
+    if (signUpData.password.length < 8) {
+      setFormError("Password must be at least 8 characters long");
       return false;
     }
     if (!signUpData.password2) {
-      setFormError("Re-Enter Password is required");
+      setFormError("Re-Enter Password is Required");
+      return false;
+    }
+    if (signUpData.password !== signUpData.password2) {
+      setFormError("Password Does Not Match");
       return false;
     }
     setFormStatus({
@@ -106,7 +114,7 @@ const Register = () => {
       } else if (response.status === 400) {
         setFormStatus({
           isError: true,
-          errMsg: "Some Problem Occurred. Please try again.",
+          errMsg: response.data?.username,
           isSubmitting: false,
         });
       }

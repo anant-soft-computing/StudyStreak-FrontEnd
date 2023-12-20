@@ -13,6 +13,8 @@ import Dashboard from "./components/Dashboard/Student/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import ExamCreate from "./components/ExamCreate/ExamCreate";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ExamCreator from "./pages/Exam-Creator/ExamCreator";
+import ExamReading from "./components/Exam-Creator/ExamReading";
 
 const App = () => {
   return (
@@ -50,6 +52,14 @@ const App = () => {
         <Route
           path="/exam-create"
           element={<ProtectedRoute element={ExamCreate} />}
+        />
+        <Route
+          path="/exam-creator"
+          element={<ProtectedRoute element={ExamCreator} />}
+        />
+        <Route
+          path="/exam-reading"
+          element={<ProtectedRoute element={ExamReading} />}
         />
       </Routes>
     </Router>

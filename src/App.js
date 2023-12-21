@@ -57,13 +57,10 @@ const App = () => {
           path="/exam-creator"
           element={<ProtectedRoute element={ExamCreator} />}
         />
-        <Route
-          path="/exam-reading"
-          element={<ProtectedRoute element={ExamReading} />}
-        />
+        <Route path="/exam-reading" element={<ExamReading />} />
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;

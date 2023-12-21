@@ -30,6 +30,7 @@ const ExamCreator = () => {
                       </div>
                       <div className="row">
                         <div
+                          style={{ cursor: "pointer" }}
                           className="col-xl-3 col-lg-6 col-md-12 col-12"
                           onClick={onReading}
                         >
@@ -41,7 +42,7 @@ const ExamCreator = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-xl-3 col-lg-6 col-md-12 col-12">
+                        <div style={{ cursor: "pointer" }} className="col-xl-3 col-lg-6 col-md-12 col-12">
                           <div className="dashboard__single__counter">
                             <div className="counterarea__text__wraper justify-content-center">
                               <div className="counter__content__wraper">
@@ -50,7 +51,7 @@ const ExamCreator = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-xl-3 col-lg-6 col-md-12 col-12">
+                        <div style={{ cursor: "pointer" }} className="col-xl-3 col-lg-6 col-md-12 col-12">
                           <div className="dashboard__single__counter">
                             <div className="counterarea__text__wraper justify-content-center">
                               <div className="counter__content__wraper">
@@ -59,7 +60,7 @@ const ExamCreator = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-xl-3 col-lg-6 col-md-12 col-12">
+                        <div style={{ cursor: "pointer" }} className="col-xl-3 col-lg-6 col-md-12 col-12">
                           <div className="dashboard__single__counter">
                             <div className="counterarea__text__wraper justify-content-center">
                               <div className="counter__content__wraper">

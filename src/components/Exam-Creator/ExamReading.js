@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import TopBar from "../TopBar/TopBar";
 import NavBar from "../NavBar/NavBar";
 import { Link } from "react-router-dom";
@@ -18,11 +18,15 @@ const intialExamCreate = {
   exam_type: 1,
 };
 
+const initialSubmit = {
+  isError: false,
+  errMsg: null,
+  isSubmitting: false,
+};
+
 const reducerExamCreate = (state, action) => {
   if (action.type === "reset") {
-    return {
-      ...state,
-    };
+    return intialExamCreate;
   }
   return { ...state, [action.type]: action.value };
 };
@@ -32,14 +36,22 @@ const ExamReading = () => {
     reducerExamCreate,
     intialExamCreate
   );
-
-  console.log("----examCreateData---->", examCreateData);
+  const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [questionInputs, setQuestionInputs] = useState([]);
 
   const resetReducerForm = () => {
     dispatchExamCreate({
       type: "reset",
     });
   };
+
+  useEffect(() => {
+    const inputs = [];
+    for (let i = 1; i <= examCreateData.no_of_questions; i++) {
+      inputs.push({ question: "", answer: "" });
+    }
+    setQuestionInputs(inputs);
+  }, [examCreateData.no_of_questions]);
 
   const doExamCreate = async (e) => {
     resetReducerForm();
@@ -54,11 +66,33 @@ const ExamReading = () => {
         method: "POST",
         body: data,
       });
-      console.log("--Response-->", response);
+      if (response.status === 201) {
+        setFormStatus({
+          isError: false,
+          errMsg: "Successfully Created",
+          isSubmitting: true,
+        });
+      } else if (response.status === 400) {
+        setFormStatus({
+          isError: true,
+          errMsg: "Some Problem Occurred. Please try again.",
+          isSubmitting: false,
+        });
+      }
     } catch (error) {
-      console.log("-->", error);
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
     }
   };
+
+  // const handleQuestionInputChange = (index, field, value) => {
+  //   const updatedInputs = [...questionInputs];
+  //   updatedInputs[index][field] = value;
+  //   setQuestionInputs(updatedInputs);
+  // };
 
   const handlePassageChange = (event, editor) => {
     const data = editor.getData();
@@ -179,12 +213,8 @@ const ExamReading = () => {
                                       }
                                     >
                                       <option value="1">MCQ</option>
-                                      <option value="2">
-                                        True / False
-                                      </option>
-                                      <option value="3">
-                                        Multiple Choice
-                                      </option>
+                                      <option value="1">True / False</option>
+                                      <option value="1">Multiple Choice</option>
                                     </select>
                                   </div>
                                 </div>
@@ -332,7 +362,94 @@ const ExamReading = () => {
                     </div>
                   </div>
                   <div className="create__course__bottom__button">
-                    <button className="default__button">Create Block</button>
+                    {formStatus.isError ? (
+                      <div className="text-danger mb-2">
+                        {formStatus.errMsg}
+                      </div>
+                    ) : (
+                      <div className="text-success mb-2">
+                        {formStatus.errMsg}
+                      </div>
+                    )}
+                    <button
+                      className="default__button"
+                      disabled={formStatus.isSubmitting}
+                    >
+                      Create Block
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div className="col-xl-4 col-lg-4 col-md-12 col-12">
+                <form>
+                  <div className="row">
+                    {questionInputs.map((input, index) => (
+                      <>
+                        <div
+                          key={index}
+                          className="col-xl-4 col-lg-6 col-md-6 col-12"
+                        >
+                          <div className="dashboard__form__wraper">
+                            <div className="dashboard__form__input">
+                              <label>{`Question ${index + 1}`}</label>
+                              <input
+                                type="number"
+                                placeholder={`Question ${index + 1}`}
+                                // value={input.question}
+                                // onChange={(e) =>
+                                //   handleQuestionInputChange(
+                                //     index,
+                                //     "question",
+                                //     e.target.value
+                                //   )
+                                // }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          key={index}
+                          className="col-xl-8 col-lg-6 col-md-6 col-12"
+                        >
+                          <div className="dashboard__form__wraper">
+                            <div className="dashboard__form__input">
+                              <label>{`Answer ${index + 1}`}</label>
+                              <input
+                                type="text"
+                                placeholder={`Answer ${index + 1}`}
+                                // value={input.answer}
+                                // onChange={(e) =>
+                                //   handleQuestionInputChange(
+                                //     index,
+                                //     "answer",
+                                //     e.target.value
+                                //   )
+                                // }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ))}
+                  </div>
+                  <div className="create__course__bottom__button">
+                    {formStatus.isError ? (
+                      <div className="text-danger mb-2">
+                        {formStatus.errMsg}
+                      </div>
+                    ) : (
+                      <div className="text-success mb-2">
+                        {formStatus.errMsg}
+                      </div>
+                    )}
+                    {examCreateData.no_of_questions > 0 && (
+                      <button
+                        className="default__button"
+                        disabled={formStatus.isSubmitting}
+                      >
+                        Submit
+                      </button>
+                    )}
                   </div>
                 </form>
               </div>

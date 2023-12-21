@@ -10,9 +10,9 @@ const ExSideBar = () => {
           </div>
           <div className="dashboard__nav">
             <ul>
-              <li>Create Block</li>
-              <li>Create Test</li>
-              <li>Create Full Lenght Test</li>
+              <li style={{ cursor: "pointer" }}>Create Block</li>
+              <li style={{ cursor: "pointer" }}>Create Test</li>
+              <li style={{ cursor: "pointer" }}>Create Full Lenght Test</li>
             </ul>
           </div>
         </div>

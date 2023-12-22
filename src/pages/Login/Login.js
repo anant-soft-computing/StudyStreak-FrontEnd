@@ -80,6 +80,7 @@ const Login = () => {
         },
         method: "POST",
         body: data,
+        withCredentials: true
       });
       if (response.status === 200) {
         handleLoginSuccess(response);

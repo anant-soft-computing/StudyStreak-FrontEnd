@@ -1,7 +1,7 @@
 import React from "react";
 import TopBar from "../../components/TopBar/TopBar";
 import NavBar from "../../components/NavBar/NavBar";
-import ExSideBar from "../../components/Exam-Creator/SideBar/ExSideBar";
+import ExSideBar from "../../components/Exam-Create/SideBar/ExSideBar";
 import Footer from "../../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +10,11 @@ const ExamCreator = () => {
   const onReading = () => {
     navigate("/exam-reading");
   };
+
+  const onListening = () => {
+    navigate("/exam-listening");
+  };
+
   return (
     <>
       <TopBar />
@@ -42,7 +47,7 @@ const ExamCreator = () => {
                             </div>
                           </div>
                         </div>
-                        <div style={{ cursor: "pointer" }} className="col-xl-3 col-lg-6 col-md-12 col-12">
+                        <div style={{ cursor: "pointer" }} className="col-xl-3 col-lg-6 col-md-12 col-12" onClick={onListening}>
                           <div className="dashboard__single__counter">
                             <div className="counterarea__text__wraper justify-content-center">
                               <div className="counter__content__wraper">

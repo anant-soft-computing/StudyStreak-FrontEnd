@@ -106,7 +106,7 @@ pre {
 }
 
 .box-left {
-  width: 21rem;
+  width: 15rem;
   height: 100%;
   float: left;
   margin: 0;
@@ -192,8 +192,8 @@ pre {
 
 .box-right {
   position: relative;
-  width: calc(90% - 15rem);
-  height: calc(1600px);
+  /* width: calc(90% - 15rem); */
+  height: calc(1045px);
   float: left;
   margin: 0;
   margin-bottom: 1em;

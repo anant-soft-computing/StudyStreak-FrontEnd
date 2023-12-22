@@ -11,10 +11,11 @@ import Tests from "./pages/Tests/Tests";
 import MyCourses from "./components/Dashboard/Student/MyCourses";
 import Dashboard from "./components/Dashboard/Student/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
-import ExamCreate from "./components/ExamCreate/ExamCreate";
+import DragDrop from "./components/Exam-Create/DragDrop";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ExamCreator from "./pages/Exam-Creator/ExamCreator";
-import ExamReading from "./components/Exam-Creator/ExamReading";
+import ExamReading from "./components/Exam-Create/ExamReading";
+import ExamListening from "./components/Exam-Create/ExamListening";
 
 const App = () => {
   return (
@@ -49,15 +50,10 @@ const App = () => {
           path="/contactUs"
           element={<ProtectedRoute element={ContactUs} />}
         />
-        <Route
-          path="/exam-create"
-          element={<ProtectedRoute element={ExamCreate} />}
-        />
-        <Route
-          path="/exam-creator"
-          element={<ProtectedRoute element={ExamCreator} />}
-        />
+        <Route path="/exam-create" element={<DragDrop />} />
+        <Route path="/exam-creator" element={<ExamCreator />} />
         <Route path="/exam-reading" element={<ExamReading />} />
+        <Route path="/exam-listening" element={<ExamListening />} />
       </Routes>
     </Router>
   );

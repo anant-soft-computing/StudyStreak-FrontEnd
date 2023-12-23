@@ -284,7 +284,7 @@ const ExamListening = () => {
                         data-bs-parent="#accordionExample"
                       >
                         <div className="accordion-body">
-                        <div className="col-xl-12 col-lg-6 col-md-6 col-12">  
+                          <div className="col-xl-12 col-lg-6 col-md-6 col-12">
                             <div className="dashboard__form__wraper">
                               <div className="dashboard__form__input">
                                 <label>Instruction</label>
@@ -302,7 +302,6 @@ const ExamListening = () => {
                                 <label>Audio</label>
                                 <input
                                   type="file"
-                                  accept="audio_file/*"
                                   onChange={(e) =>
                                     dispatchListeningData({
                                       type: "audio_file",

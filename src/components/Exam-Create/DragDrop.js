@@ -1031,8 +1031,6 @@ const DragDrop = () => {
   const readingData = location.state?.readingData || {};
   const listeningData = location.state?.listeningData || {};
 
-  console.log("-----listeningData----->", listeningData);
-
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [divContents, setDivContents] = useState(initialDivContents);
 
@@ -1148,27 +1146,32 @@ const DragDrop = () => {
 
   const doListening = async (e) => {
     e.preventDefault();
-    const data = {
-      block_threshold: listeningData.block_threshold,
-      block_type: listeningData.block_type,
-      difficulty_level: listeningData.difficulty_level,
-      exam_name: listeningData.exam_name,
-      exam_type: listeningData.exam_type,
-      no_of_questions: listeningData.no_of_questions,
-      audio_file: listeningData.audio_file,
-      passage: listeningData.passage,
-      question: htmlContent,
-      answers: questions,
-    };
+    const formData = new FormData();
+    formData.append("block_threshold", listeningData.block_threshold);
+    formData.append("block_type", listeningData.block_type);
+    formData.append("difficulty_level", listeningData.difficulty_level);
+    formData.append("exam_name", listeningData.exam_name);
+    formData.append("exam_type", listeningData.exam_type);
+    formData.append("no_of_questions", listeningData.no_of_questions);
+    formData.append("passage", listeningData.passage);
+    formData.append("question", htmlContent);
+    formData.append(
+      "answers",
+      questions.forEach((answer, index) => {
+        formData.append(
+          `answers[${index}]question_number`,
+          answer.question_number
+        );
+        formData.append(`answers[${index}]answer_text`, answer.answer_text);
+      })
+    );
+    formData.append("audio_file", listeningData.audio_file);
     try {
       const response = await ajaxCall("/exam-blocks/", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
         method: "POST",
-        body: JSON.stringify(data),
+        body: formData,
       });
+
       if (response.status === 201) {
         setFormStatus({
           isError: false,
@@ -1347,17 +1350,31 @@ const DragDrop = () => {
                       </div>
                     </div>
                   ))}
-                  <button
-                    className="default__button m-2"
-                    onClick={addMoreQuestions}
-                  >
-                    Add More...
-                  </button>
                   {formStatus.isError ? (
                     <div className="text-danger mb-2">{formStatus.errMsg}</div>
                   ) : (
                     <div className="text-success mb-2">{formStatus.errMsg}</div>
                   )}
+                  <button
+                    className="default__button m-2"
+                    onClick={addMoreQuestions}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-plus"
+                    >
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                  </button>
                   <button
                     className="default__button"
                     disabled={formStatus.isSubmitting}

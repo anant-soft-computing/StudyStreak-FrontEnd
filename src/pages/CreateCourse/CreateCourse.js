@@ -1,13 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import TopBar from "../../components/TopBar/TopBar";
 import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
-import dashboard4 from "../../img/dashbord/dashbord__4.jpg";
-import dashboard5 from "../../img/dashbord/dashbord__5.jpg";
-import dashboard7 from "../../img/dashbord/dashbord__7.jpg";
-import dashboard8 from "../../img/dashbord/dashbord__8.jpg";
-import dashboard9 from "../../img/dashbord/dashbord__9.jpg";
 
 const CreateCourse = () => {
   return (
@@ -34,7 +28,7 @@ const CreateCourse = () => {
                             aria-expanded="true"
                             aria-controls="collapseOne"
                           >
-                            Course Info
+                            Course Details
                           </button>
                         </h2>
                         <div
@@ -46,10 +40,10 @@ const CreateCourse = () => {
                           <div className="accordion-body">
                             <div className="become__instructor__form">
                               <div className="row">
-                                <div className="col-xl-12 col-lg-12 col-md-12 col-12">
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                                   <div className="dashboard__form__wraper">
                                     <div className="dashboard__form__input">
-                                      <label for="#">Course Title</label>
+                                      <label>Course Title</label>
                                       <input
                                         type="text"
                                         placeholder="Course Title"
@@ -57,171 +51,149 @@ const CreateCourse = () => {
                                     </div>
                                   </div>
                                 </div>
-                                <div className="col-xl-12 col-lg-12 col-md-12 col-12">
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                                   <div className="dashboard__form__wraper">
                                     <div className="dashboard__form__input">
-                                      <label for="#">Course Slug</label>
+                                      <label>Course Identifire</label>
                                       <input
                                         type="text"
-                                        placeholder="Course Slug"
+                                        placeholder="Course Identifire"
                                       />
                                     </div>
                                   </div>
                                 </div>
-                                <div className="col-xl-12 col-lg-12 col-md-12 col-12">
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                                   <div className="dashboard__form__wraper">
                                     <div className="dashboard__form__input">
-                                      <label for="#">
-                                        {" "}
-                                        Free Regular Price ($)
-                                      </label>
-                                      <input
-                                        type="text"
-                                        placeholder="Free Regular Price ($)"
-                                      />
-                                    </div>
-                                    <small className="create__course__small">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="feather feather-info"
-                                      >
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line
-                                          x1="12"
-                                          y1="16"
-                                          x2="12"
-                                          y2="12"
-                                        ></line>
-                                        <line
-                                          x1="12"
-                                          y1="8"
-                                          x2="12.01"
-                                          y2="8"
-                                        ></line>
-                                      </svg>{" "}
-                                      The Course Price Includes Your Author Fee.
-                                    </small>
-                                  </div>
-                                </div>
-                                <div className="col-xl-12 col-lg-12 col-md-12 col-12">
-                                  <div className="dashboard__form__wraper">
-                                    <div className="dashboard__form__input">
-                                      <label for="#">
-                                        Discounted Price ($)
-                                      </label>
-                                      <input
-                                        type="text"
-                                        placeholder="Discounted Price ($)"
-                                      />
-                                      <small className="create__course__small">
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width="24"
-                                          height="24"
-                                          viewBox="0 0 24 24"
-                                          fill="none"
-                                          stroke="currentColor"
-                                          strokeWidth="2"
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          className="feather feather-info"
-                                        >
-                                          <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                          ></circle>
-                                          <line
-                                            x1="12"
-                                            y1="16"
-                                            x2="12"
-                                            y2="12"
-                                          ></line>
-                                          <line
-                                            x1="12"
-                                            y1="8"
-                                            x2="12.01"
-                                            y2="8"
-                                          ></line>
-                                        </svg>{" "}
-                                        The Course Price Includes Your Author
-                                        Fee.
-                                      </small>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="row">
-                                  <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                                    <div className="dashboard__select__heading">
-                                      <span>Courses</span>
-                                    </div>
-                                    <div className="dashboard__selector">
-                                      <select
-                                        className="form-select"
-                                        aria-label="Default select example"
-                                      >
-                                        <option selected>All</option>
-                                        <option value="1">Web Design</option>
-                                        <option value="2">Graphic</option>
-                                        <option value="3">English</option>
-                                        <option value="4">
-                                          Spoken English
-                                        </option>
-                                        <option value="5">Art Painting</option>
-                                        <option value="6">
-                                          App Development
-                                        </option>
-                                        <option value="7">
-                                          Web Application
-                                        </option>
-                                        <option value="7">
-                                          Php Development
-                                        </option>
-                                      </select>
-                                    </div>
-                                  </div>
-                                  <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                                    <div className="dashboard__select__heading">
-                                      <span>SHORT BY OFFER</span>
-                                    </div>
-                                    <div className="dashboard__selector">
-                                      <select
-                                        className="form-select"
-                                        aria-label="Default select example"
-                                      >
-                                        <option selected>Free</option>
-                                        <option value="1">paid</option>
-                                        <option value="2">premimum</option>
-                                      </select>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="col-xl-12 col-lg-12 col-md-12 col-12">
-                                  <div className="dashboard__form__wraper">
-                                    <div className="dashboard__form__input">
-                                      <label for="#">About Course</label>
+                                      <label>Short Description</label>
                                       <textarea
-                                        name=""
-                                        id=""
-                                        cols="30"
-                                        rows="10"
-                                      ></textarea>
+                                        type="text"
+                                        placeholder="Short Description"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Description</label>
+                                      <textarea
+                                        type="text"
+                                        placeholder="Description"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__select__heading">
+                                    <span>Category</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                    >
+                                      <option value="English Language Tests">
+                                        English Language Tests
+                                      </option>
+                                      <option value="German Language Tests">
+                                        German Language Tests
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__select__heading">
+                                    <span>Level</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                    >
+                                      <option value="Beginner">Beginner</option>
+                                      <option value="Advanced">Advanced</option>
+                                      <option value="Intermediate">
+                                        Intermediate
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Enrollment StartDate</label>
+                                      <input type="date" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Enrollment EndDate</label>
+                                      <input type="date" />
                                     </div>
                                   </div>
                                 </div>
                                 <div className="col-xl-12 col-lg-12 col-md-12 col-12">
-                                  <div className="dashboard__form__button create__course__margin">
-                                    <Link className="default__button" to=" ">
-                                      Update Info
-                                    </Link>
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Max Enrollments</label>
+                                      <input type="number" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>FAQS</label>
+                                      <textarea type="text" />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__select__heading">
+                                    <span>Course Type</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                    >
+                                      <option value="Private">Private</option>
+                                      <option value="Public">Public</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__select__heading">
+                                    <span>Course Delivery</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                    >
+                                      <option value="TaughtCourse">
+                                        Taught Course
+                                      </option>
+                                      <option value="Self-StudyCourse">
+                                        Self-Study Course
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__select__heading">
+                                    <span>Primary Instructor</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                    >
+                                      <option value="Admin">Admin</option>
+                                    </select>
                                   </div>
                                 </div>
                               </div>
@@ -239,7 +211,7 @@ const CreateCourse = () => {
                             aria-expanded="false"
                             aria-controls="collapseTwo"
                           >
-                            Course Intro Video
+                            Requirements
                           </button>
                         </h2>
                         <div
@@ -251,33 +223,20 @@ const CreateCourse = () => {
                           <div className="accordion-body">
                             <div className="become__instructor__form">
                               <div className="row">
-                                <div className="col-xl-12">
-                                  <div className="dashboard__form__wraper">
-                                    <div className="dashboard__form__input">
-                                      <input
-                                        type="text"
-                                        placeholder="Select Video search"
-                                      />
-                                    </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__select__heading">
+                                    <span>Requirements</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                    >
+                                      <option value="ABCD">ABCD</option>
+                                      <option value="EFGH">EFGH</option>
+                                    </select>
                                   </div>
                                 </div>
-                                <div className="col-xl-12">
-                                  <div className="dashboard__form__wraper">
-                                    <div className="dashboard__form__input">
-                                      <label for="#">Add Your Video URL</label>
-                                      <input
-                                        type="text"
-                                        placeholder="Add your Video URL here"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <small>
-                                  Example:{" "}
-                                  <Link to="https://www.youtube.com/watch?v=yourvideoid">
-                                    https://www.youtube.com/watch?v=yourvideoid
-                                  </Link>
-                                </small>
                               </div>
                             </div>
                           </div>
@@ -290,10 +249,10 @@ const CreateCourse = () => {
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapseThree"
-                            aria-expanded="true"
+                            aria-expanded="false"
                             aria-controls="collapseThree"
                           >
-                            Course Builder
+                            Outcome
                           </button>
                         </h2>
                         <div
@@ -303,10 +262,23 @@ const CreateCourse = () => {
                           data-bs-parent="#accordionExample"
                         >
                           <div className="accordion-body">
-                            <div className="create__course__button">
-                              <Link className="default__button" to=" ">
-                                Add New Topic
-                              </Link>
+                            <div className="become__instructor__form">
+                              <div className="row">
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__select__heading">
+                                    <span>Outcome</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <select
+                                      className="form-select"
+                                      aria-label="Default select example"
+                                    >
+                                      <option value="123">123</option>
+                                      <option value="DEF">DEF</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -318,10 +290,10 @@ const CreateCourse = () => {
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapseFour"
-                            aria-expanded="true"
+                            aria-expanded="false"
                             aria-controls="collapseFour"
                           >
-                            Additional Information
+                            Course Media
                           </button>
                         </h2>
                         <div
@@ -331,134 +303,37 @@ const CreateCourse = () => {
                           data-bs-parent="#accordionExample"
                         >
                           <div className="accordion-body">
-                            <div className="row">
-                              <div className="col-xl-6">
-                                <div className="dashboard__form__wraper">
-                                  <div className="dashboard__form__input">
-                                    <label for="#">Start Date</label>
-                                    <input
-                                      type="text"
-                                      placeholder="mm/dd/yyyy"
-                                    />
+                            <div className="become__instructor__form">
+                              <div className="row">
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Course Overview Provider</label>
+                                      <input
+                                        type="text"
+                                        placeholder="Course Overview Provider"
+                                      />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="col-xl-6">
-                                <div className="dashboard__form__wraper">
-                                  <div className="dashboard__form__input">
-                                    <label for="#">Language</label>
-                                    <input type="text" placeholder="English" />
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Course Overview URL</label>
+                                      <input
+                                        type="text"
+                                        placeholder="Course Overview URL"
+                                      />
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="col-xl-6">
-                                <div className="dashboard__form__wraper">
-                                  <div className="dashboard__form__input">
-                                    <label for="#">Requirements</label>
-                                    <textarea
-                                      className="create__course__textarea"
-                                      name=""
-                                      id=""
-                                      cols="30"
-                                      rows="10"
-                                    >
-                                      Add your course benefits here.
-                                    </textarea>
-                                    <small className="create__course__small">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="feather feather-info"
-                                      >
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line
-                                          x1="12"
-                                          y1="16"
-                                          x2="12"
-                                          y2="12"
-                                        ></line>
-                                        <line
-                                          x1="12"
-                                          y1="8"
-                                          x2="12.01"
-                                          y2="8"
-                                        ></line>
-                                      </svg>{" "}
-                                      Enter for per line.
-                                    </small>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Course Thumbnail</label>
+                                      <input type="file" />
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
-                              <div className="col-xl-6">
-                                <div className="dashboard__form__wraper">
-                                  <div className="dashboard__form__input">
-                                    <label for="#">Description</label>
-                                    <textarea
-                                      className="create__course__textarea"
-                                      name=""
-                                      id=""
-                                      cols="30"
-                                      rows="10"
-                                    >
-                                      Add your course benefits here.
-                                    </textarea>
-                                    <small className="create__course__small">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="feather feather-info"
-                                      >
-                                        <circle cx="12" cy="12" r="10"></circle>
-                                        <line
-                                          x1="12"
-                                          y1="16"
-                                          x2="12"
-                                          y2="12"
-                                        ></line>
-                                        <line
-                                          x1="12"
-                                          y1="8"
-                                          x2="12.01"
-                                          y2="8"
-                                        ></line>
-                                      </svg>{" "}
-                                      Enter for per line.
-                                    </small>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-xl-12">
-                                <div className="dashboard__form__wraper">
-                                  <div className="dashboard__form__input">
-                                    <label for="#">Course Tags</label>
-                                    <textarea
-                                      name=""
-                                      id=""
-                                      cols="30"
-                                      rows="10"
-                                    ></textarea>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="col-xl-12">
-                                <div className="dashboard__form__button">
-                                  <Link className="default__button" to=" ">
-                                    Update Info
-                                  </Link>
                                 </div>
                               </div>
                             </div>
@@ -472,10 +347,10 @@ const CreateCourse = () => {
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapseFive"
-                            aria-expanded="true"
+                            aria-expanded="false"
                             aria-controls="collapseFive"
                           >
-                            Certificate Template
+                            Course SEO
                           </button>
                         </h2>
                         <div
@@ -485,35 +360,159 @@ const CreateCourse = () => {
                           data-bs-parent="#accordionExample"
                         >
                           <div className="accordion-body">
-                            <div className="row">
-                              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                <div className="create__course__single__img">
-                                  <img src={dashboard8} alt="" />
+                            <div className="become__instructor__form">
+                              <div className="row">
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>SEO Meta Keywords</label>
+                                      <input
+                                        type="text"
+                                        placeholder="SEO Meta Keywords"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Meta Description</label>
+                                      <input
+                                        type="text"
+                                        placeholder="Meta Description"
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Course Thumbnail</label>
+                                      <input type="file" />
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                <div className="create__course__single__img">
-                                  <img src={dashboard4} alt="" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="headingSix">
+                          <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseSix"
+                            aria-expanded="false"
+                            aria-controls="collapseSix"
+                          >
+                            Lessons
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseSix"
+                          className="accordion-collapse collapse"
+                          aria-labelledby="headingSix"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body">
+                            <div className="become__instructor__form">
+                              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                <div className="dashboard__select__heading">
+                                  <span>Lessons</span>
+                                </div>
+                                <div className="dashboard__selector">
+                                  <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                  >
+                                    <option value="Reading Intro">
+                                      Reading Intro
+                                    </option>
+                                    <option value="Listening-101">
+                                      Listening-101
+                                    </option>
+                                  </select>
                                 </div>
                               </div>
-                              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                <div className="create__course__single__img">
-                                  <img src={dashboard5} alt="" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="headingSeven">
+                          <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseSeven"
+                            aria-expanded="false"
+                            aria-controls="collapseSeven"
+                          >
+                            Course Materials
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseSeven"
+                          className="accordion-collapse collapse"
+                          aria-labelledby="headingSeven"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body">
+                            <div className="become__instructor__form">
+                              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                <div className="dashboard__form__wraper">
+                                  <div className="dashboard__form__input">
+                                    <label>Course Material</label>
+                                    <input type="file" />
+                                  </div>
                                 </div>
                               </div>
-                              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                <div className="create__course__single__img">
-                                  <img src={dashboard9} alt="" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="accordion-item">
+                        <h2 className="accordion-header" id="headingEigth">
+                          <button
+                            className="accordion-button collapsed"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapseEigth"
+                            aria-expanded="false"
+                            aria-controls="collapseEigth"
+                          >
+                            Additional Information
+                          </button>
+                        </h2>
+                        <div
+                          id="collapseEigth"
+                          className="accordion-collapse collapse"
+                          aria-labelledby="headingEigth"
+                          data-bs-parent="#accordionExample"
+                        >
+                          <div className="accordion-body">
+                            <div className="become__instructor__form">
+                              <div className="row">
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Information</label>
+                                      <input
+                                        type="text"
+                                        placeholder="Information"
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                <div className="create__course__single__img">
-                                  <img src={dashboard7} alt="" />
-                                </div>
-                              </div>
-                              <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12">
-                                <div className="create__course__single__img">
-                                  <img src={dashboard8} alt="" />
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                                  <div className="dashboard__form__wraper">
+                                    <div className="dashboard__form__input">
+                                      <label>Course File</label>
+                                      <input type="file" />
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -525,139 +524,10 @@ const CreateCourse = () => {
                   <div className="row">
                     <div className="col-xl-8 col-lg-8 col-md-6 col-12">
                       <div className="create__course__bottom__button">
-                        <Link to=" ">Create Course</Link>
+                        <button className="default__button">
+                          Create Course
+                        </button>
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-lg-4 col-md-12 col-12">
-                  <div className="create__course__wraper">
-                    <div className="create__course__title">
-                      <h4>Course Upload Tips</h4>
-                    </div>
-                    <div className="create__course__list">
-                      <ul>
-                        <li>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-check"
-                          >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                          Set the Course Price option make it free.
-                        </li>
-                        <li>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-check"
-                          >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                          Standard size for the course thumbnail.
-                        </li>
-                        <li>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-check"
-                          >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                          Video section controls the course overview video.
-                        </li>
-                        <li>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-check"
-                          >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                          Course Builder is where you create course.
-                        </li>
-                        <li>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-check"
-                          >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                          Add Topics in the Course Builder section to create
-                          lessons, .
-                        </li>
-                        <li>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-check"
-                          >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                          Prerequisites refers to the fundamental courses .
-                        </li>
-                        <li>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-check"
-                          >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                          Information from the Additional Data section.
-                        </li>
-                      </ul>
                     </div>
                   </div>
                 </div>

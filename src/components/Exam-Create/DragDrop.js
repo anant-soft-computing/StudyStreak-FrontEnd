@@ -7,6 +7,8 @@ import NavBar from "../NavBar/NavBar";
 import Footer from "../Footer/Footer";
 import ajaxCall from "../../helpers/ajaxCall";
 
+const Cheerio = require("cheerio");
+
 const initialDivContents = {
   header1: `
     <div className="header21Class">
@@ -1030,6 +1032,7 @@ const DragDrop = () => {
   const location = useLocation();
   const readingData = location.state?.readingData || {};
   const listeningData = location.state?.listeningData || {};
+  const [answer, setAnswer] = useState([]);
 
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [divContents, setDivContents] = useState(initialDivContents);
@@ -1040,58 +1043,412 @@ const DragDrop = () => {
     initialQuestion,
   ]);
 
-  const handleQuestionChange = (e, index, field) => {
-    dispatchQuestions({
-      type: "updateQuestion",
-      payload: { index, field, value: e.target.value },
-    });
+  const handleAnswerChange = (e, parentIndex, childIndex) => {
+    const updatedAnswer = [...answer];
+    updatedAnswer[parentIndex].answers[childIndex].answer_text = e.target.value;
+    setAnswer(updatedAnswer);
   };
 
-  const addMoreQuestions = () => {
-    dispatchQuestions({ type: "addQuestion" });
+  const generateAnswerField = (htmlContents, index = null) => {
+    let tag = null;
+    const $ = Cheerio.load(htmlContents);
+
+    // Find all <select> elements
+    const selectElements = $("select");
+
+    // Find all <ul> elements
+    const ulElements = $("ul");
+
+    // find all <input> elements
+    const inputElements = $("input");
+
+    // find all <textarea> elements
+    const textareaElements = $("textarea");
+
+    // Count the number of <select> elements
+    let numberOfQuestionsElements = 0;
+
+    // maximum number of questions
+    if (
+      selectElements.length > inputElements.length &&
+      selectElements.length > ulElements.length &&
+      selectElements.length > textareaElements.length
+    ) {
+      tag = "select";
+      numberOfQuestionsElements = selectElements.length;
+    }
+
+    if (
+      ulElements.length > selectElements.length &&
+      ulElements.length > inputElements.length &&
+      ulElements.length > textareaElements.length
+    ) {
+      tag = "ul";
+      numberOfQuestionsElements = ulElements.length;
+    }
+
+    if (
+      inputElements.length > ulElements.length &&
+      inputElements.length > selectElements.length &&
+      inputElements.length > textareaElements.length
+    ) {
+      tag = "input";
+      numberOfQuestionsElements = inputElements.length;
+    }
+
+    if (
+      textareaElements.length > ulElements.length &&
+      textareaElements.length > selectElements.length &&
+      textareaElements.length > inputElements.length
+    ) {
+      tag = "textarea";
+      numberOfQuestionsElements = textareaElements.length;
+    }
+
+    // Find the first heading element (h1, h2, h3, h4, h5, or h6)
+    const firstHeadingElement = $("h1, h2, h3, h4, h5, h6").first();
+
+    // Get the content of the first heading element
+    const content = firstHeadingElement.text();
+
+    let totalAnwser = [];
+
+    let lastQuestionNumber = 0;
+
+    if (answer.length > 0) {
+      let lastAnswer = answer[answer.length - 1];
+      lastQuestionNumber =
+        lastAnswer.answers[lastAnswer.answers.length - 1].question_number;
+    }
+
+    for (let i = 0; i < numberOfQuestionsElements; i++) {
+      const tempAnswer = {
+        question_number: lastQuestionNumber + i + 1,
+        answer_text: "",
+        error: "",
+      };
+      totalAnwser.push(tempAnswer);
+    }
+    const temp = {
+      title: content,
+      answers: totalAnwser,
+    };
+    if (index !== null) {
+      const updatedAnswer = [...answer];
+
+      updatedAnswer[index] = temp;
+
+      // reload the question number of all fields
+      let questionNumber = 0;
+      updatedAnswer.forEach((item) => {
+        item.answers.forEach((answer, index) => {
+          questionNumber = questionNumber + 1;
+          answer.question_number = questionNumber;
+        });
+      });
+      setAnswer(updatedAnswer);
+    } else setAnswer((prev) => [...prev, temp]);
+    return tag;
   };
 
-  const handleClick = (header) => {
-    setSelectedDivs((prev) => [...prev, header]);
+  const handleClick = async (header) => {
+    const tag = await generateAnswerField(divContents[header]);
+    setSelectedDivs((prev) => [...prev, { header, tag }]);
+
+    // Generate answer field
   };
 
-  const handleContentChange = (event, header) => {
+  const handleContentChange = (event, header, divIndex) => {
     event.preventDefault();
     setDivContents({
       ...divContents,
-      [header]: event.target.innerHTML,
+      [header.header]: event.target.innerHTML,
     });
+
+    generateAnswerField(event.target.innerHTML, divIndex);
   };
 
   const handleReset = () => {
     const shouldReset = window.confirm("Are you sure you want to reset?");
     if (shouldReset) {
       setSelectedDivs([]);
+      setAnswer([]);
+      setDivContents(initialDivContents);
+      setFormStatus(initialSubmit);
     }
   };
 
   const handleDelete = (header) => {
-    setSelectedDivs((prev) => prev.filter((item) => item !== header));
+    setSelectedDivs((prev) => prev?.filter((item) => item.header !== header.header));
   };
 
   const htmlContent = selectedDivs
     .map((header) => {
       return `<div class="${
         header === "header1" ? "header21Class" : "header2Class"
-      }">${divContents[header]}</div>`;
+      }">${divContents[header.header]}</div>`;
     })
     .join("");
 
   const generateHTMLContent = () => {
+    const uniqueIdArr = [];
+    let questionNumber = 0;
     const htmlContent = selectedDivs
       .map((header) => {
+        // Parse the HTML content
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(
+          divContents[header.header],
+          "text/html"
+        );
+
+        // Find all select elements
+        const selectElements = doc.querySelectorAll(header.tag);
+
+        // Add a unique ID to each select element
+        selectElements.forEach((selectElement, index) => {
+          const uniqueId = `${header.tag}_${questionNumber + 1}`;
+          questionNumber = questionNumber + 1;
+          uniqueIdArr.push(uniqueId);
+          selectElement.id = uniqueId;
+        });
+
         return `<div class="${
-          header === "header1" ? "header21Class" : "header2Class"
-        }">${divContents[header]}</div>`;
+          header.header === "header1" ? "header21Class" : "header2Class"
+        }">${doc.documentElement.outerHTML}</div>`;
       })
       .join("");
 
-    return `<div class="box-right">${htmlContent}</div>`;
+    const paginationContent = uniqueIdArr.map((item, index) => {
+      return `<div class="footer-item" onclick="scrollToContent('${item}')">${
+        index + 1
+      }</div>`;
+    });
+
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body {
+          margin: 0;
+          font-family: Arial, sans-serif;
+          background-color: #fff;
+        }
+    
+        .navbar {
+          color: black;
+          padding-left: 15px;
+          padding-right: 15px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid #ddd;
+        }
+
+        .navbar-title {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+        }
+
+        .navbar-subtitle {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+          margin-left: 15px;
+        }
+
+        .navbar-right{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 10%;
+        }
+
+    
+        .container {
+          background-color: #f1f2ec;
+          padding: 20px;
+          margin: 20px;
+          border-radius: 8px;
+          overflow: hidden;
+        }
+
+        .scrollable-content {
+          overflow-y: auto; /* Enable vertical scrollbar if content overflows vertically */
+          height: 100%; /* Take up 100% of the container height */
+          padding: 10px; /* Add padding to make it look better */
+        }
+    
+        .container-title {
+          color: #333;
+          font-size: 24px;
+          margin-bottom: 10px;
+        }
+    
+        .container-subtitle {
+          color: #666;
+          font-size: 18px;
+        }
+    
+        .main-container {
+          display: flex;
+          height: calc(100vh - 250px);
+        }
+    
+        .left-container,
+        .right-container {
+          flex: 1;
+          overflow-y: auto;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          margin: 10px;
+        }
+    
+        .footer {
+          color: black;
+          position: fixed;
+          bottom: 0;
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+    
+        .footer-text {
+          font-size: 16px;
+          padding: 0px 20px;
+          display: flex;
+          width: 100%;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          overflow: hidden;
+        }
+
+        .question-pagination, .part-pagination {
+          width: 50%;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          overflow-x: auto;
+        }
+
+    
+        .footer-button {
+          width: 80px;
+          padding: 10px 20px;
+          background-color: #efefef;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-size: 25px;
+          font-weight: bold;
+        }
+
+        .footer-item {
+          cursor: pointer;
+          padding: 5px 10px;
+          margin-right: 20px;
+        }
+    
+        .footer-item:hover {
+          text-decoration: underline;
+          border: 1px solid #418ec8;
+          font-weight: bold;
+        }
+
+        .highlight {
+          background-color: #ffffcc;
+        }
+
+      </style>
+      <title>Your Page Title</title>
+    </head>
+    <body>
+    
+      <!-- Navbar -->
+      <div class="navbar">
+        <div class="navbar-title">
+          <h2 style="color:red">IELTS</h2>
+          <div class="navbar-subtitle">
+            <h4 style="margin-top:5px; margin-bottom:5px">Test taker ID</h4>
+            <span>2 years, 11 months, 6 days, 3 hours, 40 minutes remaining Connected</span>
+          </div>
+        </div>
+        <div class="navbar-right">
+          <h4>Wifi</h4>
+          <h4>&#128276;</h4> <!-- Notification Bell Icon -->
+          <h4>&#9776;</h4> <!-- Menu Icon -->
+        </div>
+      </div>
+    
+      <!-- Static Container -->
+      <div class="container">
+        <div class="container-title">${
+          readingData.exam_type || listeningData.exam_type
+        } / ${readingData.exam_name || listeningData.exam_name} / ${
+      readingData.block_type || listeningData.block_type
+    } / ${
+      readingData.difficulty_level || listeningData.difficulty_level
+    }  </div>
+      </div>
+    
+      <!-- Main Container -->
+      <div class="main-container">
+        <!-- Left Container -->
+        <div class="left-container">
+          ${readingData.passage || listeningData.passage}
+        </div>
+    
+        <!-- Right Container -->
+        <div class="right-container" id="right-container">
+          <div class="box-right">
+            ${htmlContent}
+          </div>
+        </div>
+      </div>
+    
+      <!-- Footer -->
+      <div class="footer">
+        <div class="footer-text">
+        <div class="part-pagination">
+        </div>
+        <div class="question-pagination">
+        ${paginationContent.join("")}
+        </div>
+        </div>
+        <button class="footer-button"><span class="arrow">&#x2713;</span></button>
+      </div>
+
+      <script>
+      let highlightedElement = null;
+    function scrollToContent(contentId) {
+      const container = document.getElementById('right-container');
+      const contentElement = document.getElementById(contentId);
+
+      if (highlightedElement) {
+        highlightedElement.classList.remove('highlight');
+      }
+      
+      if (contentElement) {
+        container.scrollTop = contentElement.offsetTop - container.offsetTop;
+        contentElement.classList.add('highlight');
+        highlightedElement = contentElement;
+      }
+    }
+  </script>
+    
+    </body>
+    </html>    
+    `;
   };
 
   const downloadHTMLFile = () => {
@@ -1100,8 +1457,36 @@ const DragDrop = () => {
     saveAs(blob, "file.html");
   };
 
+  const handleAnswerValdiation = () => {
+    let isValid = true;
+    const updatedAnswer = [...answer];
+    updatedAnswer.forEach((item) => {
+      item.answers.forEach((answer) => {
+        if (answer.answer_text === "") {
+          answer.error = "Please enter answer";
+          isValid = false;
+        } else {
+          answer.error = "";
+        }
+      });
+    });
+    setAnswer(updatedAnswer);
+    return isValid;
+  };
+
   const doReading = async (e) => {
     e.preventDefault();
+    const isValid = handleAnswerValdiation();
+    if (!isValid) return;
+    const answerData = answer.map((item) => {
+      const tempAnswer = item.answers.map((answer) => ({
+        question_number: answer.question_number,
+        answer_text: answer.answer_text,
+      }));
+      tempAnswer.flat(Infinity);
+      return tempAnswer;
+    });
+
     const data = {
       block_threshold: readingData.block_threshold,
       block_type: readingData.block_type,
@@ -1111,7 +1496,7 @@ const DragDrop = () => {
       no_of_questions: readingData.no_of_questions,
       passage: readingData.passage,
       question: htmlContent,
-      answers: questions,
+      answers: answerData.flat(Infinity),
     };
     try {
       const response = await ajaxCall("/exam-blocks/", {
@@ -1146,32 +1531,38 @@ const DragDrop = () => {
 
   const doListening = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("block_threshold", listeningData.block_threshold);
-    formData.append("block_type", listeningData.block_type);
-    formData.append("difficulty_level", listeningData.difficulty_level);
-    formData.append("exam_name", listeningData.exam_name);
-    formData.append("exam_type", listeningData.exam_type);
-    formData.append("no_of_questions", listeningData.no_of_questions);
-    formData.append("passage", listeningData.passage);
-    formData.append("question", htmlContent);
-    formData.append(
-      "answers",
-      questions.forEach((answer, index) => {
-        formData.append(
-          `answers[${index}]question_number`,
-          answer.question_number
-        );
-        formData.append(`answers[${index}]answer_text`, answer.answer_text);
-      })
-    );
-    formData.append("audio_file", listeningData.audio_file);
+    const isValid = handleAnswerValdiation();
+    if (!isValid) return;
+    const answerData = answer.map((item) => {
+      const tempAnswer = item.answers.map((answer) => ({
+        question_number: answer.question_number,
+        answer_text: answer.answer_text,
+      }));
+      tempAnswer.flat(Infinity);
+      return tempAnswer;
+    });
+
+    const data = {
+      block_threshold: listeningData.block_threshold,
+      block_type: listeningData.block_type,
+      difficulty_level: listeningData.difficulty_level,
+      exam_name: listeningData.exam_name,
+      exam_type: listeningData.exam_type,
+      no_of_questions: listeningData.no_of_questions,
+      audio_file: listeningData.audio_file.name,
+      passage: listeningData.passage,
+      question: htmlContent,
+      answers: answerData.flat(Infinity),
+    };
     try {
       const response = await ajaxCall("/exam-blocks/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
         method: "POST",
-        body: formData,
+        body: JSON.stringify(data),
       });
-
       if (response.status === 201) {
         setFormStatus({
           isError: false,
@@ -1207,9 +1598,6 @@ const DragDrop = () => {
               <div className="d-flex">
                 <div>
                   <div className="box-left">
-                    <div onClick={() => handleClick("header1")}>
-                      Left Paragraph
-                    </div>
                     <div onClick={() => handleClick("header2")}>
                       Matching Headings
                     </div>
@@ -1265,6 +1653,7 @@ const DragDrop = () => {
                         type="button"
                         className="btn save"
                         onClick={downloadHTMLFile}
+                        disabled={selectedDivs.length === 0}
                       >
                         <span>Save</span>
                       </button>
@@ -1273,11 +1662,11 @@ const DragDrop = () => {
                 </div>
                 <div>
                   <div className="box-right">
-                    {selectedDivs.map((header) => (
+                    {selectedDivs.map((header, index) => (
                       <div
-                        key={header}
+                        key={header.header}
                         className={
-                          header === "header1"
+                          header.header === "header1"
                             ? "header21Class"
                             : "header2Class"
                         }
@@ -1303,51 +1692,46 @@ const DragDrop = () => {
                         <div
                           contentEditable
                           dangerouslySetInnerHTML={{
-                            __html: divContents[header],
+                            __html: divContents[header.header],
                           }}
-                          onBlur={(event) => handleContentChange(event, header)}
+                          onBlur={(event) =>
+                            handleContentChange(event, header.header, index)
+                          }
+                          // onChange={(event) =>
+                          //   handleContentChange(event, header)
+                          // }
                         />
                       </div>
                     ))}
                   </div>
                 </div>
                 <div className="col-xl-4 col-lg-4 col-md-12 col-12">
-                  {questions.map((question, index) => (
-                    <div className="row" key={index}>
-                      <div className="col-xl-4 col-lg-6 col-md-6 col-12">
-                        <div className="dashboard__form__wraper">
-                          <div className="dashboard__form__input">
-                            <label>Question No.</label>
-                            <input
-                              type="number"
-                              placeholder="Question No."
-                              value={question.question_number}
-                              onChange={(e) =>
-                                handleQuestionChange(
-                                  e,
-                                  index,
-                                  "question_number"
-                                )
-                              }
-                            />
+                  {answer.map((answer, parentIndex) => (
+                    <div className="row" key={parentIndex}>
+                      <h5>{answer.title}</h5>
+                      {answer.answers.map((item, childIndex) => (
+                        <div className="col-xl-8 col-lg-6 col-md-6 col-12">
+                          <div className="dashboard__form__wraper">
+                            <div className="dashboard__form__input">
+                              <label>Question No. {item.question_number}</label>
+                              <input
+                                type="text"
+                                placeholder="Answer"
+                                value={answer.answer_text}
+                                onChange={(e) =>
+                                  handleAnswerChange(e, parentIndex, childIndex)
+                                }
+                                style={{
+                                  borderColor: item.error === "" ? "" : "red",
+                                }}
+                              />
+                              {item.error !== "" && (
+                                <label style={{ color: "red" }}>Required</label>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="col-xl-8 col-lg-6 col-md-6 col-12">
-                        <div className="dashboard__form__wraper">
-                          <div className="dashboard__form__input">
-                            <label>Answer</label>
-                            <input
-                              type="text"
-                              placeholder="Answer"
-                              value={question.answer_text}
-                              onChange={(e) =>
-                                handleQuestionChange(e, index, "answer_text")
-                              }
-                            />
-                          </div>
-                        </div>
-                      </div>
+                      ))}
                     </div>
                   ))}
                   {formStatus.isError ? (
@@ -1355,37 +1739,19 @@ const DragDrop = () => {
                   ) : (
                     <div className="text-success mb-2">{formStatus.errMsg}</div>
                   )}
-                  <button
-                    className="default__button m-2"
-                    onClick={addMoreQuestions}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="feather feather-plus"
+                  {answer.length > 0 && (
+                    <button
+                      className="default__button"
+                      disabled={formStatus.isSubmitting}
+                      onClick={
+                        listeningData.exam_type === "Listening"
+                          ? doListening
+                          : doReading
+                      }
                     >
-                      <line x1="12" y1="5" x2="12" y2="19"></line>
-                      <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                  </button>
-                  <button
-                    className="default__button"
-                    disabled={formStatus.isSubmitting}
-                    onClick={
-                      listeningData.exam_type === "Listening"
-                        ? doListening
-                        : doReading
-                    }
-                  >
-                    Submit
-                  </button>
+                      Submit
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

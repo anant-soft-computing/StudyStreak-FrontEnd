@@ -50,10 +50,22 @@ const App = () => {
           path="/contactUs"
           element={<ProtectedRoute element={ContactUs} />}
         />
-        <Route path="/exam-create" element={<DragDrop />} />
-        <Route path="/exam-creator" element={<ExamCreator />} />
-        <Route path="/exam-reading" element={<ExamReading />} />
-        <Route path="/exam-listening" element={<ExamListening />} />
+        <Route
+          path="/exam-create"
+          element={<ProtectedRoute element={DragDrop} />}
+        />
+        <Route
+          path="/exam-creator"
+          element={<ProtectedRoute element={ExamCreator} />}
+        />
+        <Route
+          path="/exam-reading"
+          element={<ProtectedRoute element={ExamReading} />}
+        />
+        <Route
+          path="/exam-listening"
+          element={<ProtectedRoute element={ExamListening} />}
+        />
       </Routes>
     </Router>
   );

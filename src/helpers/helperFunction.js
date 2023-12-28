@@ -1,5 +1,3 @@
-import ajaxCall from "./ajaxCall";
-
 Storage.prototype.setObject = (key, value) => {
   this.setItem(key, JSON.stringify(value));
 };
@@ -23,32 +21,8 @@ const deleteFromLocalStorage = (key) => {
   localStorage.removeItem(key);
 };
 
-const getRefreshToken = async (refreshToken) => {
-  const response = await ajaxCall(
-    "token/refresh/",
-    {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    "POST",
-    JSON.stringify({
-      refreshToken: refreshToken,
-    })
-  );
-  if (response.msg === "Login Successful") {
-    const localObj = {
-      accessToken: response.token.access,
-      refreshToken: response.token.refresh,
-      user_type: response.token.user_status,
-      userId: response.token.userid,
-    };
-    setToLocalStorage("LoginInfo", localObj, true);
-  }
-};
-
 export {
   setToLocalStorage,
   getFromLocalStorage,
   deleteFromLocalStorage,
-  getRefreshToken,
 };

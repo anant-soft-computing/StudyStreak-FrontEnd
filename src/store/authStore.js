@@ -7,6 +7,7 @@ const initialState = {
   refreshToken: null,
   userId: null,
   user_type: null,
+  user_role: "",
 };
 
 const authStore = createSlice({
@@ -21,6 +22,7 @@ const authStore = createSlice({
         state.userName = action.payload.userName;
         state.user_type = action.payload.user_type;
         state.userId = action.payload.userId;
+        state.user_role = action.payload.user_role;  
       } else {
         state.loggedIn = false;
       }

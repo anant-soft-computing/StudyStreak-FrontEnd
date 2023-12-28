@@ -196,6 +196,20 @@ const CreateCourse = () => {
                                     </select>
                                   </div>
                                 </div>
+                                <div className="d-flex flex-wrap gap-4 mt-4">
+                                  <div className="form__check">
+                                    <label>Featured</label>{" "}
+                                    <input type="checkbox" />
+                                  </div>
+                                  <div className="form__check">
+                                    <label>Support Available</label>{" "}
+                                    <input type="checkbox" />
+                                  </div>
+                                  <div className="form__check">
+                                    <label>Is Active</label>{" "}
+                                    <input type="checkbox" />
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>

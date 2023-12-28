@@ -9,13 +9,21 @@ import Blogs from "./pages/Blogs/Blogs";
 import BlogDetail from "./components/BlogDetail/BlogDetail";
 import Tests from "./pages/Tests/Tests";
 import MyCourses from "./components/Dashboard/Student/MyCourses";
-import Dashboard from "./components/Dashboard/Student/Dashboard";
+import StudentDashboard from "./components/Dashboard/Student/Dashboard";
+import AdminDashboard from "./components/Dashboard/Admin/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import DragDrop from "./components/Exam-Create/DragDrop";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ExamCreator from "./pages/Exam-Creator/ExamCreator";
 import ExamReading from "./components/Exam-Create/ExamReading";
 import ExamListening from "./components/Exam-Create/ExamListening";
+import Course from "./components/Dashboard/Admin/Course";
+import Exam from "./components/Dashboard/Admin/Exam";
+import LiveClass from "./components/Dashboard/Admin/LiveClass";
+import Package from "./components/Dashboard/Admin/Package";
+import User from "./components/Dashboard/Admin/User";
+import Counselling from "./components/Dashboard/Admin/Counselling";
+import Profile from "./components/Dashboard/Admin/Profile";
 
 const App = () => {
   return (
@@ -39,8 +47,40 @@ const App = () => {
           element={<ProtectedRoute element={BlogDetail} />}
         />
         <Route
+          path="/dashboard/admin-dashboard"
+          element={<ProtectedRoute element={AdminDashboard} />}
+        />
+        <Route
+          path="/dashboard/admin-course"
+          element={<ProtectedRoute element={Course} />}
+        />
+        <Route
+          path="/dashboard/admin-exam"
+          element={<ProtectedRoute element={Exam} />}
+        />
+        <Route
+          path="/dashboard/admin-liveClass"
+          element={<ProtectedRoute element={LiveClass} />}
+        />
+        <Route
+          path="/dashboard/admin-package"
+          element={<ProtectedRoute element={Package} />}
+        />
+        <Route
+          path="/dashboard/admin-user"
+          element={<ProtectedRoute element={User} />}
+        />
+        <Route
+          path="/dashboard/admin-counselling"
+          element={<ProtectedRoute element={Counselling} />}
+        />
+        <Route
+          path="/dashboard/admin-profile"
+          element={<ProtectedRoute element={Profile} />}
+        />
+        <Route
           path="/dashboard/student-dashboard"
-          element={<ProtectedRoute element={Dashboard} />}
+          element={<ProtectedRoute element={StudentDashboard} />}
         />
         <Route
           path="/dashboard/student-my-courses"

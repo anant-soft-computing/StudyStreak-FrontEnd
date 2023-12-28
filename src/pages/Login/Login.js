@@ -73,18 +73,20 @@ const Login = () => {
     if (!validateForm()) return;
     const data = JSON.stringify(loginData);
     try {
-      const response = await ajaxCall("/login/", {
+      const response = await ajaxCall("/courselistview/", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         method: "POST",
         body: data,
-        withCredentials: true
+        withCredentials: true,
       });
       if (response.status === 200) {
         handleLoginSuccess(response);
-        navigate("/");
+        response.data.user_role === "admin"
+          ? navigate("/dashboard/admin-dashboard")
+          : navigate("/");
       } else if (response.status === 400 || response.status === 404) {
         setFormStatus({
           isError: true,
@@ -107,6 +109,7 @@ const Login = () => {
       refreshToken: response.data?.token?.refresh,
       user_type: response.data?.user_status,
       userId: response.data?.userid,
+      user_role: response.data?.user_role,
       username: loginData.username,
     };
     setToLocalStorage("loginInfo", localObj, true);
@@ -117,6 +120,7 @@ const Login = () => {
         accessToken: response.data?.token?.access,
         refreshToken: response.data?.token?.refresh,
         user_type: response.data?.user_status,
+        user_role: response.data?.user_role,
         userId: response.data?.userid,
       })
     );

@@ -38,6 +38,16 @@ const NavBar = () => {
                         Courses
                       </Link>
                     </li>
+                    {/* <li className="mega__menu position-static">
+                      <Link className="headerarea__has__dropdown" to="/tests">
+                        Tests
+                      </Link>
+                    </li>
+                    <li className="mega__menu position-static">
+                      <Link className="headerarea__has__dropdown" to="/blogs">
+                        Blogs
+                      </Link>
+                    </li> */}
                     <li className="mega__menu position-static">
                       <Link
                         className="headerarea__has__dropdown"

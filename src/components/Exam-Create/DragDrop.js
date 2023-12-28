@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { saveAs } from "file-saver";
 import "../../css/index.css";
@@ -1004,28 +1004,10 @@ const initialDivContents = {
 </div>`,
 };
 
-const initialQuestion = {
-  question_number: "",
-  answer_text: "",
-};
-
 const initialSubmit = {
   isError: false,
   errMsg: null,
   isSubmitting: false,
-};
-
-const reducerQuestions = (state, action) => {
-  if (action.type === "addQuestion") {
-    return [...state, { ...initialQuestion }];
-  }
-  if (action.type === "updateQuestion") {
-    const { index, field, value } = action.payload;
-    const updatedQuestions = [...state];
-    updatedQuestions[index][field] = value;
-    return updatedQuestions;
-  }
-  return state;
 };
 
 const DragDrop = () => {
@@ -1038,10 +1020,6 @@ const DragDrop = () => {
   const [divContents, setDivContents] = useState(initialDivContents);
 
   const [selectedDivs, setSelectedDivs] = useState([]);
-
-  const [questions, dispatchQuestions] = useReducer(reducerQuestions, [
-    initialQuestion,
-  ]);
 
   const handleAnswerChange = (e, parentIndex, childIndex) => {
     const updatedAnswer = [...answer];
@@ -1179,7 +1157,9 @@ const DragDrop = () => {
   };
 
   const handleDelete = (header) => {
-    setSelectedDivs((prev) => prev?.filter((item) => item.header !== header.header));
+    setSelectedDivs((prev) =>
+      prev?.filter((item) => item.header !== header.header)
+    );
   };
 
   const htmlContent = selectedDivs
@@ -1533,35 +1513,34 @@ const DragDrop = () => {
     e.preventDefault();
     const isValid = handleAnswerValdiation();
     if (!isValid) return;
-    const answerData = answer.map((item) => {
-      const tempAnswer = item.answers.map((answer) => ({
-        question_number: answer.question_number,
-        answer_text: answer.answer_text,
-      }));
-      tempAnswer.flat(Infinity);
-      return tempAnswer;
-    });
-
-    const data = {
-      block_threshold: listeningData.block_threshold,
-      block_type: listeningData.block_type,
-      difficulty_level: listeningData.difficulty_level,
-      exam_name: listeningData.exam_name,
-      exam_type: listeningData.exam_type,
-      no_of_questions: listeningData.no_of_questions,
-      audio_file: listeningData.audio_file.name,
-      passage: listeningData.passage,
-      question: htmlContent,
-      answers: answerData.flat(Infinity),
-    };
+    
+    const formData = new FormData();
+    
+    formData.append("block_threshold", listeningData.block_threshold);
+    formData.append("block_type", listeningData.block_type);
+    formData.append("difficulty_level", listeningData.difficulty_level);
+    formData.append("exam_name", listeningData.exam_name);
+    formData.append("exam_type", listeningData.exam_type);
+    formData.append("no_of_questions", listeningData.no_of_questions);
+    formData.append("passage", listeningData.passage);
+    formData.append("question", htmlContent);
+    formData.append(
+      "answers",
+      answer.forEach((item) => {
+        item.answers.forEach((answer, index) => {
+          formData.append(
+            `answers[${index}]question_number`,
+            answer.question_number
+          );
+          formData.append(`answers[${index}]answer_text`, answer.answer_text);
+        });
+      })
+    );
+    formData.append("audio_file", listeningData.audio_file);
     try {
       const response = await ajaxCall("/exam-blocks/", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
         method: "POST",
-        body: JSON.stringify(data),
+        body: formData,
       });
       if (response.status === 201) {
         setFormStatus({

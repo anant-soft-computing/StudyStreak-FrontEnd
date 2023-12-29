@@ -4,6 +4,8 @@ import NavBar from "../../components/NavBar/NavBar";
 import Footer from "../../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
+import SingleSelection from "../../components/UI/SingleSelect";
+import SelectionBox from "../../components/UI/SelectionBox";
 
 const initialCourseData = {
   Course_Title: "",
@@ -12,6 +14,9 @@ const initialCourseData = {
   Description: "",
   Category: "",
   Level: "",
+  Language: "",
+  tutor: [],
+  tutorId: [],
   EnrollmentStartDate: "",
   EnrollmentEndDate: "",
   max_enrollments: "",
@@ -22,19 +27,31 @@ const initialCourseData = {
   Featured: false,
   Support_Available: false,
   is_active: false,
-  Requirements: "",
-  Outcome: "",
+  Requirements: [],
+  requirementId: [],
+  Outcome: [],
+  outcomeId: [],
   Course_Overview_Provider: "",
   Course_Overview_URL: "",
   Course_Thumbnail: "",
   SEO_Meta_Keywords: "",
   Meta_Description: "",
-  lessons: "",
+  lessons: [],
+  lessonsId: [],
 };
 
 const reducerCreateCourse = (state, action) => {
   if (action.type === "reset") {
-    return initialCourseData;
+    return action.payload || initialCourseData;
+  }
+  if (
+    action.type === "SEO_Meta_Keywords" ||
+    action.type === "Meta_Description"
+  ) {
+    return {
+      ...state,
+      [action.type]: [action.value],
+    };
   }
   return { ...state, [action.type]: action.value };
 };
@@ -80,12 +97,32 @@ const CreateCourse = () => {
       setFormError("Description is Required");
       return false;
     }
+    if (!createCourseData.Category) {
+      setFormError("Category is Required");
+      return false;
+    }
+    if (!createCourseData.Level) {
+      setFormError("Level is Required");
+      return false;	
+    }
+    if (!createCourseData.Language) {
+      setFormError("Language is Required");
+      return false;
+    }
     if (!createCourseData.EnrollmentStartDate) {
       setFormError("Enrollment Start Date is Required");
       return false;
     }
     if (!createCourseData.EnrollmentEndDate) {
       setFormError("Enrollment End Date is Required");
+      return false;
+    }
+    if (!createCourseData.primary_instructor) {
+      setFormError("Primary Instructor is Required");
+      return false;
+    }
+    if (!createCourseData.tutor) {
+      setFormError("Tutor is Required");
       return false;
     }
     if (!createCourseData.max_enrollments) {
@@ -123,19 +160,68 @@ const CreateCourse = () => {
   const createCourse = async (e) => {
     resetReducerForm();
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm()) return; 
     try {
-      const response = await ajaxCall("/courselistview/", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(createCourseData),
-        withCredentials: true,
+      const formData = new FormData();
+
+      formData.append("Course_Title", createCourseData.Course_Title);
+      formData.append("course_identifier", createCourseData.course_identifier);
+      formData.append("Short_Description", createCourseData.Short_Description);
+      formData.append("Description", createCourseData.Description);
+      formData.append("Category", createCourseData.Category);
+      formData.append("Level", createCourseData.Level);
+      formData.append("Language", createCourseData.Language);
+      createCourseData.tutorId.forEach((id) => {
+        formData.append(`tutor`, id);
       });
-      if (response.status === 200) {
-        navigate("/");
+      formData.append(
+        "EnrollmentStartDate",
+        createCourseData.EnrollmentStartDate
+      );
+      formData.append("EnrollmentEndDate", createCourseData.EnrollmentEndDate);
+      formData.append("max_enrollments", createCourseData.max_enrollments);
+      formData.append("faqs", createCourseData.faqs);
+      formData.append("course_type", createCourseData.course_type);
+      formData.append("course_delivery", createCourseData.course_delivery);
+      formData.append(
+        "primary_instructor",
+        createCourseData.primary_instructor
+      );
+      formData.append("Featured", createCourseData.Featured);
+      formData.append("Support_Available", createCourseData.Support_Available);
+      formData.append("is_active", createCourseData.is_active);
+      createCourseData.requirementId.forEach((id) => {
+        formData.append(`Requirements`, id);
+      });
+      createCourseData.outcomeId.forEach((id) => {
+        formData.append(`Outcome`, id);
+      });
+      formData.append(
+        "Course_Overview_Provider",
+        createCourseData.Course_Overview_Provider
+      );
+      formData.append(
+        "Course_Overview_URL",
+        createCourseData.Course_Overview_URL
+      );
+      formData.append("Course_Thumbnail", createCourseData.Course_Thumbnail);
+      formData.append("SEO_Meta_Keywords", createCourseData.SEO_Meta_Keywords);
+      formData.append("Meta_Description", createCourseData.Meta_Description);
+      createCourseData.lessonsId.forEach((id) => {
+        formData.append(`lessons`, id);
+      });
+
+      const response = await ajaxCall(
+        "/courselistview/",
+        {
+          method: "POST",
+          body: formData,
+          withCredentials: true,
+        },
+        8000
+      );
+      if (response.status === 201) {
+        navigate("/courses");
       } else if (response.status === 400 || response.status === 404) {
         setFormStatus({
           isError: true,
@@ -150,6 +236,29 @@ const CreateCourse = () => {
         isSubmitting: false,
       });
     }
+  };
+
+  const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
+    if (isSingle) {
+      dispatchCreateCourse({
+        type: fieldName,
+        value: val,
+      });
+      dispatchCreateCourse({
+        type: proFieldName,
+        value: +val[0]?.id,
+      });
+      return;
+    }
+    const newValIds = val.map((ids) => ids.id);
+    dispatchCreateCourse({
+      type: fieldName,
+      value: val,
+    });
+    dispatchCreateCourse({
+      type: proFieldName,
+      value: newValIds,
+    });
   };
 
   return (
@@ -269,24 +378,17 @@ const CreateCourse = () => {
                                     <span>Category</span>
                                   </div>
                                   <div className="dashboard__selector">
-                                    <select
-                                      className="form-select"
-                                      aria-label="Default select example"
+                                    <SingleSelection
                                       value={createCourseData.Category}
-                                      onChange={(e) => {
+                                      onChange={(val) => {
                                         dispatchCreateCourse({
                                           type: "Category",
-                                          value: e.target.value,
+                                          value: val,
                                         });
                                       }}
-                                    >
-                                      <option value="English Language Tests">
-                                        English Language Tests
-                                      </option>
-                                      <option value="German Language Tests">
-                                        German Language Tests
-                                      </option>
-                                    </select>
+                                      url="/categoryview/"
+                                      objKey={["name"]}
+                                    />
                                   </div>
                                 </div>
                                 <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
@@ -294,23 +396,55 @@ const CreateCourse = () => {
                                     <span>Level</span>
                                   </div>
                                   <div className="dashboard__selector">
-                                    <select
-                                      className="form-select"
-                                      aria-label="Default select example"
+                                    <SingleSelection
                                       value={createCourseData.Level}
-                                      onChange={(e) => {
+                                      onChange={(val) => {
                                         dispatchCreateCourse({
                                           type: "Level",
-                                          value: e.target.value,
+                                          value: val,
                                         });
                                       }}
-                                    >
-                                      <option value="Beginner">Beginner</option>
-                                      <option value="Advanced">Advanced</option>
-                                      <option value="Intermediate">
-                                        Intermediate
-                                      </option>
-                                    </select>
+                                      url="/levelView/"
+                                      objKey={["name"]}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
+                                  <div className="dashboard__select__heading">
+                                    <span>Language</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <SingleSelection
+                                      value={createCourseData.Language}
+                                      onChange={(val) => {
+                                        dispatchCreateCourse({
+                                          type: "Language",
+                                          value: val,
+                                        });
+                                      }}
+                                      url="/languageview/"
+                                      objKey={["name"]}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
+                                  <div className="dashboard__select__heading">
+                                    <span>Tutor</span>
+                                  </div>
+                                  <div className="dashboard__selector">
+                                    <SelectionBox
+                                      value={createCourseData.tutor}
+                                      onSelect={addedSelectVal.bind(
+                                        null,
+                                        "tutor",
+                                        "tutorId",
+                                        false
+                                      )}
+                                      url="/getusers/"
+                                      name="username"
+                                      objKey={["username"]}
+                                      multiple={true}
+                                    />
                                   </div>
                                 </div>
                                 <div className="col-xl-6 col-lg-6 col-md-6 col-12">
@@ -401,8 +535,8 @@ const CreateCourse = () => {
                                         })
                                       }
                                     >
-                                      <option value="Private">Private</option>
-                                      <option value="Public">Public</option>
+                                      <option value="PRIVATE">Private</option>
+                                      <option value="PUBLIC">Public</option>
                                     </select>
                                   </div>
                                 </div>
@@ -422,11 +556,11 @@ const CreateCourse = () => {
                                         });
                                       }}
                                     >
-                                      <option value="TaughtCourse">
-                                        Taught Course
-                                      </option>
-                                      <option value="Self-StudyCourse">
+                                      <option value="SELF-STUDY">
                                         Self-Study Course
+                                      </option>
+                                      <option value="TAUGHT">
+                                        Taught Course
                                       </option>
                                     </select>
                                   </div>
@@ -449,7 +583,8 @@ const CreateCourse = () => {
                                         });
                                       }}
                                     >
-                                      <option value="Admin">Admin</option>
+                                      <option value="1">Student</option>
+                                      <option value="2">Admin</option>
                                     </select>
                                   </div>
                                 </div>
@@ -509,7 +644,7 @@ const CreateCourse = () => {
                             aria-expanded="false"
                             aria-controls="collapseTwo"
                           >
-                            Requirements
+                            Requirements & Outcome
                           </button>
                         </h2>
                         <div
@@ -526,68 +661,39 @@ const CreateCourse = () => {
                                     <span>Requirements</span>
                                   </div>
                                   <div className="dashboard__selector">
-                                    <select
-                                      className="form-select"
-                                      aria-label="Default select example"
+                                    <SelectionBox
                                       value={createCourseData.Requirements}
-                                      onChange={(e) => {
-                                        dispatchCreateCourse({
-                                          type: "Requirements",
-                                          value: e.target.value,
-                                        });
-                                      }}
-                                    >
-                                      <option value="ABCD">ABCD</option>
-                                      <option value="EFGH">EFGH</option>
-                                    </select>
+                                      onSelect={addedSelectVal.bind(
+                                        null,
+                                        "Requirements",
+                                        "requirementId",
+                                        false
+                                      )}
+                                      url="/requirementsview/"
+                                      name="description"
+                                      objKey={["description"]}
+                                      multiple={true}
+                                    />
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="accordion-item">
-                        <h2 className="accordion-header" id="headingThree">
-                          <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseThree"
-                            aria-expanded="false"
-                            aria-controls="collapseThree"
-                          >
-                            Outcome
-                          </button>
-                        </h2>
-                        <div
-                          id="collapseThree"
-                          className="accordion-collapse collapse"
-                          aria-labelledby="headingThree"
-                          data-bs-parent="#accordionExample"
-                        >
-                          <div className="accordion-body">
-                            <div className="become__instructor__form">
-                              <div className="row">
                                 <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                                   <div className="dashboard__select__heading">
                                     <span>Outcome</span>
                                   </div>
                                   <div className="dashboard__selector">
-                                    <select
-                                      className="form-select"
-                                      aria-label="Default select example"
+                                    <SelectionBox
                                       value={createCourseData.Outcome}
-                                      onChange={(e) => {
-                                        dispatchCreateCourse({
-                                          type: "Outcome",
-                                          value: e.target.value,
-                                        });
-                                      }}
-                                    >
-                                      <option value="123">123</option>
-                                      <option value="DEF">DEF</option>
-                                    </select>
+                                      onSelect={addedSelectVal.bind(
+                                        null,
+                                        "Outcome",
+                                        "outcomeId",
+                                        false
+                                      )}
+                                      url="/outcomesview/"
+                                      name="description"
+                                      objKey={["description"]}
+                                      multiple={true}
+                                    />
                                   </div>
                                 </div>
                               </div>
@@ -708,7 +814,7 @@ const CreateCourse = () => {
                                         type="text"
                                         placeholder="SEO Meta Keywords"
                                         value={
-                                          createCourseData.SEO_Meta_Keywords
+                                          createCourseData.SEO_Meta_Keywords[0]
                                         }
                                         onChange={(e) => {
                                           dispatchCreateCourse({
@@ -728,7 +834,7 @@ const CreateCourse = () => {
                                         type="text"
                                         placeholder="Meta Description"
                                         value={
-                                          createCourseData.Meta_Description
+                                          createCourseData.Meta_Description[0]
                                         }
                                         onChange={(e) => {
                                           dispatchCreateCourse({
@@ -771,103 +877,19 @@ const CreateCourse = () => {
                                   <span>Lessons</span>
                                 </div>
                                 <div className="dashboard__selector">
-                                  <select
-                                    className="form-select"
-                                    aria-label="Default select example"
+                                  <SelectionBox
                                     value={createCourseData.lessons}
-                                    onChange={(e) => {
-                                      dispatchCreateCourse({
-                                        type: "lessons",
-                                        value: e.target.value,
-                                      });
-                                    }}
-                                  >
-                                    <option value="Reading Intro">
-                                      Reading Intro
-                                    </option>
-                                    <option value="Listening-101">
-                                      Listening-101
-                                    </option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="accordion-item">
-                        <h2 className="accordion-header" id="headingSeven">
-                          <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseSeven"
-                            aria-expanded="false"
-                            aria-controls="collapseSeven"
-                          >
-                            Course Materials
-                          </button>
-                        </h2>
-                        <div
-                          id="collapseSeven"
-                          className="accordion-collapse collapse"
-                          aria-labelledby="headingSeven"
-                          data-bs-parent="#accordionExample"
-                        >
-                          <div className="accordion-body">
-                            <div className="become__instructor__form">
-                              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                                <div className="dashboard__form__wraper">
-                                  <div className="dashboard__form__input">
-                                    <label>Course Material</label>
-                                    <input type="file" />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="accordion-item">
-                        <h2 className="accordion-header" id="headingEigth">
-                          <button
-                            className="accordion-button collapsed"
-                            type="button"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#collapseEigth"
-                            aria-expanded="false"
-                            aria-controls="collapseEigth"
-                          >
-                            Additional Information
-                          </button>
-                        </h2>
-                        <div
-                          id="collapseEigth"
-                          className="accordion-collapse collapse"
-                          aria-labelledby="headingEigth"
-                          data-bs-parent="#accordionExample"
-                        >
-                          <div className="accordion-body">
-                            <div className="become__instructor__form">
-                              <div className="row">
-                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                                  <div className="dashboard__form__wraper">
-                                    <div className="dashboard__form__input">
-                                      <label>Information</label>
-                                      <input
-                                        type="text"
-                                        placeholder="Information"
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                                  <div className="dashboard__form__wraper">
-                                    <div className="dashboard__form__input">
-                                      <label>Course File</label>
-                                      <input type="file" />
-                                    </div>
-                                  </div>
+                                    onSelect={addedSelectVal.bind(
+                                      null,
+                                      "lessons",
+                                      "lessonsId",
+                                      false
+                                    )}
+                                    url="/lssonview/"
+                                    name="Lesson_Title"
+                                    objKey={["Lesson_Title"]}
+                                    multiple={true}
+                                  />
                                 </div>
                               </div>
                             </div>
@@ -879,8 +901,12 @@ const CreateCourse = () => {
                   <div className="row">
                     <div className="col-xl-8 col-lg-8 col-md-6 col-12">
                       <div className="create__course__bottom__button">
-                        {formStatus.isError && (
+                        {formStatus.isError ? (
                           <div className="text-danger mb-2">
+                            {formStatus.errMsg}
+                          </div>
+                        ) : (
+                          <div className="text-success mb-2">
                             {formStatus.errMsg}
                           </div>
                         )}

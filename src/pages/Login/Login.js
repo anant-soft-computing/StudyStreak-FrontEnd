@@ -73,7 +73,7 @@ const Login = () => {
     if (!validateForm()) return;
     const data = JSON.stringify(loginData);
     try {
-      const response = await ajaxCall("/courselistview/", {
+      const response = await ajaxCall("/login/", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",

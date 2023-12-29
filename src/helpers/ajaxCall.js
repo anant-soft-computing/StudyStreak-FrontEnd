@@ -1,9 +1,18 @@
 const ajaxCall = async (
   url,
   fetchObj = {},
+  timeOut,
+  timeOutFunction = () => {}
 ) => {
   try {
-    const response = await fetch(`http://65.20.73.247/api${url}`, fetchObj);
+    const id = setTimeout(() => {
+      timeOutFunction();
+    }, timeOut);
+    const response = await fetch(
+      `http://65.20.73.247/api${url}`,
+      fetchObj
+    );
+    clearTimeout(id);
     const data = await response.json();
 
     return {

@@ -96,14 +96,18 @@ const Register = () => {
     if (!validateForm()) return;
     const data = JSON.stringify(signUpData);
     try {
-      const response = await ajaxCall("/registration/", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+      const response = await ajaxCall(
+        "/registration/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: data,
         },
-        method: "POST",
-        body: data,
-      });
+        8000
+      );
       if (response.status === 201) {
         setFormStatus({
           isError: true,

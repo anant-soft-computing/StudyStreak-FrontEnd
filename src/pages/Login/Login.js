@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import ajaxCall from "../../helpers/ajaxCall";
 import { authAction } from "../../store/authStore";
@@ -31,6 +31,7 @@ const initialSubmit = {
 
 const Login = () => {
   const [loginData, dispatchLogin] = useReducer(reducerLogin, intialLoginData);
+  const controller = useRef(null);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("login");
   const dispatch = useDispatch();
@@ -41,6 +42,15 @@ const Login = () => {
       type: "reset",
     });
   };
+
+  useEffect(() => {
+    return () => {
+      if (controller.current) {
+        console.log("abortingg");
+        controller.current.abort();
+      }
+    };
+  }, []);
 
   const setFormError = (errMsg) => {
     setFormStatus({
@@ -71,17 +81,38 @@ const Login = () => {
     resetReducerForm();
     e.preventDefault();
     if (!validateForm()) return;
+
     const data = JSON.stringify(loginData);
+
+    controller.current = new AbortController();
+    
+    const signal = controller.current.signal;
+
+    const gotLate = setTimeout(() => {
+      console.log("------->");
+    }, 4000);
+
+    const timeOutFunction = () => {
+      controller.current.abort();
+    };
+
     try {
-      const response = await ajaxCall("/login/", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+      const response = await ajaxCall(
+        "/login/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: data,
+          withCredentials: true,
+          signal,
         },
-        method: "POST",
-        body: data,
-        withCredentials: true,
-      });
+        8000,
+        timeOutFunction
+      );
+      clearTimeout(gotLate);
       if (response.status === 200) {
         handleLoginSuccess(response);
         response.data.user_role === "admin"
@@ -109,6 +140,7 @@ const Login = () => {
       refreshToken: response.data?.token?.refresh,
       user_type: response.data?.user_status,
       userId: response.data?.userid,
+      timeOfLogin: Date.now(),
       user_role: response.data?.user_role,
       username: loginData.username,
     };
@@ -122,7 +154,25 @@ const Login = () => {
         user_type: response.data?.user_status,
         user_role: response.data?.user_role,
         userId: response.data?.userid,
+        timeOfLogin: Date.now(),
+        logInOperation: 1,
       })
+    );
+    setTimeout(
+      () =>
+        dispatch(
+          authAction.setAuthStatus({
+            userName: "",
+            loggedIn: false,
+            accessToken: null,
+            refreshToken: null,
+            userId: null,
+            user_type: null,
+            timeOfLogin: null,
+            logInOperation: -1,
+          })
+        ),
+      1000 * 60 * 30
     );
     navigate("/");
   };

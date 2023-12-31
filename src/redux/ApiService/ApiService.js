@@ -13,4 +13,15 @@ const studyStreakApiService = axios.create({
   },
 });
 
+studyStreakApiService.interceptors.request.use((config) => {
+  const token = "your_token_here"; // Replace with your actual token
+
+  config.headers = {
+    ...config.headers,
+    Authorization: `Bearer ${token}`,
+  };
+
+  return config;
+});
+
 export default studyStreakApiService;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 import gridImg1 from "../../img/grid/grid_1.png";
@@ -6,11 +6,96 @@ import gridImg2 from "../../img/grid/grid_2.png";
 import gridImg3 from "../../img/grid/grid_3.png";
 import gridImg4 from "../../img/grid/grid_4.png";
 import gridImg5 from "../../img/grid/grid_5.png";
-import gridImg6 from "../../img/grid/grid_6.png";
 import TopBar from "../../components/TopBar/TopBar";
 import NavBar from "../../components/NavBar/NavBar";
+import axios from "axios";
 
 const Courses = () => {
+  const [category, setCategory] = useState([
+    {
+      name: "Mobile Handset",
+      count: 3,
+    },
+    {
+      name: "Americano Dish",
+      count: 7,
+    },
+    {
+      name: "Raxila Dish nonyte",
+      count: 9,
+    },
+    {
+      name: "Fresh Vegetable",
+      count: 1,
+    },
+    {
+      name: "Fruites",
+      count: 0,
+    },
+  ]);
+  const [tags, setTags] = useState([
+    {
+      name: "Mechanic",
+      selected: true,
+    },
+    {
+      name: "English",
+      selected: false,
+    },
+    {
+      name: "Computer Science",
+      selected: false,
+    },
+    {
+      name: "Data & Tech",
+      selected: false,
+    },
+    {
+      name: "Ux Desgin",
+      selected: false,
+    },
+  ]);
+  const [skillLevel, setSkillLevel] = useState([
+    {
+      name: "All",
+      selected: true,
+      link: " ",
+    },
+    {
+      name: "Fullstack",
+      selected: false,
+      link: " ",
+    },
+    {
+      name: "English Learn",
+      selected: false,
+      link: " ",
+    },
+    {
+      name: "Intermediate",
+      selected: false,
+      link: " ",
+    },
+    {
+      name: "Wordpress",
+      selected: false,
+      link: " ",
+    },
+  ]);
+  const [courseList, setCourseList] = useState([]);
+  useEffect(() => {
+    (async () => {
+      await axios
+        .get("http://65.20.73.247/api/courselistview")
+        .then((res) => {
+          setCourseList(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })();
+  }, []);
+
   return (
     <>
       <TopBar />
@@ -89,36 +174,14 @@ const Courses = () => {
                       </div>
                       <div className="course__categories__list">
                         <ul>
-                          <li>
-                            <Link to=" ">
-                              Mobile Handset
-                              <span>03</span>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to=" ">
-                              Americano Dish
-                              <span>07</span>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to=" ">
-                              Raxila Dish nonyte
-                              <span>09</span>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to=" ">
-                              Fresh Vegetable
-                              <span>01</span>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to=" ">
-                              Fruites
-                              <span>00</span>
-                            </Link>
-                          </li>
+                          {category.map((cat) => (
+                            <li>
+                              <Link to=" ">
+                                {cat.name}
+                                <span>{cat.count}</span>
+                              </Link>
+                            </li>
+                          ))}
                         </ul>
                       </div>
                     </div>
@@ -129,36 +192,20 @@ const Courses = () => {
                     </div>
                     <div className="course__tag__list">
                       <ul>
-                        <li>
-                          <Link to=" ">
-                            <div className="course__check__box active "></div>
-                            <span className="active">Mechanic</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to=" ">
-                            <div className="course__check__box  "></div>
-                            <span>English</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to=" ">
-                            <div className="course__check__box  "></div>
-                            <span>Computer Science</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to=" ">
-                            <div className="course__check__box  "></div>
-                            <span>Data & Tech</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to=" ">
-                            <div className="course__check__box  "></div>
-                            <span>Ux Desgin</span>
-                          </Link>
-                        </li>
+                        {tags.map((tag) => (
+                          <li>
+                            <Link to=" ">
+                              <div
+                                className={`course__check__box ${
+                                  tag.selected ? "active" : ""
+                                }`}
+                              ></div>
+                              <span className={tag.selected ? "active" : ""}>
+                                {tag.name}
+                              </span>
+                            </Link>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
@@ -168,21 +215,11 @@ const Courses = () => {
                     </div>
                     <div className="course__skill__list">
                       <ul>
-                        <li>
-                          <Link to=" ">All</Link>
-                        </li>
-                        <li>
-                          <Link to=" ">Fullstack</Link>
-                        </li>
-                        <li>
-                          <Link to=" ">English Learn</Link>
-                        </li>
-                        <li>
-                          <Link to=" ">Intermediate</Link>
-                        </li>
-                        <li>
-                          <Link to=" ">Wordpress</Link>
-                        </li>
+                        {skillLevel.map((skill) => (
+                          <li>
+                            <Link to={skill.link}>{skill.name}</Link>
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
@@ -199,359 +236,48 @@ const Courses = () => {
                       aria-labelledby="projects__one"
                     >
                       <div className="row">
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <Link to="/course-detail">
-                                <img src={gridImg1} alt="gridImg1" />
-                              </Link>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 23
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 1 hr
-                                    30 min
-                                  </li>
-                                </ul>
+                        {courseList.map((course) => (
+                          <div
+                            className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
+                            data-aos="fade-up"
+                          >
+                            <div className="gridarea__wraper gridarea__wraper__2">
+                              <div className="gridarea__img">
+                                <Link to="/course-detail">
+                                  <img src={gridImg1} alt="gridImg1" />
+                                </Link>
                               </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to="/course-detail">
-                                    Foundation course to under stand about
-                                    softwere
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price">
-                                $32.00 <del>/ $67.00</del>
-                                <span>
-                                  {" "}
-                                  <del className="del__2">Free</del>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <img src={gridImg2} alt="grid" />
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 29
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 2 hr
-                                    10 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to=" ">
-                                    Nidnies course to under stand about softwere
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price green__color">
-                                $32.00<del>/$67.00</del>
-                                <span>.Free</span>
+                              <div className="gridarea__content">
+                                <div className="gridarea__list">
+                                  <ul>
+                                    <li>
+                                      <i className="icofont-book-alt"></i> 23
+                                      Lesson
+                                    </li>
+                                    <li>
+                                      <i className="icofont-clock-time"></i> 1
+                                      hr 30 min
+                                    </li>
+                                  </ul>
+                                </div>
+                                <div className="gridarea__heading">
+                                  <h3>
+                                    <Link to="/course-detail">
+                                      {course.Course_Title}
+                                    </Link>
+                                  </h3>
+                                </div>
+                                <div className="gridarea__price">
+                                  $32.00 <del>/ $67.00</del>
+                                  <span>
+                                    {" "}
+                                    <del className="del__2">Free</del>
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <Link to="/course-detail">
-                                <img src={gridImg3} alt="grid" />
-                              </Link>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 25
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 1 hr
-                                    40 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to="/course-detail">
-                                    Minws course to under stand about solution
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price">
-                                $40.00 <del>/ $67.00</del>
-                                <span>
-                                  {" "}
-                                  <del className="del__2">Free</del>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <Link to="/course-detail">
-                                <img src={gridImg4} alt="grid" />
-                              </Link>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 36
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 3 hr
-                                    40 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to="/course-detail">
-                                    Design course to under stand about solution
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price">
-                                $40.00 <del>/ $67.00</del>
-                                <span>
-                                  {" "}
-                                  <del className="del__2">Free</del>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <Link to="/course-detail">
-                                <img src={gridImg5} alt="grid" />
-                              </Link>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 36
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 3 hr
-                                    40 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to="/course-detail">
-                                    Data course to under stand about solution
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price">
-                                $40.00 <del>/ $67.00</del>
-                                <span>
-                                  {" "}
-                                  <del className="del__2">Free</del>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <Link to="/course-detail">
-                                <img src={gridImg6} alt="grid" />
-                              </Link>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 30
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 3 hr
-                                    40 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to="/course-detail">
-                                    Big data to under stand about solution
-                                    pacage
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price">
-                                $40.00 <del>/ $67.00</del>
-                                <span>
-                                  {" "}
-                                  <del className="del__2">Free</del>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <Link to="/course-detail">
-                                <img src={gridImg1} alt="grid" />
-                              </Link>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 23
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 1 hr
-                                    30 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to="/course-detail">
-                                    Foundation course to under stand about
-                                    softwere
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price">
-                                $32.00 <del>/ $67.00</del>
-                                <span>
-                                  {" "}
-                                  <del className="del__2">Free</del>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12 "
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <img src={gridImg2} alt="grid" />
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 29
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 2 hr
-                                    10 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to=" ">
-                                    Nidnies course to under stand about softwere
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price green__color">
-                                $32.00<del>/$67.00</del>
-                                <span>.Free</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2">
-                            <div className="gridarea__img">
-                              <Link to="/course-detail">
-                                <img src={gridImg3} alt="grid" />
-                              </Link>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul>
-                                  <li>
-                                    <i className="icofont-book-alt"></i> 25
-                                    Lesson
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 1 hr
-                                    40 min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <Link to="/course-detail">
-                                    Minws course to under stand about solution
-                                  </Link>
-                                </h3>
-                              </div>
-                              <div className="gridarea__price">
-                                $40.00 <del>/ $67.00</del>
-                                <span>
-                                  {" "}
-                                  <del className="del__2">Free</del>
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                     <div

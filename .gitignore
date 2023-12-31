@@ -1,2 +1,36 @@
-node_modules
-node_modules
+# Node.js
+node_modules/
+
+# Dependency directories
+/dist/
+/tmp/
+/out/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Editor directories and files
+.idea/
+.vscode/
+
+# Compiled binary files
+*.o
+*.out
+*.exe
+
+# Application environment files
+.env
+
+# Dependency lock files
+yarn.lock
+package-lock.json
+
+# Ignore all .env files in the project root
+.env*
+
+# Ignore all .DS_Store files everywhere
+**/.DS_Store

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../css/style.css";
-import IcoFont from "react-icofont";
+// import IcoFont from "react-icofont";
 
 const TopBar = () => {
   return (
@@ -19,7 +19,7 @@ const TopBar = () => {
           <div className="col-xl-6 col-lg-6">
             <div className="topbar__right">
               <div className="topbar__icon">
-                <IcoFont icon="location-pin" />
+                {/* <IcoFont icon="location-pin" /> */}
               </div>
               <div className="topbar__text">
                 <p>IELTS | TOFEL | PTE | DUOLINGO | GRE | GMAT</p>

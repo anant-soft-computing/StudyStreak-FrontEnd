@@ -1,17 +1,79 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import blog7 from "../../img/blog/blog_7.png";
 import blog8 from "../../img/blog/blog_8.png";
-import blog10 from "../../img/blog/blog_10.png";
 import video from "../../img/icon/video.png";
-import blogDetail6 from "../../img/blog-details/blog-details__6.png";
 import blogDetail7 from "../../img/blog-details/blog-details__7.png";
-import blogDetail8 from "../../img/blog-details/blog-details__8.png";
 import TopBar from "../TopBar/TopBar";
 import NavBar from "../NavBar/NavBar";
+import ajaxCall from "../../helpers/ajaxCall";
+import { useSelector } from "react-redux";
 
 const CourseDetail = () => {
+  const { courseId } = useParams();
+  const authData = useSelector((state) => state.authStore);
+
+  const [courseDetail, setCouresDetail] = useState();
+  const [coursePackages, setCoursePackages] = useState();
+
+  console.log("-----courseDetail----->", courseDetail);
+
+  console.log("-----coursePackages----->", coursePackages);
+
+  const getCourseDetail = async () => {
+    try {
+      const response = await ajaxCall(
+        `/courseretupddelview/${courseId}/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "PATCH",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setCouresDetail(response.data);
+      } else {
+        console.error("---error---->");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const getCoursePackages = async () => {
+    try {
+      const response = await ajaxCall(
+        `/course/${courseId}/packages/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setCoursePackages(response.data);
+      } else {
+        console.error("---error---->");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCourseDetail();
+    getCoursePackages();
+  }, [courseId]);
+
   return (
     <>
       <TopBar />
@@ -60,7 +122,7 @@ const CourseDetail = () => {
                       className="course__details__heading"
                       data-aos="fade-up"
                     >
-                      <h3>Making Music with Other People</h3>
+                      <h3>{courseDetail?.Course_Title}</h3>
                     </div>
                     <div className="course__details__price" data-aos="fade-up">
                       <ul>
@@ -90,17 +152,7 @@ const CourseDetail = () => {
                       className="course__details__paragraph"
                       data-aos="fade-up"
                     >
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Curabitur vulputate vestibulum rhoncus, dolor eget
-                        viverra pretium, dolor tellus aliquet nunc, vitae
-                        ultricies erat elit eu lacus. Vestibulum non justo
-                        consectetur, cursus ante, tincidunt sapien. Nulla quis
-                        diam sit amet turpis interd enim. Vivamus faucibus ex
-                        sed nibh egestas elementum. Mauris et bibendum dui.
-                        Aenean consequat pulvinar luctus. Suspendisse
-                        consectetur tristique
-                      </p>
+                      <p>{courseDetail?.Short_Description}</p>
                     </div>
                     <h4 className="sidebar__title" data-aos="fade-up">
                       Course Details
@@ -108,36 +160,21 @@ const CourseDetail = () => {
                     <div className="course__details__wraper" data-aos="fade-up">
                       <ul>
                         <li>
-                          Instructor : <span> Mirnsdo.H</span>
+                          Instructor :
+                          <span>
+                            {courseDetail?.primary_instructor?.username}
+                          </span>
                         </li>
                         <li>
-                          Lectures : <span> 120 sub</span>
-                        </li>
-                        <li>
-                          Duration : <span> 20h 41m 32s</span>
-                        </li>
-                        <li>
-                          Enrolled : <span> 2 students</span>
-                        </li>
-                        <li>
-                          Total : <span> 222 students</span>
+                          Category :<span>{courseDetail?.Category?.name}</span>
                         </li>
                       </ul>
                       <ul>
                         <li>
-                          Course level : <span>Intermediate</span>
+                          Course level :<span>{courseDetail?.Level?.name}</span>
                         </li>
                         <li>
-                          Language : <span>English spanish</span>
-                        </li>
-                        <li>
-                          Price Discount : <span>-20%</span>
-                        </li>
-                        <li>
-                          Regular Price : <span>$228/Mo</span>
-                        </li>
-                        <li>
-                          Course Status : <span>Available</span>
+                          Language : <span>{courseDetail?.Language?.name}</span>
                         </li>
                       </ul>
                     </div>
@@ -172,16 +209,6 @@ const CourseDetail = () => {
                                 <i className="icofont-paper"></i>Description
                               </button>
                             </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__four"
-                                type="button"
-                              >
-                                <i className="icofont-teacher"></i>Instructor
-                              </button>
-                            </li>
                           </ul>
                         </div>
                       </div>
@@ -209,7 +236,7 @@ const CourseDetail = () => {
                                   aria-expanded="true"
                                   aria-controls="collapseOne"
                                 >
-                                  Intro Course content <span>02hr 35min</span>
+                                  Course content
                                 </button>
                               </h2>
                               <div
@@ -223,662 +250,18 @@ const CourseDetail = () => {
                                     <div className="scc__info">
                                       <i className="icofont-video-alt"></i>
                                       <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
+                                        <span>Video :</span>
                                       </h5>
                                     </div>
                                     <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        22 minutes
-                                      </span>
-                                      <Link to="lesson.html">
+                                      <Link
+                                        to={courseDetail?.Course_Overview_URL}
+                                      >
                                         <span className="question">
-                                          <i className="icofont-eye"></i>
+                                          <i className="icofont-eye"> </i>
                                           Preview
                                         </span>
                                       </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        05 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span className="question">
-                                          <i className="icofont-eye"></i>
-                                          Preview
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        10 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        15 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        08 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-file-text"></i>
-                                      <h5>
-                                        <span>Lesson 03 Exam :</span>
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span>
-                                        <i className="icofont-lock"></i> 20 Ques
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="accordion-item">
-                              <h2 className="accordion-header" id="headingTwo">
-                                <button
-                                  className="accordion-button collapsed"
-                                  type="button"
-                                  data-bs-toggle="collapse"
-                                  data-bs-target="#collapseTwo"
-                                  aria-expanded="false"
-                                  aria-controls="collapseTwo"
-                                >
-                                  Course Fundamentals <span>1hr 35min</span>
-                                </button>
-                              </h2>
-                              <div
-                                id="collapseTwo"
-                                className="accordion-collapse collapse"
-                                aria-labelledby="headingTwo"
-                                data-bs-parent="#accordionExample"
-                              >
-                                <div className="accordion-body">
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        22 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        05 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        10 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        15 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        08 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-file-text"></i>
-                                      <h5>
-                                        <span>Lesson 03 Exam :</span>
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span>
-                                        <i className="icofont-lock"></i> 20 Ques
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="accordion-item">
-                              <h2
-                                className="accordion-header"
-                                id="headingThree"
-                              >
-                                <button
-                                  className="accordion-button collapsed"
-                                  type="button"
-                                  data-bs-toggle="collapse"
-                                  data-bs-target="#collapseThree"
-                                  aria-expanded="false"
-                                  aria-controls="collapseThree"
-                                >
-                                  Course Core Concept <span>3hr 10min</span>
-                                </button>
-                              </h2>
-                              <div
-                                id="collapseThree"
-                                className="accordion-collapse collapse"
-                                aria-labelledby="headingThree"
-                                data-bs-parent="#accordionExample"
-                              >
-                                <div className="accordion-body">
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        22 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        05 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        10 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        15 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        08 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-file-text"></i>
-                                      <h5>
-                                        <span>Lesson 03 Exam :</span>
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span>
-                                        <i className="icofont-lock"></i> 20 Ques
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="accordion-item">
-                              <h2 className="accordion-header" id="headingFour">
-                                <button
-                                  className="accordion-button collapsed"
-                                  type="button"
-                                  data-bs-toggle="collapse"
-                                  data-bs-target="#collapseFour"
-                                  aria-expanded="false"
-                                  aria-controls="collapseFour"
-                                >
-                                  Course Key Features <span>2hr 10min</span>
-                                </button>
-                              </h2>
-                              <div
-                                id="collapseFour"
-                                className="accordion-collapse collapse"
-                                aria-labelledby="headingFour"
-                                data-bs-parent="#accordionExample"
-                              >
-                                <div className="accordion-body">
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        22 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        05 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        10 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        15 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        08 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-file-text"></i>
-                                      <h5>
-                                        <span>Lesson 03 Exam :</span>
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span>
-                                        <i className="icofont-lock"></i> 20 Ques
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="accordion-item">
-                              <h2 className="accordion-header" id="headingFive">
-                                <button
-                                  className="accordion-button collapsed"
-                                  type="button"
-                                  data-bs-toggle="collapse"
-                                  data-bs-target="#collapseFive"
-                                  aria-expanded="false"
-                                  aria-controls="collapseFive"
-                                >
-                                  Course Conclusion <span>2hr 10min</span>
-                                </button>
-                              </h2>
-                              <div
-                                id="collapseFive"
-                                className="accordion-collapse collapse"
-                                aria-labelledby="headingFive"
-                                data-bs-parent="#accordionExample"
-                              >
-                                <div className="accordion-body">
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        22 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        05 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        10 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        15 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-video-alt"></i>
-                                      <h5>
-                                        <span>Video :</span> Lorem ipsum dolor
-                                        sit amet.
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span className="time">
-                                        <i className="icofont-clock-time"></i>
-                                        08 minutes
-                                      </span>
-                                      <Link to="lesson.html">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                  <div className="scc__wrap">
-                                    <div className="scc__info">
-                                      <i className="icofont-file-text"></i>
-                                      <h5>
-                                        <span>Lesson 03 Exam :</span>
-                                      </h5>
-                                    </div>
-                                    <div className="scc__meta">
-                                      <span>
-                                        <i className="icofont-lock"></i> 20 Ques
-                                      </span>
                                     </div>
                                   </div>
                                 </div>
@@ -893,92 +276,12 @@ const CourseDetail = () => {
                           aria-labelledby="projects__one"
                         >
                           <div className="experence__heading">
-                            <h5> Experience Description</h5>
+                            <h5>Experience Description</h5>
                           </div>
                           <div className="experence__description">
                             <p className="description__1">
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Curabitur vulputate vestibulum Phasellus
-                              rhoncus, dolor eget viverra pretium, dolor tellus
-                              aliquet nunc, vitae ultricies erat elit eu lacus.
-                              Vestibulum non justo consectetur, cursus ante,
-                              tincidunt sapien. Nulla quis diam sit amet turpis
-                              interdum accumsan quis nec enim. Vivamus faucibus
-                              ex sed nibh egestas elementum. Mauris et bibendum
-                              dui. Aenean consequat pulvinar luctus
+                              {courseDetail?.Description}
                             </p>
-                            <p className="description__2">
-                              We have covered many special events such as
-                              fireworks, fairs, parades, races, walks, awards
-                              ceremonies, fashion shows, sporting events, and
-                              even a memorial service.
-                            </p>
-                            <p className="description__3">
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Curabitur vulputate vestibulum Phasellus
-                              rhoncus, dolor eget viverra pretium, dolor tellus
-                              aliquet nunc, vitae ultricies erat elit eu lacus.
-                              Vestibulum non justo consectetur, cursus ante,
-                              tincidunt sapien. Nulla quis diam sit amet turpis
-                              interdum accumsan quis nec enim. Vivamus faucibus
-                              ex sed nibh egestas elementum. Mauris et bibendum
-                              dui. Aenean consequat pulvinar luctus.
-                            </p>
-                          </div>
-                        </div>
-                        <div
-                          className="tab-pane fade"
-                          id="projects__four"
-                          role="tabpanel"
-                          aria-labelledby="projects__four"
-                        >
-                          <div className="blogsidebar__content__wraper__2 tab__instructor">
-                            <div className="blogsidebar__content__inner__2">
-                              <div className="blogsidebar__img__2">
-                                <img src={blog10} alt="blog" />
-                              </div>
-                              <div className="tab__instructor__inner">
-                                <div className="blogsidebar__name__2">
-                                  <h5>
-                                    <Link to=""> Rosalina D. Willaim</Link>
-                                  </h5>
-                                  <p>Blogger/Photographer</p>
-                                </div>
-                                <div className="blog__sidebar__text__2">
-                                  <p>
-                                    Lorem Ipsum is simply dummy text of the
-                                    printing and typesetting industry. Lorem
-                                    Ipsum has been the industry's standard dummy
-                                    text ever since the 1500s, when an unknown
-                                    printer took a galley
-                                  </p>
-                                </div>
-                                <div className="blogsidbar__icon__2">
-                                  <ul>
-                                    <li>
-                                      <Link to="">
-                                        <i className="icofont-facebook"></i>
-                                      </Link>
-                                    </li>
-                                    <li>
-                                      <Link to="">
-                                        <i className="icofont-youtube-play"></i>
-                                      </Link>
-                                    </li>
-                                    <li>
-                                      <Link to="https://www.instagram.com/">
-                                        <i className="icofont-instagram"></i>
-                                      </Link>
-                                    </li>
-                                    <li>
-                                      <Link to="">
-                                        <i className="icofont-twitter"></i>
-                                      </Link>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
                           </div>
                         </div>
                       </div>
@@ -994,73 +297,10 @@ const CourseDetail = () => {
                         <ul>
                           <li>
                             <i className="icofont-check"></i>
-                            <p>
-                              Lorem Ipsum is simply dummying text of the
-                              printing andtypesetting industry most of the
-                              standard.
-                            </p>
-                          </li>
-                          <li>
-                            <i className="icofont-check"></i>
-                            <p>
-                              Lorem Ipsum is simply dummying text of the
-                              printing andtypesetting industry most of the
-                              standard.
-                            </p>
-                          </li>
-                          <li>
-                            <i className="icofont-check"></i>
-                            <p>
-                              Lorem Ipsum is simply dummying text of the
-                              printing andtypesetting industry most of the
-                              standard.
-                            </p>
-                          </li>
-                          <li>
-                            <i className="icofont-check"></i>
-                            <p>
-                              Lorem Ipsum is simply dummying text of the
-                              printing andtypesetting industry most of the
-                              standard.
-                            </p>
+                            <p>{courseDetail?.faqs}</p>
                           </li>
                         </ul>
                       </div>
-                    </div>
-                    <div className="blog__details__tag" data-aos="fade-up">
-                      <ul>
-                        <li className="heading__tag">Tag</li>
-                        <li>
-                          <Link to="">Business</Link>
-                        </li>
-                        <li>
-                          <Link to="">Design</Link>
-                        </li>
-                        <li>
-                          <Link to="">apps</Link>
-                        </li>
-                        <li>
-                          <Link to="">data</Link>
-                        </li>
-                      </ul>
-                      <ul className="share__list">
-                        <li className="heading__tag">Share</li>
-                        <li>
-                          <Link to="">
-                            <i className="icofont-twitter"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="">
-                            <i className="icofont-facebook"></i>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link to="https://www.instagram.com/">
-                            <i className="icofont-instagram"></i>
-                          </Link>
-                        </li>
-                      </ul>
                     </div>
                   </div>
                 </div>
@@ -1102,197 +342,76 @@ const CourseDetail = () => {
                             <div className="course__summery__item">
                               <span className="sb_label">Instructor:</span>
                               <span className="sb_content">
-                                <Link to="/instructor-details">D. Willaim</Link>
+                                <Link>
+                                  {courseDetail?.primary_instructor?.username}
+                                </Link>
                               </span>
                             </div>
                           </li>
                           <li>
                             <div className="course__summery__item">
                               <span className="sb_label">Start Date</span>
-                              <span className="sb_content">05 Dec 2024</span>
+                              <span className="sb_content">
+                                {courseDetail?.EnrollmentStartDate}
+                              </span>
                             </div>
                           </li>
                           <li>
                             <div className="course__summery__item">
-                              <span className="sb_label">Total Duration</span>
-                              <span className="sb_content">08Hrs 32Min</span>
+                              <span className="sb_label">End Date</span>
+                              <span className="sb_content">
+                                {courseDetail?.EnrollmentEndDate}
+                              </span>
                             </div>
                           </li>
                           <li>
                             <div className="course__summery__item">
-                              <span className="sb_label">Enrolled</span>
-                              <span className="sb_content">100</span>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="course__summery__item">
-                              <span className="sb_label">Lectures</span>
-                              <span className="sb_content">30</span>
+                              <span className="sb_label">Max Enroll</span>
+                              <span className="sb_content">
+                                {courseDetail?.max_enrollments}
+                              </span>
                             </div>
                           </li>
                           <li>
                             <div className="course__summery__item">
                               <span className="sb_label">Skill Level</span>
-                              <span className="sb_content">Basic</span>
+                              <span className="sb_content">
+                                {courseDetail?.Level?.name}
+                              </span>
                             </div>
                           </li>
                           <li>
                             <div className="course__summery__item">
                               <span className="sb_label">Language</span>
-                              <span className="sb_content">English</span>
-                            </div>
-                          </li>
-                          <li>
-                            <div className="course__summery__item">
-                              <span className="sb_label">Quiz</span>
-                              <span className="sb_content">Yes</span>
+                              <span className="sb_content">
+                                {courseDetail?.Language?.name}
+                              </span>
                             </div>
                           </li>
                         </ul>
                       </div>
-                      <div className="course__summery__button">
-                        <p>More inquery about course.</p>
-                        <Link
-                          className="default__button default__button--3"
-                          to="tel:+4733378901"
-                        >
-                          <i className="icofont-phone"></i> +47 333 78 901
-                        </Link>
-                      </div>
                     </div>
-                    <div
-                      className="blogsidebar__content__wraper__2"
-                      data-aos="fade-up"
-                    >
-                      <h4 className="sidebar__title">Follow Us</h4>
-                      <div className="follow__icon">
-                        <ul>
-                          <li>
-                            <Link to="">
-                              <i className="icofont-facebook"></i>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="">
-                              <i className="icofont-youtube-play"></i>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="https://www.instagram.com/">
-                              <i className="icofont-instagram"></i>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="">
-                              <i className="icofont-twitter"></i>
-                            </Link>
-                          </li>
-                          <li>
-                            <Link to="https://www.instagram.com/">
-                              <i className="icofont-instagram"></i>
-                            </Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div
-                      className="blogsidebar__content__wraper__2"
-                      data-aos="fade-up"
-                    >
-                      <h4 className="sidebar__title">Populer Course</h4>
-                      <ul className="course__details__populer__list">
-                        <li>
-                          <div className="course__details__populer__img">
-                            <img src={blogDetail6} alt="populer" />
-                          </div>
-                          <div className="course__details__populer__content">
-                            <span>$32,000</span>
-                            <h6>
-                              <Link to="">Making Music with Other People</Link>
-                            </h6>
-                          </div>
-                        </li>
-                        <li>
+                  </div>
+                  <div
+                    className="blogsidebar__content__wraper__2"
+                    data-aos="fade-up"
+                  >
+                    <h4 className="sidebar__title">Packages</h4>
+                    <ul className="course__details__populer__list">
+                      {coursePackages?.packages?.map((name, index) => (
+                        <li key={index}>
                           <div className="course__details__populer__img">
                             <img src={blogDetail7} alt="populer" />
                           </div>
                           <div className="course__details__populer__content">
                             <span>$32,000</span>
                             <h6>
-                              <Link to="">Making Music with Other People</Link>
+                              <Link to="">{name}</Link>
                             </h6>
                           </div>
                         </li>
-                        <li>
-                          <div className="course__details__populer__img">
-                            <img src={blogDetail8} alt="populer" />
-                          </div>
-                          <div className="course__details__populer__content">
-                            <span>$32,000</span>
-                            <h6>
-                              <Link to="">Making Music with Other People</Link>
-                            </h6>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                    <div
-                      className="blogsidebar__content__wraper__2"
-                      data-aos="fade-up"
-                    >
-                      <h4 className="sidebar__title">Get in Touch</h4>
-                      <div className="get__touch__input">
-                        <input type="text" placeholder="Enter name*" />
-                        <input type="text" placeholder="Enter your mail*" />
-                        <input type="text" placeholder="Massage*" />
-                        <Link
-                          className="default__button"
-                          to="blog-details.html"
-                        >
-                          SEND MASSAGE
-                        </Link>
-                      </div>
-                    </div>
-                    <div
-                      className="blogsidebar__content__wraper__2"
-                      data-aos="fade-up"
-                    >
-                      <h4 className="sidebar__title">Popular tag</h4>
-                      <div className="populer__tag__list">
-                        <ul>
-                          <li>
-                            <Link to="blog-details.html">Business</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">Design</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">apps</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">landing page</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">data</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">book</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">Design</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">book</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">landing page</Link>
-                          </li>
-                          <li>
-                            <Link to="blog-details.html">data</Link>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               </div>

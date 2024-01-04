@@ -4,6 +4,8 @@ import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import DANavBar from "./DANavBar/DANavBar";
 import DASideBar from "./DASideBar/DASideBar";
+import Courses from "../../../pages/Courses/Courses";
+import CreateCourse from "../../../pages/CreateCourse/CreateCourse";
 
 const Course = () => {
   return (
@@ -73,7 +75,7 @@ const Course = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <div className="row">Create Course</div>
+                            <div className="row"><CreateCourse/></div>
                           </div>
                           <div
                             className="tab-pane fade"
@@ -81,7 +83,7 @@ const Course = () => {
                             role="tabpanel"
                             aria-labelledby="projects__two"
                           >
-                            <div className="row">View Course</div>
+                            <div className="row"><Courses/></div>
                           </div>
                         </div>
                       </div>

@@ -33,7 +33,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/courses" element={<ProtectedRoute element={Courses} />} />
         <Route
-          path="/course-detail"
+          path="/course-detail/:courseId"
           element={<ProtectedRoute element={CourseDetail} />}
         />
         <Route

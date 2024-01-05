@@ -46,7 +46,6 @@ const Login = () => {
   useEffect(() => {
     return () => {
       if (controller.current) {
-        console.log("abortingg");
         controller.current.abort();
       }
     };

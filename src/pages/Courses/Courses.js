@@ -29,10 +29,10 @@ const Courses = () => {
       if (response.status === 200) {
         setCouresList(response.data);
       } else {
-        console.error("---error---->");
+        console.log("---error---->");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("Error:", error);
     }
   };
 
@@ -54,10 +54,10 @@ const Courses = () => {
       if (response.status === 200) {
         setCategory(response.data);
       } else {
-        console.error("---error---->");
+        console.log("---error---->");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("Error:", error);
     }
   };
 
@@ -78,10 +78,10 @@ const Courses = () => {
       if (response.status === 200) {
         setLevel(response.data);
       } else {
-        console.error("---error---->");
+        console.log("---error---->");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("Error:", error);
     }
   };
 
@@ -121,8 +121,9 @@ const Courses = () => {
                         <li>
                           <Link>
                             <div
-                              className={`course__check__box ${name.selected ? "active" : ""
-                                }`}
+                              className={`course__check__box ${
+                                name.selected ? "active" : ""
+                              }`}
                             ></div>
                             <span className={name.selected ? "active" : ""}>
                               {name}
@@ -142,13 +143,16 @@ const Courses = () => {
                   <ul>
                     {level.map(({ name }) => (
                       <li>
-                        <Link ><div
-                          className={`course__check__box ${name.selected ? "active" : ""
+                        <Link>
+                          <div
+                            className={`course__check__box ${
+                              name.selected ? "active" : ""
                             }`}
-                        ></div>
+                          ></div>
                           <span className={name.selected ? "active" : ""}>
                             {name}
-                          </span></Link>
+                          </span>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -167,15 +171,33 @@ const Courses = () => {
                       >
                         <div className="gridarea__wraper gridarea__wraper__2">
                           <div className="gridarea__img">
-                            <Link to={`/course-detail/${course.id}`}>
+                            <Link to={`/course-detail/${course?.id}`}>
                               <img src={gridImg1} alt="gridImg1" />
                             </Link>
                           </div>
                           <div className="gridarea__content">
+                            <div className="gridarea__list">
+                              <ul>
+                                <li>
+                                  <i className="icofont-book-alt"></i>{" "}
+                                  {course?.lessons?.length} Lessons
+                                </li>
+                                <li>
+                                  <i className="icofont-clock-time"></i>{" "}
+                                  {course?.lessons.reduce(
+                                    (totalDuration, lesson) =>
+                                      totalDuration +
+                                      parseInt(lesson?.Lesson_Duration),
+                                    0
+                                  )}{" "}
+                                  Mins
+                                </li>
+                              </ul>
+                            </div>
                             <div className="gridarea__heading">
                               <h3>
                                 <Link to="/course-detail">
-                                  {course.Course_Title}
+                                  {course?.Course_Title}
                                 </Link>
                               </h3>
                             </div>

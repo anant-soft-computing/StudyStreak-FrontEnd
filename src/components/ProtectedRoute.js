@@ -12,8 +12,6 @@ import { authAction } from "../store/authStore";
 const ProtectedRoute = ({ element: Element }) => {
   const dispatch = useDispatch();
   const authData = useSelector((state) => state.authStore);
-  
-  console.log("---authData---->",authData)
 
   useEffect(() => {
     const checkAuth = async () => {

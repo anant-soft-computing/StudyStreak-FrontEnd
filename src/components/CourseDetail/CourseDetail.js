@@ -4,11 +4,11 @@ import Footer from "../Footer/Footer";
 import blog7 from "../../img/blog/blog_7.png";
 import blog8 from "../../img/blog/blog_8.png";
 import video from "../../img/icon/video.png";
-import blogDetail7 from "../../img/blog-details/blog-details__7.png";
 import TopBar from "../TopBar/TopBar";
 import NavBar from "../NavBar/NavBar";
 import ajaxCall from "../../helpers/ajaxCall";
 import { useSelector } from "react-redux";
+import blogDetail7 from "../../img/blog-details/blog-details__7.png";
 
 const CourseDetail = () => {
   const { courseId } = useParams();
@@ -17,9 +17,21 @@ const CourseDetail = () => {
   const [courseDetail, setCouresDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
 
-  console.log("-----courseDetail----->", courseDetail);
+  const startDate = courseDetail?.EnrollmentStartDate
+    ? new Date(courseDetail?.EnrollmentStartDate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
 
-  console.log("-----coursePackages----->", coursePackages);
+  const endDate = courseDetail?.EnrollmentEndDate
+    ? new Date(courseDetail?.EnrollmentEndDate).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
 
   const getCourseDetail = async () => {
     try {
@@ -38,10 +50,10 @@ const CourseDetail = () => {
       if (response.status === 200) {
         setCouresDetail(response.data);
       } else {
-        console.error("---error---->");
+        console.log("---error---->");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("Error:", error);
     }
   };
 
@@ -62,10 +74,10 @@ const CourseDetail = () => {
       if (response.status === 200) {
         setCoursePackages(response.data);
       } else {
-        console.error("---error---->");
+        console.log("---error---->");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("Error:", error);
     }
   };
 
@@ -113,9 +125,10 @@ const CourseDetail = () => {
                         </Link>
                       </div>
                       <div className="course__date">
-                        <p>
-                          Last Update:<span> Sep 29, 2023</span>
-                        </p>
+                        <div className="course__details__date">
+                          <i className="icofont-book-alt"></i>{" "}
+                          {courseDetail?.lessons?.length} Lessons
+                        </div>
                       </div>
                     </div>
                     <div
@@ -123,30 +136,6 @@ const CourseDetail = () => {
                       data-aos="fade-up"
                     >
                       <h3>{courseDetail?.Course_Title}</h3>
-                    </div>
-                    <div className="course__details__price" data-aos="fade-up">
-                      <ul>
-                        <li>
-                          <div className="course__price">
-                            $32.00 <del>/ $67.00</del>
-                          </div>
-                        </li>
-                        <li>
-                          <div className="course__details__date">
-                            <i className="icofont-book-alt"></i> 23 Lesson
-                          </div>
-                        </li>
-                        <li>
-                          <div className="course__star">
-                            <i className="icofont-star"></i>
-                            <i className="icofont-star"></i>
-                            <i className="icofont-star"></i>
-                            <i className="icofont-star"></i>
-                            <i className="icofont-star"></i>
-                            <span>(44)</span>
-                          </div>
-                        </li>
-                      </ul>
                     </div>
                     <div
                       className="course__details__paragraph"
@@ -325,14 +314,6 @@ const CourseDetail = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="event__price__wraper">
-                        <div className="event__price">
-                          $32.00 <del>/ $67.00</del>
-                        </div>
-                        <div className="event__Price__button">
-                          <Link to="">68% OFF</Link>
-                        </div>
-                      </div>
                       <div className="course__summery__button">
                         <Link className="default__button">Enroll Now</Link>
                       </div>
@@ -351,16 +332,26 @@ const CourseDetail = () => {
                           <li>
                             <div className="course__summery__item">
                               <span className="sb_label">Start Date</span>
-                              <span className="sb_content">
-                                {courseDetail?.EnrollmentStartDate}
-                              </span>
+                              <span className="sb_content">{startDate}</span>
                             </div>
                           </li>
                           <li>
                             <div className="course__summery__item">
                               <span className="sb_label">End Date</span>
+                              <span className="sb_content">{endDate}</span>
+                            </div>
+                          </li>
+                          <li>
+                            <div className="course__summery__item">
+                              <span className="sb_label">Total Duration</span>
                               <span className="sb_content">
-                                {courseDetail?.EnrollmentEndDate}
+                                {courseDetail?.lessons.reduce(
+                                  (totalDuration, lesson) =>
+                                    totalDuration +
+                                    parseInt(lesson?.Lesson_Duration),
+                                  0
+                                )}{" "}
+                                Mins
                               </span>
                             </div>
                           </li>

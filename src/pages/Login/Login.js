@@ -1,21 +1,22 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import ajaxCall from "../../helpers/ajaxCall";
-import { authAction } from "../../store/authStore";
-import { Link, useNavigate } from "react-router-dom";
-import { setToLocalStorage } from "../../helpers/helperFunction";
-import Register from "./Register";
-import TopBar from "../../components/TopBar/TopBar";
-import NavBar from "../../components/NavBar/NavBar";
-import Footer from "../../components/Footer/Footer";
+import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ajaxCall from '../../helpers/ajaxCall';
+import { authAction } from '../../store/authStore';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { setToLocalStorage } from '../../helpers/helperFunction';
+import Register from './Register';
+import TopBar from '../../components/TopBar/TopBar';
+import NavBar from '../../components/NavBar/NavBar';
+import Footer from '../../components/Footer/Footer';
+import { useCheckAuth } from '../../hooks/useCheckAuth';
 
 const intialLoginData = {
-  username: "",
-  password: "",
+  username: '',
+  password: '',
 };
 
 const reducerLogin = (state, action) => {
-  if (action.type === "reset") {
+  if (action.type === 'reset') {
     return {
       ...state,
     };
@@ -33,13 +34,17 @@ const Login = () => {
   const [loginData, dispatchLogin] = useReducer(reducerLogin, intialLoginData);
   const controller = useRef(null);
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const [activeTab, setActiveTab] = useState("login");
+  const [activeTab, setActiveTab] = useState('login');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const authData = useSelector((state) => state.authStore);
+
+  const { checkAuth } = useCheckAuth();
+
   const resetReducerForm = () => {
     dispatchLogin({
-      type: "reset",
+      type: 'reset',
     });
   };
 
@@ -51,6 +56,10 @@ const Login = () => {
     };
   }, []);
 
+  useEffect(() => {
+    checkAuth();
+  }, [authData]);
+
   const setFormError = (errMsg) => {
     setFormStatus({
       isError: true,
@@ -61,11 +70,11 @@ const Login = () => {
 
   const validateForm = () => {
     if (!loginData.username) {
-      setFormError("User Name is Required");
+      setFormError('User Name is Required');
       return false;
     }
     if (!loginData.password) {
-      setFormError("Password is Required");
+      setFormError('Password is Required');
       return false;
     }
     setFormStatus({
@@ -84,11 +93,11 @@ const Login = () => {
     const data = JSON.stringify(loginData);
 
     controller.current = new AbortController();
-    
+
     const signal = controller.current.signal;
 
     const gotLate = setTimeout(() => {
-      console.log("------->");
+      console.log('------->');
     }, 4000);
 
     const timeOutFunction = () => {
@@ -97,13 +106,13 @@ const Login = () => {
 
     try {
       const response = await ajaxCall(
-        "/login/",
+        '/login/',
         {
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
           },
-          method: "POST",
+          method: 'POST',
           body: data,
           withCredentials: true,
           signal,
@@ -114,9 +123,9 @@ const Login = () => {
       clearTimeout(gotLate);
       if (response.status === 200) {
         handleLoginSuccess(response);
-        response.data.user_role === "admin"
-          ? navigate("/dashboard/admin-dashboard")
-          : navigate("/");
+        response.data.user_role === 'admin'
+          ? navigate('/dashboard/admin-dashboard')
+          : navigate('/');
       } else if (response.status === 400 || response.status === 404) {
         setFormStatus({
           isError: true,
@@ -127,7 +136,7 @@ const Login = () => {
     } catch (error) {
       setFormStatus({
         isError: true,
-        errMsg: "Some Problem Occurred. Please try again.",
+        errMsg: 'Some Problem Occurred. Please try again.',
         isSubmitting: false,
       });
     }
@@ -143,7 +152,7 @@ const Login = () => {
       user_role: response.data?.user_role,
       username: loginData.username,
     };
-    setToLocalStorage("loginInfo", localObj, true);
+    setToLocalStorage('loginInfo', localObj, true);
     dispatch(
       authAction.setAuthStatus({
         username: loginData.username,
@@ -161,7 +170,7 @@ const Login = () => {
       () =>
         dispatch(
           authAction.setAuthStatus({
-            userName: "",
+            userName: '',
             loggedIn: false,
             accessToken: null,
             refreshToken: null,
@@ -173,114 +182,123 @@ const Login = () => {
         ),
       1000 * 60 * 30
     );
-    navigate("/");
+    navigate('/');
   };
+
   const toggleForm = () => {
-    setActiveTab((prevTab) => (prevTab === "login" ? "signup" : "login"));
+    setActiveTab((prevTab) => (prevTab === 'login' ? 'signup' : 'login'));
   };
+
+  if (authData.authLoading) {
+    return <></>;
+  }
+
+  if (!authData.authLoading && authData.loggedIn) {
+    return <Navigate to='/' />;
+  }
 
   return (
     <>
       <TopBar />
       <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="loginarea sp_top_100 sp_bottom_100">
-            <div className="container">
-              <div className="row">
-                <div className="col-xl-8 col-md-8 offset-md-2">
-                  <ul className="nav tab__button__wrap text-center">
-                    <li className="nav-item">
+      <div className='body__wrapper'>
+        <div className='main_wrapper overflow-hidden'>
+          <div className='loginarea sp_top_100 sp_bottom_100'>
+            <div className='container'>
+              <div className='row'>
+                <div className='col-xl-8 col-md-8 offset-md-2'>
+                  <ul className='nav tab__button__wrap text-center'>
+                    <li className='nav-item'>
                       <button
                         className={`single__tab__link ${
-                          activeTab === "login" ? "active" : ""
+                          activeTab === 'login' ? 'active' : ''
                         }`}
-                        onClick={() => setActiveTab("login")}
-                        type="button"
+                        onClick={() => setActiveTab('login')}
+                        type='button'
                       >
                         Login
                       </button>
                     </li>
-                    <li className="nav-item">
+                    <li className='nav-item'>
                       <button
                         className={`single__tab__link ${
-                          activeTab === "signup" ? "active" : ""
+                          activeTab === 'signup' ? 'active' : ''
                         }`}
-                        onClick={() => setActiveTab("signup")}
-                        type="button"
+                        onClick={() => setActiveTab('signup')}
+                        type='button'
                       >
                         Sign up
                       </button>
                     </li>
                   </ul>
                 </div>
-                <div className="tab-content tab__content__wrapper">
+                <div className='tab-content tab__content__wrapper'>
                   <div
                     className={`tab-pane fade ${
-                      activeTab === "login" ? "active show" : ""
+                      activeTab === 'login' ? 'active show' : ''
                     }`}
                   >
-                    <div className="col-xl-8 col-md-8 offset-md-2">
-                      <div className="loginarea__wraper">
-                        <div className="login__heading">
-                          <h5 className="login__title">Login</h5>
-                          <p className="login__description">
-                            Don't have an account yet?{" "}
-                            <Link to="/login" onClick={toggleForm}>
+                    <div className='col-xl-8 col-md-8 offset-md-2'>
+                      <div className='loginarea__wraper'>
+                        <div className='login__heading'>
+                          <h5 className='login__title'>Login</h5>
+                          <p className='login__description'>
+                            Don't have an account yet?{' '}
+                            <Link to='/login' onClick={toggleForm}>
                               Sign up for free
                             </Link>
                           </p>
                         </div>
-                        <form method="POST" onSubmit={doLogin}>
-                          <div className="login__form">
-                            <label className="form__label">Username</label>
+                        <form method='POST' onSubmit={doLogin}>
+                          <div className='login__form'>
+                            <label className='form__label'>Username</label>
                             <input
-                              className="common__login__input"
-                              type="text"
-                              placeholder="Username or Email"
+                              className='common__login__input'
+                              type='text'
+                              placeholder='Username or Email'
                               value={loginData.username}
                               onChange={(e) =>
                                 dispatchLogin({
-                                  type: "username",
+                                  type: 'username',
                                   value: e.target.value,
                                 })
                               }
                             />
                           </div>
-                          <div className="login__form">
-                            <label className="form__label">Password</label>
+                          <div className='login__form'>
+                            <label className='form__label'>Password</label>
                             <input
-                              className="common__login__input"
-                              type="password"
-                              name="password"
-                              placeholder="Password"
+                              className='common__login__input'
+                              type='password'
+                              name='password'
+                              placeholder='Password'
                               value={loginData.password}
                               onChange={(e) =>
                                 dispatchLogin({
-                                  type: "password",
+                                  type: 'password',
                                   value: e.target.value,
                                 })
                               }
                             />
                           </div>
-                          <div className="login__form d-flex justify-content-between flex-wrap gap-2">
-                            <div className="form__check">
-                              <input type="checkbox" />
+                          <div className='login__form d-flex justify-content-between flex-wrap gap-2'>
+                            <div className='form__check'>
+                              <input type='checkbox' />
                               <label>Remember me</label>
                             </div>
-                            <div className="text-end login__form__link">
+                            <div className='text-end login__form__link'>
                               <Link>Forgot your password?</Link>
                             </div>
                           </div>
-                          <div className="login__button">
+                          <div className='login__button'>
                             {formStatus.isError && (
-                              <div className="text-danger d-flex justify-content-center mb-2">
+                              <div className='text-danger d-flex justify-content-center mb-2'>
                                 {formStatus.errMsg}
                               </div>
                             )}
-                            <div className="d-flex justify-content-center">
+                            <div className='d-flex justify-content-center'>
                               <button
-                                className="default__button"
+                                className='default__button'
                                 disabled={formStatus.isSubmitting}
                               >
                                 Log In
@@ -293,16 +311,16 @@ const Login = () => {
                   </div>
                   <div
                     className={`tab-pane fade ${
-                      activeTab === "signup" ? "active show" : ""
+                      activeTab === 'signup' ? 'active show' : ''
                     }`}
                   >
-                    <div className="col-xl-8 offset-md-2">
-                      <div className="loginarea__wraper">
-                        <div className="login__heading">
-                          <h5 className="login__title">Sing Up</h5>
-                          <p className="login__description">
-                            Already have an account?{" "}
-                            <Link to="/login" onClick={toggleForm}>
+                    <div className='col-xl-8 offset-md-2'>
+                      <div className='loginarea__wraper'>
+                        <div className='login__heading'>
+                          <h5 className='login__title'>Sing Up</h5>
+                          <p className='login__description'>
+                            Already have an account?{' '}
+                            <Link to='/login' onClick={toggleForm}>
                               Login
                             </Link>
                           </p>

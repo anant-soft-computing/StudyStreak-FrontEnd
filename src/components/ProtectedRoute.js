@@ -1,82 +1,38 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
-import {
-  authenticateUser,
-  deleteFromLocalStorage,
-  getFromLocalStorage,
-  setToLocalStorage,
-} from "../helpers/helperFunction";
-import { authAction } from "../store/authStore";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import logo from '../img/logo/Logo.png';
+import { useCheckAuth } from '../hooks/useCheckAuth';
 
 const ProtectedRoute = ({ element: Element }) => {
   const dispatch = useDispatch();
   const authData = useSelector((state) => state.authStore);
 
+  const { checkAuth } = useCheckAuth();
+
   useEffect(() => {
-    const checkAuth = async () => {
-      if (!authData.loggedIn) {
-        const localData = getFromLocalStorage("loginInfo", true);
-
-        if (localData === -1) {
-          dispatch(authAction.setAuthStatus({ loggedIn: false }));
-        } else {
-          const response = await authenticateUser(
-            localData.timeOfLogin,
-            localData.refreshToken
-          );
-
-          if (response === -1) {
-            dispatch(authAction.setAuthStatus({ loggedIn: false }));
-            deleteFromLocalStorage("loginInfo");
-          } else if (response === true) {
-            const payload = {
-              username: localData.username,
-              loggedIn: true,
-              accessToken: localData.accessToken,
-              refreshToken: localData.refreshToken,
-              userId: localData.userId,
-              user_type: localData.user_type,
-              timeOfLogin: localData.timeOfLogin,
-              user_role: localData.user_role,
-              logInOperation: 1,
-            };
-            dispatch(authAction.setAuthStatus(payload));
-            setToLocalStorage("loginInfo", payload, true);
-          } else if (!response?.data?.access) {
-            dispatch(authAction.setAuthStatus({ loggedIn: false }));
-          } else {
-            const localObj = {
-              accessToken: response.data.access,
-              refreshToken: localData.refreshToken,
-              user_type: localData.user_type,
-              userId: localData.userId,
-              timeOfLogin: localData.timeOfLogin,
-              username: localData.username,
-              user_role: localData.user_role,
-            };
-            setToLocalStorage("loginInfo", localObj, true);
-            dispatch(authAction.setAuthStatus({
-              username: localData.username,
-              loggedIn: true,
-              accessToken: response.data.access,
-              refreshToken: localData.refreshToken,
-              user_type: localData.user_type,
-              user_role: localData.user_role,
-              userId: localData.userId,
-              timeOfLogin: localData.timeOfLogin,
-              logInOperation: 1,
-            }));
-          }
-        }
-      }
-    };
-
     checkAuth();
-  }, [authData.loggedIn, dispatch]);
+  }, [authData, dispatch]);
+
+  if (authData.authLoading) {
+    return (
+      <div id='back__preloader'>
+        <div id='back__circle_loader'></div>
+        <div class='back__loader_logo'>
+          <img
+            loading='lazy'
+            src={logo}
+            alt='Preload'
+            height={22}
+            width='100%'
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (!authData.loggedIn) {
-    return <Navigate to="/login" />;
+    return <Navigate to='/login' />;
   }
   return <Element />;
 };

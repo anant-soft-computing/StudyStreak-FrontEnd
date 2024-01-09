@@ -138,7 +138,7 @@ const DSSidebar = () => {
                   </svg>
                   Assignments
                 </Link>
-                <span className='dashboard__label'>12</span>
+                <span className='dashboard__label'>0</span>
               </li>
               <li>
                 <Link to=''>
@@ -175,7 +175,8 @@ const DSSidebar = () => {
                   >
                     <polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
                   </svg>
-                  Full Length Test (Counter from Package) : Coming Soon
+                  Full Length Test (Coming Soon){' '}
+                  <span className='dashboard__label'>0</span>
                 </Link>
               </li>
               <li>
@@ -196,7 +197,8 @@ const DSSidebar = () => {
                     <path d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'></path>
                     <line x1='12' y1='17' x2='12.01' y2='17'></line>
                   </svg>
-                  Practice Test ( Counter from Package): Coming Soon
+                  Practice Test (Coming Soon){' '}
+                  <span className='dashboard__label'>0</span>
                 </Link>
               </li>
               <li>
@@ -217,8 +219,8 @@ const DSSidebar = () => {
                     <line x1='3' y1='6' x2='21' y2='6'></line>
                     <path d='M16 10a4 4 0 0 1-8 0'></path>
                   </svg>
-                  Live Speaking Practice Session (Counter from Package) : Coming
-                  Soon
+                  Live Speaking Practice Session (Coming Soon){' '}
+                  <span className='dashboard__label'>0</span>
                 </Link>
               </li>
               <li>
@@ -237,7 +239,8 @@ const DSSidebar = () => {
                   >
                     <path d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'></path>
                   </svg>
-                  Group Doubt Solving ( Counter from Package): Coming Soon
+                  Group Doubt Solving{' '}
+                  <span className='dashboard__label'>0</span>
                 </Link>
               </li>
               <li>
@@ -256,7 +259,8 @@ const DSSidebar = () => {
                   >
                     <path d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'></path>
                   </svg>
-                  One To One Doubt Solving (Counter From Package) : Coming Soon
+                  One To One Doubt Solving (Coming Soon){' '}
+                  <span className='dashboard__label'>0</span>
                 </Link>
               </li>
               <li>

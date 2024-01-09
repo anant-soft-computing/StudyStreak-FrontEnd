@@ -16,7 +16,7 @@ const GridSection = () => {
     speed: 2000,
     slidesToShow: 3,
     slidesToScroll: 1,
-    infinite: true,
+    infinite: false,
     autoplay: true,
     autoplaySpeed: 2000,
   };
@@ -29,7 +29,6 @@ const GridSection = () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'GET',
         },
@@ -54,7 +53,7 @@ const GridSection = () => {
     <div className='gridarea gridarea__2'>
       <div className='container'>
         <Slider {...settings}>
-          {courseList.map((course) => (
+          {courseList?.map((course) => (
             <div key={course.id} className='gridarea__wraper'>
               <div className='gridarea__img'>
                 <Link to={`/course-detail/${course?.id}`}>
@@ -63,7 +62,7 @@ const GridSection = () => {
               </div>
               <div className='gridarea__content'>
                 <div className='gridarea__list'>
-                  <ul>
+                  <ul className='ps-0'>
                     <li>
                       <i className='icofont-book-alt'></i>{' '}
                       {course?.lessons?.length} Lessons
@@ -86,12 +85,12 @@ const GridSection = () => {
                     </Link>
                   </h3>
                 </div>
-                <div className='gridarea__price'>
+                {/* <div className='gridarea__price'>
                   $32.00 <del>/$67.00</del>
                   <span>
                     <del className='del__2'>Free</del>
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
           ))}

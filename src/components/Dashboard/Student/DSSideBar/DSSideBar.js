@@ -74,7 +74,7 @@ const DSSidebar = () => {
                 </Link>
               </li>
               <li>
-                <Link to='/course-lessons/23'>
+                <Link to='/course-lessons/24'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'

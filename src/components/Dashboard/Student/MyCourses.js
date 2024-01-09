@@ -135,7 +135,15 @@ const MyCourses = () => {
                               <div className='scc__info'>
                                 <i className='icofont-audio text-muted'></i>
                                 <h5 className='text-muted'>
-                                  <span>Summer Quiz (Coming Soon)</span>
+                                  <span>Quiz (Coming Soon)</span>
+                                </h5>
+                              </div>
+                            </div>
+                            <div className='scc__wrap'>
+                              <div className='scc__info'>
+                                <i className='icofont-audio text-muted'></i>
+                                <h5 className='text-muted'>
+                                  <span>Assignment (Coming Soon)</span>
                                 </h5>
                               </div>
                             </div>

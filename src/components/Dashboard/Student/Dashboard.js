@@ -7,7 +7,6 @@ import DSSidebar from './DSSideBar/DSSideBar';
 import counter1 from '../../../img/counter/counter__1.png';
 import counter2 from '../../../img/counter/counter__2.png';
 import counter3 from '../../../img/counter/counter__3.png';
-import Courses from '../../../pages/Courses/Courses';
 import CourseListItem from '../../../pages/Courses/CourseListItem';
 
 const Dashboard = () => {
@@ -28,6 +27,17 @@ const Dashboard = () => {
                 <div className='row'>
                   <DSSidebar />
                   <div className='col-xl-9 col-lg-9 col-md-12'>
+                    <div className='dashboard__content__wraper'>
+                      <div className='dashboard__section__title'>
+                        <h4>Courses</h4>
+                        <h6>Choose the best course for you!</h6>
+                      </div>
+                      <div className='row'>
+                        <div className='col-xl-12 col-lg-12 col-md-12 col-12'>
+                          <CourseListItem />
+                        </div>
+                      </div>
+                    </div>
                     <div className='dashboard__content__wraper'>
                       <div className='dashboard__section__title'>
                         <h4>Dashboard</h4>
@@ -145,19 +155,6 @@ const Dashboard = () => {
                                 </tr>
                               </tbody>
                             </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className='dashboard__content__wraper'>
-                      <div className='dashboard__section__title'>
-                        <h4>Courses</h4>
-                        <h6>Choose the best course for you!</h6>
-                      </div>
-                      <div className='row'>
-                        <div className='col-xl-12'>
-                          <div className='dashboard__table '>
-                            <CourseListItem />
                           </div>
                         </div>
                       </div>

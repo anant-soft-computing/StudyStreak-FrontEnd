@@ -125,7 +125,7 @@ const Login = () => {
         handleLoginSuccess(response);
         response.data.user_role === 'admin'
           ? navigate('/dashboard/admin-dashboard')
-          : navigate('/');
+          : navigate('/dashboard/student-dashboard');
       } else if (response.status === 400 || response.status === 404) {
         setFormStatus({
           isError: true,
@@ -193,9 +193,9 @@ const Login = () => {
     return <></>;
   }
 
-  if (!authData.authLoading && authData.loggedIn) {
-    return <Navigate to='/' />;
-  }
+  // if (!authData.authLoading && authData.loggedIn) {
+  //   return <Navigate to='/dashboard/student-dashboard' />;
+  // }
 
   return (
     <>

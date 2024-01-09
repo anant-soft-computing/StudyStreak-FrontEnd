@@ -10954,7 +10954,7 @@ Course
   background: var(--darkdeep3);
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
 }
 
 .course__details__wraper ul {

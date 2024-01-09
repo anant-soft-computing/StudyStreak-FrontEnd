@@ -43,7 +43,7 @@ const App = () => {
       />
       <Router>
         <Routes>
-          <Route path='/' element={<ProtectedRoute element={Main} />} />
+          <Route path='/' element={<Main />} />
           <Route path='/login' element={<Login />} />
           {/* <Route path="/courses" element={<ProtectedRoute element={Courses} />} />
         <Route

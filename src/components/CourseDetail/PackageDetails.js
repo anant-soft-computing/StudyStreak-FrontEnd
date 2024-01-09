@@ -1,26 +1,6 @@
 import React from 'react';
 import blogDetail7 from '../../img/blog-details/blog-details__7.png';
 
-// const packageDetails = {
-//   full_length_test: 'Full Length Test',
-//   full_length_test_count: 'Full Length Test',
-//   group_doubt_solving: 'Full Length Test',
-//   group_doubt_solving_count: 'Full Length Test',
-//   hard_copy: 'Full Length Test',
-//   live_classes_membership: 'Full Length Test',
-//   offline_membership: 'Full Length Test',
-//   one_to_one_doubt_solving: 'Full Length Test',
-//   one_to_one_doubt_solving_count: 'Full Length Test',
-//   online_membership: 'Full Length Test',
-//   practice_test: 'Full Length Test',
-//   practice_test_count: 'Full Length Test',
-//   soft_copy: 'Full Length Test',
-//   speaking_test: 'Full Length Test',
-//   speaking_test_count: 'Full Length Test',
-//   validity: 'Full Length Test',
-//   writing_evaluation: 'Full Length Test',
-// };
-
 const checkIcon = () => {
   return (
     <i class='icofont-check-circled text-success icofont-md icofont-bold'></i>
@@ -43,7 +23,7 @@ const PackageDetails = (props) => {
           {packages?.map((packageItem, index) => (
             <div
               key={packageItem.id}
-              className='col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 aos-init aos-animate'
+              className='col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 aos-init aos-animate'
             >
               <div className='pricingarea__content__wraper p-3'>
                 <div className='pricingarea__heading d-flex justify-content-start mb-1'>
@@ -190,13 +170,14 @@ const PackageDetails = (props) => {
                     </div>
                   </div>
                   <div className='course__summery__button mt-2'>
-                    <div
-                      role='button'
+                    <button
+                      type='button'
+                      // role='button'
                       className='default__button'
-                      onClick={() => handleEnrollNow(index)}
+                      onClick={() => handleEnrollNow(packageItem?.package_id)}
                     >
                       Enroll Now
-                    </div>
+                    </button>
                   </div>
                 </div>
               </div>

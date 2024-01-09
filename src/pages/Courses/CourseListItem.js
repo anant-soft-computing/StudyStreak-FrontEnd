@@ -18,7 +18,7 @@ const CourseListItem = () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${authData.accessToken}`,
+            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'GET',
         },

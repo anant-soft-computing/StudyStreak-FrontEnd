@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Footer from '../Footer/Footer';
 import blog7 from '../../img/blog/blog_7.png';
-import blog8 from '../../img/blog/blog_8.png';
 import video from '../../img/icon/video.png';
 import TopBar from '../TopBar/TopBar';
 import NavBar from '../NavBar/NavBar';
@@ -10,6 +9,7 @@ import ajaxCall from '../../helpers/ajaxCall';
 import { useSelector } from 'react-redux';
 import PackageDetails from './PackageDetails';
 import { toast } from 'react-toastify';
+import { useCheckAuth } from '../../hooks/useCheckAuth';
 
 const CourseDetail = () => {
   const { courseId } = useParams();
@@ -20,6 +20,12 @@ const CourseDetail = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const navigate = useNavigate();
+
+  const { checkAuth } = useCheckAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, [authData]);
 
   const startDate = courseDetail?.EnrollmentStartDate
     ? new Date(courseDetail?.EnrollmentStartDate).toLocaleDateString('en-GB', {
@@ -45,7 +51,7 @@ const CourseDetail = () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${authData.accessToken}`,
+            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'PATCH',
         },
@@ -69,7 +75,7 @@ const CourseDetail = () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${authData.accessToken}`,
+            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'GET',
         },
@@ -100,21 +106,26 @@ const CourseDetail = () => {
       navigate('/login');
       return;
     }
+
+    const data = JSON.stringify({ package_id: packageId });
     try {
       const response = await ajaxCall(
-        `/package/${courseId}/enroll/${packageId}`,
+        `/enroll-package/`,
         {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: `Bearer ${authData.accessToken}`,
           },
-          method: 'GET',
+          method: 'POST',
+          body: data,
         },
         8000
       );
-      if (response.status === 200) {
-        // setCoursePackages(response.data);
+      if (response.status === 201) {
+        toast.success(response?.data?.msg);
+      } else if (response.status === 200) {
+        toast.error(response?.data?.msg);
       } else {
         console.log('---error---->');
       }
@@ -134,25 +145,82 @@ const CourseDetail = () => {
           <div className='blogarea__2 sp_top_100 sp_bottom_100'>
             <div className='container'>
               <div className='row'>
-                <div className='col-xl-8 col-lg-8'>
+                <div className='col-xl-12 col-lg-12'>
                   <div
                     className='blogarae__img__2 course__details__img__2'
                     data-aos='fade-up'
                   >
-                    <img src={courseDetail?.Course_Thumbnail} alt='blog' />
-                    <div className='registerarea__content course__details__video'>
-                      <div className='registerarea__video'>
-                        <div className='video__pop__btn'>
-                          <Link
-                            className='video-btn'
-                            to='https://www.youtube.com/watch?v=vHdclsdkp28'
-                          >
-                            <img src={video} alt='' />
-                          </Link>
+                    <div className='row'>
+                      <div className='col-xl-6 col-lg-6'>
+                        <img src={courseDetail?.Course_Thumbnail} alt='blog' />
+                        <div className='registerarea__content course__details__video'>
+                          <div className='registerarea__video'>
+                            {/* <div className='video__pop__btn'>
+                              <Link
+                                className='video-btn'
+                                to='https://www.youtube.com/watch?v=vHdclsdkp28'
+                              >
+                                <img src={video} alt='' />
+                              </Link>
+                            </div> */}
+                          </div>
                         </div>
+                      </div>
+                      <div
+                        className='course__details__wraper col-xl-6 col-lg-6'
+                        data-aos='fade-up'
+                      >
+                        <ul>
+                          <li>
+                            Instructor :
+                            <span>
+                              {courseDetail?.primary_instructor?.username}
+                            </span>
+                          </li>
+                          <li>
+                            Category :
+                            <span>{courseDetail?.Category?.name}</span>
+                          </li>
+                          <li>
+                            Start Date :
+                            <span className='sb_content'>{startDate}</span>
+                          </li>
+                          <li>
+                            End Date :
+                            <span className='sb_content'>{endDate}</span>
+                          </li>
+                        </ul>
+                        <ul>
+                          <li>
+                            Course level :
+                            <span>{courseDetail?.Level?.name}</span>
+                          </li>
+                          <li>
+                            Language :
+                            <span>{courseDetail?.Language?.name}</span>
+                          </li>
+
+                          <li>
+                            Max Enroll :
+                            <span>{courseDetail?.max_enrollments || 0}</span>
+                          </li>
+                          <li>
+                            Total Duration :
+                            <span className='sb_content'>
+                              {courseDetail?.lessons.reduce(
+                                (totalDuration, lesson) =>
+                                  totalDuration +
+                                  parseInt(lesson?.Lesson_Duration),
+                                0
+                              )}{' '}
+                              Mins
+                            </span>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
+
                   <div className='blog__details__content__wraper'>
                     <div className='course__button__wraper' data-aos='fade-up'>
                       <div className='course__button'>
@@ -182,10 +250,7 @@ const CourseDetail = () => {
                     >
                       <p>{courseDetail?.Short_Description}</p>
                     </div>
-                    <h4 className='sidebar__title' data-aos='fade-up'>
-                      Course Details
-                    </h4>
-                    <div className='course__details__wraper' data-aos='fade-up'>
+                    {/* <div className='course__details__wraper' data-aos='fade-up'>
                       <ul>
                         <li>
                           Instructor :
@@ -205,7 +270,7 @@ const CourseDetail = () => {
                           Language : <span>{courseDetail?.Language?.name}</span>
                         </li>
                       </ul>
-                    </div>
+                    </div> */}
                     <h4 className='sidebar__title' data-aos='fade-up'>
                       Packages
                     </h4>
@@ -400,7 +465,10 @@ const CourseDetail = () => {
                             <h5>Experience Description</h5>
                           </div>
                           <div className='experence__description'>
-                            <p className='description__1'>
+                            <p
+                              className='description__1'
+                              style={{ whiteSpace: 'pre-line' }}
+                            >
                               {courseDetail?.Description}
                             </p>
                           </div>
@@ -409,7 +477,7 @@ const CourseDetail = () => {
                     </div>
                     <div className='course__list__wraper' data-aos='fade-up'>
                       <div className='blog__details__heading__2'>
-                        <h5>Why search Is Important ?</h5>
+                        <h5>Why course is important ?</h5>
                       </div>
                       <div
                         className='aboutarea__list__2 blog__details__list__2'
@@ -417,15 +485,16 @@ const CourseDetail = () => {
                       >
                         <ul className='ps-0'>
                           <li>
-                            <i className='icofont-check'></i>
-                            <p>{courseDetail?.faqs}</p>
+                            <p style={{ whiteSpace: 'pre-line ' }}>
+                              {courseDetail?.faqs}
+                            </p>
                           </li>
                         </ul>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className='col-xl-4 col-lg-4'>
+                {/* <div className='col-xl-4 col-lg-4'>
                   <div className='course__details__sidebar'>
                     <div className='event__sidebar__wraper' data-aos='fade-up'>
                       <div
@@ -449,7 +518,7 @@ const CourseDetail = () => {
                       {/* <div className='course__summery__button'>
                         <Link className='default__button'>Enroll Now</Link>
                       </div> */}
-                      <div className='course__summery__lists'>
+                {/* <div className='course__summery__lists'>
                         <ul>
                           <li>
                             <div className='course__summery__item'>
@@ -514,8 +583,8 @@ const CourseDetail = () => {
                         </ul>
                       </div>
                     </div>
-                  </div>
-                  {/* <div
+                  </div> */}
+                {/* <div
                     className='blogsidebar__content__wraper__2'
                     data-aos='fade-up'
                   >
@@ -535,8 +604,8 @@ const CourseDetail = () => {
                         </li>
                       ))}
                     </ul>
-                  </div> */}
-                </div>
+                  </div>
+                </div> */}
               </div>
             </div>
           </div>

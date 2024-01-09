@@ -4,6 +4,8 @@ import gridImg1 from '../../img/grid/grid_1.png';
 import ajaxCall from '../../helpers/ajaxCall';
 import { useSelector } from 'react-redux';
 import CourseListItem from './CourseListItem';
+import TopBar from '../../components/TopBar/TopBar';
+import NavBar from '../../components/NavBar/NavBar';
 
 const Courses = () => {
   const [level, setLevel] = useState([]);
@@ -19,7 +21,7 @@ const Courses = () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${authData.accessToken}`,
+            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'GET',
         },
@@ -44,7 +46,7 @@ const Courses = () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${authData.accessToken}`,
+            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'GET',
         },
@@ -67,6 +69,8 @@ const Courses = () => {
 
   return (
     <>
+      <TopBar />
+      <NavBar />
       <div className='coursearea sp_top_100 sp_bottom_100'>
         <div className='container'>
           <div className='row'>

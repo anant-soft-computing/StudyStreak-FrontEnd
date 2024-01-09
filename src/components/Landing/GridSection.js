@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
-import grid1 from "../../img/grid/grid_1.png";
-import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { useSelector } from "react-redux";
-import ajaxCall from "../../helpers/ajaxCall";
+import React, { useEffect, useState } from 'react';
+import grid1 from '../../img/grid/grid_1.png';
+import { Link } from 'react-router-dom';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { useSelector } from 'react-redux';
+import ajaxCall from '../../helpers/ajaxCall';
 
 const GridSection = () => {
   const [courseList, setCourseList] = useState([]);
@@ -27,11 +27,11 @@ const GridSection = () => {
         `/courselistview/`,
         {
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            // Authorization: `Bearer ${authData.accessToken}`,
           },
-          method: "GET",
+          method: 'GET',
         },
         8000
       );
@@ -39,10 +39,10 @@ const GridSection = () => {
       if (response.status === 200) {
         setCourseList(response.data);
       } else {
-        console.log("---error---->");
+        console.log('---error---->');
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.log('Error:', error);
     }
   };
 
@@ -51,45 +51,45 @@ const GridSection = () => {
   }, []);
 
   return (
-    <div className="gridarea gridarea__2">
-      <div className="container">
+    <div className='gridarea gridarea__2'>
+      <div className='container'>
         <Slider {...settings}>
           {courseList.map((course) => (
-            <div key={course.id} className="gridarea__wraper">
-              <div className="gridarea__img">
+            <div key={course.id} className='gridarea__wraper'>
+              <div className='gridarea__img'>
                 <Link to={`/course-detail/${course?.id}`}>
-                  <img src={grid1} alt="grid" />
+                  <img src={grid1} alt='grid' />
                 </Link>
               </div>
-              <div className="gridarea__content">
-                <div className="gridarea__list">
+              <div className='gridarea__content'>
+                <div className='gridarea__list'>
                   <ul>
                     <li>
-                      <i className="icofont-book-alt"></i>{" "}
+                      <i className='icofont-book-alt'></i>{' '}
                       {course?.lessons?.length} Lessons
                     </li>
                     <li>
-                      <i className="icofont-clock-time"></i>{" "}
+                      <i className='icofont-clock-time'></i>{' '}
                       {course?.lessons.reduce(
                         (totalDuration, lesson) =>
                           totalDuration + parseInt(lesson?.Lesson_Duration),
                         0
-                      )}{" "}
+                      )}{' '}
                       Mins
                     </li>
                   </ul>
-                </div>  
-                <div className="gridarea__heading">
-                  <h3 className="gridarea_link">
+                </div>
+                <div className='gridarea__heading'>
+                  <h3 className='gridarea_link'>
                     <Link to={`/course-detail/${course.id}`}>
                       {course?.Course_Title}
                     </Link>
                   </h3>
                 </div>
-                <div className="gridarea__price">
+                <div className='gridarea__price'>
                   $32.00 <del>/$67.00</del>
                   <span>
-                    <del className="del__2">Free</del>
+                    <del className='del__2'>Free</del>
                   </span>
                 </div>
               </div>

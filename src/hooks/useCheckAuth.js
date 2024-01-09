@@ -79,7 +79,13 @@ export function useCheckAuth() {
     }
   };
 
+  const logoutUser = () => {
+    dispatch(authAction.setAuthStatus({ loggedIn: false, authLoading: false }));
+    deleteFromLocalStorage('loginInfo');
+  };
+
   return {
     checkAuth,
+    logoutUser,
   };
 }

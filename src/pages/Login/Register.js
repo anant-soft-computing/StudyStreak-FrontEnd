@@ -43,7 +43,6 @@ const Register = () => {
   };
 
   const setFormError = (fieldName, errMsg) => {
-    console.log('formStatus', fieldName, formStatus.errMsg);
     setFormStatus((prevState) => ({
       isError: true,
       errMsg: { ...prevState.errMsg, [fieldName]: [errMsg] },
@@ -112,7 +111,6 @@ const Register = () => {
         },
         8000
       );
-      console.log('response', response);
       if (response.status === 201) {
         toast.success(response.data?.msg);
         setFormStatus({
@@ -129,7 +127,6 @@ const Register = () => {
         });
       }
     } catch (error) {
-      console.log('error', error);
       setFormStatus({
         isError: true,
         errMsg: 'Some Problem Occurred. Please try again.',
@@ -139,7 +136,6 @@ const Register = () => {
   };
 
   const renderError = (fieldName) => {
-    console.log('formStatus', formStatus);
     return (
       <div className='text-danger d-flex justify-content-start mt-2'>
         {formStatus?.errMsg?.[fieldName]?.[0] ||

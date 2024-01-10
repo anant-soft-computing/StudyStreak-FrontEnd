@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { deleteFromLocalStorage } from '../../../../helpers/helperFunction';
 import { useCheckAuth } from '../../../../hooks/useCheckAuth';
 
 const DASideBar = () => {
@@ -261,7 +260,6 @@ const DASideBar = () => {
                   Settings
                 </Link>
               </li>
-
               <li>
                 <Link to='/login' onClick={logout}>
                   <svg

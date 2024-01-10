@@ -1,13 +1,13 @@
 import React from 'react';
 import blogDetail7 from '../../img/blog-details/blog-details__7.png';
 
-const checkIcon = () => {
+export const checkIcon = () => {
   return (
     <i class='icofont-check-circled text-success icofont-md icofont-bold'></i>
   );
 };
 
-const cancelIcon = () => {
+export const cancelIcon = () => {
   return (
     <i class='icofont-close-circled text-danger icofont-md icofont-bold'></i>
   );
@@ -172,7 +172,6 @@ const PackageDetails = (props) => {
                   <div className='course__summery__button mt-2'>
                     <button
                       type='button'
-                      // role='button'
                       className='default__button'
                       onClick={() => handleEnrollNow(packageItem?.package_id)}
                     >
@@ -183,7 +182,6 @@ const PackageDetails = (props) => {
               </div>
             </div>
           ))}
-          {/* </Slider> */}
         </div>
       </div>
     </div>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import gridImg1 from '../../img/grid/grid_1.png';
 import ajaxCall from '../../helpers/ajaxCall';
 import { useSelector } from 'react-redux';
 import CourseListItem from './CourseListItem';

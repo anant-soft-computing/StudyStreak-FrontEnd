@@ -25,7 +25,9 @@ import LiveClass from './components/Dashboard/Admin/LiveClass';
 import Package from './components/Dashboard/Admin/Package';
 import User from './components/Dashboard/Admin/User';
 import Counselling from './components/Dashboard/Admin/Counselling';
-import Profile from './components/Dashboard/Admin/Profile';
+import AdminProfile from './components/Dashboard/Admin/Profile';
+import StudentProfile from './components/Dashboard/Student/Profile';
+import StudentSettings from './components/Dashboard/Student/Setting/Settings';
 
 const App = () => {
   return (
@@ -96,7 +98,7 @@ const App = () => {
           />
           <Route
             path='/dashboard/admin-profile'
-            element={<ProtectedRoute element={Profile} />}
+            element={<ProtectedRoute element={AdminProfile} />}
           />
           <Route
             path='/dashboard/student-dashboard'
@@ -126,6 +128,8 @@ const App = () => {
             path='/exam-listening'
             element={<ProtectedRoute element={ExamListening} />}
           />
+          <Route path="/dashboard/student-profile" element={<StudentProfile />} />
+          <Route path="/dashboard/student-settings" element={<StudentSettings />} />
         </Routes>
       </Router>
     </>

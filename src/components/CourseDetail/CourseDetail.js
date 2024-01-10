@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Footer from '../Footer/Footer';
-import blog7 from '../../img/blog/blog_7.png';
-import video from '../../img/icon/video.png';
 import TopBar from '../TopBar/TopBar';
 import NavBar from '../NavBar/NavBar';
 import ajaxCall from '../../helpers/ajaxCall';
@@ -213,7 +211,7 @@ const CourseDetail = () => {
                                   parseInt(lesson?.Lesson_Duration),
                                 0
                               )}{' '}
-                              Mins
+                              Minutes
                             </span>
                           </li>
                         </ul>

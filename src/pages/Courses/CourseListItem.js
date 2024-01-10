@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import gridImg1 from '../../img/grid/grid_1.png';
-import logo from '../../img/logo/Logo.png';
 import ajaxCall from '../../helpers/ajaxCall';
 import { useSelector } from 'react-redux';
 
@@ -70,7 +68,7 @@ const CourseListItem = () => {
                         totalDuration + parseInt(lesson?.Lesson_Duration),
                       0
                     )}{' '}
-                    Mins
+                    Minutes
                   </li>
                 </ul>
               </div>

@@ -35,6 +35,7 @@ const Register = () => {
     intialSignUpData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [acceptTerm, setAcceptTerm] = useState(false);
 
   const navigate = useNavigate();
 
@@ -87,6 +88,10 @@ const Register = () => {
     }
     if (signUpData.password !== signUpData.password2) {
       setFormError('password', 'Password Does Not Match');
+      isValid = false;
+    }
+    if (!acceptTerm) {
+      setFormError("acceptTerm", "Please Accept the Terms and Privacy Policy");
       isValid = false;
     }
 
@@ -272,16 +277,16 @@ const Register = () => {
         </div>
         <div className='login__form d-flex justify-content-between flex-wrap gap-2'>
           <div className='form__check'>
-            <input type='checkbox' />{' '}
+            <input
+              type="checkbox"
+              checked={acceptTerm}
+              onChange={() => setAcceptTerm(!acceptTerm)}
+            />{' '}
             <label>Accept the Terms and Privacy Policy</label>
           </div>
         </div>
-        <div className='login__button'>
-          {/* {formStatus.isError && (
-            <div className='text-danger d-flex justify-content-center mb-2'>
-              {formStatus.errMsg}
-            </div>
-          )} */}
+        {formStatus.isError && renderError("acceptTerm")}
+        <div className="login__button">
           <div className='d-flex justify-content-center'>
             <button
               className='default__button'

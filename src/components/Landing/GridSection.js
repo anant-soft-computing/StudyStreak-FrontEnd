@@ -4,12 +4,10 @@ import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useSelector } from 'react-redux';
 import ajaxCall from '../../helpers/ajaxCall';
 
 const GridSection = () => {
   const [courseList, setCourseList] = useState([]);
-  const authData = useSelector((state) => state.authStore);
 
   const settings = {
     dots: false,
@@ -74,7 +72,7 @@ const GridSection = () => {
                           totalDuration + parseInt(lesson?.Lesson_Duration),
                         0
                       )}{' '}
-                      Mins
+                      Minutes
                     </li>
                   </ul>
                 </div>

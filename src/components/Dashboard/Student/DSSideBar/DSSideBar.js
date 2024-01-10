@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import ajaxCall from '../../../../helpers/ajaxCall';
-import { deleteFromLocalStorage } from '../../../../helpers/helperFunction';
 import { useCheckAuth } from '../../../../hooks/useCheckAuth';
 
 const DSSidebar = () => {
   const authData = useSelector((state) => state.authStore);
   const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const location = useLocation().pathname;
 
   const { logoutUser } = useCheckAuth();
 
@@ -54,7 +54,12 @@ const DSSidebar = () => {
           <div className='dashboard__nav'>
             <ul>
               <li>
-                <Link className='active' to='/dashboard/student-dashboard/'>
+                <Link
+                  className={
+                    location === "/dashboard/student-dashboard/" ? "active" : ""
+                  }
+                  to="/dashboard/student-dashboard/"
+                >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'
@@ -74,7 +79,32 @@ const DSSidebar = () => {
                 </Link>
               </li>
               <li>
-                <Link to='/course-lessons/24'>
+                <Link
+                  className={
+                    location === "/dashboard/student-profile" ? "active" : ""
+                  }
+                  to="/dashboard/student-profile"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-user"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  My Profile
+                </Link>
+              </li>
+              <li>
+                <Link to="/course-lessons/24">
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'
@@ -97,10 +127,8 @@ const DSSidebar = () => {
                   My Course
                 </Link>
               </li>
-
               <li>
-                {/* <Link to='/course-lessons/23'> */}
-                <Link to=''>
+                <Link to="">
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'
@@ -119,7 +147,6 @@ const DSSidebar = () => {
                   Course Material
                 </Link>
               </li>
-
               <li>
                 <Link to=''>
                   <svg
@@ -175,8 +202,8 @@ const DSSidebar = () => {
                   >
                     <polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon>
                   </svg>
-                  Full Length Test (Coming Soon){' '}
-                  <span className='dashboard__label'>0</span>
+                  Practice Test (Coming Soon){" "}
+                  <span className="dashboard__label">0</span>
                 </Link>
               </li>
               <li>
@@ -193,12 +220,12 @@ const DSSidebar = () => {
                     strokeLinejoin='round'
                     className='feather feather-help-circle'
                   >
-                    <circle cx='12' cy='12' r='10'></circle>
-                    <path d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'></path>
-                    <line x1='12' y1='17' x2='12.01' y2='17'></line>
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
                   </svg>
-                  Practice Test (Coming Soon){' '}
-                  <span className='dashboard__label'>0</span>
+                  Live Speaking Practice Session (Coming Soon){" "}
+                  <span className="dashboard__label">0</span>
                 </Link>
               </li>
               <li>
@@ -215,12 +242,10 @@ const DSSidebar = () => {
                     strokeLinejoin='round'
                     className='feather feather-shopping-bag'
                   >
-                    <path d='M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z'></path>
-                    <line x1='3' y1='6' x2='21' y2='6'></line>
-                    <path d='M16 10a4 4 0 0 1-8 0'></path>
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                   </svg>
-                  Live Speaking Practice Session (Coming Soon){' '}
-                  <span className='dashboard__label'>0</span>
+                  Group Doubt Solving{" "}
+                  <span className="dashboard__label">0</span>
                 </Link>
               </li>
               <li>
@@ -237,14 +262,20 @@ const DSSidebar = () => {
                     strokeLinejoin='round'
                     className='feather feather-bookmark'
                   >
-                    <path d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'></path>
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                   </svg>
-                  Group Doubt Solving{' '}
-                  <span className='dashboard__label'>0</span>
+                  <span>One To One Doubt Solving</span>
+                  <div> (Coming Soon) </div>
+                  <span className="dashboard__label">0</span>
                 </Link>
               </li>
               <li>
-                <Link to=''>
+                <Link
+                  className={
+                    location === "/dashboard/student-settings" ? "active" : ""
+                  }
+                  to="/dashboard/student-settings"
+                >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'
@@ -257,14 +288,14 @@ const DSSidebar = () => {
                     strokeLinejoin='round'
                     className='feather feather-bookmark'
                   >
-                    <path d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                   </svg>
-                  One To One Doubt Solving (Coming Soon){' '}
-                  <span className='dashboard__label'>0</span>
+                  Settings
                 </Link>
               </li>
               <li>
-                <Link to='/login' onClick={logout}>
+                <Link to="/login" onClick={logout}>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     width='24'

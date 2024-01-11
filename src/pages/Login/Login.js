@@ -9,6 +9,7 @@ import TopBar from '../../components/TopBar/TopBar';
 import NavBar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
 import { useCheckAuth } from '../../hooks/useCheckAuth';
+import { Spinner } from 'react-bootstrap';
 
 const intialLoginData = {
   username: '',
@@ -89,6 +90,11 @@ const Login = () => {
     resetReducerForm();
     e.preventDefault();
     if (!validateForm()) return;
+
+    setFormStatus({
+      ...formStatus,
+      isSubmitting: true,
+    });
 
     const data = JSON.stringify(loginData);
 
@@ -299,8 +305,20 @@ const Login = () => {
                             <div className='d-flex justify-content-center'>
                               <button
                                 className='default__button'
-                                disabled={formStatus.isSubmitting}
+                                disabled={formStatus?.isSubmitting}
                               >
+                                {formStatus.isSubmitting && (
+                                  <Spinner
+                                    animation='border'
+                                    role='status'
+                                    size='sm'
+                                    className='me-2'
+                                  >
+                                    <span className='visually-hidden'>
+                                      Loading...
+                                    </span>
+                                  </Spinner>
+                                )}
                                 Log In
                               </button>
                             </div>

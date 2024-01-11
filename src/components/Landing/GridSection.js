@@ -55,7 +55,10 @@ const GridSection = () => {
             <div key={course.id} className='gridarea__wraper'>
               <div className='gridarea__img'>
                 <Link to={`/course-detail/${course?.id}`}>
-                  <img src={grid1} alt='grid' />
+                  <img
+                    src={course?.Course_Thumbnail}
+                    alt={course?.Course_Title}
+                  />
                 </Link>
               </div>
               <div className='gridarea__content'>

@@ -15,7 +15,10 @@ const CourseDetail = () => {
 
   const [courseDetail, setCouresDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
+  const [courseBatches, setCourseBatches] = useState();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [showBatchSelection, setShowBatchSelection] = React.useState(false);
+  const [batchFormSubmitting, setBatchFormSubmitting] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -89,6 +92,30 @@ const CourseDetail = () => {
     }
   };
 
+  const getCourseBatches = async () => {
+    try {
+      const response = await ajaxCall(
+        `/batchview/`,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            // Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: 'GET',
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setCourseBatches(response.data);
+      } else {
+        console.log('---error---->');
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
   useEffect(() => {
     if (!courseId || isNaN(courseId)) {
       toast.error('Please select a valid course');
@@ -97,15 +124,20 @@ const CourseDetail = () => {
     }
     getCourseDetail();
     getCoursePackages();
+    getCourseBatches();
   }, [courseId]);
 
-  const handleEnrollNow = async (packageId) => {
+  const handleEnrollNow = async (packageId, batchId) => {
     if (!authData.loggedIn) {
       navigate('/login');
       return;
     }
-
-    const data = JSON.stringify({ package_id: packageId });
+    setBatchFormSubmitting(true);
+    const data = JSON.stringify({
+      package_id: packageId,
+      batch_id: batchId,
+      course_id: parseInt(courseId),
+    });
     try {
       const response = await ajaxCall(
         `/enroll-package/`,
@@ -121,13 +153,20 @@ const CourseDetail = () => {
         8000
       );
       if (response.status === 201) {
+        setShowBatchSelection(false);
+        setBatchFormSubmitting(false);
         toast.success(response?.data?.msg);
       } else if (response.status === 200) {
         toast.error(response?.data?.msg);
+        setBatchFormSubmitting(false);
+      } else if (response.status === 404 && response.isError) {
+        toast.error(response?.data?.error);
+        setBatchFormSubmitting(false);
       } else {
         console.log('---error---->');
       }
     } catch (error) {
+      setBatchFormSubmitting(false);
       console.log('Error:', error);
     }
   };
@@ -275,8 +314,12 @@ const CourseDetail = () => {
                     <div data-aos='fade-up' className='mb-4'>
                       {coursePackages?.packages?.length >= 1 ? (
                         <PackageDetails
+                          showBatchSelection={showBatchSelection}
+                          setShowBatchSelection={setShowBatchSelection}
                           packages={coursePackages?.packages}
                           handleEnrollNow={handleEnrollNow}
+                          courseBatches={courseBatches}
+                          batchFormSubmitting={batchFormSubmitting}
                         />
                       ) : (
                         // coursePackages?.packages?.map((name, index) => (

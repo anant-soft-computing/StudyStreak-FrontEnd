@@ -4,7 +4,6 @@ import { useCheckAuth } from '../../../../hooks/useCheckAuth';
 
 const DASideBar = () => {
   const location = useLocation().pathname;
-
   const { logoutUser } = useCheckAuth();
 
   const logout = (event) => {
@@ -113,10 +112,10 @@ const DASideBar = () => {
                     viewBox='0 0 24 24'
                     fill='none'
                     stroke='currentColor'
-                    stroke-width='2'
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    class='feather feather-exam'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='feather feather-exam'
                   >
                     <rect
                       x='3'
@@ -151,7 +150,7 @@ const DASideBar = () => {
                     strokeWidth='2'
                     strokeLinecap='round'
                     strokeLinejoin='round'
-                    class='feather feather-live-classes'
+                    className='feather feather-live-classes'
                   >
                     <path d='M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z'></path>
                     <polygon points='10 15 15 12 10 9 10 15'></polygon>

@@ -12,9 +12,13 @@ import TopBar from "../../components/TopBar/TopBar";
 
 const Main = () => {
   return (
-    <>
+    <div className="main_wrapper overflow-hidden">
       <TopBar />
       <NavBar />
+      <div>
+        <div className="theme__shadow__circle"></div>
+        <div className="theme__shadow__circle shadow__right"></div>
+      </div>
       <HeroBanner />
       <BrandSection />
       <GridSection />
@@ -24,7 +28,7 @@ const Main = () => {
       <AboutSection />
       <BlogSection />
       <Footer />
-    </>
+    </div>
   );
 };
 

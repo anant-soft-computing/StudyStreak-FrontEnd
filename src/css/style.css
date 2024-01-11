@@ -16146,3 +16146,45 @@ Dark Mode
   height: 16px;
   width: 16px;
 }
+
+.course__videos .lesson__content__wrap {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.course__videos iframe {
+  border-radius: 10px;
+}
+
+@media (max-width: 1199px) {
+  .course__videos {
+    margin-bottom: 25px;
+    order: 1;
+  }
+  .course__lessons {
+    order: 2;
+  }
+}
+
+.batch__radio__input {
+  accent-color: var(--primaryColor);
+  height: 16px;
+  width: 16px;
+}
+
+.select-search-options {
+  padding: 10px;
+}
+
+li {
+  display: inline-block;
+}
+
+.select-search-row {
+  list-style: none; 
+  display: block;
+}
+
+.option {
+  display: block;
+  padding: 10px; 
+}

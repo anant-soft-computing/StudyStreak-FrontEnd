@@ -86,12 +86,6 @@ const GridSection = () => {
                     </Link>
                   </h3>
                 </div>
-                {/* <div className='gridarea__price'>
-                  $32.00 <del>/$67.00</del>
-                  <span>
-                    <del className='del__2'>Free</del>
-                  </span>
-                </div> */}
               </div>
             </div>
           ))}

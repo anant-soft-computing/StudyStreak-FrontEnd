@@ -18,7 +18,7 @@ const ProtectedRoute = ({ element: Element }) => {
     return (
       <div id='back__preloader'>
         <div id='back__circle_loader'></div>
-        <div class='back__loader_logo'>
+        <div className='back__loader_logo'>
           <img
             loading='lazy'
             src={logo}

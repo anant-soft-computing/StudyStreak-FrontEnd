@@ -2,6 +2,7 @@ import React, { useReducer, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ajaxCall from '../../helpers/ajaxCall';
 import { toast } from 'react-toastify';
+import { Spinner } from 'react-bootstrap';
 
 const intialSignUpData = {
   first_name: '',
@@ -91,7 +92,7 @@ const Register = () => {
       isValid = false;
     }
     if (!acceptTerm) {
-      setFormError("acceptTerm", "Please Accept the Terms and Privacy Policy");
+      setFormError('acceptTerm', 'Please Accept the Terms and Privacy Policy');
       isValid = false;
     }
 
@@ -102,6 +103,10 @@ const Register = () => {
     e.preventDefault();
     resetReducerForm();
     if (!validateForm()) return;
+    setFormStatus((prevState) => ({
+      ...formStatus,
+      isSubmitting: true,
+    }));
     const data = JSON.stringify(signUpData);
     try {
       const response = await ajaxCall(
@@ -278,20 +283,30 @@ const Register = () => {
         <div className='login__form d-flex justify-content-between flex-wrap gap-2'>
           <div className='form__check'>
             <input
-              type="checkbox"
+              type='checkbox'
               checked={acceptTerm}
               onChange={() => setAcceptTerm(!acceptTerm)}
             />{' '}
             <label>Accept the Terms and Privacy Policy</label>
           </div>
         </div>
-        {formStatus.isError && renderError("acceptTerm")}
-        <div className="login__button">
+        {formStatus.isError && renderError('acceptTerm')}
+        <div className='login__button'>
           <div className='d-flex justify-content-center'>
             <button
               className='default__button'
-              disabled={formStatus.isSubmitting}
+              disabled={formStatus?.isSubmitting}
             >
+              {formStatus.isSubmitting && (
+                <Spinner
+                  animation='border'
+                  role='status'
+                  size='sm'
+                  className='me-2'
+                >
+                  <span className='visually-hidden'>Loading...</span>
+                </Spinner>
+              )}
               Sign Up
             </button>
           </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import blogDetail7 from '../../img/blog-details/blog-details__7.png';
+import BatchSelection from './BatchSelectionModal';
 
 export const checkIcon = () => {
   return (
@@ -14,7 +15,25 @@ export const cancelIcon = () => {
 };
 
 const PackageDetails = (props) => {
-  const { packages, handleEnrollNow } = props;
+  const {
+    courseBatches,
+    packages,
+    handleEnrollNow,
+    showBatchSelection,
+    setShowBatchSelection,
+  } = props;
+
+  const [selectedPackageId, setSelectedPackageId] = React.useState('');
+
+  const handleEnrollButtonClick = (packageId) => {
+    setSelectedPackageId(packageId);
+    setShowBatchSelection(true);
+  };
+
+  const handleBatchSelectionModalClose = () => {
+    setSelectedPackageId('');
+    setShowBatchSelection(false);
+  };
 
   return (
     <div className='pricingarea'>
@@ -173,7 +192,10 @@ const PackageDetails = (props) => {
                     <button
                       type='button'
                       className='default__button'
-                      onClick={() => handleEnrollNow(packageItem?.package_id)}
+                      // onClick={() => handleEnrollNow(packageItem?.package_id)}
+                      onClick={() =>
+                        handleEnrollButtonClick(packageItem?.package_id)
+                      }
                     >
                       Enroll Now
                     </button>
@@ -184,6 +206,13 @@ const PackageDetails = (props) => {
           ))}
         </div>
       </div>
+      <BatchSelection
+        show={showBatchSelection}
+        onHide={() => handleBatchSelectionModalClose()}
+        handleEnrollNow={handleEnrollNow}
+        packageId={selectedPackageId}
+        courseBatches={courseBatches}
+      />
     </div>
   );
 };

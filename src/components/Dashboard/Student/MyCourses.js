@@ -69,7 +69,7 @@ const MyCourses = () => {
             <div className='container-fluid full__width__padding'>
               <div className='row'>
                 <div
-                  className='col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12'
+                  className='col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons'
                   data-aos='fade-up'
                 >
                   <div
@@ -582,7 +582,7 @@ const MyCourses = () => {
                   </div>
                 </div>
                 <div
-                  className='col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12'
+                  className='col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 course__videos'
                   data-aos='fade-up'
                 >
                   <div className='lesson__content__main'>

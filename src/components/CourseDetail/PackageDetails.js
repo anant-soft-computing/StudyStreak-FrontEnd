@@ -21,6 +21,7 @@ const PackageDetails = (props) => {
     handleEnrollNow,
     showBatchSelection,
     setShowBatchSelection,
+    batchFormSubmitting,
   } = props;
 
   const [selectedPackageId, setSelectedPackageId] = React.useState('');
@@ -212,6 +213,7 @@ const PackageDetails = (props) => {
         handleEnrollNow={handleEnrollNow}
         packageId={selectedPackageId}
         courseBatches={courseBatches}
+        batchFormSubmitting={batchFormSubmitting}
       />
     </div>
   );

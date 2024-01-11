@@ -18,6 +18,7 @@ const CourseDetail = () => {
   const [courseBatches, setCourseBatches] = useState();
   const [activeIndex, setActiveIndex] = useState(0);
   const [showBatchSelection, setShowBatchSelection] = React.useState(false);
+  const [batchFormSubmitting, setBatchFormSubmitting] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -131,7 +132,7 @@ const CourseDetail = () => {
       navigate('/login');
       return;
     }
-
+    setBatchFormSubmitting(true);
     const data = JSON.stringify({
       package_id: packageId,
       batch_id: batchId,
@@ -153,15 +154,19 @@ const CourseDetail = () => {
       );
       if (response.status === 201) {
         setShowBatchSelection(false);
+        setBatchFormSubmitting(false);
         toast.success(response?.data?.msg);
       } else if (response.status === 200) {
         toast.error(response?.data?.msg);
+        setBatchFormSubmitting(false);
       } else if (response.status === 404 && response.isError) {
         toast.error(response?.data?.error);
+        setBatchFormSubmitting(false);
       } else {
         console.log('---error---->');
       }
     } catch (error) {
+      setBatchFormSubmitting(false);
       console.log('Error:', error);
     }
   };
@@ -314,6 +319,7 @@ const CourseDetail = () => {
                           packages={coursePackages?.packages}
                           handleEnrollNow={handleEnrollNow}
                           courseBatches={courseBatches}
+                          batchFormSubmitting={batchFormSubmitting}
                         />
                       ) : (
                         // coursePackages?.packages?.map((name, index) => (

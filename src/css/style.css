@@ -16140,3 +16140,9 @@ Dark Mode
     order: 2;
   }
 }
+
+.batch__radio__input {
+  accent-color: var(--primaryColor);
+  height: 16px;
+  width: 16px;
+}

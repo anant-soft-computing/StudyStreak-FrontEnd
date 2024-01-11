@@ -7,9 +7,9 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 const intialListeningField = {
   no_of_questions: "",
-  difficulty_level: "",
+  difficulty_level: "Easy",
   exam_name: "",
-  block_type: "",
+  block_type: "Practice",
   block_threshold: "",
   audio_file: "",
   passage: "",
@@ -24,6 +24,7 @@ const initialSubmit = {
 };
 
 const listeningReducer = (state, action) => {
+  console.log(state,action);
   return { ...state, [action.type]: action.value };
 };
 
@@ -82,6 +83,7 @@ const ExamListening = () => {
 
   const handleOnNext = () => {
     if (!validateForm()) return;
+    console.log(listeningData,'this is the entire from obj and it has have that mp3 file')
     navigate("/exam-create", { state: { listeningData } });
   };
 

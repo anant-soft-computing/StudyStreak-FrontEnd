@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { saveAs } from "file-saver";
 import "../../css/index.css";
@@ -1014,7 +1014,25 @@ const DragDrop = () => {
   const location = useLocation();
   const readingData = location.state?.readingData || {};
   const listeningData = location.state?.listeningData || {};
+  const [audioLink,setAudioLink] = useState();
   const [answer, setAnswer] = useState([]);
+  useEffect(() => {
+    const loadAudio = async () => {
+      if (listeningData.audio_file) {
+        try {
+          const audioSource = await readFile(listeningData.audio_file);
+          // Do something with audioSource, for example, set it in state
+          console.log(audioSource);
+          setAudioLink(audioSource);
+        } catch (error) {
+          console.error('Error reading audio file:', error);
+        }
+      }
+    };
+
+    console.log(listeningData, 'this is listening data');
+    loadAudio();
+  }, []);
 
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [divContents, setDivContents] = useState(initialDivContents);
@@ -1025,6 +1043,26 @@ const DragDrop = () => {
     const updatedAnswer = [...answer];
     updatedAnswer[parentIndex].answers[childIndex].answer_text = e.target.value;
     setAnswer(updatedAnswer);
+  };
+  const readFile = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      // Set up an event listener for the 'load' event
+      reader.onload = (event) => {
+        console.log(event,'this is the event in the file reader')
+        // Resolve the Promise with the result, which is the data URL of the file
+        resolve(event.target.result);
+      };
+
+      // Set up an event listener for the 'error' event
+      reader.onerror = (event) => {
+        // Reject the Promise with the error
+        reject(event.target.error);
+      };
+
+      // Initiate the file reading operation as a data URL
+      reader.readAsDataURL(file);
+    });
   };
 
   const generateAnswerField = (htmlContents, index = null) => {
@@ -1136,6 +1174,28 @@ const DragDrop = () => {
     // Generate answer field
   };
 
+  const renderAudio = () => {
+    console.log(listeningData.audio_file,'this is lsitening data from the other component')
+    console.log('this is render audio and it works')
+    if(listeningData.audio_file){
+      return `<div>
+      <audio controls autoplay>
+       <source src = ${audioLink} type="audio/mpeg">
+      </audio>
+      </div>`
+    }else{
+      return`<p></p>`
+    }
+  }
+
+  const displayLeftContainer =() => {
+    if(listeningData.audio_file){
+      return `${readingData.passage || listeningData.passage}`
+    }else{
+      return`<p></p>`
+    }
+  }
+
   const handleContentChange = (event, header, divIndex) => {
     event.preventDefault();
     setDivContents({
@@ -1173,6 +1233,7 @@ const DragDrop = () => {
   const generateHTMLContent = () => {
     const uniqueIdArr = [];
     let questionNumber = 0;
+    console.log(selectedDivs, "this is selected divs");
     const htmlContent = selectedDivs
       .map((header) => {
         // Parse the HTML content
@@ -1382,10 +1443,14 @@ const DragDrop = () => {
       </div>
     
       <!-- Main Container -->
+      <div>
+      ${renderAudio()}
+      
+      </div>
       <div class="main-container">
         <!-- Left Container -->
         <div class="left-container">
-          ${readingData.passage || listeningData.passage}
+          ${displayLeftContainer()}
         </div>
     
         <!-- Right Container -->
@@ -1513,9 +1578,9 @@ const DragDrop = () => {
     e.preventDefault();
     const isValid = handleAnswerValdiation();
     if (!isValid) return;
-    
+
     const formData = new FormData();
-    
+
     formData.append("block_threshold", listeningData.block_threshold);
     formData.append("block_type", listeningData.block_type);
     formData.append("difficulty_level", listeningData.difficulty_level);

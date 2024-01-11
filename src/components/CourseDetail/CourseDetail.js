@@ -445,7 +445,7 @@ const CourseDetail = () => {
                                       </div>
                                       <div className='scc__meta'>
                                         <span>
-                                          <i class='icofont-lock'></i>
+                                          <i className='icofont-lock'></i>
                                         </span>
                                       </div>
                                     </div>

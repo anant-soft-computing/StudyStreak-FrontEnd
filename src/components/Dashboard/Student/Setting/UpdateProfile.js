@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const UpdateProfile = () => {
   return (
@@ -10,7 +9,7 @@ const UpdateProfile = () => {
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label for="#">First Name</label>
-                <input type="text" placeholder="John" />
+                <input type="text" placeholder="First Name" />
               </div>
             </div>
           </div>
@@ -18,7 +17,7 @@ const UpdateProfile = () => {
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label for="#">Last Name</label>
-                <input type="text" placeholder="Due" />
+                <input type="text" placeholder="Last Name" />
               </div>
             </div>
           </div>
@@ -26,7 +25,7 @@ const UpdateProfile = () => {
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label for="#">User Name</label>
-                <input type="text" placeholder="johndue" />
+                <input type="text" placeholder="User Name" />
               </div>
             </div>
           </div>
@@ -34,7 +33,7 @@ const UpdateProfile = () => {
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label for="#">Phone No</label>
-                <input type="text" placeholder="+1-202-555-0174" />
+                <input type="text" placeholder="Phone No" />
               </div>
             </div>
           </div>
@@ -42,7 +41,7 @@ const UpdateProfile = () => {
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label for="#">Whatsapp No</label>
-                <input type="text" placeholder="+1-202-555-0174" />
+                <input type="text" placeholder="Whatsapp No" />
               </div>
             </div>
           </div>
@@ -177,7 +176,7 @@ const UpdateProfile = () => {
               <div className="dashboard__form__input">
                 <label for="#">Reference By</label>
                 <textarea name="" id="" cols="10" rows="3">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Reference By
                 </textarea>
               </div>
             </div>
@@ -187,7 +186,7 @@ const UpdateProfile = () => {
               <div className="dashboard__form__input">
                 <label for="#">Remark</label>
                 <textarea name="" id="" cols="10" rows="3">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Remark
                 </textarea>
               </div>
             </div>
@@ -197,16 +196,16 @@ const UpdateProfile = () => {
               <div className="dashboard__form__input">
                 <label for="#">Bio</label>
                 <textarea name="" id="" cols="10" rows="3">
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Bio
                 </textarea>
               </div>
             </div>
           </div>
           <div className="col-xl-12">
             <div className="dashboard__form__button">
-              <Link className="default__button" to="#">
+              <button className="default__button">
                 Update Info
-              </Link>
+              </button>
             </div>
           </div>
         </div>

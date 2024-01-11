@@ -4,7 +4,7 @@ import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import DANavBar from "./DANavBar/DANavBar";
 import DASideBar from "./DASideBar/DASideBar";
-import Courses from "../../../pages/Courses/Courses";
+import CourseListItem from "../../../pages/Courses/CourseListItem";
 import CreateCourse from "../../../pages/CreateCourse/CreateCourse";
 
 const Course = () => {
@@ -87,7 +87,7 @@ const Course = () => {
                             id="projects__two"
                           >
                             <div className="row">
-                              <Courses key={activeTab} />
+                              <CourseListItem key={activeTab} />
                             </div>
                           </div>
                         </div>

@@ -4,13 +4,13 @@ import BatchSelection from './BatchSelectionModal';
 
 export const checkIcon = () => {
   return (
-    <i class='icofont-check-circled text-success icofont-md icofont-bold'></i>
+    <i className='icofont-check-circled text-success icofont-md icofont-bold'></i>
   );
 };
 
 export const cancelIcon = () => {
   return (
-    <i class='icofont-close-circled text-danger icofont-md icofont-bold'></i>
+    <i className='icofont-close-circled text-danger icofont-md icofont-bold'></i>
   );
 };
 
@@ -53,7 +53,7 @@ const PackageDetails = (props) => {
                 </div>
                 <div className='pricingarea__plan__type d-flex justify-content-start align-items-center align-content-center mb-1'>
                   <h3 className='text-primary pricingarea__number'>
-                    <i class='icofont-rupee'></i>
+                    <i className='icofont-rupee'></i>
                     <b>{`${packageItem?.package_price}`}</b>
                   </h3>
                 </div>

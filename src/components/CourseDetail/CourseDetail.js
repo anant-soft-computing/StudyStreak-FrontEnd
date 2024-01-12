@@ -15,7 +15,6 @@ const CourseDetail = () => {
 
   const [courseDetail, setCouresDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
-  const [courseBatches, setCourseBatches] = useState();
   const [activeIndex, setActiveIndex] = useState(0);
   const [showBatchSelection, setShowBatchSelection] = React.useState(false);
   const [batchFormSubmitting, setBatchFormSubmitting] = React.useState(false);
@@ -92,30 +91,6 @@ const CourseDetail = () => {
     }
   };
 
-  const getCourseBatches = async () => {
-    try {
-      const response = await ajaxCall(
-        `/batchview/`,
-        {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            // Authorization: `Bearer ${authData.accessToken}`,
-          },
-          method: 'GET',
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setCourseBatches(response.data);
-      } else {
-        console.log('---error---->');
-      }
-    } catch (error) {
-      console.log('Error:', error);
-    }
-  };
-
   useEffect(() => {
     if (!courseId || isNaN(courseId)) {
       toast.error('Please select a valid course');
@@ -124,7 +99,6 @@ const CourseDetail = () => {
     }
     getCourseDetail();
     getCoursePackages();
-    getCourseBatches();
   }, [courseId]);
 
   const handleEnrollNow = async (packageId, batchId) => {
@@ -135,7 +109,7 @@ const CourseDetail = () => {
     setBatchFormSubmitting(true);
     const data = JSON.stringify({
       package_id: packageId,
-      batch_id: batchId,
+      batch_ids: batchId,
       course_id: parseInt(courseId),
     });
     try {
@@ -155,19 +129,21 @@ const CourseDetail = () => {
       if (response.status === 201) {
         setShowBatchSelection(false);
         setBatchFormSubmitting(false);
-        toast.success(response?.data?.msg);
+        toast.success(response?.data?.detail);
       } else if (response.status === 200) {
         toast.error(response?.data?.msg);
         setBatchFormSubmitting(false);
-      } else if (response.status === 404 && response.isError) {
-        toast.error(response?.data?.error);
+      } else if (response.status === 400 && response.isError) {
+        toast.error(response?.data?.detail);
+        setShowBatchSelection(false);
         setBatchFormSubmitting(false);
       } else {
-        console.log('---error---->');
+        setShowBatchSelection(false);
+        toast.error("Something went wrong, please try again later");
       }
     } catch (error) {
       setBatchFormSubmitting(false);
-      console.log('Error:', error);
+      toast.error("Something went wrong, please try again later");
     }
   };
 
@@ -318,7 +294,6 @@ const CourseDetail = () => {
                           setShowBatchSelection={setShowBatchSelection}
                           packages={coursePackages?.packages}
                           handleEnrollNow={handleEnrollNow}
-                          courseBatches={courseBatches}
                           batchFormSubmitting={batchFormSubmitting}
                         />
                       ) : (

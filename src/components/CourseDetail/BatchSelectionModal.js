@@ -1,24 +1,51 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Spinner } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
+import ajaxCall from "../../helpers/ajaxCall";
+import { useSelector } from "react-redux";
 
 const BatchSelection = (props) => {
-  const [selectedBatchId, setSelectedBatchId] = useState('');
-  const {
-    courseBatches,
-    handleEnrollNow,
-    packageId,
-    show,
-    onHide,
-    batchFormSubmitting,
-  } = props;
+  const [batches, setBatches] = useState([]);
+  const [selectedBatchIds, setSelectedBatchIds] = useState([]);
+  const authData = useSelector((state) => state.authStore);
+
+  const { handleEnrollNow, packageId, show, onHide, batchFormSubmitting } =
+    props;
+
+  const getCourseBatches = async () => {
+    try {
+      const response = await ajaxCall(
+        `/filterbatches/${packageId}/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setBatches(response.data);
+      } else {
+        console.log("---error---->");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    getCourseBatches();
+  }, [packageId]);
 
   const handleEnrollButton = () => {
-    handleEnrollNow(packageId, selectedBatchId);
+    handleEnrollNow(packageId, selectedBatchIds);
   };
 
   const handleModalClose = () => {
-    setSelectedBatchId('');
+    setSelectedBatchIds('');
     onHide();
   };
 
@@ -38,21 +65,28 @@ const BatchSelection = (props) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {courseBatches?.length >= 1 ? (
+        {batches?.length >= 1 ? (
           <div className='row'>
-            {courseBatches?.map((batchItem) => (
+            {batches?.map((batchItem) => (
               <div
                 className='dashboard__recent__course__single'
                 key={batchItem?.id}
               >
                 <div className='me-3'>
                   <input
-                    type='radio'
-                    checked={selectedBatchId === batchItem?.id}
+                    type='checkbox'
+                    checked={selectedBatchIds.includes(batchItem?.id)}
                     name='batchSelection'
                     className='w-10 batch__radio__input'
-                    onChange={(event) => {
-                      setSelectedBatchId(batchItem?.id);
+                    onChange={() => {
+                      const batchId = batchItem?.id;
+                      setSelectedBatchIds((prev) => {
+                        if (prev.includes(batchId)) {
+                          return prev.filter((id) => id !== batchId);
+                        } else {
+                          return [...prev, batchId];
+                        }
+                      });
                     }}
                   />
                 </div>
@@ -98,7 +132,7 @@ const BatchSelection = (props) => {
         <button
           className='default__button'
           onClick={() => handleEnrollButton()}
-          disabled={!selectedBatchId || batchFormSubmitting}
+          disabled={!selectedBatchIds || batchFormSubmitting}
         >
           {batchFormSubmitting && (
             <Spinner

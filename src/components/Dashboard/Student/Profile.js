@@ -1,22 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TopBar from "../../TopBar/TopBar";
-import { Navbar } from "react-bootstrap";
+import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
 import DSNavBar from "./DSNavBar/DSNavBar";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import { useNavigate } from "react-router-dom";
 import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
+import ajaxCall from "../../../helpers/ajaxCall";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+  const [profileData, setProfileData] = useState();
+  const authData = useSelector((state) => state.authStore);
   const navigate = useNavigate();
   const updateProfile = () => {
-    navigate("/dashboard/student-settings");
+    navigate("/dashboard/student-settings", { state: { profileData } });
   };
+
+  const getProfileData = async () => {
+    try {
+      const response = await ajaxCall(
+        `/studentview/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setProfileData(response.data[0]);
+      } else {
+        console.log("---error---->");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    getProfileData();
+  }, []);
 
   return (
     <div>
       <TopBar />
-      <Navbar />
+      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
@@ -47,7 +79,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              Michle
+                              {profileData?.user?.first_name}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -57,7 +89,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              Obema
+                              {profileData?.user?.last_name}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -67,7 +99,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              obema007
+                              {profileData?.user?.username}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -77,7 +109,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              obema@example.com
+                              {profileData?.user?.email}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -87,7 +119,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              +55 669 4456 25987
+                              {profileData?.phone_no}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -97,7 +129,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              +91 982 589 2258
+                              {profileData?.whatsapp_no}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -107,17 +139,17 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              10 Jan 2024
+                              {profileData?.last_education}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Bio
+                            Biography
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              I am ReactJS Developer
+                              {profileData?.biography}
                             </div>
                           </div>
                         </div>
@@ -129,7 +161,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              Male
+                              {profileData?.gender}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -139,7 +171,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              Vadodara
+                              {profileData?.city?.name}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -149,7 +181,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              Gujarat
+                              {profileData?.state?.name}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -159,17 +191,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              India
-                            </div>
-                          </div>
-                          <div className="col-lg-4 col-md-4">
-                            <div className="dashboard__form dashboard__form__margin">
-                              Country Interested
-                            </div>
-                          </div>
-                          <div className="col-lg-8 col-md-8">
-                            <div className="dashboard__form dashboard__form__margin">
-                              India
+                              {profileData?.country?.name}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -179,7 +201,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              I am Student
+                              {profileData?.remark}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -189,7 +211,17 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              Annat Soft Computing
+                              {profileData?.reference_by}
+                            </div>
+                          </div>
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              Referal Code
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {profileData?.referal_code}
                             </div>
                           </div>
                           <div className="col-lg-4 col-md-4">
@@ -199,7 +231,10 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
-                              {cancelIcon()}
+                              {profileData?.interested_in_visa_counselling ===
+                              "Yes"
+                                ? checkIcon()
+                                : cancelIcon()}
                             </div>
                           </div>
                         </div>
@@ -209,74 +244,82 @@ const Profile = () => {
                       <div className="dashboard__section__title">
                         <h4>Exam Taken Before</h4>
                       </div>
-                      <div className="col-xl-12">
-                        <div className="dashboard__table table-responsive">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>No.</th>
-                                <th>Name</th>
-                                <th>Yes / No</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <th>
-                                  <div>1.</div>
-                                </th>
-                                <td>IELTS</td>
-                                <td>
-                                  <div className="dashboard__table__star">
-                                    {checkIcon()}
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr className="dashboard__table__row">
-                                <th>
-                                  <div>2.</div>
-                                </th>
-                                <td>Duolingo</td>
-                                <td>
-                                  <div className="dashboard__table__star">
-                                    {cancelIcon()}
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <th>
-                                  <div>3.</div>
-                                </th>
-                                <td>TOFEL</td>
-                                <td>
-                                  <div className="dashboard__table__star">
-                                    {checkIcon()}
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr className="dashboard__table__row">
-                                <th>
-                                  <div>4.</div>
-                                </th>
-                                <td>GRE</td>
-                                <td>
-                                  <div className="dashboard__table__star">
-                                    {cancelIcon()}
-                                  </div>
-                                </td>
-                              </tr>
-                              <tr>
-                                <th>
-                                  <div>5.</div>
-                                </th>
-                                <td>GMAT</td>
-                                <td>
-                                  <div className="dashboard__table__star">
-                                    {checkIcon()}
-                                  </div>
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                      <div className="d-flex">
+                        <div className="row">
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              IELTS
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {profileData?.ielts_taken_before
+                                ? checkIcon()
+                                : cancelIcon()}
+                            </div>
+                          </div>
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              Duolingo
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {profileData?.duolingo_taken_before
+                                ? checkIcon()
+                                : cancelIcon()}
+                            </div>
+                          </div>
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              PTE
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {profileData?.pte_taken_before
+                                ? checkIcon()
+                                : cancelIcon()}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              TOFEL
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {profileData?.toefl_taken_before
+                                ? checkIcon()
+                                : cancelIcon()}
+                            </div>
+                          </div>
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              GRE
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {profileData?.gre_taken_before
+                                ? checkIcon()
+                                : cancelIcon()}
+                            </div>
+                          </div>
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              GMAT
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {profileData?.gmat_taken_before
+                                ? checkIcon()
+                                : cancelIcon()}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -288,7 +331,7 @@ const Profile = () => {
         </div>
       </div>
       <Footer />
-    </div>
+    </div>    
   );
 };
 

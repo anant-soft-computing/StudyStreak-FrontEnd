@@ -8,12 +8,14 @@ import HeroBanner from "../../components/Landing/HeroBanner";
 import PopulerArea from "../../components/Landing/PopularArea";
 import RegisterSection from "../../components/Landing/RegisterSection";
 import NavBar from "../../components/NavBar/NavBar";
+import { MobileTopBar } from "../../components/TopBar/MobileTopBar";
 import TopBar from "../../components/TopBar/TopBar";
 
 const Main = () => {
   return (
     <div className="main_wrapper overflow-hidden">
       <TopBar />
+      <MobileTopBar />
       <NavBar />
       <div>
         <div className="theme__shadow__circle"></div>

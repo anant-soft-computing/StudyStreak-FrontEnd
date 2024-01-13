@@ -28,6 +28,7 @@ import Counselling from './components/Dashboard/Admin/Counselling';
 import AdminProfile from './components/Dashboard/Admin/Profile';
 import StudentProfile from './components/Dashboard/Student/Profile';
 import StudentSettings from './components/Dashboard/Student/Setting/Settings';
+import ErrorPage from './pages/ErrorPage/ErrorPage';
 
 const App = () => {
   return (
@@ -130,6 +131,7 @@ const App = () => {
           />
           <Route path="/dashboard/student-profile" element={<StudentProfile />} />
           <Route path="/dashboard/student-settings" element={<StudentSettings />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
     </>

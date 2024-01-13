@@ -10,7 +10,7 @@ const CounterArea = () => {
       <div className='container'>
         <div className='row'>
           <div
-            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12'
+            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6'
             data-aos='fade-up'
           >
             <div className='counterarea__text__wraper'>
@@ -26,7 +26,7 @@ const CounterArea = () => {
             </div>
           </div>
           <div
-            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12'
+            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6'
             data-aos='fade-up'
           >
             <div className='counterarea__text__wraper'>
@@ -42,7 +42,7 @@ const CounterArea = () => {
             </div>
           </div>
           <div
-            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12'
+            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6'
             data-aos='fade-up'
           >
             <div className='counterarea__text__wraper'>
@@ -58,7 +58,7 @@ const CounterArea = () => {
             </div>
           </div>
           <div
-            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12'
+            className='col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6'
             data-aos='fade-up'
           >
             <div className='counterarea__text__wraper'>

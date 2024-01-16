@@ -29,10 +29,10 @@ const BatchSelection = (props) => {
       if (response.status === 200) {
         setBatches(response.data);
       } else {
-        console.log("---error---->");
+        console.log("error");
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.log("error", error);
     }
   };
 

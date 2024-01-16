@@ -23,9 +23,9 @@ const DASideBar = () => {
               <li>
                 <Link
                   className={
-                    location === '/dashboard/admin-dashboard' ? 'active' : ''
+                    location === '/admin-dashboard' ? 'active' : ''
                   }
-                  to='/dashboard/admin-dashboard'
+                  to='/admin-dashboard'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -48,9 +48,9 @@ const DASideBar = () => {
               <li>
                 <Link
                   className={
-                    location === '/dashboard/admin-package' ? 'active' : ''
+                    location === '/admin-package' ? 'active' : ''
                   }
-                  to='/dashboard/admin-package'
+                  to='/admin-package'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -72,9 +72,9 @@ const DASideBar = () => {
               <li>
                 <Link
                   className={
-                    location === '/dashboard/admin-course' ? 'active' : ''
+                    location === '/admin-course' ? 'active' : ''
                   }
-                  to='/dashboard/admin-course'
+                  to='/admin-course'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -101,9 +101,9 @@ const DASideBar = () => {
               <li>
                 <Link
                   className={
-                    location === '/dashboard/admin-exam' ? 'active' : ''
+                    location === '/admin-exam' ? 'active' : ''
                   }
-                  to='/dashboard/admin-exam'
+                  to='/admin-exam'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -136,9 +136,9 @@ const DASideBar = () => {
               <li>
                 <Link
                   className={
-                    location === '/dashboard/admin-liveClass' ? 'active' : ''
+                    location === '/admin-liveClass' ? 'active' : ''
                   }
-                  to='/dashboard/admin-liveClass'
+                  to='/admin-liveClass'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -160,9 +160,6 @@ const DASideBar = () => {
               </li>
               <li>
                 <Link
-                  // className={
-                  //   location === '/dashboard/admin-user' ? 'active' : ''
-                  // }
                   to=''
                 >
                   <svg
@@ -183,37 +180,12 @@ const DASideBar = () => {
                   Doubt Solving Sessions
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  className={
-                    location === '/dashboard/admin-user' ? 'active' : ''
-                  }
-                  to='/dashboard/admin-user'
-                >
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    width='24'
-                    height='24'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeWidth='2'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    className='feather feather-user'
-                  >
-                    <path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path>
-                    <circle cx='12' cy='7' r='4'></circle>
-                  </svg>
-                  User
-                </Link>
-              </li> */}
               <li>
                 <Link
                   className={
-                    location === '/dashboard/admin-counselling' ? 'active' : ''
+                    location === '/admin-counselling' ? 'active' : ''
                   }
-                  to='/dashboard/admin-counselling'
+                  to='/admin-counselling'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
@@ -237,9 +209,9 @@ const DASideBar = () => {
               <li>
                 <Link
                   className={
-                    location === '/dashboard/admin-profile' ? 'active' : ''
+                    location === '/admin-profile' ? 'active' : ''
                   }
-                  to='/dashboard/admin-profile'
+                  to='/admin-profile'
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'

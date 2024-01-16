@@ -1,14 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../img/logo/Logo.png';
 import { useCheckAuth } from '../../hooks/useCheckAuth';
 
 const NavBar = () => {
   const token = localStorage.getItem('loginInfo');
   const { logoutUser } = useCheckAuth();
+  const navigate = useNavigate();
 
   const logout = (event) => {
     event.preventDefault();
+    navigate('/login');
     logoutUser();
   };
 
@@ -44,7 +46,7 @@ const NavBar = () => {
                       <li className='mega__menu position-static'>
                         <Link
                           className='headerarea__has__dropdown'
-                          to='/dashboard/student-dashboard'
+                          to='/student-dashboard'
                         >
                           Dashboard
                         </Link>

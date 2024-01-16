@@ -10838,6 +10838,13 @@ Course
   width: 30%;
 }
 
+.gridarea__list
+  ul
+  li a  {
+  text-decoration: none;
+  color: #000;
+}
+
 .with__sidebar__content
   .gridarea__wraper.gridarea__course__list
   .gridarea__content

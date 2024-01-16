@@ -14,7 +14,6 @@ const DANavBar = () => {
                     <img src={dashboard2} alt="" />
                   </div>
                   <div className="dashboardarea__left__content">
-                    <h5>Hello</h5>
                     <h4>Admin</h4>
                   </div>
                 </div>

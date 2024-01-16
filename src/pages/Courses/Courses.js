@@ -81,10 +81,10 @@ const Courses = () => {
                 <div className='col-xl-3 col-lg-3 col-md-4 col-12'>
                   <div className='course__sidebar__wraper' data-aos='fade-up'>
                     <div className='course__heading'>
-                      <h5>Search here</h5>
+                      <h5>Search</h5>
                     </div>
                     <div className='course__input'>
-                      <input type='text' placeholder='Search product' />
+                      <input type='text' placeholder='Search course here...' />
                       <div className='search__button'>
                         <button>
                           <i className='icofont-search-1'></i>

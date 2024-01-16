@@ -8,7 +8,7 @@ import HeroBanner from "../../components/Landing/HeroBanner";
 import PopulerArea from "../../components/Landing/PopularArea";
 import RegisterSection from "../../components/Landing/RegisterSection";
 import NavBar from "../../components/NavBar/NavBar";
-import { MobileTopBar } from "../../components/TopBar/MobileTopBar";
+import MobileTopBar from "../../components/TopBar/MobileTopBar";
 import TopBar from "../../components/TopBar/TopBar";
 
 const Main = () => {

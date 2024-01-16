@@ -14,7 +14,7 @@ const Profile = () => {
   const authData = useSelector((state) => state.authStore);
   const navigate = useNavigate();
   const updateProfile = () => {
-    navigate("/dashboard/student-settings", { state: { profileData } });
+    navigate("/student-settings", { state: { profileData } });
   };
 
   const getProfileData = async () => {

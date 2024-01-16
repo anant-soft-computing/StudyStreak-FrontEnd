@@ -75,10 +75,7 @@ const GridSection = () => {
       <div className="container">
         <Slider {...settings}>
           {courseList.length > 0 &&
-            Array.from(
-              { length: 30 },
-              (_, i) => courseList[i % courseList.length]
-            ).map((course) => (
+            courseList.map((course) => (
               <div key={course.id} className="gridarea__wraper">
                 <div className="gridarea__img">
                   <Link to={`/course-detail/${course?.id}`}>

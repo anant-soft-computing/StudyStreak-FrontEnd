@@ -51,7 +51,6 @@ const CourseDetail = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: "PATCH",
         },
@@ -75,7 +74,6 @@ const CourseDetail = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: "GET",
         },
@@ -245,7 +243,11 @@ const CourseDetail = () => {
                       className="course__details__paragraph"
                       data-aos="fade-up"
                     >
-                      <p>{courseDetail?.Short_Description}</p>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: courseDetail?.Short_Description,
+                        }}
+                      ></div>
                     </div>
                     <h4 className="sidebar__title" data-aos="fade-up">
                       Packages
@@ -387,12 +389,11 @@ const CourseDetail = () => {
                             <h5>Experience Description</h5>
                           </div>
                           <div className="experence__description">
-                            <p
-                              className="description__1"
-                              style={{ whiteSpace: "pre-line" }}
-                            >
-                              {courseDetail?.Description}
-                            </p>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: courseDetail?.Description,
+                              }}
+                            ></div>
                           </div>
                         </div>
                       </div>
@@ -407,9 +408,11 @@ const CourseDetail = () => {
                       >
                         <ul className="ps-0">
                           <li>
-                            <p style={{ whiteSpace: "pre-line " }}>
-                              {courseDetail?.faqs}
-                            </p>
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: courseDetail?.faqs,
+                              }}
+                            ></div>
                           </li>
                         </ul>
                       </div>

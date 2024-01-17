@@ -16234,3 +16234,9 @@ li {
   font-size: 14px;
   color: #777;
 }
+
+.checkoutarea__total {
+  border: 1px solid #ccc;
+  padding: 15px; 
+  margin-bottom: 20px;
+}

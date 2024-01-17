@@ -10,7 +10,7 @@ import Courses from "./pages/Courses/Courses";
 import Blogs from "./pages/Blogs/Blogs";
 import BlogDetail from "./components/BlogDetail/BlogDetail";
 import Tests from "./pages/Tests/Tests";
-import CourseLesson from "./components/Dashboard/Student/CourseLesson";
+import Lesson from "./components/Dashboard/Student/Lesson";
 import StudentDashboard from "./components/Dashboard/Student/Dashboard";
 import AdminDashboard from "./components/Dashboard/Admin/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
@@ -30,8 +30,11 @@ import StudentProfile from "./components/Dashboard/Student/Profile";
 import StudentSettings from "./components/Dashboard/Student/Setting/Settings";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyCourse from "./components/Dashboard/Student/MyCourse";
-import CourseMaterial from "./components/Dashboard/Student/CourseMaterial";
-import Assignments from "./components/Dashboard/Student/Assignments";
+import Material from "./components/Dashboard/Student/Material";
+import AdditionalResourcse from "./components/Dashboard/Student/AdditionalResourcse";
+import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
+import Checkout from "./components/Checkout/Checkout";
+
 
 const App = () => {
   return (
@@ -55,7 +58,7 @@ const App = () => {
           <Route path="/course-detail/:courseId" element={<CourseDetail />} />
           <Route
             path="/course-lessons/:courseId"
-            element={<ProtectedRoute element={CourseLesson} />}
+            element={<ProtectedRoute element={Lesson} />}
           />
           <Route
             path="/create-course"
@@ -130,14 +133,19 @@ const App = () => {
           />
           <Route
             path="/student-courseMaterial"
-            element={<ProtectedRoute element={CourseMaterial} />}
+            element={<ProtectedRoute element={Material} />}
           />
           <Route
-            path="/student-assignment"
-            element={<ProtectedRoute element={Assignments} />}
+            path="/student-AdditionalResource"
+            element={<ProtectedRoute element={AdditionalResourcse} />}
+          />
+          <Route
+            path="/student-liveClasses"
+            element={<ProtectedRoute element={StudentLiveClass} />}
           />
           <Route path="/student-profile" element={<StudentProfile />} />
           <Route path="/student-settings" element={<StudentSettings />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

@@ -6,12 +6,13 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 
 const DSSidebar = () => {
   const authData = useSelector((state) => state.authStore);
-  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [enrolledCourse, setEnrolledCourse] = useState([]);
+  const [count, setCount] = useState([]);
   const location = useLocation().pathname;
 
   const { logoutUser } = useCheckAuth();
 
-  const getEnrolledCourses = async () => {  
+  const getEnrolledCourses = async () => {
     try {
       const response = await ajaxCall(
         "/userwisepackagewithcourseid/",
@@ -26,7 +27,8 @@ const DSSidebar = () => {
         8000
       );
       if (response.status === 200) {
-        setEnrolledCourses(response?.data?.student_packages?.[0]?.package);
+        setCount(response?.data?.student_packages?.[0]?.package);
+        setEnrolledCourse(response?.data?.student_packages?.[0]?.course);
       } else {
         console.log("error");
       }
@@ -103,7 +105,7 @@ const DSSidebar = () => {
                 <Link
                   className={location === "/student-myCourse" ? "active" : ""}
                   to="/student-myCourse"
-                  state={{ enrolledCourses }}
+                  state={{ enrolledCourse }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -133,6 +135,7 @@ const DSSidebar = () => {
                     location === "/student-courseMaterial" ? "active" : ""
                   }
                   to="/student-courseMaterial"
+                  state={{ enrolledCourse }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -154,8 +157,11 @@ const DSSidebar = () => {
               </li>
               <li>
                 <Link
-                  className={location === "/student-assignment" ? "active" : ""}
-                  to="/student-assignment"
+                  className={
+                    location === "/student-AdditionalResource" ? "active" : ""
+                  }
+                  to="/student-AdditionalResource"
+                  state={{ enrolledCourse }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -167,16 +173,19 @@ const DSSidebar = () => {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-message-square"
+                    className="feather feather-book-open"
                   >
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                   </svg>
-                  Assignments
+                  Additional Resource
                 </Link>
-                <span className="dashboard__label">0</span>
               </li>
               <li>
-                <Link to="">
+                <Link className={
+                    location === "/student-liveClasses" ? "active" : ""
+                  }
+                  to="/student-liveClasses">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -212,7 +221,7 @@ const DSSidebar = () => {
                   </svg>
                   Practice Test (Coming Soon){" "}
                   <span className="dashboard__label">
-                    {enrolledCourses?.practice_test_count}
+                    {count?.practice_test_count}
                   </span>
                 </Link>
               </li>
@@ -236,7 +245,7 @@ const DSSidebar = () => {
                   </svg>
                   Live Speaking Practice Session (Coming Soon){" "}
                   <span className="dashboard__label">
-                    {enrolledCourses?.speaking_test_count}
+                    {count?.speaking_test_count}
                   </span>
                 </Link>
               </li>
@@ -258,7 +267,7 @@ const DSSidebar = () => {
                   </svg>
                   Group Doubt Solving{" "}
                   <span className="dashboard__label">
-                    {enrolledCourses?.group_doubt_solving_count}
+                    {count?.group_doubt_solving_count}
                   </span>
                 </Link>
               </li>
@@ -281,7 +290,7 @@ const DSSidebar = () => {
                   <span>One To One Doubt Solving</span>
                   <div> (Coming Soon) </div>
                   <span className="dashboard__label">
-                    {enrolledCourses?.one_to_one_doubt_solving_count}
+                    {count?.one_to_one_doubt_solving_count}
                   </span>
                 </Link>
               </li>

@@ -7,9 +7,7 @@ import DSNavBar from "./DSNavBar/DSNavBar";
 import { Link, useLocation } from "react-router-dom";
 
 const MyCourse = () => {
-  const { enrolledCourses } = useLocation().state;
-  const course = enrolledCourses?.select_course;
-
+  const { enrolledCourse } = useLocation().state; 
   return (
     <>
       <TopBar />
@@ -35,30 +33,44 @@ const MyCourse = () => {
                         <div
                           className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
                           data-aos="fade-up"
-                          key={course.id}
+                          key={enrolledCourse.id}
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
                               <img
-                                src={course?.Course_Thumbnail}
-                                alt={course?.Course_Title}
+                                src={enrolledCourse?.Course_Thumbnail}
+                                alt={enrolledCourse?.Course_Title}
                               />
                             </div>
                             <div className="gridarea__content">
                               <div className="gridarea__list">
                                 <ul className="ps-0">
                                   <li>
-                                    <Link to={`/course-lessons/${course?.id}`}>
+                                    <Link
+                                      to={`/course-lessons/${enrolledCourse?.id}`}
+                                    >
                                       <i className="icofont-book-alt"></i>{" "}
-                                      {course?.lessons?.length} Lessons
+                                      {enrolledCourse?.lessons?.length} Lessons
                                     </Link>
+                                  </li>
+                                  <li>
+                                    <i className="icofont-clock-time"></i>{" "}
+                                    {enrolledCourse?.lessons.reduce(
+                                      (totalDuration, lesson) =>
+                                        totalDuration +
+                                        parseInt(lesson?.Lesson_Duration),
+                                      0
+                                    )}{" "}
+                                    Minutes
                                   </li>
                                 </ul>
                               </div>
                               <div className="gridarea__heading">
                                 <h3>
-                                  <Link to={`/course-detail/${course?.id}`}>
-                                    {course?.Course_Title}
+                                  <Link
+                                    to={`/course-detail/${enrolledCourse?.id}`}
+                                  >
+                                    {enrolledCourse?.Course_Title}
                                   </Link>
                                 </h3>
                               </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import blogDetail7 from '../../img/blog-details/blog-details__7.png';
 import BatchSelection from './BatchSelectionModal';
 
@@ -21,11 +21,16 @@ const PackageDetails = (props) => {
     showBatchSelection,
     setShowBatchSelection,
     batchFormSubmitting,
+    courseName,
   } = props;
 
-  const [selectedPackageId, setSelectedPackageId] = React.useState('');
+  const [selectedPackageId, setSelectedPackageId] = useState('');
+  const [packageName, setPackageName] = useState("");
+  const [packagePrice, setPackagePrice] = useState("");
 
-  const handleEnrollButtonClick = (packageId) => {
+  const handleEnrollButtonClick = (packageId, packageName, packagePrice) => {
+    setPackageName(packageName);
+    setPackagePrice(packagePrice);
     setSelectedPackageId(packageId);
     setShowBatchSelection(true);
   };
@@ -192,9 +197,12 @@ const PackageDetails = (props) => {
                     <button
                       type='button'
                       className='default__button'
-                      // onClick={() => handleEnrollNow(packageItem?.package_id)}
                       onClick={() =>
-                        handleEnrollButtonClick(packageItem?.package_id)
+                        handleEnrollButtonClick(
+                          packageItem?.package_id,
+                          packageItem?.package_name,
+                          packageItem?.package_price
+                        )
                       }
                     >
                       Enroll Now
@@ -212,6 +220,9 @@ const PackageDetails = (props) => {
         handleEnrollNow={handleEnrollNow}
         packageId={selectedPackageId}
         batchFormSubmitting={batchFormSubmitting}
+        courseName={courseName}
+        packageName={packageName}
+        packagePrice={packagePrice}
       />
     </div>
   );

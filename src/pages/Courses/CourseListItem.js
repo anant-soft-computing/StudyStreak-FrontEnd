@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ajaxCall from '../../helpers/ajaxCall';
-import { useSelector } from 'react-redux';
 
-const CourseListItem = () => {
+const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   const [courseList, setCouresList] = useState([]);
-
-  const authData = useSelector((state) => state.authStore);
 
   const getCourses = async () => {
     try {
       const response = await ajaxCall(
-        `/courselistview/`,
+        `/courselistview/?search=${search}&Category__name=${selectedCategory}&Level__name=${selectedLevel}`,
         {
           headers: {
             Accept: 'application/json',
@@ -26,16 +23,16 @@ const CourseListItem = () => {
       if (response.status === 200) {
         setCouresList(response.data);
       } else {
-        console.log('---error---->');
+        console.log("error");
       }
     } catch (error) {
-      console.log('Error:', error);
+      console.log("error", error);
     }
   };
 
   useEffect(() => {
     getCourses();
-  }, []);
+  }, [search, selectedCategory, selectedLevel]);
 
   return (
     <div className='row'>

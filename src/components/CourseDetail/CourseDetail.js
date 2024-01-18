@@ -16,8 +16,8 @@ const CourseDetail = () => {
   const [courseDetail, setCouresDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [showBatchSelection, setShowBatchSelection] = React.useState(false);
-  const [batchFormSubmitting, setBatchFormSubmitting] = React.useState(false);
+  const [showBatchSelection, setShowBatchSelection] = useState(false);
+  const [batchFormSubmitting, setBatchFormSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -260,6 +260,7 @@ const CourseDetail = () => {
                           packages={coursePackages?.packages}
                           handleEnrollNow={handleEnrollNow}
                           batchFormSubmitting={batchFormSubmitting}
+                          courseName={courseDetail?.Course_Title}
                         />
                       ) : (
                         <div data-aos="fade-up">

@@ -1,16 +1,26 @@
-import { useEffect, useState } from 'react';
-import { Spinner } from 'react-bootstrap';
-import Modal from 'react-bootstrap/Modal';
+import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import ajaxCall from "../../helpers/ajaxCall";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const BatchSelection = (props) => {
   const [batches, setBatches] = useState([]);
   const [selectedBatchIds, setSelectedBatchIds] = useState([]);
   const authData = useSelector((state) => state.authStore);
+  const navigate = useNavigate();
 
-  const { handleEnrollNow, packageId, show, onHide, batchFormSubmitting } =
-    props;
+  const {
+    // handleEnrollNow,
+    packageId,
+    show,
+    onHide,
+    batchFormSubmitting,
+    courseName,
+    packageName,
+    packagePrice,
+  } = props;
 
   const getCourseBatches = async () => {
     try {
@@ -20,7 +30,6 @@ const BatchSelection = (props) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
           },
           method: "GET",
         },
@@ -41,7 +50,20 @@ const BatchSelection = (props) => {
   }, [packageId]);
 
   const handleEnrollButton = () => {
-    handleEnrollNow(packageId, selectedBatchIds);
+    if (!authData.loggedIn) {
+      navigate("/login");
+      return;
+    }
+    // handleEnrollNow(packageId, selectedBatchIds);
+    navigate("/checkout", {
+      state: {
+        packageId,
+        selectedBatchIds,
+        courseName,
+        packageName,
+        packagePrice,
+      },
+    });
   };
 
   const handleModalClose = () => {
@@ -127,7 +149,6 @@ const BatchSelection = (props) => {
           <p>No Batches Available</p>
         )}
       </Modal.Body>
-
       <Modal.Footer>
         <button
           className='default__button'

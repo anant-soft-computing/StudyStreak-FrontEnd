@@ -28,7 +28,7 @@ const Assignment = ({ activeLesson }) => {
                         </th>
                         <td></td>
                         <td></td>
-                        <td>
+                        <td style={{ width: "0%" }}>
                           <div className="dashboard__button__group">
                             <a
                               className="dashboard__small__btn__2"

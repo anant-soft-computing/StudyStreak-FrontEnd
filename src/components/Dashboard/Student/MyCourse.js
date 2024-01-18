@@ -4,10 +4,12 @@ import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import DSNavBar from "./DSNavBar/DSNavBar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const MyCourse = () => {
-  const { enrolledCourse } = useLocation().state; 
+  const { enrolledCourse } = useLocation().state;
+  const navigate = useNavigate();
+
   return (
     <>
       <TopBar />
@@ -34,28 +36,35 @@ const MyCourse = () => {
                           className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
                           data-aos="fade-up"
                           key={enrolledCourse.id}
+                          onClick={() =>
+                            navigate(`/course-content/${enrolledCourse?.id}`, {
+                              state: { enrolledCourse },
+                            })
+                          }
                         >
                           <div className="gridarea__wraper gridarea__wraper__2">
                             <div className="gridarea__img">
                               <img
                                 src={enrolledCourse?.Course_Thumbnail}
                                 alt={enrolledCourse?.Course_Title}
+                                onClick={(e) => {
+                                  navigate(
+                                    `/course-detail/${enrolledCourse?.id}`
+                                  );
+                                  e.stopPropagation();
+                                }}
                               />
                             </div>
                             <div className="gridarea__content">
                               <div className="gridarea__list">
                                 <ul className="ps-0">
                                   <li>
-                                    <Link
-                                      to={`/course-lessons/${enrolledCourse?.id}`}
-                                    >
-                                      <i className="icofont-book-alt"></i>{" "}
-                                      {enrolledCourse?.lessons?.length} Lessons
-                                    </Link>
+                                    <i className="icofont-book-alt"></i>{" "}
+                                    {enrolledCourse?.lessons?.length} Lessons
                                   </li>
                                   <li>
                                     <i className="icofont-clock-time"></i>{" "}
-                                    {enrolledCourse?.lessons.reduce(
+                                    {enrolledCourse?.lessons?.reduce(
                                       (totalDuration, lesson) =>
                                         totalDuration +
                                         parseInt(lesson?.Lesson_Duration),
@@ -68,7 +77,10 @@ const MyCourse = () => {
                               <div className="gridarea__heading">
                                 <h3>
                                   <Link
-                                    to={`/course-detail/${enrolledCourse?.id}`}
+                                    to={`/course-lessons/${enrolledCourse?.id}`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                    }}
                                   >
                                     {enrolledCourse?.Course_Title}
                                   </Link>

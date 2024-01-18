@@ -16240,3 +16240,18 @@ li {
   padding: 15px; 
   margin-bottom: 20px;
 }
+.borderBox {
+  border: 1px solid #ccc;
+  padding: 20px; 
+}
+
+.count {
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 500;
+  display: inline-block;
+  color: var(--whiteColor);
+  padding: 0px 9px;
+  border-radius: 15px;
+  background-color: var(--primaryColor);
+}

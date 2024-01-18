@@ -34,6 +34,7 @@ import Material from "./components/Dashboard/Student/Material";
 import AdditionalResourcse from "./components/Dashboard/Student/AdditionalResourcse";
 import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
+import CourseContent from "./components/Dashboard/Student/CourseContent/CourseContent";
 
 
 const App = () => {
@@ -59,6 +60,10 @@ const App = () => {
           <Route
             path="/course-lessons/:courseId"
             element={<ProtectedRoute element={Lesson} />}
+          />
+          <Route
+            path="/course-content/:courseId"
+            element={<ProtectedRoute element={CourseContent} />}
           />
           <Route
             path="/create-course"

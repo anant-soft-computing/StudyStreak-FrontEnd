@@ -108,10 +108,16 @@ const LessonList = ({
                   <i className="icofont-book-alt"></i>
                   <h5>
                     <div onClick={() => handleContentChange("attachment")}>
-                      <span>Attachement</span>{" "}
-                      <span>({lessonItem.attachmentCount})</span>
+                      <Link>
+                        <span>Attachement</span>{" "}
+                      </Link>
                     </div>
                   </h5>
+                </div>
+                <div className="scc__meta">
+                  <strong className="count">
+                    {lessonItem.attachmentCount}
+                  </strong>
                 </div>
               </div>
               <div className="scc__wrap">
@@ -119,7 +125,9 @@ const LessonList = ({
                   <i className="icofont-audio"></i>
                   <h5>
                     <div onClick={() => handleContentChange("quiz")}>
-                      <span>Quiz</span>
+                      <Link>
+                        <span>Quiz</span>
+                      </Link>
                     </div>
                   </h5>
                 </div>
@@ -129,10 +137,16 @@ const LessonList = ({
                   <i className="icofont-book-alt"></i>
                   <h5>
                     <div onClick={() => handleContentChange("assignment")}>
-                      <span>Assignment</span>{" "}
-                      <span>({lessonItem.assignmentCount})</span>
+                      <Link>
+                        <span>Assignment</span>{" "}
+                      </Link>
                     </div>
                   </h5>
+                </div>
+                <div className="scc__meta">
+                  <strong className="count">
+                    {lessonItem.assignmentCount}
+                  </strong>
                 </div>
               </div>
             </div>
@@ -150,7 +164,7 @@ const Lesson = () => {
   const [courseLessons, setCourseLessons] = useState([]);
   const [activeLesson, setActiveLesson] = useState({});
   const [activeIndex, setActiveIndex] = useState(0);
-  const [activeContentType, setActiveContentType] = useState("video");  
+  const [activeContentType, setActiveContentType] = useState("video");
 
   const authData = useSelector((state) => state.authStore);
   const getCourseLessons = async () => {
@@ -222,10 +236,7 @@ const Lesson = () => {
           <div className="tution sp_bottom_100 sp_top_50">
             <div className="container-fluid full__width__padding">
               <div className="row">
-                <div
-                  className="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons"
-                  data-aos="fade-up"
-                >
+                <div className="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
                   <LessonList
                     lessons={courseLessons}
                     activeIndex={activeIndex}
@@ -234,10 +245,7 @@ const Lesson = () => {
                     setActiveLesson={setActiveLesson}
                   />
                 </div>
-                <div
-                  className="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 course__videos"
-                  data-aos="fade-up"
-                >
+                <div className="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
                   <LessonContent
                     activeLesson={activeLesson}
                     activeContentType={activeContentType}

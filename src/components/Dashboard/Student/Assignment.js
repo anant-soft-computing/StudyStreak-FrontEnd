@@ -1,6 +1,6 @@
 import React from "react";
 
-const Assignment = ({ activeLesson }) => {
+const Assignment = ({ activeLesson, lessonName }) => {
   return (
     <div>
       {activeLesson.assignments.length > 0 ? (
@@ -21,28 +21,38 @@ const Assignment = ({ activeLesson }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {activeLesson.assignments.map((assignment) => (
-                      <tr key={assignment.id}>
-                        <th>
-                          <span>{assignment.attachment_description}</span>
-                        </th>
-                        <td></td>
-                        <td></td>
-                        <td style={{ width: "0%" }}>
-                          <div className="dashboard__button__group">
-                            <a
-                              className="dashboard__small__btn__2"
-                              href={assignment.attachment}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <i className="icofont-download" />
-                              Download
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                    {activeLesson.assignments.map(
+                      ({ id, attachment_description, attachment }, index) => (
+                        <tr
+                          key={id}
+                          className={`${
+                            index % 2 === 0 ? "" : "dashboard__table__row"
+                          }`}
+                        >
+                          <th>
+                            <span>{attachment_description}</span>
+                            <p className="mt-2">
+                              Lesson : <span>{lessonName}</span>
+                            </p>
+                          </th>
+                          <td></td>
+                          <td></td>
+                          <td style={{ width: "0%" }}>
+                            <div className="dashboard__button__group">
+                              <a
+                                className="dashboard__small__btn__2"
+                                href={attachment}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                <i className="icofont-download" />
+                                Download
+                              </a>
+                            </div>
+                          </td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>

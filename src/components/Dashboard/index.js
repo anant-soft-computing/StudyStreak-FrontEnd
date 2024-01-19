@@ -26,7 +26,7 @@ const Dashboard = () => {
             </Link>
             <ul className='headerarea__submenu--third'>
               <li>
-                <Link to='/student-dashboard'>Dashboard</Link>
+                <Link to='/studentDashboard'>Dashboard</Link>
               </li>
             </ul>
           </li>

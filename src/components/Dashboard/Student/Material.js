@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../helpers/ajaxCall";
 
-const Material = ({ courseId,courseName }) => {
+const Material = ({ courseId, courseName }) => {
   const [courseMaterial, setCourseMaterial] = useState([]);
   const getCourseMaterial = async () => {
     try {
@@ -31,8 +31,8 @@ const Material = ({ courseId,courseName }) => {
   }, [courseId]);
 
   return (
-    <div className="col-xl-9 col-lg-9 col-md-12">
-      <div className="dashboard__content__wraper borderBox">
+    <div className="col-xl-12 col-lg-9 col-md-12">
+      <div className="dashboard__content__wraper">
         <div className="dashboard__section__title">
           <h4>Course Material</h4>
         </div>
@@ -49,36 +49,38 @@ const Material = ({ courseId,courseName }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {courseMaterial.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      className={`${
-                        index % 2 === 0 ? "" : "dashboard__table__row"
-                      }`}
-                    >
-                      <th>
-                        <span>{item.material_name}</span>
-                        <p className="mt-2">
-                          Course : <span>{courseName}</span>
-                        </p>
-                      </th>
-                      <td></td>
-                      <td></td>
-                      <td style={{ width: "0%" }}>
-                        <div className="dashboard__button__group">
-                          <a
-                            className="dashboard__small__btn__2"
-                            href={item.course_material}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="icofont-download" />
-                            Download
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {courseMaterial.map(
+                    ({ id, material_name, course_material }, index) => (
+                      <tr
+                        key={id}
+                        className={`${
+                          index % 2 === 0 ? "" : "dashboard__table__row"
+                        }`}
+                      >
+                        <th>
+                          <span>{material_name}</span>
+                          <p className="mt-2">
+                            Course : <span>{courseName}</span>
+                          </p>
+                        </th>
+                        <td></td>
+                        <td></td>
+                        <td style={{ width: "0%" }}>
+                          <div className="dashboard__button__group">
+                            <a
+                              className="dashboard__small__btn__2"
+                              href={course_material}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <i className="icofont-download" />
+                              Download
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>

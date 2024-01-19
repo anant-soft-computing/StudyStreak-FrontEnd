@@ -37,7 +37,7 @@ const MyCourse = () => {
                           data-aos="fade-up"
                           key={enrolledCourse.id}
                           onClick={() =>
-                            navigate(`/course-content/${enrolledCourse?.id}`, {
+                            navigate(`/course/${enrolledCourse?.id}`, {
                               state: { enrolledCourse },
                             })
                           }
@@ -49,7 +49,7 @@ const MyCourse = () => {
                                 alt={enrolledCourse?.Course_Title}
                                 onClick={(e) => {
                                   navigate(
-                                    `/course-detail/${enrolledCourse?.id}`
+                                    `/courseDetail/${enrolledCourse?.id}`
                                   );
                                   e.stopPropagation();
                                 }}
@@ -77,7 +77,7 @@ const MyCourse = () => {
                               <div className="gridarea__heading">
                                 <h3>
                                   <Link
-                                    to={`/course-lessons/${enrolledCourse?.id}`}
+                                    to={`/courseLessons/${enrolledCourse?.id}`}
                                     onClick={(e) => {
                                       e.stopPropagation();
                                     }}

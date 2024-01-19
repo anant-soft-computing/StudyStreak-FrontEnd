@@ -76,7 +76,7 @@ const UpdateProfile = () => {
       );
       if (response.status === 200) {
         toast.success("Profile Updated Successfully");
-        navigate("/student-profile");
+        navigate("/studentProfile");
       } else {
         toast.error("Something went wrong. Please try again later.");
       }

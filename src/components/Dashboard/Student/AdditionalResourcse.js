@@ -32,8 +32,8 @@ const AdditionalResourcse = ({ courseId, courseName }) => {
   }, [courseId]);
 
   return (
-    <div className="col-xl-9 col-lg-9 col-md-12">
-      <div className="dashboard__content__wraper borderBox">
+    <div className="col-xl-12 col-lg-9 col-md-12">
+      <div className="dashboard__content__wraper">
         <div className="dashboard__section__title ">
           <h4>Additional Resources</h4>
         </div>
@@ -50,36 +50,38 @@ const AdditionalResourcse = ({ courseId, courseName }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {additionalResource.map((item, index) => (
-                    <tr
-                      key={item.id}
-                      className={`${
-                        index % 2 === 0 ? "" : "dashboard__table__row"
-                      }`}
-                    >
-                      <th>
-                        <span>{item.info}</span>
-                        <p className="mt-2">
-                          Course : <span>{courseName}</span>
-                        </p>
-                      </th>
-                      <td></td>
-                      <td></td>
-                      <td style={{ width: "0%" }}>
-                        <div className="dashboard__button__group">
-                          <a
-                            className="dashboard__small__btn__2"
-                            href={item.course_files}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="icofont-download" />
-                            Download
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  {additionalResource.map(
+                    ({ id, info, course_files }, index) => (
+                      <tr
+                        key={id}
+                        className={`${
+                          index % 2 === 0 ? "" : "dashboard__table__row"
+                        }`}
+                      >
+                        <th>
+                          <span>{info}</span>
+                          <p className="mt-2">
+                            Course : <span>{courseName}</span>
+                          </p>
+                        </th>
+                        <td></td>
+                        <td></td>
+                        <td style={{ width: "0%" }}>
+                          <div className="dashboard__button__group">
+                            <a
+                              className="dashboard__small__btn__2"
+                              href={course_files}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <i className="icofont-download" />
+                              Download
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>

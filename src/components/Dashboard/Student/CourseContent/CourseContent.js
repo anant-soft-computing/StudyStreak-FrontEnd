@@ -53,7 +53,7 @@ const CourseContent = () => {
                                 aria-selected="true"
                                 role="tab"
                               >
-                                Downloads
+                                Lessons
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
@@ -66,20 +66,7 @@ const CourseContent = () => {
                                 role="tab"
                                 tabindex="-1"
                               >
-                                Live Classes
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__three"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabindex="-1"
-                              >
-                                Tests
+                                Downloads
                               </button>
                             </li>
                           </ul>
@@ -95,6 +82,14 @@ const CourseContent = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
+                            Lessons
+                          </div>
+                          <div
+                            className="tab-pane fade"
+                            id="projects__two"
+                            role="tabpanel"
+                            aria-labelledby="projects__two"
+                          >
                             <Material
                               courseId={courseId}
                               courseName={enrolledCourse?.Course_Title}
@@ -104,12 +99,6 @@ const CourseContent = () => {
                               courseName={enrolledCourse?.Course_Title}
                             />
                           </div>
-                          <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
-                          ></div>
                         </div>
                       </div>
                     </div>

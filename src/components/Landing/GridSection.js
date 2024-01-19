@@ -78,7 +78,7 @@ const GridSection = () => {
             courseList.map((course) => (
               <div key={course.id} className="gridarea__wraper">
                 <div className="gridarea__img">
-                  <Link to={`/course-detail/${course?.id}`}>
+                  <Link to={`/courseDetail/${course?.id}`}>
                     <img
                       src={course?.Course_Thumbnail}
                       alt={course?.Course_Title}
@@ -105,7 +105,7 @@ const GridSection = () => {
                   </div>
                   <div className="gridarea__heading">
                     <h3 className="gridarea_link">
-                      <Link to={`/course-detail/${course.id}`}>
+                      <Link to={`/courseDetail/${course.id}`}>
                         {course?.Course_Title}
                       </Link>
                     </h3>

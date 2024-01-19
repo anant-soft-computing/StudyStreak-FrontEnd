@@ -7,6 +7,7 @@ import Material from "../Material";
 import { useLocation, useParams } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import DSNavBar from "../DSNavBar/DSNavBar";
+import Lesson from "../Lesson/Lesson";
 
 const CourseContent = () => {
   const { courseId } = useParams();
@@ -82,7 +83,7 @@ const CourseContent = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            Lessons
+                            <Lesson/>
                           </div>
                           <div
                             className="tab-pane fade"

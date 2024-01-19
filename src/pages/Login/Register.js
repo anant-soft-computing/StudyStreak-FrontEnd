@@ -37,6 +37,8 @@ const Register = () => {
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [acceptTerm, setAcceptTerm] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showReEnterPassword, setShowReEnterPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -242,41 +244,57 @@ const Register = () => {
           <div className='col-xl-6'>
             <div className='login__form'>
               <label className='form__label'>Password</label>
-              <input
-                className={`common__login__input ${
-                  formStatus?.errMsg?.password && 'error-border'
-                }`}
-                type='password'
-                placeholder='Password'
-                value={signUpData.password}
-                onChange={(e) =>
-                  dispatchSignUp({
-                    type: 'password',
-                    value: e.target.value,
-                  })
-                }
-              />
+              <div className='password-input-container'>
+                <input
+                  className={`common__login__input ${
+                    formStatus?.errMsg?.password && 'error-border'
+                  }`}
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  value={signUpData.password}
+                  onChange={(e) =>
+                    dispatchSignUp({
+                      type: 'password',
+                      value: e.target.value,
+                    })
+                  }
+                />
+                <i
+                  className={`eye-icon icofont-eye-open ${
+                    showPassword ? "visible" : "hidden"
+                  }`}
+                  onClick={() => setShowPassword(!showPassword)}
+                ></i>
+              </div>
               {formStatus?.isError && renderError('password')}
             </div>
           </div>
           <div className='col-xl-6'>
             <div className='login__form'>
               <label className='form__label'>Re-Enter Password</label>
-              <input
-                className={`common__login__input ${
-                  formStatus?.errMsg?.password2 && 'error-border'
-                }`}
-                type='password'
-                placeholder='Re-Enter Password'
-                value={signUpData.password2}
-                onChange={(e) =>
-                  dispatchSignUp({
-                    type: 'password2',
-                    value: e.target.value,
-                  })
-                }
-              />
-              {formStatus?.isError && renderError('password2')}
+              <div className='password-input-container'>
+                <input
+                  className={`common__login__input ${
+                    formStatus?.errMsg?.password2 && 'error-border'
+                  }`}
+                  type={showReEnterPassword ? 'text' : 'password'}
+                  placeholder='Re-Enter Password'
+                  value={signUpData.password2}
+                  onChange={(e) =>
+                    dispatchSignUp({
+                      type: 'password2',
+                      value: e.target.value,
+                    })
+                  }
+                />
+                <i
+                  className={`eye-icon icofont-eye-open ${
+                    showReEnterPassword ? "visible" : "hidden"
+                  }`}
+                  onClick={() => setShowReEnterPassword(!showReEnterPassword)}
+                ></i>
+              </div>
+              {formStatus?.isError && renderError("password2")}
             </div>
           </div>
         </div>

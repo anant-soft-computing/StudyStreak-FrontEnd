@@ -2,7 +2,7 @@ import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ajaxCall from '../../helpers/ajaxCall';
 import { authAction } from '../../store/authStore';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { setToLocalStorage } from '../../helpers/helperFunction';
 import Register from './Register';
 import TopBar from '../../components/TopBar/TopBar';
@@ -10,6 +10,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import Footer from '../../components/Footer/Footer';
 import { useCheckAuth } from '../../hooks/useCheckAuth';
 import { Spinner } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 const intialLoginData = {
   username: '',
@@ -35,6 +36,7 @@ const Login = () => {
   const [loginData, dispatchLogin] = useReducer(reducerLogin, intialLoginData);
   const controller = useRef(null);
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -128,6 +130,7 @@ const Login = () => {
       );
       clearTimeout(gotLate);
       if (response.status === 200) {
+        toast.success(response.data?.msg);
         handleLoginSuccess(response);
         response.data.user_role === 'admin'
           ? navigate('/admin-dashboard')
@@ -212,9 +215,8 @@ const Login = () => {
                   <ul className='nav tab__button__wrap text-center'>
                     <li className='nav-item'>
                       <button
-                        className={`single__tab__link ${
-                          activeTab === 'login' ? 'active' : ''
-                        }`}
+                        className={`single__tab__link ${activeTab === 'login' ? 'active' : ''
+                          }`}
                         onClick={() => setActiveTab('login')}
                         type='button'
                       >
@@ -223,9 +225,8 @@ const Login = () => {
                     </li>
                     <li className='nav-item'>
                       <button
-                        className={`single__tab__link ${
-                          activeTab === 'signup' ? 'active' : ''
-                        }`}
+                        className={`single__tab__link ${activeTab === 'signup' ? 'active' : ''
+                          }`}
                         onClick={() => setActiveTab('signup')}
                         type='button'
                       >
@@ -236,9 +237,8 @@ const Login = () => {
                 </div>
                 <div className='tab-content tab__content__wrapper'>
                   <div
-                    className={`tab-pane fade ${
-                      activeTab === 'login' ? 'active show' : ''
-                    }`}
+                    className={`tab-pane fade ${activeTab === 'login' ? 'active show' : ''
+                      }`}
                   >
                     <div className='col-xl-8 col-md-8 offset-md-2'>
                       <div className='loginarea__wraper'>
@@ -269,19 +269,26 @@ const Login = () => {
                           </div>
                           <div className='login__form'>
                             <label className='form__label'>Password</label>
-                            <input
-                              className='common__login__input'
-                              type='password'
-                              name='password'
-                              placeholder='Password'
-                              value={loginData.password}
-                              onChange={(e) =>
-                                dispatchLogin({
-                                  type: 'password',
-                                  value: e.target.value,
-                                })
-                              }
-                            />
+                            <div className='password-input-container'>
+                              <input
+                                className='common__login__input'
+                                type={showPassword ? 'text' : 'password'}
+                                name='password'
+                                placeholder='Password'
+                                value={loginData.password}
+                                onChange={(e) =>
+                                  dispatchLogin({
+                                    type: 'password',
+                                    value: e.target.value,
+                                  })
+                                }
+                              />
+                              <i
+                                className={`eye-icon icofont-eye-open ${showPassword ? "visible" : "hidden"
+                                  }`}
+                                onClick={() => setShowPassword(!showPassword)}
+                              ></i>
+                            </div>
                           </div>
                           <div className='login__form d-flex justify-content-between flex-wrap gap-2'>
                             <div className='form__check'>
@@ -289,7 +296,7 @@ const Login = () => {
                               <label>Remember me</label>
                             </div>
                             <div className='text-end login__form__link'>
-                              <Link>Forgot your password?</Link>
+                              <Link to='/forgot-password'>Forgot your password?</Link>
                             </div>
                           </div>
                           <div className='login__button'>
@@ -318,15 +325,20 @@ const Login = () => {
                                 Log In
                               </button>
                             </div>
+                            <div className="login__social__option">
+                              <p>or Log-in with</p>
+                              <button className="default__button">
+                                <i className="icofont-google-plus"></i> Google
+                              </button>
+                            </div>
                           </div>
                         </form>
                       </div>
                     </div>
                   </div>
                   <div
-                    className={`tab-pane fade ${
-                      activeTab === 'signup' ? 'active show' : ''
-                    }`}
+                    className={`tab-pane fade ${activeTab === 'signup' ? 'active show' : ''
+                      }`}
                   >
                     <div className='col-xl-8 offset-md-2'>
                       <div className='loginarea__wraper'>

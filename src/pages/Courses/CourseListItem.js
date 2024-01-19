@@ -13,7 +13,6 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            // Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'GET',
         },
@@ -44,7 +43,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
         >
           <div className='gridarea__wraper gridarea__wraper__2'>
             <div className='gridarea__img'>
-              <Link to={`/course-detail/${course?.id}`}>
+              <Link to={`/courseDetail/${course?.id}`}>
                 <img
                   src={course?.Course_Thumbnail}
                   alt={course?.Course_Title}
@@ -71,7 +70,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
               </div>
               <div className='gridarea__heading'>
                 <h3>
-                  <Link to={`/course-detail/${course?.id}`}>
+                  <Link to={`/courseDetail/${course?.id}`}>
                     {course?.Course_Title}
                   </Link>
                 </h3>

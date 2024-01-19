@@ -14,7 +14,7 @@ const menu = [
   },
   {
     name: "Dashboard",
-    link: "/student-dashboard",
+    link: "/studentDashboard",
   },
   {
     name: "Contact Us",

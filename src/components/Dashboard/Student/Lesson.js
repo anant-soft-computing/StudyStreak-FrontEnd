@@ -31,11 +31,11 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
         </>
       )}
       {activeContentType === "attachment" && (
-        <Attachment activeLesson={activeLesson} />
+        <Attachment activeLesson={activeLesson} lessonName={activeLesson?.Lesson_Title} />
       )}
       {activeContentType === "quiz" && <Quiz activeLesson={activeLesson} />}
       {activeContentType === "assignment" && (
-        <Assignment activeLesson={activeLesson} />
+        <Assignment activeLesson={activeLesson} lessonName={activeLesson?.Lesson_Title} />
       )}
     </div>
   );
@@ -54,9 +54,8 @@ const LessonList = ({
         <div className="accordion-item" key={index}>
           <h2 className="accordion-header" id={`lesson-${index}`}>
             <button
-              className={`accordion-button ${
-                activeIndex !== index ? "collapsed" : ""
-              }`}
+              className={`accordion-button ${activeIndex !== index ? "collapsed" : ""
+                }`}
               type="button"
               data-bs-toggle="collapse"
               data-bs-target={`#collapseOne-${index}`}
@@ -69,9 +68,8 @@ const LessonList = ({
           </h2>
           <div
             id={`collapseOne-${index}`}
-            className={`accordion-collapse collapse ${
-              activeIndex === index ? "show" : ""
-            }`}
+            className={`accordion-collapse collapse ${activeIndex === index ? "show" : ""
+              }`}
             aria-labelledby={`lesson-${index}`}
             data-bs-parent="#accordionLessons"
           >

@@ -30,8 +30,6 @@ import StudentProfile from "./components/Dashboard/Student/Profile";
 import StudentSettings from "./components/Dashboard/Student/Setting/Settings";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyCourse from "./components/Dashboard/Student/MyCourse";
-import Material from "./components/Dashboard/Student/Material";
-import AdditionalResourcse from "./components/Dashboard/Student/AdditionalResourcse";
 import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
 import CourseContent from "./components/Dashboard/Student/CourseContent/CourseContent";
@@ -56,17 +54,17 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/courses" element={<Courses />} />
-          <Route path="/course-detail/:courseId" element={<CourseDetail />} />
+          <Route path="/courseDetail/:courseId" element={<CourseDetail />} />
           <Route
-            path="/course-lessons/:courseId"
+            path="/courseLessons/:courseId"
             element={<ProtectedRoute element={Lesson} />}
           />
           <Route
-            path="/course-content/:courseId"
+            path="/course/:courseId"
             element={<ProtectedRoute element={CourseContent} />}
           />
           <Route
-            path="/create-course"
+            path="/createCourse"
             element={<ProtectedRoute element={CreateCourse} />}
           />
           <Route path="/tests" element={<ProtectedRoute element={Tests} />} />
@@ -129,27 +127,19 @@ const App = () => {
             element={<ProtectedRoute element={ExamListening} />}
           />
           <Route
-            path="/student-dashboard"
+            path="/studentDashboard"
             element={<ProtectedRoute element={StudentDashboard} />}
           />
           <Route
-            path="/student-myCourse"
+            path="/studentMyCourse"
             element={<ProtectedRoute element={MyCourse} />}
           />
           <Route
-            path="/student-courseMaterial"
-            element={<ProtectedRoute element={Material} />}
-          />
-          <Route
-            path="/student-AdditionalResource"
-            element={<ProtectedRoute element={AdditionalResourcse} />}
-          />
-          <Route
-            path="/student-liveClasses"
+            path="/studentLiveClasses"
             element={<ProtectedRoute element={StudentLiveClass} />}
           />
-          <Route path="/student-profile" element={<StudentProfile />} />
-          <Route path="/student-settings" element={<StudentSettings />} />
+          <Route path="/studentProfile" element={<StudentProfile />} />
+          <Route path="/studentSettings" element={<StudentSettings />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

@@ -46,7 +46,7 @@ const NavBar = () => {
                       <li className='mega__menu position-static'>
                         <Link
                           className='headerarea__has__dropdown'
-                          to='/student-dashboard'
+                          to='/studentDashboard'
                         >
                           Dashboard
                         </Link>

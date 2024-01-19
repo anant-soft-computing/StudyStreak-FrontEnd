@@ -8,8 +8,8 @@ const DSSidebar = () => {
   const authData = useSelector((state) => state.authStore);
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [count, setCount] = useState([]);
+  
   const location = useLocation().pathname;
-
   const { logoutUser } = useCheckAuth();
 
   const getEnrolledCourses = async () => {
@@ -57,8 +57,8 @@ const DSSidebar = () => {
             <ul>
               <li>
                 <Link
-                  className={location === "/student-dashboard/" ? "active" : ""}
-                  to="/student-dashboard/"
+                  className={location === "/studentDashboard/" ? "active" : ""}
+                  to="/studentDashboard/"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -80,8 +80,8 @@ const DSSidebar = () => {
               </li>
               <li>
                 <Link
-                  className={location === "/student-profile" ? "active" : ""}
-                  to="/student-profile"
+                  className={location === "/studentProfile" ? "active" : ""}
+                  to="/studentProfile"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -103,8 +103,8 @@ const DSSidebar = () => {
               </li>
               <li>
                 <Link
-                  className={location === "/student-myCourse" ? "active" : ""}
-                  to="/student-myCourse"
+                  className={location === "/studentMyCourse" ? "active" : ""}
+                  to="/studentMyCourse"
                   state={{ enrolledCourse }}
                 >
                   <svg
@@ -129,11 +129,81 @@ const DSSidebar = () => {
                   My Course
                 </Link>
               </li>
+
               <li>
-                <Link className={
-                    location === "/student-liveClasses" ? "active" : ""
-                  }
-                  to="/student-liveClasses">
+                <Link to="">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-star"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>Practice Test</span>
+                  <div>(Coming Soon)</div>
+                  <span className="dashboard__label">
+                    {count?.practice_test_count}
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link to="">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-star"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>Full Length Test </span>
+                  <div>(Coming Soon)</div>
+                  <span className="dashboard__label">
+                    {count?.full_length_test_count}
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link to="">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-star"
+                  >
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span>Speaking Test </span>
+                  <div>(Coming Soon)</div>
+                  <span className="dashboard__label">
+                    {count?.speaking_test_count}
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className={location === "/studentLiveClasses" ? "active" : ""}
+                  to="/studentLiveClasses"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -163,57 +233,12 @@ const DSSidebar = () => {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="feather feather-star"
-                  >
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                  </svg>
-                  Practice Test (Coming Soon){" "}
-                  <span className="dashboard__label">
-                    {count?.practice_test_count}
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link to="">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="feather feather-help-circle"
-                  >
-                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <path d="M16 10a4 4 0 0 1-8 0"></path>
-                  </svg>
-                  Live Speaking Practice Session (Coming Soon){" "}
-                  <span className="dashboard__label">
-                    {count?.speaking_test_count}
-                  </span>
-                </Link>
-              </li>
-              <li>
-                <Link to="">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
                     className="feather feather-shopping-bag"
                   >
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                   </svg>
-                  Group Doubt Solving{" "}
+                  <span>Group Doubt Solving </span>
+                  <div>(Coming Soon)</div>
                   <span className="dashboard__label">
                     {count?.group_doubt_solving_count}
                   </span>
@@ -236,7 +261,7 @@ const DSSidebar = () => {
                     <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
                   </svg>
                   <span>One To One Doubt Solving</span>
-                  <div> (Coming Soon) </div>
+                  <div>(Coming Soon)</div>
                   <span className="dashboard__label">
                     {count?.one_to_one_doubt_solving_count}
                   </span>
@@ -244,8 +269,8 @@ const DSSidebar = () => {
               </li>
               <li>
                 <Link
-                  className={location === "/student-settings" ? "active" : ""}
-                  to="/student-settings"
+                  className={location === "/studentSettings" ? "active" : ""}
+                  to="/studentSettings"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

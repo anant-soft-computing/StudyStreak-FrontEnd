@@ -10,7 +10,7 @@ import Courses from "./pages/Courses/Courses";
 import Blogs from "./pages/Blogs/Blogs";
 import BlogDetail from "./components/BlogDetail/BlogDetail";
 import Tests from "./pages/Tests/Tests";
-import Lesson from "./components/Dashboard/Student/Lesson";
+import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
 import StudentDashboard from "./components/Dashboard/Student/Dashboard";
 import AdminDashboard from "./components/Dashboard/Admin/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
@@ -32,7 +32,8 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyCourse from "./components/Dashboard/Student/MyCourse";
 import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
-import CourseContent from "./components/Dashboard/Student/CourseContent/CourseContent";
+import CourseContent from "./components/Dashboard/Student/Course/CourseContent";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 
 
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/courseDetail/:courseId" element={<CourseDetail />} />
           <Route

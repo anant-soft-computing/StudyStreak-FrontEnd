@@ -1,0 +1,129 @@
+.lv-navbar {
+  color: black;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.lv-navbar-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.lv-navbar-subtitle {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-left: 15px;
+}
+
+.lv-navbar-right {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 10%;
+}
+
+.lv-container {
+  background-color: #f1f2ec;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.lv-scrollable-content {
+  overflow-y: auto; /* Enable vertical scrollbar if content overflows vertically */
+  height: 100%; /* Take up 100% of the container height */
+  padding: 10px; /* Add padding to make it look better */
+}
+
+.lv-container-title {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.lv-container-subtitle {
+  color: #666;
+  font-size: 18px;
+}
+
+.lv-main-container {
+  display: flex;
+  height: calc(100vh - 250px);
+}
+
+.lv-left-container,
+.lv-right-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 10px;
+}
+
+.lv-footer {
+  color: black;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lv-footer-text {
+  font-size: 16px;
+  padding: 0px 20px;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+
+.lv-question-pagination,
+.lv-part-pagination {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: auto;
+}
+
+.lv-footer-button {
+  width: 80px;
+  padding: 10px 20px;
+  background-color: #efefef;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.lv-footer-item {
+  cursor: pointer;
+  padding: 5px 10px;
+  margin-right: 20px;
+}
+
+.lv-footer-item:hover {
+  text-decoration: underline;
+  border: 1px solid #418ec8;
+  font-weight: bold;
+}
+
+.lv-highlight {
+  background-color: #ffffcc;
+}

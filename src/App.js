@@ -19,6 +19,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ExamCreator from "./pages/Exam-Creator/ExamCreator";
 import ExamReading from "./components/Exam-Create/ExamReading";
 import ExamListening from "./components/Exam-Create/ExamListening";
+import ExamWriting from "./components/Exam-Create/ExamWriting";
+import ExamSpeaking from "./components/Exam-Create/ExamSpeaking";
+import LiveExam from "./components/LiveExam/LiveExam";
 import Course from "./components/Dashboard/Admin/Course";
 import Exam from "./components/Dashboard/Admin/Exam";
 import LiveClass from "./components/Dashboard/Admin/LiveClass";
@@ -34,7 +37,6 @@ import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
 import CourseContent from "./components/Dashboard/Student/Course/CourseContent";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-
 
 const App = () => {
   return (
@@ -88,6 +90,14 @@ const App = () => {
             element={<ProtectedRoute element={Exam} />}
           />
           <Route
+            path="/admin-exam/:examType"
+            element={<ProtectedRoute element={Exam} />}
+          />
+          <Route
+            path="/admin-exam/:examType/:examForm"
+            element={<ProtectedRoute element={Exam} />}
+          />
+          <Route
             path="/admin-liveClass"
             element={<ProtectedRoute element={LiveClass} />}
           />
@@ -128,6 +138,20 @@ const App = () => {
             path="/exam-listening"
             element={<ProtectedRoute element={ExamListening} />}
           />
+          <Route
+            path="/exam-writing"
+            element={<ProtectedRoute element={ExamWriting} />}
+          />
+          <Route
+            path="/exam-speaking"
+            element={<ProtectedRoute element={ExamSpeaking} />}
+          />
+
+          <Route
+            path="/live-writing-exam"
+            element={<ProtectedRoute element={LiveExam} />}
+          />
+
           <Route
             path="/studentDashboard"
             element={<ProtectedRoute element={StudentDashboard} />}

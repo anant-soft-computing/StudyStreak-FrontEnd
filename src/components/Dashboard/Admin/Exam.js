@@ -1,11 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import Footer from "../../Footer/Footer";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import DANavBar from "./DANavBar/DANavBar";
 import DASideBar from "./DASideBar/DASideBar";
+import { useNavigate } from "react-router-dom";
+
+const exams = [
+  {
+    name: "IELTS",
+    subMenu: [
+      {
+        name: "Reading",
+        link: "/exam-reading",
+      },
+      {
+        name: "Listening",
+        link: "/exam-listening",
+      },
+      {
+        name: "Writing",
+        link: "",
+      },
+      {
+        name: "Speaking",
+        link: "",
+      },
+    ],
+    isDisabled: false,
+  },
+  {
+    name: "TOEFL",
+    subMenu: [],
+    isDisabled: true,
+  },
+  {
+    name: "PTE",
+    subMenu: [],
+    isDisabled: true,
+  },
+  {
+    name: "DUOLINGO",
+    subMenu: [],
+    isDisabled: true,
+  },
+  {
+    name: "GRE",
+    subMenu: [],
+    isDisabled: true,
+  },
+  {
+    name: "GMAT",
+    subMenu: [],
+    isDisabled: true,
+  },
+];
 
 const Exam = () => {
+  const navigate = useNavigate();
+  const [selectedExamIndex, setSelectedExamIndex] = useState(null);
+
+  const handleSelectExam = (index) => setSelectedExamIndex(index);
+
+  const handleExamClick = (exam) => {
+    if (exam.link !== "") navigate(exam.link);
+  };
+
   return (
     <>
       <TopBar />
@@ -73,7 +133,46 @@ const Exam = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <div className="row">Create Exam</div>
+                            <div className="row">
+                              {selectedExamIndex === null
+                                ? exams.map((exam, index) => (
+                                    <div
+                                      style={{
+                                        cursor: "pointer",
+                                        pointerEvents: exam.isDisabled
+                                          ? "none"
+                                          : "",
+                                      }}
+                                      className="col-xl-3 col-lg-6 col-md-12 col-12"
+                                      onClick={() => handleSelectExam(index)}
+                                    >
+                                      <div className="dashboard__single__counter">
+                                        <div className="counterarea__text__wraper justify-content-center">
+                                          <div className="counter__content__wraper">
+                                            <p>{exam.name}</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ))
+                                : exams[selectedExamIndex].subMenu.map(
+                                    (exam) => (
+                                      <div
+                                        style={{ cursor: "pointer" }}
+                                        className="col-xl-3 col-lg-6 col-md-12 col-12"
+                                        onClick={() => handleExamClick(exam)}
+                                      >
+                                        <div className="dashboard__single__counter">
+                                          <div className="counterarea__text__wraper justify-content-center">
+                                            <div className="counter__content__wraper">
+                                              <p>{exam.name}</p>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    )
+                                  )}
+                            </div>
                           </div>
                           <div
                             className="tab-pane fade"

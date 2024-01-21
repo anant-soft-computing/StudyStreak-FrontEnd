@@ -14852,7 +14852,8 @@ Breadcrumb Area
   font-size: 10px;
   line-height: 14px;
   font-weight: 500;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
   color: var(--whiteColor);
   padding: 0px 9px;
   border-radius: 15px;

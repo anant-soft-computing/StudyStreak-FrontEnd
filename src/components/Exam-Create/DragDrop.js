@@ -1014,7 +1014,7 @@ const DragDrop = () => {
   const location = useLocation();
   const readingData = location.state?.readingData || {};
   const listeningData = location.state?.listeningData || {};
-  const [audioLink,setAudioLink] = useState();
+  const [audioLink, setAudioLink] = useState();
   const [answer, setAnswer] = useState([]);
   useEffect(() => {
     const loadAudio = async () => {
@@ -1025,12 +1025,12 @@ const DragDrop = () => {
           console.log(audioSource);
           setAudioLink(audioSource);
         } catch (error) {
-          console.error('Error reading audio file:', error);
+          console.error("Error reading audio file:", error);
         }
       }
     };
 
-    console.log(listeningData, 'this is listening data');
+    console.log(listeningData, "this is listening data");
     loadAudio();
   }, []);
 
@@ -1049,7 +1049,7 @@ const DragDrop = () => {
       const reader = new FileReader();
       // Set up an event listener for the 'load' event
       reader.onload = (event) => {
-        console.log(event,'this is the event in the file reader')
+        console.log(event, "this is the event in the file reader");
         // Resolve the Promise with the result, which is the data URL of the file
         resolve(event.target.result);
       };
@@ -1175,26 +1175,30 @@ const DragDrop = () => {
   };
 
   const renderAudio = () => {
-    console.log(listeningData.audio_file,'this is lsitening data from the other component')
-    console.log('this is render audio and it works')
-    if(listeningData.audio_file){
+    console.log(
+      listeningData.audio_file,
+      "this is lsitening data from the other component"
+    );
+    console.log("this is render audio and it works");
+    if (listeningData.audio_file) {
       return `<div>
       <audio controls autoplay>
        <source src = ${audioLink} type="audio/mpeg">
       </audio>
-      </div>`
-    }else{
-      return`<p></p>`
+      </div>`;
+    } else {
+      return `<p></p>`;
     }
-  }
+  };
 
-  const displayLeftContainer =() => {
-    if(listeningData.audio_file){
-      return `${readingData.passage || listeningData.passage}`
-    }else{
-      return`<p></p>`
+  const displayLeftContainer = () => {
+    console.log(readingData, "this is reading data");
+    if (listeningData.audio_file || readingData.passage) {
+      return `${readingData.passage || listeningData.passage}`;
+    } else {
+      return `<p></p>`;
     }
-  }
+  };
 
   const handleContentChange = (event, header, divIndex) => {
     event.preventDefault();

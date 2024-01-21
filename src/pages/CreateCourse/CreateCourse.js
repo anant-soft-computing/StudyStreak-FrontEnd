@@ -100,7 +100,7 @@ const CreateCourse = () => {
     }
     if (!createCourseData.Level) {
       setFormError("Level is Required");
-      return false;	
+      return false;
     }
     if (!createCourseData.Language) {
       setFormError("Language is Required");
@@ -157,7 +157,7 @@ const CreateCourse = () => {
   const createCourse = async (e) => {
     resetReducerForm();
     e.preventDefault();
-    if (!validateForm()) return; 
+    if (!validateForm()) return;
     try {
       const formData = new FormData();
 
@@ -223,7 +223,6 @@ const CreateCourse = () => {
           errMsg: "Course Created Successfully.",
           isSubmitting: false,
         });
-        
       } else if (response.status === 400 || response.status === 404) {
         setFormStatus({
           isError: true,
@@ -267,10 +266,13 @@ const CreateCourse = () => {
     <>
       <div className="container">
         <div className="row">
-          <div className="col-xl-8 col-lg-8 col-md-12 col-12">
+          <div
+            className="col-xl-8 col-lg-8 col-md-12 col-12"
+            style={{ width: "-webkit-fill-available" }}
+          >
             <div className="create__course__accordion__wraper">
               <div className="accordion" id="accordionExample">
-                <div className="accordion-item">
+                <div className="accordion-item w-auto">
                   <h2 className="accordion-header" id="headingOne">
                     <button
                       className="accordion-button"

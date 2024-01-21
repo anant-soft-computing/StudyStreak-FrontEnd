@@ -4,8 +4,8 @@ import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import DANavBar from "./DANavBar/DANavBar";
 import DASideBar from "./DASideBar/DASideBar";
-import CourseListItem from "../../../pages/Courses/CourseListItem";
 import CreateCourse from "../../../pages/CreateCourse/CreateCourse";
+import ViewCourse from "./ViewCourse";
 
 const Course = () => {
   const [activeTab, setActiveTab] = useState("createCourse");
@@ -87,7 +87,7 @@ const Course = () => {
                             id="projects__two"
                           >
                             <div className="row">
-                              <CourseListItem key={activeTab} />
+                              <ViewCourse key={activeTab} />
                             </div>
                           </div>
                         </div>

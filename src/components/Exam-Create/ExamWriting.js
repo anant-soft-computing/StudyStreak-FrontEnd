@@ -5,16 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
-const intialListeningField = {
+const intialWritingField = {
   no_of_questions: "",
-  difficulty_level: "Easy",
+  difficulty_level: "",
   exam_name: "",
-  block_type: "Practice",
+  block_type: "",
   block_threshold: "",
   audio_file: "",
   passage: "",
   question: "",
-  exam_type: "Listening",
+  exam_type: "Writing",
 };
 
 const initialSubmit = {
@@ -23,22 +23,23 @@ const initialSubmit = {
   isSubmitting: false,
 };
 
-const listeningReducer = (state, action) => {
-  console.log(state, action);
+const reducerWriting = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const ExamListening = () => {
-  const [listeningData, dispatchListeningData] = useReducer(
-    listeningReducer,
-    intialListeningField
+const ExamWriting = () => {
+  const [writingData, dispatchWritingData] = useReducer(
+    reducerWriting,
+    intialWritingField
   );
+
   const [formStatus, setFormStatus] = useState(initialSubmit);
+
   const navigate = useNavigate();
 
   const handlePassageChange = (event, editor) => {
     const data = editor.getData();
-    dispatchListeningData({
+    dispatchWritingData({
       type: "passage",
       value: data,
     });
@@ -53,23 +54,23 @@ const ExamListening = () => {
   };
 
   const validateForm = () => {
-    if (!listeningData.no_of_questions) {
+    if (!writingData.no_of_questions) {
       setFormError("No of Question is Required");
       return false;
     }
-    if (!listeningData.difficulty_level) {
+    if (!writingData.difficulty_level) {
       setFormError("Difficulty Level is Required");
       return false;
     }
-    if (!listeningData.exam_name) {
+    if (!writingData.exam_name) {
       setFormError("Block Name is Required");
       return false;
     }
-    if (!listeningData.block_type) {
+    if (!writingData.block_type) {
       setFormError("Block Type is Required");
       return false;
     }
-    if (!listeningData.block_threshold) {
+    if (!writingData.block_threshold) {
       setFormError("Block Threshold is Required");
       return false;
     }
@@ -83,11 +84,7 @@ const ExamListening = () => {
 
   const handleOnNext = () => {
     if (!validateForm()) return;
-    console.log(
-      listeningData,
-      "this is the entire from obj and it has have that mp3 file"
-    );
-    navigate("/exam-create", { state: { listeningData } });
+    navigate("/exam-create", { state: { writingData } });
   };
 
   return (
@@ -103,7 +100,7 @@ const ExamListening = () => {
                   <li>
                     <Link to="/exam-creator">Create Exam</Link>
                   </li>
-                  <li>Listening</li>
+                  <li>Writing</li>
                 </ul>
               </div>
             </div>
@@ -139,9 +136,9 @@ const ExamListening = () => {
                                   <input
                                     type="number"
                                     placeholder="Number of Question"
-                                    value={listeningData.no_of_questions}
+                                    value={writingData.no_of_questions}
                                     onChange={(e) =>
-                                      dispatchListeningData({
+                                      dispatchWritingData({
                                         type: "no_of_questions",
                                         value: e.target.value,
                                       })
@@ -158,9 +155,9 @@ const ExamListening = () => {
                                 <select
                                   className="form-select"
                                   aria-label="Default select example"
-                                  value={listeningData.difficulty_level}
+                                  value={writingData.difficulty_level}
                                   onChange={(e) =>
-                                    dispatchListeningData({
+                                    dispatchWritingData({
                                       type: "difficulty_level",
                                       value: e.target.value,
                                     })
@@ -206,9 +203,9 @@ const ExamListening = () => {
                                   <input
                                     type="text"
                                     placeholder="Block Name"
-                                    value={listeningData.exam_name}
+                                    value={writingData.exam_name}
                                     onChange={(e) =>
-                                      dispatchListeningData({
+                                      dispatchWritingData({
                                         type: "exam_name",
                                         value: e.target.value,
                                       })
@@ -225,9 +222,9 @@ const ExamListening = () => {
                                 <select
                                   className="form-select"
                                   aria-label="Default select example"
-                                  value={listeningData.block_type}
+                                  value={writingData.block_type}
                                   onChange={(e) =>
-                                    dispatchListeningData({
+                                    dispatchWritingData({
                                       type: "block_type",
                                       value: e.target.value,
                                     })
@@ -249,9 +246,9 @@ const ExamListening = () => {
                                     <input
                                       type="number"
                                       placeholder="Block Threshold"
-                                      value={listeningData.block_threshold}
+                                      value={writingData.block_threshold}
                                       onChange={(e) =>
-                                        dispatchListeningData({
+                                        dispatchWritingData({
                                           type: "block_threshold",
                                           value: e.target.value,
                                         })
@@ -292,7 +289,7 @@ const ExamListening = () => {
                               <label>Instruction</label>
                               <CKEditor
                                 editor={ClassicEditor}
-                                data={listeningData.passage}
+                                data={writingData.passage}
                                 onChange={handlePassageChange}
                               />
                             </div>
@@ -305,7 +302,7 @@ const ExamListening = () => {
                               <input
                                 type="file"
                                 onChange={(e) =>
-                                  dispatchListeningData({
+                                  dispatchWritingData({
                                     type: "audio_file",
                                     value: e.target.files[0],
                                   })
@@ -335,4 +332,4 @@ const ExamListening = () => {
   );
 };
 
-export default ExamListening;
+export default ExamWriting;

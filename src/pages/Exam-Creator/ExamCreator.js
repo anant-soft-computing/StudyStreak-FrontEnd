@@ -19,11 +19,11 @@ const exams = [
       },
       {
         name: "Writing",
-        link: "",
+        link: "/exam-writing",
       },
       {
         name: "Speaking",
-        link: "",
+        link: "/exam-speaking",
       },
     ],
     isDisabled: false,

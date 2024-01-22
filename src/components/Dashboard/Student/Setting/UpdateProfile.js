@@ -128,7 +128,7 @@ const UpdateProfile = () => {
               <div className="dashboard__form__input">
                 <label for="#">First Name</label>
                 <input
-                  type="text"
+                  type="text" 
                   placeholder="First Name"
                   value={profileData?.user?.first_name}
                   name="user.first_name"

@@ -1,9 +1,10 @@
 import React from "react";
-import Footer from "../../Footer/Footer";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
-import DANavBar from "./DANavBar/DANavBar";
-import DASideBar from "./DASideBar/DASideBar";
+import Footer from "../../../Footer/Footer";
+import TopBar from "../../../TopBar/TopBar";
+import NavBar from "../../../NavBar/NavBar";
+import DANavBar from "../DANavBar/DANavBar";
+import DASideBar from "../DASideBar/DASideBar";
+import CreatePackage from "./CreatePackage";
 
 const Package = () => {
   return (
@@ -86,7 +87,9 @@ const Package = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <div className="row">Create Package</div>
+                            <div className="row">
+                              <CreatePackage />
+                            </div>
                           </div>
                           <div
                             className="tab-pane fade"

@@ -1,5 +1,4 @@
 import React, { useReducer, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import SingleSelection from "../../components/UI/SingleSelect";
 import SelectionBox from "../../components/UI/SelectionBox";
@@ -65,7 +64,6 @@ const CreateCourse = () => {
     initialCourseData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const navigate = useNavigate();
 
   const resetReducerForm = () => {
     dispatchCreateCourse({

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../../Footer/Footer";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
-import DANavBar from "./DANavBar/DANavBar";
-import DASideBar from "./DASideBar/DASideBar";
+import Footer from "../../../Footer/Footer";
+import TopBar from "../../../TopBar/TopBar";
+import NavBar from "../../../NavBar/NavBar";
+import DANavBar from "../DANavBar/DANavBar";
+import DASideBar from "../DASideBar/DASideBar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import ExamWriting from "../../Exam-Create/ExamWriting";
-import ExamReading from "../../Exam-Create/ExamReading";
-import ExamListening from "../../Exam-Create/ExamListening";
-import ExamSpeaking from "../../Exam-Create/ExamSpeaking";
+import ExamWriting from "../../../Exam-Create/ExamWriting";
+import ExamReading from "../../../Exam-Create/ExamReading";
+import ExamListening from "../../../Exam-Create/ExamListening";
+import ExamSpeaking from "../../../Exam-Create/ExamSpeaking";
 import ViewExam from "./ViewExam";
 
 const exams = [

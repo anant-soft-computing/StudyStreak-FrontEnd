@@ -1,11 +1,12 @@
 import React from "react";
-import Footer from "../../Footer/Footer";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
-import DANavBar from "./DANavBar/DANavBar";
-import DASideBar from "./DASideBar/DASideBar";
+import Footer from "../../../Footer/Footer";
+import TopBar from "../../../TopBar/TopBar";
+import NavBar from "../../../NavBar/NavBar";
+import DANavBar from "../DANavBar/DANavBar";
+import DASideBar from "../DASideBar/DASideBar";
+import CreateLesson from "./CreateLesson";
 
-const Counselling = () => {
+const Lesson = () => {
   return (
     <>
       <TopBar />
@@ -23,7 +24,7 @@ const Counselling = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>Counselling</h4>
+                        <h4>Batch</h4>
                       </div>
                       <div className="row">
                         <div
@@ -44,7 +45,7 @@ const Counselling = () => {
                                 aria-selected="true"
                                 role="tab"
                               >
-                                Add Counselling
+                               Create Lesson
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
@@ -57,20 +58,7 @@ const Counselling = () => {
                                 role="tab"
                                 tabindex="-1"
                               >
-                                View Counselling
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__three"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabindex="-1"
-                              >
-                                Assign Counselling
+                                View Lesson
                               </button>
                             </li>
                           </ul>
@@ -86,7 +74,7 @@ const Counselling = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <div className="row">Add Counselling</div>
+                            <div className="row"> <CreateLesson /></div>
                           </div>
                           <div
                             className="tab-pane fade"
@@ -94,15 +82,7 @@ const Counselling = () => {
                             role="tabpanel"
                             aria-labelledby="projects__two"
                           >
-                            <div className="row">View Counselling</div>
-                          </div>
-                          <div
-                            className="tab-pane fade"
-                            id="projects__three"
-                            role="tabpanel"
-                            aria-labelledby="projects__three"
-                          >
-                            <div className="row">Assign Counselling</div>
+                            <div className="row">View Batch</div>
                           </div>
                         </div>
                       </div>
@@ -119,4 +99,4 @@ const Counselling = () => {
   );
 };
 
-export default Counselling;
+export default Lesson;

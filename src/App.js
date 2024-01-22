@@ -11,6 +11,7 @@ import Blogs from "./pages/Blogs/Blogs";
 import BlogDetail from "./components/BlogDetail/BlogDetail";
 import Tests from "./pages/Tests/Tests";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
+import AdminLesson from "./components/Dashboard/Admin/Lesson/Lesson";
 import StudentDashboard from "./components/Dashboard/Student/Dashboard";
 import AdminDashboard from "./components/Dashboard/Admin/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
@@ -22,12 +23,12 @@ import ExamListening from "./components/Exam-Create/ExamListening";
 import ExamWriting from "./components/Exam-Create/ExamWriting";
 import ExamSpeaking from "./components/Exam-Create/ExamSpeaking";
 import LiveExam from "./components/LiveExam/LiveExam";
-import Course from "./components/Dashboard/Admin/Course";
-import Exam from "./components/Dashboard/Admin/Exam";
-import LiveClass from "./components/Dashboard/Admin/LiveClass";
-import Package from "./components/Dashboard/Admin/Package";
+import Course from "./components/Dashboard/Admin/Course/Course";
+import Exam from "./components/Dashboard/Admin/Exam/Exam";
+import LiveClass from "./components/Dashboard/Admin/LiveClass/LiveClass";
+import Package from "./components/Dashboard/Admin/Package/Package";
 import User from "./components/Dashboard/Admin/User";
-import Counselling from "./components/Dashboard/Admin/Counselling";
+import Batch from "./components/Dashboard/Admin/Batch/Batch";
 import AdminProfile from "./components/Dashboard/Admin/Profile";
 import StudentProfile from "./components/Dashboard/Student/Profile";
 import StudentSettings from "./components/Dashboard/Student/Setting/Settings";
@@ -110,8 +111,12 @@ const App = () => {
             element={<ProtectedRoute element={User} />}
           />
           <Route
-            path="/admin-counselling"
-            element={<ProtectedRoute element={Counselling} />}
+            path="/admin-batch"
+            element={<ProtectedRoute element={Batch} />}
+          />
+          <Route
+            path="/admin-lesson"
+            element={<ProtectedRoute element={AdminLesson} />}
           />
           <Route
             path="/admin-profile"

@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import ajaxCall from "../../../helpers/ajaxCall";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
   "No.",
-  "Exam Name",
-  "Exam Type",
-  "No. of Questions",
-  "Block Type",
-  "Difficulty Level",
-  "Block Threshold",
+  "Course Title",
+  "Enrollment Start Date",
+  "Enrollment End Date",
+  "Max Enrollment",
+  "Course Overview",
+  "Level",
+  "Language",
+  "Primary Instructor",
 ];
 
-const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
-  const [examList, setExamList] = useState([]);
+const ViewCourse = ({ search, selectedCategory, selectedLevel }) => {
+  const [courseList, setCouresList] = useState([]);
 
-  const getExams = async () => {
+  const getCourses = async () => {
     try {
       const response = await ajaxCall(
-        `/exam-blocks`,
+        `/courselistview`,
         {
           headers: {
             Accept: "application/json",
@@ -30,7 +31,7 @@ const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
       );
 
       if (response.status === 200) {
-        setExamList(response.data);
+        setCouresList(response.data);
       } else {
         console.log("error");
       }
@@ -40,7 +41,7 @@ const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
   };
 
   useEffect(() => {
-    getExams();
+    getCourses();
   }, [search, selectedCategory, selectedLevel]);
 
   return (
@@ -51,45 +52,51 @@ const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
             {columns.map((column) => (
               <th>{column}</th>
             ))}
-          </tr>
+          </tr> 
         </thead>
         <tbody>
-          {examList.map((exam, index) => (
-            <tr key={index + 1}>
+          {courseList.map((course, index) => (
+            <tr
+              key={index + 1}
+              className={`${index % 2 === 0 ? "" : "dashboard__table__row"}`}
+            >
               <th>
                 <div>{index + 1}.</div>
               </th>
+              <td>{course.Course_Title}</td>
               <td>
                 <div className="dashboard__table__star">
-                  <Link
-                    to="/live-writing-exam"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#000", textDecoration: "none" }}
-                  >
-                    {exam.exam_name}
-                  </Link>
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">{exam.exam_type}</div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {exam.no_of_questions}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">{exam.block_type}</div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {exam.difficulty_level}
+                  {course.EnrollmentStartDate}
                 </div>
               </td>
               <td>
                 <div className="dashboard__table__star">
-                  {exam.block_threshold}
+                  {course.EnrollmentEndDate}
+                </div>
+              </td>
+              <td>
+                <div className="dashboard__table__star">
+                  {course.max_enrollments}
+                </div>
+              </td>
+              <td>
+                <div className="dashboard__table__star">
+                  {course.Course_Overview_Provider}
+                </div>
+              </td>
+              <td>
+                <div className="dashboard__table__star">
+                  {course.Level.name}
+                </div>
+              </td>
+              <td>
+                <div className="dashboard__table__star">
+                  {course.Language.name}
+                </div>
+              </td>
+              <td>
+                <div className="dashboard__table__star">
+                  {course.primary_instructor.first_name}
                 </div>
               </td>
             </tr>
@@ -99,4 +106,4 @@ const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
     </div>
   );
 };
-export default ViewExam;
+export default ViewCourse;

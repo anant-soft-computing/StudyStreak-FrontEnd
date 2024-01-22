@@ -1,19 +1,12 @@
-import React, { useState } from "react";
-import Footer from "../../Footer/Footer";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
-import DANavBar from "./DANavBar/DANavBar";
-import DASideBar from "./DASideBar/DASideBar";
-import CreateCourse from "../../../pages/CreateCourse/CreateCourse";
-import ViewCourse from "./ViewCourse";
+import React from "react";
+import Footer from "../../../Footer/Footer";
+import TopBar from "../../../TopBar/TopBar";
+import NavBar from "../../../NavBar/NavBar";
+import DANavBar from "../DANavBar/DANavBar";
+import DASideBar from "../DASideBar/DASideBar";
+import CreateLiveClass from "./CreateLiveClass";
 
-const Course = () => {
-  const [activeTab, setActiveTab] = useState("createCourse");
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-  
+const LiveClass = () => {
   return (
     <>
       <TopBar />
@@ -31,7 +24,7 @@ const Course = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>Course</h4>
+                        <h4>LiveClass</h4>
                       </div>
                       <div className="row">
                         <div
@@ -45,22 +38,27 @@ const Course = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${
-                                  activeTab === "createCourse" ? "active" : ""
-                                }`}
-                                onClick={() => handleTabChange("createCourse")}
+                                className="single__tab__link active"
+                                data-bs-toggle="tab"
+                                data-bs-target="#projects__one"
+                                type="button"
+                                aria-selected="true"
+                                role="tab"
                               >
-                                Create Course
+                                Create LiveClass
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${
-                                  activeTab === "viewCourse" ? "active" : ""
-                                }`}
-                                onClick={() => handleTabChange("viewCourse")}
+                                className="single__tab__link"
+                                data-bs-toggle="tab"
+                                data-bs-target="#projects__two"
+                                type="button"
+                                aria-selected="false"
+                                role="tab"
+                                tabindex="-1"
                               >
-                                View Course
+                                View LiveClass
                               </button>
                             </li>
                           </ul>
@@ -71,24 +69,22 @@ const Course = () => {
                           data-aos="fade-up"
                         >
                           <div
-                            className={`tab-pane fade ${
-                              activeTab === "createCourse" ? "show active" : ""
-                            }`}
+                            className="tab-pane fade active show"
                             id="projects__one"
+                            role="tabpanel"
+                            aria-labelledby="projects__one"
                           >
                             <div className="row">
-                              <CreateCourse />
+                              <CreateLiveClass />
                             </div>
                           </div>
                           <div
-                            className={`tab-pane fade ${
-                              activeTab === "viewCourse" ? "show active" : ""
-                            }`}
+                            className="tab-pane fade"
                             id="projects__two"
+                            role="tabpanel"
+                            aria-labelledby="projects__two"
                           >
-                            <div className="row">
-                              <ViewCourse key={activeTab} />
-                            </div>
+                            <div className="row">View LiveClass</div>
                           </div>
                         </div>
                       </div>
@@ -105,4 +101,4 @@ const Course = () => {
   );
 };
 
-export default Course;
+export default LiveClass;

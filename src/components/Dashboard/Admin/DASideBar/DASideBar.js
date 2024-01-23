@@ -172,7 +172,7 @@ const DASideBar = () => {
                   Batch
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   className={location === "/admin-lesson" ? "active" : ""}
                   to="/admin-lesson"
@@ -193,7 +193,7 @@ const DASideBar = () => {
                   </svg>
                   Lesson
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   className={location === "/admin-profile" ? "active" : ""}

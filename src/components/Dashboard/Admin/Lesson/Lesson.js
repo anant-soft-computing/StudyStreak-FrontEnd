@@ -24,7 +24,7 @@ const Lesson = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>Batch</h4>
+                        <h4>Lesson</h4>
                       </div>
                       <div className="row">
                         <div

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Footer from '../../../Footer/Footer';
 import TopBar from '../../../TopBar/TopBar';
 import NavBar from '../../../NavBar/NavBar';
@@ -8,6 +8,12 @@ import CreateLiveClass from './CreateLiveClass';
 import ViewLiveClasses from './ViewLiveClasses';
 
 const LiveClass = () => {
+  const [activeTab, setActiveTab] = useState('createLiveClass');
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+  
   return (
     <>
       <TopBar />
@@ -39,25 +45,18 @@ const LiveClass = () => {
                           >
                             <li className='nav-item' role='presentation'>
                               <button
-                                className='single__tab__link active'
-                                data-bs-toggle='tab'
-                                data-bs-target='#projects__one'
-                                type='button'
-                                aria-selected='true'
-                                role='tab'
+                                className={`single__tab__link ${activeTab === 'createLiveClass' ? 'active' : ''
+                                  }`}
+                                onClick={() => handleTabChange('createLiveClass')}
                               >
                                 Create LiveClass
                               </button>
                             </li>
                             <li className='nav-item' role='presentation'>
                               <button
-                                className='single__tab__link'
-                                data-bs-toggle='tab'
-                                data-bs-target='#projects__two'
-                                type='button'
-                                aria-selected='false'
-                                role='tab'
-                                tabindex='-1'
+                                className={`single__tab__link ${activeTab === 'viewLiveClass' ? 'active' : ''
+                                  }`}
+                                onClick={() => handleTabChange('viewLiveClass')}
                               >
                                 View LiveClass
                               </button>
@@ -70,20 +69,18 @@ const LiveClass = () => {
                           data-aos='fade-up'
                         >
                           <div
-                            className='tab-pane fade active show'
+                            className={`tab-pane fade ${activeTab === 'createLiveClass' ? 'show active' : ''
+                              }`}
                             id='projects__one'
-                            role='tabpanel'
-                            aria-labelledby='projects__one'
                           >
                             <div className='row'>
                               <CreateLiveClass />
                             </div>
                           </div>
                           <div
-                            className='tab-pane fade'
-                            id='projects__two'
-                            role='tabpanel'
-                            aria-labelledby='projects__two'
+                            className={`tab-pane fade ${activeTab === 'viewLiveClass' ? 'show active' : ''
+                              }`}
+                            id='projects__one'
                           >
                             <div className='row'>
                               <ViewLiveClasses />

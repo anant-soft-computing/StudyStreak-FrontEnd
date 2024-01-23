@@ -3,19 +3,23 @@ import ajaxCall from '../../../../helpers/ajaxCall';
 
 const columns = [
   'No.',
-  'Package name',
-  'Package price',
-  'PackageType',
-  'Selected course',
-  'Soft copy',
-  'Hard copy',
-  'Full length test',
-  'Practice test',
-  'Speaking test',
-  'Writing evaluation',
-  'Live classes membership',
-  'Group doubt solving',
-  'One to one doubt solving',
+  'Name',
+  'Price',
+  'Type',
+  'Course',
+  'Duration',
+  'Coupon Code',
+  'Soft Copy',
+  'Hard Copy',
+  'Full Length Test',
+  'Practice Test',
+  'Speaking Test',
+  'Writing Evaluation',
+  'Live Classes Membership',
+  'Onlline Membership',
+  'Offline Membership',
+  'Group Doubt Solving',
+  'One To One Doubt Solving',
 ];
 
 export const checkIcon = () => {
@@ -30,7 +34,7 @@ export const cancelIcon = () => {
   );
 };
 
-const ViewPackages = ({ search, selectedCategory, selectedLevel }) => {
+const ViewPackages = () => {
   const [packageList, setPackageList] = useState([]);
 
   const getPackages = async () => {
@@ -59,7 +63,7 @@ const ViewPackages = ({ search, selectedCategory, selectedLevel }) => {
 
   useEffect(() => {
     getPackages();
-  }, [search, selectedCategory, selectedLevel]);
+  }, []);
 
   const renderItemAvailable = (value) => {
     return value ? checkIcon() : cancelIcon();
@@ -102,6 +106,16 @@ const ViewPackages = ({ search, selectedCategory, selectedLevel }) => {
               </td>
               <td>
                 <div className='dashboard__table__star'>
+                  {packageItem?.duration}
+                </div>
+              </td>
+              <td>
+                <div className='dashboard__table__star'>
+                  {packageItem?.coupon_code?.cupon_code}
+                </div>
+              </td>
+              <td>
+                <div className='dashboard__table__star'>
                   {renderItemAvailable(packageItem?.soft_copy)}
                 </div>
               </td>
@@ -133,6 +147,16 @@ const ViewPackages = ({ search, selectedCategory, selectedLevel }) => {
               <td>
                 <div className='dashboard__table__star'>
                   {renderItemAvailable(packageItem?.live_classes_membership)}
+                </div>
+              </td>
+              <td>
+                <div className='dashboard__table__star'>
+                  {renderItemAvailable(packageItem?.online_membership)}
+                </div>
+              </td>
+              <td>
+                <div className='dashboard__table__star'>
+                  {renderItemAvailable(packageItem?.offline_membership)}
                 </div>
               </td>
               <td>

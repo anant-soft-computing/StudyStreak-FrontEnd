@@ -2,6 +2,7 @@ import React, { useReducer, useState } from "react";
 import ajaxCall from "../../helpers/ajaxCall";
 import SingleSelection from "../../components/UI/SingleSelect";
 import SelectionBox from "../../components/UI/SelectionBox";
+import { toast } from "react-toastify";
 
 const initialCourseData = {
   Course_Title: "",
@@ -153,7 +154,6 @@ const CreateCourse = () => {
   };
 
   const createCourse = async (e) => {
-    resetReducerForm();
     e.preventDefault();
     if (!validateForm()) return;
     try {
@@ -216,11 +216,8 @@ const CreateCourse = () => {
         8000
       );
       if (response.status === 201) {
-        setFormStatus({
-          isError: true,
-          errMsg: "Course Created Successfully.",
-          isSubmitting: false,
-        });
+        resetReducerForm();
+        toast.success("Course Created Successfully");
       } else if (response.status === 400 || response.status === 404) {
         setFormStatus({
           isError: true,

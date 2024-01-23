@@ -3,15 +3,16 @@ import ajaxCall from '../../../../helpers/ajaxCall';
 
 const columns = [
   'No.',
-  'Meeting Title',
+  'Batch',
+  'Meeting Name',
   'Start Time',
   'End Time',
-  'Selected course',
+  'Course',
   'Meeting Id',
   'Meeting Password',
 ];
 
-const ViewLiveClasses = ({ search, selectedCategory, selectedLevel }) => {
+const ViewLiveClasses = () => {
   const [liveClassList, setLiveClassList] = useState([]);
 
   const getLiveClassesList = async () => {
@@ -40,7 +41,7 @@ const ViewLiveClasses = ({ search, selectedCategory, selectedLevel }) => {
 
   useEffect(() => {
     getLiveClassesList();
-  }, [search, selectedCategory, selectedLevel]);
+  }, []);
 
   return (
     <div className='dashboard__table table-responsive'>

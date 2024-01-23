@@ -1,12 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import Footer from "../../../Footer/Footer";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DANavBar from "../DANavBar/DANavBar";
 import DASideBar from "../DASideBar/DASideBar";
 import CreateBatch from "./CreateBatch";
+import ViewBatches from "./ViewBatches";
 
 const Batch = () => {
+  const [activeTab, setActiveTab] = useState("createBatch");
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
       <TopBar />
@@ -38,25 +45,18 @@ const Batch = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link active"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__one"
-                                type="button"
-                                aria-selected="true"
-                                role="tab"
+                                className={`single__tab__link ${activeTab === "createBatch" ? "active" : ""
+                                  }`}
+                                onClick={() => handleTabChange("createBatch")}
                               >
                                 Create Batch
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabindex="-1"
+                                className={`single__tab__link ${activeTab === "viewBatch" ? "active" : ""
+                                  }`}
+                                onClick={() => handleTabChange("viewBatch")}
                               >
                                 View Batch
                               </button>
@@ -69,22 +69,20 @@ const Batch = () => {
                           data-aos="fade-up"
                         >
                           <div
-                            className="tab-pane fade active show"
-                            id="projects__one"
-                            role="tabpanel"
-                            aria-labelledby="projects__one"
+                            className={`tab-pane fade ${activeTab === 'createBatch' ? 'show active' : ''
+                              }`}
+                            id='projects__one'
                           >
                             <div className="row">
                               <CreateBatch />
                             </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
+                            className={`tab-pane fade ${activeTab === 'viewBatch' ? 'show active' : ''
+                              }`}
+                            id='projects__one'
                           >
-                            <div className="row">View Batch</div>
+                            <div className="row"><ViewBatches key={activeTab} /></div>
                           </div>
                         </div>
                       </div>

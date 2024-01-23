@@ -28,7 +28,7 @@ const SelectionBox = (props) => {
       8000
     );
 
-    const allObj = response.data.map((option) => {
+    const allObj = response.data?.map((option) => {
       let name = "";
       props.objKey.forEach((key, index, arr) => {
         if (index !== 0) name += " - ";

@@ -45,14 +45,8 @@ const Package = () => {
                           >
                             <li className='nav-item' role='presentation'>
                               <button
-                                className={`single__tab__link ${
-                                  activeTab === 'createPackage' ? 'active' : ''
-                                }`}
-                                data-bs-toggle='tab'
-                                data-bs-target='#projects__one'
-                                type='button'
-                                aria-selected='true'
-                                role='tab'
+                                className={`single__tab__link ${activeTab === 'createPackage' ? 'active' : ''
+                                  }`}
                                 onClick={() => handleTabChange('createPackage')}
                               >
                                 Create Package
@@ -60,31 +54,11 @@ const Package = () => {
                             </li>
                             <li className='nav-item' role='presentation'>
                               <button
-                                className={`single__tab__link ${
-                                  activeTab === 'viewPackage' ? 'active' : ''
-                                }`}
-                                data-bs-toggle='tab'
-                                data-bs-target='#projects__two'
-                                type='button'
-                                aria-selected='false'
-                                role='tab'
-                                tabindex='-1'
+                                className={`single__tab__link ${activeTab === 'viewPackage' ? 'active' : ''
+                                  }`}
                                 onClick={() => handleTabChange('viewPackage')}
                               >
                                 View Package
-                              </button>
-                            </li>
-                            <li className='nav-item' role='presentation'>
-                              <button
-                                className='single__tab__link'
-                                data-bs-toggle='tab'
-                                data-bs-target='#projects__three'
-                                type='button'
-                                aria-selected='false'
-                                role='tab'
-                                tabindex='-1'
-                              >
-                                Assign Package
                               </button>
                             </li>
                           </ul>
@@ -95,36 +69,22 @@ const Package = () => {
                           data-aos='fade-up'
                         >
                           <div
-                            className={`tab-pane fade ${
-                              activeTab === 'createPackage' ? 'show active' : ''
-                            }`}
+                            className={`tab-pane fade ${activeTab === 'createPackage' ? 'show active' : ''
+                              }`}
                             id='projects__one'
-                            role='tabpanel'
-                            aria-labelledby='projects__one'
                           >
                             <div className='row'>
                               <CreatePackage />
                             </div>
                           </div>
                           <div
-                            className={`tab-pane fade ${
-                              activeTab === 'viewPackage' ? 'show active' : ''
-                            }`}
+                            className={`tab-pane fade ${activeTab === 'viewPackage' ? 'show active' : ''
+                              }`}
                             id='projects__two'
-                            role='tabpanel'
-                            aria-labelledby='projects__two'
                           >
                             <div className='row'>
                               <ViewPackages key={activeTab} />
                             </div>
-                          </div>
-                          <div
-                            className='tab-pane fade'
-                            id='projects__three'
-                            role='tabpanel'
-                            aria-labelledby='projects__three'
-                          >
-                            <div className='row'>Assign Package</div>
                           </div>
                         </div>
                       </div>

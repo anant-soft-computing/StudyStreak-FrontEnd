@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import SelectSearch from "react-select-search";
-import ajaxCall from "../../helpers/ajaxCall";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import SelectSearch from 'react-select-search';
+import ajaxCall from '../../helpers/ajaxCall';
+import { useSelector } from 'react-redux';
 
 const SingleSelection = (props) => {
   const authData = useSelector((state) => state.authStore);
@@ -18,20 +18,20 @@ const SingleSelection = (props) => {
       url,
       {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${authData.accessToken}`,
         },
-        method: "GET",
+        method: 'GET',
       },
       8000
     );
 
     const allObj = response?.data?.map((option) => {
-      let name = "";
+      let name = '';
       props.objKey?.forEach((key, index, arr) => {
-        if (index !== 0) name += " - ";
-        name += option[key] ? option[key] : "NA";
+        if (index !== 0) name += ' - ';
+        name += option[key] ? option[key] : 'NA';
       });
       if (props.needSlug) {
         return { value: option.slug, name };
@@ -59,16 +59,16 @@ const SingleSelection = (props) => {
         const getSelectedVal = options.find((option) => {
           return option.value === props.value;
         });
-        props.setPopupthing(getSelectedVal ? getSelectedVal.name : "");
+        props.setPopupthing(getSelectedVal ? getSelectedVal.name : '');
       }
     }
   }, [props.value, props?.forPopup, options]);
 
   let placeholder = isLoading
-    ? "Loading"
+    ? 'Loading'
     : options?.length
-    ? "Select Options"
-    : "No Data Found";
+    ? 'Select Options'
+    : 'No Data Found';
 
   return (
     <SelectSearch

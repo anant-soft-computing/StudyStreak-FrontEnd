@@ -1922,7 +1922,7 @@ Mobile Menu
   background-color: transparent;
 }
 
-.mobile_menu{
+.mobile_menu {
   text-decoration: auto;
   font-weight: 600;
 }
@@ -8561,7 +8561,7 @@ Counter Area
   color: var(--blackColor);
   margin: 0;
 }
-@media  (max-width: 767px) {
+@media (max-width: 767px) {
   .counter__content__wraper {
     text-align: center;
     margin-top: 10px;
@@ -10838,9 +10838,7 @@ Course
   width: 30%;
 }
 
-.gridarea__list
-  ul
-  li a  {
+.gridarea__list ul li a {
   text-decoration: none;
   color: #000;
 }
@@ -16204,13 +16202,13 @@ li {
 }
 
 .select-search-row {
-  list-style: none; 
+  list-style: none;
   display: block;
 }
 
 .option {
   display: block;
-  padding: 10px; 
+  padding: 10px;
 }
 
 .error-container {
@@ -16238,12 +16236,12 @@ li {
 
 .checkoutarea__total {
   border: 1px solid #ccc;
-  padding: 15px; 
+  padding: 15px;
   margin-bottom: 20px;
 }
 .borderBox {
   border: 1px solid #ccc;
-  padding: 20px; 
+  padding: 20px;
 }
 
 .count {
@@ -16267,4 +16265,12 @@ li {
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+}
+
+/* cusotm shadow style */
+
+div.dashboard__inner,
+div.dashboard__content__wraper,
+div.gridarea__wraper {
+  box-shadow: 5px 5px 10px #afafaf, -5px -5px 10px #ffffff;
 }

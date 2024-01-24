@@ -1,8 +1,11 @@
 import React, { useReducer, useState } from "react";
 import SingleSelection from "../../../UI/SingleSelect";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const initialBatchData = {
-  package: "",
+  add_package: "",
   batch_name: "",
   batch_startdate: "",
   batch_enddate: "",
@@ -26,8 +29,7 @@ const reducerBatch = (state, action) => {
 const CreateBatch = () => {
   const [batchData, dispatchBatch] = useReducer(reducerBatch, initialBatchData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
-
-  console.log("--batchData---->",batchData)
+  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!batchData.batch_name) {
@@ -73,10 +75,31 @@ const CreateBatch = () => {
   };
 
   const createBatch = async (e) => {
-    resetReducerForm();
     e.preventDefault();
     if (!validateForm()) return;
-    //API integration
+    try {
+      const response = await ajaxCall(
+        "/create-batch/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "POST",
+          body: JSON.stringify(batchData),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        resetReducerForm();
+        toast.success("Batch Created Successfully");
+      } else if (response.status === 400 || response.status === 404) {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
   };
 
   return (
@@ -92,12 +115,12 @@ const CreateBatch = () => {
                 value={batchData?.batch}
                 onChange={(val) => {
                   dispatchBatch({
-                    type: "package",
+                    type: "add_package",
                     value: val,
                   });
                 }}
-                url="/levelView/"
-                objKey={["name"]}
+                url="/packagelistview/"
+                objKey={["package_name"]}
               />
             </div>
           </div>

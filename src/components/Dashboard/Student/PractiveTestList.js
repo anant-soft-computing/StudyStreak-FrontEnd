@@ -4,19 +4,12 @@ import NavBar from '../../NavBar/NavBar';
 import Footer from '../../Footer/Footer';
 import DSNavBar from './DSNavBar/DSNavBar';
 import DSSidebar from './DSSideBar/DSSideBar';
-import { cancelIcon, checkIcon } from '../../CourseDetail/PackageDetails';
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from '../../../helpers/ajaxCall';
 import { useSelector } from 'react-redux';
 
-const columns = [
-  'No.',
-  'Exam Name',
-  'Exam Type',
-  'No. of Questions',
-  'Difficulty Level',
-  // 'Meeting Id',
-  // 'Meeting Password',
-];
 
 const PracticeTestList = () => {
   const [practiceTestData, setPracticeTestData] = useState([]);
@@ -37,18 +30,41 @@ const PracticeTestList = () => {
         8000
       );
       if (response.status === 200) {
-        setPracticeTestData(response.data);
+        const examBlockWithNumbers = response?.data?.map(
+          (examBlock, index) => ({
+            ...examBlock,
+            no: index + 1,
+          })
+        )
+        setPracticeTestData(examBlockWithNumbers);
       } else {
-        console.log('---error---->');
+        console.log('error');
       }
     } catch (error) {
-      console.log('Error:', error);
+      console.log('error', error);
     }
   };
 
   useEffect(() => {
     getPracticeTestData();
   }, []);
+
+  const gridOptions = {
+    rowData: practiceTestData,
+    columnDefs: [
+      { headerName: "No.", field: "no", filter: true },
+      { headerName: "Exam Name", field: "exam_name", filter: true },
+      { headerName: "Exam Type", field: "exam_type", filter: true },
+      { headerName: "No. Of Questions", field: "no_of_questions", filter: true },
+      { headerName: "Difficulty Level", field: "difficulty_level", filter: true }
+    ],
+    pagination: true,
+    domLayout: "autoHeight",
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+    },
+  };
 
   return (
     <div>
@@ -69,61 +85,8 @@ const PracticeTestList = () => {
                       <div className='dashboard__section__title'>
                         <h4>Practice Test</h4>
                       </div>
-                      <div className='dashboard__table table-responsive'>
-                        <table>
-                          <thead>
-                            <tr>
-                              {columns.map((column) => (
-                                <th>{column}</th>
-                              ))}
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {practiceTestData?.length >= 1 &&
-                              practiceTestData?.map(
-                                (practiceTestItem, index) => (
-                                  <tr
-                                    key={index + 1}
-                                    className={`${
-                                      index % 2 === 0
-                                        ? ''
-                                        : 'dashboard__table__row'
-                                    }`}
-                                  >
-                                    <th>
-                                      <div>{index + 1}.</div>
-                                    </th>
-                                    <td>{practiceTestItem?.exam_name}</td>
-                                    <td>
-                                      <div className='dashboard__table__star'>
-                                        {practiceTestItem?.exam_type}
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div className='dashboard__table__star'>
-                                        {practiceTestItem?.no_of_questions}
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <div className='dashboard__table__star'>
-                                        {practiceTestItem?.difficulty_level}
-                                      </div>
-                                    </td>
-                                    {/* <td>
-                                    <div className='dashboard__table__star'>
-                                      {practiceTestItem?.soft_copy}
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div className='dashboard__table__star'>
-                                      {practiceTestItem?.hard_copy}
-                                    </div>
-                                  </td> */}
-                                  </tr>
-                                )
-                              )}
-                          </tbody>
-                        </table>
+                      <div className="ag-theme-alpine">
+                        <AgGridReact {...gridOptions} />
                       </div>
                     </div>
                   </div>

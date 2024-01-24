@@ -39,6 +39,7 @@ import Checkout from './components/Checkout/Checkout';
 import CourseContent from './components/Dashboard/Student/Course/CourseContent';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import PracticeTestList from './components/Dashboard/Student/PractiveTestList';
+import Student from './components/Dashboard/Admin/Student/Student';
 
 const App = () => {
   return (
@@ -82,6 +83,10 @@ const App = () => {
           <Route
             path='/admin-dashboard'
             element={<ProtectedRoute element={AdminDashboard} />}
+          />
+          <Route
+            path='/admin-student'
+            element={<ProtectedRoute element={Student} />}
           />
           <Route
             path='/admin-course'

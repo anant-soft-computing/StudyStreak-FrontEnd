@@ -1,19 +1,38 @@
 import React, { useEffect, useState } from "react";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  "No.",
-  "Course Title",
-  "Enrollment Start Date",
-  "Enrollment End Date",
-  "Max Enrollment",
-  "Course Overview",
-  "Level",
-  "Language",
-  "Primary Instructor",
+  { headerName: "No.", field: "no" },
+  { headerName: "Course Title", field: "Course_Title", filter: true },
+  {
+    headerName: "Enrollment Start Date",
+    field: "EnrollmentStartDate",
+    filter: true,
+  },
+  {
+    headerName: "Enrollment End Date",
+    field: "EnrollmentEndDate",
+    filter: true,
+  },
+  { headerName: "Max Enrollment", field: "max_enrollments", filter: true },
+  {
+    headerName: "Course Overview",
+    field: "Course_Overview_Provider",
+    filter: true,
+  },
+  { headerName: "Level", field: "Level.name", filter: true },
+  { headerName: "Language", field: "Language.name", filter: true },
+  {
+    headerName: "Primary Instructor",
+    field: "primary_instructor.first_name",
+    filter: true,
+  },
 ];
 
-const ViewCourse = ({ search, selectedCategory, selectedLevel }) => {
+const ViewCourse = () => {
   const [courseList, setCouresList] = useState([]);
 
   const getCourses = async () => {
@@ -31,7 +50,11 @@ const ViewCourse = ({ search, selectedCategory, selectedLevel }) => {
       );
 
       if (response.status === 200) {
-        setCouresList(response.data);
+        const courseWithNumbers = response?.data?.map((course, index) => ({
+          ...course,
+          no: index + 1,
+        }));
+        setCouresList(courseWithNumbers);
       } else {
         console.log("error");
       }
@@ -42,67 +65,22 @@ const ViewCourse = ({ search, selectedCategory, selectedLevel }) => {
 
   useEffect(() => {
     getCourses();
-  }, [search, selectedCategory, selectedLevel]);
+  }, []);
+
+  const gridOptions = {
+    rowData: courseList,
+    columnDefs: columns,
+    pagination: true,
+    domLayout: "autoHeight",
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+    },
+  };
 
   return (
-    <div className="dashboard__table table-responsive">
-      <table>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th>{column}</th>
-            ))}
-          </tr> 
-        </thead>
-        <tbody>
-          {courseList.map((course, index) => (
-            <tr
-              key={index + 1}
-              className={`${index % 2 === 0 ? "" : "dashboard__table__row"}`}
-            >
-              <th>
-                <div>{index + 1}.</div>
-              </th>
-              <td>{course.Course_Title}</td>
-              <td>
-                <div className="dashboard__table__star">
-                  {course.EnrollmentStartDate}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {course.EnrollmentEndDate}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {course.max_enrollments}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {course.Course_Overview_Provider}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {course.Level.name}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {course.Language.name}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {course.primary_instructor.first_name}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="ag-theme-alpine">
+      <AgGridReact {...gridOptions} />
     </div>
   );
 };

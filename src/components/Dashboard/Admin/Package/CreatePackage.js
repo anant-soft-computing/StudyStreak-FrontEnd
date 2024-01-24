@@ -1,10 +1,13 @@
 import React, { useReducer, useState } from 'react';
 import SingleSelection from '../../../UI/SingleSelect';
+import { toast } from "react-toastify";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import { useSelector } from "react-redux";
 
 const initialPackageData = {
   package_name: '',
   package_price: '',
-  duration: null,
+  duration: 0,
   PackageType: '',
   select_course: '',
   coupon_code: '',
@@ -34,7 +37,7 @@ const initialSubmit = {
 
 const reducerCreatePackage = (state, action) => {
   if (action.type === 'reset') {
-    return action.payload || initialPackageData;
+    return initialPackageData;
   }
   return { ...state, [action.type]: action.value };
 };
@@ -45,6 +48,7 @@ const CreatePackage = () => {
     initialPackageData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!createPackageData.PackageType) {
@@ -91,8 +95,11 @@ const CreatePackage = () => {
   };
 
   const resetReducerForm = () => {
-    dispatchCreatePackage({
-      type: 'reset',
+    dispatchCreatePackage({ type: 'reset' });
+    setFormStatus({
+      isError: false,
+      errMsg: null,
+      isSubmitting: false,
     });
   };
 
@@ -105,10 +112,31 @@ const CreatePackage = () => {
   };
 
   const createPackage = async (e) => {
-    resetReducerForm();
     e.preventDefault();
     if (!validateForm()) return;
-    //API integration
+    try {
+      const response = await ajaxCall(
+        "/packagecreateview/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "POST",
+          body: JSON.stringify(createPackageData),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        resetReducerForm();
+        toast.success("Package Created Successfully");
+      } else if (response.status === 400 || response.status === 404) {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
   };
 
   return (
@@ -210,7 +238,7 @@ const CreatePackage = () => {
                                     value: val,
                                   });
                                 }}
-                                url='/levelView/'
+                                url='/packagetypeview/'
                                 objKey={['name']}
                               />
                             </div>
@@ -228,8 +256,8 @@ const CreatePackage = () => {
                                     value: val,
                                   });
                                 }}
-                                url='/levelView/'
-                                objKey={['name']}
+                                url='/courselistforpackage/'
+                                objKey={['Course_Title']}
                               />
                             </div>
                           </div>
@@ -246,8 +274,8 @@ const CreatePackage = () => {
                                     value: val,
                                   });
                                 }}
-                                url='/levelView/'
-                                objKey={['name']}
+                                url='/cuponlistview/'
+                                objKey={['cupon_name']}
                               />
                             </div>
                           </div>
@@ -283,6 +311,7 @@ const CreatePackage = () => {
                             <input
                               type='checkbox'
                               value={createPackageData?.soft_copy}
+                              checked={createPackageData?.soft_copy}
                               onChange={(e) => {
                                 dispatchCreatePackage({
                                   type: 'soft_copy',
@@ -296,6 +325,7 @@ const CreatePackage = () => {
                             <input
                               type='checkbox'
                               value={createPackageData?.hard_copy}
+                              checked={createPackageData?.hard_copy}
                               onChange={(e) => {
                                 dispatchCreatePackage({
                                   type: 'hard_copy',
@@ -344,7 +374,7 @@ const CreatePackage = () => {
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'full_length_test_count',
-                                      value: e.target.checked,
+                                      value: e.target.value,
                                     });
                                   }}
                                 />
@@ -354,6 +384,7 @@ const CreatePackage = () => {
                                 <input
                                   type='checkbox'
                                   value={createPackageData?.full_length_test}
+                                  checked={createPackageData?.full_length_test}
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'full_length_test',
@@ -372,10 +403,11 @@ const CreatePackage = () => {
                                   type='number'
                                   placeholder='Practice Test Count'
                                   value={createPackageData?.practice_test_count}
+                                  checked={createPackageData?.practice_test_count}
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'practice_test_count',
-                                      value: e.target.checked,
+                                      value: e.target.value,
                                     });
                                   }}
                                 />
@@ -385,6 +417,7 @@ const CreatePackage = () => {
                                 <input
                                   type='checkbox'
                                   value={createPackageData?.practice_test}
+                                  checked={createPackageData?.practice_test}
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'practice_test',
@@ -406,7 +439,7 @@ const CreatePackage = () => {
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'speaking_test_count',
-                                      value: e.target.checked,
+                                      value: e.target.value,
                                     });
                                   }}
                                 />
@@ -417,6 +450,7 @@ const CreatePackage = () => {
                                   <input
                                     type='checkbox'
                                     value={createPackageData?.speaking_test}
+                                    checked={createPackageData?.speaking_test}
                                     onChange={(e) => {
                                       dispatchCreatePackage({
                                         type: 'speaking_test',
@@ -432,6 +466,7 @@ const CreatePackage = () => {
                                     value={
                                       createPackageData?.writing_evaluation
                                     }
+                                    checked={createPackageData?.writing_evaluation}
                                     onChange={(e) => {
                                       dispatchCreatePackage({
                                         type: 'writing_evaluation',
@@ -476,6 +511,7 @@ const CreatePackage = () => {
                             <input
                               type='checkbox'
                               value={createPackageData?.live_classes_membership}
+                              checked={createPackageData?.live_classes_membership}
                               onChange={(e) => {
                                 dispatchCreatePackage({
                                   type: 'live_classes_membership',
@@ -489,6 +525,7 @@ const CreatePackage = () => {
                             <input
                               type='checkbox'
                               value={createPackageData?.online_membership}
+                              checked={createPackageData?.online_membership}
                               onChange={(e) => {
                                 dispatchCreatePackage({
                                   type: 'online_membership',
@@ -502,6 +539,7 @@ const CreatePackage = () => {
                             <input
                               type='checkbox'
                               value={createPackageData?.offline_membership}
+                              checked={createPackageData?.offline_membership}
                               onChange={(e) => {
                                 dispatchCreatePackage({
                                   type: 'offline_membership',
@@ -550,7 +588,7 @@ const CreatePackage = () => {
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'group_doubt_solving_count',
-                                      value: e.target.checked,
+                                      value: e.target.value,
                                     });
                                   }}
                                 />
@@ -560,6 +598,7 @@ const CreatePackage = () => {
                                 <input
                                   type='checkbox'
                                   value={createPackageData?.group_doubt_solving}
+                                  checked={createPackageData?.group_doubt_solving}
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'group_doubt_solving',
@@ -583,7 +622,7 @@ const CreatePackage = () => {
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'one_to_one_doubt_solving_count',
-                                      value: e.target.checked,
+                                      value: e.target.value,
                                     });
                                   }}
                                 />
@@ -595,6 +634,7 @@ const CreatePackage = () => {
                                   value={
                                     createPackageData.one_to_one_doubt_solving
                                   }
+                                  checked={createPackageData.one_to_one_doubt_solving}
                                   onChange={(e) => {
                                     dispatchCreatePackage({
                                       type: 'one_to_one_doubt_solving',

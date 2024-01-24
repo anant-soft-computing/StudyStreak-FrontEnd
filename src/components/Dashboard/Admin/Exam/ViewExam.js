@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const columns = [
-  "No.",
-  "Exam Name",
-  "Exam Type",
-  "No. of Questions",
-  "Block Type",
-  "Difficulty Level",
-  "Block Threshold",
-];
-
-const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
+const ViewExam = () => {
   const [examList, setExamList] = useState([]);
 
   const getExams = async () => {
@@ -30,7 +22,11 @@ const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
       );
 
       if (response.status === 200) {
-        setExamList(response.data);
+        const examWithNumbers = response?.data?.map((exam, index) => ({
+          ...exam,
+          no: index + 1,
+        }));
+        setExamList(examWithNumbers);
       } else {
         console.log("error");
       }
@@ -41,64 +37,42 @@ const ViewExam = ({ search, selectedCategory, selectedLevel }) => {
 
   useEffect(() => {
     getExams();
-  }, [search, selectedCategory, selectedLevel]);
+  }, []);
+
+  const gridOptions = {
+    rowData: examList,
+    columnDefs: [
+      { headerName: "No.", field: "no" },
+      {
+        headerName: "Exam Name",
+        field: "exam_name",
+        filter: true,
+      },
+      { headerName: "Exam Type", field: "exam_type", filter: true },
+      {
+        headerName: "No. Of Questions",
+        field: "no_of_questions",
+        filter: true,
+      },
+      { headerName: "Block Type", field: "block_type", filter: true },
+      {
+        headerName: "Difficulty Level",
+        field: "difficulty_level",
+        filter: true,
+      },
+      { headerName: "Block Threshold", field: "block_threshold", filter: true },
+    ],
+    pagination: true,
+    domLayout: "autoHeight",
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+    },
+  };
 
   return (
-    <div className="dashboard__table table-responsive">
-      <table>
-        <thead>
-          <tr>
-            {columns.map((column) => (  
-              <th>{column}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {examList.map((exam, index) => (
-            <tr
-              key={index + 1}
-              className={`${index % 2 === 0 ? "" : "dashboard__table__row"}`}
-            >
-              <th>
-                <div>{index + 1}.</div>
-              </th>
-              <td>
-                <div className="dashboard__table__star">
-                  <Link
-                    to="/live-writing-exam"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: "#000", textDecoration: "none" }}
-                  >
-                    {exam.exam_name}
-                  </Link>
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">{exam.exam_type}</div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {exam.no_of_questions}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">{exam.block_type}</div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {exam.difficulty_level}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {exam.block_threshold}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="ag-theme-alpine">
+      <AgGridReact {...gridOptions} />
     </div>
   );
 };

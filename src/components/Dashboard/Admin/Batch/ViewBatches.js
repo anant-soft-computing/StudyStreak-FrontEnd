@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  "No.",
-  "Name",
-  "Package",
-  "Start Date",
-  "End Date",
-  "Start Time",
-  "End Time",
+  { headerName: "No.", field: "no" },
+  { headerName: "Name", field: "batch_name", filter: true },
+  { headerName: "Package", field: "add_package.package_name", filter: true },
+  { headerName: "Start Date", field: "batch_startdate", filter: true },
+  { headerName: "End Date", field: "batch_enddate", filter: true },
+  { headerName: "Start Time", field: "batch_start_timing", filter: true },
+  { headerName: "End Time", field: "batch_end_timing", filter: true },
 ];
 
 const ViewBatches = () => {
@@ -29,7 +32,11 @@ const ViewBatches = () => {
       );
 
       if (response?.status === 200) {
-        setBatchList(response?.data);
+        const batchesWithNumbers = response?.data?.map((batch, index) => ({
+          ...batch,
+          no: index + 1,
+        }));
+        setBatchList(batchesWithNumbers);
       } else {
         console.log("error");
       }
@@ -42,51 +49,20 @@ const ViewBatches = () => {
     getBatches();
   }, []);
 
+  const gridOptions = {
+    rowData: batchList,
+    columnDefs: columns,
+    pagination: true,
+    domLayout: "autoHeight",
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+    },
+  };
+
   return (
-    <div className="dashboard__table table-responsive">
-      <table>
-        <thead>
-          <tr>
-            {columns.map((column) => (
-              <th>{column}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {batchList?.map((batchItem, index) => (
-            <tr
-              key={index + 1}
-              className={`${index % 2 === 0 ? "" : "dashboard__table__row"}`}
-            >
-              <th>
-                <div>{index + 1}.</div>
-              </th>
-              <td>{batchItem?.batch_name}</td>
-              <td>{batchItem?.add_package?.package_name}</td>
-              <td>
-                <div className="dashboard__table__star">
-                  {batchItem?.batch_startdate}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {batchItem?.batch_enddate}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {batchItem?.batch_start_timing}
-                </div>
-              </td>
-              <td>
-                <div className="dashboard__table__star">
-                  {batchItem?.batch_end_timing}
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="ag-theme-alpine">
+      <AgGridReact {...gridOptions} />
     </div>
   );
 };

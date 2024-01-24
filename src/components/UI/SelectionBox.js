@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import Multiselect from "multiselect-react-dropdown";
 import ajaxCall from "../../helpers/ajaxCall";
 import "react-select-search/style.css";
 
 const SelectionBox = (props) => {
-  const authData = useSelector((state) => state.authStore);
-  // const token = JSON.parse(localStorage.getItem("loginInfo"));
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -21,7 +18,6 @@ const SelectionBox = (props) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${authData.accessToken}`,
         },
         method: "GET",
       },

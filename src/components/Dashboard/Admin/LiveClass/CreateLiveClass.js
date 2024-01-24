@@ -1,5 +1,8 @@
 import React, { useReducer, useState } from 'react';
 import SingleSelection from '../../../UI/SingleSelect';
+import ajaxCall from '../../../../helpers/ajaxCall';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const initialLiveClassData = {
   batch: '',
@@ -32,6 +35,7 @@ const CreateLiveClass = () => {
     initialLiveClassData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!createLiveClassData.meeting_title) {
@@ -82,10 +86,31 @@ const CreateLiveClass = () => {
   };
 
   const createLiveClass = async (e) => {
-    resetReducerForm();
     e.preventDefault();
     if (!validateForm()) return;
-    //API integration
+    try {
+      const response = await ajaxCall(
+        "/create-batch/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "POST",
+          body: JSON.stringify(createLiveClassData),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        resetReducerForm();
+        toast.success("Batch Created Successfully");
+      } else if (response.status === 400 || response.status === 404) {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
   };
 
   return (
@@ -105,8 +130,8 @@ const CreateLiveClass = () => {
                     value: val,
                   });
                 }}
-                url='/levelView/'
-                objKey={['name']}
+                url='/batchview/'
+                objKey={['batch_name']}
               />
             </div>
           </div>

@@ -37,14 +37,8 @@ const Lesson = () => {
 
       if (response.status === 200) {
         const lessonsData = response?.data?.lessons.map((lesson) => {
-          const attachments = lesson.attachment_lession_count.attachments;
-          const assignments = lesson.assignment_lession_count.assignments;
           return {
             ...lesson,
-            attachments,
-            assignments,
-            attachmentCount: attachments.length,
-            assignmentCount: assignments.length,
           };
         });
 

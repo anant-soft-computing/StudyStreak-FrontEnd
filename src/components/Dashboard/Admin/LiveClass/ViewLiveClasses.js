@@ -3,10 +3,24 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import { Link } from "react-router-dom";
 
 const columns = [
   { headerName: "No.", field: "no", filter: true },
-  { headerName: "Batch", field: "select_batch.batch_name", filter: true },
+  {
+    headerName: "Batch",
+    field: "select_batch.batch_name",
+    filter: true,
+    cellRenderer: (params) => {
+      const batchName = params.value;
+      const data = params.data?.zoom_meeting_id;
+      return (
+        <Link to={`${data}`} target="_blank">
+          {batchName}
+        </Link>
+      );
+    },
+  },
   { headerName: "Live Class Type", field: "liveclasstype.name", filter: true },
   { headerName: "Meeting Name", field: "meeting_title", filter: true },
   {
@@ -19,7 +33,7 @@ const columns = [
         month: "2-digit",
         day: "2-digit",
       });
-      const [month, day, year] = startDate.split('/');
+      const [month, day, year] = startDate.split("/");
       return `${year}-${month}-${day}`;
     },
   },
@@ -46,7 +60,7 @@ const columns = [
         month: "2-digit",
         day: "2-digit",
       });
-      const [month, day, year] = endDate.split('/');
+      const [month, day, year] = endDate.split("/");
       return `${year}-${month}-${day}`;
     },
   },

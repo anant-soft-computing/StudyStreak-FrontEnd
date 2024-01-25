@@ -14,37 +14,37 @@ import ViewExam from "./ViewExam";
 const exams = [
   {
     name: "IELTS",
-    link: "/admin-exam/ielts",
+    link: "/admin-exam/IELTS",
     isDisabled: false,
   },
   {
     name: "TOEFL",
     subMenu: [],
-    link: "/admin-exam/toefl",
+    link: "/admin-exam/TOEFL",
     isDisabled: true,
   },
   {
     name: "PTE",
     subMenu: [],
-    link: "/admin-exam/pte",
+    link: "/admin-exam/PTE",
     isDisabled: true,
   },
   {
     name: "DUOLINGO",
     subMenu: [],
-    link: "/admin-exam/duolingo",
+    link: "/admin-exam/DUOLINGO",
     isDisabled: true,
   },
   {
     name: "GRE",
     subMenu: [],
-    link: "/admin-exam/gre",
+    link: "/admin-exam/GRE",
     isDisabled: true,
   },
   {
     name: "GMAT",
     subMenu: [],
-    link: "/admin-exam/gmat",
+    link: "/admin-exam/GMAT",
     isDisabled: true,
   },
 ];
@@ -52,19 +52,19 @@ const exams = [
 const examTypes = [
   {
     name: "Reading",
-    link: "/admin-exam/ielts/exam-reading",
+    link: "/admin-exam/IELTS/exam-reading",
   },
   {
     name: "Listening",
-    link: "/admin-exam/ielts/exam-listening",
+    link: "/admin-exam/IELTS/exam-listening",
   },
   {
     name: "Writing",
-    link: "/admin-exam/ielts/exam-writing",
+    link: "/admin-exam/IELTS/exam-writing",
   },
   {
     name: "Speaking",
-    link: "/admin-exam/ielts/exam-speaking",
+    link: "/admin-exam/IELTS/exam-speaking",
   },
 ];
 

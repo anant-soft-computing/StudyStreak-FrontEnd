@@ -1,8 +1,11 @@
 import React, { useRef } from "react";
 import "../../css/LiveExam.css";
+import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const LiveExam = () => {
   const containerRef = useRef(null);
+  const examData = useLocation()?.state;
   let highlightedElement = null;
 
   // Function to scroll to content
@@ -42,9 +45,15 @@ const LiveExam = () => {
     return <div>Render Audio</div>;
   };
 
-  const displayLeftContainer = () => {
+  const displayLeftContainer = (passage) => {
     // Replace this with your actual implementation
-    return <div>Display Left Container</div>;
+    return (
+      <div
+        dangerouslySetInnerHTML={{
+          __html: passage,
+        }}
+      ></div>
+    );
   };
 
   // Dummy data for paginationContent
@@ -75,26 +84,26 @@ const LiveExam = () => {
 
       {/* Static Container */}
       <div className="lv-container">
-        <div className="lv-container-title">{`${
-          readingData.exam_type || listeningData.exam_type
-        } / ${readingData.exam_name || listeningData.exam_name} / ${
-          readingData.block_type || listeningData.block_type
-        } / ${
-          readingData.difficulty_level || listeningData.difficulty_level
-        }`}</div>
+        <div className="lv-container-title">{`${examData?.exam_type} / ${examData?.exam_name} / ${examData?.block_type} / ${examData?.difficulty_level}`}</div>
       </div>
 
       {/* Main Container */}
       {/* <div>{renderAudio()}</div> */}
       <div className="lv-main-container" ref={containerRef}>
         {/* Left Container */}
-        <div className="lv-left-container">{displayLeftContainer()}</div>
+        <div className="lv-left-container">
+          {displayLeftContainer(examData?.passage)}
+        </div>
 
         {/* Right Container */}
         <div className="lv-right-container" id="right-container">
           <div className="lv-box-right">
             {/* Replace the following with your actual content */}
-            <p>Your content goes here.</p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: examData?.question,
+              }}
+            />
           </div>
         </div>
       </div>
@@ -109,7 +118,10 @@ const LiveExam = () => {
         </div>
         <button
           className="lv-footer-button"
-          onClick={() => scrollToContent("yourContentId")}
+          onClick={() => {
+            scrollToContent("yourContentId") 
+            toast.success("Your Exam Submit Successfully")
+          }}
         >
           <span className="lv-arrow">&#x2713;</span>
         </button>

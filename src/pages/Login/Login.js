@@ -325,14 +325,14 @@ const Login = () => {
                                 Log In
                               </button>
                             </div>
-                            <div className="login__social__option">
-                              <p>or Log-in with</p>
-                              <button className="default__button">
-                                <i className="icofont-google-plus"></i> Google
-                              </button>
-                            </div>
                           </div>
                         </form>
+                        <div className="login__social__option">
+                          <p>or Log-in with</p>
+                          <button className="default__button" onClick={() => console.log("---Sagar-->")}>
+                            <i className="icofont-google-plus"></i> Google
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -60,7 +60,7 @@ const LessonList = ({
                     <strong>{lessonItem?.Lesson_Duration}</strong>
                   </div>
                 </div>
-                <div className="scc__wrap">
+                {/* <div className="scc__wrap">
                   <div className="scc__info">
                     <i className="icofont-book-alt"></i>
                     <h5>
@@ -76,8 +76,8 @@ const LessonList = ({
                       {lessonItem.attachmentCount}
                     </strong>
                   </div>
-                </div>
-                <div className="scc__wrap">
+                </div> */}
+                {/* <div className="scc__wrap">
                   <div className="scc__info">
                     <i className="icofont-audio"></i>
                     <h5>
@@ -88,8 +88,8 @@ const LessonList = ({
                       </div>
                     </h5>
                   </div>
-                </div>
-                <div className="scc__wrap">
+                </div> */}
+                {/* <div className="scc__wrap">
                   <div className="scc__info">
                     <i className="icofont-book-alt"></i>
                     <h5>
@@ -105,7 +105,7 @@ const LessonList = ({
                       {lessonItem.assignmentCount}
                     </strong>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

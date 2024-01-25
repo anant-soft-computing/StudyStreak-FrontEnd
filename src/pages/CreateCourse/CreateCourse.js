@@ -219,11 +219,7 @@ const CreateCourse = () => {
         resetReducerForm();
         toast.success("Course Created Successfully");
       } else if (response.status === 400 || response.status === 404) {
-        setFormStatus({
-          isError: true,
-          errMsg: "Some Problem Occurred. Please try again.",
-          isSubmitting: false,
-        });
+        toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
       setFormStatus({

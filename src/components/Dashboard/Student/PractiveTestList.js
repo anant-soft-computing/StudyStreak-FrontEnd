@@ -8,12 +8,11 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from '../../../helpers/ajaxCall';
-import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 const PracticeTestList = () => {
   const [practiceTestData, setPracticeTestData] = useState([]);
-  const authData = useSelector((state) => state.authStore);
 
   const getPracticeTestData = async () => {
     try {
@@ -23,7 +22,6 @@ const PracticeTestList = () => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${authData.accessToken}`,
           },
           method: 'GET',
         },
@@ -53,7 +51,17 @@ const PracticeTestList = () => {
     rowData: practiceTestData,
     columnDefs: [
       { headerName: "No.", field: "no", filter: true },
-      { headerName: "Exam Name", field: "exam_name", filter: true },
+      {
+        headerName: "Exam Name", field: "exam_name", filter: true, cellRenderer: (params) => {
+          const name = params.value;
+          const examData = params?.data
+          return (
+            <Link to="/live-writing-exam" state={examData}>
+              {name}
+            </Link>
+          );
+        },
+      },
       { headerName: "Exam Type", field: "exam_type", filter: true },
       { headerName: "No. Of Questions", field: "no_of_questions", filter: true },
       { headerName: "Difficulty Level", field: "difficulty_level", filter: true }

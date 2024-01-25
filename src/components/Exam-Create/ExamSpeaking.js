@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
@@ -90,19 +90,12 @@ const ExamSpeaking = () => {
       <div className="main_wrapper overflow-hidden">
         <div className="theme__shadow__circle"></div>
         <div className="theme__shadow__circle shadow__right"></div>
-        <div className="container mt-5">
+        <div className="container">
           <div className="row">
-            <div className="col-xl-12">
-              <div className="breadcrumb__inner">
-                <ul>
-                  <li>
-                    <Link to="/exam-creator">Create Exam</Link>
-                  </li>
-                  <li>Speaking</li>
-                </ul>
-              </div>
-            </div>
-            <div className="col-xl-8 col-lg-8 col-md-12 col-12">
+            <div
+              className="col-xl-8 col-lg-8 col-md-12 col-12"
+              style={{ width: "-webkit-fill-available" }}
+            >
               <div className="create__course__accordion__wraper">
                 <div className="accordion" id="accordionExample">
                   <div className="accordion-item">
@@ -271,7 +264,7 @@ const ExamSpeaking = () => {
                         aria-expanded="true"
                         aria-controls="collapseThree"
                       >
-                        Questions
+                        Instruction & Audio
                       </button>
                     </h2>
                     <div

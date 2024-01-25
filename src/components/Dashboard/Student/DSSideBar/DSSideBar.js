@@ -304,25 +304,24 @@ const DSSidebar = () => {
                       display: 'flex',
                       flexDirection: 'row',
                     }}
-                    onClick={item.name === 'Logout' ? logout : () => {}}
+                    onClick={item.name === 'Logout' ? logout : () => { }}
                     state={item?.state}
                   >
                     <div style={{ width: '10%' }}>{item.icon}</div>
                     <div style={{ width: '65%' }}>
                       {item.name}
-                      {item.name === 'Practice Test' ||
-                      item.name === 'Full Length Test' ||
-                      item.name === 'Speaking Test' ||
-                      item.name === 'Group Doubt Solving' ||
-                      item.name === 'One To One Doubt Solving'
+                      {item.name === 'Full Length Test' ||
+                        item.name === 'Speaking Test' ||
+                        item.name === 'Group Doubt Solving' ||
+                        item.name === 'One To One Doubt Solving'
                         ? '(Coming Soon)'
                         : ''}
                     </div>
                     {item.name === 'Practice Test' ||
-                    item.name === 'Full Length Test' ||
-                    item.name === 'Speaking Test' ||
-                    item.name === 'Group Doubt Solving' ||
-                    item.name === 'One To One Doubt Solving' ? (
+                      item.name === 'Full Length Test' ||
+                      item.name === 'Speaking Test' ||
+                      item.name === 'Group Doubt Solving' ||
+                      item.name === 'One To One Doubt Solving' ? (
                       <span
                         className='dashboard__label'
                         style={{ width: '10%' }}

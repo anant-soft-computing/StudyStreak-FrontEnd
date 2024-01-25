@@ -3,7 +3,6 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { Link } from "react-router-dom";
 
 const columns = [
   { headerName: "No.", field: "no", filter: true },
@@ -11,15 +10,6 @@ const columns = [
     headerName: "Batch",
     field: "select_batch.batch_name",
     filter: true,
-    cellRenderer: (params) => {
-      const batchName = params.value;
-      const data = params.data?.zoom_meeting_id;
-      return (
-        <Link to={`${data}`} target="_blank">
-          {batchName}
-        </Link>
-      );
-    },
   },
   { headerName: "Live Class Type", field: "liveclasstype.name", filter: true },
   { headerName: "Meeting Name", field: "meeting_title", filter: true },

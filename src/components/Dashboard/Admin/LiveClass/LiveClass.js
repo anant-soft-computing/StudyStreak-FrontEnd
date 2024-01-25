@@ -8,7 +8,7 @@ import CreateLiveClass from './CreateLiveClass';
 import ViewLiveClasses from './ViewLiveClasses';
 
 const LiveClass = () => {
-  const [activeTab, setActiveTab] = useState('createLiveClass');
+  const [activeTab, setActiveTab] = useState("viewLiveClass");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -45,20 +45,20 @@ const LiveClass = () => {
                           >
                             <li className='nav-item' role='presentation'>
                               <button
-                                className={`single__tab__link ${activeTab === 'createLiveClass' ? 'active' : ''
-                                  }`}
-                                onClick={() => handleTabChange('createLiveClass')}
-                              >
-                                Create LiveClass
-                              </button>
-                            </li>
-                            <li className='nav-item' role='presentation'>
-                              <button
                                 className={`single__tab__link ${activeTab === 'viewLiveClass' ? 'active' : ''
                                   }`}
                                 onClick={() => handleTabChange('viewLiveClass')}
                               >
                                 View LiveClass
+                              </button>
+                            </li>
+                            <li className='nav-item' role='presentation'>
+                              <button
+                                className={`single__tab__link ${activeTab === 'createLiveClass' ? 'active' : ''
+                                  }`}
+                                onClick={() => handleTabChange('createLiveClass')}
+                              >
+                                Create LiveClass
                               </button>
                             </li>
                           </ul>
@@ -83,7 +83,7 @@ const LiveClass = () => {
                             id='projects__one'
                           >
                             <div className='row'>
-                              <ViewLiveClasses />
+                              <ViewLiveClasses key={activeTab} />
                             </div>
                           </div>
                         </div>

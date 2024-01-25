@@ -1,19 +1,18 @@
-import React, { useReducer, useState } from 'react';
-import SingleSelection from '../../../UI/SingleSelect';
-import ajaxCall from '../../../../helpers/ajaxCall';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import React, { useReducer, useState } from "react";
+import SingleSelection from "../../../UI/SingleSelect";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const initialLiveClassData = {
-  batch: '',
-  meeting_title: '',
-  meeting_description: null,
-  start_time_0: '',
-  start_time_1: '',
-  end_time_0: '',
-  end_time_1: '',
-  zoom_meeting_id: '',
-  zoom_meeting_password: '',
+  select_batch: "",
+  liveclasstype: "",
+  meeting_title: "",
+  meeting_description: "",
+  start_time: "",
+  end_time: "",
+  zoom_meeting_id: "",
+  zoom_meeting_password: "",
 };
 
 const initialSubmit = {
@@ -23,7 +22,7 @@ const initialSubmit = {
 };
 
 const reducerCreateLiveClass = (state, action) => {
-  if (action.type === 'reset') {
+  if (action.type === "reset") {
     return action.payload || initialLiveClassData;
   }
   return { ...state, [action.type]: action.value };
@@ -39,30 +38,21 @@ const CreateLiveClass = () => {
 
   const validateForm = () => {
     if (!createLiveClassData.meeting_title) {
-      setFormError('Meeting title is Required');
+      setFormError("Meeting title is Required");
       return false;
     }
     if (!createLiveClassData.meeting_description) {
-      setFormError('Meeting description Required');
+      setFormError("Meeting description Required");
       return false;
     }
-    if (!createLiveClassData.start_time_0) {
-      setFormError('Start date is Required');
+    if (!createLiveClassData.start_time) {
+      setFormError("Start Date & Time is Required");
       return false;
     }
-    if (!createLiveClassData.start_time_1) {
-      setFormError('Start time is Required');
+    if (!createLiveClassData.end_time) {
+      setFormError("End Date & Time is Required");
       return false;
     }
-    if (!createLiveClassData.end_time_0) {
-      setFormError('End date is Required');
-      return false;
-    }
-    if (!createLiveClassData.end_time_1) {
-      setFormError('End time is Required');
-      return false;
-    }
-
     setFormStatus({
       isError: false,
       errMsg: null,
@@ -73,7 +63,7 @@ const CreateLiveClass = () => {
 
   const resetReducerForm = () => {
     dispatchCreateLiveClass({
-      type: 'reset',
+      type: "reset",
     });
   };
 
@@ -90,7 +80,7 @@ const CreateLiveClass = () => {
     if (!validateForm()) return;
     try {
       const response = await ajaxCall(
-        "/create-batch/",
+        "/liveclass_create_view/",
         {
           headers: {
             Accept: "application/json",
@@ -104,7 +94,7 @@ const CreateLiveClass = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
-        toast.success("Batch Created Successfully");
+        toast.success("Live Class Created Successfully");
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -114,38 +104,56 @@ const CreateLiveClass = () => {
   };
 
   return (
-    <div className='row'>
-      <div className='col-xl-12'>
-        <div className='row'>
-          <div className='col-xl-6'>
-            <div className='dashboard__select__heading'>
+    <div className="row">
+      <div className="col-xl-12">
+        <div className="row">
+          <div className="col-xl-6">
+            <div className="dashboard__select__heading">
               <span>Batch</span>
             </div>
-            <div className='dashboard__selector'>
+            <div className="dashboard__selector">
               <SingleSelection
-                value={createLiveClass?.batch}
+                value={createLiveClass?.select_batch}
                 onChange={(val) => {
                   dispatchCreateLiveClass({
-                    type: 'batch',
+                    type: "select_batch",
                     value: val,
                   });
                 }}
-                url='/batchview/'
-                objKey={['batch_name']}
+                url="/batchview/"
+                objKey={["batch_name"]}
               />
             </div>
           </div>
-          <div className='col-xl-6'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>Meeting Title</label>
+          <div className="col-xl-6">
+            <div className="dashboard__select__heading">
+              <span>Live Class Type</span>
+            </div>
+            <div className="dashboard__selector">
+              <SingleSelection
+                value={createLiveClass?.liveclasstype}
+                onChange={(val) => {
+                  dispatchCreateLiveClass({
+                    type: "liveclasstype",
+                    value: val,
+                  });
+                }}
+                url="/live_class_type_list_view/"
+                objKey={["name"]}
+              />
+            </div>
+          </div>
+          <div className="col-xl-6 mt-3">
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                <label for="#">Meeting Title</label>
                 <input
-                  type='text'
-                  placeholder='Meeting Title'
+                  type="text"
+                  placeholder="Meeting Title"
                   value={createLiveClassData?.meeting_title}
                   onChange={(e) => {
                     dispatchCreateLiveClass({
-                      type: 'meeting_title',
+                      type: "meeting_title",
                       value: e.target.value,
                     });
                   }}
@@ -153,16 +161,16 @@ const CreateLiveClass = () => {
               </div>
             </div>
           </div>
-          <div className='col-xl-6'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>Start Date</label>
+          <div className="col-xl-6 mt-3">
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                <label for="#">Start Date & Time</label>
                 <input
-                  type='date'
-                  value={createLiveClassData?.start_time_0}
+                  type="datetime-local"
+                  value={createLiveClassData?.start_time}
                   onChange={(e) => {
                     dispatchCreateLiveClass({
-                      type: 'start_time_0',
+                      type: "start_time",
                       value: e.target.value,
                     });
                   }}
@@ -170,16 +178,16 @@ const CreateLiveClass = () => {
               </div>
             </div>
           </div>
-          <div className='col-xl-6'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>Start Time</label>
+          <div className="col-xl-6">
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                <label for="#">End Date & Time</label>
                 <input
-                  type='time'
-                  value={createLiveClassData?.start_time_1}
+                  type="datetime-local"
+                  value={createLiveClassData?.end_time}
                   onChange={(e) => {
                     dispatchCreateLiveClass({
-                      type: 'start_time_1',
+                      type: "end_time",
                       value: e.target.value,
                     });
                   }}
@@ -187,51 +195,17 @@ const CreateLiveClass = () => {
               </div>
             </div>
           </div>
-          <div className='col-xl-6'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>End Date</label>
+          <div className="col-xl-6">
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                <label for="#">Meeting ID</label>
                 <input
-                  type='date'
-                  value={createLiveClassData?.end_time_0}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: 'end_time_0',
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className='col-xl-6'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>End Time</label>
-                <input
-                  type='time'
-                  value={createLiveClassData?.end_time_1}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: 'end_time_1',
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className='col-xl-6'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>Meeting ID</label>
-                <input
-                  type='text'
-                  placeholder='Meeting ID'
+                  type="text"
+                  placeholder="Meeting ID"
                   value={createLiveClassData?.zoom_meeting_id}
                   onChange={(e) => {
                     dispatchCreateLiveClass({
-                      type: 'zoom_meeting_id',
+                      type: "zoom_meeting_id",
                       value: e.target.value,
                     });
                   }}
@@ -239,17 +213,17 @@ const CreateLiveClass = () => {
               </div>
             </div>
           </div>
-          <div className='col-xl-6'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>Meeting Password</label>
+          <div className="col-xl-6">
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                <label for="#">Meeting Password</label>
                 <input
-                  type='text'
-                  placeholder='Meeting Password'
+                  type="text"
+                  placeholder="Meeting Password"
                   value={createLiveClassData?.zoom_meeting_password}
                   onChange={(e) => {
                     dispatchCreateLiveClass({
-                      type: 'zoom_meeting_password',
+                      type: "zoom_meeting_password",
                       value: e.target.value,
                     });
                   }}
@@ -257,18 +231,19 @@ const CreateLiveClass = () => {
               </div>
             </div>
           </div>
-          <div className='col-xl-12'>
-            <div className='dashboard__form__wraper'>
-              <div className='dashboard__form__input'>
-                <label for='#'>Meeting Description</label>
+          <div className="col-xl-6">
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                <label for="#">Meeting Description</label>
                 <textarea
-                  id=''
-                  cols='10'
-                  rows='3'
+                  id=""
+                  cols="3"
+                  rows="3"
+                  placeholder="Meeting Description"
                   value={createLiveClassData?.meeting_description}
                   onChange={(e) => {
                     dispatchCreateLiveClass({
-                      type: 'meeting_description',
+                      type: "meeting_description",
                       value: e.target.value,
                     });
                   }}
@@ -278,14 +253,14 @@ const CreateLiveClass = () => {
               </div>
             </div>
           </div>
-          <div className='col-xl-12'>
-            <div className='dashboard__form__button'>
+          <div className="col-xl-12">
+            <div className="dashboard__form__button">
               {formStatus.isError ? (
-                <div className='text-danger mb-2'>{formStatus.errMsg}</div>
+                <div className="text-danger mb-2">{formStatus.errMsg}</div>
               ) : (
-                <div className='text-success mb-2'>{formStatus.errMsg}</div>
+                <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
-              <button className='default__button' onClick={createLiveClass}>
+              <button className="default__button" onClick={createLiveClass}>
                 Create Live Class
               </button>
             </div>

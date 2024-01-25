@@ -76,6 +76,7 @@ const Exam = () => {
     examType: "",
     examForm: "",
   });
+  const [activeTab, setActiveTab] = useState("viewExam");
 
   useEffect(() => {
     const examType = location.pathname.split("/")[2];
@@ -100,6 +101,10 @@ const Exam = () => {
       });
     }
   }, [location]);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const handleNavigate = (link) => {
     if (link !== "") navigate(link);
@@ -161,27 +166,22 @@ const Exam = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link active"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__one"
-                                type="button"
-                                aria-selected="true"
-                                role="tab"
+                                className={`single__tab__link ${
+                                  activeTab === "viewExam" ? "active" : ""
+                                }`}
+                                onClick={() => handleTabChange("viewExam")}
                               >
-                                Create Exam
+                                View Exam
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabindex="-1"
+                                className={`single__tab__link ${
+                                  activeTab === "createExam" ? "active" : ""
+                                }`}
+                                onClick={() => handleTabChange("createExam")}
                               >
-                                View Exam
+                                Create Exam
                               </button>
                             </li>
                           </ul>
@@ -192,10 +192,10 @@ const Exam = () => {
                           data-aos="fade-up"
                         >
                           <div
-                            className="tab-pane fade active show"
+                            className={`tab-pane fade ${
+                              activeTab === "createExam" ? "show active" : ""
+                            }`}
                             id="projects__one"
-                            role="tabpanel"
-                            aria-labelledby="projects__one"
                           >
                             <div className="row">
                               {!screenContent.examType &&
@@ -252,12 +252,12 @@ const Exam = () => {
                             </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
+                            className={`tab-pane fade ${
+                              activeTab === "viewExam" ? "show active" : ""
+                            }`}
+                            id="projects__one"
                           >
-                            <ViewExam />
+                            <ViewExam key={activeTab} />
                           </div>
                         </div>
                       </div>

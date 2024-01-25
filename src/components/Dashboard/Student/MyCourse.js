@@ -7,7 +7,7 @@ import DSNavBar from "./DSNavBar/DSNavBar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const MyCourse = () => {
-  const { enrolledCourse } = useLocation().state;
+  const { enrolledCourse } = useLocation()?.state;
   const navigate = useNavigate();
 
   return (
@@ -35,7 +35,7 @@ const MyCourse = () => {
                         <div
                           className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
                           data-aos="fade-up"
-                          key={enrolledCourse.id}
+                          key={enrolledCourse?.id}
                           onClick={() =>
                             navigate(`/course/${enrolledCourse?.id}`, {
                               state: { enrolledCourse },

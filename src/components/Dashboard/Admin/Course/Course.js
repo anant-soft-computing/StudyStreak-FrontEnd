@@ -8,7 +8,7 @@ import CreateCourse from "../../../../pages/CreateCourse/CreateCourse";
 import ViewCourse from "./ViewCourse";
 
 const Course = () => {
-  const [activeTab, setActiveTab] = useState("createCourse");
+  const [activeTab, setActiveTab] = useState("viewCourse");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -45,22 +45,20 @@ const Course = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${
-                                  activeTab === "createCourse" ? "active" : ""
-                                }`}
-                                onClick={() => handleTabChange("createCourse")}
+                                className={`single__tab__link ${activeTab === "viewCourse" ? "active" : ""
+                                  }`}
+                                onClick={() => handleTabChange("viewCourse")}
                               >
-                                Create Course
+                                View Course
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${
-                                  activeTab === "viewCourse" ? "active" : ""
-                                }`}
-                                onClick={() => handleTabChange("viewCourse")}
+                                className={`single__tab__link ${activeTab === "createCourse" ? "active" : ""
+                                  }`}
+                                onClick={() => handleTabChange("createCourse")}
                               >
-                                View Course
+                                Create Course
                               </button>
                             </li>
                           </ul>
@@ -71,9 +69,8 @@ const Course = () => {
                           data-aos="fade-up"
                         >
                           <div
-                            className={`tab-pane fade ${
-                              activeTab === "createCourse" ? "show active" : ""
-                            }`}
+                            className={`tab-pane fade ${activeTab === "createCourse" ? "show active" : ""
+                              }`}
                             id="projects__one"
                           >
                             <div className="row">
@@ -81,9 +78,8 @@ const Course = () => {
                             </div>
                           </div>
                           <div
-                            className={`tab-pane fade ${
-                              activeTab === "viewCourse" ? "show active" : ""
-                            }`}
+                            className={`tab-pane fade ${activeTab === "viewCourse" ? "show active" : ""
+                              }`}
                             id="projects__two"
                           >
                             <div className="row">

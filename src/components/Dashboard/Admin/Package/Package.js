@@ -8,7 +8,7 @@ import CreatePackage from './CreatePackage';
 import ViewPackages from './ViewPackages';
 
 const Package = () => {
-  const [activeTab, setActiveTab] = useState('createPackage');
+  const [activeTab, setActiveTab] = useState("viewPackage");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -45,20 +45,20 @@ const Package = () => {
                           >
                             <li className='nav-item' role='presentation'>
                               <button
-                                className={`single__tab__link ${activeTab === 'createPackage' ? 'active' : ''
-                                  }`}
-                                onClick={() => handleTabChange('createPackage')}
-                              >
-                                Create Package
-                              </button>
-                            </li>
-                            <li className='nav-item' role='presentation'>
-                              <button
                                 className={`single__tab__link ${activeTab === 'viewPackage' ? 'active' : ''
                                   }`}
                                 onClick={() => handleTabChange('viewPackage')}
                               >
                                 View Package
+                              </button>
+                            </li>
+                            <li className='nav-item' role='presentation'>
+                              <button
+                                className={`single__tab__link ${activeTab === 'createPackage' ? 'active' : ''
+                                  }`}
+                                onClick={() => handleTabChange('createPackage')}
+                              >
+                                Create Package
                               </button>
                             </li>
                           </ul>

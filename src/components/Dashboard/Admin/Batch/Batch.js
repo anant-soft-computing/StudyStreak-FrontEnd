@@ -8,7 +8,7 @@ import CreateBatch from "./CreateBatch";
 import ViewBatches from "./ViewBatches";
 
 const Batch = () => {
-  const [activeTab, setActiveTab] = useState("createBatch");
+  const [activeTab, setActiveTab] = useState("viewBatch");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -45,20 +45,20 @@ const Batch = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${activeTab === "createBatch" ? "active" : ""
-                                  }`}
-                                onClick={() => handleTabChange("createBatch")}
-                              >
-                                Create Batch
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
                                 className={`single__tab__link ${activeTab === "viewBatch" ? "active" : ""
                                   }`}
                                 onClick={() => handleTabChange("viewBatch")}
                               >
                                 View Batch
+                              </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className={`single__tab__link ${activeTab === "createBatch" ? "active" : ""
+                                  }`}
+                                onClick={() => handleTabChange("createBatch")}
+                              >
+                                Create Batch
                               </button>
                             </li>
                           </ul>

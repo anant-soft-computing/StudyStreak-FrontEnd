@@ -5,9 +5,9 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 const intialSpeakingField = {
   no_of_questions: "",
-  difficulty_level: "",
+  difficulty_level: "Easy",
   exam_name: "",
-  block_type: "",
+  block_type: "Practice",
   block_threshold: "",
   audio_file: "",
   passage: "",
@@ -225,7 +225,6 @@ const ExamSpeaking = () => {
                                   <option value="Full Length">
                                     Full Length
                                   </option>
-                                  <option value="Both">Both</option>
                                 </select>
                               </div>
                             </div>

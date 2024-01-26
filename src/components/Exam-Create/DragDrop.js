@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import "../../css/index.css";
 import TopBar from "../TopBar/TopBar";
 import NavBar from "../NavBar/NavBar";
 import Footer from "../Footer/Footer";
 import ajaxCall from "../../helpers/ajaxCall";
+import { toast } from "react-toastify";
 
 const Cheerio = require("cheerio");
 
@@ -1016,6 +1017,8 @@ const DragDrop = () => {
   const listeningData = location.state?.listeningData || {};
   const [audioLink, setAudioLink] = useState();
   const [answer, setAnswer] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const loadAudio = async () => {
       if (listeningData.audio_file) {
@@ -1557,17 +1560,10 @@ const DragDrop = () => {
         body: JSON.stringify(data),
       });
       if (response.status === 201) {
-        setFormStatus({
-          isError: false,
-          errMsg: "Successfully Created",
-          isSubmitting: true,
-        });
+        toast.success("Reading Exam Create SuccessFull");
+        navigate("/admin-exam");
       } else if (response.status === 400) {
-        setFormStatus({
-          isError: true,
-          errMsg: "Some Problem Occurred. Please try again.",
-          isSubmitting: false,
-        });
+        toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
       setFormStatus({
@@ -1612,17 +1608,10 @@ const DragDrop = () => {
         body: formData,
       });
       if (response.status === 201) {
-        setFormStatus({
-          isError: false,
-          errMsg: "Successfully Created",
-          isSubmitting: true,
-        });
+        toast.success("Writing Exam Create SuccessFull");
+        navigate("/admin-exam");
       } else if (response.status === 400) {
-        setFormStatus({
-          isError: true,
-          errMsg: "Some Problem Occurred. Please try again.",
-          isSubmitting: false,
-        });
+        toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
       setFormStatus({

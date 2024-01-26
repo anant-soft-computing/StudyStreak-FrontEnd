@@ -5,9 +5,9 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 const intialReadingField = {
   no_of_questions: "",
-  difficulty_level: "",
+  difficulty_level: "Easy",
   exam_name: "",
-  block_type: "",
+  block_type: "Practice",
   block_threshold: "",
   passage: "",
   question: "",
@@ -224,7 +224,6 @@ const ExamReading = () => {
                                   <option value="Full Length">
                                     Full Length
                                   </option>
-                                  <option value="Both">Both</option>
                                 </select>
                               </div>
                             </div>

@@ -1,15 +1,13 @@
 import React, { useReducer, useState } from "react";
-import TopBar from "../TopBar/TopBar";
-import NavBar from "../NavBar/NavBar";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 const intialWritingField = {
   no_of_questions: "",
-  difficulty_level: "",
+  difficulty_level: "Easy",
   exam_name: "",
-  block_type: "",
+  block_type: "Practice",
   block_threshold: "",
   audio_file: "",
   passage: "",
@@ -227,7 +225,6 @@ const ExamWriting = () => {
                                   <option value="Full Length">
                                     Full Length
                                   </option>
-                                  <option value="Both">Both</option>
                                 </select>
                               </div>
                             </div>

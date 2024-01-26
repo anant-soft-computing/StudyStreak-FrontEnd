@@ -224,7 +224,6 @@ const ExamListening = () => {
                                   <option value="Full Length">
                                     Full Length
                                   </option>
-                                  <option value="Both">Both</option>
                                 </select>
                               </div>
                             </div>

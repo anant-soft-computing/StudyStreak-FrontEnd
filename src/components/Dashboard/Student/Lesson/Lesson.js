@@ -36,14 +36,27 @@ const Lesson = () => {
       );
 
       if (response.status === 200) {
-        const lessonsData = response?.data?.lessons.map((lesson) => {
-          return {
-            ...lesson,
-          };
+        const tempSessions = [];
+        response?.data?.lessons.forEach((lesson) => {
+          const isExist = tempSessions.findIndex(
+            (item) => item.id === lesson.section.id
+          );
+
+          if (isExist !== -1) {
+            tempSessions[isExist].lessons.push(lesson);
+          } else {
+            tempSessions.push({
+              id: lesson.section.id,
+              name: lesson.section.name,
+              lessons: [lesson],
+            });
+          }
         });
 
-        setCourseLessons(lessonsData);
-        setActiveLesson(lessonsData[0]);
+        const tempCourse = [{ ...response?.data, section: tempSessions }];
+
+        setCourseLessons(tempCourse);
+        setActiveLesson(tempCourse[0]);
       } else {
         console.log("error");
       }
@@ -70,7 +83,7 @@ const Lesson = () => {
       return;
     }
     getCourseLessons();
-  }, [courseId, authData]); 
+  }, [courseId, authData]);
 
   return (
     <>
@@ -84,6 +97,9 @@ const Lesson = () => {
               <div className="theme__shadow__circle shadow__right"></div>
               <div className="tution sp_bottom_100 sp_top_50">
                 <div className="container-fluid full__width__padding">
+                  <h4 className="text-center pb-3">
+                    {courseLessons?.[0]?.Course_Title}
+                  </h4>
                   <div className="row">
                     <div className="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
                       <LessonList

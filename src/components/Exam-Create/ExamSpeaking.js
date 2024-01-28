@@ -2,6 +2,8 @@ import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { toast } from "react-toastify";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const intialSpeakingField = {
   no_of_questions: "",
@@ -9,10 +11,10 @@ const intialSpeakingField = {
   exam_name: "",
   block_type: "Practice",
   block_threshold: "",
-  audio_file: "",
   passage: "",
   question: "",
   exam_type: "Speaking",
+  answers: [],
 };
 
 const initialSubmit = {
@@ -39,6 +41,14 @@ const ExamSpeaking = () => {
     const data = editor.getData();
     dispatchSpeakingData({
       type: "passage",
+      value: data,
+    });
+  };
+
+  const handleQuestionChange = (event, editor) => {
+    const data = editor.getData();
+    dispatchSpeakingData({
+      type: "question",
       value: data,
     });
   };
@@ -72,6 +82,16 @@ const ExamSpeaking = () => {
       setFormError("Block Threshold is Required");
       return false;
     }
+    if (!SpeakingData.passage) {
+      setFormError("Passage is Required");
+      return false;
+    }
+
+    if (!SpeakingData.question) {
+      setFormError("Question is Required");
+      return false;
+    }
+
     setFormStatus({
       isError: false,
       errMsg: null,
@@ -80,9 +100,44 @@ const ExamSpeaking = () => {
     return true;
   };
 
-  const handleOnNext = () => {
+  const submitSpeakingExam = async (e) => {
+    e.preventDefault();
     if (!validateForm()) return;
-    navigate("/exam-create", { state: { SpeakingData } });
+
+    const data = {
+      block_threshold: SpeakingData.block_threshold,
+      block_type: SpeakingData.block_type,
+      difficulty_level: SpeakingData.difficulty_level,
+      exam_name: SpeakingData.exam_name,
+      exam_type: SpeakingData.exam_type,
+      no_of_questions: SpeakingData.no_of_questions,
+      passage: SpeakingData.passage,
+      question: SpeakingData.question,
+      answers: SpeakingData.answers,
+    };
+
+    try {
+      const response = await ajaxCall("/exam-blocks/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      if (response.status === 201) {
+        toast.success("Speaking Exam Create SuccessFull");
+        navigate("/admin-exam");
+      } else if (response.status === 400) {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    }
   };
 
   return (
@@ -263,7 +318,7 @@ const ExamSpeaking = () => {
                         aria-expanded="true"
                         aria-controls="collapseThree"
                       >
-                        Instruction & Audio
+                        Instruction
                       </button>
                     </h2>
                     <div
@@ -285,18 +340,37 @@ const ExamSpeaking = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-xl-12 col-lg-6 col-md-6 col-12">
+                      </div>
+                    </div>
+                  </div>
+                  <div className="accordion-item">
+                    <h2 className="accordion-header" id="headingThree">
+                      <button
+                        className="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree"
+                        aria-expanded="true"
+                        aria-controls="collapseThree"
+                      >
+                        Question
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseThree"
+                      className="accordion-collapse collapse"
+                      aria-labelledby="headingThree"
+                      data-bs-parent="#accordionExample"
+                    >
+                      <div className="accordion-body">
+                        <div className="col-xl-12 col-lg-6 col-md-6 col-12 mb-4">
                           <div className="dashboard__form__wraper">
                             <div className="dashboard__form__input">
-                              <label>Audio</label>
-                              <input
-                                type="file"
-                                onChange={(e) =>
-                                  dispatchSpeakingData({
-                                    type: "audio_file",
-                                    value: e.target.files[0],
-                                  })
-                                }
+                              <label>Question</label>
+                              <CKEditor
+                                editor={ClassicEditor}
+                                data={SpeakingData.question}
+                                onChange={handleQuestionChange}
                               />
                             </div>
                           </div>
@@ -310,8 +384,11 @@ const ExamSpeaking = () => {
                 {formStatus.isError && (
                   <div className="text-danger mb-2">{formStatus.errMsg}</div>
                 )}
-                <button className="default__button" onClick={handleOnNext}>
-                  Next
+                <button
+                  className="default__button"
+                  onClick={submitSpeakingExam}
+                >
+                  Submit
                 </button>
               </div>
             </div>

@@ -2,6 +2,8 @@ import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import { toast } from "react-toastify";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const intialWritingField = {
   no_of_questions: "",
@@ -9,10 +11,10 @@ const intialWritingField = {
   exam_name: "",
   block_type: "Practice",
   block_threshold: "",
-  audio_file: "",
   passage: "",
   question: "",
   exam_type: "Writing",
+  answers: [],
 };
 
 const initialSubmit = {
@@ -39,6 +41,14 @@ const ExamWriting = () => {
     const data = editor.getData();
     dispatchWritingData({
       type: "passage",
+      value: data,
+    });
+  };
+
+  const handleQuestionChange = (event, editor) => {
+    const data = editor.getData();
+    dispatchWritingData({
+      type: "question",
       value: data,
     });
   };
@@ -72,6 +82,22 @@ const ExamWriting = () => {
       setFormError("Block Threshold is Required");
       return false;
     }
+
+    if (!writingData.passage) {
+      setFormError("Passage is Required");
+      return false;
+    }
+
+    if (!writingData.question) {
+      setFormError("Question is Required");
+      return false;
+    }
+
+    if (!writingData.answers) {
+      setFormError("Answers is Required");
+      return false;
+    }
+
     setFormStatus({
       isError: false,
       errMsg: null,
@@ -80,9 +106,44 @@ const ExamWriting = () => {
     return true;
   };
 
-  const handleOnNext = () => {
+  const submitWritingExam = async (e) => {
+    e.preventDefault();
     if (!validateForm()) return;
-    navigate("/exam-create", { state: { writingData } });
+
+    const data = {
+      block_threshold: writingData.block_threshold,
+      block_type: writingData.block_type,
+      difficulty_level: writingData.difficulty_level,
+      exam_name: writingData.exam_name,
+      exam_type: writingData.exam_type,
+      no_of_questions: writingData.no_of_questions,
+      passage: writingData.passage,
+      question: writingData.question,
+      answers: writingData.answers,
+    };
+
+    try {
+      const response = await ajaxCall("/exam-blocks/", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+      if (response.status === 201) {
+        toast.success("Speaking Exam Create SuccessFull");
+        navigate("/admin-exam");
+      } else if (response.status === 400) {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    }
   };
 
   return (
@@ -263,7 +324,7 @@ const ExamWriting = () => {
                         aria-expanded="true"
                         aria-controls="collapseThree"
                       >
-                        Instruction & Audio
+                        Instructions
                       </button>
                     </h2>
                     <div
@@ -285,18 +346,37 @@ const ExamWriting = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="col-xl-12 col-lg-6 col-md-6 col-12">
+                      </div>
+                    </div>
+                  </div>
+                  <div className="accordion-item">
+                    <h2 className="accordion-header" id="headingThree">
+                      <button
+                        className="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree"
+                        aria-expanded="true"
+                        aria-controls="collapseThree"
+                      >
+                        Qeustions
+                      </button>
+                    </h2>
+                    <div
+                      id="collapseThree"
+                      className="accordion-collapse collapse"
+                      aria-labelledby="headingThree"
+                      data-bs-parent="#accordionExample"
+                    >
+                      <div className="accordion-body">
+                        <div className="col-xl-12 col-lg-6 col-md-6 col-12 mb-4">
                           <div className="dashboard__form__wraper">
                             <div className="dashboard__form__input">
-                              <label>Audio</label>
-                              <input
-                                type="file"
-                                onChange={(e) =>
-                                  dispatchWritingData({
-                                    type: "audio_file",
-                                    value: e.target.files[0],
-                                  })
-                                }
+                              <label>Questions</label>
+                              <CKEditor
+                                editor={ClassicEditor}
+                                data={writingData.question}
+                                onChange={handleQuestionChange}
                               />
                             </div>
                           </div>
@@ -310,7 +390,7 @@ const ExamWriting = () => {
                 {formStatus.isError && (
                   <div className="text-danger mb-2">{formStatus.errMsg}</div>
                 )}
-                <button className="default__button" onClick={handleOnNext}>
+                <button className="default__button" onClick={submitWritingExam}>
                   Next
                 </button>
               </div>

@@ -56,9 +56,8 @@ const PracticeTest = () => {
         filter: true,
         cellRenderer: (params) => {
           const name = params.value;
-          const examData = params?.data;
           return (
-            <Link to="/live-writing-exam" state={examData}>
+            <Link to={`/live-exam/${params.data.id}`} target="_blank">
               {name}
             </Link>
           );

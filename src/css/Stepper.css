@@ -1,0 +1,41 @@
+.create-course-container {
+  margin-top: 20px;
+  padding: 0px 20px;
+  margin-right: 25px;
+  margin-left: 25px;
+}
+.c-tab-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.c-tab {
+  display: inline-block;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.c-tab:hover {
+  border-bottom: 2px solid #1ca1c1;
+  background-color: #f4f5f9;
+}
+
+.tab-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #1ca1c1;
+}
+
+.tab-active {
+  border-bottom: 2px solid #1ca1c1;
+}

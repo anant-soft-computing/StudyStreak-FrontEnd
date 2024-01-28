@@ -82,6 +82,7 @@ const GridSection = () => {
                     <img
                       src={course?.Course_Thumbnail}
                       alt={course?.Course_Title}
+                      style={{ height: "220px", width: "100%" }}
                     />
                   </Link>
                 </div>

@@ -160,7 +160,7 @@ const App = () => {
           />
 
           <Route
-            path="/live-writing-exam"
+            path="/live-exam/:examId"
             element={<ProtectedRoute element={LiveExam} />}
           />
 

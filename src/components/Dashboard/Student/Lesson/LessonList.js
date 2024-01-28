@@ -1,39 +1,45 @@
 import { Link } from "react-router-dom";
 
 const LessonList = ({
-    lessons,
-    activeIndex,
-    setActiveIndex,
-    setActiveLesson,
-    handleContentChange,
-  }) => {
-    return (
-      <div className="accordion content__cirriculum__wrap" id="accordionLessons">
-        {lessons?.map((lessonItem, index) => (
-          <div className="accordion-item" key={index}>
-            <h2 className="accordion-header" id={`lesson-${index}`}>
-              <button
-                className={`accordion-button ${activeIndex !== index ? "collapsed" : ""
-                  }`}
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={`#collapseOne-${index}`}
-                aria-expanded={activeIndex === index ? "true" : "false"}
-                aria-controls={`#collapseOne-${index}`}
-                onClick={() => setActiveIndex(index)}
-              >
-                {lessonItem?.Lesson_Title}
-              </button>
-            </h2>
-            <div
-              id={`collapseOne-${index}`}
-              className={`accordion-collapse collapse ${activeIndex === index ? "show" : ""
-                }`}
-              aria-labelledby={`lesson-${index}`}
-              data-bs-parent="#accordionLessons"
+  lessons,
+  activeIndex,
+  setActiveIndex,
+  setActiveLesson,
+  handleContentChange,
+}) => {
+  return (
+    <div className="accordion content__cirriculum__wrap" id="accordionLessons">
+      {/* Course title */}
+      {lessons[0]?.section.map((section, index) => (
+        <div className="accordion-item" key={index}>
+          <h2 className="accordion-header" id={`section-${index}`}>
+            <button
+              className={`accordion-button ${
+                activeIndex !== index ? "collapsed" : ""
+              }`}
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target={`#collapseSection-${index}`}
+              aria-expanded={activeIndex === index ? "true" : "false"}
+              aria-controls={`#collapseSection-${index}`}
+              onClick={() =>
+                setActiveIndex(activeIndex === index ? null : index)
+              }
             >
-              <div className="accordion-body">
-                <div className="scc__wrap">
+              {section?.name}
+            </button>
+          </h2>
+          <div
+            id={`collapseSection-${index}`}
+            className={`accordion-collapse collapse ${
+              activeIndex === index ? "show" : ""
+            }`}
+            aria-labelledby={`section-${index}`}
+            data-bs-parent="#accordionLessons"
+          >
+            <div className="accordion-body">
+              {section?.lessons.map((lesson, lessonIndex) => (
+                <div key={lessonIndex} className="scc__wrap">
                   <div
                     className="scc__info align-items-center"
                     style={{
@@ -46,72 +52,27 @@ const LessonList = ({
                     <h5>
                       <div
                         onClick={() => {
-                          setActiveLesson(lessonItem);
+                          setActiveLesson(lesson);
                           handleContentChange("video");
                         }}
                       >
                         <Link to="">
-                          <span>{lessonItem?.Lesson_Description}</span>
+                          <span>{lesson?.Lesson_Title}</span>
                         </Link>
                       </div>
                     </h5>
                   </div>
                   <div className="scc__meta">
-                    <strong>{lessonItem?.Lesson_Duration}</strong>
+                    <strong>{lesson?.Lesson_Duration}</strong>
                   </div>
                 </div>
-                {/* <div className="scc__wrap">
-                  <div className="scc__info">
-                    <i className="icofont-book-alt"></i>
-                    <h5>
-                      <div onClick={() => handleContentChange("attachment")}>
-                        <Link>
-                          <span>Attachement</span>{" "}
-                        </Link>
-                      </div>
-                    </h5>
-                  </div>
-                  <div className="scc__meta">
-                    <strong className="count">
-                      {lessonItem.attachmentCount}
-                    </strong>
-                  </div>
-                </div> */}
-                {/* <div className="scc__wrap">
-                  <div className="scc__info">
-                    <i className="icofont-audio"></i>
-                    <h5>
-                      <div onClick={() => handleContentChange("quiz")}>
-                        <Link>
-                          <span>Quiz</span>
-                        </Link>
-                      </div>
-                    </h5>
-                  </div>
-                </div> */}
-                {/* <div className="scc__wrap">
-                  <div className="scc__info">
-                    <i className="icofont-book-alt"></i>
-                    <h5>
-                      <div onClick={() => handleContentChange("assignment")}>
-                        <Link>
-                          <span>Assignment</span>{" "}
-                        </Link>
-                      </div>
-                    </h5>
-                  </div>
-                  <div className="scc__meta">
-                    <strong className="count">
-                      {lessonItem.assignmentCount}
-                    </strong>
-                  </div>
-                </div> */}
-              </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
-    );
-  };
+        </div>
+      ))}
+    </div>
+  );
+};
 
-  export default LessonList
+export default LessonList;

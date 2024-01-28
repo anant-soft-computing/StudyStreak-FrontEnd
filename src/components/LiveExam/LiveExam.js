@@ -1,12 +1,53 @@
-import React, { useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import ajaxCall from "../../helpers/ajaxCall";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import AudioRecorder from "../Exam-Create/AudioRecorder";
 
 const LiveExam = () => {
   const containerRef = useRef(null);
-  const examData = useLocation()?.state;
+  const examId = useLocation()?.pathname?.split("/")?.[2];
+  const [examData, setExamData] = useState([]);
+  const [uniqueIdArr, setUniqueIdArr] = useState([]);
   let highlightedElement = null;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/examlistfilterview/?block_type=Practice`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const examBlockWithNumbers = response?.data?.map(
+            (examBlock, index) => ({
+              ...examBlock,
+              no: index + 1,
+              // exam_type: "Writing",
+            })
+          );
+          const tempExamData = examBlockWithNumbers?.find(
+            (examBlock) => examBlock?.id.toString() === examId
+          );
+          setExamData(tempExamData);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [examId]);
 
   // Function to scroll to content
   const scrollToContent = (contentId) => {
@@ -14,35 +55,14 @@ const LiveExam = () => {
     const contentElement = document.getElementById(contentId);
 
     if (highlightedElement) {
-      highlightedElement.classList.remove("highlight");
+      highlightedElement.classList.remove("lv-highlight");
     }
 
     if (contentElement) {
       container.scrollTop = contentElement.offsetTop - container.offsetTop;
-      contentElement.classList.add("highlight");
+      contentElement.classList.add("lv-highlight");
       highlightedElement = contentElement;
     }
-  };
-
-  // Static data
-  const readingData = {
-    exam_type: "Reading Exam Type",
-    exam_name: "Reading Exam Name",
-    block_type: "Reading Block Type",
-    difficulty_level: "Reading Difficulty Level",
-  };
-
-  const listeningData = {
-    exam_type: "Listening Exam Type",
-    exam_name: "Listening Exam Name",
-    block_type: "Listening Block Type",
-    difficulty_level: "Listening Difficulty Level",
-  };
-
-  // Dummy function for renderAudio and displayLeftContainer
-  const renderAudio = () => {
-    // Replace this with your actual implementation
-    return <div>Render Audio</div>;
   };
 
   const displayLeftContainer = (passage) => {
@@ -56,8 +76,57 @@ const LiveExam = () => {
     );
   };
 
-  // Dummy data for paginationContent
-  const paginationContent = ["1", "2", "3"];
+  const htmlContent = useMemo(() => {
+    const question = examData?.question;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(question, "text/html");
+
+    const questionTags = ["select", "input", "textarea"];
+
+    const temp = [];
+    let questionPassage = "";
+
+    // First tag
+    const questionElements = doc.querySelectorAll(questionTags[0]);
+    const numberOfElements = questionElements.length;
+
+    if (numberOfElements !== 0) {
+      questionElements.forEach((selectElements, index) => {
+        const uniqueId = `${questionTags[0]}_${index + 1}`;
+        temp.push(uniqueId);
+        selectElements.id = uniqueId;
+      });
+    }
+
+    // Second tag
+    const inputElements = doc.querySelectorAll(questionTags[1]);
+    const numberOfInputElements = inputElements.length;
+
+    if (numberOfInputElements !== 0) {
+      inputElements.forEach((inputElement, index) => {
+        const uniqueId = `${questionTags[1]}_${index + 1}`;
+        temp.push(uniqueId);
+        inputElement.id = uniqueId;
+      });
+    }
+
+    // Third tag
+    const textareaElements = doc.querySelectorAll(questionTags[2]);
+    const numberOfTextareaElements = textareaElements.length;
+
+    if (numberOfTextareaElements !== 0) {
+      textareaElements.forEach((textareaElement, index) => {
+        const uniqueId = `${questionTags[2]}_${index + 1}`;
+        temp.push(uniqueId);
+        textareaElement.id = uniqueId;
+      });
+    }
+
+    questionPassage += `<div class="mainContainer">${doc.documentElement.outerHTML}</div>`;
+
+    setUniqueIdArr(temp);
+    return questionPassage;
+  }, [examData?.question]);
 
   return (
     <>
@@ -88,22 +157,39 @@ const LiveExam = () => {
       </div>
 
       {/* Main Container */}
-      {/* <div>{renderAudio()}</div> */}
-      <div className="lv-main-container" ref={containerRef}>
+      <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">
           {displayLeftContainer(examData?.passage)}
         </div>
 
         {/* Right Container */}
-        <div className="lv-right-container" id="right-container">
+        <div
+          className="lv-right-container"
+          id="right-container"
+          ref={containerRef}
+        >
           <div className="lv-box-right">
             {/* Replace the following with your actual content */}
-            <p
-              dangerouslySetInnerHTML={{
-                __html: examData?.question,
-              }}
-            />
+            {(examData.exam_type === "Reading" ||
+              examData.exam_type === "Listening") && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: htmlContent,
+                }}
+              />
+            )}
+            {examData.exam_type === "Writing" && (
+              <CKEditor
+                editor={ClassicEditor}
+                data=""
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  console.log({ event, editor, data });
+                }}
+              />
+            )}
+            {examData.exam_type === "Speaking" && <AudioRecorder />}
           </div>
         </div>
       </div>
@@ -113,14 +199,24 @@ const LiveExam = () => {
         <div className="lv-footer-text">
           <div className="lv-part-pagination"></div>
           <div className="lv-question-pagination">
-            {paginationContent.join("")}
+            {uniqueIdArr?.map((item, index) => {
+              return (
+                <div
+                  class="lv-footer-item"
+                  onClick={() => scrollToContent(item)}
+                  key={index}
+                >
+                  {index + 1}
+                </div>
+              );
+            })}
           </div>
         </div>
         <button
           className="lv-footer-button"
           onClick={() => {
-            scrollToContent("yourContentId") 
-            toast.success("Your Exam Submit Successfully")
+            scrollToContent("yourContentId");
+            toast.success("Your Exam Submit Successfully");
           }}
         >
           <span className="lv-arrow">&#x2713;</span>

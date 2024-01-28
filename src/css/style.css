@@ -60,7 +60,7 @@
 	|___ End Style Sheet Indexing
 
 ***************************************************************/
-@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap");
 
 :root {
   --bodyColor: #222222;
@@ -125,9 +125,9 @@
   --borderRadius2: 20px;
   --borderRadius3: 10px;
   --transition: 0.3s;
-  --bodyFont: 'Inter', sans-serif;
-  --headingFont: 'Hind', sans-serif;
-  --contentFont: 'Inter', sans-serif;
+  --bodyFont: "Inter", sans-serif;
+  --headingFont: "Hind", sans-serif;
+  --contentFont: "Inter", sans-serif;
 }
 
 .is_dark {
@@ -699,7 +699,7 @@ li {
 
 .heading__underline span:after {
   position: absolute;
-  content: '';
+  content: "";
   width: 100%;
   height: 7px;
   background: var(--secondaryColor);
@@ -1188,7 +1188,7 @@ Header Area
   width: 15px;
   height: 15px;
   padding: 0 4px;
-  content: '3';
+  content: "3";
   text-align: center;
   border-radius: 100%;
   background: var(--secondaryColor);
@@ -2168,7 +2168,7 @@ Mobile Menu
   i::before {
   top: 0;
   width: 100%;
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   -webkit-transform: rotate(90deg);
@@ -2774,7 +2774,7 @@ Mobile Menu
   i::before {
   top: 0;
   width: 100%;
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   -webkit-transform: rotate(90deg);
@@ -3990,7 +3990,7 @@ Hero Banner Area
   background: #000;
   height: 100%;
   width: 100%;
-  content: '';
+  content: "";
   opacity: 0.7;
   z-index: 9;
 }
@@ -5128,7 +5128,7 @@ About Area
 
 .about__button__wrap li button:after {
   position: absolute;
-  content: '';
+  content: "";
   width: 0;
   height: 2px;
   background: var(--primaryColor);
@@ -6205,7 +6205,7 @@ Grid Area
   width: 0;
   transition: var(--transition);
   position: absolute;
-  content: '';
+  content: "";
   height: 2px;
   background: var(--primaryColor);
   bottom: -20px;
@@ -6253,7 +6253,7 @@ Grid Area
 
 .grid__filter button.active::before {
   position: absolute;
-  content: '';
+  content: "";
   width: 100%;
   height: 2px;
   background: var(--primaryColor);
@@ -6281,7 +6281,7 @@ Grid Area
 
 .grid__filter button::after {
   position: absolute;
-  content: '';
+  content: "";
   width: 2px;
   height: 15px;
   background: var(--contentColor);
@@ -6765,7 +6765,7 @@ Event
 
 .eventarea__content p::before {
   position: absolute;
-  content: '';
+  content: "";
   width: 1px;
   height: 100%;
   background: var(--darkdeep7);
@@ -7072,7 +7072,7 @@ Event
 
 .tab__button__wrap li button::after {
   position: absolute;
-  content: '';
+  content: "";
   height: 4px;
   width: 0;
   background: var(--primaryColor);
@@ -7563,7 +7563,7 @@ Register Area
 
 .registerarea::before {
   position: absolute;
-  content: '';
+  content: "";
   height: 100%;
   width: 100%;
   left: 0;
@@ -7664,7 +7664,7 @@ Register Area
 }
 
 .registerarea__video a::before {
-  content: '';
+  content: "";
   border: 2px solid var(--secondaryColor);
   position: absolute;
   z-index: 0;
@@ -7683,7 +7683,7 @@ Register Area
 }
 
 .registerarea__video a::after {
-  content: '';
+  content: "";
   border: 2px solid var(--secondaryColor);
   position: absolute;
   z-index: 0;
@@ -8236,7 +8236,7 @@ Testimonial Area
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
   border-top: 15px solid var(--whiteColor);
-  content: '';
+  content: "";
 }
 
 .aboutarea__para__3 p {
@@ -8550,7 +8550,7 @@ Counter Area
   font-weight: 700;
   font-size: 34px;
   line-height: 1.1;
-  font-family: 'Hind';
+  font-family: "Hind";
   color: var(--blackColor);
 }
 
@@ -9363,7 +9363,7 @@ Blog
   ul
   li:after {
   position: absolute;
-  content: '';
+  content: "";
   height: 11px;
   width: 1px;
   background: var(--borderColor);
@@ -9443,7 +9443,7 @@ Blog
 
 .blogarae__img__2 .blogarea__date__2 span {
   display: block;
-  font-family: 'Hind';
+  font-family: "Hind";
   font-style: normal;
   font-weight: 600;
   font-size: 22px;
@@ -9709,7 +9709,7 @@ Blog
 
 .sidebar__title::before {
   position: absolute;
-  content: '';
+  content: "";
   width: 2px;
   height: 21px;
   background: var(--primaryColor);
@@ -9821,7 +9821,7 @@ Blog
   .photo__gallery__img
   .single__gallery__img::before {
   position: absolute;
-  content: '';
+  content: "";
   height: 100%;
   width: 100%;
   transition: var(--transition);
@@ -10078,7 +10078,7 @@ Blog
   .blockquate__content
   a::before {
   position: absolute;
-  content: '';
+  content: "";
   height: 2px;
   width: 45px;
   background: var(--whiteColor);
@@ -11908,7 +11908,7 @@ Error
 }
 
 .loginarea__wraper .login__heading .login__description a:after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0%;
   height: 2px;
@@ -11970,7 +11970,7 @@ Error
 }
 
 .loginarea__wraper form .login__form .login__form__link a:after {
-  content: '';
+  content: "";
   position: absolute;
   width: 0%;
   height: 2px;
@@ -12014,7 +12014,7 @@ Error
 }
 
 .loginarea__wraper .login__social__option p::before {
-  content: '';
+  content: "";
   position: absolute;
   height: 1px;
   background: var(--borderColor4);
@@ -12036,7 +12036,7 @@ Error
 }
 
 .loginarea__wraper .login__social__option p::after {
-  content: '';
+  content: "";
   position: absolute;
   height: 1px;
   background: var(--borderColor4);
@@ -12322,8 +12322,8 @@ Breadcrumb Area
 
 .breadcrumb__inner ul li a:after {
   position: absolute;
-  content: '\eaa0';
-  font-family: 'icofont';
+  content: "\eaa0";
+  font-family: "icofont";
   top: 0px;
   right: 3px;
 }
@@ -12752,7 +12752,7 @@ Breadcrumb Area
 }
 
 .descriptionarea__link:after {
-  content: '';
+  content: "";
   height: 2px;
   left: 0;
   width: 0;
@@ -13102,7 +13102,7 @@ Breadcrumb Area
 
 .cartarea__title::after {
   background-color: var(--borderColor2);
-  content: '';
+  content: "";
   height: 1px;
   left: 0;
   position: absolute;
@@ -13418,7 +13418,7 @@ Breadcrumb Area
 
 .shopsidebar__remove a:after {
   position: absolute;
-  content: '';
+  content: "";
   width: 100%;
   height: 1px;
   background: var(--blackColor);
@@ -13924,7 +13924,7 @@ Breadcrumb Area
 }
 
 .dashboard__small__btn::after {
-  content: '';
+  content: "";
   position: absolute;
   height: 2px;
   width: 0;
@@ -14153,7 +14153,7 @@ Breadcrumb Area
 }
 
 .become__instructor__check__label a::after {
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 1px;
@@ -14798,7 +14798,7 @@ Breadcrumb Area
 
 .dashboard__meessage__input .attachment:after {
   position: absolute;
-  content: '';
+  content: "";
   background: #e5eded;
   height: 50px;
   width: 1px;
@@ -15127,7 +15127,7 @@ Footer Area
 
 .footerarea__wrapper .footerarea__inner .footerarea__list ul li a:after {
   position: absolute;
-  content: '';
+  content: "";
   height: 2px;
   width: 0;
   background: var(--primaryColor);
@@ -15302,7 +15302,7 @@ Footer Area
 
 .footerarea__copyright__wrapper .footerarea__copyright__list ul li:after {
   position: absolute;
-  content: '';
+  content: "";
   width: 1px;
   height: 13px;
   background: var(--darkgray);
@@ -16273,4 +16273,32 @@ div.dashboard__inner,
 div.dashboard__content__wraper,
 div.gridarea__wraper {
   box-shadow: 5px 5px 10px #afafaf, -5px -5px 10px #ffffff;
+}
+
+.audio__recorder__btn {
+  background-color: transparent;
+  padding: 20px;
+  border: none;
+  border-radius: 50%;
+}
+
+
+.audio_recorder_icon {
+  font-size: 30px;
+}
+
+.audio_stop_icon{
+  font-size: 30px;
+}
+
+.audio__recorder__btn:hover {
+  background-color: grey;
+}
+
+.audio_recorder_icon:hover {
+  color: white;
+}
+
+.audio_stop_icon:hover {
+  color: white;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import "../../css/index.css";
 import TopBar from "../TopBar/TopBar";
@@ -1686,14 +1686,17 @@ const DragDrop = () => {
                       >
                         Reset
                       </button>
-                      <button
-                        type="button"
-                        className="btn save"
-                        onClick={downloadHTMLFile}
-                        disabled={selectedDivs.length === 0}
-                      >
-                        <span>Save</span>
-                      </button>
+                      <Link to="/live-writing-exam" target="_blank">
+                        <button
+                          type="button"
+                          className="btn save"
+                          onClick={downloadHTMLFile}
+                          disabled={selectedDivs.length === 0}
+                          style={{ display: "none" }}
+                        >
+                          <span>Save</span>
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

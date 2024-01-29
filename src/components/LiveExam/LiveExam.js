@@ -65,6 +65,21 @@ const LiveExam = () => {
     }
   };
 
+  const renderAudio = (audio_file) => {
+    // Replace this with your actual implementation
+    if (audio_file) {
+      return (
+        <div>
+          <audio controls autoPlay>
+            <source src={audio_file} type="audio/mpeg" />
+          </audio>
+        </div>
+      );
+    } else {
+      return <p></p>;
+    }
+  };
+
   const displayLeftContainer = (passage) => {
     // Replace this with your actual implementation
     return (
@@ -157,6 +172,7 @@ const LiveExam = () => {
       </div>
 
       {/* Main Container */}
+      <div>{renderAudio(examData?.audio_file)}</div>
       <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">
@@ -171,15 +187,15 @@ const LiveExam = () => {
         >
           <div className="lv-box-right">
             {/* Replace the following with your actual content */}
-            {(examData.exam_type === "Reading" ||
-              examData.exam_type === "Listening") && (
+            {(examData?.exam_type === "Reading" ||
+              examData?.exam_type === "Listening") && (
               <div
                 dangerouslySetInnerHTML={{
                   __html: htmlContent,
                 }}
               />
             )}
-            {examData.exam_type === "Writing" && (
+            {examData?.exam_type === "Writing" && (
               <CKEditor
                 editor={ClassicEditor}
                 data=""
@@ -189,7 +205,7 @@ const LiveExam = () => {
                 }}
               />
             )}
-            {examData.exam_type === "Speaking" && <AudioRecorder />}
+            {examData?.exam_type === "Speaking" && <AudioRecorder />}
           </div>
         </div>
       </div>
@@ -202,7 +218,7 @@ const LiveExam = () => {
             {uniqueIdArr?.map((item, index) => {
               return (
                 <div
-                  class="lv-footer-item"
+                  className="lv-footer-item"
                   onClick={() => scrollToContent(item)}
                   key={index}
                 >

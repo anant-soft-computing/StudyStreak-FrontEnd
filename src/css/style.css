@@ -6618,7 +6618,7 @@ Grid Area
 
 .zoom__meeting__grid .zoom__meeting__id span {
   font-weight: 700;
-  color: var(--secondaryColor);
+  color: var(--primaryColor);
   font-size: 18px;
   margin: 10px;
 }
@@ -16301,4 +16301,8 @@ div.gridarea__wraper {
 
 .audio_stop_icon:hover {
   color: white;
+}
+
+.GridGap {
+  width: 90% !important;
 }

@@ -132,7 +132,7 @@ const ExamWriting = () => {
         body: JSON.stringify(data),
       });
       if (response.status === 201) {
-        toast.success("Speaking Exam Create SuccessFull");
+        toast.success("Writing Exam Create SuccessFull");
         navigate("/admin-exam");
       } else if (response.status === 400) {
         toast.error("Some Problem Occurred. Please try again.");
@@ -324,7 +324,7 @@ const ExamWriting = () => {
                         aria-expanded="true"
                         aria-controls="collapseThree"
                       >
-                        Instructions
+                        Instruction
                       </button>
                     </h2>
                     <div
@@ -350,29 +350,29 @@ const ExamWriting = () => {
                     </div>
                   </div>
                   <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingThree">
+                    <h2 className="accordion-header" id="headingFour">
                       <button
                         className="accordion-button collapsed"
                         type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target="#collapseThree"
+                        data-bs-target="#collapseFour"
                         aria-expanded="true"
-                        aria-controls="collapseThree"
+                        aria-controls="collapseFour"
                       >
-                        Qeustions
+                        Question
                       </button>
                     </h2>
                     <div
-                      id="collapseThree"
+                      id="collapseFour"
                       className="accordion-collapse collapse"
-                      aria-labelledby="headingThree"
+                      aria-labelledby="headingFour"
                       data-bs-parent="#accordionExample"
                     >
                       <div className="accordion-body">
                         <div className="col-xl-12 col-lg-6 col-md-6 col-12 mb-4">
                           <div className="dashboard__form__wraper">
                             <div className="dashboard__form__input">
-                              <label>Questions</label>
+                              <label>Question</label>
                               <CKEditor
                                 editor={ClassicEditor}
                                 data={writingData.question}

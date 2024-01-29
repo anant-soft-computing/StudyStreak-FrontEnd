@@ -63,6 +63,7 @@ const ViewExam = () => {
       { headerName: "Block Threshold", field: "block_threshold", filter: true },
     ],
     pagination: true,
+    paginationPageSize: 20,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,

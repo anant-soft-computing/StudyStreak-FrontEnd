@@ -3,7 +3,7 @@ import React from "react";
 const Attachment = ({ activeLesson, lessonName }) => {
   return (
     <div>
-      {activeLesson.attachments.length > 0 ? (
+      {activeLesson?.attachments?.length > 0 ? (
         <>
           <div className="dashboard__section__title">
             <h4>Attachments</h4>
@@ -60,7 +60,7 @@ const Attachment = ({ activeLesson, lessonName }) => {
           </div>
         </>
       ) : (
-        <p>No Attachments Available For This Lesson.</p>
+        <p>No Attachments Available</p>
       )}
     </div>
   );

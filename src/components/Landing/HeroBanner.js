@@ -5,8 +5,20 @@ import herobanner__2 from "../../img/herobanner/herobanner__2.png";
 import herobanner__3 from "../../img/herobanner/herobanner__3.png";
 import herobanner__4 from "../../img/herobanner/herobanner__4.png";
 import herobanner__5 from "../../img/herobanner/herobanner__5.png";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const HeroBanner = () => {
+  const authData = useSelector((state) => state.authStore);
+  const navigate = useNavigate();
+
+  const handleOnClick = () => {
+    if (!authData.loggedIn) {
+      navigate("/login");
+    } else {
+      navigate("/practiceTest");
+    }
+  };
   return (
     <div className="herobannerarea herobannerarea__2">
       <div className="container">
@@ -27,8 +39,13 @@ const HeroBanner = () => {
               <div className="herobannerarea__text herobannerarea__text__2">
                 <p>
                   Real-Time AI Based Results , Live Online Class Access
-                  Thousands Of Tests To Practice {" "}
+                  Thousands Of Tests To Practice{" "}
                 </p>
+              </div>
+              <div>
+                <button className="default__button" onClick={handleOnClick}>
+                  Free Mock Test
+                </button>
               </div>
             </div>
           </div>

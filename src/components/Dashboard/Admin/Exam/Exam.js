@@ -129,7 +129,7 @@ const Exam = () => {
                       <div className="dashboard__section__title">
                         <h4>Exam</h4>
                         <nav aria-label="breadcrumb">
-                          <ol class="breadcrumb">
+                          <ol className="breadcrumb">
                             {screenContent.exam && (
                               <li className="breadcrumb-item">
                                 <Link to="/admin-exam">

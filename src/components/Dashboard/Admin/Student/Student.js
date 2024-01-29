@@ -146,6 +146,7 @@ const Student = () => {
       },
     ],
     pagination: true,
+    paginationPageSize: 20,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,

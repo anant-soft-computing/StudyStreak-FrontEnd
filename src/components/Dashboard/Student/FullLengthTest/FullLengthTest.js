@@ -1,12 +1,56 @@
-import React from "react";
-import Footer from "../../../Footer/Footer";
+import React, { useEffect, useState } from "react";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
-import DANavBar from "../DANavBar/DANavBar";
-import DASideBar from "../DASideBar/DASideBar";
-import CreateLesson from "./CreateLesson";
+import DSNavBar from "../DSNavBar/DSNavBar";
+import DSSidebar from "../DSSideBar/DSSideBar";
+import Easy from "./Easy";
+import Hard from "./Hard";
+import Medium from "./Medium";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import Footer from "../../../Footer/Footer";
 
-const Lesson = () => {
+const FullLengthTest = () => {
+  const [fullLengthTestData, setFullLengthTestData] = useState([]);
+
+  const easyData = fullLengthTestData?.filter(
+    (item) => item.difficulty_level === "Easy"
+  );
+
+  const mediumData = fullLengthTestData?.filter(
+    (item) => item.difficulty_level === "Medium"
+  );
+
+  const hardData = fullLengthTestData?.filter(
+    (item) => item.exam_type === "Hard"
+  );
+
+  const getFullLengthTestData = async () => {
+    try {
+      const response = await ajaxCall(
+        `/examlistfilterview/?block_type=Full Length`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setFullLengthTestData(response?.data);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getFullLengthTestData();
+  }, []);
+
   return (
     <>
       <TopBar />
@@ -16,15 +60,15 @@ const Lesson = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DANavBar />
+            <DSNavBar />
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
-                  <DASideBar />
+                  <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>Lesson</h4>
+                        <h4>Full Length Tests</h4>
                       </div>
                       <div className="row">
                         <div
@@ -45,7 +89,7 @@ const Lesson = () => {
                                 aria-selected="true"
                                 role="tab"
                               >
-                                Create Lesson
+                                Easy
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
@@ -58,7 +102,20 @@ const Lesson = () => {
                                 role="tab"
                                 tabindex="-1"
                               >
-                                View Lesson
+                                Medium
+                              </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className="single__tab__link"
+                                data-bs-toggle="tab"
+                                data-bs-target="#projects__three"
+                                type="button"
+                                aria-selected="false"
+                                role="tab"
+                                tabindex="-1"
+                              >
+                                Hard
                               </button>
                             </li>
                           </ul>
@@ -74,10 +131,7 @@ const Lesson = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <div className="row">
-                              {" "}
-                              <CreateLesson />
-                            </div>
+                            <Easy easyData={easyData} />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -85,7 +139,15 @@ const Lesson = () => {
                             role="tabpanel"
                             aria-labelledby="projects__two"
                           >
-                            <div className="row">View Lesson</div>
+                            <Medium mediumData={mediumData} />
+                          </div>
+                          <div
+                            className="tab-pane fade"
+                            id="projects__three"
+                            role="tabpanel"
+                            aria-labelledby="projects__three"
+                          >
+                            <Hard hardData={hardData} />
                           </div>
                         </div>
                       </div>
@@ -102,4 +164,4 @@ const Lesson = () => {
   );
 };
 
-export default Lesson;
+export default FullLengthTest;

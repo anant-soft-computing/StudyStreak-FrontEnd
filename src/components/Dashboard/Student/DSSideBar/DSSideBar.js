@@ -115,7 +115,7 @@ const DSSidebar = () => {
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
         </svg>
       ),
-      link: "/FullLengthTest",
+      link: "/fullLengthTest",
     },
     {
       name: "Speaking Test",
@@ -316,7 +316,8 @@ const DSSidebar = () => {
                         ? "(Coming Soon)"
                         : ""}
                     </div>
-                    {item.name === "Practice Test" ||
+                    {item.name === "Section Test" || 
+                    item.name === "Practice Test" ||
                     item.name === "Full Length Test" ||
                     item.name === "Speaking Test" ||
                     item.name === "Group Doubt Solving" ||
@@ -336,32 +337,7 @@ const DSSidebar = () => {
             </ul>
           </div>
         </div>
-        <div className="dashboard__inner sticky-top mt-4">
-          <div className="dashboard__nav__title">
-            <h6 className="mb-2">Upcoming Live Class</h6>
-          </div>
-          <hr />
-          <div className="dashboard__nav">
-            <div>Writing Task 1 - Letter Writing</div>
-            <div className="d-flex justify-content-between">
-              <div>Tommorrow, 06:00 PM</div>
-              <div>Add Reminder</div>
-            </div>
-          </div>
-        </div>
-        <div className="dashboard__inner sticky-top mt-4">
-          <div className="dashboard__nav__title">
-            <h6 className="mb-2">Next Lesson Due</h6>
-          </div>
-          <hr />
-          <div className="dashboard__nav">
-            <div>Writing Task 2 - Eassay Writing</div>
-            <div className="d-flex justify-content-between">
-              <div>Lesson No. 7</div>
-              <div>Take me to the lesson</div>
-            </div>
-          </div>
-        </div>
+       
       </div>
     </>
   );

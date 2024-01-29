@@ -83,7 +83,7 @@ const CourseContent = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <Lesson/>
+                            <Lesson />
                           </div>
                           <div
                             className="tab-pane fade"

@@ -38,8 +38,8 @@ import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
 import CourseContent from "./components/Dashboard/Student/Course/CourseContent";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import PracticeTest from "./components/Dashboard/Student/PractiveTest";
-import FullLengthTest from "./components/Dashboard/Student/FullLengthTest";
+import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest"
+import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import Student from "./components/Dashboard/Admin/Student/Student";
 
 const App = () => {
@@ -180,7 +180,7 @@ const App = () => {
           <Route path="/studentSettings" element={<StudentSettings />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/practiceTest" element={<PracticeTest />} />
-          <Route path="/FullLengthTest" element={<FullLengthTest />} />
+          <Route path="/fullLengthTest" element={<FullLengthTest />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

@@ -263,36 +263,36 @@ const CreateCourse = () => {
     <>
       <div className="container">
         <div className="create-course-container">
-          <div class="c-tab-container">
+          <div className="c-tab-container">
             <div
-              class={`c-tab ${activeTap === 1 && "tab-active"}`}
+              className={`c-tab ${activeTap === 1 && "tab-active"}`}
               onClick={() => handleTabChange(1)}
             >
-              <div class="tab-name">Course Details</div>
+              <div className="tab-name">Course Details</div>
             </div>
             <div
-              class={`c-tab ${activeTap === 2 && "tab-active"}`}
+              className={`c-tab ${activeTap === 2 && "tab-active"}`}
               onClick={() => handleTabChange(2)}
             >
-              <div class="tab-name">Requirements and Outcomes</div>
+              <div className="tab-name">Requirements and Outcomes</div>
             </div>
             <div
-              class={`c-tab ${activeTap === 3 && "tab-active"}`}
+              className={`c-tab ${activeTap === 3 && "tab-active"}`}
               onClick={() => handleTabChange(3)}
             >
-              <div class="tab-name">Course Media</div>
+              <div className="tab-name">Course Media</div>
             </div>
             <div
-              class={`c-tab ${activeTap === 4 && "tab-active"}`}
+              className={`c-tab ${activeTap === 4 && "tab-active"}`}
               onClick={() => handleTabChange(4)}
             >
-              <div class="tab-name">Course SEO</div>
+              <div className="tab-name">Course SEO</div>
             </div>
             <div
-              class={`c-tab ${activeTap === 5 && "tab-active"}`}
+              className={`c-tab ${activeTap === 5 && "tab-active"}`}
               onClick={() => handleTabChange(5)}
             >
-              <div class="tab-name">Lessons</div>
+              <div className="tab-name">Lessons</div>
             </div>
           </div>
           {activeTap === 1 && (

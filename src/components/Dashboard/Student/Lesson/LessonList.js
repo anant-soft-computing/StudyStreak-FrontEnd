@@ -9,7 +9,6 @@ const LessonList = ({
 }) => {
   return (
     <div className="accordion content__cirriculum__wrap" id="accordionLessons">
-      {/* Course title */}
       {lessons[0]?.section.map((section, index) => (
         <div className="accordion-item" key={index}>
           <h2 className="accordion-header" id={`section-${index}`}>
@@ -38,7 +37,7 @@ const LessonList = ({
             data-bs-parent="#accordionLessons"
           >
             <div className="accordion-body">
-              {section?.lessons.map((lesson, lessonIndex) => (
+              {section?.lessons?.map((lesson, lessonIndex) => (
                 <div key={lessonIndex} className="scc__wrap">
                   <div
                     className="scc__info align-items-center"
@@ -67,6 +66,50 @@ const LessonList = ({
                   </div>
                 </div>
               ))}
+              <div className="scc__wrap">
+                <div className="scc__info">
+                  <i className="icofont-book-alt"></i>
+                  <h5>
+                    <div onClick={() => handleContentChange("attachment")}>
+                      <Link>
+                        <span>Attachement</span>{" "}
+                      </Link>
+                    </div>
+                  </h5>
+                </div>
+                <div className="scc__meta">
+                  <strong className="count">
+                  </strong>
+                </div>
+              </div>
+              <div className="scc__wrap">
+                <div className="scc__info">
+                  <i className="icofont-book-alt"></i>
+                  <h5>
+                    <div
+                      onClick={() => {
+                        setActiveLesson(
+                          section?.lessons?.map(
+                            (item) => item?.lesson_assignment
+                          )
+                        );
+                        handleContentChange("assignment");
+                      }}
+                    >
+                      <Link>
+                        <span>Assignment</span>{" "}
+                      </Link>
+                    </div>
+                  </h5>
+                </div>
+                <div className="scc__meta">
+                  <strong className="count">
+                    {section?.lessons?.map(
+                      (lesson) => lesson?.lesson_assignment?.length
+                    )}
+                  </strong>
+                </div>
+              </div>
             </div>
           </div>
         </div>

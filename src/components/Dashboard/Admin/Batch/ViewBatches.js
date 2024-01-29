@@ -53,6 +53,7 @@ const ViewBatches = () => {
     rowData: batchList,
     columnDefs: columns,
     pagination: true,
+    paginationPageSize: 20,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,

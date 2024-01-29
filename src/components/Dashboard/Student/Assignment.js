@@ -1,66 +1,54 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
-const Assignment = ({ activeLesson, lessonName }) => {
+const Assignment = ({ activeLesson }) => {
+  const handleClick = (id) => {
+    window.open(`/live-exam/${id}`, "_blank");
+  };
+
   return (
     <div>
-      {activeLesson.assignments.length > 0 ? (
-        <>
-          <div className="dashboard__section__title">
-            <h4>Assignment</h4>
-          </div>
-          <div className="row">
-            <div className="col-xl-12">
-              <div className="dashboard__table table-responsive">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Assignment Name</th>
-                      <th></th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {activeLesson.assignments.map(
-                      ({ id, attachment_description, attachment }, index) => (
-                        <tr
-                          key={id}
-                          className={`${
-                            index % 2 === 0 ? "" : "dashboard__table__row"
-                          }`}
-                        >
-                          <th>
-                            <span>{attachment_description}</span>
-                            <p className="mt-2">
-                              Lesson : <span>{lessonName}</span>
-                            </p>
-                          </th>
-                          <td></td>
-                          <td></td>
-                          <td style={{ width: "0%" }}>
-                            <div className="dashboard__button__group">
-                              <a
-                                className="dashboard__small__btn__2"
-                                href={attachment}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                              >
-                                <i className="icofont-download" />
-                                Download
-                              </a>
-                            </div>
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
+      {activeLesson?.[0]?.length > 0 ? (
+        <div className="row">
+          {activeLesson[0]?.map((exam, index) => (
+            <div
+              className="col-lg-4 col-md-6 col-12"
+              data-aos="fade-up"
+              key={index}
+            >
+              <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+                <div className="gridarea__content ">
+                  <div className="gridarea__heading">
+                    <h3 className="text-center">
+                      <Link to={`/live-exam/${exam.id}`} target="_blank">
+                        {exam.exam_name}
+                      </Link>
+                    </h3>
+                  </div>
+                  <div className="zoom__meeting__id">
+                    <p>
+                      Questions : <span>{exam.no_of_questions}</span>
+                    </p>
+                  </div>
+                  <div className="zoom__meeting__id">
+                    <p>
+                      Difficulty Level : <span>{exam.difficulty_level}</span>
+                    </p>
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <button
+                      className="default__button"
+                      onClick={() => handleClick(exam.id)}
+                    >
+                      Take Test
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </>
+          ))}
+        </div>
       ) : (
-        <p>No Assignment Available For This Lesson.</p>
+        <p>No Assignment Available</p>
       )}
     </div>
   );

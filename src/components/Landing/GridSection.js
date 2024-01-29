@@ -59,10 +59,10 @@ const GridSection = () => {
       if (response.status === 200) {
         setCourseList(response.data);
       } else {
-        console.log("---error---->");
+        console.log("error");
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.log("error", error);
     }
   };
 
@@ -76,13 +76,13 @@ const GridSection = () => {
         <Slider {...settings}>
           {courseList.length > 0 &&
             courseList.map((course) => (
-              <div key={course.id} className="gridarea__wraper">
+              <div key={course.id} className="gridarea__wraper GridGap">
                 <div className="gridarea__img">
                   <Link to={`/courseDetail/${course?.id}`}>
                     <img
                       src={course?.Course_Thumbnail}
                       alt={course?.Course_Title}
-                      style={{ height: "220px", width: "100%" }}
+                      style={{ height: "220px" }}
                     />
                   </Link>
                 </div>

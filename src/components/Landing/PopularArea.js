@@ -37,11 +37,11 @@ const PopulerArea = () => {
                   praesentium quaerat.
                 </p>
               </div>
-              <div className="populerarea__button__2">
-                <Link className="default__button" to="#">
-                  Explore More
+              <div>
+                <button className="default__button">
+                  Book A Demo
                   <i className="icofont-long-arrow-right"></i>
-                </Link>
+                </button>
               </div>
             </div>
           </div>

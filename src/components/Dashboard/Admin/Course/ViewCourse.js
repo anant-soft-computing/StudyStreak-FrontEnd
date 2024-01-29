@@ -73,6 +73,7 @@ const ViewCourse = () => {
     rowData: courseList,
     columnDefs: columns,
     pagination: true,
+    paginationPageSize: 20,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,

@@ -1,26 +1,25 @@
 import React from "react";
 
-const Quiz = ({activeLesson}) => {
+const Quiz = ({ activeLesson }) => {
   return (
     <div>
-      {activeLesson?.quiz_questions?.length > 0 ? (
+      {activeLesson?.[0]?.length > 0 && (
         <>
-          <div className="dashboard__section__title">
-            <h4>Quiz</h4>
+          <div className="lesson__content__wrap">
+            <h3>Quiz</h3>
           </div>
           <div className="lesson__quiz__wrap">
-            {activeLesson.quiz_questions.map((question, index) => (
+            {activeLesson?.[0]?.map((question, index) => (
               <div className="quiz__single__attemp" key={index}>
-                <li>{`Question : ${index + 1}/${
-                  activeLesson.quiz_questions.length
-                } | `}</li>{" "}
-                <li>{`Attempts allowed : 1 `}</li> <li> | Time: 5.0 Min</li>
-                <hr className="hr" />
+                <li style={{ marginTop: "70px" }}>{`Question : ${index + 1}/${
+                  activeLesson?.[0]?.length
+                }`}</li>
+                <hr />
                 <h3>{question.Question}</h3>
                 <div className="row">
-                  {activeLesson.quiz_options
-                    .filter((option) => option.name === question.id)
-                    .map((option, optionIndex) => (
+                  {activeLesson?.[0]
+                    ?.filter((option) => option.name === question.id)
+                    ?.map((option, optionIndex) => (
                       <div className="col-md-6" key={optionIndex}>
                         <div className="form-check">
                           <input
@@ -44,8 +43,6 @@ const Quiz = ({activeLesson}) => {
             ))}
           </div>
         </>
-      ) : (
-        <p>No Quize Available For This Lesson.</p>
       )}
     </div>
   );

@@ -55,7 +55,7 @@ const LessonList = ({
                           handleContentChange("video");
                         }}
                       >
-                        <Link to="">
+                        <Link>
                           <span>{lesson?.Lesson_Title}</span>
                         </Link>
                       </div>
@@ -70,7 +70,17 @@ const LessonList = ({
                 <div className="scc__info">
                   <i className="icofont-book-alt"></i>
                   <h5>
-                    <div onClick={() => handleContentChange("attachment")}>
+                    <div
+                      onClick={() => {
+                        setActiveLesson(
+                          section?.lessons?.map(
+                            (item) =>
+                              item?.attachment_lession_count?.attachments
+                          )
+                        );
+                        handleContentChange("attachment");
+                      }}
+                    >
                       <Link>
                         <span>Attachement</span>{" "}
                       </Link>
@@ -79,6 +89,9 @@ const LessonList = ({
                 </div>
                 <div className="scc__meta">
                   <strong className="count">
+                    {section?.lessons?.map(
+                      (lesson) => lesson?.attachment_lession_count?.count
+                    )}
                   </strong>
                 </div>
               </div>

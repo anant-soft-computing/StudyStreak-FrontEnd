@@ -38,9 +38,10 @@ import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
 import CourseContent from "./components/Dashboard/Student/Course/CourseContent";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest"
+import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import Student from "./components/Dashboard/Admin/Student/Student";
+import Answere from "./components/Dashboard/ExamAnswere/Answere";
 
 const App = () => {
   return (
@@ -158,12 +159,14 @@ const App = () => {
             path="/exam-speaking"
             element={<ProtectedRoute element={ExamSpeaking} />}
           />
-
           <Route
             path="/live-exam/:examId"
             element={<ProtectedRoute element={LiveExam} />}
           />
-
+          <Route
+            path="/eaxm-answere/:examId"
+            element={<ProtectedRoute element={Answere} />}
+          />
           <Route
             path="/studentDashboard"
             element={<ProtectedRoute element={StudentDashboard} />}

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -9,6 +9,7 @@ import AudioRecorder from "../Exam-Create/AudioRecorder";
 
 const LiveExam = () => {
   const containerRef = useRef(null);
+  const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
@@ -18,7 +19,7 @@ const LiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/examlistfilterview/?block_type=Practice`,
+          `/exam-blocks/`,
           {
             headers: {
               Accept: "application/json",
@@ -233,6 +234,7 @@ const LiveExam = () => {
           onClick={() => {
             scrollToContent("yourContentId");
             toast.success("Your Exam Submit Successfully");
+            navigate(`/eaxm-answere/${examData?.id}`);
           }}
         >
           <span className="lv-arrow">&#x2713;</span>

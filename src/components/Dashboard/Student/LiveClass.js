@@ -1,16 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import DSNavBar from "./DSNavBar/DSNavBar";
 import Footer from "../../Footer/Footer";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
-import img1 from "../../../img/zoom/1.jpg"
-import img2 from "../../../img/zoom/2.jpg"
-import img3 from "../../../img/zoom/3.jpg"
-import img4 from "../../../img/zoom/4.jpg"
-
+import { useLocation } from "react-router-dom";
+import ajaxCall from "../../../helpers/ajaxCall";
+import img1 from "../../../img/zoom/1.jpg";
 
 const LiveClass = () => {
+  const { batchId } = useLocation()?.state;
+  const [liveClass, setLiveClass] = useState([]);
+
+  const getLiveClass = async () => {
+    try {
+      const response = await ajaxCall(
+        `/liveclass_listwithid_view/${batchId}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setLiveClass(response?.data);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getLiveClass();
+  }, [batchId]);
+
   return (
     <>
       <TopBar />
@@ -33,186 +61,81 @@ const LiveClass = () => {
                         <h4>Live Classes</h4>
                       </div>
                       <div className="row">
-                        <div
-                          className="col-lg-4 col-md-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
-                            <div className="gridarea__img">
-                              <a href="zoom-meeting-details.html">
-                                <img src={img1} alt="grid" />
-                              </a>
-                            </div>
-                            <div className="gridarea__content ">
-                              <div className="gridarea__list">
-                                <ul className="ps-0">
-                                  <li>
-                                    <i className="icofont-calendar"></i> Dec 22,2023
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 1 hr 30
-                                    min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <a href="zoom-meeting-details.html">
-                                    Executive Assistant Meeting
-                                  </a>
-                                </h3>
-                              </div>
-                              <div className="zoom__meeting__time__id">
-                                <div className="zoom__meeting__time">
-                                  <p>
-                                    Starting Time:
-                                    <span>6.00 PM</span>
-                                  </p>
-                                </div>
-                                <div className="zoom__meeting__id">
-                                  <p>
-                                    Meeting ID :<span>952428993687</span>
-                                  </p>
+                        {liveClass.map((item) => (
+                          <div
+                            key={item.id}
+                            className="col-lg-4 col-md-6 col-12"
+                            data-aos="fade-up"
+                          >
+                            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+                              <div className="gridarea__img">
+                                <div>
+                                  <img src={img1} alt="grid" />
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-lg-4 col-md-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid">
-                            <div className="gridarea__img">
-                              <a href="zoom-meeting-details.html">
-                                <img src={img2} alt="grid" />
-                              </a>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul className="ps-0">
-                                  <li>
-                                    <i className="icofont-calendar"></i> Dec 25,2023
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 2 hr 30
-                                    min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <a href="zoom-meeting-details.html">
-                                    Website Renovation Meeting
-                                  </a>
-                                </h3>
-                              </div>
-                              <div className="zoom__meeting__time__id">
-                                <div className="zoom__meeting__time">
-                                  <p>
-                                    Starting Time:
-                                    <span>5.00 PM</span>
-                                  </p>
+                              <div className="gridarea__content ">
+                                <div className="gridarea__list">
+                                  <ul className="ps-0">
+                                    <li>
+                                      <i className="icofont-calendar"></i>{" "}
+                                      {new Date(
+                                        item.start_time
+                                      ).toLocaleDateString("en-US", {
+                                        year: "numeric",
+                                        month: "short",
+                                        day: "numeric",
+                                      })}
+                                    </li>
+                                    <li>
+                                      <i className="icofont-clock-time"></i>{" "}
+                                      {new Date(
+                                        item.start_time
+                                      ).toLocaleTimeString("en-US", {
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                      })}{" "}
+                                      -{" "}
+                                      {new Date(
+                                        item.end_time
+                                      ).toLocaleTimeString("en-US", {
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                      })}
+                                    </li>
+                                  </ul>
                                 </div>
-                                <div className="zoom__meeting__id">
-                                  <p>
-                                    Meeting ID :<span>952429936777</span>
-                                  </p>
+                                <div className="gridarea__heading">
+                                  <h3>
+                                    <a href={item.zoom_meeting_id}>
+                                      {item.meeting_title}
+                                    </a>
+                                  </h3>
+                                </div>
+                                <div className="zoom__meeting__time__id">
+                                  <div className="zoom__meeting__time">
+                                    <p>
+                                      Starting Time:
+                                      <span>
+                                        {new Date(
+                                          item.start_time
+                                        ).toLocaleTimeString("en-US", {
+                                          hour: "numeric",
+                                          minute: "numeric",
+                                        })}
+                                      </span>
+                                    </p>
+                                  </div>
+                                  <div className="zoom__meeting__id">
+                                    <p>
+                                      Meeting ID :
+                                      <span>{item.zoom_meeting_id}</span>
+                                    </p>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div
-                          className="col-lg-4 col-md-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid">
-                            <div className="gridarea__img">
-                              <a href="zoom-meeting-details.html">
-                                <img src={img3} alt="grid" />
-                              </a>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul className="ps-0">
-                                  <li>
-                                    <i className="icofont-calendar"></i> Dec 29,2023
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 3 hr 30
-                                    min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <a href="zoom-meeting-details.html">
-                                    Marketing Committee Meeting
-                                  </a>
-                                </h3>
-                              </div>
-                              <div className="zoom__meeting__time__id">
-                                <div className="zoom__meeting__time">
-                                  <p>
-                                    Starting Time:
-                                    <span>4.00 PM</span>
-                                  </p>
-                                </div>
-                                <div className="zoom__meeting__id">
-                                  <p>
-                                    Meeting ID :<span>952428993999</span>
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          className="col-lg-4 col-md-6 col-12"
-                          data-aos="fade-up"
-                        >
-                          <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid">
-                            <div className="gridarea__img">
-                              <a href="zoom-meeting-details.html">
-                                <img src={img4} alt="grid" />
-                              </a>
-                            </div>
-                            <div className="gridarea__content">
-                              <div className="gridarea__list">
-                                <ul className="ps-0">
-                                  <li>
-                                    <i className="icofont-calendar"></i> Dec 29,2023
-                                  </li>
-                                  <li>
-                                    <i className="icofont-clock-time"></i> 3 hr 30
-                                    min
-                                  </li>
-                                </ul>
-                              </div>
-                              <div className="gridarea__heading">
-                                <h3>
-                                  <a href="zoom-meeting-details.html">
-                                    Teacher Leader Team Meeting
-                                  </a>
-                                </h3>
-                              </div>
-                              <div className="zoom__meeting__time__id">
-                                <div className="zoom__meeting__time">
-                                  <p>
-                                    Starting Time:
-                                    <span>7.00 AM</span>
-                                  </p>
-                                </div>
-                                <div className="zoom__meeting__id">
-                                  <p>
-                                    Meeting ID :<span>952428993555</span>
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>

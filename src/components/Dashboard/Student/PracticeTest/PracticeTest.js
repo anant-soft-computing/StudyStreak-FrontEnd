@@ -32,7 +32,7 @@ const SectionTest = () => {
   const getPracticeTestData = async () => {
     try {
       const response = await ajaxCall(
-        `/examlistfilterview/?block_type=Practice`,
+        `/exam-blocks/`,
         {
           headers: {
             Accept: "application/json",
@@ -43,7 +43,10 @@ const SectionTest = () => {
         8000
       );
       if (response.status === 200) {
-        setPracticeTestData(response?.data);
+        const practiceTest = response?.data?.filter(
+          (item) => item.block_type === "Practice"
+        );
+        setPracticeTestData(practiceTest);
       } else {
         console.log("error");
       }

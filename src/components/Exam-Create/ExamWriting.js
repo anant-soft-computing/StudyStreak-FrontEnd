@@ -286,6 +286,9 @@ const ExamWriting = () => {
                                   <option value="Full Length">
                                     Full Length
                                   </option>
+                                  <option value="Assignments">
+                                    Assignment
+                                  </option>
                                 </select>
                               </div>
                             </div>

@@ -21,13 +21,13 @@ const FullLengthTest = () => {
   );
 
   const hardData = fullLengthTestData?.filter(
-    (item) => item.exam_type === "Hard"
+    (item) => item.difficulty_level === "Hard"
   );
 
   const getFullLengthTestData = async () => {
     try {
       const response = await ajaxCall(
-        `/examlistfilterview/?block_type=Full Length`,
+        `/exam-blocks/`,
         {
           headers: {
             Accept: "application/json",
@@ -38,7 +38,10 @@ const FullLengthTest = () => {
         8000
       );
       if (response.status === 200) {
-        setFullLengthTestData(response?.data);
+        const fullLengthTest = response?.data?.filter(
+          (item) => item.block_type === "Full Length"
+        );
+        setFullLengthTestData(fullLengthTest);
       } else {
         console.log("error");
       }

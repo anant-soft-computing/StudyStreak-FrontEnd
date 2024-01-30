@@ -7,6 +7,7 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 const DSSidebar = () => {
   const authData = useSelector((state) => state.authStore);
   const [enrolledCourse, setEnrolledCourse] = useState([]);
+  const [batchId,setBatchId]=useState([]);
   const [count, setCount] = useState([]);
   const menuList = [
     {
@@ -156,6 +157,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentLiveClasses",
+      state: { batchId: batchId },
     },
     {
       name: "Group Doubt Solving",
@@ -268,6 +270,7 @@ const DSSidebar = () => {
       );
       if (response.status === 200) {
         setCount(response?.data?.student_packages?.[0]?.package);
+        setBatchId(response?.data?.student_packages?.[0]?.batch_id)
         setEnrolledCourse(response?.data?.student_packages?.[0]?.course);
       } else {
         console.log("error");
@@ -337,7 +340,6 @@ const DSSidebar = () => {
             </ul>
           </div>
         </div>
-       
       </div>
     </>
   );

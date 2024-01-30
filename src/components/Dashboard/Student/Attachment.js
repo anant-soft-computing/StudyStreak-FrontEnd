@@ -1,17 +1,17 @@
 import React from "react";
 
-const Attachment = ({ activeLesson, lessonName }) => {
+const Attachment = ({ activeLesson }) => {
   return (
     <div>
-      {activeLesson?.attachments?.length > 0 ? (
+      {activeLesson?.[0]?.length > 0 && (
         <>
-          <div className="dashboard__section__title">
-            <h4>Attachments</h4>
+         <div className="lesson__content__wrap">
+            <h3>Attachment</h3>
           </div>
           <div className="row">
             <div className="col-xl-12">
               <div className="dashboard__table table-responsive">
-                <table>
+                <table style={{ marginTop: "70px" }}>
                   <thead>
                     <tr>
                       <th>Name</th>
@@ -21,7 +21,7 @@ const Attachment = ({ activeLesson, lessonName }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {activeLesson.attachments.map(
+                    {activeLesson?.[0]?.map(
                       ({ id, attachment_description, attachment }, index) => (
                         <tr
                           key={id}
@@ -31,9 +31,7 @@ const Attachment = ({ activeLesson, lessonName }) => {
                         >
                           <th>
                             <span>{attachment_description}</span>
-                            <p className="mt-2">
-                              Lesson : <span>{lessonName}</span>
-                            </p>
+                            <p className="mt-2"></p>
                           </th>
                           <td></td>
                           <td></td>
@@ -59,8 +57,6 @@ const Attachment = ({ activeLesson, lessonName }) => {
             </div>
           </div>
         </>
-      ) : (
-        <p>No Attachments Available</p>
       )}
     </div>
   );

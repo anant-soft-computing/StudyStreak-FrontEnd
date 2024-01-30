@@ -7,9 +7,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
     <div className="lesson__content__main">
       {activeContentType === "video" && (
         <>
-          <div className="lesson__content__wrap">
-            <h3>{activeLesson?.Lesson_Title}</h3>
-          </div>
           <div className="plyr__video-embed rbtplayer">
             <iframe
               src={activeLesson?.Lesson_Video?.replace("watch?v=", "embed/")}

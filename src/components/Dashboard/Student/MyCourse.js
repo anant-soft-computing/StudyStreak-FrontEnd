@@ -47,6 +47,7 @@ const MyCourse = () => {
                               <img
                                 src={enrolledCourse?.Course_Thumbnail}
                                 alt={enrolledCourse?.Course_Title}
+                                style={{ height: "220px" }}
                                 onClick={(e) => {
                                   navigate(
                                     `/courseDetail/${enrolledCourse?.id}`

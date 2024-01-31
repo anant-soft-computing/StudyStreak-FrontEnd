@@ -1,60 +1,35 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
-const ReadingTest = ({ readingName, readingData }) => {
-  const handleClick = (id) => {
-    window.open(`/live-exam/${id}`, "_blank");
+const ReadingTest = ({ readingData }) => {
+  const handleClick = () => {
+    Object.keys(readingData.IELTS).forEach((key) => {
+      if (Array.isArray(readingData.IELTS[key])) {
+        if (readingData.IELTS[key].length > 0) {
+          window.open(`/practice-live-exam/IELTS/${key}/${readingData.id}`, "_blank");
+        }
+      }
+    });
   };
 
   return (
     <>
-      <span
-        style={{
-          backgroundColor: "#5f2ded",
-          padding: "10px",
-          borderRadius: "10px",
-          marginBottom: "10px",
-          color: "white"
-        }}
-      >
-        {readingName}
-      </span>
       <div className="row mt-4">
-        {readingData?.map(
-          ({ id, exam_name, no_of_questions, difficulty_level }, index) => (
-            <div className="col-lg-4 col-md-6 col-12">
-              <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
-                <div className="gridarea__content ">
-                  <div className="gridarea__heading">
-                    <h3 className="text-center">
-                      <Link to={`/live-exam/${id}`} target="_blank">
-                        {exam_name}
-                      </Link>
-                    </h3>
-                  </div>
-                  <div className="zoom__meeting__id">
-                    <p>
-                      Questions : <span>{no_of_questions}</span>
-                    </p>
-                  </div>
-                  <div className="zoom__meeting__id">
-                    <p>
-                      Difficulty Level : <span>{difficulty_level}</span>
-                    </p>
-                  </div>
-                  <div className="d-flex justify-content-center">
-                    <button
-                      className="default__button"
-                      onClick={() => handleClick(id)}
-                    >
-                      Take Test
-                    </button>
-                  </div>
-                </div>
+        <div className="col-lg-4 col-md-6 col-12">
+          <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+            <div className="gridarea__content ">
+              <div className="gridarea__heading">
+                <h3 className="text-center">
+                  <div>{readingData?.IELTS?.Name}</div>
+                </h3>
+              </div>
+              <div className="d-flex justify-content-center mt-5">
+                <button className="default__button" onClick={handleClick}>
+                  Take Test
+                </button>
               </div>
             </div>
-          )
-        )}
+          </div>
+        </div>
       </div>
     </>
   );

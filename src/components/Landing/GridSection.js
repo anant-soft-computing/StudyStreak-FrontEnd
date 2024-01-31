@@ -71,7 +71,12 @@ const GridSection = () => {
   }, []);
 
   return (
-    <div className="gridarea gridarea__2">
+    <div className="gridarea__2">
+      <div className="section__title text-center">
+        <div className="section__title__button">
+          <div className="default__small__button">Choose Your Course</div>
+        </div>
+      </div>
       <div className="container">
         <Slider {...settings}>
           {courseList.length > 0 &&

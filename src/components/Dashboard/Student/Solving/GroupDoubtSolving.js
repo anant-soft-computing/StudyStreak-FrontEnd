@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
-import DSSidebar from "./DSSideBar/DSSideBar";
-import DSNavBar from "./DSNavBar/DSNavBar";
-import Footer from "../../Footer/Footer";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
 import { useLocation } from "react-router-dom";
-import ajaxCall from "../../../helpers/ajaxCall";
+import { useSelector } from "react-redux";
+import TopBar from "../../../TopBar/TopBar";
+import NavBar from "../../../NavBar/NavBar";
+import DSNavBar from "../DSNavBar/DSNavBar";
+import DSSidebar from "../DSSideBar/DSSideBar";
+import Footer from "../../../Footer/Footer";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import { toast } from "react-toastify";
 
-const LiveClass = () => {
-  const { batchId } = useLocation()?.state;
-  const [liveClass, setLiveClass] = useState([]);
+const GroupDoubtSolving = () => {
+  const { studentId } = useLocation()?.state;
+  const [groupDoubtSolvingData, setGroupDoubtSolvingData] = useState([]);
+  const authData = useSelector((state) => state.authStore);
 
-  const getLiveClass = async () => {
+  const getGroupDoubtSolvingData = async () => {
     try {
       const response = await ajaxCall(
-        `/liveclass_listwithid_view/${batchId}`,
+        `/liveclass_list_view`,
         {
           headers: {
             Accept: "application/json",
@@ -24,8 +27,11 @@ const LiveClass = () => {
         },
         8000
       );
-      if (response.status === 200) {
-        setLiveClass(response?.data);
+      if (response?.status === 200) {
+        const groupDoubtData = response?.data?.filter(
+          (item) => item?.liveclasstype?.name === "Doubt Solving - Group"
+        );
+        setGroupDoubtSolvingData(groupDoubtData);
       } else {
         console.log("error");
       }
@@ -34,9 +40,38 @@ const LiveClass = () => {
     }
   };
 
+  const handleEnrollNow = async (Id) => {
+    const data = JSON.stringify({
+      live_class_id: Id,
+      student_id: studentId,
+    });
+    try {
+      const response = await ajaxCall(
+        `/enroll-students-in-live-class/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Slot Booked Successfully");
+      } else if (response.status === 400) {
+        toast.error("AlReady Enrolled");
+      }
+    } catch (error) {
+      toast.error("AlReady Enrolled");
+    }
+  };
+
   useEffect(() => {
-    getLiveClass();
-  }, [batchId]);
+    getGroupDoubtSolvingData();
+  }, []);
 
   return (
     <>
@@ -57,10 +92,10 @@ const LiveClass = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>Live Classes</h4>
+                        <h4>Group Doubt Solving</h4>
                       </div>
                       <div className="row">
-                        {liveClass.map(
+                        {groupDoubtSolvingData?.map(
                           ({
                             id,
                             start_time,
@@ -70,10 +105,14 @@ const LiveClass = () => {
                             zoom_meeting_id,
                             zoom_meeting_password,
                           }) => (
-                            <div key={id} className="col-lg-4 col-md-6 col-12">
+                            <div
+                              key={id}
+                              className="col-lg-4 col-md-6 col-12"
+                              data-aos="fade-up"
+                            >
                               <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
                                 <div className="gridarea__content ">
-                                    <div className="gridarea__list">
+                                  <div className="gridarea__list">
                                     <ul className="ps-0">
                                       <li>
                                         <i className="icofont-calendar"></i>{" "}
@@ -108,7 +147,7 @@ const LiveClass = () => {
                                     <h3>{meeting_title}</h3>
                                   </div>
                                   <p className="text-dark">
-                                    Description :
+                                    Meeting Description :
                                     <span> {meeting_description}</span>
                                   </p>
                                   <div>
@@ -125,12 +164,16 @@ const LiveClass = () => {
                                       </span>
                                     </p>
                                     <p className="text-dark">
-                                      ID :<span> {zoom_meeting_id}</span>
+                                      Meeting ID :
+                                      <span> {zoom_meeting_id}</span>
                                     </p>
                                     <p className="text-dark">
-                                      Password :
+                                      Meeting Password :
                                       <span> {zoom_meeting_password}</span>
                                     </p>
+                                    <button className="default__button" onClick={() => handleEnrollNow(id)}>
+                                      Book Solt
+                                    </button>
                                   </div>
                                 </div>
                               </div>
@@ -151,4 +194,4 @@ const LiveClass = () => {
   );
 };
 
-export default LiveClass;
+export default GroupDoubtSolving;

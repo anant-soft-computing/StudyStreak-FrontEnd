@@ -23,6 +23,7 @@ import ExamListening from "./components/Exam-Create/ExamListening";
 import ExamWriting from "./components/Exam-Create/ExamWriting";
 import ExamSpeaking from "./components/Exam-Create/ExamSpeaking";
 import LiveExam from "./components/LiveExam/LiveExam";
+import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import Course from "./components/Dashboard/Admin/Course/Course";
 import Exam from "./components/Dashboard/Admin/Exam/Exam";
 import LiveClass from "./components/Dashboard/Admin/LiveClass/LiveClass";
@@ -168,6 +169,10 @@ const App = () => {
             element={<ProtectedRoute element={LiveExam} />}
           />
           <Route
+            path="/practice-live-exam/:examType/:examForm/:examId"
+            element={<ProtectedRoute element={PracticeLiveExam} />}
+          />
+          <Route
             path="/eaxm-answere/:examId"
             element={<ProtectedRoute element={Answer} />}
           />
@@ -191,10 +196,7 @@ const App = () => {
           <Route path="/fullLengthTest" element={<FullLengthTest />} />
           <Route path="/speakingSolving" element={<SpeakingSolving />} />
           <Route path="/doubtSolving" element={<DoubtSolving />} />
-          <Route
-            path="/groupDoubtSolving"
-            element={<GroupDoubtSolving />}
-          />
+          <Route path="/groupDoubtSolving" element={<GroupDoubtSolving />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

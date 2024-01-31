@@ -780,7 +780,7 @@ const CreateCourse = () => {
                       "lessonsId",
                       false
                     )}
-                    url="/lssonview/"
+                    url="/lessonview/"
                     name="Lesson_Title"
                     objKey={["Lesson_Title"]}
                     multiple={true}

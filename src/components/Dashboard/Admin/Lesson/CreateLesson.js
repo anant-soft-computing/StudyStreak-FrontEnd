@@ -156,8 +156,8 @@ const CreateLesson = () => {
                           <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                             <div className="dashboard__form__wraper">
                               <div className="dashboard__form__input">
-                                <label>Answere</label>
-                                <input type="text" placeholder="Answere" />
+                                <label>Answer</label>
+                                <input type="text" placeholder="Answer" />
                               </div>
                             </div>
                           </div>

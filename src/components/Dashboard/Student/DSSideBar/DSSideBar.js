@@ -7,7 +7,8 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 const DSSidebar = () => {
   const authData = useSelector((state) => state.authStore);
   const [enrolledCourse, setEnrolledCourse] = useState([]);
-  const [batchId,setBatchId]=useState([]);
+  const [batchId, setBatchId] = useState([]);
+  const [studentId, setStudentId] = useState([]);
   const [count, setCount] = useState([]);
   const menuList = [
     {
@@ -79,6 +80,26 @@ const DSSidebar = () => {
       state: { enrolledCourse: enrolledCourse },
     },
     {
+      name: "Test Block",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-star"
+        >
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      ),
+      link: "/testBlock",
+    },
+    {
       name: "Practice Test",
       icon: (
         <svg
@@ -119,26 +140,6 @@ const DSSidebar = () => {
       link: "/fullLengthTest",
     },
     {
-      name: "Speaking Test",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-star"
-        >
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-        </svg>
-      ),
-      link: "",
-    },
-    {
       name: "Live Classes",
       icon: (
         <svg
@@ -160,6 +161,27 @@ const DSSidebar = () => {
       state: { batchId: batchId },
     },
     {
+      name: "Speaking Solving",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-shopping-bag"
+        >
+          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+      ),
+      link: "/speakingSolving",
+      state: { studentId: studentId },
+    },
+    {
       name: "Group Doubt Solving",
       icon: (
         <svg
@@ -177,7 +199,8 @@ const DSSidebar = () => {
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
         </svg>
       ),
-      link: "",
+      link: "/groupDoubtSolving",
+      state: { studentId: studentId },
     },
     {
       name: "One To One Doubt Solving",
@@ -197,7 +220,8 @@ const DSSidebar = () => {
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
         </svg>
       ),
-      link: "",
+      link: "/doubtSolving",
+      state: { studentId: studentId },
     },
     {
       name: "Settings",
@@ -270,7 +294,8 @@ const DSSidebar = () => {
       );
       if (response.status === 200) {
         setCount(response?.data?.student_packages?.[0]?.package);
-        setBatchId(response?.data?.student_packages?.[0]?.batch_id)
+        setBatchId(response?.data?.student_packages?.[0]?.batch_id);
+        setStudentId(response?.data?.student_packages?.[0]?.student_id);
         setEnrolledCourse(response?.data?.student_packages?.[0]?.course);
       } else {
         console.log("error");
@@ -311,18 +336,11 @@ const DSSidebar = () => {
                     state={item?.state}
                   >
                     <div style={{ width: "10%" }}>{item.icon}</div>
-                    <div style={{ width: "65%" }}>
-                      {item.name}
-                      {item.name === "Speaking Test" ||
-                      item.name === "Group Doubt Solving" ||
-                      item.name === "One To One Doubt Solving"
-                        ? "(Coming Soon)"
-                        : ""}
-                    </div>
-                    {item.name === "Section Test" || 
-                    item.name === "Practice Test" ||
+                    <div style={{ width: "65%" }}>{item.name}</div>
+                    {item.name === "Section Test" ||
+                    item.name === "Test Block" ||
                     item.name === "Full Length Test" ||
-                    item.name === "Speaking Test" ||
+                    item.name === "Speaking Solving" ||
                     item.name === "Group Doubt Solving" ||
                     item.name === "One To One Doubt Solving" ? (
                       <span

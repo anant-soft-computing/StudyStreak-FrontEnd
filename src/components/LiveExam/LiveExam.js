@@ -13,7 +13,30 @@ const LiveExam = () => {
   const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
+  const [timer, setTimer] = useState(3600);
+  const [timerRunning, setTimerRunning] = useState(true);
   let highlightedElement = null;
+
+  useEffect(() => {
+    let interval;
+
+    if (timerRunning) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timerRunning]);
+
+  useEffect(() => {
+    if (timer === 0) {
+      setTimerRunning(false);
+      toast.error("Time's up! Your exam has ended.");
+    }
+  }, [timer]);
 
   useEffect(() => {
     (async () => {
@@ -149,21 +172,13 @@ const LiveExam = () => {
       {/* Navbar */}
       <div className="lv-navbar">
         <div className="lv-navbar-title">
-          <h2 style={{ color: "red" }}>IELTS</h2>
-          <div className="lv-navbar-subtitle">
-            <h4 style={{ marginTop: "5px", marginBottom: "5px" }}>
-              Test taker ID
-            </h4>
-            <span>
-              2 years, 11 months, 6 days, 3 hours, 40 minutes remaining
-              Connected
-            </span>
-          </div>
+          <h2 style={{ color: "red", marginTop: "10px" }}>IELTS</h2>
+          <div className="lv-navbar-subtitle"></div>
         </div>
         <div className="lv-navbar-right">
-          <h4>Wifi</h4>
-          <h4>&#128276;</h4> {/* Notification Bell Icon */}
-          <h4>&#9776;</h4> {/* Menu Icon */}
+          <div>
+            Time Left: {Math.floor(timer / 60)}:{timer % 60}
+          </div>
         </div>
       </div>
 

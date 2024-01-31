@@ -4,26 +4,35 @@ import NavBar from "../../../NavBar/NavBar";
 import DSNavBar from "../DSNavBar/DSNavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
+import Reading from "./Reading";
+import Writing from "./Writing";
+import Listening from "./Listening";
+import Speaking from "./Speaking";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import ReadingTest from "./ReadingTest";
-import ListeningTest from "./ListeningTest";
-import WritingTest from "./WritingTest";
-import SpeakingTest from "./SpeakingTest";
 
-const PracticeTest = () => {
-  const [readingData, setReadingData] = useState([]);
-  const [readingName, setReadingName] = useState("");
-  const [listeningData, setListeningData] = useState([]);
-  const [listeningName, setListeningName] = useState("");
-  const [speakingData, setSpeakingData] = useState([]);
-  const [speakingName, setSpeakingName] = useState("");
-  const [writingData, setWritingData] = useState([]);
-  const [writingName, setWritingName] = useState("");
+const TestBlock = () => {
+  const [testBlockData, setTestBlockData] = useState([]);
 
-  const getPracticeTestData = async () => {
+  const readingData = testBlockData?.filter(
+    (item) => item.exam_type === "Reading"
+  );
+
+  const writingData = testBlockData?.filter(
+    (item) => item.exam_type === "Writing"
+  );
+
+  const listeningData = testBlockData?.filter(
+    (item) => item.exam_type === "Listening"
+  );
+
+  const speakingData = testBlockData?.filter(
+    (item) => item.exam_type === "Speaking"
+  );
+
+  const getTestBlockData = async () => {
     try {
       const response = await ajaxCall(
-        `/createexamview/`,
+        `/exam-blocks/`,
         {
           headers: {
             Accept: "application/json",
@@ -34,15 +43,10 @@ const PracticeTest = () => {
         8000
       );
       if (response.status === 200) {
-        console.log("--------->", response?.data);
-        setReadingData(response?.data?.[0]?.IELTS?.Reading);
-        setReadingName(response?.data?.[0]?.IELTS?.Name);
-        setSpeakingData(response?.data?.[1]?.IELTS?.Speaking);
-        setSpeakingName(response?.data?.[1]?.IELTS?.Name);
-        setWritingData(response?.data?.[2]?.IELTS?.Writing);
-        setWritingName(response?.data?.[2]?.IELTS?.Name);
-        setListeningData(response?.data?.[3]?.IELTS?.Listening);
-        setListeningName(response?.data?.[3]?.IELTS?.Name);
+        const practiceTest = response?.data?.filter(
+          (item) => item.block_type === "Practice"
+        );
+        setTestBlockData(practiceTest);
       } else {
         console.log("error");
       }
@@ -52,7 +56,7 @@ const PracticeTest = () => {
   };
 
   useEffect(() => {
-    getPracticeTestData();
+    getTestBlockData();
   }, []);
 
   return (
@@ -72,7 +76,7 @@ const PracticeTest = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>Practice Tests</h4>
+                        <h4>Test Block</h4>
                       </div>
                       <div className="row">
                         <div
@@ -148,10 +152,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <ReadingTest
-                              readingName={readingName}
-                              readingData={readingData}
-                            />
+                            <Reading readingData={readingData} />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -159,10 +160,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__two"
                           >
-                            <WritingTest
-                              writingName={writingName}
-                              writingData={writingData}
-                            />
+                            <Writing writingData={writingData} />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -170,10 +168,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__three"
                           >
-                            <ListeningTest
-                              listeningName={listeningName}
-                              listeningData={listeningData}
-                            />
+                            <Listening listeningData={listeningData} />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -181,10 +176,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__four"
                           >
-                            <SpeakingTest
-                              speakingName={speakingName}
-                              speakingData={speakingData}
-                            />
+                            <Speaking speakingData={speakingData} />
                           </div>
                         </div>
                       </div>
@@ -201,4 +193,4 @@ const PracticeTest = () => {
   );
 };
 
-export default PracticeTest;
+export default TestBlock;

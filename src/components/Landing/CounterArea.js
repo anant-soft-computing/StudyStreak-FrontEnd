@@ -6,7 +6,7 @@ import counter4 from '../../img/counter/counter__4.png';
 
 const CounterArea = () => {
   return (
-    <div className='counterarea sp_bottom_50 sp_top_50'>
+    <div className='counterarea sp_bottom_50 sp_top_50 mt-4'>
       <div className='container'>
         <div className='row'>
           <div

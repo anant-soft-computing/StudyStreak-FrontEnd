@@ -5879,7 +5879,7 @@ Grid Area
 }
 
 .gridarea.gridarea__2 {
-  background: var(--whiteColor);
+  background: rgba(95, 45, 237, 0.05);
 }
 
 .gridarea__wraper {

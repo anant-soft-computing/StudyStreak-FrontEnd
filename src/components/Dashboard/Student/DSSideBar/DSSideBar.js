@@ -80,7 +80,7 @@ const DSSidebar = () => {
       state: { enrolledCourse: enrolledCourse },
     },
     {
-      name: "Test Block",
+      name: "Mock Test",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -161,7 +161,7 @@ const DSSidebar = () => {
       state: { batchId: batchId },
     },
     {
-      name: "Speaking Solving",
+      name: "Speaking Practice",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -338,9 +338,9 @@ const DSSidebar = () => {
                     <div style={{ width: "10%" }}>{item.icon}</div>
                     <div style={{ width: "65%" }}>{item.name}</div>
                     {item.name === "Section Test" ||
-                    item.name === "Test Block" ||
+                    item.name === "Mock Test" ||
                     item.name === "Full Length Test" ||
-                    item.name === "Speaking Solving" ||
+                    item.name === "Speaking Practice" ||
                     item.name === "Group Doubt Solving" ||
                     item.name === "One To One Doubt Solving" ? (
                       <span

@@ -63,7 +63,7 @@ const PracticeTest = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>Practice Tests</h4>
+                        <h4>Practice Test</h4>
                       </div>
                       <div className="row">
                         <div

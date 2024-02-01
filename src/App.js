@@ -39,7 +39,7 @@ import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
 import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import TestBlock from "./components/Dashboard/Student/TestBlock/TestBlock";
+import MockTest from "./components/Dashboard/Student/MockTest/MockTest";  
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import Student from "./components/Dashboard/Admin/Student/Student";
 import Answer from "./components/Dashboard/ExamAnswer/Answer";
@@ -191,7 +191,7 @@ const App = () => {
           <Route path="/studentProfile" element={<StudentProfile />} />
           <Route path="/studentSettings" element={<StudentSettings />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/testBlock" element={<TestBlock />} />
+          <Route path="/testBlock" element={<MockTest />} />
           <Route path="/practiceTest" element={<PracticeTest />} />
           <Route path="/fullLengthTest" element={<FullLengthTest />} />
           <Route path="/speakingSolving" element={<SpeakingPractice />} />

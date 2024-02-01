@@ -10,22 +10,22 @@ import Listening from "./Listening";
 import Speaking from "./Speaking";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const TestBlock = () => {
-  const [testBlockData, setTestBlockData] = useState([]);
+const MockTest = () => {
+  const [mockTestData, setMockTestData] = useState([]);
 
-  const readingData = testBlockData?.filter(
+  const readingData = mockTestData?.filter(
     (item) => item.exam_type === "Reading"
   );
 
-  const writingData = testBlockData?.filter(
+  const writingData = mockTestData?.filter(
     (item) => item.exam_type === "Writing"
   );
 
-  const listeningData = testBlockData?.filter(
+  const listeningData = mockTestData?.filter(
     (item) => item.exam_type === "Listening"
   );
 
-  const speakingData = testBlockData?.filter(
+  const speakingData = mockTestData?.filter(
     (item) => item.exam_type === "Speaking"
   );
 
@@ -46,7 +46,7 @@ const TestBlock = () => {
         const practiceTest = response?.data?.filter(
           (item) => item.block_type === "Practice"
         );
-        setTestBlockData(practiceTest);
+        setMockTestData(practiceTest);
       } else {
         console.log("error");
       }
@@ -193,4 +193,4 @@ const TestBlock = () => {
   );
 };
 
-export default TestBlock;
+export default MockTest;

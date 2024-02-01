@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 
@@ -10,6 +10,8 @@ const DSSidebar = () => {
   const [batchId, setBatchId] = useState([]);
   const [studentId, setStudentId] = useState([]);
   const [count, setCount] = useState([]);
+  const navigate = useNavigate();
+
   const menuList = [
     {
       name: "Dashboard",
@@ -312,6 +314,7 @@ const DSSidebar = () => {
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
+    navigate("/login");
   };
 
   return (

@@ -5,17 +5,16 @@ import DSNavBar from "../DSNavBar/DSNavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import ReadingTest from "./ReadingTest";
-import ListeningTest from "./ListeningTest";
-import WritingTest from "./WritingTest";
-import SpeakingTest from "./SpeakingTest";
+import Reading from "./Reading";
+import Listening from "./Listening";
+import Writing from "./Writing";
+import Speaking from "./Speaking";
 
 const PracticeTest = () => {
   const [readingData, setReadingData] = useState([]);
   const [listeningData, setListeningData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
   const [writingData, setWritingData] = useState([]);
-  const [writingName, setWritingName] = useState("");
 
   const getPracticeTestData = async () => {
     try {
@@ -31,7 +30,6 @@ const PracticeTest = () => {
         8000
       );
       if (response.status === 200) {
-        console.log("--------->", response?.data);
         setReadingData(response?.data?.[0]);
         setSpeakingData(response?.data?.[1]);
         setWritingData(response?.data?.[2]);
@@ -141,7 +139,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <ReadingTest readingData={readingData} />
+                            <Reading readingData={readingData} />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -149,7 +147,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__two"
                           >
-                            <WritingTest writingData={writingData} />
+                            <Writing writingData={writingData} />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -157,9 +155,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__three"
                           >
-                            <ListeningTest
-                              listeningData={listeningData}
-                            />
+                            <Listening listeningData={listeningData} />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -167,7 +163,7 @@ const PracticeTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__four"
                           >
-                            <SpeakingTest speakingData={speakingData} />
+                            <Speaking speakingData={speakingData} />
                           </div>
                         </div>
                       </div>

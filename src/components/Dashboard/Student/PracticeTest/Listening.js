@@ -1,6 +1,6 @@
 import React from "react";
 
-const ListeningTest = ({ listeningData }) => {
+const Listening = ({ listeningData }) => {
   const handleClick = () => {
     Object.keys(listeningData.IELTS).forEach((key) => {
       if (Array.isArray(listeningData.IELTS[key])) {
@@ -36,4 +36,4 @@ const ListeningTest = ({ listeningData }) => {
   );
 };
 
-export default ListeningTest;
+export default Listening;

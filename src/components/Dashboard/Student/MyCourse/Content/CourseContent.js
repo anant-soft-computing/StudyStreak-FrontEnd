@@ -1,13 +1,13 @@
 import React from "react";
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
-import Footer from "../../../Footer/Footer";
-import AdditionalResourcse from "../AdditionalResourcse";
-import Material from "../Material";
+import TopBar from "../../../../TopBar/TopBar";
+import NavBar from "../../../../NavBar/NavBar";
+import Footer from "../../../../Footer/Footer";
+import AdditionalResourcse from "./AdditionalResourcse";
+import Material from "./Material";
 import { useLocation, useParams } from "react-router-dom";
-import DSSidebar from "../DSSideBar/DSSideBar";
-import DSNavBar from "../DSNavBar/DSNavBar";
-import Lesson from "../Lesson/Lesson";
+import DSSidebar from "../../DSSideBar/DSSideBar";
+import DSNavBar from "../../DSNavBar/DSNavBar";
+import Lesson from "../../Lesson/Lesson";
 
 const CourseContent = () => {
   const { courseId } = useParams();

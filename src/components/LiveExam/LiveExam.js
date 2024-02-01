@@ -18,6 +18,19 @@ const LiveExam = () => {
   let highlightedElement = null;
 
   useEffect(() => {
+    if (
+      examData?.exam_type === "Reading" ||
+      examData?.exam_type === "Writing"
+    ) {
+      setTimer(60 * 60);
+    } else if (examData?.exam_type === "Listening") {
+      setTimer(30 * 60);
+    } else if (examData?.exam_type === "Speaking") {
+      setTimer(15 * 60);
+    }
+  }, [examData]);
+
+  useEffect(() => {
     let interval;
 
     if (timerRunning) {
@@ -57,7 +70,6 @@ const LiveExam = () => {
             (examBlock, index) => ({
               ...examBlock,
               no: index + 1,
-              // exam_type: "Writing",
             })
           );
           const tempExamData = examBlockWithNumbers?.find(

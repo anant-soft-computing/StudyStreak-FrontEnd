@@ -9,7 +9,7 @@ const DSSidebar = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [batchId, setBatchId] = useState([]);
   const [studentId, setStudentId] = useState([]);
-  const [count, setCount] = useState([]);
+  const [count, setCount] = useState({});
   const navigate = useNavigate();
 
   const menuList = [
@@ -154,9 +154,10 @@ const DSSidebar = () => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="feather feather-bookmark"
+          className="feather feather-live-classes"
         >
           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          <polygon points="10 15 15 12 10 9 10 15"></polygon>
         </svg>
       ),
       link: "/studentLiveClasses",
@@ -295,7 +296,16 @@ const DSSidebar = () => {
         8000
       );
       if (response.status === 200) {
-        setCount(response?.data?.student_packages?.[0]?.package);
+        const packageDetails = response?.data?.student_packages?.[0]?.package;
+        setCount({
+          practice_test_count: packageDetails?.practice_test_count,
+          mock_test_count: packageDetails?.practice_test_count,
+          full_length_test_count: packageDetails?.full_length_test_count,
+          speaking_practice_count: packageDetails?.speaking_test_count,
+          group_doubt_solving_count: packageDetails?.group_doubt_solving_count,
+          one_to_one_doubt_solving_count:
+            packageDetails?.one_to_one_doubt_solving_count,
+        });
         setBatchId(response?.data?.student_packages?.[0]?.batch_id);
         setStudentId(response?.data?.student_packages?.[0]?.student_id);
         setEnrolledCourse(response?.data?.student_packages?.[0]?.course);
@@ -340,7 +350,7 @@ const DSSidebar = () => {
                   >
                     <div style={{ width: "10%" }}>{item.icon}</div>
                     <div style={{ width: "65%" }}>{item.name}</div>
-                    {item.name === "Section Test" ||
+                    {item.name === "Practice Test" ||
                     item.name === "Mock Test" ||
                     item.name === "Full Length Test" ||
                     item.name === "Speaking Practice" ||
@@ -350,7 +360,7 @@ const DSSidebar = () => {
                         className="dashboard__label"
                         style={{ width: "10%" }}
                       >
-                        {count?.practice_test_count}
+                        {count[item.name.replace(/ /g, "_").toLowerCase() + "_count"]}
                       </span>
                     ) : (
                       ""

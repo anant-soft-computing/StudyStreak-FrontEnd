@@ -1,11 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
 import DSNavBar from "./DSNavBar/DSNavBar";
 import DSSidebar from "./DSSideBar/DSSideBar";
+import ajaxCall from "../../../helpers/ajaxCall";
 
 const Dashboard = () => {
+  const [lastestLiveClass, setLastestLiveClass] = useState({});
+
+  const getLiveClassesList = async () => {
+    try {
+      const response = await ajaxCall(
+        `/liveclass_list_view`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "GET",
+        },
+        8000
+      );
+
+      if (response?.status === 200) {
+        setLastestLiveClass(response?.data?.[0]);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    getLiveClassesList();
+  }, []);
+
   return (
     <>
       <TopBar />
@@ -35,10 +66,32 @@ const Dashboard = () => {
                             </div>
                             <hr />
                             <div className="dashboard__nav">
-                              <div>Writing Task 1 - Letter Writing</div>
+                              <div>Name : {lastestLiveClass.meeting_title}</div>
                               <div className="d-flex justify-content-between">
-                                <div>Tommorrow, 06:00 PM</div>
-                                <div>Add Reminder</div>
+                                <div>
+                                  {new Date(
+                                    lastestLiveClass?.start_time
+                                  ).toLocaleDateString("en-US", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  })}
+                                </div>
+                                <div>
+                                  {new Date(
+                                    lastestLiveClass?.start_time
+                                  ).toLocaleTimeString("en-US", {
+                                    hour: "numeric",
+                                    minute: "numeric",
+                                  })}{" "}
+                                  -{" "}
+                                  {new Date(
+                                    lastestLiveClass?.end_time
+                                  ).toLocaleTimeString("en-US", {
+                                    hour: "numeric",
+                                    minute: "numeric",
+                                  })}
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -56,6 +109,14 @@ const Dashboard = () => {
                                 <div>Take me to the lesson</div>
                               </div>
                             </div>
+                          </div>
+                        </div>
+                        <div className="col-xl-4 col-lg-6 col-md-12 col-12">
+                          <div className="dashboard__inner sticky-top mt-4">
+                            <div className="dashboard__nav__title">
+                              <h6 className="mb-2">Today's Mission</h6>
+                            </div>
+                            <hr />
                           </div>
                         </div>
                       </div>

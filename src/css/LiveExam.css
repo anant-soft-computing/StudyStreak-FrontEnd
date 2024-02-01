@@ -103,13 +103,15 @@
 
 .lv-footer-button {
   width: 80px;
-  padding: 10px 20px;
-  background-color: #efefef;
+  background-color: #5f2ded;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 25px;
   font-weight: bold;
+  color:white;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .lv-footer-item {

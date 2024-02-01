@@ -62,10 +62,10 @@ const SpeakingPractice = () => {
       if (response.status === 200) {
         toast.success("Slot Booked Successfully");
       } else if (response.status === 400) {
-        toast.error("AlReady Enrolled");
+        toast.error(response?.data?.Message);
       }
     } catch (error) {
-      toast.error("AlReady Enrolled");
+      console.log("error", error);
     }
   };
 
@@ -104,78 +104,87 @@ const SpeakingPractice = () => {
                             meeting_description,
                             zoom_meeting_id,
                             zoom_meeting_password,
-                          }) => (
-                            <div key={id} className="col-lg-4 col-md-6 col-12">
-                              <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
-                                <div className="gridarea__content ">
-                                  <div className="gridarea__list">
-                                    <ul className="ps-0">
-                                      <li>
-                                        <i className="icofont-calendar"></i>{" "}
-                                        {new Date(
-                                          start_time
-                                        ).toLocaleDateString("en-US", {
-                                          year: "numeric",
-                                          month: "short",
-                                          day: "numeric",
-                                        })}
-                                      </li>
-                                      <li>
-                                        <i className="icofont-clock-time"></i>{" "}
-                                        {new Date(
-                                          start_time
-                                        ).toLocaleTimeString("en-US", {
-                                          hour: "numeric",
-                                          minute: "numeric",
-                                        })}{" "}
-                                        -{" "}
-                                        {new Date(end_time).toLocaleTimeString(
-                                          "en-US",
-                                          {
+                          }) => {
+                            const startDate = new Date(start_time);
+                            const isPastDate = startDate < new Date();
+                            return (
+                              <div
+                                key={id}
+                                className="col-lg-4 col-md-6 col-12"
+                              >
+                                <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+                                  <div className="gridarea__content ">
+                                    <div className="gridarea__list">
+                                      <ul className="ps-0">
+                                        <li>
+                                          <i className="icofont-calendar"></i>{" "}
+                                          {new Date(
+                                            start_time
+                                          ).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                          })}
+                                        </li>
+                                        <li>
+                                          <i className="icofont-clock-time"></i>{" "}
+                                          {new Date(
+                                            start_time
+                                          ).toLocaleTimeString("en-US", {
                                             hour: "numeric",
                                             minute: "numeric",
-                                          }
-                                        )}
-                                      </li>
-                                    </ul>
-                                  </div>
-                                  <div className="gridarea__heading">
-                                    <h3>{meeting_title}</h3>
-                                  </div>
-                                  <p className="text-dark">
-                                    Meeting Description :
-                                    <span>{meeting_description}</span>
-                                  </p>
-                                  <div>
+                                          })}{" "}
+                                          -{" "}
+                                          {new Date(
+                                            end_time
+                                          ).toLocaleTimeString("en-US", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                          })}
+                                        </li>
+                                      </ul>
+                                    </div>
+                                    <div className="gridarea__heading">
+                                      <h3>{meeting_title}</h3>
+                                    </div>
                                     <p className="text-dark">
-                                      Starting Time:
-                                      <span>
-                                        {new Date(
-                                          start_time
-                                        ).toLocaleTimeString("en-US", {
-                                          hour: "numeric",
-                                          minute: "numeric",
-                                        })}
-                                      </span>
+                                      Meeting Description :
+                                      <span> {meeting_description}</span>
                                     </p>
-                                    <p className="text-dark">
-                                      Meeting ID :<span>{zoom_meeting_id}</span>
-                                    </p>
-                                    <p className="text-dark">
-                                      Meeting Password :
-                                      <span>{zoom_meeting_password}</span>
-                                    </p>
-                                    <button
-                                      className="default__button"
-                                      onClick={() => handleEnrollNow(id)}
-                                    >
-                                      Book Slot
-                                    </button>
+                                    <div>
+                                      <p className="text-dark">
+                                        Starting Time:
+                                        <span>
+                                          {" "}
+                                          {new Date(
+                                            start_time
+                                          ).toLocaleTimeString("en-US", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                          })}
+                                        </span>
+                                      </p>
+                                      <p className="text-dark">
+                                        Meeting ID :
+                                        <span> {zoom_meeting_id}</span>
+                                      </p>
+                                      <p className="text-dark">
+                                        Meeting Password :
+                                        <span> {zoom_meeting_password}</span>
+                                      </p>
+                                      <button
+                                        className="default__button"
+                                        onClick={() => handleEnrollNow(id)}
+                                        disabled={isPastDate}
+                                      >
+                                        Book Slot
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          )
+                            );
+                          }
                         )}
                       </div>
                     </div>

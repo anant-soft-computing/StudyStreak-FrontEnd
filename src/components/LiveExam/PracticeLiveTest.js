@@ -27,6 +27,19 @@ const PracticeLiveExam = () => {
   }, [userData]);
 
   useEffect(() => {
+    if (
+      examData?.exam_type === "Reading" ||
+      examData?.exam_type === "Writing"
+    ) {
+      setTimer(60 * 60);
+    } else if (examData?.exam_type === "Listening") {
+      setTimer(30 * 60);
+    } else if (examData?.exam_type === "Speaking") {
+      setTimer(15 * 60);
+    }
+  }, [examData]);
+
+  useEffect(() => {
     let interval;
 
     if (timerRunning) {
@@ -48,7 +61,6 @@ const PracticeLiveExam = () => {
   }, [timer]);
 
   useEffect(() => {
-    console.log("examId", examId);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -67,7 +79,6 @@ const PracticeLiveExam = () => {
             (examBlock) => examBlock?.id.toString() === examId.toString()
           );
           setFullPaper(filteredData);
-          console.log("filteredData", filteredData, response?.data);
         } else {
           console.log("error");
         }
@@ -83,13 +94,8 @@ const PracticeLiveExam = () => {
         (examBlock, index) => ({
           ...examBlock,
           no: index + 1,
-          // exam_type: "Writing",
         })
       );
-      console.log("examBlockWithNumbers", examBlockWithNumbers);
-      //   const tempExamData = examBlockWithNumbers?.find(
-      //     (examBlock) => examBlock?.id.toString() === 7
-      //   );
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
@@ -280,13 +286,10 @@ const PracticeLiveExam = () => {
                 : "block",
           }}
           onClick={() => {
-            // scrollToContent("yourContentId");
-            // toast.success("Your Exam Submit Successfully");
-            // navigate(`/eaxm-answere/${examData?.id}`);
             setNext(next + 1);
           }}
         >
-          <span className="lv-arrow">Next</span>
+          <span>&#10152;</span>
         </button>
         <button
           className="lv-footer-button"

@@ -1,6 +1,6 @@
-import Assignment from "../Assignment";
-import Attachment from "../Attachment";
-import Quiz from "../Quiz";
+import Assignment from "./Assignment";
+import Attachment from "./Attachment";
+import Quiz from "./Quiz";
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   return (

@@ -9,7 +9,7 @@ import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 
-const SpeakingSolving = () => {
+const SpeakingPractice = () => {
   const { studentId } = useLocation()?.state;
   const [speakingSolvingData, setSpeakingSolvingData] = useState([]);
   const authData = useSelector((state) => state.authStore);
@@ -191,4 +191,4 @@ const SpeakingSolving = () => {
   );
 };
 
-export default SpeakingSolving;
+export default SpeakingPractice;

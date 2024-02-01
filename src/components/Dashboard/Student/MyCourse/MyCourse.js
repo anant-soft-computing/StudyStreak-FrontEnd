@@ -1,9 +1,9 @@
 import React from "react";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
-import Footer from "../../Footer/Footer";
-import DSSidebar from "./DSSideBar/DSSideBar";
-import DSNavBar from "./DSNavBar/DSNavBar";
+import TopBar from "../../../TopBar/TopBar";
+import NavBar from "../../../NavBar/NavBar";
+import Footer from "../../../Footer/Footer";
+import DSSidebar from "../DSSideBar/DSSideBar";
+import DSNavBar from "../DSNavBar/DSNavBar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const MyCourse = () => {

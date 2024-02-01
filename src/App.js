@@ -34,16 +34,16 @@ import AdminProfile from "./components/Dashboard/Admin/Profile";
 import StudentProfile from "./components/Dashboard/Student/Profile";
 import StudentSettings from "./components/Dashboard/Student/Setting/Settings";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
-import MyCourse from "./components/Dashboard/Student/MyCourse";
+import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
-import CourseContent from "./components/Dashboard/Student/Course/CourseContent";
+import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import TestBlock from "./components/Dashboard/Student/TestBlock/TestBlock";
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import Student from "./components/Dashboard/Admin/Student/Student";
-import Answer from "./components/Dashboard/ExamAnswere/Answer";
-import SpeakingSolving from "./components/Dashboard/Student/Solving/SpeakingSolving";
+import Answer from "./components/Dashboard/ExamAnswer/Answer";
+import SpeakingPractice from "./components/Dashboard/Student/Practice/SpeakingPractice";
 import DoubtSolving from "./components/Dashboard/Student/Solving/DoubtSolving";
 import GroupDoubtSolving from "./components/Dashboard/Student/Solving/GroupDoubtSolving";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
@@ -194,7 +194,7 @@ const App = () => {
           <Route path="/testBlock" element={<TestBlock />} />
           <Route path="/practiceTest" element={<PracticeTest />} />
           <Route path="/fullLengthTest" element={<FullLengthTest />} />
-          <Route path="/speakingSolving" element={<SpeakingSolving />} />
+          <Route path="/speakingSolving" element={<SpeakingPractice />} />
           <Route path="/doubtSolving" element={<DoubtSolving />} />
           <Route path="/groupDoubtSolving" element={<GroupDoubtSolving />} />
           <Route path="*" element={<ErrorPage />} />

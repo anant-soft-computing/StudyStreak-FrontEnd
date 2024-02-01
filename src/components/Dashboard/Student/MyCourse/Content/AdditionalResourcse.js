@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ajaxCall from "../../../helpers/ajaxCall";
+import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const AdditionalResourcse = ({ courseId, courseName }) => {
   const [additionalResource, setAdditionalResource] = useState([]);

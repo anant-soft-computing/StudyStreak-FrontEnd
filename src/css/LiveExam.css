@@ -15,21 +15,6 @@
   align-items: center;
 }
 
-.lv-navbar-subtitle {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-left: 15px;
-}
-
-.lv-navbar-right {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 10%;
-}
-
 .lv-container {
   background-color: #f1f2ec;
   padding: 20px;
@@ -70,35 +55,10 @@
   margin: 10px;
 }
 
-.lv-footer {
-  color: black;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.lv-footer-text {
-  font-size: 16px;
-  padding: 0px 20px;
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  overflow: hidden;
-}
-
 .lv-question-pagination,
 .lv-part-pagination {
-  width: 50%;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  overflow-x: auto;
+  margin-left: 10px;
 }
 
 .lv-footer-button {
@@ -110,8 +70,6 @@
   font-size: 25px;
   font-weight: bold;
   color:white;
-  margin-right: 10px;
-  margin-bottom: 10px;
 }
 
 .lv-footer-item {
@@ -120,10 +78,21 @@
   margin-right: 20px;
 }
 
+.lv-userName {
+  background-color: #5f2ded;
+  color: white;
+  border-radius: 10px;
+  padding: 8px;
+  margin-left: 10px;
+}
+
 .lv-footer-item:hover {
-  text-decoration: underline;
-  border: 1px solid #418ec8;
+  text-decoration: none;
+  border: 1px solid white;
   font-weight: bold;
+  background-color: #5f2ded;
+  color: white;
+  border-radius: 10px;
 }
 
 .lv-highlight {

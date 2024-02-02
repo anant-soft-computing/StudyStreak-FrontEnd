@@ -65,35 +65,60 @@ const Dashboard = () => {
                               <h6 className="mb-2">Upcoming Live Class</h6>
                             </div>
                             <hr />
-                            <div className="dashboard__nav">
-                              <div>Name : {lastestLiveClass.meeting_title}</div>
-                              <div className="d-flex justify-content-between">
-                                <div>
-                                  {new Date(
-                                    lastestLiveClass?.start_time
-                                  ).toLocaleDateString("en-US", {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "numeric",
-                                  })}
-                                </div>
-                                <div>
-                                  {new Date(
-                                    lastestLiveClass?.start_time
-                                  ).toLocaleTimeString("en-US", {
-                                    hour: "numeric",
-                                    minute: "numeric",
-                                  })}{" "}
-                                  -{" "}
-                                  {new Date(
-                                    lastestLiveClass?.end_time
-                                  ).toLocaleTimeString("en-US", {
-                                    hour: "numeric",
-                                    minute: "numeric",
-                                  })}
-                                </div>
-                              </div>
-                            </div>
+                            <ul className="ps-0 d-flex justify-content-between">
+                              <li>
+                                <i
+                                  className="icofont-calendar"
+                                  style={{ color: "#5f2ded" }}
+                                ></i>{" "}
+                                {new Date(
+                                  lastestLiveClass.start_time
+                                ).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                })}
+                              </li>
+                              <li>
+                                <i
+                                  className="icofont-clock-time"
+                                  style={{ color: "#5f2ded" }}
+                                ></i>{" "}
+                                {new Date(
+                                  lastestLiveClass.start_time
+                                ).toLocaleTimeString("en-US", {
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                })}{" "}
+                                -{" "}
+                                {new Date(
+                                  lastestLiveClass.end_time
+                                ).toLocaleTimeString("en-US", {
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                })}
+                              </li>
+                            </ul>
+                            <p className="text-dark">
+                              Name :
+                              <span>
+                                {" "}
+                                <strong>
+                                  {lastestLiveClass.meeting_title}
+                                </strong>
+                              </span>
+                            </p>
+                            <p className="text-dark">
+                              ID :
+                              <span> {lastestLiveClass.zoom_meeting_id}</span>
+                            </p>
+                            <p className="text-dark">
+                              Password :
+                              <span>
+                                {" "}
+                                {lastestLiveClass.zoom_meeting_password}
+                              </span>
+                            </p>
                           </div>
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-12 col-12">

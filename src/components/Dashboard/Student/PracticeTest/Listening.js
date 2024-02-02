@@ -24,7 +24,24 @@ const Listening = ({ listeningData }) => {
                 <div>{listeningData?.IELTS?.Name}</div>
               </h3>
             </div>
-            <div className="d-flex justify-content-center mt-5">
+            <div className="d-flex justify-content-between">
+              <div className="zoom__meeting__id">
+                <div>
+                  Sections :<span>4</span>
+                </div>
+              </div>
+              <div className="zoom__meeting__id">
+                <div>
+                  Questions :<span>40</span>
+                </div>
+              </div>
+            </div>
+            <div className="zoom__meeting__id mt-2">
+              <div>
+                Time :<span>30 mintues</span>
+              </div>
+            </div>
+            <div className="d-flex justify-content-center mt-2">
               <button className="default__button" onClick={handleClick}>
                 Take Test
               </button>

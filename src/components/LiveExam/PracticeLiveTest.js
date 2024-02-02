@@ -23,10 +23,6 @@ const PracticeLiveExam = () => {
   let highlightedElement = null;
 
   useEffect(() => {
-    console.log("userData", userData);
-  }, [userData]);
-
-  useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||
       examData?.exam_type === "Writing"
@@ -204,13 +200,14 @@ const PracticeLiveExam = () => {
       <div className="lv-navbar">
         <div className="lv-navbar-title">
           <h2 style={{ color: "red", marginTop: "10px" }}>IELTS</h2>
-          <div className="lv-navbar-subtitle">{userData?.username}</div>
+          <div className="lv-userName">{userData?.username}</div>
         </div>
-        <div className="lv-navbar-right">
-          <div>
-            Time Left: {Math.floor(timer / 60)}:{timer % 60}
-          </div>
-        </div>
+        <span>
+          Time Left :
+          <span className="lv-userName">
+            {Math.floor(timer / 60)}:{timer % 60}
+          </span>
+        </span>
       </div>
 
       {/* Static Container */}
@@ -258,22 +255,19 @@ const PracticeLiveExam = () => {
       </div>
 
       {/* Footer */}
-      <div className="lv-footer">
-        <div className="lv-footer-text">
-          <div className="lv-part-pagination"></div>
-          <div className="lv-question-pagination">
-            {uniqueIdArr?.map((item, index) => {
-              return (
-                <div
-                  className="lv-footer-item"
-                  onClick={() => scrollToContent(item)}
-                  key={index}
-                >
-                  {index + 1}
-                </div>
-              );
-            })}
-          </div>
+      <div className="d-flex justify-content-between">
+        <div className="lv-question-pagination">
+          {uniqueIdArr?.map((item, index) => {
+            return (
+              <div
+                className="lv-footer-item"
+                onClick={() => scrollToContent(item)}
+                key={index}
+              >
+                {index + 1}
+              </div>
+            );
+          })}
         </div>
         <button
           className="lv-footer-button"
@@ -307,7 +301,7 @@ const PracticeLiveExam = () => {
             navigate(`/eaxm-answere/${examData?.id}`);
           }}
         >
-          <span className="lv-arrow">&#x2713;</span>
+          <span>&#x2713;</span>
         </button>
       </div>
     </>

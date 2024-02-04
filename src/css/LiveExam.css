@@ -63,6 +63,7 @@
 
 .lv-footer-button {
   width: 80px;
+  margin-right: 10px;
   background-color: #5f2ded;
   border: none;
   border-radius: 5px;
@@ -70,6 +71,10 @@
   font-size: 25px;
   font-weight: bold;
   color:white;
+}
+
+.lv-footer-button:hover {
+ color: white;
 }
 
 .lv-footer-item {
@@ -97,4 +102,10 @@
 
 .lv-highlight {
   background-color: #ffffcc;
+}
+
+.lv-footer-btn{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }

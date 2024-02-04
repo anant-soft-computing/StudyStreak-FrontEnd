@@ -12,6 +12,8 @@ const LiveExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
+  const [examAnswer, setExamAnswer] = useState([]);
+  const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
@@ -128,6 +130,34 @@ const LiveExam = () => {
     );
   };
 
+  const handleAnswerLinking = (e, questionId, next) => {
+    const answer = e.target.value;
+    const temp = [...examAnswer];
+    temp[next].answers.map((item) => {
+      if (item.questionId === questionId) {
+        item.answer = answer;
+      }
+    });
+    setExamAnswer(temp);
+  };
+
+  useEffect(() => {
+    if (linkAnswer && examAnswer[0] && examAnswer[0].answers.length > 0) {
+      setTimeout(() => {
+        examAnswer[0].answers.forEach((item) => {
+          const contentElement = document.getElementById(item.questionId);
+          if (item.answer !== "") {
+            document.getElementById(item.questionId).value = item.answer;
+          }
+          contentElement.addEventListener("change", (e) => {
+            handleAnswerLinking(e, item.questionId, 0);
+          });
+        });
+        setLinkAnswer(false);
+      }, 500);
+    }
+  }, [linkAnswer, examAnswer]);
+
   const htmlContent = useMemo(() => {
     const question = examData?.question;
     const parser = new DOMParser();
@@ -175,6 +205,24 @@ const LiveExam = () => {
     }
 
     questionPassage += `<div class="mainContainer">${doc.documentElement.outerHTML}</div>`;
+
+    const tempAnswer = temp.map((item) => {
+      return {
+        questionId: item,
+        answer: "",
+      };
+    });
+
+    const tempAnswerArr = [...examAnswer];
+
+    if (!tempAnswerArr[0] || tempAnswerArr[0]?.answers.length === 0) {
+      tempAnswerArr[0] = {
+        testId: examData?.id,
+        answers: tempAnswer,
+      };
+      setExamAnswer(tempAnswerArr);
+    }
+    setLinkAnswer(true);
 
     setUniqueIdArr(temp);
     return questionPassage;

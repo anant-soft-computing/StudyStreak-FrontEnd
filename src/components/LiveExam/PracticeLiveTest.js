@@ -15,10 +15,12 @@ const PracticeLiveExam = () => {
   const examId = useLocation()?.pathname?.split("/")?.[4];
   const [examData, setExamData] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
+  const [examAnswer, setExamAnswer] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
   const [fullPaper, setFullPaper] = useState([]);
   const [next, setNext] = useState(0);
+  const [linkAnswer, setLinkAnswer] = useState(false);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   let highlightedElement = null;
 
@@ -33,7 +35,7 @@ const PracticeLiveExam = () => {
     } else if (examData?.exam_type === "Speaking") {
       setTimer(15 * 60);
     }
-  }, [examData]);
+  }, [examId]);
 
   useEffect(() => {
     let interval;
@@ -96,9 +98,33 @@ const PracticeLiveExam = () => {
     }
   }, [fullPaper, next]);
 
+  const handleAnswerLinking = (e, questionId, next) => {
+    const answer = e.target.value;
+    const temp = [...examAnswer];
+    temp[next].answers.map((item) => {
+      if (item.questionId === questionId) {
+        item.answer = answer;
+      }
+    });
+    setExamAnswer(temp);
+  };
+
   useEffect(() => {
-    console.log("examData", examData);
-  }, [examData]);
+    if (linkAnswer && examAnswer[next] && examAnswer[next].answers.length > 0) {
+      setTimeout(() => {
+        examAnswer[next].answers.forEach((item) => {
+          const contentElement = document.getElementById(item.questionId);
+          if (item.answer !== "") {
+            document.getElementById(item.questionId).value = item.answer;
+          }
+          contentElement.addEventListener("change", (e) => {
+            handleAnswerLinking(e, item.questionId, next);
+          });
+        });
+        setLinkAnswer(false);
+      }, 500);
+    }
+  }, [linkAnswer, examAnswer]);
 
   // Function to scroll to content
   const scrollToContent = (contentId) => {
@@ -190,9 +216,38 @@ const PracticeLiveExam = () => {
 
     questionPassage += `<div class="mainContainer">${doc.documentElement.outerHTML}</div>`;
 
+    const tempAnswer = temp.map((item) => {
+      return {
+        questionId: item,
+        answer: "",
+      };
+    });
+
+    const tempAnswerArr = [...examAnswer];
+
+    if (!tempAnswerArr[next] || tempAnswerArr[next]?.answers.length === 0) {
+      tempAnswerArr[next] = {
+        testId: examData?.id,
+        answers: tempAnswer,
+      };
+      setExamAnswer(tempAnswerArr);
+    }
+    setLinkAnswer(true);
     setUniqueIdArr(temp);
     return questionPassage;
   }, [examData?.question]);
+
+  const renderTime = useMemo(
+    () => (
+      <span>
+        Time Left :
+        <span className="lv-userName">
+          {Math.floor(timer / 60)}:{timer % 60}
+        </span>
+      </span>
+    ),
+    [timer]
+  );
 
   return (
     <>
@@ -202,12 +257,7 @@ const PracticeLiveExam = () => {
           <h2 style={{ color: "red", marginTop: "10px" }}>IELTS</h2>
           <div className="lv-userName">{userData?.username}</div>
         </div>
-        <span>
-          Time Left :
-          <span className="lv-userName">
-            {Math.floor(timer / 60)}:{timer % 60}
-          </span>
-        </span>
+        {renderTime}
       </div>
 
       {/* Static Container */}
@@ -269,40 +319,62 @@ const PracticeLiveExam = () => {
             );
           })}
         </div>
-        <button
-          className="lv-footer-button"
-          style={{
-            display:
-              next ===
-              (fullPaper.length > 0 &&
-                fullPaper?.[0][examType][examForm]?.length - 1)
-                ? "none"
-                : "block",
-          }}
-          onClick={() => {
-            setNext(next + 1);
-          }}
-        >
-          <span>&#10152;</span>
-        </button>
-        <button
-          className="lv-footer-button"
-          style={{
-            display:
-              next !==
-              (fullPaper.length > 0 &&
-                fullPaper?.[0][examType][examForm]?.length - 1)
-                ? "none"
-                : "block",
-          }}
-          onClick={() => {
-            scrollToContent("yourContentId");
-            toast.success("Your Exam Submit Successfully");
-            navigate(`/eaxm-answere/${examData?.id}`);
-          }}
-        >
-          <span>&#x2713;</span>
-        </button>
+        <div className="lv-footer-btn">
+          <button
+            className="lv-footer-button"
+            style={{
+              display: next === 0 ? "none" : "block",
+              cursor: linkAnswer ? "not-allowed" : "pointer",
+              opacity: linkAnswer ? 0.5 : 1,
+            }}
+            onClick={() => {
+              setNext(next - 1);
+            }}
+            disabled={linkAnswer}
+          >
+            <span>Back</span>
+          </button>
+          <button
+            className="lv-footer-button"
+            style={{
+              display:
+                next ===
+                (fullPaper.length > 0 &&
+                  fullPaper?.[0][examType][examForm]?.length - 1)
+                  ? "none"
+                  : "block",
+              cursor: linkAnswer ? "not-allowed" : "pointer",
+              opacity: linkAnswer ? 0.5 : 1,
+            }}
+            onClick={() => {
+              setNext(next + 1);
+            }}
+            disabled={linkAnswer}
+          >
+            <span>&#10152;</span>
+          </button>
+          <button
+            className="lv-footer-button"
+            style={{
+              display:
+                next !==
+                (fullPaper.length > 0 &&
+                  fullPaper?.[0][examType][examForm]?.length - 1)
+                  ? "none"
+                  : "block",
+              cursor: linkAnswer ? "not-allowed" : "pointer",
+              opacity: linkAnswer ? 0.5 : 1,
+            }}
+            onClick={() => {
+              scrollToContent("yourContentId");
+              toast.success("Your Exam Submit Successfully");
+              navigate(`/eaxm-answere/${examData?.id}`);
+            }}
+            disabled={linkAnswer}
+          >
+            <span>&#x2713;</span>
+          </button>
+        </div>
       </div>
     </>
   );

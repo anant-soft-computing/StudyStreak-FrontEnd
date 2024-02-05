@@ -60,7 +60,7 @@ const LiveClass = () => {
                         <h4>Live Classes</h4>
                       </div>
                       <div className="row">
-                        {liveClass.map(
+                        {liveClass?.map(
                           ({
                             id,
                             start_time,

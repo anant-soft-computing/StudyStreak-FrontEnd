@@ -50,7 +50,7 @@ const AdditionalResourcse = ({ courseId, courseName }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {additionalResource.map(
+                  {additionalResource?.map(
                     ({ id, info, course_files }, index) => (
                       <tr
                         key={id}

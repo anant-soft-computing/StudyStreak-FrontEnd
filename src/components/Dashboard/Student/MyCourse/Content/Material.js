@@ -49,7 +49,7 @@ const Material = ({ courseId, courseName }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {courseMaterial.map(
+                  {courseMaterial?.map(
                     ({ id, material_name, course_material }, index) => (
                       <tr
                         key={id}

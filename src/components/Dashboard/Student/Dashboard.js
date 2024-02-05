@@ -72,7 +72,7 @@ const Dashboard = () => {
                                   style={{ color: "#5f2ded" }}
                                 ></i>{" "}
                                 {new Date(
-                                  lastestLiveClass.start_time
+                                  lastestLiveClass?.start_time
                                 ).toLocaleDateString("en-US", {
                                   year: "numeric",
                                   month: "short",
@@ -85,14 +85,14 @@ const Dashboard = () => {
                                   style={{ color: "#5f2ded" }}
                                 ></i>{" "}
                                 {new Date(
-                                  lastestLiveClass.start_time
+                                  lastestLiveClass?.start_time
                                 ).toLocaleTimeString("en-US", {
                                   hour: "numeric",
                                   minute: "numeric",
                                 })}{" "}
                                 -{" "}
                                 {new Date(
-                                  lastestLiveClass.end_time
+                                  lastestLiveClass?.end_time
                                 ).toLocaleTimeString("en-US", {
                                   hour: "numeric",
                                   minute: "numeric",
@@ -104,19 +104,19 @@ const Dashboard = () => {
                               <span>
                                 {" "}
                                 <strong>
-                                  {lastestLiveClass.meeting_title}
+                                  {lastestLiveClass?.meeting_title}
                                 </strong>
                               </span>
                             </p>
                             <p className="text-dark">
                               ID :
-                              <span> {lastestLiveClass.zoom_meeting_id}</span>
+                              <span> {lastestLiveClass?.zoom_meeting_id}</span>
                             </p>
                             <p className="text-dark">
                               Password :
                               <span>
                                 {" "}
-                                {lastestLiveClass.zoom_meeting_password}
+                                {lastestLiveClass?.zoom_meeting_password}
                               </span>
                             </p>
                           </div>

@@ -2,9 +2,9 @@ import React from "react";
 
 const WritingTest = ({ writingData }) => {
   const handleClick = () => {
-    Object.keys(writingData.IELTS).forEach((key) => {
-      if (Array.isArray(writingData.IELTS[key])) {
-        if (writingData.IELTS[key].length > 0) {
+    Object?.keys(writingData?.IELTS)?.forEach((key) => {
+      if (Array.isArray(writingData?.IELTS[key])) {
+        if (writingData?.IELTS[key]?.length > 0) {
           window.open(
             `/practice-live-writing-exam/IELTS/${key}/${writingData.id}`,
             "_blank"

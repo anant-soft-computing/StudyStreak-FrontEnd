@@ -48,12 +48,6 @@ const MyCourse = () => {
                                 src={enrolledCourse?.Course_Thumbnail}
                                 alt={enrolledCourse?.Course_Title}
                                 style={{ height: "220px" }}
-                                onClick={(e) => {
-                                  navigate(
-                                    `/courseDetail/${enrolledCourse?.id}`
-                                  );
-                                  e.stopPropagation();
-                                }}
                               />
                             </div>
                             <div className="gridarea__content">

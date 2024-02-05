@@ -11,7 +11,7 @@ import Footer from "../../components/Footer/Footer";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
 import { Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 
 const intialLoginData = {

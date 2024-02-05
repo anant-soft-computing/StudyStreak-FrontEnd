@@ -2,9 +2,9 @@ import React from "react";
 
 const SpeakingTest = ({ speakingData }) => {
   const handleClick = () => {
-    Object.keys(speakingData.IELTS).forEach((key) => {
-      if (Array.isArray(speakingData.IELTS[key])) {
-        if (speakingData.IELTS[key].length > 0) {
+    Object?.keys(speakingData?.IELTS)?.forEach((key) => {
+      if (Array.isArray(speakingData?.IELTS[key])) {
+        if (speakingData?.IELTS[key]?.length > 0) {
           window.open(
             `/practice-live-exam/IELTS/${key}/${speakingData.id}`,
             "_blank"

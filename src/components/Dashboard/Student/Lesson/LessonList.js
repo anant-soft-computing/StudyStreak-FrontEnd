@@ -9,7 +9,7 @@ const LessonList = ({
 }) => {
   return (
     <div className="accordion content__cirriculum__wrap" id="accordionLessons">
-      {lessons[0]?.section.map((section, index) => (
+      {lessons[0]?.section?.map((section, index) => (
         <div className="accordion-item" key={index}>
           <h2 className="accordion-header" id={`section-${index}`}>
             <button

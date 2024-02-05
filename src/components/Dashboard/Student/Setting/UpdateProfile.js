@@ -25,7 +25,7 @@ const UpdateProfile = () => {
         8000
       );
       if (response.status === 200) {
-        setUserId(response.data[0]);
+        setUserId(response?.data[0]);
       } else {
         console.log("---error---->");
       }
@@ -100,7 +100,7 @@ const UpdateProfile = () => {
         8000
       );
       if (response.status === 200) {
-        setProfileData(response.data);
+        setProfileData(response?.data);
       } else {
         console.log("---error---->");
       }

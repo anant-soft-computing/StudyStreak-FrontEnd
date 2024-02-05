@@ -24,6 +24,7 @@ import ExamWriting from "./components/Exam-Create/ExamWriting";
 import ExamSpeaking from "./components/Exam-Create/ExamSpeaking";
 import LiveExam from "./components/LiveExam/LiveExam";
 import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
+import PracticeWritingExam from "./components/LiveExam/PracticeWritingExam";
 import Course from "./components/Dashboard/Admin/Course/Course";
 import Exam from "./components/Dashboard/Admin/Exam/Exam";
 import LiveClass from "./components/Dashboard/Admin/LiveClass/LiveClass";
@@ -39,7 +40,7 @@ import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
 import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import MockTest from "./components/Dashboard/Student/MockTest/MockTest";  
+import MockTest from "./components/Dashboard/Student/MockTest/MockTest";
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import Student from "./components/Dashboard/Admin/Student/Student";
 import Answer from "./components/Dashboard/ExamAnswer/Answer";
@@ -171,6 +172,10 @@ const App = () => {
           <Route
             path="/practice-live-exam/:examType/:examForm/:examId"
             element={<ProtectedRoute element={PracticeLiveExam} />}
+          />
+          <Route
+            path="/practice-live-writing-exam/:examType/:examForm/:examId"
+            element={<ProtectedRoute element={PracticeWritingExam} />}
           />
           <Route
             path="/eaxm-answere/:examId"

@@ -56,7 +56,7 @@ const BlogDetail = () => {
                         className="blog__details__heading"
                         data-aos="fade-up"
                       >
-                        <h5>Experience is over the world visit</h5>
+                        <h5>Experience is in over the world visit</h5>
                       </div>
                       <p className="content__3" data-aos="fade-up">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.

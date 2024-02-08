@@ -29,7 +29,7 @@ const SpeakingPractice = () => {
       );
       if (response?.status === 200) {
         const speakingData = response?.data?.filter(
-          (item) => item?.liveclasstype?.name === "Speaking - Practice"
+          (item) => item?.liveclasstype?.name === "Speaking-Practice"
         );
         setSpeakingSolvingData(speakingData);
       } else {

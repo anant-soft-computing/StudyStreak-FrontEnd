@@ -29,7 +29,7 @@ const DoubtSolving = () => {
       );
       if (response?.status === 200) {
         const doubtData = response?.data?.filter(
-          (item) => item?.liveclasstype?.name === "Doubt Solving - One to one"
+          (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
         );
         setDoubtSolvingData(doubtData);
       } else {

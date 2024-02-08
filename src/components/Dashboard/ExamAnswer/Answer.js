@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 
-const Answer = () => {
+const Answer = () => {  
   const { examId } = useParams();
   const [answer, setAnswer] = useState([]);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [incorrectCount, setIncorrectCount] = useState(0);
 
   const examName = answer[0]?.exam?.exam_name;
   const totalQuestions = answer[0]?.exam?.no_of_questions;
+
+  const { examAnswer,stoppedTimeFormatted } = useLocation()?.state || {};
 
   const getAnswere = async () => {
     try {
@@ -38,6 +43,28 @@ const Answer = () => {
     getAnswere();
   }, [examId]);
 
+  useEffect(() => {
+    if (examAnswer) {
+      setCorrectAnswers(examAnswer[0].answers);
+    }
+  }, [examAnswer]);
+
+  useEffect(() => {
+    let correct = 0;
+    let incorrect = 0;
+    correctAnswers.forEach((item, index) => {
+      if (
+        answer[index]?.answer_text.toLowerCase() === item.answer.toLowerCase()
+      ) {
+        correct++;
+      } else {
+        incorrect++;
+      }
+    });
+    setCorrectCount(correct);
+    setIncorrectCount(incorrect);
+  }, [correctAnswers, answer]);
+
   return (
     <div>
       <TopBar />
@@ -62,21 +89,15 @@ const Answer = () => {
                           Total Question : <span>{totalQuestions}</span>
                         </li>
                         <li className="text-dark">
-                          Marks : <span>5/14</span>
-                        </li>
-                        <li className="text-dark">
-                          Time Taken : <span>00:27</span>
+                          Time Taken : <span>{stoppedTimeFormatted}</span>
                         </li>
                       </ul>
                       <ul>
                         <li className="text-dark">
-                          Correct : <span>5</span>
+                          Correct : <span>{correctCount}</span>
                         </li>
                         <li className="text-dark">
-                          InCorrect : <span>9</span>
-                        </li>
-                        <li className="text-dark">
-                          UnAnswered : <span>0</span>
+                          InCorrect : <span>{incorrectCount}</span>
                         </li>
                       </ul>
                     </div>
@@ -94,7 +115,8 @@ const Answer = () => {
                               <thead>
                                 <tr>
                                   <th>Question No.</th>
-                                  <th>Answer</th>
+                                  <th>Your Answer</th>
+                                  <th>Correct Answer</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -118,6 +140,11 @@ const Answer = () => {
                                         <div className="dashboard__table__star">
                                           {answer_text}
                                         </div>
+                                      </td>
+                                      <td className="text-dark">
+                                        {correctAnswers?.length > 0 &&
+                                          correctAnswers[index] &&
+                                          correctAnswers[index].answer}
                                       </td>
                                     </tr>
                                   )

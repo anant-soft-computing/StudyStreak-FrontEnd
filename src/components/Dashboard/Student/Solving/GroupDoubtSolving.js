@@ -29,7 +29,7 @@ const GroupDoubtSolving = () => {
       );
       if (response?.status === 200) {
         const groupDoubtData = response?.data?.filter(
-          (item) => item?.liveclasstype?.name === "Doubt Solving - Group"
+          (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
         );
         setGroupDoubtSolvingData(groupDoubtData);
       } else {

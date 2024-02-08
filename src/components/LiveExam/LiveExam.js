@@ -20,6 +20,12 @@ const LiveExam = () => {
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   let highlightedElement = null;
 
+  const hours = Math.floor(timer / 3600);
+  const minutes = Math.floor((timer % 3600) / 60);
+  const seconds = timer % 60;
+
+  const stoppedTimeFormatted = `${minutes}:${seconds}`;
+
   useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||
@@ -87,6 +93,14 @@ const LiveExam = () => {
       }
     })();
   }, [examId]);
+
+  const handleExamSubmit = () => {
+    setTimerRunning(false);
+    toast.success("Your Exam Submitted Successfully");
+    navigate(`/eaxm-answere/${examData?.id}`, {
+      state: { examAnswer, stoppedTimeFormatted },
+    });
+  };
 
   // Function to scroll to content
   const scrollToContent = (contentId) => {
@@ -303,14 +317,7 @@ const LiveExam = () => {
             );
           })}
         </div>
-        <button
-          className="lv-footer-button"
-          onClick={() => {
-            scrollToContent("yourContentId");
-            toast.success("Your Exam Submit Successfully");
-            navigate(`/eaxm-answere/${examData?.id}`);
-          }}
-        >
+        <button className="lv-footer-button" onClick={handleExamSubmit}>
           <span>&#x2713;</span>
         </button>
       </div>

@@ -115,8 +115,8 @@ const Answer = () => {
                               <thead>
                                 <tr>
                                   <th>Question No.</th>
-                                  <th>Your Answer</th>
                                   <th>Correct Answer</th>
+                                  <th>Your Answer</th>
                                 </tr>
                               </thead>
                               <tbody>

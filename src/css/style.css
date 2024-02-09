@@ -5795,7 +5795,7 @@ Popular Area
 }
 
 .animate__content .single__service {
-  width: 250px;
+  width: 400px;
   margin: 0 10px;
 }
 
@@ -16305,4 +16305,21 @@ div.gridarea__wraper {
 
 .GridGap {
   width: 90% !important;
+}
+
+.answerCount {
+  font-size: 16px;
+  line-height: 14px;
+  font-weight: 500;
+  display: inline-block;
+  color: var(--whiteColor);
+  padding: 8px 8px;
+  border-radius: 15px;
+  background-color: var(--primaryColor);
+}
+
+.answerContent {
+  width: 50%;
+  border-right: 2px solid var(--borderColor);
+  padding: 40px 40px 40px 40px;
 }

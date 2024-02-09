@@ -24,7 +24,7 @@ const LiveExam = () => {
   const minutes = Math.floor((timer % 3600) / 60);
   const seconds = timer % 60;
 
-  const stoppedTimeFormatted = `${minutes}:${seconds}`;
+  const stoppedTimeFormatted = `${minutes} : ${seconds}`;
 
   useEffect(() => {
     if (

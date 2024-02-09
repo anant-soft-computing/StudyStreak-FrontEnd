@@ -4,7 +4,7 @@ import ajaxCall from "../../../helpers/ajaxCall";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 
-const Answer = () => {  
+const Answer = () => {
   const { examId } = useParams();
   const [answer, setAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
@@ -14,7 +14,7 @@ const Answer = () => {
   const examName = answer[0]?.exam?.exam_name;
   const totalQuestions = answer[0]?.exam?.no_of_questions;
 
-  const { examAnswer,stoppedTimeFormatted } = useLocation()?.state || {};
+  const { examAnswer, stoppedTimeFormatted } = useLocation()?.state || {};
 
   const getAnswere = async () => {
     try {
@@ -81,23 +81,37 @@ const Answer = () => {
                 <div className="col-xl-8 col-lg-8">
                   <div className="blog__details__content__wraper">
                     <h4 className="sidebar__title">
-                      Solution For : {examName}{" "}
+                      Solution For : {examName}
                     </h4>
                     <div className="course__details__wraper">
-                      <ul>
+                      <ul className="answerContent">
                         <li className="text-dark">
-                          Total Question : <span>{totalQuestions}</span>
+                          Total Question :
+                          <div className="scc__meta">
+                            <strong className="answerCount">{totalQuestions}</strong>
+                          </div>
                         </li>
                         <li className="text-dark">
-                          Time Taken : <span>{stoppedTimeFormatted}</span>
+                          Time Taken :
+                          <div className="scc__meta">
+                            <strong className="answerCount">
+                              {stoppedTimeFormatted}
+                            </strong>
+                          </div>
                         </li>
                       </ul>
-                      <ul>
+                      <ul className="answerContent">
                         <li className="text-dark">
-                          Correct : <span>{correctCount}</span>
+                          Correct :
+                          <div className="scc__meta">
+                            <strong className="answerCount">{correctCount}</strong>
+                          </div>
                         </li>
                         <li className="text-dark">
-                          InCorrect : <span>{incorrectCount}</span>
+                          In Correct :
+                          <div className="scc__meta">
+                            <strong className="answerCount">{incorrectCount}</strong>
+                          </div>
                         </li>
                       </ul>
                     </div>

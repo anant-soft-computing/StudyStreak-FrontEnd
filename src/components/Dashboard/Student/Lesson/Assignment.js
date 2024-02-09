@@ -7,13 +7,13 @@ const Assignment = ({ activeLesson }) => {
 
   return (
     <div>
-      {activeLesson?.[0]?.length > 0 && (
+      {activeLesson && activeLesson.length > 0 && (
         <>
           <div className="lesson__content__wrap">
             <h3>Assignment</h3>
           </div>
           <div className="row">
-            {activeLesson[0]?.map((exam, index) => (
+            {activeLesson.map((exam, index) => (
               <div
                 className="col-lg-4 col-md-6 col-12"
                 data-aos="fade-up"

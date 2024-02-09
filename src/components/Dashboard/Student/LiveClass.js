@@ -4,7 +4,7 @@ import DSNavBar from "./DSNavBar/DSNavBar";
 import Footer from "../../Footer/Footer";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 
 const LiveClass = () => {
@@ -73,7 +73,7 @@ const LiveClass = () => {
                             <div key={id} className="col-lg-4 col-md-6 col-12">
                               <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
                                 <div className="gridarea__content ">
-                                    <div className="gridarea__list">
+                                  <div className="gridarea__list">
                                     <ul className="ps-0">
                                       <li>
                                         <i className="icofont-calendar"></i>{" "}
@@ -125,7 +125,17 @@ const LiveClass = () => {
                                       </span>
                                     </p>
                                     <p className="text-dark">
-                                      ID :<span> {zoom_meeting_id}</span>
+                                      ID :
+                                      <span>
+                                        {" "}
+                                        <Link
+                                          to={`${zoom_meeting_id}`}
+                                          target="_blank"
+                                          className="text-decoration-none"
+                                        >
+                                          {zoom_meeting_id}
+                                        </Link>
+                                      </span>
                                     </p>
                                     <p className="text-dark">
                                       Password :

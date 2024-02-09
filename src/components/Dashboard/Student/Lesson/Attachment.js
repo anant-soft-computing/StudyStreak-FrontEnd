@@ -3,9 +3,9 @@ import React from "react";
 const Attachment = ({ activeLesson }) => {
   return (
     <div>
-      {activeLesson?.[0]?.length > 0 && (
+      {activeLesson && activeLesson.length > 0 && (
         <>
-         <div className="lesson__content__wrap">
+          <div className="lesson__content__wrap">
             <h3>Attachment</h3>
           </div>
           <div className="row">
@@ -21,7 +21,7 @@ const Attachment = ({ activeLesson }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {activeLesson?.[0]?.map(
+                    {activeLesson?.map(
                       ({ id, attachment_description, attachment }, index) => (
                         <tr
                           key={id}

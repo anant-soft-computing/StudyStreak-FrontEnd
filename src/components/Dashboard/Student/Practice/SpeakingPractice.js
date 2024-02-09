@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
@@ -166,7 +166,16 @@ const SpeakingPractice = () => {
                                       </p>
                                       <p className="text-dark">
                                         Meeting ID :
-                                        <span> {zoom_meeting_id}</span>
+                                        <span>
+                                          {" "}
+                                          <Link
+                                            to={`${zoom_meeting_id}`}
+                                            target="_blank"
+                                            className="text-decoration-none"
+                                          >
+                                            {zoom_meeting_id}
+                                          </Link>
+                                        </span>
                                       </p>
                                       <p className="text-dark">
                                         Meeting Password :

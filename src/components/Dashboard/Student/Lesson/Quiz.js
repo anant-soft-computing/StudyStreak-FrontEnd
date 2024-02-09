@@ -1,6 +1,7 @@
 import React from "react";
 
 const Quiz = ({ activeLesson }) => {
+  console.log("---activeLesson---->", activeLesson);
   return (
     <div>
       {activeLesson?.[0]?.length > 0 && (

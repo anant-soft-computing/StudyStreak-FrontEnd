@@ -6,6 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
+const Cheerio = require("cheerio");
 
 const LiveExam = () => {
   const containerRef = useRef(null);
@@ -174,51 +175,65 @@ const LiveExam = () => {
 
   const htmlContent = useMemo(() => {
     const question = examData?.question;
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(question, "text/html");
+    if (!question) return;
+    const $ = Cheerio.load(question.toString());
 
-    const questionTags = ["select", "input", "textarea"];
+    const questionTags = [
+      "select",
+      "textarea",
+      "input[type='text'], input:not([type='radio'], [type='checkbox'])",
+      "input[type='radio']",
+      "input[type='checkbox']",
+    ];
+
+    const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
 
     const temp = [];
     let questionPassage = "";
 
-    // First tag
-    const questionElements = doc.querySelectorAll(questionTags[0]);
-    const numberOfElements = questionElements.length;
+    questionTags.forEach((tag, tagIndex) => {
+      // Find elements for current tag
+      const elements = $(tag);
+      const numberOfElements = elements.length;
 
-    if (numberOfElements !== 0) {
-      questionElements.forEach((selectElements, index) => {
-        const uniqueId = `${questionTags[0]}_${index + 1}`;
-        temp.push(uniqueId);
-        selectElements.id = uniqueId;
-      });
+      const radioCheckboxtypeQuestionsGroup = {};
+
+      if (numberOfElements !== 0) {
+        elements.each((index, element) => {
+          if (
+            tag === "input[type='radio']" ||
+            tag === "input[type='checkbox']"
+          ) {
+            const name = $(element).attr("name");
+            if (!radioCheckboxtypeQuestionsGroup[name]) {
+              radioCheckboxtypeQuestionsGroup[name] = [];
+              const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+              temp.push(uniqueId);
+              $(element).attr("id", uniqueId);
+            }
+            radioCheckboxtypeQuestionsGroup[name].push(element);
+          } else {
+            const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+            temp.push(uniqueId);
+            $(element).attr("id", uniqueId);
+          }
+        });
+      }
+    });
+
+    // Pagination logic
+    const pageSize = 5; // Set your desired page size here
+    const totalPages = Math.ceil(temp.length / pageSize);
+
+    // Generate pagination markup
+    let paginationHTML = "";
+    for (let i = 1; i <= totalPages; i++) {
+      paginationHTML += `<button onclick="goToPage(${i})">${i}</button>`;
     }
 
-    // Second tag
-    const inputElements = doc.querySelectorAll(questionTags[1]);
-    const numberOfInputElements = inputElements.length;
-
-    if (numberOfInputElements !== 0) {
-      inputElements.forEach((inputElement, index) => {
-        const uniqueId = `${questionTags[1]}_${index + 1}`;
-        temp.push(uniqueId);
-        inputElement.id = uniqueId;
-      });
-    }
-
-    // Third tag
-    const textareaElements = doc.querySelectorAll(questionTags[2]);
-    const numberOfTextareaElements = textareaElements.length;
-
-    if (numberOfTextareaElements !== 0) {
-      textareaElements.forEach((textareaElement, index) => {
-        const uniqueId = `${questionTags[2]}_${index + 1}`;
-        temp.push(uniqueId);
-        textareaElement.id = uniqueId;
-      });
-    }
-
-    questionPassage += `<div class="mainContainer">${doc.documentElement.outerHTML}</div>`;
+    // Display questions for the first page initially
+    questionPassage += `<div class="mainContainer">${$.html()}</div>`;
+    questionPassage += `<div class="pagination">${paginationHTML}</div>`;
 
     const tempAnswer = temp.map((item) => {
       return {

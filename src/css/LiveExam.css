@@ -59,6 +59,8 @@
 .lv-part-pagination {
   display: flex;
   margin-left: 10px;
+  width: 50%;
+  overflow-x: auto;
 }
 
 .lv-footer-button {
@@ -70,11 +72,11 @@
   cursor: pointer;
   font-size: 25px;
   font-weight: bold;
-  color:white;
+  color: white;
 }
 
 .lv-footer-button:hover {
- color: white;
+  color: white;
 }
 
 .lv-footer-item {
@@ -104,7 +106,7 @@
   background-color: #ffffcc;
 }
 
-.lv-footer-btn{
+.lv-footer-btn {
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;

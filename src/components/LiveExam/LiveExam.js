@@ -146,11 +146,12 @@ const LiveExam = () => {
   };
 
   const handleAnswerLinking = (e, questionId, next) => {
-    const answer = e.target.value;
+    const { value, id } = e.target;
+
     const temp = [...examAnswer];
     temp[next].answers.map((item) => {
-      if (item.questionId === questionId) {
-        item.answer = answer;
+      if (item.questionId === id) {
+        item.answer = value;
       }
     });
     setExamAnswer(temp);
@@ -160,12 +161,18 @@ const LiveExam = () => {
     if (linkAnswer && examAnswer[0] && examAnswer[0].answers.length > 0) {
       setTimeout(() => {
         examAnswer[0].answers.forEach((item) => {
-          const contentElement = document.getElementById(item.questionId);
+          const contentElements = document.querySelectorAll(
+            `[id="${item.questionId}"]`
+          );
           if (item.answer !== "") {
-            document.getElementById(item.questionId).value = item.answer;
+            contentElements.forEach((element) => {
+              element.value = item.answer;
+            });
           }
-          contentElement.addEventListener("change", (e) => {
-            handleAnswerLinking(e, item.questionId, 0);
+          contentElements.forEach((element) => {
+            element.addEventListener("change", (e) => {
+              handleAnswerLinking(e, item.questionId, 0);
+            });
           });
         });
         setLinkAnswer(false);
@@ -197,6 +204,7 @@ const LiveExam = () => {
       const numberOfElements = elements.length;
 
       const radioCheckboxtypeQuestionsGroup = {};
+      let uniqueId = "";
 
       if (numberOfElements !== 0) {
         elements.each((index, element) => {
@@ -207,10 +215,10 @@ const LiveExam = () => {
             const name = $(element).attr("name");
             if (!radioCheckboxtypeQuestionsGroup[name]) {
               radioCheckboxtypeQuestionsGroup[name] = [];
-              const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+              uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
               temp.push(uniqueId);
-              $(element).attr("id", uniqueId);
             }
+            $(element).attr("id", uniqueId);
             radioCheckboxtypeQuestionsGroup[name].push(element);
           } else {
             const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
@@ -323,7 +331,13 @@ const LiveExam = () => {
           {uniqueIdArr?.map((item, index) => {
             return (
               <div
-                className="lv-footer-item"
+                className={`lv-footer-item ${
+                  examAnswer[0].answers.length > 0 &&
+                  examAnswer[0].answers.find((val) => val.questionId === item)
+                    ?.answer !== ""
+                    ? "lv-completed-questions"
+                    : ""
+                }`}
                 onClick={() => scrollToContent(item)}
                 key={index}
               >

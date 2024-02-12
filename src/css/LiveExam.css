@@ -63,6 +63,11 @@
   overflow-x: auto;
 }
 
+.lv-completed-questions {
+  background-color: green;
+  border-radius: 10px;
+}
+
 .lv-footer-button {
   width: 80px;
   margin-right: 10px;

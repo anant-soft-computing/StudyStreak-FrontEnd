@@ -6,6 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
+import { useSelector } from "react-redux";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -19,9 +20,9 @@ const LiveExam = () => {
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const authData = useSelector((state) => state.authStore);
   let highlightedElement = null;
 
-  const hours = Math.floor(timer / 3600);
   const minutes = Math.floor((timer % 3600) / 60);
   const seconds = timer % 60;
 
@@ -95,12 +96,51 @@ const LiveExam = () => {
     })();
   }, [examId]);
 
-  const handleExamSubmit = () => {
-    setTimerRunning(false);
-    toast.success("Your Exam Submitted Successfully");
-    navigate(`/eaxm-answere/${examData?.id}`, {
-      state: { examAnswer, stoppedTimeFormatted },
+  const doAnswerSubmit = async () => {
+    const answersArray = [];
+
+    examAnswer[0].answers.forEach((answer, index) => {
+      answersArray.push({
+        question_number: index + 1,
+        answer_text: answer.answer,
+      });
     });
+
+    const data = JSON.stringify({
+      student_exam: answersArray,
+      user: userData?.userId,
+      exam: parseInt(examId),
+    });
+
+    try {
+      const response = await ajaxCall(
+        `/studentanswerlistview/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+
+      if (response.status === 201) {
+        setTimerRunning(false);
+        toast.success("Your Exam Submitted Successfully");
+        navigate(`/eaxm-answere/${examData?.id}`, {
+          state: { examAnswer, stoppedTimeFormatted },
+        });
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   // Function to scroll to content
@@ -346,7 +386,7 @@ const LiveExam = () => {
             );
           })}
         </div>
-        <button className="lv-footer-button" onClick={handleExamSubmit}>
+        <button className="lv-footer-button" onClick={doAnswerSubmit}>
           <span>&#x2713;</span>
         </button>
       </div>

@@ -3,6 +3,7 @@ import { useLocation, useParams } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
+import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
 
 const Answer = () => {
   const { examId } = useParams();
@@ -88,7 +89,9 @@ const Answer = () => {
                         <li className="text-dark">
                           Total Question :
                           <div className="scc__meta">
-                            <strong className="answerCount">{totalQuestions}</strong>
+                            <strong className="answerCount">
+                              {totalQuestions}
+                            </strong>
                           </div>
                         </li>
                         <li className="text-dark">
@@ -104,13 +107,17 @@ const Answer = () => {
                         <li className="text-dark">
                           Correct :
                           <div className="scc__meta">
-                            <strong className="answerCount">{correctCount}</strong>
+                            <strong className="answerCount">
+                              {correctCount}
+                            </strong>
                           </div>
                         </li>
                         <li className="text-dark">
                           In Correct :
                           <div className="scc__meta">
-                            <strong className="answerCount">{incorrectCount}</strong>
+                            <strong className="answerCount">
+                              {incorrectCount}
+                            </strong>
                           </div>
                         </li>
                       </ul>
@@ -122,8 +129,8 @@ const Answer = () => {
                       <div className="row">
                         <div className="col-xl-12">
                           <div
-                            className="dashboard__table table-responsive"
-                            style={{ maxHeight: "260px" }}
+                            className="dashboard__table table-responsive Sagar"
+                            style={{ maxHeight: "270px" }}
                           >
                             <table>
                               <thead>
@@ -131,6 +138,7 @@ const Answer = () => {
                                   <th>Question No.</th>
                                   <th>Correct Answer</th>
                                   <th>Your Answer</th>
+                                  <th></th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -159,6 +167,18 @@ const Answer = () => {
                                         {correctAnswers?.length > 0 &&
                                           correctAnswers[index] &&
                                           correctAnswers[index].answer}
+                                      </td>
+                                      <td className="text-dark">
+                                        {correctAnswers?.length > 0 &&
+                                        correctAnswers[index] &&
+                                        correctAnswers[
+                                          index
+                                        ].answer.toLowerCase() ===
+                                          answer[
+                                            index
+                                          ]?.answer_text.toLowerCase()
+                                          ? checkIcon()
+                                          : cancelIcon()}
                                       </td>
                                     </tr>
                                   )

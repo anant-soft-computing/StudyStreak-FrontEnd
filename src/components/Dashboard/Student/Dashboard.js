@@ -5,6 +5,7 @@ import Footer from "../../Footer/Footer";
 import DSNavBar from "./DSNavBar/DSNavBar";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import ajaxCall from "../../../helpers/ajaxCall";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [lastestLiveClass, setLastestLiveClass] = useState({});
@@ -110,7 +111,16 @@ const Dashboard = () => {
                             </p>
                             <p className="text-dark">
                               ID :
-                              <span> {lastestLiveClass?.zoom_meeting_id}</span>
+                              <span>
+                                {" "}
+                                <Link
+                                  to={`${lastestLiveClass?.zoom_meeting_id}`}
+                                  target="_blank"
+                                  className="text-decoration-none"
+                                >
+                                  {lastestLiveClass?.zoom_meeting_id}
+                                </Link>
+                              </span>
                             </p>
                             <p className="text-dark">
                               Password :

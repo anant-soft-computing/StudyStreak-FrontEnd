@@ -105,6 +105,28 @@ const LessonList = ({
                       </strong>
                     </div>
                   </div>
+                  <div className="scc__wrap">
+                    <div className="scc__info">
+                      <i className="icofont-audio"></i>
+                      <h5>
+                        <div
+                          onClick={() => {
+                            setActiveLesson(lesson?.quiz_question_options);
+                            handleContentChange("quiz");
+                          }}
+                        >
+                          <Link>
+                            <span>Quiz</span>{" "}
+                          </Link>
+                        </div>
+                      </h5>
+                    </div>
+                    <div className="scc__meta">
+                      <strong className="count">
+                        {lesson.quiz_question_options.length}
+                      </strong>
+                    </div>
+                  </div>
                   <hr style={{ color: "#5f2ded", height: "3px" }} />
                 </>
               ))}

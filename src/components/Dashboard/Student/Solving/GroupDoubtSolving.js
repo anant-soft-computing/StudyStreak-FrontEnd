@@ -174,13 +174,9 @@ const GroupDoubtSolving = () => {
                                             target="_blank"
                                             className="text-decoration-none"
                                           >
-                                            {zoom_meeting_id}
+                                            {zoom_meeting_id?.split("/")[3]}
                                           </Link>
                                         </span>
-                                      </p>
-                                      <p className="text-dark">
-                                        Meeting Password :
-                                        <span> {zoom_meeting_password}</span>
                                       </p>
                                       <button
                                         className="default__button"

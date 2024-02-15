@@ -9,7 +9,7 @@ const ajaxCall = async (
       timeOutFunction();
     }, timeOut);
     const response = await fetch(
-      `http://65.20.73.247/api${url}`,
+      `https://studystreak.in/api${url}`,
       fetchObj
     );
     clearTimeout(id);

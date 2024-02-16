@@ -30,9 +30,9 @@ const PracticeTest = () => {
         8000
       );
       if (response.status === 200) {
-        setReadingData(response?.data?.[2]);
+        setReadingData(response?.data?.[0]);
         setSpeakingData(response?.data?.[3]);
-        setWritingData(response?.data?.[0]);
+        setWritingData(response?.data?.[2]);
         setListeningData(response?.data?.[1]);
       } else {
         console.log("error");

@@ -10,6 +10,7 @@ const DSSidebar = () => {
   const [batchId, setBatchId] = useState([]);
   const [studentId, setStudentId] = useState([]);
   const [count, setCount] = useState({});
+  const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
 
   const menuList = [
@@ -332,7 +333,7 @@ const DSSidebar = () => {
       <div className="col-xl-3 col-lg-3 col-md-12">
         <div className="dashboard__inner sticky-top">
           <div className="dashboard__nav__title">
-            <h6>Welcome, Micle Obema</h6>
+            <h6>Welcome, {userData?.username}</h6>
           </div>
           <div className="dashboard__nav">
             <ul>
@@ -360,7 +361,12 @@ const DSSidebar = () => {
                         className="dashboard__label"
                         style={{ width: "10%" }}
                       >
-                        {count[item.name.replace(/ /g, "_").toLowerCase() + "_count"]}
+                        {
+                          count[
+                            item.name.replace(/ /g, "_").toLowerCase() +
+                              "_count"
+                          ]
+                        }
                       </span>
                     ) : (
                       ""

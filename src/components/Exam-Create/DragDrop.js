@@ -58,6 +58,7 @@ const DragDrop = () => {
   const listeningData = location.state?.listeningData || {};
   const [audioLink, setAudioLink] = useState();
   const [answer, setAnswer] = useState([]);
+  const [questionStructure, setQuestionStructure] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,6 +87,7 @@ const DragDrop = () => {
     updatedAnswer[parentIndex].answers[childIndex].answer_text = e.target.value;
     setAnswer(updatedAnswer);
   };
+
   const readFile = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -151,18 +153,68 @@ const DragDrop = () => {
     const numberOfRadioGroups = Object.keys(radioGroups).length;
     const numberOfCheckboxGroups = Object.keys(checkboxGroups).length;
 
+    if (
+      numberOfSelectQuestions > numberOfTextareaQuestions &&
+      numberOfSelectQuestions > numberOfTextInputQuestions &&
+      numberOfSelectQuestions > numberOfRadioGroups &&
+      numberOfSelectQuestions > numberOfCheckboxGroups
+    ) {
+      setQuestionStructure((prev) => [
+        ...prev,
+        { type: "Select", id, numberOfQuestions: numberOfSelectQuestions },
+      ]);
+    } else if (
+      numberOfTextareaQuestions > numberOfSelectQuestions &&
+      numberOfTextareaQuestions > numberOfTextInputQuestions &&
+      numberOfTextareaQuestions > numberOfRadioGroups &&
+      numberOfTextareaQuestions > numberOfCheckboxGroups
+    ) {
+      setQuestionStructure((prev) => [
+        ...prev,
+        { type: "Textarea", id, numberOfQuestions: numberOfTextareaQuestions },
+      ]);
+    } else if (
+      numberOfTextInputQuestions > numberOfSelectQuestions &&
+      numberOfTextInputQuestions > numberOfTextareaQuestions &&
+      numberOfTextInputQuestions > numberOfRadioGroups &&
+      numberOfTextInputQuestions > numberOfCheckboxGroups
+    ) {
+      setQuestionStructure((prev) => [
+        ...prev,
+        {
+          type: "InputText",
+          id,
+          numberOfQuestions: numberOfTextInputQuestions,
+        },
+      ]);
+    } else if (
+      numberOfRadioGroups > numberOfSelectQuestions &&
+      numberOfRadioGroups > numberOfTextareaQuestions &&
+      numberOfRadioGroups > numberOfTextInputQuestions &&
+      numberOfRadioGroups > numberOfCheckboxGroups
+    ) {
+      setQuestionStructure((prev) => [
+        ...prev,
+        { type: "Radio", id, numberOfQuestions: numberOfRadioGroups },
+      ]);
+    } else if (
+      numberOfCheckboxGroups > numberOfSelectQuestions &&
+      numberOfCheckboxGroups > numberOfTextareaQuestions &&
+      numberOfCheckboxGroups > numberOfTextInputQuestions &&
+      numberOfCheckboxGroups > numberOfRadioGroups
+    ) {
+      setQuestionStructure((prev) => [
+        ...prev,
+        { type: "Checkbox", id, numberOfQuestions: numberOfCheckboxGroups },
+      ]);
+    }
+
     const totalQuestions =
       numberOfSelectQuestions +
       numberOfTextareaQuestions +
       numberOfTextInputQuestions +
       numberOfRadioGroups +
       numberOfCheckboxGroups;
-
-    // // Find the first heading element (h1, h2, h3, h4, h5, or h6)
-    // const firstHeadingElement = $("h1, h2, h3, h4, h5, h6").first();
-
-    // // Get the content of the first heading element
-    // const content = firstHeadingElement.text();
 
     let totalAnswers = [];
     let lastQuestionNumber = 0;
@@ -293,6 +345,7 @@ const DragDrop = () => {
   const handleDelete = (header) => {
     setSelectedDivs((prev) => prev?.filter((item) => item.id !== header.id));
     const tempFilters = answer.filter((item) => item.id !== header.id);
+
     // Rearrange the question numbers
     let questionNumber = 0;
     tempFilters.forEach((item) => {
@@ -302,6 +355,12 @@ const DragDrop = () => {
       });
     });
     setAnswer(tempFilters);
+
+    // Remove the question structure
+    const tempQuestionStructure = questionStructure.filter(
+      (item) => item.id !== header.id
+    );
+    setQuestionStructure(tempQuestionStructure);
   };
 
   const htmlContent = selectedDivs
@@ -623,6 +682,7 @@ const DragDrop = () => {
       passage: readingData.passage,
       question: htmlContent,
       answers: answerData.flat(Infinity),
+      question_structure: questionStructure,
     };
     try {
       const response = await ajaxCall("/exam-blocks/", {

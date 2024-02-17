@@ -188,9 +188,14 @@ const LiveExam = () => {
   const handleAnswerLinking = (e, questionId, next) => {
     const { value, id } = e.target;
 
+    const elementId = id.split("_")[0];
+
     const temp = [...examAnswer];
     temp[next].answers.map((item) => {
-      if (item.questionId === id) {
+      if (item.questionId === id && elementId === "InputText") {
+        const trimedValue = value.trim();
+        item.answer = trimedValue;
+      } else if (item.questionId === id) {
         item.answer = value;
       }
     });
@@ -247,6 +252,10 @@ const LiveExam = () => {
       let uniqueId = "";
 
       if (numberOfElements !== 0) {
+        let tagQuestions = {
+          type: tagIds[tagIndex],
+          paginationsIds: [],
+        };
         elements.each((index, element) => {
           if (
             tag === "input[type='radio']" ||
@@ -256,34 +265,38 @@ const LiveExam = () => {
             if (!radioCheckboxtypeQuestionsGroup[name]) {
               radioCheckboxtypeQuestionsGroup[name] = [];
               uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
-              temp.push(uniqueId);
+              tagQuestions.paginationsIds.push(uniqueId);
             }
             $(element).attr("id", uniqueId);
             radioCheckboxtypeQuestionsGroup[name].push(element);
           } else {
             const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
-            temp.push(uniqueId);
+            tagQuestions.paginationsIds.push(uniqueId);
             $(element).attr("id", uniqueId);
           }
         });
+        temp.push(tagQuestions);
       }
     });
 
-    // Pagination logic
-    const pageSize = 5; // Set your desired page size here
-    const totalPages = Math.ceil(temp.length / pageSize);
+    let paginationsStrucutre = [];
 
-    // Generate pagination markup
-    let paginationHTML = "";
-    for (let i = 1; i <= totalPages; i++) {
-      paginationHTML += `<button onclick="goToPage(${i})">${i}</button>`;
-    }
+    examData?.question_structure?.forEach((item, index) => {
+      temp.forEach((element) => {
+        if (element.type === item.type) {
+          paginationsStrucutre.push(
+            element.paginationsIds.splice(0, item.numberOfQuestions)
+          );
+        }
+      });
+    });
+
+    paginationsStrucutre = paginationsStrucutre.flat();
 
     // Display questions for the first page initially
     questionPassage += `<div class="mainContainer">${$.html()}</div>`;
-    questionPassage += `<div class="pagination">${paginationHTML}</div>`;
 
-    const tempAnswer = temp.map((item) => {
+    const tempAnswer = paginationsStrucutre.map((item) => {
       return {
         questionId: item,
         answer: "",
@@ -301,7 +314,7 @@ const LiveExam = () => {
     }
     setLinkAnswer(true);
 
-    setUniqueIdArr(temp);
+    setUniqueIdArr(paginationsStrucutre);
     return questionPassage;
   }, [examData?.question]);
 

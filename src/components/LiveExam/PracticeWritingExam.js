@@ -46,11 +46,6 @@ const PracticeLiveExam = () => {
     };
   }, [timerRunning]);
 
-  // const handleWritingAnswer = (e, next) => {
-  //   const answer = e.target.value;
-  //   const temp = [...examAnswer];
-  //   temp[next].answers.map((item) => {
-
   useEffect(() => {
     if (timer === 0) {
       setTimerRunning(false);

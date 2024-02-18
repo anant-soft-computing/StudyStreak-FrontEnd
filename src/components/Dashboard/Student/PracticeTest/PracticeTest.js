@@ -30,10 +30,26 @@ const PracticeTest = () => {
         8000
       );
       if (response.status === 200) {
-        setReadingData(response?.data?.[0]);
-        setSpeakingData(response?.data?.[3]);
-        setWritingData(response?.data?.[2]);
-        setListeningData(response?.data?.[1]);
+        setReadingData(
+          response?.data?.filter(
+            (examBlock) => examBlock?.exam_type === "Reading"
+          )
+        );
+        setSpeakingData(
+          response?.data?.filter(
+            (examBlock) => examBlock?.exam_type === "Speaking"
+          )
+        );
+        setWritingData(
+          response?.data?.filter(
+            (examBlock) => examBlock?.exam_type === "Writing"
+          )
+        );
+        setListeningData(
+          response?.data?.filter(
+            (examBlock) => examBlock?.exam_type === "Listening"
+          )
+        );
       } else {
         console.log("error");
       }

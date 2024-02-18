@@ -6,6 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
+const Cheerio = require("cheerio");
 
 const PracticeLiveExam = () => {
   const containerRef = useRef(null);
@@ -99,11 +100,17 @@ const PracticeLiveExam = () => {
   }, [fullPaper, next]);
 
   const handleAnswerLinking = (e, questionId, next) => {
-    const answer = e.target.value;
+    const { value, id } = e.target;
+
+    const elementId = id.split("_")[0];
+
     const temp = [...examAnswer];
     temp[next].answers.map((item) => {
-      if (item.questionId === questionId) {
-        item.answer = answer;
+      if (item.questionId === id && elementId === "InputText") {
+        const trimedValue = value.trim();
+        item.answer = trimedValue;
+      } else if (item.questionId === id) {
+        item.answer = value;
       }
     });
     setExamAnswer(temp);
@@ -113,12 +120,18 @@ const PracticeLiveExam = () => {
     if (linkAnswer && examAnswer[next] && examAnswer[next].answers.length > 0) {
       setTimeout(() => {
         examAnswer[next].answers.forEach((item) => {
-          const contentElement = document.getElementById(item.questionId);
+          const contentElements = document.querySelectorAll(
+            `[id="${item.questionId}"]`
+          );
           if (item.answer !== "") {
-            document.getElementById(item.questionId).value = item.answer;
+            contentElements.forEach((element) => {
+              element.value = item.answer;
+            });
           }
-          contentElement.addEventListener("change", (e) => {
-            handleAnswerLinking(e, item.questionId, next);
+          contentElements.forEach((element) => {
+            element.addEventListener("change", (e) => {
+              handleAnswerLinking(e, item.questionId, next);
+            });
           });
         });
         setLinkAnswer(false);
@@ -170,53 +183,76 @@ const PracticeLiveExam = () => {
 
   const htmlContent = useMemo(() => {
     const question = examData?.question;
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(question, "text/html");
+    if (!question) return;
+    const $ = Cheerio.load(question.toString());
 
-    const questionTags = ["select", "input", "textarea"];
+    const questionTags = [
+      "select",
+      "textarea",
+      "input[type='text'], input:not([type='radio'], [type='checkbox'])",
+      "input[type='radio']",
+      "input[type='checkbox']",
+    ];
+
+    const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
 
     const temp = [];
     let questionPassage = "";
 
-    // First tag
-    const questionElements = doc.querySelectorAll(questionTags[0]);
-    const numberOfElements = questionElements.length;
+    questionTags.forEach((tag, tagIndex) => {
+      // Find elements for current tag
+      const elements = $(tag);
+      const numberOfElements = elements.length;
 
-    if (numberOfElements !== 0) {
-      questionElements.forEach((selectElements, index) => {
-        const uniqueId = `${questionTags[0]}_${index + 1}`;
-        temp.push(uniqueId);
-        selectElements.id = uniqueId;
+      const radioCheckboxtypeQuestionsGroup = {};
+      let uniqueId = "";
+
+      if (numberOfElements !== 0) {
+        let tagQuestions = {
+          type: tagIds[tagIndex],
+          paginationsIds: [],
+        };
+        elements.each((index, element) => {
+          if (
+            tag === "input[type='radio']" ||
+            tag === "input[type='checkbox']"
+          ) {
+            const name = $(element).attr("name");
+            if (!radioCheckboxtypeQuestionsGroup[name]) {
+              radioCheckboxtypeQuestionsGroup[name] = [];
+              uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+              tagQuestions.paginationsIds.push(uniqueId);
+            }
+            $(element).attr("id", uniqueId);
+            radioCheckboxtypeQuestionsGroup[name].push(element);
+          } else {
+            const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+            tagQuestions.paginationsIds.push(uniqueId);
+            $(element).attr("id", uniqueId);
+          }
+        });
+        temp.push(tagQuestions);
+      }
+    });
+
+    let paginationsStrucutre = [];
+
+    examData?.question_structure?.forEach((item, index) => {
+      temp.forEach((element) => {
+        if (element.type === item.type) {
+          paginationsStrucutre.push(
+            element.paginationsIds.splice(0, item.numberOfQuestions)
+          );
+        }
       });
-    }
+    });
 
-    // Second tag
-    const inputElements = doc.querySelectorAll(questionTags[1]);
-    const numberOfInputElements = inputElements.length;
+    paginationsStrucutre = paginationsStrucutre.flat();
 
-    if (numberOfInputElements !== 0) {
-      inputElements.forEach((inputElement, index) => {
-        const uniqueId = `${questionTags[1]}_${index + 1}`;
-        temp.push(uniqueId);
-        inputElement.id = uniqueId;
-      });
-    }
+    // Display questions for the first page initially
+    questionPassage += `<div class="mainContainer">${$.html()}</div>`;
 
-    // Third tag
-    const textareaElements = doc.querySelectorAll(questionTags[2]);
-    const numberOfTextareaElements = textareaElements.length;
-
-    if (numberOfTextareaElements !== 0) {
-      textareaElements.forEach((textareaElement, index) => {
-        const uniqueId = `${questionTags[2]}_${index + 1}`;
-        temp.push(uniqueId);
-        textareaElement.id = uniqueId;
-      });
-    }
-
-    questionPassage += `<div class="mainContainer">${doc.documentElement.outerHTML}</div>`;
-
-    const tempAnswer = temp.map((item) => {
+    const tempAnswer = paginationsStrucutre.map((item) => {
       return {
         questionId: item,
         answer: "",
@@ -233,7 +269,7 @@ const PracticeLiveExam = () => {
       setExamAnswer(tempAnswerArr);
     }
     setLinkAnswer(true);
-    setUniqueIdArr(temp);
+    setUniqueIdArr(paginationsStrucutre);
     return questionPassage;
   }, [examData?.question]);
 
@@ -310,7 +346,15 @@ const PracticeLiveExam = () => {
           {uniqueIdArr?.map((item, index) => {
             return (
               <div
-                className="lv-footer-item"
+                className={`lv-footer-item ${
+                  examAnswer[next] &&
+                  examAnswer[next].answers.length > 0 &&
+                  examAnswer[next].answers.find(
+                    (val) => val.questionId === item
+                  )?.answer !== ""
+                    ? "lv-completed-questions"
+                    : ""
+                }`}
                 onClick={() => scrollToContent(item)}
                 key={index}
               >

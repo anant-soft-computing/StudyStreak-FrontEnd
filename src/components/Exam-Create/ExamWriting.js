@@ -110,6 +110,13 @@ const ExamWriting = () => {
     e.preventDefault();
     if (!validateForm()) return;
 
+    const witingQuestionStrucutre = [
+      {
+        type: "Textarea",
+        numberOfQuestions: 1,
+      },
+    ];
+
     const data = {
       block_threshold: writingData.block_threshold,
       block_type: writingData.block_type,
@@ -120,6 +127,7 @@ const ExamWriting = () => {
       passage: writingData.passage,
       question: writingData.question,
       answers: writingData.answers,
+      question_structure: witingQuestionStrucutre,
     };
 
     try {

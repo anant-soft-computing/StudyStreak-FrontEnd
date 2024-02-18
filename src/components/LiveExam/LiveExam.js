@@ -3,10 +3,10 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
 import { useSelector } from "react-redux";
+import readingBandValues from "../../utils/bandValues/ReadingBandValues";
+import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -19,6 +19,7 @@ const LiveExam = () => {
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
+  const [numberOfWord, setNumberOfWord] = useState(0);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const authData = useSelector((state) => state.authStore);
   let highlightedElement = null;
@@ -96,6 +97,17 @@ const LiveExam = () => {
     })();
   }, [examId]);
 
+  const handleWritingAnswer = (e, next) => {
+    const answer = e.target.value;
+    const temp = [...examAnswer];
+    temp[next].answers[0].answer = answer;
+    setExamAnswer(temp);
+
+    // Count the number of words
+    const words = answer.split(" ");
+    setNumberOfWord(words.length);
+  };
+
   const doAnswerSubmit = async () => {
     const answersArray = [];
 
@@ -106,13 +118,122 @@ const LiveExam = () => {
       });
     });
 
-    const data = JSON.stringify({
-      student_exam: answersArray,
-      user: userData?.userId,
-      exam: parseInt(examId),
-    });
+    // Call ChaGpt API for checking the answer
+    const gptBody = {
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "user",
+          content:
+            "analyse the package for ielts writing task and give IELTS bands to the task.",
+        },
+        {
+          role: "user",
+          content: `Questions: ${examData?.question}`,
+        },
+        {
+          role: "user",
+          content: `Answers: ${examAnswer[0].answers[0].answer} `,
+        },
+        {
+          role: "user",
+          content:
+            "Give band explanation as #Explanation: exaplanationValue  and band as #Band:bandValue",
+        },
+      ],
+    };
 
     try {
+      let gptResponse;
+      let band;
+      try {
+        const res = await fetch("https://api.openai.com/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+          },
+          body: JSON.stringify(gptBody),
+        });
+        const data = await res.json();
+        band = data?.choices?.[0]?.message?.content
+          ?.split("#Band:")[1]
+          .split(" ")[1];
+        gptResponse = data?.choices?.[0]?.message?.content;
+      } catch (error) {}
+
+      const data = JSON.stringify({
+        student_exam: answersArray,
+        user: userData?.userId,
+        exam: parseInt(examId),
+        gpt_response: gptResponse,
+        band: parseInt(band),
+      });
+
+      const response = await ajaxCall(
+        `/studentanswerlistview/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+
+      if (response.status === 201) {
+        setTimerRunning(false);
+        toast.success("Your Exam Submitted Successfully");
+        navigate(`/eaxm-answere/${examData?.id}`, {
+          state: { examAnswer, stoppedTimeFormatted },
+        });
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const handleRLSubmit = async () => {
+    const answersArray = [];
+
+    examAnswer[0].answers.forEach((answer, index) => {
+      answersArray.push({
+        question_number: index + 1,
+        answer_text: answer.answer,
+      });
+    });
+
+    let totalCorrect = 0;
+    examAnswer[0].answers.forEach((answer, index) => {
+      const correctAnswer = examData?.answers[index].answer_text;
+      if (answer.answer === correctAnswer) {
+        totalCorrect += 1;
+      }
+    });
+
+    let bandValue = 0;
+
+    if (examData?.exam_type === "Reading") {
+      bandValue = readingBandValues[totalCorrect];
+    } else if (examData?.exam_type === "Listening") {
+      bandValue = listeningBandValues[totalCorrect];
+    }
+
+    try {
+      const data = JSON.stringify({
+        student_exam: answersArray,
+        user: userData?.userId,
+        exam: parseInt(examId),
+        band: parseInt(bandValue),
+      });
+
       const response = await ajaxCall(
         `/studentanswerlistview/`,
         {
@@ -279,6 +400,14 @@ const LiveExam = () => {
       }
     });
 
+    if (examData?.exam_type === "Writing") {
+      const uniqueId = `Textarea_1`;
+      temp.push({
+        type: "Textarea",
+        paginationsIds: [uniqueId],
+      });
+    }
+
     let paginationsStrucutre = [];
 
     examData?.question_structure?.forEach((item, index) => {
@@ -363,16 +492,20 @@ const LiveExam = () => {
                 }}
               />
             )}
-            {examData?.exam_type === "Writing" && (
-              <CKEditor
-                editor={ClassicEditor}
-                data=""
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  console.log({ event, editor, data });
-                }}
-              />
-            )}
+            {examData?.exam_type === "Writing" &&
+              uniqueIdArr?.map((item, index) => {
+                return (
+                  <div className="lv-textarea">
+                    <textarea
+                      id={item}
+                      style={{ width: "100%", height: "200px" }}
+                      value={examAnswer[0]?.answers[0]?.answer || ""}
+                      onChange={(e) => handleWritingAnswer(e, 0)}
+                    />
+                    <span>{numberOfWord} Words</span>
+                  </div>
+                );
+              })}
             {examData?.exam_type === "Speaking" && <AudioRecorder />}
           </div>
         </div>
@@ -399,7 +532,19 @@ const LiveExam = () => {
             );
           })}
         </div>
-        <button className="lv-footer-button" onClick={doAnswerSubmit}>
+        <button
+          className="lv-footer-button"
+          onClick={() => {
+            if (
+              examData?.exam_type === "Reading" ||
+              examData?.exam_type === "Listening"
+            ) {
+              handleRLSubmit();
+            } else if (examData?.exam_type === "Writing") {
+              doAnswerSubmit();
+            }
+          }}
+        >
           <span>&#x2713;</span>
         </button>
       </div>

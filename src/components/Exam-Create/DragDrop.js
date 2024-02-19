@@ -159,54 +159,108 @@ const DragDrop = () => {
       numberOfSelectQuestions > numberOfRadioGroups &&
       numberOfSelectQuestions > numberOfCheckboxGroups
     ) {
-      setQuestionStructure((prev) => [
-        ...prev,
-        { type: "Select", id, numberOfQuestions: numberOfSelectQuestions },
-      ]);
+      if (index === null)
+        setQuestionStructure((prev) => [
+          ...prev,
+          { type: "Select", id, numberOfQuestions: numberOfSelectQuestions },
+        ]);
+      else {
+        const newQuestionStructure = [...questionStructure];
+        newQuestionStructure[index] = {
+          type: "Select",
+          id,
+          numberOfQuestions: numberOfSelectQuestions,
+        };
+        setQuestionStructure(newQuestionStructure);
+      }
     } else if (
       numberOfTextareaQuestions > numberOfSelectQuestions &&
       numberOfTextareaQuestions > numberOfTextInputQuestions &&
       numberOfTextareaQuestions > numberOfRadioGroups &&
       numberOfTextareaQuestions > numberOfCheckboxGroups
     ) {
-      setQuestionStructure((prev) => [
-        ...prev,
-        { type: "Textarea", id, numberOfQuestions: numberOfTextareaQuestions },
-      ]);
+      if (index === null)
+        setQuestionStructure((prev) => [
+          ...prev,
+          {
+            type: "Textarea",
+            id,
+            numberOfQuestions: numberOfTextareaQuestions,
+          },
+        ]);
+      else {
+        const newQuestionStructure = [...questionStructure];
+        newQuestionStructure[index] = {
+          type: "Textarea",
+          id,
+          numberOfQuestions: numberOfTextareaQuestions,
+        };
+        setQuestionStructure(newQuestionStructure);
+      }
     } else if (
       numberOfTextInputQuestions > numberOfSelectQuestions &&
       numberOfTextInputQuestions > numberOfTextareaQuestions &&
       numberOfTextInputQuestions > numberOfRadioGroups &&
       numberOfTextInputQuestions > numberOfCheckboxGroups
     ) {
-      setQuestionStructure((prev) => [
-        ...prev,
-        {
+      if (index === null)
+        setQuestionStructure((prev) => [
+          ...prev,
+          {
+            type: "InputText",
+            id,
+            numberOfQuestions: numberOfTextInputQuestions,
+          },
+        ]);
+      else {
+        const newQuestionStructure = [...questionStructure];
+        newQuestionStructure[index] = {
           type: "InputText",
           id,
           numberOfQuestions: numberOfTextInputQuestions,
-        },
-      ]);
+        };
+        setQuestionStructure(newQuestionStructure);
+      }
     } else if (
       numberOfRadioGroups > numberOfSelectQuestions &&
       numberOfRadioGroups > numberOfTextareaQuestions &&
       numberOfRadioGroups > numberOfTextInputQuestions &&
       numberOfRadioGroups > numberOfCheckboxGroups
     ) {
-      setQuestionStructure((prev) => [
-        ...prev,
-        { type: "Radio", id, numberOfQuestions: numberOfRadioGroups },
-      ]);
+      if (index === null)
+        setQuestionStructure((prev) => [
+          ...prev,
+          { type: "Radio", id, numberOfQuestions: numberOfRadioGroups },
+        ]);
+      else {
+        const newQuestionStructure = [...questionStructure];
+        newQuestionStructure[index] = {
+          type: "Radio",
+          id,
+          numberOfQuestions: numberOfRadioGroups,
+        };
+        setQuestionStructure(newQuestionStructure);
+      }
     } else if (
       numberOfCheckboxGroups > numberOfSelectQuestions &&
       numberOfCheckboxGroups > numberOfTextareaQuestions &&
       numberOfCheckboxGroups > numberOfTextInputQuestions &&
       numberOfCheckboxGroups > numberOfRadioGroups
     ) {
-      setQuestionStructure((prev) => [
-        ...prev,
-        { type: "Checkbox", id, numberOfQuestions: numberOfCheckboxGroups },
-      ]);
+      if (index === null)
+        setQuestionStructure((prev) => [
+          ...prev,
+          { type: "Checkbox", id, numberOfQuestions: numberOfCheckboxGroups },
+        ]);
+      else {
+        const newQuestionStructure = [...questionStructure];
+        newQuestionStructure[index] = {
+          type: "Checkbox",
+          id,
+          numberOfQuestions: numberOfCheckboxGroups,
+        };
+        setQuestionStructure(newQuestionStructure);
+      }
     }
 
     const totalQuestions =
@@ -924,7 +978,7 @@ const DragDrop = () => {
                             __html: divContents[header.header],
                           }}
                           onBlur={(event) =>
-                            handleContentChange(event, header.header)
+                            handleContentChange(event, header, index)
                           }
                         />
                       </div>

@@ -103,7 +103,7 @@ const FullLengthTest = () => {
                                 type="button"
                                 aria-selected="false"
                                 role="tab"
-                                tabindex="-1"
+                                tabIndex="-1"
                               >
                                 Medium
                               </button>
@@ -116,7 +116,7 @@ const FullLengthTest = () => {
                                 type="button"
                                 aria-selected="false"
                                 role="tab"
-                                tabindex="-1"
+                                tabIndex="-1"
                               >
                                 Hard
                               </button>

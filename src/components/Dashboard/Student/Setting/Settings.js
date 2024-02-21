@@ -57,7 +57,7 @@ const Settings = () => {
                                 type="button"
                                 aria-selected="false"
                                 role="tab"
-                                tabindex="-1"
+                                tabIndex="-1"
                               >
                                 Password
                               </button>

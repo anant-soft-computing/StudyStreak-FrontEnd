@@ -10,10 +10,6 @@ import { Link } from "react-router-dom";
 const Dashboard = () => {
   const [lastestLiveClass, setLastestLiveClass] = useState({});
 
-  const MeetId = lastestLiveClass?.zoom_meeting_id?.split("/")[3];
-
-  console.log("MeetId", MeetId);
-
   const getLiveClassesList = async () => {
     try {
       const response = await ajaxCall(

@@ -22,7 +22,10 @@ const Attachment = ({ activeLesson }) => {
                   </thead>
                   <tbody>
                     {activeLesson?.map(
-                      ({ id, attachment_description, attachment }, index) => (
+                      (
+                        { id, attachment_description, attachment, lesson },
+                        index
+                      ) => (
                         <tr
                           key={id}
                           className={`${
@@ -31,7 +34,9 @@ const Attachment = ({ activeLesson }) => {
                         >
                           <th>
                             <span>{attachment_description}</span>
-                            <p className="mt-2"></p>
+                            <p className="mt-2">
+                              Lesson : <span>{lesson?.Lesson_Title}</span>
+                            </p>
                           </th>
                           <td></td>
                           <td></td>

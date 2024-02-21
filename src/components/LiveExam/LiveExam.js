@@ -212,8 +212,8 @@ const LiveExam = () => {
 
     let totalCorrect = 0;
     examAnswer[0].answers.forEach((answer, index) => {
-      const correctAnswer = examData?.answers[index].answer_text;
-      if (answer.answer === correctAnswer) {
+      const correctAnswer = examData?.answers[index].answer_text.toLowerCase();
+      if (answer.answer.toLowerCase() === correctAnswer) {
         totalCorrect += 1;
       }
     });

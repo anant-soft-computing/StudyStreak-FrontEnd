@@ -3,7 +3,6 @@ import ajaxCall from "../../helpers/ajaxCall";
 import SingleSelection from "../../components/UI/SingleSelect";
 import SelectionBox from "../../components/UI/SelectionBox";
 import { toast } from "react-toastify";
-import "../../css/Stepper.css";
 
 const initialCourseData = {
   Course_Title: "",
@@ -61,7 +60,6 @@ const initialSubmit = {
 };
 
 const CreateCourse = () => {
-  const [activeTap, setActiveTab] = useState(1);
   const [createCourseData, dispatchCreateCourse] = useReducer(
     reducerCreateCourse,
     initialCourseData
@@ -72,10 +70,6 @@ const CreateCourse = () => {
     dispatchCreateCourse({
       type: "reset",
     });
-  };
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
   };
 
   const setFormError = (errMsg) => {

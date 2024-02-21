@@ -39,15 +39,15 @@ const Lesson = () => {
         const tempSessions = [];
         response?.data?.lessons.forEach((lesson) => {
           const isExist = tempSessions.findIndex(
-            (item) => item.id === lesson.section.id
+            (item) => item.id === lesson.section?.id
           );
 
           if (isExist !== -1) {
             tempSessions[isExist].lessons.push(lesson);
           } else {
             tempSessions.push({
-              id: lesson.section.id,
-              name: lesson.section.name,
+              id: lesson.section?.id,
+              name: lesson.section?.name,
               lessons: [lesson],
             });
           }

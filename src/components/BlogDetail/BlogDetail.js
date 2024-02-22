@@ -504,6 +504,7 @@ const BlogDetail = () => {
                   <div
                     className="blogsidebar__content__wraper__2"
                     data-aos="fade-up"
+                    
                   >
                     <h4 className="sidebar__title">Get in Touch</h4>
                     <div className="get__touch__input">

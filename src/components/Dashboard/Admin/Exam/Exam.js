@@ -10,6 +10,7 @@ import ExamReading from "../../../Exam-Create/ExamReading";
 import ExamListening from "../../../Exam-Create/ExamListening";
 import ExamSpeaking from "../../../Exam-Create/ExamSpeaking";
 import ViewExam from "./ViewExam";
+import PracticeReading from "../../../Exam-Create/Practice-Exam/PracticeReading";
 
 const exams = [
   {
@@ -177,11 +178,29 @@ const Exam = () => {
                             <li className="nav-item" role="presentation">
                               <button
                                 className={`single__tab__link ${
-                                  activeTab === "createExam" ? "active" : ""
+                                  activeTab === "create Mock Exam"
+                                    ? "active"
+                                    : ""
                                 }`}
-                                onClick={() => handleTabChange("createExam")}
+                                onClick={() =>
+                                  handleTabChange("create Mock Exam")
+                                }
                               >
-                                Create Exam
+                                Create Mock Exam
+                              </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className={`single__tab__link ${
+                                  activeTab === "create Practice Exam"
+                                    ? "active"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleTabChange("create Practice Exam")
+                                }
+                              >
+                                Create Practice Exam
                               </button>
                             </li>
                           </ul>
@@ -193,7 +212,9 @@ const Exam = () => {
                         >
                           <div
                             className={`tab-pane fade ${
-                              activeTab === "createExam" ? "show active" : ""
+                              activeTab === "create Mock Exam"
+                                ? "show active"
+                                : ""
                             }`}
                             id="projects__one"
                           >
@@ -249,6 +270,60 @@ const Exam = () => {
                                 (screenContent.examForm === "exam-speaking" && (
                                   <ExamSpeaking />
                                 ))}
+                            </div>
+                          </div>
+                          <div
+                            className={`tab-pane fade ${
+                              activeTab === "create Practice Exam"
+                                ? "show active"
+                                : ""
+                            }`}
+                            id="projects__one"
+                          >
+                            <div className="row">
+                              {!screenContent.examType &&
+                                !screenContent.examForm &&
+                                exams.map((exam) => (
+                                  <div
+                                    style={{
+                                      cursor: "pointer",
+                                      pointerEvents: exam.isDisabled
+                                        ? "none"
+                                        : "",
+                                    }}
+                                    className="col-xl-3 col-lg-6 col-md-12 col-12"
+                                    onClick={() => handleNavigate(exam.link)}
+                                  >
+                                    <div className="dashboard__single__counter">
+                                      <div className="counterarea__text__wraper justify-content-center">
+                                        <div className="counter__content__wraper">
+                                          <p>{exam.name}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              {screenContent.examType &&
+                                !screenContent.examForm &&
+                                examTypes.map((exam) => (
+                                  <div
+                                    style={{ cursor: "pointer" }}
+                                    className="col-xl-3 col-lg-6 col-md-12 col-12"
+                                    onClick={() => handleNavigate(exam.link)}
+                                  >
+                                    <div className="dashboard__single__counter">
+                                      <div className="counterarea__text__wraper justify-content-center">
+                                        <div className="counter__content__wraper">
+                                          <p>{exam.name}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              {screenContent.examType &&
+                                screenContent.examForm === "exam-reading" && (
+                                  <PracticeReading />
+                                )}
                             </div>
                           </div>
                           <div

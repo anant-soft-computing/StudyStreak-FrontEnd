@@ -15,7 +15,8 @@ const Answer = () => {
   const examName = answer[0]?.exam?.exam_name;
   const totalQuestions = answer[0]?.exam?.no_of_questions;
 
-  const { examAnswer, stoppedTimeFormatted } = useLocation()?.state || {};
+  const { examAnswer, stoppedTimeFormatted, bandValue } =
+    useLocation()?.state || {};
 
   const getAnswere = async () => {
     try {
@@ -86,14 +87,16 @@ const Answer = () => {
                     </h4>
                     <div className="course__details__wraper">
                       <ul className="answerContent">
-                        <li className="text-dark">
-                          Total Question :
-                          <div className="scc__meta">
-                            <strong className="answerCount">
-                              {totalQuestions}
-                            </strong>
-                          </div>
-                        </li>
+                        {totalQuestions && (
+                          <li className="text-dark">
+                            Total Question :
+                            <div className="scc__meta">
+                              <strong className="answerCount">
+                                {totalQuestions}
+                              </strong>
+                            </div>
+                          </li>
+                        )}
                         <li className="text-dark">
                           Time Taken :
                           <div className="scc__meta">
@@ -118,6 +121,12 @@ const Answer = () => {
                             <strong className="answerCount">
                               {incorrectCount}
                             </strong>
+                          </div>
+                        </li>
+                        <li className="text-dark">
+                          Band Score :
+                          <div className="scc__meta">
+                            <strong className="answerCount">{bandValue}</strong>
                           </div>
                         </li>
                       </ul>

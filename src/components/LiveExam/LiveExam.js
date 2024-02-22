@@ -145,7 +145,7 @@ const LiveExam = () => {
 
     try {
       let gptResponse;
-      let band;
+      let bandValue;
       try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
@@ -156,7 +156,7 @@ const LiveExam = () => {
           body: JSON.stringify(gptBody),
         });
         const data = await res.json();
-        band = data?.choices?.[0]?.message?.content
+        bandValue = data?.choices?.[0]?.message?.content
           ?.split("#Band:")[1]
           .split(" ")[1];
         gptResponse = data?.choices?.[0]?.message?.content;
@@ -167,7 +167,7 @@ const LiveExam = () => {
         user: userData?.userId,
         exam: parseInt(examId),
         gpt_response: gptResponse,
-        band: parseInt(band),
+        band: bandValue,
       });
 
       const response = await ajaxCall(
@@ -188,7 +188,7 @@ const LiveExam = () => {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
         navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, stoppedTimeFormatted },
+          state: { examAnswer, stoppedTimeFormatted,bandValue },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
@@ -231,7 +231,7 @@ const LiveExam = () => {
         student_exam: answersArray,
         user: userData?.userId,
         exam: parseInt(examId),
-        band: parseInt(bandValue),
+        band: bandValue,
       });
 
       const response = await ajaxCall(
@@ -252,7 +252,7 @@ const LiveExam = () => {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
         navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, stoppedTimeFormatted },
+          state: { examAnswer, stoppedTimeFormatted, bandValue },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

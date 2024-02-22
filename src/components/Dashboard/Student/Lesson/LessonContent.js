@@ -13,7 +13,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               allow="autoplay"
               allowFullScreen
               title="YouTube video player"
-              frameBorder="0"
+              frameborder="0"
               className="video"
             ></iframe>
           </div>

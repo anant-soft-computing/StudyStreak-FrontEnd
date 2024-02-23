@@ -10,7 +10,12 @@ import ExamReading from "../../../Exam-Create/ExamReading";
 import ExamListening from "../../../Exam-Create/ExamListening";
 import ExamSpeaking from "../../../Exam-Create/ExamSpeaking";
 import ViewExam from "./ViewExam";
-import PracticeReading from "../../../Exam-Create/Practice-Exam/PracticeReading";
+import PTR from "../../../Exam-Create/Practice-Test/PTR";
+import PTW from "../../../Exam-Create/Practice-Test/PTW";
+import PTL from "../../../Exam-Create/Practice-Test/PTL";
+import PTS from "../../../Exam-Create/Practice-Test/PTS";
+import FLT from "../../../Exam-Create/FullLength-Test/FLT";
+import PT from "../../../Exam-Create/Practice-Test/PT";
 
 const exams = [
   {
@@ -53,19 +58,19 @@ const exams = [
 const examTypes = [
   {
     name: "Reading",
-    link: "/admin-exam/IELTS/exam-reading",
-  },
-  {
-    name: "Listening",
-    link: "/admin-exam/IELTS/exam-listening",
+    link: "/admin-exam/IELTS/Reading",
   },
   {
     name: "Writing",
-    link: "/admin-exam/IELTS/exam-writing",
+    link: "/admin-exam/IELTS/Writing",
+  },
+  {
+    name: "Listening",
+    link: "/admin-exam/IELTS/Listening",
   },
   {
     name: "Speaking",
-    link: "/admin-exam/IELTS/exam-speaking",
+    link: "/admin-exam/IELTS/Speaking",
   },
 ];
 
@@ -178,29 +183,31 @@ const Exam = () => {
                             <li className="nav-item" role="presentation">
                               <button
                                 className={`single__tab__link ${
-                                  activeTab === "create Mock Exam"
-                                    ? "active"
-                                    : ""
+                                  activeTab === "create MT" ? "active" : ""
                                 }`}
-                                onClick={() =>
-                                  handleTabChange("create Mock Exam")
-                                }
+                                onClick={() => handleTabChange("create MT")}
                               >
-                                Create Mock Exam
+                                Create MT
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
                                 className={`single__tab__link ${
-                                  activeTab === "create Practice Exam"
-                                    ? "active"
-                                    : ""
+                                  activeTab === "create PT" ? "active" : ""
                                 }`}
-                                onClick={() =>
-                                  handleTabChange("create Practice Exam")
-                                }
+                                onClick={() => handleTabChange("create PT")}
                               >
-                                Create Practice Exam
+                                Create PT
+                              </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className={`single__tab__link ${
+                                  activeTab === "create FLT" ? "active" : ""
+                                }`}
+                                onClick={() => handleTabChange("create FLT")}
+                              >
+                                Create FLT
                               </button>
                             </li>
                           </ul>
@@ -212,9 +219,7 @@ const Exam = () => {
                         >
                           <div
                             className={`tab-pane fade ${
-                              activeTab === "create Mock Exam"
-                                ? "show active"
-                                : ""
+                              activeTab === "create MT" ? "show active" : ""
                             }`}
                             id="projects__one"
                           >
@@ -259,24 +264,23 @@ const Exam = () => {
                                   </div>
                                 ))}
                               {(screenContent.examType &&
-                                screenContent.examForm === "exam-reading" && (
+                                screenContent.examForm === "Reading" && (
                                   <ExamReading />
                                 )) ||
-                                (screenContent.examForm ===
-                                  "exam-listening" && <ExamListening />) ||
-                                (screenContent.examForm === "exam-writing" && (
+                                (screenContent.examForm === "Writing" && (
                                   <ExamWriting />
                                 )) ||
-                                (screenContent.examForm === "exam-speaking" && (
+                                (screenContent.examForm === "Listening" && (
+                                  <ExamListening />
+                                )) ||
+                                (screenContent.examForm === "Speaking" && (
                                   <ExamSpeaking />
                                 ))}
                             </div>
                           </div>
                           <div
                             className={`tab-pane fade ${
-                              activeTab === "create Practice Exam"
-                                ? "show active"
-                                : ""
+                              activeTab === "create PT" ? "show active" : ""
                             }`}
                             id="projects__one"
                           >
@@ -320,10 +324,75 @@ const Exam = () => {
                                     </div>
                                   </div>
                                 ))}
-                              {screenContent.examType &&
-                                screenContent.examForm === "exam-reading" && (
-                                  <PracticeReading />
-                                )}
+                              {(screenContent.examType &&
+                                screenContent.examForm === "Reading" && (
+                                  <PT
+                                    name={screenContent.examType}
+                                    type={screenContent.examForm}
+                                  />
+                                )) ||
+                                (screenContent.examForm === "Writing" && (
+                                  <PT
+                                    name={screenContent.examType}
+                                    type={screenContent.examForm}
+                                  />
+                                )) ||
+                                (screenContent.examForm === "Listening" && (
+                                  <PT
+                                    name={screenContent.examType}
+                                    type={screenContent.examForm}
+                                  />
+                                )) ||
+                                (screenContent.examForm === "Speaking" && (
+                                  <PT
+                                    name={screenContent.examType}
+                                    type={screenContent.examForm}
+                                  />
+                                ))}
+                              {/* {(screenContent.examType &&
+                                screenContent.examForm === "Reading" && (
+                                  <PTR />
+                                )) ||
+                                (screenContent.examForm === "Writing" && (
+                                  <PTW />
+                                )) ||
+                                (screenContent.examForm ===
+                                  "Listening" && <PTL />) ||
+                                (screenContent.examForm === "Speaking" && (
+                                  <PTS />
+                                ))} */}
+                            </div>
+                          </div>
+                          <div
+                            className={`tab-pane fade ${
+                              activeTab === "create FLT" ? "show active" : ""
+                            }`}
+                            id="projects__one"
+                          >
+                            <div className="row">
+                              {!screenContent.examType &&
+                                !screenContent.examForm &&
+                                exams.map((exam) => (
+                                  <div
+                                    style={{
+                                      cursor: "pointer",
+                                      pointerEvents: exam.isDisabled
+                                        ? "none"
+                                        : "",
+                                    }}
+                                    className="col-xl-3 col-lg-6 col-md-12 col-12"
+                                    onClick={() => handleNavigate(exam.link)}
+                                  >
+                                    <div className="dashboard__single__counter">
+                                      <div className="counterarea__text__wraper justify-content-center">
+                                        <div className="counter__content__wraper">
+                                          <p>{exam.name}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              {screenContent.examType && <FLT />}
                             </div>
                           </div>
                           <div

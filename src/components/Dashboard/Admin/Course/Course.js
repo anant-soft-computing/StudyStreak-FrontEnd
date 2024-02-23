@@ -4,7 +4,7 @@ import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DANavBar from "../DANavBar/DANavBar";
 import DASideBar from "../DASideBar/DASideBar";
-import CreateCourse from "../../../../pages/CreateCourse/CreateCourse";
+import CreateCourse from "./CreateCourse";
 import ViewCourse from "./ViewCourse";
 
 const Course = () => {

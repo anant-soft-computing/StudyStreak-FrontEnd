@@ -7,6 +7,7 @@ import AudioRecorder from "../Exam-Create/AudioRecorder";
 import { useSelector } from "react-redux";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
+import Modal from "react-bootstrap/Modal";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -17,51 +18,27 @@ const LiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
-  const [timer, setTimer] = useState(3600);
+  const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(true);
   const [numberOfWord, setNumberOfWord] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const authData = useSelector((state) => state.authStore);
   let highlightedElement = null;
 
-  const minutes = Math.floor((timer % 3600) / 60);
-  const seconds = timer % 60;
-
-  const stoppedTimeFormatted = `${minutes} : ${seconds}`;
-
-  useEffect(() => {
-    if (
-      examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Writing"
-    ) {
-      setTimer(60 * 60);
-    } else if (examData?.exam_type === "Listening") {
-      setTimer(30 * 60);
-    } else if (examData?.exam_type === "Speaking") {
-      setTimer(15 * 60);
-    }
-  }, [examData]);
+  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
 
   useEffect(() => {
     let interval;
-
     if (timerRunning) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
     }
-
     return () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setTimerRunning(false);
-      toast.error("Time's up! Your exam has ended.");
-    }
-  }, [timer]);
 
   useEffect(() => {
     (async () => {
@@ -188,7 +165,7 @@ const LiveExam = () => {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
         navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, stoppedTimeFormatted,bandValue },
+          state: { examAnswer, timeTaken, bandValue },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
@@ -252,7 +229,7 @@ const LiveExam = () => {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
         navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, stoppedTimeFormatted, bandValue },
+          state: { examAnswer, timeTaken, bandValue },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
@@ -456,7 +433,7 @@ const LiveExam = () => {
           <div className="lv-userName">{userData?.username}</div>
         </div>
         <span>
-          Time Left :
+          Time Taken :
           <span className="lv-userName">
             {Math.floor(timer / 60)}:{timer % 60}
           </span>
@@ -532,6 +509,15 @@ const LiveExam = () => {
             );
           })}
         </div>
+        {(examData?.exam_type === "Reading" ||
+          examData?.exam_type === "Listening") && (
+          <button
+            className="lv-footer-review-button"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Review
+          </button>
+        )}
         <button
           className="lv-footer-button"
           onClick={() => {
@@ -548,6 +534,34 @@ const LiveExam = () => {
           <span>&#x2713;</span>
         </button>
       </div>
+      {isModalOpen &&
+        (examData?.exam_type === "Reading" ||
+          examData?.exam_type === "Listening") && (
+          <Modal
+            size="lg"
+            show={isModalOpen}
+            onHide={() => setIsModalOpen(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Your Answers</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <div className="card-container">
+                {examAnswer[0]?.answers.map((answer, index) => (
+                  <div key={index} className="card" style={{ maxWidth: "30%" }}>
+                    <div className="card-body">
+                      <h6 className="card-title">Q. {index + 1}</h6>
+                      <h6 className="card-text">
+                        Answer :{" "}
+                        <span className="text-success">{answer.answer}</span>
+                      </h6>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Modal.Body>
+          </Modal>
+        )}
     </>
   );
 };

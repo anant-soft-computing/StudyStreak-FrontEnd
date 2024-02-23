@@ -68,6 +68,22 @@
   border-radius: 10px;
 }
 
+.lv-footer-review-button {
+  width: 100px;
+  margin-left: 39%;
+  background-color: #5f2ded;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+}
+
+.lv-footer-review-button:hover {
+  color: white;
+}
+
 .lv-footer-button {
   width: 80px;
   margin-right: 10px;

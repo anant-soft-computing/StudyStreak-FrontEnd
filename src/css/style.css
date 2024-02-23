@@ -16323,3 +16323,13 @@ div.gridarea__wraper {
   border-right: 2px solid var(--borderColor);
   padding: 40px 40px 40px 40px;
 }
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1 1 300px;
+  margin: 10px;
+}

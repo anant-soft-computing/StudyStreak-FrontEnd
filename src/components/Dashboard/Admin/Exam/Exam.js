@@ -10,10 +10,6 @@ import ExamReading from "../../../Exam-Create/ExamReading";
 import ExamListening from "../../../Exam-Create/ExamListening";
 import ExamSpeaking from "../../../Exam-Create/ExamSpeaking";
 import ViewExam from "./ViewExam";
-import PTR from "../../../Exam-Create/Practice-Test/PTR";
-import PTW from "../../../Exam-Create/Practice-Test/PTW";
-import PTL from "../../../Exam-Create/Practice-Test/PTL";
-import PTS from "../../../Exam-Create/Practice-Test/PTS";
 import FLT from "../../../Exam-Create/FullLength-Test/FLT";
 import PT from "../../../Exam-Create/Practice-Test/PT";
 
@@ -349,18 +345,6 @@ const Exam = () => {
                                     type={screenContent.examForm}
                                   />
                                 ))}
-                              {/* {(screenContent.examType &&
-                                screenContent.examForm === "Reading" && (
-                                  <PTR />
-                                )) ||
-                                (screenContent.examForm === "Writing" && (
-                                  <PTW />
-                                )) ||
-                                (screenContent.examForm ===
-                                  "Listening" && <PTL />) ||
-                                (screenContent.examForm === "Speaking" && (
-                                  <PTS />
-                                ))} */}
                             </div>
                           </div>
                           <div

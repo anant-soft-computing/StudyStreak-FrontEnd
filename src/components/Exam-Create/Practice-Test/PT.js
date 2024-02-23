@@ -1,14 +1,15 @@
-import React, { useEffect, useReducer, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import React, { useEffect, useReducer, useState } from "react";
 import ajaxCall from "../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 
-const intialPRData = {
+const intialPT = {
   Name: "",
   exam_test: "Practice",
   Reading: [],
+  Writing: [],
+  Listening: [],    
+  Speaking: [],
 };
 
 const initialSubmit = {
@@ -17,22 +18,21 @@ const initialSubmit = {
   isSubmitting: false,
 };
 
-const reducerCreateCourse = (state, action) => {
+const reducerPT = (state, action) => {
   if (action.type === "reset") {
-    return action.payload || intialPRData;
-  }
-  if (action.type === "Reading") {
-    return { ...state, Reading: action.value };
+    return action.payload || intialPT;
   }
   return { ...state, [action.type]: action.value };
 };
 
-const PracticeReading = ({ examName, examType }) => {
-  const [examList, setExamList] = useState([]);
-  const [createPRExam, dispatchPRExam] = useReducer(
-    reducerCreateCourse,
-    intialPRData
-  );
+const PT = ({ name, type }) => {
+  const [exams, setExams] = useState({
+    Reading: [],
+    Writing: [],
+    Listening: [],
+    Speaking: [],
+  });
+  const [createPT, dispatchPT] = useReducer(reducerPT, intialPT);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
@@ -45,7 +45,7 @@ const PracticeReading = ({ examName, examType }) => {
   };
 
   const resetReducerForm = () => {
-    dispatchPRExam({
+    dispatchPT({
       type: "reset",
     });
   };
@@ -53,7 +53,7 @@ const PracticeReading = ({ examName, examType }) => {
   const getExams = async () => {
     try {
       const response = await ajaxCall(
-        `/exam-blocks`,
+        "/exam-blocks",
         {
           headers: {
             Accept: "application/json",
@@ -63,16 +63,21 @@ const PracticeReading = ({ examName, examType }) => {
         },
         8000
       );
+
       if (response.status === 200) {
-        const examWithNumbers = response?.data?.filter(
-          (exam) => exam.exam_type === "Reading"
-        );
-        setExamList(examWithNumbers);
+        const { data } = response;
+        const updatedExams = {
+          Reading: data.filter((exam) => exam.exam_type === type),
+          Writing: data.filter((exam) => exam.exam_type === type),
+          Listening: data.filter((exam) => exam.exam_type === type),
+          Speaking: data.filter((exam) => exam.exam_type === type),
+        };
+        setExams(updatedExams);
       } else {
-        console.log("error");
+        console.error("Error fetching exams");
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("Error:", error);
     }
   };
 
@@ -81,12 +86,24 @@ const PracticeReading = ({ examName, examType }) => {
   }, []);
 
   const validateForm = () => {
-    if (!createPRExam.Name) {
+    if (!createPT.Name) {
       setFormError("Name is Required");
       return false;
     }
-    if (!createPRExam.Reading.length > 0) {
-      setFormError("Please Choose at least one Exam");
+    if (type === "Reading" && !createPT.Reading.length > 0) {
+      setFormError("Please Choose at least one Reading Exam");
+      return false;
+    }
+    if (type === "Writing" && !createPT.Writing.length > 0) {
+      setFormError("Please Choose at least one Writing Exam");
+      return false;
+    }
+    if (type === "Listening" && !createPT.Listening.length > 0) {
+      setFormError("Please Choose at least one Listening Exam");
+      return false;
+    }
+    if (type === "Speaking" && !createPT.Speaking.length > 0) {
+      setFormError("Please Choose at least one Speaking Exam");
       return false;
     }
     setFormStatus({
@@ -97,14 +114,17 @@ const PracticeReading = ({ examName, examType }) => {
     return true;
   };
 
-  const createPExam = async (e) => {
+  const createPTest = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
     try {
       const data = {
-        Name: createPRExam.Name,
-        exam_test: createPRExam.exam_test,
-        Reading: createPRExam.Reading,
+        Name: createPT.Name,
+        exam_test: createPT.exam_test,
+        Reading: createPT.Reading,
+        Writing: createPT.Writing,
+        Listening: createPT.Listening,
+        Speaking: createPT.Speaking,
       };
       const response = await ajaxCall(
         "/moduleListView/",
@@ -121,7 +141,7 @@ const PracticeReading = ({ examName, examType }) => {
       );
       if (response.status === 201) {
         resetReducerForm();
-        toast.success("Practice Exam Create Successfully");
+        toast.success("Full Length Exam Create Successfully");
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -134,11 +154,11 @@ const PracticeReading = ({ examName, examType }) => {
     }
   };
 
-  const handleRowSelection = (event) => {
+  const rowSelection = "multiple";
+
+  const handleRowSelection = (type) => (event) => {
     const selectedNodes = event.api?.getSelectedNodes();
-    const selectedIds = selectedNodes.map((node) => (
-      node?.data?.id
-    ));
+    const selectedIds = selectedNodes.map((node) => node?.data?.id);
 
     const total = selectedNodes.reduce((total, node) => {
       return total + (node.data.no_of_questions || 0);
@@ -146,24 +166,18 @@ const PracticeReading = ({ examName, examType }) => {
 
     setTotalQuestions(total);
 
-    dispatchPRExam({
-      type: "Reading",
+    dispatchPT({
+      type,
       value: selectedIds,
     });
   };
 
-  const rowSelection = "multiple";
-
-  const gridOptions = {
-    rowData: examList,
+  const gridOptions = (rowData, handleRowSelection) => ({
+    rowData,
     onSelectionChanged: handleRowSelection,
     columnDefs: [
       { headerCheckboxSelection: true, checkboxSelection: true },
-      {
-        headerName: "Exam Name",
-        field: "exam_name",
-        filter: true,
-      },
+      { headerName: "Exam Name", field: "exam_name", filter: true },
       { headerName: "Exam Type", field: "exam_type", filter: true },
       {
         headerName: "No. Of Questions",
@@ -184,7 +198,7 @@ const PracticeReading = ({ examName, examType }) => {
       sortable: true,
       resizable: true,
     },
-  };
+  });
 
   return (
     <div className="body__wrapper">
@@ -209,7 +223,7 @@ const PracticeReading = ({ examName, examType }) => {
                         aria-expanded="true"
                         aria-controls="collapseOne"
                       >
-                        Practice Exam Details
+                        PT Details
                       </button>
                     </h2>
                     <div
@@ -224,13 +238,13 @@ const PracticeReading = ({ examName, examType }) => {
                             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                               <div className="dashboard__form__wraper">
                                 <div className="dashboard__form__input">
-                                  <label>Practice Exam Name</label>
+                                  <label>Practice Test Name</label>
                                   <input
                                     type="text"
                                     placeholder="Name"
-                                    value={createPRExam.Name}
+                                    value={createPT.Name}
                                     onChange={(e) =>
-                                      dispatchPRExam({
+                                      dispatchPT({
                                         type: "Name",
                                         value: e.target.value,
                                       })
@@ -241,14 +255,23 @@ const PracticeReading = ({ examName, examType }) => {
                             </div>
                             <div className="dashboard__form__wraper">
                               <div className="dashboard__form__input">
-                                <label>Total No. of Questions : {totalQuestions}</label>
+                                <label>
+                                  Total No. of Questions : {totalQuestions}
+                                </label>
                               </div>
                             </div>
-                            <div className="ag-theme-alpine">
-                              <AgGridReact
-                                {...gridOptions}
-                                rowSelection={rowSelection}
-                              />
+                            <div className="dashboard__form__wraper">
+                              <div className="dashboard__form__input">
+                                <div className="ag-theme-alpine">
+                                  <AgGridReact
+                                    {...gridOptions(
+                                      exams.Reading,
+                                      handleRowSelection(type)
+                                    )}
+                                    rowSelection={rowSelection}
+                                  />
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -263,8 +286,8 @@ const PracticeReading = ({ examName, examType }) => {
                 ) : (
                   <div className="text-success mb-2">{formStatus.errMsg}</div>
                 )}
-                <button className="default__button" onClick={createPExam}>
-                  Submit
+                <button className="default__button" onClick={createPTest}>
+                  Create PT
                 </button>
               </div>
             </div>
@@ -275,4 +298,4 @@ const PracticeReading = ({ examName, examType }) => {
   );
 };
 
-export default PracticeReading;
+export default PT;

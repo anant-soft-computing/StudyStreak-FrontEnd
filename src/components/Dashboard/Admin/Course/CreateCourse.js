@@ -1,8 +1,8 @@
 import React, { useReducer, useState } from "react";
-import ajaxCall from "../../helpers/ajaxCall";
-import SingleSelection from "../../components/UI/SingleSelect";
-import SelectionBox from "../../components/UI/SelectionBox";
 import { toast } from "react-toastify";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import SingleSelection from "../../../UI/SingleSelect";
+import SelectionBox from "../../../UI/SelectionBox";
 
 const initialCourseData = {
   Course_Title: "",

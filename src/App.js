@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Main from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
-import CreateCourse from "./pages/CreateCourse/CreateCourse";
 import CourseDetail from "./components/CourseDetail/CourseDetail";
 import Courses from "./pages/Courses/Courses";
 import Blogs from "./pages/Blogs/Blogs";
@@ -17,7 +16,6 @@ import AdminDashboard from "./components/Dashboard/Admin/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import DragDrop from "./components/Exam-Create/DragDrop";
 import ProtectedRoute from "./components/ProtectedRoute";
-import ExamCreator from "./pages/Exam-Creator/ExamCreator";
 import ExamReading from "./components/Exam-Create/ExamReading";
 import ExamListening from "./components/Exam-Create/ExamListening";
 import ExamWriting from "./components/Exam-Create/ExamWriting";
@@ -77,10 +75,6 @@ const App = () => {
           <Route
             path="/course/:courseId"
             element={<ProtectedRoute element={CourseContent} />}
-          />
-          <Route
-            path="/createCourse"
-            element={<ProtectedRoute element={CreateCourse} />}
           />
           <Route path="/tests" element={<ProtectedRoute element={Tests} />} />
           <Route path="/blogs" element={<ProtectedRoute element={Blogs} />} />
@@ -146,23 +140,19 @@ const App = () => {
             element={<ProtectedRoute element={DragDrop} />}
           />
           <Route
-            path="/exam-creator"
-            element={<ProtectedRoute element={ExamCreator} />}
-          />
-          <Route
-            path="/exam-reading"
+            path="/Reading"
             element={<ProtectedRoute element={ExamReading} />}
           />
           <Route
-            path="/exam-listening"
+            path="/Listening"
             element={<ProtectedRoute element={ExamListening} />}
           />
           <Route
-            path="/exam-writing"
+            path="/Writing"
             element={<ProtectedRoute element={ExamWriting} />}
           />
           <Route
-            path="/exam-speaking"
+            path="/Speaking"
             element={<ProtectedRoute element={ExamSpeaking} />}
           />
           <Route

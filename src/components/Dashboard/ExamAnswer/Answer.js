@@ -15,7 +15,7 @@ const Answer = () => {
   const examName = answer[0]?.exam?.exam_name;
   const totalQuestions = answer[0]?.exam?.no_of_questions;
 
-  const { examAnswer, stoppedTimeFormatted, bandValue } =
+  const { examAnswer, timeTaken, bandValue } =
     useLocation()?.state || {};
 
   const getAnswere = async () => {
@@ -101,7 +101,7 @@ const Answer = () => {
                           Time Taken :
                           <div className="scc__meta">
                             <strong className="answerCount">
-                              {stoppedTimeFormatted}
+                              {timeTaken}
                             </strong>
                           </div>
                         </li>

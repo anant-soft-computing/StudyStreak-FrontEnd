@@ -9,7 +9,10 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
         <>
           <div className="plyr__video-embed rbtplayer">
             <iframe
-              src={activeLesson?.Lesson_Video?.replace("watch?v=", "embed/")}
+              src={`${activeLesson?.Lesson_Video?.replace(
+                "watch?v=",
+                "embed/"
+              )}?start=140`}
               allow="autoplay"
               allowFullScreen
               title="YouTube video player"

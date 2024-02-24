@@ -343,9 +343,10 @@ const DragDrop = () => {
       type,
       randomNumbers[0]
     );
+
     setSelectedDivs((prev) => [
       ...prev,
-      { header, tag, type, id: randomNumbers[0] },
+      { header, passage: divContents[header], tag, type, id: randomNumbers[0] },
     ]);
 
     // Generate answer field
@@ -373,10 +374,15 @@ const DragDrop = () => {
 
   const handleContentChange = (event, header, divIndex) => {
     event.preventDefault();
-    setDivContents({
-      ...divContents,
-      [header.header]: event.target.innerHTML,
-    });
+    if (
+      event.target.localName === "select" ||
+      event.target.localName === "textarea" ||
+      event.target.localName === "input"
+    )
+      return;
+    const tempSelectedDivs = [...selectedDivs];
+    tempSelectedDivs[divIndex].passage = event.target.innerHTML;
+    setSelectedDivs(tempSelectedDivs);
 
     generateAnswerField(
       event.target.innerHTML,
@@ -421,7 +427,7 @@ const DragDrop = () => {
     .map((header) => {
       return `<div class="${
         header === "header1" ? "header21Class" : "header2Class"
-      }">${divContents[header.header]}</div>`;
+      }">${header.passage}</div>`;
     })
     .join("");
 
@@ -432,10 +438,7 @@ const DragDrop = () => {
       .map((header) => {
         // Parse the HTML content
         const parser = new DOMParser();
-        const doc = parser.parseFromString(
-          divContents[header.header],
-          "text/html"
-        );
+        const doc = parser.parseFromString(header.passage, "text/html");
 
         // Find all select elements
         const selectElements = doc.querySelectorAll(header.tag);
@@ -975,7 +978,7 @@ const DragDrop = () => {
                         <div
                           contentEditable
                           dangerouslySetInnerHTML={{
-                            __html: divContents[header.header],
+                            __html: header.passage,
                           }}
                           onBlur={(event) =>
                             handleContentChange(event, header, index)

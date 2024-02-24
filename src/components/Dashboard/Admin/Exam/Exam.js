@@ -49,6 +49,12 @@ const exams = [
     link: "/admin-exam/GMAT",
     isDisabled: true,
   },
+  {
+    name: "Genral Exam",
+    subMenu: [],
+    link: "/admin-exam/Genral-Exam",
+    isDisabled: true,
+  },
 ];
 
 const examTypes = [

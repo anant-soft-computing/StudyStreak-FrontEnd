@@ -212,6 +212,9 @@ const CreateCourse = () => {
           method: "POST",
           body: formData,
           withCredentials: true,
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+          }`,
         },
         8000
       );

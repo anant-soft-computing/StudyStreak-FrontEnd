@@ -20,6 +20,7 @@ const Lesson = () => {
   const [activeContentType, setActiveContentType] = useState("video");
 
   const authData = useSelector((state) => state.authStore);
+
   const getCourseLessons = async () => {
     try {
       const response = await ajaxCall(
@@ -28,7 +29,9 @@ const Lesson = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },

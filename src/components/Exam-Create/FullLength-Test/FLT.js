@@ -7,7 +7,7 @@ const intialFLTData = {
   Name: "",
   exam_test: "Full Length",
   Reading: [],
-  Writing: [],  
+  Writing: [],
   Listening: [],
   Speaking: [],
 };
@@ -31,10 +31,7 @@ const FLT = () => {
     Listening: [],
     Speaking: [],
   });
-  const [createFLT, dispatchFLT] = useReducer(
-    reducerFLT,
-    intialFLTData
-  );
+  const [createFLT, dispatchFLT] = useReducer(reducerFLT, intialFLTData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
 
   const setFormError = (errMsg) => {
@@ -59,6 +56,9 @@ const FLT = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -133,6 +133,9 @@ const FLT = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "POST",
           body: JSON.stringify(data),

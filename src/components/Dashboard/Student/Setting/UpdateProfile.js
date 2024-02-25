@@ -18,7 +18,9 @@ const UpdateProfile = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -67,7 +69,9 @@ const UpdateProfile = () => {
         {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "PATCH",
           body: formData,
@@ -93,7 +97,9 @@ const UpdateProfile = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "PATCH",
         },
@@ -128,7 +134,7 @@ const UpdateProfile = () => {
               <div className="dashboard__form__input">
                 <label for="#">First Name</label>
                 <input
-                  type="text" 
+                  type="text"
                   placeholder="First Name"
                   value={profileData?.user?.first_name}
                   name="user.first_name"

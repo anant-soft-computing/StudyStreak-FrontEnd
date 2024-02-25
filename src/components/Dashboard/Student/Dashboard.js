@@ -18,6 +18,9 @@ const Dashboard = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -118,7 +121,11 @@ const Dashboard = () => {
                                   target="_blank"
                                   className="text-decoration-none"
                                 >
-                                  {lastestLiveClass?.zoom_meeting_id?.split("/")[3]}
+                                  {
+                                    lastestLiveClass?.zoom_meeting_id?.split(
+                                      "/"
+                                    )[3]
+                                  }
                                 </Link>
                               </span>
                             </p>

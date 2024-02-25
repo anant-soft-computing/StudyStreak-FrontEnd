@@ -27,6 +27,9 @@ const ViewPackages = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -69,7 +72,7 @@ const ViewPackages = () => {
         field: "select_course.Course_Title",
         filter: true,
       },
-      { headerName: "Duration", field: "duration"},
+      { headerName: "Duration", field: "duration" },
       {
         headerName: "Coupon Code",
         field: "coupon_code.cupon_code",

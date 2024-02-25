@@ -30,6 +30,9 @@ const MockTest = () => {
   );
 
   const getTestBlockData = async () => {
+    const getToken = JSON.parse(localStorage.getItem("loginInfo"));
+    console.log("getToken", getToken);
+    console.log("getToken?.accessToken", getToken?.accessToken);
     try {
       const response = await ajaxCall(
         `/exam-blocks/`,
@@ -37,6 +40,9 @@ const MockTest = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },

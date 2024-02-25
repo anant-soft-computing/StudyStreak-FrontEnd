@@ -746,6 +746,9 @@ const DragDrop = () => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+          }`,
         },
         method: "POST",
         body: JSON.stringify(data),
@@ -797,6 +800,13 @@ const DragDrop = () => {
       const response = await ajaxCall("/exam-blocks/", {
         method: "POST",
         body: formData,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+          }`,
+        },
       });
       if (response.status === 201) {
         toast.success("Writing Exam Create SuccessFull");

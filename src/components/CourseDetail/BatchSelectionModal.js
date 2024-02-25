@@ -30,6 +30,9 @@ const BatchSelection = (props) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -67,7 +70,7 @@ const BatchSelection = (props) => {
   };
 
   const handleModalClose = () => {
-    setSelectedBatchIds('');
+    setSelectedBatchIds("");
     onHide();
   };
 
@@ -75,31 +78,31 @@ const BatchSelection = (props) => {
     <Modal
       {...props}
       show={show}
-      size='lg'
+      size="lg"
       keyboard={false}
-      backdrop='static'
-      aria-labelledby='contained-modal-title-vcenter'
+      backdrop="static"
+      aria-labelledby="contained-modal-title-vcenter"
       centered
     >
       <Modal.Header>
-        <Modal.Title id='contained-modal-title-vcenter'>
+        <Modal.Title id="contained-modal-title-vcenter">
           Select Preferred Batch
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {batches?.length >= 1 ? (
-          <div className='row'>
+          <div className="row">
             {batches?.map((batchItem) => (
               <div
-                className='dashboard__recent__course__single'
+                className="dashboard__recent__course__single"
                 key={batchItem?.id}
               >
-                <div className='me-3'>
+                <div className="me-3">
                   <input
-                    type='checkbox'
+                    type="checkbox"
                     checked={selectedBatchIds.includes(batchItem?.id)}
-                    name='batchSelection'
-                    className='w-10 batch__radio__input'
+                    name="batchSelection"
+                    className="w-10 batch__radio__input"
                     onChange={() => {
                       const batchId = batchItem?.id;
                       setSelectedBatchIds((prev) => {
@@ -113,30 +116,30 @@ const BatchSelection = (props) => {
                   />
                 </div>
                 <div
-                  className='dashboard__recent__course__content'
-                  style={{ width: '80%' }}
+                  className="dashboard__recent__course__content"
+                  style={{ width: "80%" }}
                 >
-                  <div className='dashboard__recent__course__heading'>
+                  <div className="dashboard__recent__course__heading">
                     <h3>{batchItem?.batch_name}</h3>
                   </div>
-                  <div className='dashboard__recent__course__meta text-xl-center'>
-                    <ul className='ps-0'>
+                  <div className="dashboard__recent__course__meta text-xl-center">
+                    <ul className="ps-0">
                       <li>
-                        <i className='icofont-calendar'></i> <b>Date</b>:{' '}
+                        <i className="icofont-calendar"></i> <b>Date</b>:{" "}
                         {batchItem?.batch_startdate && batchItem?.batch_enddate
                           ? `${batchItem?.batch_startdate} To ${batchItem?.batch_enddate}`
-                          : 'N/A'}
+                          : "N/A"}
                       </li>
                       <li>
-                        <i className='icofont-clock-time'></i> <b>Time</b>:{' '}
+                        <i className="icofont-clock-time"></i> <b>Time</b>:{" "}
                         {batchItem?.batch_start_timing &&
                         batchItem?.batch_end_timing
                           ? `${batchItem?.batch_start_timing} To ${batchItem?.batch_end_timing}`
-                          : 'N/A'}
+                          : "N/A"}
                       </li>
 
                       <li>
-                        <i className='icofont-group-students'></i>{' '}
+                        <i className="icofont-group-students"></i>{" "}
                         <b>Students</b>: {batchItem?.batchuser}
                       </li>
                     </ul>
@@ -151,25 +154,25 @@ const BatchSelection = (props) => {
       </Modal.Body>
       <Modal.Footer>
         <button
-          className='default__button'
+          className="default__button"
           onClick={() => handleEnrollButton()}
           disabled={!selectedBatchIds || batchFormSubmitting}
         >
           {batchFormSubmitting && (
             <Spinner
-              animation='border'
-              role='status'
-              size='sm'
-              className='me-2'
+              animation="border"
+              role="status"
+              size="sm"
+              className="me-2"
             >
-              <span className='visually-hidden'>Loading...</span>
+              <span className="visually-hidden">Loading...</span>
             </Spinner>
           )}
           Enroll Package
         </button>
         <button
           onClick={() => handleModalClose()}
-          className='btn-secondary default__button'
+          className="btn-secondary default__button"
         >
           Close
         </button>

@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState();
-  const authData = useSelector((state) => state.authStore);
   const navigate = useNavigate();
   const updateProfile = () => {
     navigate("/studentSettings", { state: { profileData } });
@@ -25,7 +24,9 @@ const Profile = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -144,7 +145,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                            Biography
+                              Biography
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -331,7 +332,7 @@ const Profile = () => {
         </div>
       </div>
       <Footer />
-    </div>    
+    </div>
   );
 };
 

@@ -8,7 +8,7 @@ const intialPT = {
   exam_test: "Practice",
   Reading: [],
   Writing: [],
-  Listening: [],    
+  Listening: [],
   Speaking: [],
 };
 
@@ -58,6 +58,9 @@ const PT = ({ name, type }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -132,6 +135,9 @@ const PT = ({ name, type }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "POST",
           body: JSON.stringify(data),

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const DSNavBar = () => {
   const [data, setData] = useState();
-  const authData = useSelector((state) => state.authStore);
 
   const getData = async () => {
     try {
@@ -14,7 +12,9 @@ const DSNavBar = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -46,7 +46,9 @@ const DSNavBar = () => {
                     <img src={data?.user_image} alt="" />
                   </div>
                   <div className="dashboardarea__left__content">
-                    <h4>{data?.user?.first_name} {data?.user?.last_name}</h4>
+                    <h4>
+                      {data?.user?.first_name} {data?.user?.last_name}
+                    </h4>
                   </div>
                 </div>
               </div>

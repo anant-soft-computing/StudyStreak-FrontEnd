@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import ajaxCall from '../../helpers/ajaxCall';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   const [courseList, setCouresList] = useState([]);
@@ -11,10 +11,13 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
         `/courselistview/?search=${search}&Category__name=${selectedCategory}&Level__name=${selectedLevel}`,
         {
           headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
-          method: 'GET',
+          method: "GET",
         },
         8000
       );
@@ -34,15 +37,15 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   }, [search, selectedCategory, selectedLevel]);
 
   return (
-    <div className='row'>
+    <div className="row">
       {courseList.map((course) => (
         <div
-          className='col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12'
-          data-aos='fade-up'
+          className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
+          data-aos="fade-up"
           key={course.id}
         >
-          <div className='gridarea__wraper gridarea__wraper__2'>
-            <div className='gridarea__img'>
+          <div className="gridarea__wraper gridarea__wraper__2">
+            <div className="gridarea__img">
               <Link to={`/courseDetail/${course?.id}`}>
                 <img
                   src={course?.Course_Thumbnail}
@@ -51,25 +54,25 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                 />
               </Link>
             </div>
-            <div className='gridarea__content'>
-              <div className='gridarea__list'>
-                <ul className='ps-0'>
+            <div className="gridarea__content">
+              <div className="gridarea__list">
+                <ul className="ps-0">
                   <li>
-                    <i className='icofont-book-alt'></i>{' '}
+                    <i className="icofont-book-alt"></i>{" "}
                     {course?.lessons?.length} Lessons
                   </li>
                   <li>
-                    <i className='icofont-clock-time'></i>{' '}
+                    <i className="icofont-clock-time"></i>{" "}
                     {course?.lessons.reduce(
                       (totalDuration, lesson) =>
                         totalDuration + parseInt(lesson?.Lesson_Duration),
                       0
-                    )}{' '}
+                    )}{" "}
                     Minutes
                   </li>
                 </ul>
               </div>
-              <div className='gridarea__heading'>
+              <div className="gridarea__heading">
                 <h3>
                   <Link to={`/courseDetail/${course?.id}`}>
                     {course?.Course_Title}

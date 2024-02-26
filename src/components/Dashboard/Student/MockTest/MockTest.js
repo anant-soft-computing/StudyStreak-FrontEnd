@@ -30,9 +30,6 @@ const MockTest = () => {
   );
 
   const getTestBlockData = async () => {
-    const getToken = JSON.parse(localStorage.getItem("loginInfo"));
-    console.log("getToken", getToken);
-    console.log("getToken?.accessToken", getToken?.accessToken);
     try {
       const response = await ajaxCall(
         `/exam-blocks/`,

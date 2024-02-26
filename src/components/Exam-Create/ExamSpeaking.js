@@ -9,7 +9,7 @@ const intialSpeakingField = {
   no_of_questions: "",
   difficulty_level: "Easy",
   exam_name: "",
-  block_type: "Practice",
+  block_type: "Mock Test",
   block_threshold: "",
   passage: "",
   question: "",
@@ -27,7 +27,7 @@ const reducerSpeaking = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const ExamSpeaking = () => {
+const ExamSpeaking = ({ category }) => {
   const [SpeakingData, dispatchSpeakingData] = useReducer(
     reducerSpeaking,
     intialSpeakingField
@@ -114,6 +114,7 @@ const ExamSpeaking = () => {
       passage: SpeakingData.passage,
       question: SpeakingData.question,
       answers: SpeakingData.answers,
+      exam_category: category,
     };
 
     try {
@@ -279,10 +280,7 @@ const ExamSpeaking = () => {
                                     })
                                   }
                                 >
-                                  <option value="Practice">Practice</option>
-                                  <option value="Full Length">
-                                    Full Length
-                                  </option>
+                                  <option value="Mock Test">Mock Test</option>
                                   <option value="Assignments">
                                     Assignment
                                   </option>

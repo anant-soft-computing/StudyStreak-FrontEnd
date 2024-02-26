@@ -7,7 +7,7 @@ const intialReadingField = {
   no_of_questions: "",
   difficulty_level: "Easy",
   exam_name: "",
-  block_type: "Practice",
+  block_type: "Mock Test",
   block_threshold: "",
   passage: "",
   question: "",
@@ -24,7 +24,7 @@ const reducerReading = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const ExamReading = () => {
+const ExamReading = ({ category }) => {
   const [readingData, dispatchReadingData] = useReducer(
     reducerReading,
     intialReadingField
@@ -81,7 +81,7 @@ const ExamReading = () => {
 
   const handleOnNext = () => {
     if (!validateForm()) return;
-    navigate("/exam-create", { state: { readingData } });
+    navigate("/exam-create", { state: { readingData, category } });
   };
 
   return (
@@ -220,10 +220,7 @@ const ExamReading = () => {
                                     })
                                   }
                                 >
-                                  <option value="Practice">Practice</option>
-                                  <option value="Full Length">
-                                    Full Length
-                                  </option>
+                                  <option value="Mock Test">Mock Test</option>
                                   <option value="Assignments">
                                     Assignment
                                   </option>

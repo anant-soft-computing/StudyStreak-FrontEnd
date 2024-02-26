@@ -27,8 +27,6 @@ const PracticeLiveExam = () => {
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   let highlightedElement = null;
 
-  console.log("--examAnswer----->", examAnswer);
-
   useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||

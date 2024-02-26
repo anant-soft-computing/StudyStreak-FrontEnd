@@ -7,7 +7,7 @@ const intialListeningField = {
   no_of_questions: "",
   difficulty_level: "Easy",
   exam_name: "",
-  block_type: "Practice",
+  block_type: "Mock Test",
   block_threshold: "",
   audio_file: "",
   passage: "",
@@ -25,7 +25,7 @@ const listeningReducer = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const ExamListening = () => {
+const ExamListening = ({ category }) => {
   const [listeningData, dispatchListeningData] = useReducer(
     listeningReducer,
     intialListeningField
@@ -80,7 +80,7 @@ const ExamListening = () => {
 
   const handleOnNext = () => {
     if (!validateForm()) return;
-    navigate("/exam-create", { state: { listeningData } });
+    navigate("/exam-create", { state: { listeningData, category } });
   };
 
   return (
@@ -219,10 +219,7 @@ const ExamListening = () => {
                                     })
                                   }
                                 >
-                                  <option value="Practice">Practice</option>
-                                  <option value="Full Length">
-                                    Full Length
-                                  </option>
+                                  <option value="Mock Test">Mock Test</option>
                                   <option value="Assignments">
                                     Assignment
                                   </option>

@@ -129,7 +129,7 @@ const ExamSpeaking = () => {
         body: JSON.stringify(data),
       });
       if (response.status === 201) {
-        toast.success("Speaking Exam Create SuccessFull");
+        toast.success("Speaking Exam Create SuccessFully");
         navigate("/admin-exam");
       } else if (response.status === 400) {
         toast.error("Some Problem Occurred. Please try again.");

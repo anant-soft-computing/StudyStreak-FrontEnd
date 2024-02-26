@@ -27,22 +27,31 @@ const TopBar = () => {
               <div className="topbar__list">
                 <ul>
                   <li>
-                    <Link to="/">
+                    <Link
+                      to="https://www.facebook.com/espivisaconsultants/"
+                      target="_blank"
+                    >
                       <i className="icofont-facebook"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/">
+                    <Link to="https://twitter.com/espionline" target="_blank">
                       <i className="icofont-twitter"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link to="https://www.instagram.com/">
+                    <Link
+                      to="https://www.instagram.com/espiconsultants/?hl=en"
+                      target="_blank"
+                    >
                       <i className="icofont-instagram"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/">
+                    <Link
+                      to="https://www.youtube.com/channel/UCFcwCIfSD2_sL79XmR-M-fQ"
+                      target="_blank"
+                    >
                       <i className="icofont-youtube-play"></i>
                     </Link>
                   </li>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DSNavBar from "../DSNavBar/DSNavBar";
@@ -12,7 +11,6 @@ import { toast } from "react-toastify";
 const GroupDoubtSolving = () => {
   const { studentId } = useLocation()?.state;
   const [groupDoubtSolvingData, setGroupDoubtSolvingData] = useState([]);
-  const authData = useSelector((state) => state.authStore);
 
   const getGroupDoubtSolvingData = async () => {
     try {
@@ -108,7 +106,6 @@ const GroupDoubtSolving = () => {
                             meeting_title,
                             meeting_description,
                             zoom_meeting_id,
-                            zoom_meeting_password,
                           }) => {
                             const startDate = new Date(start_time);
                             const isPastDate = startDate < new Date();
@@ -168,19 +165,6 @@ const GroupDoubtSolving = () => {
                                             hour: "numeric",
                                             minute: "numeric",
                                           })}
-                                        </span>
-                                      </p>
-                                      <p className="text-dark">
-                                        Meeting ID :
-                                        <span>
-                                          {" "}
-                                          <Link
-                                            to={`${zoom_meeting_id}`}
-                                            target="_blank"
-                                            className="text-decoration-none"
-                                          >
-                                            {zoom_meeting_id?.split("/")[3]}
-                                          </Link>
                                         </span>
                                       </p>
                                       <button

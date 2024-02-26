@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DSNavBar from "../DSNavBar/DSNavBar";
@@ -12,7 +11,6 @@ import { toast } from "react-toastify";
 const DoubtSolving = () => {
   const { studentId } = useLocation()?.state;
   const [doubtSolvingData, setDoubtSolvingData] = useState([]);
-  const authData = useSelector((state) => state.authStore);
 
   const getdoubtSolvingData = async () => {
     try {
@@ -107,8 +105,6 @@ const DoubtSolving = () => {
                             end_time,
                             meeting_title,
                             meeting_description,
-                            zoom_meeting_id,
-                            zoom_meeting_password,
                           }) => {
                             const startDate = new Date(start_time);
                             const isPastDate = startDate < new Date();
@@ -169,26 +165,15 @@ const DoubtSolving = () => {
                                           })}
                                         </span>
                                       </p>
-                                      <p className="text-dark">
-                                        Meeting ID :
-                                        <span>
-                                          {" "}
-                                          <Link
-                                            to={`${zoom_meeting_id}`}
-                                            target="_blank"
-                                            className="text-decoration-none"
-                                          >
-                                            {zoom_meeting_id?.split("/")[3]}
-                                          </Link>
-                                        </span>
-                                      </p>
-                                      <button
-                                        className="default__button"
-                                        onClick={() => handleEnrollNow(id)}
-                                        disabled={isPastDate}
-                                      >
-                                        Book Slot
-                                      </button>
+                                      <div className="d-flex justify-content-center">
+                                        <button
+                                          className="default__button"
+                                          onClick={() => handleEnrollNow(id)}
+                                          disabled={isPastDate}
+                                        >
+                                          Book Slot
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>

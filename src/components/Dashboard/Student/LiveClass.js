@@ -4,7 +4,7 @@ import DSNavBar from "./DSNavBar/DSNavBar";
 import Footer from "../../Footer/Footer";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 
 const LiveClass = () => {
@@ -37,9 +37,20 @@ const LiveClass = () => {
     }
   };
 
+  const joinNow = (zoom_meeting) => {
+    window.open(zoom_meeting, "__blank");
+  };
+
   useEffect(() => {
     getLiveClass();
   }, [batchId]);
+
+  const isWithin5Minutes = (startTime) => {
+    const currentTime = new Date();
+    const classStartTime = new Date(startTime);
+    const difference = classStartTime.getTime() - currentTime.getTime();
+    return difference >= 0 && difference <= 5 * 60 * 1000;
+  };
 
   return (
     <>
@@ -71,80 +82,85 @@ const LiveClass = () => {
                             meeting_title,
                             meeting_description,
                             zoom_meeting_id,
-                            zoom_meeting_password,
-                          }) => (
-                            <div key={id} className="col-lg-4 col-md-6 col-12">
-                              <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
-                                <div className="gridarea__content ">
-                                  <div className="gridarea__list">
-                                    <ul className="ps-0">
-                                      <li>
-                                        <i className="icofont-calendar"></i>{" "}
-                                        {new Date(
-                                          start_time
-                                        ).toLocaleDateString("en-US", {
-                                          year: "numeric",
-                                          month: "short",
-                                          day: "numeric",
-                                        })}
-                                      </li>
-                                      <li>
-                                        <i className="icofont-clock-time"></i>{" "}
-                                        {new Date(
-                                          start_time
-                                        ).toLocaleTimeString("en-US", {
-                                          hour: "numeric",
-                                          minute: "numeric",
-                                        })}{" "}
-                                        -{" "}
-                                        {new Date(end_time).toLocaleTimeString(
-                                          "en-US",
-                                          {
+                          }) => {
+                            return (
+                              <div
+                                key={id}
+                                className="col-lg-4 col-md-6 col-12"
+                              >
+                                <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+                                  <div className="gridarea__content ">
+                                    <div className="gridarea__list">
+                                      <ul className="ps-0">
+                                        <li>
+                                          <i className="icofont-calendar"></i>{" "}
+                                          {new Date(
+                                            start_time
+                                          ).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "short",
+                                            day: "numeric",
+                                          })}
+                                        </li>
+                                        <li>
+                                          <i className="icofont-clock-time"></i>{" "}
+                                          {new Date(
+                                            start_time
+                                          ).toLocaleTimeString("en-US", {
                                             hour: "numeric",
                                             minute: "numeric",
+                                          })}{" "}
+                                          -{" "}
+                                          {new Date(
+                                            end_time
+                                          ).toLocaleTimeString("en-US", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                          })}
+                                        </li>
+                                      </ul>
+                                    </div>
+                                    <div className="gridarea__heading">
+                                      <h3>{meeting_title}</h3>
+                                    </div>
+                                    <p className="text-dark">
+                                      Description :
+                                      <span> {meeting_description}</span>
+                                    </p>
+                                    <div>
+                                      <p className="text-dark">
+                                        Starting Time:
+                                        <span>
+                                          {" "}
+                                          {new Date(
+                                            start_time
+                                          ).toLocaleTimeString("en-US", {
+                                            hour: "numeric",
+                                            minute: "numeric",
+                                          })}
+                                        </span>
+                                      </p>
+                                    </div>
+                                    {zoom_meeting_id && (
+                                      <div className="d-flex justify-content-center">
+                                        <button
+                                          className="default__button"
+                                          onClick={() =>
+                                            joinNow(zoom_meeting_id)
                                           }
-                                        )}
-                                      </li>
-                                    </ul>
-                                  </div>
-                                  <div className="gridarea__heading">
-                                    <h3>{meeting_title}</h3>
-                                  </div>
-                                  <p className="text-dark">
-                                    Description :
-                                    <span> {meeting_description}</span>
-                                  </p>
-                                  <div>
-                                    <p className="text-dark">
-                                      Starting Time:
-                                      <span>
-                                        {" "}
-                                        {new Date(
-                                          start_time
-                                        ).toLocaleTimeString("en-US", {
-                                          hour: "numeric",
-                                          minute: "numeric",
-                                        })}
-                                      </span>
-                                    </p>
-                                    <p className="text-dark">
-                                      ID :
-                                      <span>
-                                        {" "}
-                                        <Link
-                                          to={`${zoom_meeting_id}`}
-                                          target="_blank"
-                                          className="text-decoration-none"
+                                          disabled={
+                                            !isWithin5Minutes(start_time)
+                                          }
                                         >
-                                          {zoom_meeting_id?.split("/")[3]}
-                                        </Link>
-                                      </span>
-                                    </p>
+                                          Join Now
+                                        </button>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                          )
+                            );
+                          }
                         )}
                       </div>
                     </div>

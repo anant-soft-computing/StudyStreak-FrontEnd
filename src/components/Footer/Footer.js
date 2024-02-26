@@ -62,28 +62,32 @@ const Footer = () => {
               <div className="footerarea__icon footerarea__icon__2">
                 <ul>
                   <li>
-                    <Link to="http://facebook.com/">
+                    <Link
+                      to="https://www.facebook.com/espivisaconsultants/"
+                      target="_blank"
+                    >
                       <i className="icofont-facebook"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link to="http://twitter.com/">
+                    <Link to="https://twitter.com/espionline" target="_blank">
                       <i className="icofont-twitter"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link to="http://vimeo.com/">
-                      <i className="icofont-vimeo"></i>
+                    <Link
+                      to="https://www.instagram.com/espiconsultants/?hl=en"
+                      target="_blank"
+                    >
+                      <i className="icofont-instagram"></i>
                     </Link>
                   </li>
                   <li>
-                    <Link to="http://linkedin.com/">
-                      <i className="icofont-linkedin"></i>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="http://skype.com/">
-                      <i className="icofont-skype"></i>
+                    <Link
+                      to="https://www.youtube.com/channel/UCFcwCIfSD2_sL79XmR-M-fQ"
+                      target="_blank"
+                    >
+                      <i className="icofont-youtube-play"></i>
                     </Link>
                   </li>
                 </ul>

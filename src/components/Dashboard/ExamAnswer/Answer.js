@@ -15,7 +15,7 @@ const Answer = () => {
   const examName = answer[0]?.exam?.exam_name;
   const totalQuestions = answer[0]?.exam?.no_of_questions;
 
-  const { examAnswer, timeTaken, bandValue } =
+  const { examAnswer, timeTaken, bandValue, gptResponse, examData } =
     useLocation()?.state || {};
 
   const getAnswere = async () => {
@@ -103,9 +103,7 @@ const Answer = () => {
                         <li className="text-dark">
                           Time Taken :
                           <div className="scc__meta">
-                            <strong className="answerCount">
-                              {timeTaken}
-                            </strong>
+                            <strong className="answerCount">{timeTaken}</strong>
                           </div>
                         </li>
                       </ul>
@@ -134,73 +132,92 @@ const Answer = () => {
                         </li>
                       </ul>
                     </div>
-                    <div style={{ marginTop: "50px" }}>
-                      <div className="dashboard__section__title">
-                        <h4 className="sidebar__title">Answer Table</h4>
+                    {examData?.exam_type === "Writing" && (
+                      <div style={{ marginTop: "50px" }}>
+                        <div className="dashboard__section__title">
+                          <h4 className="sidebar__title">Assessment</h4>
+                        </div>
+                        <div
+                          style={{
+                            fontWeight: "400",
+                            fontSize: "18px",
+                            lineHeight: "30px",
+                          }}
+                        >
+                          {gptResponse}
+                        </div>
                       </div>
-                      <div className="row">
-                        <div className="col-xl-12">
-                          <div
-                            className="dashboard__table table-responsive Sagar"
-                            style={{ maxHeight: "270px" }}
-                          >
-                            <table>
-                              <thead>
-                                <tr>
-                                  <th>Question No.</th>
-                                  <th>Correct Answer</th>
-                                  <th>Your Answer</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {answer.map(
-                                  (
-                                    { id, question_number, answer_text },
-                                    index
-                                  ) => (
-                                    <tr
-                                      key={id}
-                                      className={`${
-                                        index % 2 === 0
-                                          ? ""
-                                          : "dashboard__table__row"
-                                      }`}
-                                    >
-                                      <td className="text-dark">
-                                        {question_number}.
-                                      </td>
-                                      <td className="text-dark">
-                                        <div className="dashboard__table__star">
-                                          {answer_text}
-                                        </div>
-                                      </td>
-                                      <td className="text-dark">
-                                        {correctAnswers?.length > 0 &&
+                    )}
+                    {(examData?.exam_type === "Reading" ||
+                      examData?.exam_type === "Listening") && (
+                      <div style={{ marginTop: "50px" }}>
+                        <div className="dashboard__section__title">
+                          <h4 className="sidebar__title">Answer Table</h4>
+                        </div>
+                        <div className="row">
+                          <div className="col-xl-12">
+                            <div
+                              className="dashboard__table table-responsive Sagar"
+                              style={{ maxHeight: "270px" }}
+                            >
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th>Question No.</th>
+                                    <th>Correct Answer</th>
+                                    <th>Your Answer</th>
+                                    <th></th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {answer.map(
+                                    (
+                                      { id, question_number, answer_text },
+                                      index
+                                    ) => (
+                                      <tr
+                                        key={id}
+                                        className={`${
+                                          index % 2 === 0
+                                            ? ""
+                                            : "dashboard__table__row"
+                                        }`}
+                                      >
+                                        <td className="text-dark">
+                                          {question_number}.
+                                        </td>
+                                        <td className="text-dark">
+                                          <div className="dashboard__table__star">
+                                            {answer_text}
+                                          </div>
+                                        </td>
+                                        <td className="text-dark">
+                                          {correctAnswers?.length > 0 &&
+                                            correctAnswers[index] &&
+                                            correctAnswers[index].answer}
+                                        </td>
+                                        <td className="text-dark">
+                                          {correctAnswers?.length > 0 &&
                                           correctAnswers[index] &&
-                                          correctAnswers[index].answer}
-                                      </td>
-                                      <td className="text-dark">
-                                        {correctAnswers?.length > 0 &&
-                                        correctAnswers[index] &&
-                                        correctAnswers[
-                                          index
-                                        ].answer.toLowerCase() ===
-                                          answer[
+                                          correctAnswers[
                                             index
-                                          ]?.answer_text.toLowerCase()
-                                          ? checkIcon()
-                                          : cancelIcon()}
-                                      </td>
-                                    </tr>
-                                  )
-                                )}
-                              </tbody>
-                            </table>
+                                          ].answer.toLowerCase() ===
+                                            answer[
+                                              index
+                                            ]?.answer_text.toLowerCase()
+                                            ? checkIcon()
+                                            : cancelIcon()}
+                                        </td>
+                                      </tr>
+                                    )
+                                  )}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
                 <div className="col-xl-4 col-lg-4">

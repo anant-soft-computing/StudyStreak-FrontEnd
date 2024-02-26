@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const UpdateProfile = () => {
   const [profileData, setProfileData] = useState();
   const [userId, setUserId] = useState({});
-  const authData = useSelector((state) => state.authStore);
   const navigate = useNavigate();
 
   const getStudentId = async () => {
@@ -29,7 +27,7 @@ const UpdateProfile = () => {
       if (response.status === 200) {
         setUserId(response?.data[0]);
       } else {
-        console.log("---error---->");
+        console.log("error");
       }
     } catch (error) {
       console.log("Error:", error);

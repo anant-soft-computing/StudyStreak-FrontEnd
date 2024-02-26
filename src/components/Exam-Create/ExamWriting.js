@@ -9,7 +9,7 @@ const intialWritingField = {
   no_of_questions: "",
   difficulty_level: "Easy",
   exam_name: "",
-  block_type: "Practice",
+  block_type: "Mock Test",
   block_threshold: "",
   passage: "",
   question: "",
@@ -27,7 +27,7 @@ const reducerWriting = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const ExamWriting = () => {
+const ExamWriting = ({ category }) => {
   const [writingData, dispatchWritingData] = useReducer(
     reducerWriting,
     intialWritingField
@@ -128,6 +128,7 @@ const ExamWriting = () => {
       question: writingData.question,
       answers: writingData.answers,
       question_structure: witingQuestionStrucutre,
+      exam_category: category,
     };
 
     try {
@@ -293,10 +294,7 @@ const ExamWriting = () => {
                                     })
                                   }
                                 >
-                                  <option value="Practice">Practice</option>
-                                  <option value="Full Length">
-                                    Full Length
-                                  </option>
+                                  <option value="Mock Test">Mock Test</option>
                                   <option value="Assignments">
                                     Assignment
                                   </option>

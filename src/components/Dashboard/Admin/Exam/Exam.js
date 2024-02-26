@@ -267,16 +267,24 @@ const Exam = () => {
                                 ))}
                               {(screenContent.examType &&
                                 screenContent.examForm === "Reading" && (
-                                  <ExamReading />
+                                  <ExamReading
+                                    category={screenContent.examType}
+                                  />
                                 )) ||
                                 (screenContent.examForm === "Writing" && (
-                                  <ExamWriting />
+                                  <ExamWriting
+                                    category={screenContent.examType}
+                                  />
                                 )) ||
                                 (screenContent.examForm === "Listening" && (
-                                  <ExamListening />
+                                  <ExamListening
+                                    category={screenContent.examType}
+                                  />
                                 )) ||
                                 (screenContent.examForm === "Speaking" && (
-                                  <ExamSpeaking />
+                                  <ExamSpeaking
+                                    category={screenContent.examType}
+                                  />
                                 ))}
                             </div>
                           </div>

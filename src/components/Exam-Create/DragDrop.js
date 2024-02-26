@@ -54,6 +54,7 @@ const initialSubmit = {
 
 const DragDrop = () => {
   const location = useLocation();
+  const category = location.state?.category || {};
   const readingData = location.state?.readingData || {};
   const listeningData = location.state?.listeningData || {};
   const [audioLink, setAudioLink] = useState();
@@ -740,6 +741,7 @@ const DragDrop = () => {
       question: htmlContent,
       answers: answerData.flat(Infinity),
       question_structure: questionStructure,
+      exam_category: category,
     };
     try {
       const response = await ajaxCall("/exam-blocks/", {
@@ -796,6 +798,7 @@ const DragDrop = () => {
       })
     );
     formData.append("audio_file", listeningData.audio_file);
+    formData.append("exam_category", category);
     try {
       const response = await ajaxCall("/exam-blocks/", {
         method: "POST",

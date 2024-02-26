@@ -7,7 +7,6 @@ import DSSidebar from "./DSSideBar/DSSideBar";
 import { useNavigate } from "react-router-dom";
 import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
 import ajaxCall from "../../../helpers/ajaxCall";
-import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState();
@@ -35,10 +34,10 @@ const Profile = () => {
       if (response.status === 200) {
         setProfileData(response.data[0]);
       } else {
-        console.log("---error---->");
+        console.log("error");
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.log("error:", error);
     }
   };
 

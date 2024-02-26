@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 
 const DSSidebar = () => {
-  const authData = useSelector((state) => state.authStore);
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [batchId, setBatchId] = useState([]);
   const [studentId, setStudentId] = useState([]);
@@ -100,7 +98,7 @@ const DSSidebar = () => {
           <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
         </svg>
       ),
-      link: "/testBlock",
+      link: "/mockTest",
     },
     {
       name: "Practice Test",
@@ -310,6 +308,7 @@ const DSSidebar = () => {
             packageDetails?.one_to_one_doubt_solving_count,
         });
         setBatchId(response?.data?.student_packages?.[0]?.batch_id);
+        localStorage.setItem("StudentID",response?.data?.student_packages?.[0]?.student_id);
         setStudentId(response?.data?.student_packages?.[0]?.student_id);
         setEnrolledCourse(response?.data?.student_packages?.[0]?.course);
       } else {

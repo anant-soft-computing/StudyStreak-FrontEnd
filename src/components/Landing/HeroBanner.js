@@ -16,7 +16,7 @@ const HeroBanner = () => {
     if (!authData.loggedIn) {
       navigate("/login");
     } else {
-      navigate("/testBlock");
+      navigate("/mockTest");
     }
   };
   return (

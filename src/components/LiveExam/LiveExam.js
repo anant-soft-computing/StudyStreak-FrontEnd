@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
-import { useSelector } from "react-redux";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import Modal from "react-bootstrap/Modal";
@@ -23,7 +22,6 @@ const LiveExam = () => {
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  const authData = useSelector((state) => state.authStore);
   let highlightedElement = null;
 
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
@@ -170,7 +168,7 @@ const LiveExam = () => {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
         navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, timeTaken, bandValue },
+          state: { examAnswer, timeTaken, bandValue, gptResponse, examData },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
@@ -236,7 +234,7 @@ const LiveExam = () => {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
         navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, timeTaken, bandValue },
+          state: { examAnswer, timeTaken, bandValue, examData },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

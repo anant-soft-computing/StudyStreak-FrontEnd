@@ -22,7 +22,6 @@ const initialSubmit = {
 };
 
 const listeningReducer = (state, action) => {
-  console.log(state, action);
   return { ...state, [action.type]: action.value };
 };
 

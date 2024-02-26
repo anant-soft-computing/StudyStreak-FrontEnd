@@ -754,7 +754,7 @@ const DragDrop = () => {
         body: JSON.stringify(data),
       });
       if (response.status === 201) {
-        toast.success("Reading Exam Create SuccessFull");
+        toast.success("Reading Exam Create SuccessFully");
         navigate("/admin-exam");
       } else if (response.status === 400) {
         toast.error("Some Problem Occurred. Please try again.");
@@ -801,17 +801,15 @@ const DragDrop = () => {
         method: "POST",
         body: formData,
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${
             JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
           }`,
         },
       });
       if (response.status === 201) {
-        toast.success("Writing Exam Create SuccessFull");
+        toast.success("Listening Exam Create SuccessFully");
         navigate("/admin-exam");
-      } else if (response.status === 400) {
+      } else if (response.status === 400 || response.status === 401) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {

@@ -53,7 +53,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
           <div className="plyr__video-embed rbtplayer">
             <ReactPlayer
               url={
-                activeLesson.timestamp !== undefined &&
+                activeLesson?.timestamp !== undefined &&
                 `${activeLesson?.Lesson_Video?.replace(
                   "watch?v=",
                   "embed/"

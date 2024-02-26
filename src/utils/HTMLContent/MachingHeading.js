@@ -73,9 +73,6 @@ const MatchingHeadingContent = `
       of CO2 in the atmosphere.
     </span>
   </div>
-  <button className="q-a">
-    <b>Answers</b>
-  </button>
 </div>
 `;
 

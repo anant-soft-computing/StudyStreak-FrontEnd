@@ -1,7 +1,6 @@
 import React, { useReducer, useState } from "react";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 const initialLiveClassData = {
@@ -13,6 +12,7 @@ const initialLiveClassData = {
   end_time: "",
   zoom_meeting_id: "",
   zoom_meeting_password: "",
+  registration_limit: 0,
 };
 
 const initialSubmit = {
@@ -34,15 +34,14 @@ const CreateLiveClass = () => {
     initialLiveClassData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!createLiveClassData.meeting_title) {
-      setFormError("Meeting title is Required");
+      setFormError("Meeting Title is Required");
       return false;
     }
     if (!createLiveClassData.meeting_description) {
-      setFormError("Meeting description Required");
+      setFormError("Meeting Description Required");
       return false;
     }
     if (!createLiveClassData.start_time) {
@@ -226,6 +225,24 @@ const CreateLiveClass = () => {
                   onChange={(e) => {
                     dispatchCreateLiveClass({
                       type: "zoom_meeting_password",
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-xl-6">
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                <label for="#">Registration Limit</label>
+                <input
+                  type="number"
+                  placeholder="Registration Limit"
+                  value={createLiveClassData?.registration_limit}
+                  onChange={(e) => {
+                    dispatchCreateLiveClass({
+                      type: "registration_limit",
                       value: e.target.value,
                     });
                   }}

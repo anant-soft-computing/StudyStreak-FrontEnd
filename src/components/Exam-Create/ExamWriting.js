@@ -143,7 +143,7 @@ const ExamWriting = () => {
         body: JSON.stringify(data),
       });
       if (response.status === 201) {
-        toast.success("Writing Exam Create SuccessFull");
+        toast.success("Writing Exam Create SuccessFully");
         navigate("/admin-exam");
       } else if (response.status === 400) {
         toast.error("Some Problem Occurred. Please try again.");
@@ -405,7 +405,7 @@ const ExamWriting = () => {
                   <div className="text-danger mb-2">{formStatus.errMsg}</div>
                 )}
                 <button className="default__button" onClick={submitWritingExam}>
-                  Next
+                  Submit
                 </button>
               </div>
             </div>

@@ -47,7 +47,7 @@ const MockTest = () => {
       );
       if (response.status === 200) {
         const practiceTest = response?.data?.filter(
-          (item) => item.block_type === "Practice"
+          (item) => item.block_type === "Mock Test"
         );
         setMockTestData(practiceTest);
       } else {

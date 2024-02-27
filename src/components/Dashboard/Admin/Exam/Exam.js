@@ -50,9 +50,9 @@ const exams = [
     isDisabled: true,
   },
   {
-    name: "Genral Exam",
+    name: "GENERAL",
     subMenu: [],
-    link: "/admin-exam/Genral-Exam",
+    link: "/admin-exam/GENERAL",
     isDisabled: true,
   },
 ];

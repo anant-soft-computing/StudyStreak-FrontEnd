@@ -10,6 +10,7 @@ const MatchingSentenceEndingsContent = `
     <li>
       1 After reforms, most mails was
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -22,6 +23,7 @@ const MatchingSentenceEndingsContent = `
     <li>
       2 Each steel printing plate was
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -34,6 +36,7 @@ const MatchingSentenceEndingsContent = `
     <li>
       3 Every penny black was
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -46,6 +49,7 @@ const MatchingSentenceEndingsContent = `
     <li>
       4 Putting a letter in an envelope was
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -58,6 +62,7 @@ const MatchingSentenceEndingsContent = `
     <li>
       5 Keeping the borders of each stamp was
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>

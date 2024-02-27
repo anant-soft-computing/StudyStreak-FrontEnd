@@ -21,6 +21,7 @@ const YesNoContent = `
     <li>
       People do not like the idea of living without technology.
       <select className="optionClass">
+        <option value=""></option>
         <option value="yes">yes</option>
         <option value="no">no</option>
         <option value="not given">not given</option>
@@ -29,6 +30,7 @@ const YesNoContent = `
     <li>
       Teenagers must prefer books over the internet for information.
       <select className="optionClass">
+        <option value=""></option>
         <option value="yes">yes</option>
         <option value="no">no</option>
         <option value="not given">not given</option>
@@ -37,6 +39,7 @@ const YesNoContent = `
     <li>
       We are not yet prepared for technology failures.
       <select className="optionClass">
+        <option value=""></option>
         <option value="yes">yes</option>
         <option value="no">no</option>
         <option value="not given">not given</option>
@@ -45,6 +48,7 @@ const YesNoContent = `
     <li>
       An alternative setup is always reliable.
       <select className="optionClass">
+        <option value=""></option>
         <option value="yes">yes</option>
         <option value="no">no</option>
         <option value="not given">not given</option>
@@ -53,6 +57,7 @@ const YesNoContent = `
     <li>
       Improved systems have rare security breaches
       <select>
+        <option value=""></option>
         <option value="yes">yes</option>
         <option value="no">no</option>
         <option value="not given">not given</option>
@@ -61,6 +66,7 @@ const YesNoContent = `
     <li>
       People are losing social skills due to virtual communication
       <select className="optionClass">
+        <option value=""></option>
         <option value="yes">yes</option>
         <option value="no">no</option>
         <option value="not given">not given</option>

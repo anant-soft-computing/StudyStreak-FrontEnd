@@ -5,6 +5,7 @@ const MatchingHeadingContent = `
     <strong>A.</strong>
     <span>
       <select className="optionClass">
+        <option value=""></option>
         <option value="i">i</option>
         <option value="ii">ii</option>
         <option value="iii">iii</option>
@@ -24,6 +25,7 @@ const MatchingHeadingContent = `
     <strong>B.</strong>
     <span>
       <select className="optionClass">
+        <option value=""></option>
         <option value="i">i</option>
         <option value="ii">ii</option>
         <option value="iii">iii</option>
@@ -42,6 +44,7 @@ const MatchingHeadingContent = `
     <strong>C.</strong>
     <span>
       <select className="optionClass">
+        <option value=""></option>
         <option value="i">i</option>
         <option value="ii">ii</option>
         <option value="iii">iii</option>
@@ -56,6 +59,7 @@ const MatchingHeadingContent = `
     <strong>D.</strong>
     <span>
       <select className="optionClass">
+        <option value=""></option>
         <option value="i">i</option>
         <option value="ii">ii</option>
         <option value="iii">iii</option>

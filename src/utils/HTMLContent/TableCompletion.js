@@ -58,12 +58,14 @@ from the reading passage for each answer.
     </tr>
     <tr>
       <td class='tg-0lax'>Salinity Occurs in 1 </strong> <span> <select class='optionClass'>
+            <option value=''></option>
             <option value='i'>i</option>
             <option value='ii'>ii</option>
             <option value='iii'>iii</option>
             <option value='v'>v</option>
           </select></td>
       <td class='tg-0lax'>salinity as a consequence of <br>7 </strong> <span> <select class='optionClass'>
+            <option value=''></option>
             <option value='i'>i</option>
             <option value='ii'>ii</option>
             <option value='iii'>iii</option>
@@ -72,22 +74,26 @@ from the reading passage for each answer.
     </tr>
     <tr>
       <td class='tg-0lax'>oceanic salts are deposited by <br>2</strong> <span> <select class='optionClass'>
+            <option value=''></option>
             <option value='i'>i</option>
             <option value='ii'>ii</option>
             <option value='iii'>iii</option>
             <option value='v'>v</option>
           </select>and <br>3</strong> <span> <select class='optionClass'>
+              <option value=''></option>
               <option value='i'>i</option>
               <option value='ii'>ii</option>
               <option value='iii'>iii</option>
               <option value='v'>v</option>
             </select></td>
       <td class='tg-0lax'>it includes 8 </strong> <span> <select class='optionClass'>
+            <option value=''></option>
             <option value='i'>i</option>
             <option value='ii'>ii</option>
             <option value='iii'>iii</option>
             <option value='v'>v</option>
           </select>salinity and <br>9 </strong> <span> <select class='optionClass'>
+              <option value=''></option>
               <option value='i'>i</option>
               <option value='ii'>ii</option>
               <option value='iii'>iii</option>
@@ -96,32 +102,36 @@ from the reading passage for each answer.
     </tr>
     <tr>
       <td class='tg-0lax'>salt is a concetrated via<br>4</strong> <span> <select class='optionClass'>
+            <option value=''></option>
             <option value='i'>i</option>
             <option value='ii'>ii</option>
             <option value='iii'>iii</option>
             <option value='v'>v</option>
           </select>and <br>5</strong> <span> <select class='optionClass'>
+              <option value=''></option>
               <option value='i'>i</option>
               <option value='ii'>ii</option>
               <option value='iii'>iii</option>		
               <option value='v'>v</option>
             </select></td>
-      <td class='tg-0lax' rowspan='2'>More water seeps&nbsp;&nbsp;into 10 </strong> <span> <select
-            class='optionClass'>
+      <td class='tg-0lax' rowspan='2'>More water seeps&nbsp;&nbsp;into 10 </strong> <span> <select class='optionClass'>
+            <option value=''></option>
             <option value='i'>i</option>
             <option value='ii'>ii</option>
             <option value='iii'>iii</option>
             <option value='v'>v</option>
-          </select>as farms <br>replace local plants <br><br>causes salt to move to the 11</strong> <span> <select
-              class='optionClass'>
+          </select>as farms <br>replace local plants <br><br>causes salt to move to the 11</strong> <span> <select class='optionClass'>
+              <option value=''></option>    
               <option value='i'>i</option>
               <option value='ii'>ii</option>
               <option value='iii'>iii</option>
               <option value='v'>v</option>
-            </select></td>
+            </select>
+      </td>
     </tr>
     <tr>
       <td class='tg-0lax'>salt moves downwards below <br>6</strong> <span> <select class='optionClass'>
+            <option value=''></option>      
             <option value='i'>i</option>
             <option value='ii'>ii</option>
             <option value='iii'>iii</option>

@@ -23,10 +23,10 @@ const Main = () => {
       </div>
       <HeroBanner />
       <BrandSection />
+      <Scrollar />
       <Path />
       <CounterArea />
       <PopulerArea />
-      <Scrollar />
       <RegisterSection />
       <AboutSection />
       <Footer />

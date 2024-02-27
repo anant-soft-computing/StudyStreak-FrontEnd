@@ -61,6 +61,8 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               }
               onProgress={handleProgress}
               controls
+              height={"590px"}
+              width={"100%"}
             />
           </div>
         </>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 const ReadingTest = ({ readingData }) => {
   const handleClick = (data) => {
@@ -14,7 +14,7 @@ const ReadingTest = ({ readingData }) => {
   return (
     <>
       <div className="row">
-        {readingData.map((data, index) => (
+        {readingData.map((data) => (
           <div className="col-lg-4 col-md-6 col-12">
             <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
               <div className="gridarea__content ">

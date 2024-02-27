@@ -22,6 +22,7 @@ const MAtchingFeaturesContent = `
     <li>
       <strong id="question1#">1 figurine of the dancing girl</strong>
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -37,6 +38,7 @@ const MAtchingFeaturesContent = `
     <li>
       <strong id="question2#">2 seals for marking goods</strong>
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -52,6 +54,7 @@ const MAtchingFeaturesContent = `
     <li>
       <strong id="question3#">3 weapons for hunting</strong>
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -67,6 +70,7 @@ const MAtchingFeaturesContent = `
     <li>
       <strong id="question4#">4 toys for children</strong>
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -82,6 +86,7 @@ const MAtchingFeaturesContent = `
     <li>
       <strong id="question5#">5 copper alloy ruler</strong>
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -97,6 +102,7 @@ const MAtchingFeaturesContent = `
     <li>
       <strong id="question6#">6 production of paper from plant material</strong>
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>
@@ -112,6 +118,7 @@ const MAtchingFeaturesContent = `
     <li>
       <strong id="question7#">7 invention of the compass</strong>
       <select className="optionClass">
+        <option value=""></option>
         <option value="a">A</option>
         <option value="b">B</option>
         <option value="c">C</option>

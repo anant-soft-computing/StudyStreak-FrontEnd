@@ -15,6 +15,7 @@ const LocatingInformatonContent = `
         <span>
           An explanation of how adjustments are made when navigating
           <select className="optionClass">
+            <option value=""></option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -30,6 +31,7 @@ const LocatingInformatonContent = `
         <span>
           Recent news about how navigation systems work
           <select className="optionClass">
+            <option value=""></option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -45,6 +47,7 @@ const LocatingInformatonContent = `
         <span>
           A comparison of tracking abilities
           <select className="optionClass">
+            <option value=""></option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -60,6 +63,7 @@ const LocatingInformatonContent = `
         <span>
           A study showing that scent and sound are not important
           <select className="optionClass">
+            <option value=""></option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -75,6 +79,7 @@ const LocatingInformatonContent = `
         <span>
           Explaining the importance of counting
           <select className="optionClass">
+            <option value=""></option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -90,6 +95,7 @@ const LocatingInformatonContent = `
         <span>
           A description of how ants navigate
           <select className="optionClass">
+            <option value=""></option>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>

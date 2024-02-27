@@ -103,7 +103,7 @@ const LiveExam = () => {
         {
           role: "user",
           content:
-            "analyse the package for ielts writing task and give IELTS bands to the task.",
+            "Analyse The Package For IELTS Writing Task With Following Criteria TASK RESPONSE, COHERENCE AND COHESION, LEXICAL RESOURCE AND Grammatical Range and Accuracy and Give IELTS Bands To The Task",
         },
         {
           role: "user",

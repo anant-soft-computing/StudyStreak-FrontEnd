@@ -22,6 +22,7 @@ const LiveExam = () => {
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
   let highlightedElement = null;
 
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
@@ -74,6 +75,38 @@ const LiveExam = () => {
       }
     })();
   }, [examId]);
+
+  const examSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      exam_id: parseInt(examId),
+      typetest: examData?.block_type,
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-mocktest-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have All Ready Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
 
   const handleWritingAnswer = (e, next) => {
     const answer = e.target.value;
@@ -166,7 +199,7 @@ const LiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        toast.success("Your Exam Submitted Successfully");
+        examSubmit();
         navigate(`/eaxm-answere/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue, gptResponse, examData },
         });
@@ -232,7 +265,7 @@ const LiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        toast.success("Your Exam Submitted Successfully");
+        examSubmit();
         navigate(`/eaxm-answere/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue, examData },
         });

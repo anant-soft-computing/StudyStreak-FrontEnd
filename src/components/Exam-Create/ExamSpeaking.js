@@ -12,7 +12,6 @@ const intialSpeakingField = {
   block_type: "Mock Test",
   block_threshold: "",
   passage: "",
-  question: "",
   exam_type: "Speaking",
   answers: [],
 };
@@ -45,13 +44,6 @@ const ExamSpeaking = ({ category }) => {
     });
   };
 
-  const handleQuestionChange = (event, editor) => {
-    const data = editor.getData();
-    dispatchSpeakingData({
-      type: "question",
-      value: data,
-    });
-  };
 
   const setFormError = (errMsg) => {
     setFormStatus({
@@ -87,11 +79,6 @@ const ExamSpeaking = ({ category }) => {
       return false;
     }
 
-    if (!SpeakingData.question) {
-      setFormError("Question is Required");
-      return false;
-    }
-
     setFormStatus({
       isError: false,
       errMsg: null,
@@ -112,7 +99,6 @@ const ExamSpeaking = ({ category }) => {
       exam_type: SpeakingData.exam_type,
       no_of_questions: SpeakingData.no_of_questions,
       passage: SpeakingData.passage,
-      question: SpeakingData.question,
       answers: SpeakingData.answers,
       exam_category: category,
     };
@@ -322,7 +308,7 @@ const ExamSpeaking = ({ category }) => {
                         aria-expanded="true"
                         aria-controls="collapseThree"
                       >
-                        Instruction
+                        Passage
                       </button>
                     </h2>
                     <div
@@ -335,46 +321,11 @@ const ExamSpeaking = ({ category }) => {
                         <div className="col-xl-12 col-lg-6 col-md-6 col-12 mb-4">
                           <div className="dashboard__form__wraper">
                             <div className="dashboard__form__input">
-                              <label>Instruction</label>
+                              <label>Passage</label>
                               <CKEditor
                                 editor={ClassicEditor}
                                 data={SpeakingData.passage}
                                 onChange={handlePassageChange}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingFour">
-                      <button
-                        className="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseFour"
-                        aria-expanded="true"
-                        aria-controls="collapseFour"
-                      >
-                        Question
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseFour"
-                      className="accordion-collapse collapse"
-                      aria-labelledby="headingFour"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div className="accordion-body">
-                        <div className="col-xl-12 col-lg-6 col-md-6 col-12 mb-4">
-                          <div className="dashboard__form__wraper">
-                            <div className="dashboard__form__input">
-                              <label>Question</label>
-                              <CKEditor
-                                editor={ClassicEditor}
-                                data={SpeakingData.question}
-                                onChange={handleQuestionChange}
                               />
                             </div>
                           </div>

@@ -298,10 +298,13 @@ const DSSidebar = () => {
       );
       if (response.status === 200) {
         const packageDetails = response?.data?.student_packages?.[0]?.package;
+        const studentMT = response?.data?.student_packages?.[0]?.student_mock;
+        const studentPT = response?.data?.student_packages?.[0]?.student_pt;
+        const studentFLT = response?.data?.student_packages?.[0]?.student_flt
         setCount({
-          practice_test_count: packageDetails?.practice_test_count,
-          mock_test_count: packageDetails?.practice_test_count,
-          full_length_test_count: packageDetails?.full_length_test_count,
+          practice_test_count: packageDetails?.practice_test_count - studentPT,
+          mock_test_count: packageDetails?.practice_test_count - studentMT,
+          full_length_test_count: packageDetails?.full_length_test_count - studentFLT,
           speaking_practice_count: packageDetails?.speaking_test_count,
           group_doubt_solving_count: packageDetails?.group_doubt_solving_count,
           one_to_one_doubt_solving_count:

@@ -721,39 +721,42 @@ const DragDrop = () => {
     e.preventDefault();
     const isValid = handleAnswerValdiation();
     if (!isValid) return;
-    const answerData = answer.map((item) => {
-      const tempAnswer = item.answers.map((answer) => ({
-        question_number: answer.question_number,
-        answer_text: answer.answer_text,
-      }));
-      tempAnswer.flat(Infinity);
-      return tempAnswer;
-    });
 
-    const data = {
-      block_threshold: readingData.block_threshold,
-      block_type: readingData.block_type,
-      difficulty_level: readingData.difficulty_level,
-      exam_name: readingData.exam_name,
-      exam_type: readingData.exam_type,
-      no_of_questions: readingData.no_of_questions,
-      passage: readingData.passage,
-      question: htmlContent,
-      answers: answerData.flat(Infinity),
-      question_structure: questionStructure,
-      exam_category: category,
-    };
+    const formData = new FormData();
+
+    formData.append("block_threshold", readingData.block_threshold);
+    formData.append("block_type", readingData.block_type);
+    formData.append("difficulty_level", readingData.difficulty_level);
+    formData.append("exam_name", readingData.exam_name);
+    formData.append("exam_type", readingData.exam_type);
+    formData.append("no_of_questions", readingData.no_of_questions);
+    formData.append("passage", readingData.passage);
+    formData.append("passage_image", readingData.passage_image);
+    formData.append("question", htmlContent);
+    formData.append(
+      "answers",
+      answer.forEach((item) => {
+        item.answers.forEach((answer, index) => {
+          formData.append(
+            `answers[${index}]question_number`,
+            answer.question_number
+          );
+          formData.append(`answers[${index}]answer_text`, answer.answer_text);
+        });
+      })
+    );
+    formData.append("question_structure", JSON.stringify(questionStructure));
+    formData.append("exam_category", category);
+
     try {
       const response = await ajaxCall("/exam-blocks/", {
         headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
           Authorization: `Bearer ${
             JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
           }`,
         },
         method: "POST",
-        body: JSON.stringify(data),
+        body: formData,
       });
       if (response.status === 201) {
         toast.success("Reading Exam Create SuccessFully");

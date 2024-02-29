@@ -418,6 +418,7 @@ const CourseDetail = () => {
                         <ul className="ps-0">
                           <li>
                             <div
+                              className="faqs"
                               dangerouslySetInnerHTML={{
                                 __html: courseDetail?.faqs,
                               }}

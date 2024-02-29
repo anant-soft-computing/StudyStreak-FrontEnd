@@ -10,6 +10,7 @@ const intialReadingField = {
   block_type: "Mock Test",
   block_threshold: "",
   passage: "",
+  passage_image: "",
   question: "",
   exam_type: "Reading",
 };
@@ -272,6 +273,22 @@ const ExamReading = ({ category }) => {
                       data-bs-parent="#accordionExample"
                     >
                       <div className="accordion-body">
+                        <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                          <div className="dashboard__form__wraper">
+                            <div className="dashboard__form__input">
+                              <label>Passage Image</label>
+                              <input
+                                type="file"
+                                onChange={(e) =>
+                                  dispatchReadingData({
+                                    type: "passage_image",
+                                    value: e.target.files[0],
+                                  })
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
                         <div className="col-xl-12 col-lg-6 col-md-6 col-12">
                           <div className="dashboard__form__wraper">
                             <div className="dashboard__form__input">

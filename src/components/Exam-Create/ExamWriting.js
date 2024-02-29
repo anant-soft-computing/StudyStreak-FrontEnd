@@ -12,7 +12,6 @@ const intialWritingField = {
   block_type: "Mock Test",
   block_threshold: "",
   passage: "",
-  question: "",
   exam_type: "Writing",
   answers: [],
 };
@@ -45,13 +44,6 @@ const ExamWriting = ({ category }) => {
     });
   };
 
-  const handleQuestionChange = (event, editor) => {
-    const data = editor.getData();
-    dispatchWritingData({
-      type: "question",
-      value: data,
-    });
-  };
 
   const setFormError = (errMsg) => {
     setFormStatus({
@@ -88,11 +80,6 @@ const ExamWriting = ({ category }) => {
       return false;
     }
 
-    if (!writingData.question) {
-      setFormError("Question is Required");
-      return false;
-    }
-
     if (!writingData.answers) {
       setFormError("Answers is Required");
       return false;
@@ -125,7 +112,6 @@ const ExamWriting = ({ category }) => {
       exam_type: writingData.exam_type,
       no_of_questions: writingData.no_of_questions,
       passage: writingData.passage,
-      question: writingData.question,
       answers: writingData.answers,
       question_structure: witingQuestionStrucutre,
       exam_category: category,
@@ -336,7 +322,7 @@ const ExamWriting = ({ category }) => {
                         aria-expanded="true"
                         aria-controls="collapseThree"
                       >
-                        Instruction
+                        Passage
                       </button>
                     </h2>
                     <div
@@ -349,46 +335,11 @@ const ExamWriting = ({ category }) => {
                         <div className="col-xl-12 col-lg-6 col-md-6 col-12 mb-4">
                           <div className="dashboard__form__wraper">
                             <div className="dashboard__form__input">
-                              <label>Instruction</label>
+                              <label>Passage</label>
                               <CKEditor
                                 editor={ClassicEditor}
                                 data={writingData.passage}
                                 onChange={handlePassageChange}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingFour">
-                      <button
-                        className="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseFour"
-                        aria-expanded="true"
-                        aria-controls="collapseFour"
-                      >
-                        Question
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseFour"
-                      className="accordion-collapse collapse"
-                      aria-labelledby="headingFour"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div className="accordion-body">
-                        <div className="col-xl-12 col-lg-6 col-md-6 col-12 mb-4">
-                          <div className="dashboard__form__wraper">
-                            <div className="dashboard__form__input">
-                              <label>Question</label>
-                              <CKEditor
-                                editor={ClassicEditor}
-                                data={writingData.question}
-                                onChange={handleQuestionChange}
                               />
                             </div>
                           </div>

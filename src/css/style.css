@@ -10118,14 +10118,13 @@ Blog
 
 .blog__details__content__wraper .blog__details__list__2 ul li p {
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 25px;
-  /* width: 508px; */
 }
 
 @media (min-width: 992px) and (max-width: 1365px) {
   .blog__details__content__wraper .blog__details__list__2 ul li p {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 21px;
     margin-bottom: 7px;
   }
@@ -16282,12 +16281,11 @@ div.gridarea__wraper {
   border-radius: 50%;
 }
 
-
 .audio_recorder_icon {
   font-size: 30px;
 }
 
-.audio_stop_icon{
+.audio_stop_icon {
   font-size: 30px;
 }
 
@@ -16332,4 +16330,8 @@ div.gridarea__wraper {
 .card {
   flex: 1 1 300px;
   margin: 10px;
+}
+
+.faqs p strong {
+  font-size: 18px;
 }

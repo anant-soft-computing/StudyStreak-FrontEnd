@@ -506,7 +506,7 @@ const BlogDetail = () => {
                     data-aos="fade-up"
                     
                   >
-                    <h4 className="sidebar__title">Get in Touch</h4>
+                    <h4 className="sidebar__title">Get in Touch With You</h4>
                     <div className="get__touch__input">
                       <input type="text" placeholder="Enter name*" />
                       <input type="text" placeholder="Enter your mail*" />

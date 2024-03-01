@@ -105,7 +105,6 @@ const GroupDoubtSolving = () => {
                             end_time,
                             meeting_title,
                             meeting_description,
-                            zoom_meeting_id,
                           }) => {
                             const startDate = new Date(start_time);
                             const isPastDate = startDate < new Date();
@@ -167,13 +166,15 @@ const GroupDoubtSolving = () => {
                                           })}
                                         </span>
                                       </p>
-                                      <button
-                                        className="default__button"
-                                        onClick={() => handleEnrollNow(id)}
-                                        disabled={isPastDate}
-                                      >
-                                        Book Solt
-                                      </button>
+                                      <div className="d-flex justify-content-center">
+                                        <button
+                                          className="default__button"
+                                          onClick={() => handleEnrollNow(id)}
+                                          disabled={isPastDate}
+                                        >
+                                          Book Solt
+                                        </button>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>

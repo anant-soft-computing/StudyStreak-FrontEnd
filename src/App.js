@@ -45,6 +45,8 @@ import Answer from "./components/Dashboard/ExamAnswer/Answer";
 import SpeakingPractice from "./components/Dashboard/Student/Practice/SpeakingPractice";
 import DoubtSolving from "./components/Dashboard/Student/Solving/DoubtSolving";
 import GroupDoubtSolving from "./components/Dashboard/Student/Solving/GroupDoubtSolving";
+import TermsAndService from "./pages/TermsAndService/TermsAndService";
+import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
 
 const App = () => {
@@ -192,6 +194,8 @@ const App = () => {
           <Route path="/speakingSolving" element={<SpeakingPractice />} />
           <Route path="/doubtSolving" element={<DoubtSolving />} />
           <Route path="/groupDoubtSolving" element={<GroupDoubtSolving />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsAndService />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

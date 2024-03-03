@@ -18,6 +18,7 @@ const PracticeLiveExam = () => {
   const [next, setNext] = useState(0);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
 
   useEffect(() => {
     if (
@@ -107,17 +108,10 @@ const PracticeLiveExam = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("examAnswer", examAnswer);
-  }, [examAnswer]);
-
   const renderTime = useMemo(
     () => (
       <span>
-        Time Left :
-        <span className="lv-userName">
-          {Math.floor(timer / 60)}:{timer % 60}
-        </span>
+        Time Left :<span className="lv-userName">{timeTaken}</span>
       </span>
     ),
     [timer]
@@ -126,30 +120,92 @@ const PracticeLiveExam = () => {
   useEffect(() => {
     const temp = [...examAnswer];
     temp[next] = {
-      testId: examData?.id,
-      answers: [
+      exam_id: examData?.id,
+      data: [
         {
-          questionId: `textarea_${next}`,
-          answer: (temp[next] && temp[next]?.answers[0]?.answer) || "",
+          question_number: `textarea_${next}`,
+          answer_text: (temp[next] && temp[next]?.data[0]?.answer_text) || "",
         },
       ],
     };
     setExamAnswer(temp);
 
-    const words = temp[next]?.answers[0]?.answer.split(" ");
+    const words = temp[next]?.data[0]?.answer_text.split(" ");
     setNumberOfWord(words.length);
   }, [next]);
 
   const handleWritingAnswer = (e, next) => {
-    const answer = e.target.value;
+    const answer_text = e.target.value;
     const temp = [...examAnswer];
-    console.log("temp", temp);
-    temp[next].answers[0].answer = answer;
+    temp[next].data[0].answer_text = answer_text;
     setExamAnswer(temp);
 
     // Count the number of words
-    const words = answer.split(" ");
+    const words = answer_text.split(" ");
     setNumberOfWord(words.length);
+  };
+
+  const handleWritingSubmit = async () => {
+    const answersArray = [];
+    let isAllAnswered = true;
+
+    examAnswer.forEach((item, index) => {
+      const temp = item.data.map((answer, index2) => {
+        if (answer.answer_text === "") isAllAnswered = false;
+        return {
+          question_number: index2 + 1,
+          answer_text: answer.answer_text,
+        };
+      });
+      const tempObj = {
+        exam_id: item.exam_id,
+        data: temp,
+      };
+      answersArray.push(tempObj);
+    });
+
+    if (!isAllAnswered) {
+      toast.error("Please answer all the questions before submitting.");
+      return;
+    }
+
+    try {
+      const data = JSON.stringify({
+        answer_data: answersArray,
+        user: userData?.userId,
+        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
+        band: null,
+      });
+
+      const response = await ajaxCall(
+        `/answer/practice-test/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+
+      if (response.status === 201) {
+        setTimerRunning(false);
+        navigate(`/eaxm-answere/${examData?.id}`, {
+          state: { examAnswer, timeTaken, bandValue: 0, examData },
+        });
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   return (
@@ -188,7 +244,7 @@ const PracticeLiveExam = () => {
                 <textarea
                   id={`textarea_${next}`}
                   style={{ width: "100%", height: "200px" }}
-                  value={examAnswer[next]?.answers[0]?.answer || ""}
+                  value={examAnswer[next]?.data[0]?.answer_text || ""}
                   onChange={(e) => handleWritingAnswer(e, next)}
                 />
                 <span>{numberOfWord} Words</span>
@@ -239,10 +295,7 @@ const PracticeLiveExam = () => {
                   ? "none"
                   : "block",
             }}
-            onClick={() => {
-              toast.success("Your Exam Submit Successfully");
-              navigate(`/eaxm-answere/${examData?.id}`);
-            }}
+            onClick={handleWritingSubmit}
           >
             <span>&#x2713;</span>
           </button>

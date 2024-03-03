@@ -24,6 +24,7 @@ const PracticeLiveExam = () => {
   const [fullPaper, setFullPaper] = useState([]);
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
+  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   let highlightedElement = null;
 
@@ -104,38 +105,38 @@ const PracticeLiveExam = () => {
     }
   }, [fullPaper, next]);
 
-  const handleAnswerLinking = (e, questionId, next) => {
+  const handleAnswerLinking = (e, question_number, next) => {
     const { value, id } = e.target;
 
     const elementId = id.split("_")[0];
 
     const temp = [...examAnswer];
-    temp[next].answers.map((item) => {
-      if (item.questionId === id && elementId === "InputText") {
+    temp[next].data.map((item) => {
+      if (item.question_number === id && elementId === "InputText") {
         const trimedValue = value.trim();
-        item.answer = trimedValue;
-      } else if (item.questionId === id) {
-        item.answer = value;
+        item.answer_text = trimedValue;
+      } else if (item.question_number === id) {
+        item.answer_text = value;
       }
     });
     setExamAnswer(temp);
   };
 
   useEffect(() => {
-    if (linkAnswer && examAnswer[next] && examAnswer[next].answers.length > 0) {
+    if (linkAnswer && examAnswer[next] && examAnswer[next].data.length > 0) {
       setTimeout(() => {
-        examAnswer[next].answers.forEach((item) => {
+        examAnswer[next].data.forEach((item) => {
           const contentElements = document.querySelectorAll(
-            `[id="${item.questionId}"]`
+            `[id="${item.question_number}"]`
           );
-          if (item.answer !== "") {
+          if (item.answer_text !== "") {
             contentElements.forEach((element) => {
-              element.value = item.answer;
+              element.value = item.answer_text;
             });
           }
           contentElements.forEach((element) => {
             element.addEventListener("change", (e) => {
-              handleAnswerLinking(e, item.questionId, next);
+              handleAnswerLinking(e, item.question_number, next);
             });
           });
         });
@@ -259,17 +260,17 @@ const PracticeLiveExam = () => {
 
     const tempAnswer = paginationsStrucutre.map((item) => {
       return {
-        questionId: item,
-        answer: "",
+        question_number: item,
+        answer_text: "",
       };
     });
 
     const tempAnswerArr = [...examAnswer];
 
-    if (!tempAnswerArr[next] || tempAnswerArr[next]?.answers.length === 0) {
+    if (!tempAnswerArr[next] || tempAnswerArr[next]?.data.length === 0) {
       tempAnswerArr[next] = {
-        testId: examData?.id,
-        answers: tempAnswer,
+        exam_id: examData?.id,
+        data: tempAnswer,
       };
       setExamAnswer(tempAnswerArr);
     }
@@ -281,14 +282,75 @@ const PracticeLiveExam = () => {
   const renderTime = useMemo(
     () => (
       <span>
-        Time Left :
-        <span className="lv-userName">
-          {Math.floor(timer / 60)}:{timer % 60}
-        </span>
+        Time Left :<span className="lv-userName">{timeTaken}</span>
       </span>
     ),
     [timer]
   );
+
+  const handleRLSubmit = async () => {
+    const answersArray = [];
+    let isAllAnswered = true;
+
+    examAnswer.forEach((item, index) => {
+      const temp = item.data.map((answer, index2) => {
+        if (answer.answer_text === "") isAllAnswered = false;
+
+        return {
+          question_number: index2 + 1,
+          answer_text: answer.answer_text,
+        };
+      });
+      const tempObj = {
+        exam_id: item.exam_id,
+        data: temp,
+      };
+      answersArray.push(tempObj);
+    });
+
+    if (!isAllAnswered) {
+      toast.error("Please answer all the questions before submitting.");
+      return;
+    }
+
+    try {
+      const data = JSON.stringify({
+        answer_data: answersArray,
+        user: userData?.userId,
+        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
+        band: null,
+      });
+
+      const response = await ajaxCall(
+        `/answer/practice-test/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+
+      if (response.status === 201) {
+        setTimerRunning(false);
+        navigate(`/eaxm-answere/${examData?.id}`, {
+          state: { examAnswer, timeTaken, bandValue: 0, examData },
+        });
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   return (
     <>
@@ -353,10 +415,10 @@ const PracticeLiveExam = () => {
               <div
                 className={`lv-footer-item ${
                   examAnswer[next] &&
-                  examAnswer[next].answers.length > 0 &&
-                  examAnswer[next].answers.find(
-                    (val) => val.questionId === item
-                  )?.answer !== ""
+                  examAnswer[next].data.length > 0 &&
+                  examAnswer[next].data.find(
+                    (val) => val.question_number === item
+                  )?.answer_text !== ""
                     ? "lv-completed-questions"
                     : ""
                 }`}
@@ -424,11 +486,7 @@ const PracticeLiveExam = () => {
               cursor: linkAnswer ? "not-allowed" : "pointer",
               opacity: linkAnswer ? 0.5 : 1,
             }}
-            onClick={() => {
-              scrollToContent("yourContentId");
-              toast.success("Your Exam Submit Successfully");
-              navigate(`/eaxm-answere/${examData?.id}`);
-            }}
+            onClick={handleRLSubmit}
             disabled={linkAnswer}
           >
             <span>&#x2713;</span>
@@ -452,7 +510,7 @@ const PracticeLiveExam = () => {
                   <div key={index}>
                     <h4>Test : {index + 1}</h4>
                     <div className="card-container">
-                      {test.answers.map((answer, idx) => (
+                      {test.data.map((answer, idx) => (
                         <div
                           key={idx}
                           className="card"
@@ -463,7 +521,7 @@ const PracticeLiveExam = () => {
                             <h6 className="card-text">
                               Answer :{" "}
                               <span className="text-success">
-                                {answer.answer}
+                                {answer.answer_text}
                               </span>
                             </h6>
                           </div>

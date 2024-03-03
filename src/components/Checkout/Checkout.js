@@ -1,18 +1,160 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../Footer/Footer";
 import TopBar from "../TopBar/TopBar";
 import NavBar from "../NavBar/NavBar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import logo from "../../img/logo/Logo.png";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const Checkout = () => {
+  const [userDetails, setUserDetails] = useState({});
   const location = useLocation();
-  const { packageId, selectedBatchIds, courseName, packageName, packagePrice } =
-    location.state || {};
+  const { courseName, packageName, packagePrice } = location.state || {};
+  const navigate = useNavigate();
 
-    const handleEnrollButton = () => {
-      console.log("--packageId, selectedBatchIds----->", packageId, selectedBatchIds);
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  }
+
+  const handleEnrollButton = async () => {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
     }
-    
+
+    // creating a new order
+
+    const body = {
+      amount: packagePrice,
+      currency: "INR",
+    };
+
+    // const result = await axios.post("http://localhost:5000/payment/orders");
+
+    const response = await ajaxCall(
+      "/create/order/",
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+          }`,
+        },
+        method: "POST",
+        body: JSON.stringify(body),
+      },
+      8000
+    );
+
+    if (!response) {
+      alert("Server error. Are you online?");
+      return;
+    }
+
+    // Getting the order details back
+    const { amount, id: order_id, currency } = response.data;
+
+    const userData = JSON.parse(localStorage.getItem("loginInfo"));
+
+    const options = {
+      key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+      amount: amount.toString(),
+      currency: currency,
+      name: `${userDetails?.user.first_name} ${userDetails?.user.last_name}`,
+      description: "Test Transaction",
+      image: { logo },
+      order_id: order_id,
+      handler: async function (response) {
+        const data = {
+          amount,
+          order_id: response.razorpay_order_id,
+          payment_id: response.razorpay_payment_id,
+          signature_id: response.razorpay_signature,
+          user: userData?.userId,
+          product: "Tested Product",
+        };
+
+        const result = await ajaxCall(
+          "/confirm/order/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "POST",
+            body: JSON.stringify(data),
+          },
+          8000
+        );
+
+        if (result?.status === 200) {
+          alert("Payment Successful");
+          navigate("/studentDashboard");
+        }
+      },
+      prefill: {
+        name: userData?.username,
+        email: userDetails?.user.email,
+        contact: userDetails?.user.phone_no,
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#61dafb",
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/studentview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setUserDetails(response.data[0]);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
+
   return (
     <>
       <TopBar />

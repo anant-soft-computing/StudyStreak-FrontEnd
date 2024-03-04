@@ -16,11 +16,10 @@ export const cancelIcon = () => {
 
 const PackageDetails = (props) => {
   const {
+    courseId,
     packages,
-    handleEnrollNow,
     showBatchSelection,
     setShowBatchSelection,
-    batchFormSubmitting,
     courseName,
   } = props;
 
@@ -217,9 +216,8 @@ const PackageDetails = (props) => {
       <BatchSelection
         show={showBatchSelection}
         onHide={() => handleBatchSelectionModalClose()}
-        handleEnrollNow={handleEnrollNow}
+        courseId={courseId}
         packageId={selectedPackageId}
-        batchFormSubmitting={batchFormSubmitting}
         courseName={courseName}
         packageName={packageName}
         packagePrice={packagePrice}

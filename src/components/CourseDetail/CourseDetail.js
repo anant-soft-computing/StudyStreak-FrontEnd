@@ -17,7 +17,6 @@ const CourseDetail = () => {
   const [coursePackages, setCoursePackages] = useState();
   const [activeIndex, setActiveIndex] = useState(0);
   const [showBatchSelection, setShowBatchSelection] = useState(false);
-  const [batchFormSubmitting, setBatchFormSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -105,53 +104,7 @@ const CourseDetail = () => {
     getCoursePackages();
   }, [courseId]);
 
-  const handleEnrollNow = async (packageId, batchId) => {
-    if (!authData.loggedIn) {
-      navigate("/login");
-      return;
-    }
-    setBatchFormSubmitting(true);
-    const data = JSON.stringify({
-      package_id: packageId,
-      batch_ids: batchId,
-      course_id: parseInt(courseId),
-    });
-    try {
-      const response = await ajaxCall(
-        `/enroll-package/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-      if (response.status === 201) {
-        setShowBatchSelection(false);
-        setBatchFormSubmitting(false);
-        toast.success(response?.data?.detail);
-      } else if (response.status === 200) {
-        toast.error(response?.data?.msg);
-        setBatchFormSubmitting(false);
-      } else if (response.status === 400 && response.isError) {
-        toast.error(response?.data?.detail);
-        setShowBatchSelection(false);
-        setBatchFormSubmitting(false);
-      } else {
-        setShowBatchSelection(false);
-        toast.error("Something went wrong, please try again later");
-      }
-    } catch (error) {
-      setBatchFormSubmitting(false);
-      toast.error("Something went wrong, please try again later");
-    }
-  };
+
 
   return (
     <>
@@ -266,8 +219,7 @@ const CourseDetail = () => {
                           showBatchSelection={showBatchSelection}
                           setShowBatchSelection={setShowBatchSelection}
                           packages={coursePackages?.packages}
-                          handleEnrollNow={handleEnrollNow}
-                          batchFormSubmitting={batchFormSubmitting}
+                          courseId={courseId}
                           courseName={courseDetail?.Course_Title}
                         />
                       ) : (

@@ -299,20 +299,20 @@ const DSSidebar = () => {
       if (response.status === 200) {
         const { data } = response;
         const studentPackage = data?.student_packages?.[0];
-        const packageDetails = studentPackage.package;
-        const studentMT = studentPackage.student_mock;
-        const studentPT = studentPackage.student_pt;
-        const studentFLT = studentPackage.student_flt;
-        const studentSP = studentPackage.Live_class_enroll.filter(
+        const packageDetails = studentPackage?.package;
+        const studentMT = studentPackage?.student_mock;
+        const studentPT = studentPackage?.student_pt;
+        const studentFLT = studentPackage?.student_flt;
+        const studentSP = studentPackage?.Live_class_enroll?.filter(
           ({ liveclasstype }) => liveclasstype.name === "Speaking-Practice"
-        ).length;
-        const studentOTOS = studentPackage.Live_class_enroll.filter(
+        )?.length;
+        const studentOTOS = studentPackage?.Live_class_enroll?.filter(
           ({ liveclasstype }) =>
             liveclasstype.name === "One-To-One-Doubt-Solving"
-        ).length;
-        const studentGDS = studentPackage.Live_class_enroll.filter(
+        )?.length;
+        const studentGDS = studentPackage?.Live_class_enroll?.filter(
           ({ liveclasstype }) => liveclasstype.name === "Group-Doubt Solving"
-        ).length;
+        )?.length;
 
         setCount({
           practice_test_count: packageDetails?.practice_test_count - studentPT,

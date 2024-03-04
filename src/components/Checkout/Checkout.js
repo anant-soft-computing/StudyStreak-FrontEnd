@@ -5,11 +5,23 @@ import NavBar from "../NavBar/NavBar";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../img/logo/Logo.png";
 import ajaxCall from "../../helpers/ajaxCall";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const Checkout = () => {
   const [userDetails, setUserDetails] = useState({});
+  const authData = useSelector((state) => state.authStore);
+
   const location = useLocation();
-  const { courseName, packageName, packagePrice } = location.state || {};
+  const {
+    courseId,
+    packageId,
+    selectedBatchIds,
+    courseName,
+    packageName,
+    packagePrice,
+  } = location.state || {};
+
   const navigate = useNavigate();
 
   function loadScript(src) {
@@ -25,6 +37,46 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
   }
+
+  const handleEnrollNow = async () => {
+    if (!authData.loggedIn) {
+      navigate("/login");
+      return;
+    }
+    const data = JSON.stringify({
+      package_id: packageId,
+      batch_ids: selectedBatchIds,
+      course_id: parseInt(courseId),
+    });
+    try {
+      const response = await ajaxCall(
+        `/enroll-package/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success(response?.data?.detail);
+      } else if (response.status === 200) {
+        toast.error(response?.data?.msg);
+      } else if (response.status === 400 && response.isError) {
+        toast.error(response?.data?.detail);
+      } else {
+        toast.error("Something went wrong, please try again later");
+      }
+    } catch (error) {
+      toast.error("Something went wrong, please try again later");
+    }
+  };
 
   const handleEnrollButton = async () => {
     const res = await loadScript(
@@ -86,7 +138,7 @@ const Checkout = () => {
           payment_id: response.razorpay_payment_id,
           signature_id: response.razorpay_signature,
           user: userData?.userId,
-          product: "Tested Product",
+          product: [packageId],
         };
 
         const result = await ajaxCall(
@@ -106,7 +158,8 @@ const Checkout = () => {
         );
 
         if (result?.status === 200) {
-          alert("Payment Successful");
+          toast.success("Payment Successful");
+          handleEnrollNow();
           navigate("/studentDashboard");
         }
       },

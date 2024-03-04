@@ -24,7 +24,6 @@ const LiveExam = () => {
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   let highlightedElement = null;
-
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
 
   useEffect(() => {
@@ -299,8 +298,8 @@ const LiveExam = () => {
     // Replace this with your actual implementation
     if (audio_file) {
       return (
-        <div>
-          <audio controls autoPlay>
+        <div className="m-2">
+          <audio controls autoPlay controlsList="nodownload noplaybackrate">
             <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>
@@ -310,14 +309,25 @@ const LiveExam = () => {
     }
   };
 
-  const displayLeftContainer = (passage) => {
+  const displayLeftContainer = (passage, image) => {
     // Replace this with your actual implementation
     return (
-      <div
-        dangerouslySetInnerHTML={{
-          __html: passage,
-        }}
-      ></div>
+      <>
+        {image && (
+          <img
+            className="mb-2"
+            src={image}
+            alt="Study Streak"
+            height={250}
+            width={250}
+          />
+        )}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: passage,
+          }}
+        ></div>
+      </>
     );
   };
 
@@ -488,7 +498,7 @@ const LiveExam = () => {
       <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">
-          {displayLeftContainer(examData?.passage)}
+          {displayLeftContainer(examData?.passage, examData?.passage_image)}
         </div>
 
         {/* Right Container */}

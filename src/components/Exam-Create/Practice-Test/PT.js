@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 const intialPT = {
   Name: "",
+  difficulty_level: "Easy",
   exam_test: "Practice",
   Reading: [],
   Writing: [],
@@ -128,6 +129,7 @@ const PT = ({ name, type }) => {
         Writing: createPT.Writing,
         Listening: createPT.Listening,
         Speaking: createPT.Speaking,
+        difficulty_level: createPT.difficulty_level,
       };
       const response = await ajaxCall(
         "/moduleListView/",
@@ -256,6 +258,28 @@ const PT = ({ name, type }) => {
                                       })
                                     }
                                   />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                              <div className="dashboard__form__wraper">
+                                <div className="dashboard__form__input">
+                                  <label>Difficulty Level</label>
+                                  <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    value={createPT.difficulty_level}
+                                    onChange={(e) =>
+                                      dispatchPT({
+                                        type: "difficulty_level",
+                                        value: e.target.value,
+                                      })
+                                    }
+                                  >
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Hard">Hard</option>
+                                  </select>
                                 </div>
                               </div>
                             </div>

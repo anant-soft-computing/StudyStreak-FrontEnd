@@ -4,7 +4,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 const intialReadingField = {
-  no_of_questions: "",
+  no_of_questions: "10",
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
@@ -124,9 +124,9 @@ const ExamReading = ({ category }) => {
                               <div className="dashboard__form__wraper">
                                 <div className="dashboard__form__input">
                                   <label>Number of Question</label>
-                                  <input
-                                    type="number"
-                                    placeholder="Number of Question"
+                                  <select
+                                    className="form-select"
+                                    aria-label="Default select example"
                                     value={readingData.no_of_questions}
                                     onChange={(e) =>
                                       dispatchReadingData({
@@ -134,7 +134,11 @@ const ExamReading = ({ category }) => {
                                         value: e.target.value,
                                       })
                                     }
-                                  />
+                                  >
+                                    <option value="10">10</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                  </select>
                                 </div>
                               </div>
                             </div>

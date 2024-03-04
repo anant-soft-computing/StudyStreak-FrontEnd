@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 const intialFLTData = {
   Name: "",
+  difficulty_level: "Easy",
   exam_test: "Full Length",
   Reading: [],
   Writing: [],
@@ -238,6 +239,28 @@ const FLT = () => {
                                       })
                                     }
                                   />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                              <div className="dashboard__form__wraper">
+                                <div className="dashboard__form__input">
+                                  <label>Difficulty Level</label>
+                                  <select
+                                    className="form-select"
+                                    aria-label="Default select example"
+                                    value={createFLT.difficulty_level}
+                                    onChange={(e) =>
+                                      dispatchFLT({
+                                        type: "difficulty_level",
+                                        value: e.target.value,
+                                      })
+                                    }
+                                  >
+                                    <option value="Easy">Easy</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="Hard">Hard</option>
+                                  </select>
                                 </div>
                               </div>
                             </div>

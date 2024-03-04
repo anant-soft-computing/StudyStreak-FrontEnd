@@ -123,23 +123,27 @@ const LiveClass = () => {
                                     <div className="gridarea__heading">
                                       <h3>{meeting_title}</h3>
                                     </div>
-                                    <p className="text-dark">
-                                      Description :
-                                      <span> {meeting_description}</span>
-                                    </p>
-                                    <div>
-                                      <p className="text-dark">
-                                        Starting Time:
-                                        <span>
-                                          {" "}
-                                          {new Date(
-                                            start_time
-                                          ).toLocaleTimeString("en-US", {
-                                            hour: "numeric",
-                                            minute: "numeric",
-                                          })}
-                                        </span>
+                                    <div class="zoom__meeting__id">
+                                      <p>
+                                        Description:
+                                        <span>{meeting_description}</span>
                                       </p>
+                                    </div>
+                                    <div class="zoom__meeting__time__id">
+                                      <div class="zoom__meeting__time">
+                                        <p>
+                                          Starting Time:
+                                          <span>
+                                            {" "}
+                                            {new Date(
+                                              start_time
+                                            ).toLocaleTimeString("en-US", {
+                                              hour: "numeric",
+                                              minute: "numeric",
+                                            })}
+                                          </span>
+                                        </p>
+                                      </div>
                                     </div>
                                     {zoom_meeting_id && (
                                       <div className="d-flex justify-content-center">

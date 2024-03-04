@@ -149,32 +149,36 @@ const GroupDoubtSolving = () => {
                                     <div className="gridarea__heading">
                                       <h3>{meeting_title}</h3>
                                     </div>
-                                    <p className="text-dark">
-                                      Meeting Description :
-                                      <span> {meeting_description}</span>
-                                    </p>
-                                    <div>
-                                      <p className="text-dark">
-                                        Starting Time:
-                                        <span>
-                                          {" "}
-                                          {new Date(
-                                            start_time
-                                          ).toLocaleTimeString("en-US", {
-                                            hour: "numeric",
-                                            minute: "numeric",
-                                          })}
-                                        </span>
+                                    <div class="zoom__meeting__id">
+                                      <p>
+                                        Description:
+                                        <span>{meeting_description}</span>
                                       </p>
-                                      <div className="d-flex justify-content-center">
-                                        <button
-                                          className="default__button"
-                                          onClick={() => handleEnrollNow(id)}
-                                          disabled={isPastDate}
-                                        >
-                                          Book Solt
-                                        </button>
+                                    </div>
+                                    <div class="zoom__meeting__time__id">
+                                      <div class="zoom__meeting__time">
+                                        <p>
+                                          Starting Time:
+                                          <span>
+                                            {" "}
+                                            {new Date(
+                                              start_time
+                                            ).toLocaleTimeString("en-US", {
+                                              hour: "numeric",
+                                              minute: "numeric",
+                                            })}
+                                          </span>
+                                        </p>
                                       </div>
+                                    </div>
+                                    <div className="d-flex justify-content-center">
+                                      <button
+                                        className="default__button"
+                                        onClick={() => handleEnrollNow(id)}
+                                        disabled={isPastDate}
+                                      >
+                                        Book Slot
+                                      </button>
                                     </div>
                                   </div>
                                 </div>

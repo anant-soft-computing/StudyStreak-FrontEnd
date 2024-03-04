@@ -176,14 +176,25 @@ const PracticeLiveExam = () => {
     }
   };
 
-  const displayLeftContainer = (passage) => {
+  const displayLeftContainer = (passage, image) => {
     // Replace this with your actual implementation
     return (
-      <div
-        dangerouslySetInnerHTML={{
-          __html: passage,
-        }}
-      ></div>
+      <>
+        {image && (
+          <img
+            className="mb-2"
+            src={image}
+            alt="Study Streak"
+            height={250}
+            width={250}
+          />
+        )}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: passage,
+          }}
+        ></div>
+      </>
     );
   };
 
@@ -373,7 +384,7 @@ const PracticeLiveExam = () => {
       <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">
-          {displayLeftContainer(examData?.passage)}
+          {displayLeftContainer(examData?.passage, examData?.passage_image)}
         </div>
 
         {/* Right Container */}

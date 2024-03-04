@@ -133,10 +133,7 @@ const App = () => {
             element={<ProtectedRoute element={AdminProfile} />}
           />
 
-          <Route
-            path="/contactUs"
-            element={<ProtectedRoute element={ContactUs} />}
-          />
+          <Route path="/contactUs" element={<ContactUs />} />
           <Route
             path="/exam-create"
             element={<ProtectedRoute element={DragDrop} />}

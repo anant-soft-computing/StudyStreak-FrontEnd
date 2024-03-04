@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
 import ajaxCall from "../../helpers/ajaxCall";
 import { useSelector } from "react-redux";
@@ -12,11 +11,10 @@ const BatchSelection = (props) => {
   const navigate = useNavigate();
 
   const {
-    // handleEnrollNow,
     packageId,
     show,
     onHide,
-    batchFormSubmitting,
+    courseId,
     courseName,
     packageName,
     packagePrice,
@@ -57,9 +55,9 @@ const BatchSelection = (props) => {
       navigate("/login");
       return;
     }
-    // handleEnrollNow(packageId, selectedBatchIds);
     navigate("/checkout", {
       state: {
+        courseId,
         packageId,
         selectedBatchIds,
         courseName,
@@ -156,18 +154,8 @@ const BatchSelection = (props) => {
         <button
           className="default__button"
           onClick={() => handleEnrollButton()}
-          disabled={!selectedBatchIds || batchFormSubmitting}
+          disabled={selectedBatchIds?.length === 0}
         >
-          {batchFormSubmitting && (
-            <Spinner
-              animation="border"
-              role="status"
-              size="sm"
-              className="me-2"
-            >
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          )}
           Enroll Package
         </button>
         <button

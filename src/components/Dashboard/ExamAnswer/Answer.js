@@ -57,7 +57,7 @@ const Answer = () => {
   useEffect(() => {
     let correct = 0;
     let incorrect = 0;
-    correctAnswers.forEach((item, index) => {
+    correctAnswers?.forEach((item, index) => {
       if (
         answer[index]?.answer_text.toLowerCase() === item.answer.toLowerCase()
       ) {

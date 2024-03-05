@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const AdditionalResourcse = ({ courseId, courseName }) => {
+const AdditionalResources = ({ courseId, courseName }) => {
   const [additionalResource, setAdditionalResource] = useState([]);
 
   const getAdditionalResource = async () => {
@@ -95,4 +95,4 @@ const AdditionalResourcse = ({ courseId, courseName }) => {
   );
 };
 
-export default AdditionalResourcse;
+export default AdditionalResources;

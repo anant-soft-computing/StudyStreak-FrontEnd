@@ -10,6 +10,8 @@ const DSSidebar = () => {
   const [count, setCount] = useState({});
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
+  const location = useLocation().pathname;
+  const { logoutUser } = useCheckAuth();
 
   const menuList = [
     {
@@ -277,9 +279,6 @@ const DSSidebar = () => {
     },
   ];
 
-  const location = useLocation().pathname;
-  const { logoutUser } = useCheckAuth();
-
   const getEnrolledCourses = async () => {
     try {
       const response = await ajaxCall(
@@ -315,16 +314,18 @@ const DSSidebar = () => {
         )?.length;
 
         setCount({
-          practice_test_count: packageDetails?.practice_test_count - studentPT,
-          mock_test_count: packageDetails?.practice_test_count - studentMT,
+          practice_test_count:
+            packageDetails?.practice_test_count - studentPT || "",
+          mock_test_count:
+            packageDetails?.practice_test_count - studentMT || "",
           full_length_test_count:
-            packageDetails?.full_length_test_count - studentFLT,
+            packageDetails?.full_length_test_count - studentFLT || "",
           speaking_practice_count:
-            packageDetails?.speaking_test_count - studentSP,
+            packageDetails?.speaking_test_count - studentSP || "",
           group_doubt_solving_count:
-            packageDetails?.group_doubt_solving_count - studentGDS,
+            packageDetails?.group_doubt_solving_count - studentGDS || "",
           one_to_one_doubt_solving_count:
-            packageDetails?.one_to_one_doubt_solving_count - studentOTOS,
+            packageDetails?.one_to_one_doubt_solving_count - studentOTOS || "",
         });
         setBatchId(response?.data?.student_packages?.[0]?.batch_id);
         localStorage.setItem(
@@ -332,7 +333,9 @@ const DSSidebar = () => {
           response?.data?.student_packages?.[0]?.student_id
         );
         setStudentId(response?.data?.student_packages?.[0]?.student_id);
-        setEnrolledCourse(response?.data?.student_packages?.[0]?.course);
+        setEnrolledCourse(
+          response?.data?.student_packages?.map(({ course }) => course)
+        );
       } else {
         console.log("error");
       }
@@ -380,10 +383,7 @@ const DSSidebar = () => {
                     item.name === "Speaking Practice" ||
                     item.name === "Group Doubt Solving" ||
                     item.name === "One To One Doubt Solving" ? (
-                      <span
-                        className="dashboard__label"
-                        style={{ width: "10%" }}
-                      >
+                      <span className="dashboard__label">
                         {
                           count[
                             item.name.replace(/ /g, "_").toLowerCase() +

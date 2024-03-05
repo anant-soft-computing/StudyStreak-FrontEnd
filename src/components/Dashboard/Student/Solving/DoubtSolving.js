@@ -11,6 +11,13 @@ import { toast } from "react-toastify";
 const DoubtSolving = () => {
   const { studentId } = useLocation()?.state;
   const [doubtSolvingData, setDoubtSolvingData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
+
+  const date = doubtSolvingData.map(
+    ({ start_time }) => new Date(start_time).toISOString().split("T")[0]
+  );
+
+  console.log(date);
 
   const getdoubtSolvingData = async () => {
     try {
@@ -76,6 +83,17 @@ const DoubtSolving = () => {
     getdoubtSolvingData();
   }, []);
 
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const dSData = selectedDate
+    ? doubtSolvingData.filter(
+        ({ start_time }) =>
+          new Date(start_time).toISOString().split("T")[0] === selectedDate
+      )
+    : doubtSolvingData;
+
   return (
     <>
       <TopBar />
@@ -96,9 +114,16 @@ const DoubtSolving = () => {
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
                         <h4>One To One Doubt Solving</h4>
+                        <div className="dashboard__form__input">
+                          <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                          />
+                        </div>
                       </div>
                       <div className="row">
-                        {doubtSolvingData?.map(
+                        {dSData?.map(
                           ({
                             id,
                             start_time,

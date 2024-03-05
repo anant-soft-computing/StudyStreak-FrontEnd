@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 const SpeakingPractice = () => {
   const { studentId } = useLocation()?.state;
   const [speakingSolvingData, setSpeakingSolvingData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
 
   const getSpeakingSolvingData = async () => {
     try {
@@ -76,6 +77,17 @@ const SpeakingPractice = () => {
     getSpeakingSolvingData();
   }, []);
 
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const speakingData = selectedDate
+    ? speakingSolvingData.filter(
+        ({ start_time }) =>
+          new Date(start_time).toISOString().split("T")[0] === selectedDate
+      )
+    : speakingSolvingData;
+
   return (
     <>
       <TopBar />
@@ -96,9 +108,16 @@ const SpeakingPractice = () => {
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
                         <h4>Speaking Practice</h4>
+                        <div className="dashboard__form__input">
+                          <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                          />
+                        </div>
                       </div>
                       <div className="row">
-                        {speakingSolvingData?.map(
+                        {speakingData?.map(
                           ({
                             id,
                             start_time,
@@ -148,14 +167,14 @@ const SpeakingPractice = () => {
                                     <div className="gridarea__heading">
                                       <h3>{meeting_title}</h3>
                                     </div>
-                                    <div class="zoom__meeting__id">
+                                    <div className="zoom__meeting__id">
                                       <p>
                                         Description:
                                         <span>{meeting_description}</span>
                                       </p>
                                     </div>
-                                    <div class="zoom__meeting__time__id">
-                                      <div class="zoom__meeting__time">
+                                    <div className="zoom__meeting__time__id">
+                                      <div className="zoom__meeting__time">
                                         <p>
                                           Starting Time:
                                           <span>

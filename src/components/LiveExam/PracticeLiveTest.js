@@ -351,8 +351,8 @@ const PracticeLiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
-        navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, timeTaken, bandValue: 0, examData, answersArray },
+        navigate(`/eaxm-practice-test-answere/${examId}`, {
+          state: { timeTaken },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

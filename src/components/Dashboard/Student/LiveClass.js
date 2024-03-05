@@ -10,6 +10,7 @@ import ajaxCall from "../../../helpers/ajaxCall";
 const LiveClass = () => {
   const { batchId } = useLocation()?.state;
   const [liveClass, setLiveClass] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
 
   const getLiveClass = async () => {
     try {
@@ -45,12 +46,23 @@ const LiveClass = () => {
     getLiveClass();
   }, [batchId]);
 
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
   const isWithin5Minutes = (startTime) => {
     const currentTime = new Date();
     const classStartTime = new Date(startTime);
     const difference = classStartTime.getTime() - currentTime.getTime();
     return difference >= 0 && difference <= 5 * 60 * 1000;
   };
+
+  const liveClasses = selectedDate
+    ? liveClass.filter(
+        ({ start_time }) =>
+          new Date(start_time).toISOString().split("T")[0] === selectedDate
+      )
+    : liveClass;
 
   return (
     <>
@@ -72,9 +84,16 @@ const LiveClass = () => {
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
                         <h4>Live Classes</h4>
+                        <div className="dashboard__form__input">
+                          <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                          />
+                        </div>
                       </div>
                       <div className="row">
-                        {liveClass?.map(
+                        {liveClasses?.map(
                           ({
                             id,
                             start_time,

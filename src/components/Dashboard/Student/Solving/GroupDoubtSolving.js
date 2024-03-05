@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 const GroupDoubtSolving = () => {
   const { studentId } = useLocation()?.state;
   const [groupDoubtSolvingData, setGroupDoubtSolvingData] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
 
   const getGroupDoubtSolvingData = async () => {
     try {
@@ -76,6 +77,17 @@ const GroupDoubtSolving = () => {
     getGroupDoubtSolvingData();
   }, []);
 
+  const handleDateChange = (event) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const gDSData = selectedDate
+    ? groupDoubtSolvingData.filter(
+        ({ start_time }) =>
+          new Date(start_time).toISOString().split("T")[0] === selectedDate
+      )
+    : groupDoubtSolvingData;
+
   return (
     <>
       <TopBar />
@@ -96,9 +108,16 @@ const GroupDoubtSolving = () => {
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
                         <h4>Group Doubt Solving</h4>
+                        <div className="dashboard__form__input">
+                          <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                          />
+                        </div>
                       </div>
                       <div className="row">
-                        {groupDoubtSolvingData?.map(
+                        {gDSData?.map(
                           ({
                             id,
                             start_time,

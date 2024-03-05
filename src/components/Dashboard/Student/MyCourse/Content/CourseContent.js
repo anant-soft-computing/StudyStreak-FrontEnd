@@ -13,6 +13,10 @@ const CourseContent = () => {
   const { courseId } = useParams();
   const { state: { enrolledCourse } = {} } = useLocation();
 
+  const { Course_Title } = enrolledCourse.find(
+    ({ id }) => id === parseInt(courseId)
+  );
+  
   return (
     <>
       <TopBar />
@@ -32,11 +36,7 @@ const CourseContent = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>
-                          {enrolledCourse.map(
-                            ({ Course_Title }) => Course_Title
-                          )}
-                        </h4>
+                        <h4>{Course_Title}</h4>
                       </div>
                       <div className="row">
                         <div
@@ -96,15 +96,11 @@ const CourseContent = () => {
                           >
                             <Material
                               courseId={courseId}
-                              courseName={enrolledCourse.map(
-                                ({ Course_Title }) => Course_Title
-                              )}
+                              courseName={Course_Title}
                             />
                             <AdditionalResources
                               courseId={courseId}
-                              courseName={enrolledCourse.map(
-                                ({ Course_Title }) => Course_Title
-                              )}
+                              courseName={Course_Title}
                             />
                           </div>
                         </div>

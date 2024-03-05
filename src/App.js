@@ -48,6 +48,7 @@ import GroupDoubtSolving from "./components/Dashboard/Student/Solving/GroupDoubt
 import TermsAndService from "./pages/TermsAndService/TermsAndService";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
+import PracticeTestAnswer from "./components/Dashboard/ExamAnswer/PracticeTestAnswer";
 
 const App = () => {
   return (
@@ -169,6 +170,10 @@ const App = () => {
           <Route
             path="/eaxm-answere/:examId"
             element={<ProtectedRoute element={Answer} />}
+          />
+          <Route
+            path="/eaxm-practice-test-answere/:examId"
+            element={<ProtectedRoute element={PracticeTestAnswer} />}
           />
           <Route
             path="/studentDashboard"

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const DSNavBar = () => {
-  const [data, setData] = useState();
+  const [user, setUser] = useState();
 
-  const getData = async () => {
+  const getStudent = async () => {
     try {
       const response = await ajaxCall(
         `/studentview/`,
@@ -21,9 +21,9 @@ const DSNavBar = () => {
         8000
       );
       if (response.status === 200) {
-        setData(response.data[0]);
+        setUser(response.data[0]);
       } else {
-        console.log("---error---->");
+        console.log("error");
       }
     } catch (error) {
       console.log("Error:", error);
@@ -31,7 +31,7 @@ const DSNavBar = () => {
   };
 
   useEffect(() => {
-    getData();
+    getStudent();
   }, []);
 
   return (
@@ -43,11 +43,11 @@ const DSNavBar = () => {
               <div className="dashboardarea__inner">
                 <div className="dashboardarea__left">
                   <div className="dashboardarea__left__img">
-                    <img src={data?.user_image} alt="" />
+                    <img src={user?.user_image} alt="" />
                   </div>
                   <div className="dashboardarea__left__content">
                     <h4>
-                      {data?.user?.first_name} {data?.user?.last_name}
+                      {user?.user?.first_name} {user?.user?.last_name}
                     </h4>
                   </div>
                 </div>

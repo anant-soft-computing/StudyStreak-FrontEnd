@@ -2,7 +2,7 @@ import React from "react";
 import TopBar from "../../../../TopBar/TopBar";
 import NavBar from "../../../../NavBar/NavBar";
 import Footer from "../../../../Footer/Footer";
-import AdditionalResourcse from "./AdditionalResourcse";
+import AdditionalResources from "./AdditionalResources";
 import Material from "./Material";
 import { useLocation, useParams } from "react-router-dom";
 import DSSidebar from "../../DSSideBar/DSSideBar";
@@ -11,8 +11,7 @@ import Lesson from "../../Lesson/Lesson";
 
 const CourseContent = () => {
   const { courseId } = useParams();
-  const location = useLocation();
-  const enrolledCourse = location?.state?.enrolledCourse;
+  const { state: { enrolledCourse } = {} } = useLocation();
 
   return (
     <>
@@ -33,7 +32,11 @@ const CourseContent = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
-                        <h4>{enrolledCourse?.Course_Title}</h4>
+                        <h4>
+                          {enrolledCourse.map(
+                            ({ Course_Title }) => Course_Title
+                          )}
+                        </h4>
                       </div>
                       <div className="row">
                         <div
@@ -93,11 +96,15 @@ const CourseContent = () => {
                           >
                             <Material
                               courseId={courseId}
-                              courseName={enrolledCourse?.Course_Title}
+                              courseName={enrolledCourse.map(
+                                ({ Course_Title }) => Course_Title
+                              )}
                             />
-                            <AdditionalResourcse
+                            <AdditionalResources
                               courseId={courseId}
-                              courseName={enrolledCourse?.Course_Title}
+                              courseName={enrolledCourse.map(
+                                ({ Course_Title }) => Course_Title
+                              )}
                             />
                           </div>
                         </div>

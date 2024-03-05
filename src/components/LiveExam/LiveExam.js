@@ -314,13 +314,15 @@ const LiveExam = () => {
     return (
       <>
         {image && (
-          <img
-            className="mb-2"
-            src={image}
-            alt="Study Streak"
-            height={250}
-            width={250}
-          />
+          <div className="text-center">
+            <img
+              className="mb-2"
+              src={image}
+              alt="Study Streak"
+              height={250}
+              width={250}
+            />
+          </div>
         )}
         <div
           dangerouslySetInnerHTML={{

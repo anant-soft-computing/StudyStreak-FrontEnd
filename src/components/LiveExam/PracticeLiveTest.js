@@ -7,6 +7,8 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
 import Modal from "react-bootstrap/Modal";
+import readingBandValues from "../../utils/bandValues/ReadingBandValues";
+import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 const Cheerio = require("cheerio");
 
 const PracticeLiveExam = () => {
@@ -18,6 +20,7 @@ const PracticeLiveExam = () => {
   const [examData, setExamData] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,6 +30,8 @@ const PracticeLiveExam = () => {
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   let highlightedElement = null;
+
+  console.log("correctAnswers",correctAnswers);
 
   useEffect(() => {
     if (
@@ -84,6 +89,51 @@ const PracticeLiveExam = () => {
             (examBlock) => examBlock?.id.toString() === examId.toString()
           );
           setFullPaper(filteredData);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [examId]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/practice-answers/${examId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        console.log(response);
+        if (response.status === 200) {
+          let correctAnswers;
+          if (examForm === "Reading") {
+            correctAnswers = response.data?.correct_answers.Reading?.reduce(
+              (acc, curr) => {
+                return acc.concat(curr.answers);
+              },
+              []
+            );
+          } else if (examForm === "Listening") {
+            correctAnswers = response.data?.correct_answers.Listening?.reduce(
+              (acc, curr) => {
+                return acc.concat(curr.answers);
+              },
+              []
+            );
+          }
+          setCorrectAnswers(correctAnswers);
         } else {
           console.log("error");
         }
@@ -319,6 +369,24 @@ const PracticeLiveExam = () => {
       answersArray.push(tempObj);
     });
 
+    const studentAnswers = answersArray.reduce((acc, exam) => {
+      return [...acc, ...exam.data];
+    }, []);
+
+    let totalCorrect = 0;
+    studentAnswers.forEach((studentAns, index) => {
+      if (studentAns.answer_text === correctAnswers[index].answer_text) {
+        totalCorrect += 1;
+      }
+    });
+
+    let bandValue = 0;
+    if (examForm === "Reading") {
+      bandValue = readingBandValues[totalCorrect];
+    } else if (examForm === "Listening") {
+      bandValue = listeningBandValues[totalCorrect];
+    }
+
     if (!isAllAnswered) {
       toast.error("Please answer all the questions before submitting.");
       return;
@@ -329,7 +397,8 @@ const PracticeLiveExam = () => {
         answer_data: answersArray,
         user: userData?.userId,
         Practise_Exam: parseInt(fullPaper[0].IELTS.id),
-        band: null,
+        band: bandValue,
+        exam_type: examForm,
       });
 
       const response = await ajaxCall(
@@ -352,7 +421,7 @@ const PracticeLiveExam = () => {
         setTimerRunning(false);
         toast.success("Your Exam Submitted Successfully");
         navigate(`/eaxm-practice-test-answere/${examId}`, {
-          state: { timeTaken },
+          state: { timeTaken, bandValue, examForm },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

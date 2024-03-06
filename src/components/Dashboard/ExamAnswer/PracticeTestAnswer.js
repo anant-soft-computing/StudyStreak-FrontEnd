@@ -9,64 +9,72 @@ const PracticeTestAnswer = () => {
   const { examId } = useParams();
   const [studentAnswer, setStudentAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
-  const { timeTaken } = useLocation()?.state || {};
+  const { timeTaken, bandValue, examForm } = useLocation()?.state || {};
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
 
-  const getPracticeTestAnswer = async () => {
-    try {
-      const response = await ajaxCall(
-        `/practice-answers/${examId}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        const studentAnswers = response.data?.student_answers.Reading?.reduce(
-          (acc, curr) => {
-            return acc.concat(curr.answers);
-          },
-          []
-        );
-        const correctAnswers = response.data?.correct_answers.Reading?.reduce(
-          (acc, curr) => {
-            return acc.concat(curr.answers);
-          },
-          []
-        );
-        setStudentAnswer(studentAnswers);
-        setCorrectAnswers(correctAnswers);
-
-        let correct = 0;
-        let incorrect = 0;
-        studentAnswers.forEach((studentAns, index) => {
-          if (studentAns.answer_text === correctAnswers[index].answer_text) {
-            correct++;
-          } else {
-            incorrect++;
-          }
-        });
-        setCorrectCount(correct);
-        setIncorrectCount(incorrect);
-
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getPracticeTestAnswer();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/practice-answers/50`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        console.log("Response", response);
+        if (response.status === 200) {
+          let studentAnswers;
+          if (examForm === "Reading") {
+            studentAnswers = response.data?.student_answers.Reading?.reduce(
+              (acc, curr) => {
+                return acc.concat(curr.answers);
+              },
+              []
+            );
+          } else if (examForm === "Listening") {
+            studentAnswers = response.data?.student_answers.Listening?.reduce(
+              (acc, curr) => {
+                return acc.concat(curr.answers);
+              },
+              []
+            );
+          }
+          const correctAnswers = response.data?.correct_answers.Reading?.reduce(
+            (acc, curr) => {
+              return acc.concat(curr.answers);
+            },
+            []
+          );
+          setStudentAnswer(studentAnswers);
+          setCorrectAnswers(correctAnswers);
+
+          let correct = 0;
+          let incorrect = 0;
+          studentAnswers.forEach((studentAns, index) => {
+            if (studentAns.answer_text === correctAnswers[index].answer_text) {
+              correct++;
+            } else {
+              incorrect++;
+            }
+          });
+          setCorrectCount(correct);
+          setIncorrectCount(incorrect);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, [examId]);
 
   return (
@@ -90,16 +98,15 @@ const PracticeTestAnswer = () => {
                     <div className="course__details__wraper">
                       <ul className="answerContent">
                         <li className="text-dark">
-                          Total Question :
-                          <div className="scc__meta">
-                            <strong className="answerCount">0</strong>
-                          </div>
-                        </li>
-
-                        <li className="text-dark">
                           Time Taken :
                           <div className="scc__meta">
                             <strong className="answerCount">{timeTaken}</strong>
+                          </div>
+                        </li>
+                        <li className="text-dark">
+                          Band Score :
+                          <div className="scc__meta">
+                            <strong className="answerCount">{bandValue}</strong>
                           </div>
                         </li>
                       </ul>
@@ -118,12 +125,6 @@ const PracticeTestAnswer = () => {
                             <strong className="answerCount">
                               {incorrectCount}
                             </strong>
-                          </div>
-                        </li>
-                        <li className="text-dark">
-                          Band Score :
-                          <div className="scc__meta">
-                            <strong className="answerCount">0</strong>
                           </div>
                         </li>
                       </ul>

@@ -29,6 +29,7 @@ const PracticeLiveExam = () => {
   const [linkAnswer, setLinkAnswer] = useState(false);
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
   let highlightedElement = null;
 
   console.log("correctAnswers",correctAnswers);
@@ -349,6 +350,38 @@ const PracticeLiveExam = () => {
     [timer]
   );
 
+  const practiceTestSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      exam_id: parseInt(examId),
+      typetest: "Practice",
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-mocktest-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have All Ready Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
   const handleRLSubmit = async () => {
     const answersArray = [];
     let isAllAnswered = true;
@@ -419,7 +452,7 @@ const PracticeLiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        toast.success("Your Exam Submitted Successfully");
+        practiceTestSubmit();
         navigate(`/eaxm-practice-test-answere/${examId}`, {
           state: { timeTaken, bandValue, examForm },
         });

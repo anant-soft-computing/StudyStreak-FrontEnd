@@ -16,53 +16,51 @@ const PracticeTest = () => {
   const [speakingData, setSpeakingData] = useState([]);
   const [writingData, setWritingData] = useState([]);
 
-  const getPracticeTestData = async () => {
-    try {
-      const response = await ajaxCall(
-        `/createexamview/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setReadingData(
-          response?.data?.filter(
-            (examBlock) => examBlock?.exam_type === "Reading"
-          )
-        );
-        setSpeakingData(
-          response?.data?.filter(
-            (examBlock) => examBlock?.exam_type === "Speaking"
-          )
-        );
-        setWritingData(
-          response?.data?.filter(
-            (examBlock) => examBlock?.exam_type === "Writing"
-          )
-        );
-        setListeningData(
-          response?.data?.filter(
-            (examBlock) => examBlock?.exam_type === "Listening"
-          )
-        );
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getPracticeTestData();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/createexamview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setReadingData(
+            response?.data?.filter(
+              (examBlock) => examBlock?.exam_type === "Reading"
+            )
+          );
+          setSpeakingData(
+            response?.data?.filter(
+              (examBlock) => examBlock?.exam_type === "Speaking"
+            )
+          );
+          setWritingData(
+            response?.data?.filter(
+              (examBlock) => examBlock?.exam_type === "Writing"
+            )
+          );
+          setListeningData(
+            response?.data?.filter(
+              (examBlock) => examBlock?.exam_type === "Listening"
+            )
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   return (

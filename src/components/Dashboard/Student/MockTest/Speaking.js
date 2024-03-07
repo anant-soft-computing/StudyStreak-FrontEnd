@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Speaking = ({ speakingData }) => {
+const Speaking = ({ speakingData, givenTest }) => {
   const handleClick = (id) => {
     window.open(`/live-exam/${id}`, "_blank");
   };
@@ -15,7 +15,10 @@ const Speaking = ({ speakingData }) => {
             data-aos="fade-up"
             key={index}
           >
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain">
+            {givenTest.some((test) => test.id === id) && (
+                <span className="tag">Given</span>
+              )}
               <div className="gridarea__content ">
                 <div className="gridarea__heading">
                   <h3 className="text-center">
@@ -35,7 +38,7 @@ const Speaking = ({ speakingData }) => {
                   </p>
                 </div>
                 <div className="d-flex justify-content-center">
-                   <button
+                  <button
                     className="default__button"
                     onClick={() => handleClick(id)}
                   >

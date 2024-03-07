@@ -4,36 +4,65 @@ import ajaxCall from "../../helpers/ajaxCall";
 
 const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   const [courseList, setCouresList] = useState([]);
-
-  const getCourses = async () => {
-    try {
-      const response = await ajaxCall(
-        `/courselistview/?search=${search}&Category__name=${selectedCategory}&Level__name=${selectedLevel}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response.status === 200) {
-        setCouresList(response.data);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  const [enrolledCourse, setEnrolledCourse] = useState([]);
 
   useEffect(() => {
-    getCourses();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/userwisepackagewithcourseid/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setEnrolledCourse(
+            response?.data?.student_packages?.map(({ course }) => course)
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/courselistview/?search=${search}&Category__name=${selectedCategory}&Level__name=${selectedLevel}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          setCouresList(response.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, [search, selectedCategory, selectedLevel]);
 
   return (
@@ -44,7 +73,15 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
           data-aos="fade-up"
           key={course.id}
         >
-          <div className="gridarea__wraper gridarea__wraper__2">
+          <div className="gridarea__wraper gridarea__wraper__2 tagMain">
+            {enrolledCourse.some(({ id }) => id === course.id) && (
+              <span
+                className="tag"
+                style={{ zIndex: "1", backgroundColor: "red" }}
+              >
+                Enrolled
+              </span>
+            )}
             <div className="gridarea__img">
               <Link to={`/courseDetail/${course?.id}`}>
                 <img

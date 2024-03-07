@@ -10,35 +10,33 @@ import { Link } from "react-router-dom";
 const Dashboard = () => {
   const [lastestLiveClass, setLastestLiveClass] = useState({});
 
-  const getLiveClassesList = async () => {
-    try {
-      const response = await ajaxCall(
-        `/liveclass_list_view`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response?.status === 200) {
-        setLastestLiveClass(response?.data?.[0]);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getLiveClassesList();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/liveclass_list_view`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setLastestLiveClass(response?.data?.[0]);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   return (

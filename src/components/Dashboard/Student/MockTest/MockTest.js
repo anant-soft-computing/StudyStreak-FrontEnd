@@ -12,6 +12,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 
 const MockTest = () => {
   const [mockTestData, setMockTestData] = useState([]);
+  const [givenTest, setGivenTest] = useState([]);
 
   const readingData = mockTestData?.filter(
     (item) => item.exam_type === "Reading"
@@ -29,37 +30,63 @@ const MockTest = () => {
     (item) => item.exam_type === "Speaking"
   );
 
-  const getTestBlockData = async () => {
-    try {
-      const response = await ajaxCall(
-        `/exam-blocks/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/studentview/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
           },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        const practiceTest = response?.data?.filter(
-          (item) => item.block_type === "Mock Test"
+          8000
         );
-        setMockTestData(practiceTest);
-      } else {
-        console.log("error");
+        if (response.status === 200) {
+          setGivenTest(response?.data[0].student_mock);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
       }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+    })();
+  }, []);
 
   useEffect(() => {
-    getTestBlockData();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/exam-blocks/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const mockTest = response?.data?.filter(
+            (item) => item.block_type === "Mock Test"
+          );
+          setMockTestData(mockTest);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   return (
@@ -155,7 +182,10 @@ const MockTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__one"
                           >
-                            <Reading readingData={readingData} />
+                            <Reading
+                              readingData={readingData}
+                              givenTest={givenTest}
+                            />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -163,7 +193,10 @@ const MockTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__two"
                           >
-                            <Writing writingData={writingData} />
+                            <Writing
+                              writingData={writingData}
+                              givenTest={givenTest}
+                            />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -171,7 +204,10 @@ const MockTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__three"
                           >
-                            <Listening listeningData={listeningData} />
+                            <Listening
+                              listeningData={listeningData}
+                              givenTest={givenTest}
+                            />
                           </div>
                           <div
                             className="tab-pane fade"
@@ -179,7 +215,10 @@ const MockTest = () => {
                             role="tabpanel"
                             aria-labelledby="projects__four"
                           >
-                            <Speaking speakingData={speakingData} />
+                            <Speaking
+                              speakingData={speakingData}
+                              givenTest={givenTest}
+                            />
                           </div>
                         </div>
                       </div>

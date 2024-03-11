@@ -3,59 +3,91 @@ import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DSNavBar from "../DSNavBar/DSNavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import Easy from "./Easy";
-import Hard from "./Hard";
-import Medium from "./Medium";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Footer from "../../../Footer/Footer";
+import { Link } from "react-router-dom";
+
+const difficultLevelTabs = ["Easy", "Medium", "Hard"];
 
 const FullLengthTest = () => {
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
+  const [difficulty_level, setDifficultyLevel] = useState("Easy");
 
-  const easyData = fullLengthTestData?.filter(
-    (item) => item.difficulty_level === "Easy"
-  );
-
-  const mediumData = fullLengthTestData?.filter(
-    (item) => item.difficulty_level === "Medium"
-  );
-
-  const hardData = fullLengthTestData?.filter(
-    (item) => item.difficulty_level === "Hard"
-  );
-
-  const getFullLengthTestData = async () => {
-    try {
-      const response = await ajaxCall(
-        `/exam-blocks/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        const fullLengthTest = response?.data?.filter(
-          (item) => item.block_type === "Full Length"
-        );
-        setFullLengthTestData(fullLengthTest);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
+  const handleDifficultyLevel = (e) => {
+    setDifficultyLevel(e.target.innerHTML);
   };
 
   useEffect(() => {
-    getFullLengthTestData();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const response = await ajaxCall(
+          `/get/flt/?difficulty_level=${difficulty_level}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setFullLengthTestData([...response.data]);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, [difficulty_level]);
+
+  const handleFullLengthTest = (id) => {
+    window.open(`/fulllength-live-exam/${id}`, "_blank");
+  };
+
+  const renderTestCards = (
+    <div className="row">
+      {fullLengthTestData?.map(
+        ({ id, exam_name, no_of_questions, exam_type }, index) => (
+          <div
+            className="col-lg-4 col-md-6 col-12"
+            data-aos="fade-up"
+            key={index}
+          >
+            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+              <div className="gridarea__content ">
+                <div className="gridarea__heading">
+                  <h3 className="text-center">IELTS</h3>
+                </div>
+                <div className="gridarea__heading">
+                  <h3 className="text-center">Full Length Test </h3>
+                </div>
+                <div className="zoom__meeting__id">
+                  <p>Reading, Writing, Listening, Speaking</p>
+                </div>
+                <div className="zoom__meeting__id">
+                  <p>2.5 Hours</p>
+                </div>
+                <div className="d-flex justify-content-center">
+                  <button
+                    className="default__button"
+                    onClick={() => handleFullLengthTest(id)}
+                  >
+                    Take Test
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -86,44 +118,27 @@ const FullLengthTest = () => {
                             id="myTab"
                             role="tablist"
                           >
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link active"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__one"
-                                type="button"
-                                aria-selected="true"
-                                role="tab"
+                            {difficultLevelTabs.map((tab, index) => (
+                              <li
+                                className="nav-item"
+                                role="presentation"
+                                key={index}
                               >
-                                Easy
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Medium
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__three"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Hard
-                              </button>
-                            </li>
+                                <button
+                                  className={`single__tab__link ${
+                                    tab === difficulty_level ? "active" : ""
+                                  }`}
+                                  data-bs-toggle="tab"
+                                  data-bs-target={`#projects__${tab}`}
+                                  type="button"
+                                  aria-selected="true"
+                                  role="tab"
+                                  onClick={handleDifficultyLevel}
+                                >
+                                  {tab}
+                                </button>
+                              </li>
+                            ))}
                           </ul>
                         </div>
                         <div
@@ -131,30 +146,18 @@ const FullLengthTest = () => {
                           id="myTabContent"
                           data-aos="fade-up"
                         >
-                          <div
-                            className="tab-pane fade active show"
-                            id="projects__one"
-                            role="tabpanel"
-                            aria-labelledby="projects__one"
-                          >
-                            <Easy easyData={easyData} />
-                          </div>
-                          <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
-                          >
-                            <Medium mediumData={mediumData} />
-                          </div>
-                          <div
-                            className="tab-pane fade"
-                            id="projects__three"
-                            role="tabpanel"
-                            aria-labelledby="projects__three"
-                          >
-                            <Hard hardData={hardData} />
-                          </div>
+                          {difficultLevelTabs.map((test, index) => (
+                            <div
+                              className={`tab-pane fade ${
+                                test === difficulty_level ? "show active" : ""
+                              }`}
+                              id={`projects__${test}`}
+                              role="tabpanel"
+                              key={index}
+                            >
+                              <div className="row">{renderTestCards}</div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>

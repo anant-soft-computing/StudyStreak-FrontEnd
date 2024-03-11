@@ -118,21 +118,24 @@ const PracticeLiveExam = () => {
   );
 
   useEffect(() => {
-    const temp = [...examAnswer];
-    temp[next] = {
-      exam_id: examData?.id,
-      data: [
-        {
-          question_number: `textarea_${next}`,
-          answer_text: (temp[next] && temp[next]?.data[0]?.answer_text) || "",
-        },
-      ],
-    };
-    setExamAnswer(temp);
+    if (examData) {
+      const temp = [...examAnswer];
+      temp[next] = {
+        exam_id: examData?.id,
+        question: examData?.question,
+        data: [
+          {
+            question_number: `textarea_${next}`,
+            answer_text: (temp[next] && temp[next]?.data[0]?.answer_text) || "",
+          },
+        ],
+      };
+      setExamAnswer(temp);
 
-    const words = temp[next]?.data[0]?.answer_text.split(" ");
-    setNumberOfWord(words.length);
-  }, [next]);
+      const words = temp[next]?.data[0]?.answer_text.split(" ");
+      setNumberOfWord(words.length);
+    }
+  }, [next, examData]);
 
   const handleWritingAnswer = (e, next) => {
     const answer_text = e.target.value;
@@ -159,6 +162,7 @@ const PracticeLiveExam = () => {
       });
       const tempObj = {
         exam_id: item.exam_id,
+        question: item.question,
         data: temp,
       };
       answersArray.push(tempObj);
@@ -169,9 +173,77 @@ const PracticeLiveExam = () => {
       return;
     }
 
+    let newAnswersArray = [];
+    let isError = false;
+    try {
+      // Wait for all ChatGPT API calls to complete
+      await Promise.all(
+        answersArray.map(async (item) => {
+          let gptResponse;
+          let bandValue;
+          const gptBody = {
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "user",
+                content:
+                  "Analyse The Package For IELTS Writing Task With Following Criteria TASK RESPONSE, COHERENCE AND COHESION, LEXICAL RESOURCE AND Grammatical Range and Accuracy and Give IELTS Bands To The Task",
+              },
+              {
+                role: "user",
+                content: `Questions: ${item.question}`,
+              },
+              {
+                role: "user",
+                content: `Answers: ${item.data[0].answer_text} `,
+              },
+              {
+                role: "user",
+                content:
+                  "Give band explanation as #Explanation: exaplanationValue  and band as #Band:bandValue",
+              },
+            ],
+          };
+
+          const res = await fetch(
+            "https://api.openai.com/v1/chat/completions",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+              },
+              body: JSON.stringify(gptBody),
+            }
+          );
+
+          if (!res.ok)
+            throw new Error("Some Problem Occurred. Please try again.");
+          const data = await res.json();
+          bandValue = data?.choices?.[0]?.message?.content
+            ?.split("#Band:")[1]
+            .split(" ")[1];
+          gptResponse = data?.choices?.[0]?.message?.content;
+          newAnswersArray.push({
+            exam_id: item.exam_id,
+            band: bandValue,
+            AI_Assessment: gptResponse,
+            data: item.data,
+          });
+        })
+      );
+    } catch (error) {
+      isError = true;
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+
+    if (isError) {
+      return;
+    }
+
     try {
       const data = JSON.stringify({
-        answer_data: answersArray,
+        answer_data: newAnswersArray,
         user: userData?.userId,
         Practise_Exam: parseInt(fullPaper[0].IELTS.id),
         band: null,

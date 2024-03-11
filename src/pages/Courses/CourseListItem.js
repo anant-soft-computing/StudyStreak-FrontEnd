@@ -74,7 +74,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
           key={course.id}
         >
           <div className="gridarea__wraper gridarea__wraper__2 tagMain">
-            {enrolledCourse.some(({ id }) => id === course.id) && (
+            {enrolledCourse.some((item) => item?.id === course.id) && (
               <span
                 className="tag"
                 style={{ zIndex: "1", backgroundColor: "red" }}

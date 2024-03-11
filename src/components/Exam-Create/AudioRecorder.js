@@ -1,11 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
+import ajaxCall from "../../helpers/ajaxCall";
 
-const AudioRecorder = () => {
+const AudioRecorder = ({ setRecordedFilePath, next, exam_id }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
+
+  useEffect(() => {
+    setIsRecording(false);
+    setAudioBlob(null);
+    setRecordedFilePath(null);
+    mediaRecorderRef.current = null;
+    chunksRef.current = [];
+  }, [next]);
 
   const handleStartRecording = () => {
     navigator.mediaDevices
@@ -20,7 +29,7 @@ const AudioRecorder = () => {
         };
 
         mediaRecorderRef.current.onstop = () => {
-          const blob = new Blob(chunksRef.current, { type: "audio/wav" });
+          const blob = new Blob(chunksRef.current, { type: "audio/mp3" });
           setAudioBlob(blob);
         };
 
@@ -35,12 +44,43 @@ const AudioRecorder = () => {
     setIsRecording(false);
   };
 
+  useEffect(() => {
+    if (audioBlob) {
+      const formData = new FormData();
+      formData.append("file", audioBlob);
+      formData.append("exam_id", exam_id);
+      formData.append("extension", "mp3");
+
+      ajaxCall(
+        "/save-audio-file/",
+        {
+          method: "POST",
+          body: formData,
+
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+        },
+        8000
+      )
+        .then((response) => {
+          setRecordedFilePath(response?.data?.file_path);
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    }
+  }, [audioBlob]); // Include 'next' as a dependency here
+
   return (
     <div>
       <h1>
         {(isRecording && "Recording...") ||
           (!isRecording && !audioBlob && "Click to Start Recording") ||
-          "Recording Stopped"}
+          "Recording Completed"}
       </h1>
       <button
         className="audio__recorder__btn"
@@ -56,7 +96,7 @@ const AudioRecorder = () => {
         <div>
           <h2>Recorded Audio</h2>
           <audio controls>
-            <source src={URL.createObjectURL(audioBlob)} type="audio/wav" />
+            <source src={URL.createObjectURL(audioBlob)} type="audio/mp3" />
             Your browser does not support the audio element.
           </audio>
         </div>

@@ -49,6 +49,7 @@ import TermsAndService from "./pages/TermsAndService/TermsAndService";
 import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
 import PracticeTestAnswer from "./components/Dashboard/ExamAnswer/PracticeTestAnswer";
+import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 
 const App = () => {
   return (
@@ -166,6 +167,10 @@ const App = () => {
           <Route
             path="/practice-live-writing-exam/:examType/:examForm/:examId"
             element={<ProtectedRoute element={PracticeWritingExam} />}
+          />
+          <Route
+            path="/fulllength-live-exam/:examId"
+            element={<ProtectedRoute element={FullLengthLiveExam} />}
           />
           <Route
             path="/eaxm-answere/:examId"

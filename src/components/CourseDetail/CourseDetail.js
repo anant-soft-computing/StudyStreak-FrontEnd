@@ -59,7 +59,27 @@ const CourseDetail = () => {
         8000
       );
       if (response.status === 200) {
-        setCouresDetail(response.data);
+        const section = [];
+        response.data?.lessons?.map((lesson) => {
+          const isSessionExist = section.find(
+            (item) => item.id === lesson?.section.id
+          );
+          if (!isSessionExist) {
+            section.push(lesson?.section);
+          }
+        });
+        const updatedData = {
+          ...response.data,
+          section,
+        };
+        section.map((sectionItem) => {
+          const lessons = response.data?.lessons?.filter(
+            (lesson) => lesson?.section.id === sectionItem.id
+          );
+          sectionItem.lessons = lessons;
+        });
+
+        setCouresDetail(updatedData);
       } else {
         console.log("error");
       }
@@ -103,8 +123,6 @@ const CourseDetail = () => {
     getCourseDetail();
     getCoursePackages();
   }, [courseId]);
-
-
 
   return (
     <>
@@ -278,66 +296,75 @@ const CourseDetail = () => {
                             className="accordion content__cirriculum__wrap"
                             id="accordionCourseContent"
                           >
-                            {courseDetail?.lessons?.map((lessonItem, index) => (
-                              <div className="accordion-item" key={index}>
-                                <h2
-                                  className="accordion-header"
-                                  id={`lesson-${index}`}
-                                >
-                                  <button
-                                    className={`accordion-button ${
-                                      activeIndex !== index ? "collapsed" : ""
-                                    }`}
-                                    type="button"
-                                    data-bs-toggle="collapse"
-                                    data-bs-target={`#collapseOne-${index}`}
-                                    aria-expanded={
-                                      activeIndex === index ? "true" : "false"
-                                    }
-                                    aria-controls={`#collapseOne-${index}`}
-                                    onClick={() => setActiveIndex(index)}
+                            <div className="blog__details__heading__2">
+                              <h5>{courseDetail?.Course_Title}</h5>
+                            </div>
+                            {courseDetail?.section?.map(
+                              (sectionItem, index) => (
+                                <div className="accordion-item" key={index}>
+                                  <h2
+                                    className="accordion-header"
+                                    id={`section-${index}`}
                                   >
-                                    {lessonItem?.Lesson_Title}
-                                    <span>{lessonItem?.Lesson_Duration}</span>
-                                  </button>
-                                </h2>
-                                <div
-                                  id={`collapseOne-${index}`}
-                                  className={`accordion-collapse collapse ${
-                                    activeIndex === index ? "show" : ""
-                                  }`}
-                                  aria-labelledby={`lesson-${index}`}
-                                  data-bs-parent="#accordionCourseContent"
-                                >
-                                  <div className="accordion-body">
-                                    <div className="scc__wrap">
-                                      <div
-                                        className="scc__info align-items-center"
-                                        style={{
-                                          wordWrap: "break-word",
-                                          width: "100%",
-                                          maxWidth: "600px",
-                                        }}
-                                      >
-                                        <i className="icofont-video-alt"></i>
-                                        <h5>
-                                          <div role="button">
-                                            <span>
-                                              {lessonItem?.Lesson_Description}
-                                            </span>
+                                    <button
+                                      className={`accordion-button ${
+                                        activeIndex !== index ? "collapsed" : ""
+                                      }`}
+                                      type="button"
+                                      data-bs-toggle="collapse"
+                                      data-bs-target={`#collapseOne-${index}`}
+                                      aria-expanded={
+                                        activeIndex === index ? "true" : "false"
+                                      }
+                                      aria-controls={`#collapseOne-${index}`}
+                                      onClick={() => setActiveIndex(index)}
+                                    >
+                                      {sectionItem?.name}
+                                    </button>
+                                  </h2>
+                                  <div
+                                    id={`collapseOne-${index}`}
+                                    className={`accordion-collapse collapse ${
+                                      activeIndex === index ? "show" : ""
+                                    }`}
+                                    aria-labelledby={`section-${index}`}
+                                    data-bs-parent="#accordionCourseContent"
+                                  >
+                                    <div className="accordion-body">
+                                      {sectionItem?.lessons?.map(
+                                        (lessonItem, index) => (
+                                          <div
+                                            className="scc__wrap"
+                                            key={index}
+                                          >
+                                            <div
+                                              className="scc__info align-items-center"
+                                              style={{
+                                                wordWrap: "break-word",
+                                                width: "100%",
+                                                maxWidth: "600px",
+                                              }}
+                                            >
+                                              <i className="icofont-video-alt"></i>
+                                              <h5>
+                                                <span>
+                                                  {lessonItem?.Lesson_Title}
+                                                </span>
+                                              </h5>
+                                            </div>
+                                            <div className="scc__meta">
+                                              <span>
+                                                <i className="icofont-lock"></i>
+                                              </span>
+                                            </div>
                                           </div>
-                                        </h5>
-                                      </div>
-                                      <div className="scc__meta">
-                                        <span>
-                                          <i className="icofont-lock"></i>
-                                        </span>
-                                      </div>
+                                        )
+                                      )}
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))}
+                              )
+                            )}
                           </div>
                         </div>
                         <div

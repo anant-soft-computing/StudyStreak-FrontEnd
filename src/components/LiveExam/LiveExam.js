@@ -21,6 +21,7 @@ const LiveExam = () => {
   const [timerRunning, setTimerRunning] = useState(true);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   let highlightedElement = null;
@@ -214,6 +215,7 @@ const LiveExam = () => {
 
   const handleRLSubmit = async () => {
     const answersArray = [];
+    let bandValue = 0;
 
     examAnswer[0].answers.forEach((answer, index) => {
       answersArray.push({
@@ -222,20 +224,24 @@ const LiveExam = () => {
       });
     });
 
-    let totalCorrect = 0;
-    examAnswer[0].answers.forEach((answer, index) => {
-      const correctAnswer = examData?.answers[index].answer_text.toLowerCase();
-      if (answer.answer.toLowerCase() === correctAnswer) {
-        totalCorrect += 1;
+    if (
+      examData?.exam_type === "Reading" ||
+      examData?.exam_type === "Listening"
+    ) {
+      let totalCorrect = 0;
+      examAnswer[0].answers.forEach((answer, index) => {
+        const correctAnswer =
+          examData?.answers[index].answer_text.toLowerCase();
+        if (answer.answer.toLowerCase() === correctAnswer) {
+          totalCorrect += 1;
+        }
+      });
+
+      if (examData?.exam_type === "Reading") {
+        bandValue = readingBandValues[totalCorrect];
+      } else if (examData?.exam_type === "Listening") {
+        bandValue = listeningBandValues[totalCorrect];
       }
-    });
-
-    let bandValue = 0;
-
-    if (examData?.exam_type === "Reading") {
-      bandValue = readingBandValues[totalCorrect];
-    } else if (examData?.exam_type === "Listening") {
-      bandValue = listeningBandValues[totalCorrect];
     }
 
     try {
@@ -374,105 +380,144 @@ const LiveExam = () => {
   }, [linkAnswer, examAnswer]);
 
   const htmlContent = useMemo(() => {
-    const question = examData?.question;
+    const question = examData?.question || examData?.passage;
     if (!question) return;
-    const $ = Cheerio.load(question.toString());
-
-    const questionTags = [
-      "select",
-      "textarea",
-      "input[type='text'], input:not([type='radio'], [type='checkbox'])",
-      "input[type='radio']",
-      "input[type='checkbox']",
-    ];
-
-    const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
-
-    const temp = [];
-    let questionPassage = "";
-
-    questionTags.forEach((tag, tagIndex) => {
-      // Find elements for current tag
-      const elements = $(tag);
-      const numberOfElements = elements.length;
-
-      const radioCheckboxtypeQuestionsGroup = {};
-      let uniqueId = "";
-
-      if (numberOfElements !== 0) {
-        let tagQuestions = {
-          type: tagIds[tagIndex],
-          paginationsIds: [],
-        };
-        elements.each((index, element) => {
-          if (
-            tag === "input[type='radio']" ||
-            tag === "input[type='checkbox']"
-          ) {
-            const name = $(element).attr("name");
-            if (!radioCheckboxtypeQuestionsGroup[name]) {
-              radioCheckboxtypeQuestionsGroup[name] = [];
-              uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
-              tagQuestions.paginationsIds.push(uniqueId);
-            }
-            $(element).attr("id", uniqueId);
-            radioCheckboxtypeQuestionsGroup[name].push(element);
-          } else {
-            const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
-            tagQuestions.paginationsIds.push(uniqueId);
-            $(element).attr("id", uniqueId);
-          }
-        });
-        temp.push(tagQuestions);
-      }
-    });
-
-    if (examData?.exam_type === "Writing") {
-      const uniqueId = `Textarea_1`;
+    if (
+      examData?.exam_type === "Writing" ||
+      examData?.exam_type === "Speaking"
+    ) {
+      const temp = [];
       temp.push({
-        type: "Textarea",
-        paginationsIds: [uniqueId],
+        type: examData?.exam_type === "Writing" ? "Textarea" : "speaking_1",
+        questionId:
+          examData?.exam_type === "Writing" ? "Textarea_1" : "speaking_1",
       });
-    }
 
-    let paginationsStrucutre = [];
+      const paginationsStrucutre = temp.flat();
 
-    examData?.question_structure?.forEach((item, index) => {
-      temp.forEach((element) => {
-        if (element.type === item.type) {
-          paginationsStrucutre.push(
-            element.paginationsIds.splice(0, item.numberOfQuestions)
-          );
+      const questionPassage = `<div class="mainContainer">${question}</div>`;
+      setUniqueIdArr(paginationsStrucutre);
+
+      const tempAnswer = paginationsStrucutre.map((item) => {
+        return {
+          questionId: item,
+          answer: "",
+        };
+      });
+
+      const tempAnswerArr = [...examAnswer];
+
+      if (!tempAnswerArr[0] || tempAnswerArr[0]?.answers.length === 0) {
+        tempAnswerArr[0] = {
+          testId: examData?.id,
+          answers: tempAnswer,
+        };
+        setExamAnswer(tempAnswerArr);
+      }
+
+      return question;
+    } else if (
+      examData?.exam_type === "Listening" ||
+      examData?.exam_type === "Reading"
+    ) {
+      const $ = Cheerio.load(question.toString());
+
+      const questionTags = [
+        "select",
+        "textarea",
+        "input[type='text'], input:not([type='radio'], [type='checkbox'])",
+        "input[type='radio']",
+        "input[type='checkbox']",
+      ];
+
+      const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
+
+      const temp = [];
+      let questionPassage = "";
+
+      questionTags.forEach((tag, tagIndex) => {
+        // Find elements for current tag
+        const elements = $(tag);
+        const numberOfElements = elements.length;
+
+        const radioCheckboxtypeQuestionsGroup = {};
+        let uniqueId = "";
+
+        if (numberOfElements !== 0) {
+          let tagQuestions = {
+            type: tagIds[tagIndex],
+            paginationsIds: [],
+          };
+          elements.each((index, element) => {
+            if (
+              tag === "input[type='radio']" ||
+              tag === "input[type='checkbox']"
+            ) {
+              const name = $(element).attr("name");
+              if (!radioCheckboxtypeQuestionsGroup[name]) {
+                radioCheckboxtypeQuestionsGroup[name] = [];
+                uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+                tagQuestions.paginationsIds.push(uniqueId);
+              }
+              $(element).attr("id", uniqueId);
+              radioCheckboxtypeQuestionsGroup[name].push(element);
+            } else {
+              const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+              tagQuestions.paginationsIds.push(uniqueId);
+              $(element).attr("id", uniqueId);
+            }
+          });
+          temp.push(tagQuestions);
         }
       });
-    });
 
-    paginationsStrucutre = paginationsStrucutre.flat();
+      let paginationsStrucutre = [];
 
-    // Display questions for the first page initially
-    questionPassage += `<div class="mainContainer">${$.html()}</div>`;
+      examData?.question_structure?.forEach((item, index) => {
+        temp.forEach((element) => {
+          if (element.type === item.type) {
+            paginationsStrucutre.push(
+              element.paginationsIds.splice(0, item.numberOfQuestions)
+            );
+          }
+        });
+      });
 
-    const tempAnswer = paginationsStrucutre.map((item) => {
-      return {
-        questionId: item,
-        answer: "",
-      };
-    });
+      paginationsStrucutre = paginationsStrucutre.flat();
 
-    const tempAnswerArr = [...examAnswer];
+      // Display questions for the first page initially
+      questionPassage += `<div class="mainContainer">${$.html()}</div>`;
 
-    if (!tempAnswerArr[0] || tempAnswerArr[0]?.answers.length === 0) {
-      tempAnswerArr[0] = {
-        testId: examData?.id,
-        answers: tempAnswer,
-      };
-      setExamAnswer(tempAnswerArr);
+      const tempAnswer = paginationsStrucutre.map((item) => {
+        return {
+          questionId: item,
+          answer: "",
+        };
+      });
+
+      const tempAnswerArr = [...examAnswer];
+
+      if (!tempAnswerArr[0] || tempAnswerArr[0]?.answers.length === 0) {
+        tempAnswerArr[0] = {
+          testId: examData?.id,
+          answers: tempAnswer,
+        };
+        setExamAnswer(tempAnswerArr);
+      }
+      setLinkAnswer(true);
+
+      setUniqueIdArr(paginationsStrucutre);
+      return questionPassage;
     }
-    setLinkAnswer(true);
-
-    setUniqueIdArr(paginationsStrucutre);
-    return questionPassage;
   }, [examData?.question]);
+
+  useEffect(() => {
+    if (recordedFilePath) {
+      const tempExamAnswer = [...examAnswer];
+      tempExamAnswer[0].answers[0].answer = recordedFilePath;
+      setExamAnswer(tempExamAnswer);
+    }
+  }, [recordedFilePath]);
 
   return (
     <>
@@ -533,7 +578,13 @@ const LiveExam = () => {
                   </div>
                 );
               })}
-            {examData?.exam_type === "Speaking" && <AudioRecorder />}
+            {examData?.exam_type === "Speaking" && (
+              <AudioRecorder
+                setRecordedFilePath={setRecordedFilePath}
+                next={0}
+                exam_id={examData?.id}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -573,7 +624,8 @@ const LiveExam = () => {
           onClick={() => {
             if (
               examData?.exam_type === "Reading" ||
-              examData?.exam_type === "Listening"
+              examData?.exam_type === "Listening" ||
+              examData?.exam_type === "Speaking"
             ) {
               handleRLSubmit();
             } else if (examData?.exam_type === "Writing") {

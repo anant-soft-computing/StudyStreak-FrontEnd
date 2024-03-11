@@ -3,20 +3,18 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
 import Modal from "react-bootstrap/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 const Cheerio = require("cheerio");
 
-const PracticeLiveExam = () => {
+const FullLengthLiveExam = () => {
   const containerRef = useRef(null);
   const navigate = useNavigate();
-  const examType = useLocation()?.pathname?.split("/")?.[2];
+  const examType = useLocation()?.pathname?.split("/")?.[4];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
-  const examId = useLocation()?.pathname?.split("/")?.[4];
+  const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
@@ -25,8 +23,10 @@ const PracticeLiveExam = () => {
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
+  const [fullLengthId, setFullLengthId] = useState("");
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
+  const [numberOfWord, setNumberOfWord] = useState(0);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -71,7 +71,7 @@ const PracticeLiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/`,
+          `/get/flt/?difficulty_level=Easy`,
           {
             headers: {
               Accept: "application/json",
@@ -88,7 +88,25 @@ const PracticeLiveExam = () => {
           const filteredData = response?.data?.filter(
             (examBlock) => examBlock?.id.toString() === examId.toString()
           );
-          setFullPaper(filteredData);
+          let pappers = [];
+          filteredData[0].reading_set.Reading.forEach((item) => {
+            pappers.push({ ...item, paperId: filteredData[0].reading_set.id });
+          });
+          filteredData[0].writing_set.Writing.forEach((item) => {
+            pappers.push({ ...item, paperId: filteredData[0].writing_set.id });
+          });
+          filteredData[0].listening_set.Listening.forEach((item) => {
+            pappers.push({
+              ...item,
+              paperId: filteredData[0].listening_set.id,
+            });
+          });
+          filteredData[0].speaking_set.Speaking.forEach((item) => {
+            pappers.push({ ...item, paperId: filteredData[0].speaking_set.id });
+          });
+          filteredData[0].papers = pappers;
+          setFullPaper(pappers);
+          setFullLengthId(filteredData[0].id);
         } else {
           console.log("error");
         }
@@ -100,13 +118,18 @@ const PracticeLiveExam = () => {
 
   useEffect(() => {
     (async () => {
-      if (
-        (examForm === "Reading" || examForm === "Listening") &&
-        fullPaper?.length !== 0
-      ) {
-        try {
+      try {
+        if (
+          examData?.exam_type === "Reading" ||
+          examData?.exam_type === "Listening"
+        ) {
+          const correctAnswersAlready =
+            correctAnswers.filter((item) => item.exam_id === examData?.id)
+              .length > 0;
+          if (correctAnswersAlready) return;
+
           const response = await ajaxCall(
-            `/practice-answers/${fullPaper[0].IELTS.id}`,
+            `/practice-answers/${examData?.paperId}`,
             {
               headers: {
                 Accept: "application/json",
@@ -120,42 +143,43 @@ const PracticeLiveExam = () => {
             8000
           );
           if (response.status === 200) {
-            let correctAnswers;
-            if (examForm === "Reading") {
-              correctAnswers = response.data?.correct_answers.Reading.map(
+            let tempCorrectAnswers;
+            if (examData.exam_type === "Reading") {
+              tempCorrectAnswers = response.data?.correct_answers.Reading.map(
                 (item) => ({
                   exam_id: item.block_id,
                   data: item.answers,
                 })
               );
-            } else if (examForm === "Listening") {
-              correctAnswers = response.data?.correct_answers.Listening.map(
+            } else if (examData?.exam_type === "Listening") {
+              tempCorrectAnswers = response.data?.correct_answers.Listening.map(
                 (item) => ({
                   exam_id: item.block_id,
                   data: item.answers,
                 })
               );
             }
+            tempCorrectAnswers = tempCorrectAnswers.filter(
+              (item) => item.exam_id === examData?.id
+            );
 
-            setCorrectAnswers(correctAnswers);
+            setCorrectAnswers([...correctAnswers, ...tempCorrectAnswers]);
           } else {
             console.log("error");
           }
-        } catch (error) {
-          console.log("error", error);
         }
+      } catch (error) {
+        console.log("error", error);
       }
     })();
-  }, [fullPaper]);
+  }, [examData]);
 
   useEffect(() => {
     if (fullPaper?.length !== 0) {
-      const examBlockWithNumbers = fullPaper?.[0][examType][examForm]?.map(
-        (examBlock, index) => ({
-          ...examBlock,
-          no: index + 1,
-        })
-      );
+      let examBlockWithNumbers = fullPaper?.map((examBlock, index) => ({
+        ...examBlock,
+        no: index + 1,
+      }));
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
@@ -262,6 +286,7 @@ const PracticeLiveExam = () => {
       const temp = [...examAnswer];
       temp[next] = {
         exam_id: examData?.id,
+        question: examData?.question,
         data: [
           {
             question_number:
@@ -271,6 +296,7 @@ const PracticeLiveExam = () => {
             answer_text: (temp[next] && temp[next]?.data[0]?.answer_text) || "",
           },
         ],
+        exam_type: examData?.exam_type,
       };
       setExamAnswer(temp);
       setLinkAnswer(true);
@@ -295,8 +321,8 @@ const PracticeLiveExam = () => {
 
       const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
 
-      const temp = [];
       let questionPassage = "";
+      const temp = [];
 
       questionTags.forEach((tag, tagIndex) => {
         // Find elements for current tag
@@ -364,11 +390,12 @@ const PracticeLiveExam = () => {
         tempAnswerArr[next] = {
           exam_id: examData?.id,
           data: tempAnswer,
+          exam_type: examData?.exam_type,
         };
         setExamAnswer(tempAnswerArr);
       }
-      setLinkAnswer(true);
       setUniqueIdArr(paginationsStrucutre);
+      setLinkAnswer(true);
       return questionPassage;
     }
   }, [examData?.question]);
@@ -416,8 +443,8 @@ const PracticeLiveExam = () => {
 
   const handleRLSubmit = async () => {
     const answersArray = [];
-    let bandValue = null;
     let isAllAnswered = true;
+    let bandValue = 0;
 
     examAnswer.forEach((item, index) => {
       const temp = item.data.map((answer, index2) => {
@@ -431,6 +458,8 @@ const PracticeLiveExam = () => {
       const tempObj = {
         exam_id: item.exam_id,
         data: temp,
+        exam_type: item.exam_type,
+        question: item?.question,
       };
       answersArray.push(tempObj);
     });
@@ -439,35 +468,119 @@ const PracticeLiveExam = () => {
       toast.error("Please answer all the questions before submitting.");
       return;
     }
-    if (examForm === "Reading" || examForm === "Listening") {
-      let totalCorrect = 0;
-      correctAnswers.forEach((correctAns, index) => {
-        const tempExamAnswer = examAnswer[index];
-        correctAns.data.forEach((correct, idx) => {
-          if (correct.answer_text === tempExamAnswer.data[idx].answer_text) {
-            totalCorrect += 1;
-          }
-        });
-      });
 
-      if (examForm === "Reading") {
-        bandValue = readingBandValues[totalCorrect];
-      } else if (examForm === "Listening") {
-        bandValue = listeningBandValues[totalCorrect];
-      }
+    let newAnswersArray = [];
+    let isError = false;
+    try {
+      // Wait for all ChatGPT API calls to complete for writing only
+      await Promise.all(
+        answersArray.map(async (item) => {
+          if (item.exam_type === "Writing") {
+            let gptResponse;
+            let bandValue;
+            const gptBody = {
+              model: "gpt-3.5-turbo",
+              messages: [
+                {
+                  role: "user",
+                  content:
+                    "Analyse The Package For IELTS Writing Task With Following Criteria TASK RESPONSE, COHERENCE AND COHESION, LEXICAL RESOURCE AND Grammatical Range and Accuracy and Give IELTS Bands To The Task",
+                },
+                {
+                  role: "user",
+                  content: `Questions: ${item.question}`,
+                },
+                {
+                  role: "user",
+                  content: `Answers: ${item.data[0].answer_text} `,
+                },
+                {
+                  role: "user",
+                  content:
+                    "Give band explanation as #Explanation: exaplanationValue  and band as #Band:bandValue",
+                },
+              ],
+            };
+
+            const res = await fetch(
+              "https://api.openai.com/v1/chat/completions",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+                },
+                body: JSON.stringify(gptBody),
+              }
+            );
+
+            if (!res.ok)
+              throw new Error("Some Problem Occurred. Please try again.");
+            const data = await res.json();
+            bandValue = data?.choices?.[0]?.message?.content
+              ?.split("#Band:")[1]
+              .split(" ")[1];
+            gptResponse = data?.choices?.[0]?.message?.content;
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: bandValue,
+              AI_Assessment: gptResponse,
+              data: item.data,
+            });
+          } else if (
+            item.exam_type === "Reading" ||
+            item.exam_type === "Listening"
+          ) {
+            let totalCorrect = 0;
+            const tempCorrectAnswers =
+              correctAnswers?.find((val) => val.exam_id === item.exam_id)
+                ?.data || [];
+
+            item.data.forEach((answer, index) => {
+              if (
+                answer.answer_text === tempCorrectAnswers[index].answer_text
+              ) {
+                totalCorrect++;
+              }
+            });
+
+            if (examForm === "Reading") {
+              bandValue = readingBandValues[totalCorrect];
+            } else if (examForm === "Listening") {
+              bandValue = listeningBandValues[totalCorrect];
+            }
+
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: bandValue,
+              data: item.data,
+            });
+          } else {
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: 0,
+              data: item.data,
+            });
+          }
+        })
+      );
+    } catch (error) {
+      isError = true;
+      toast.error("Some Problem Occurred. Please try again.");
     }
+
+    if (isError) return;
 
     try {
       const data = JSON.stringify({
-        answer_data: answersArray,
+        answer_data: newAnswersArray,
         user: userData?.userId,
-        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
-        band: bandValue,
-        exam_type: examForm,
+        Full_Length_Exam: parseInt(fullLengthId),
+        exam_type: "Reading",
       });
 
       const response = await ajaxCall(
-        `/answer/practice-test/`,
+        `/answer/full-length-test/`,
         {
           headers: {
             Accept: "application/json",
@@ -496,6 +609,17 @@ const PracticeLiveExam = () => {
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  const handleWritingAnswer = (e, next) => {
+    const answer_text = e.target.value;
+    const temp = [...examAnswer];
+    temp[next].data[0].answer_text = answer_text;
+    setExamAnswer(temp);
+
+    // Count the number of words
+    const words = answer_text.split(" ");
+    setNumberOfWord(words.length);
   };
 
   useEffect(() => {
@@ -547,14 +671,15 @@ const PracticeLiveExam = () => {
               />
             )}
             {examData?.exam_type === "Writing" && (
-              <CKEditor
-                editor={ClassicEditor}
-                data=""
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  console.log({ event, editor, data });
-                }}
-              />
+              <div className="lv-textarea">
+                <textarea
+                  id={`textarea_${next}`}
+                  style={{ width: "100%", height: "200px" }}
+                  value={examAnswer[next]?.data[0]?.answer_text || ""}
+                  onChange={(e) => handleWritingAnswer(e, next)}
+                />
+                <span>{numberOfWord} Words</span>
+              </div>
             )}
             {examData?.exam_type === "Speaking" && (
               <AudioRecorder
@@ -618,12 +743,7 @@ const PracticeLiveExam = () => {
           <button
             className="lv-footer-button"
             style={{
-              display:
-                next ===
-                (fullPaper.length > 0 &&
-                  fullPaper?.[0][examType][examForm]?.length - 1)
-                  ? "none"
-                  : "block",
+              display: fullPaper.length === next + 1 ? "none" : "block",
               cursor: linkAnswer ? "not-allowed" : "pointer",
               opacity: linkAnswer ? 0.5 : 1,
             }}
@@ -637,12 +757,7 @@ const PracticeLiveExam = () => {
           <button
             className="lv-footer-button"
             style={{
-              display:
-                next !==
-                (fullPaper.length > 0 &&
-                  fullPaper?.[0][examType][examForm]?.length - 1)
-                  ? "none"
-                  : "block",
+              display: next !== (fullPaper.length > 0 ? "none" : "block"),
               cursor: linkAnswer ? "not-allowed" : "pointer",
               opacity: linkAnswer ? 0.5 : 1,
             }}
@@ -698,4 +813,4 @@ const PracticeLiveExam = () => {
   );
 };
 
-export default PracticeLiveExam;
+export default FullLengthLiveExam;

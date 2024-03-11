@@ -279,73 +279,72 @@ const DSSidebar = () => {
     },
   ];
 
-  const getEnrolledCourses = async () => {
-    try {
-      const response = await ajaxCall(
-        "/userwisepackagewithcourseid/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        const { data } = response;
-        const studentPackage = data?.student_packages?.[0];
-        const packageDetails = studentPackage?.package;
-        const studentMT = studentPackage?.student_mock;
-        const studentPT = studentPackage?.student_pt;
-        const studentFLT = studentPackage?.student_flt;
-        const studentSP = studentPackage?.Live_class_enroll?.filter(
-          ({ liveclasstype }) => liveclasstype.name === "Speaking-Practice"
-        )?.length;
-        const studentOTOS = studentPackage?.Live_class_enroll?.filter(
-          ({ liveclasstype }) =>
-            liveclasstype.name === "One-To-One-Doubt-Solving"
-        )?.length;
-        const studentGDS = studentPackage?.Live_class_enroll?.filter(
-          ({ liveclasstype }) => liveclasstype.name === "Group-Doubt Solving"
-        )?.length;
-
-        setCount({
-          practice_test_count:
-            packageDetails?.practice_test_count - studentPT || "",
-          mock_test_count:
-            packageDetails?.practice_test_count - studentMT || "",
-          full_length_test_count:
-            packageDetails?.full_length_test_count - studentFLT || "",
-          speaking_practice_count:
-            packageDetails?.speaking_test_count - studentSP || "",
-          group_doubt_solving_count:
-            packageDetails?.group_doubt_solving_count - studentGDS || "",
-          one_to_one_doubt_solving_count:
-            packageDetails?.one_to_one_doubt_solving_count - studentOTOS || "",
-        });
-        setBatchId(response?.data?.student_packages?.[0]?.batch_id);
-        localStorage.setItem(
-          "StudentID",
-          response?.data?.student_packages?.[0]?.student_id
-        );
-        setStudentId(response?.data?.student_packages?.[0]?.student_id);
-        setEnrolledCourse(
-          response?.data?.student_packages?.map(({ course }) => course)
-        );
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getEnrolledCourses();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/userwisepackagewithcourseid/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const { data } = response;
+          const studentPackage = data?.student_packages?.[0];
+          const packageDetails = studentPackage?.package;
+          const studentMT = studentPackage?.student_mock;
+          const studentPT = studentPackage?.student_pt;
+          const studentFLT = studentPackage?.student_flt;
+          const studentSP = studentPackage?.Live_class_enroll?.filter(
+            ({ liveclasstype }) => liveclasstype.name === "Speaking-Practice"
+          )?.length;
+          const studentOTOS = studentPackage?.Live_class_enroll?.filter(
+            ({ liveclasstype }) =>
+              liveclasstype.name === "One-To-One-Doubt-Solving"
+          )?.length;
+          const studentGDS = studentPackage?.Live_class_enroll?.filter(
+            ({ liveclasstype }) => liveclasstype.name === "Group-Doubt Solving"
+          )?.length;
+
+          setCount({
+            practice_test_count:
+              packageDetails?.practice_test_count - studentPT || "",
+            mock_test_count:
+              packageDetails?.practice_test_count - studentMT || "",
+            full_length_test_count:
+              packageDetails?.full_length_test_count - studentFLT || "",
+            speaking_practice_count:
+              packageDetails?.speaking_test_count - studentSP || "",
+            group_doubt_solving_count:
+              packageDetails?.group_doubt_solving_count - studentGDS || "",
+            one_to_one_doubt_solving_count:
+              packageDetails?.one_to_one_doubt_solving_count - studentOTOS ||
+              "",
+          });
+          setBatchId(response?.data?.student_packages?.[0]?.batch_id);
+          localStorage.setItem(
+            "StudentID",
+            response?.data?.student_packages?.[0]?.student_id
+          );
+          setStudentId(response?.data?.student_packages?.[0]?.student_id);
+          setEnrolledCourse(
+            response?.data?.student_packages?.map(({ course }) => course)
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   const logout = (event) => {

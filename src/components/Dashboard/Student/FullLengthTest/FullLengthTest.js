@@ -5,7 +5,6 @@ import DSNavBar from "../DSNavBar/DSNavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Footer from "../../../Footer/Footer";
-import { Link } from "react-router-dom";
 
 const difficultLevelTabs = ["Easy", "Medium", "Hard"];
 
@@ -18,7 +17,7 @@ const FullLengthTest = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       try {
         const response = await ajaxCall(
           `/get/flt/?difficulty_level=${difficulty_level}`,
@@ -42,8 +41,7 @@ const FullLengthTest = () => {
       } catch (error) {
         console.log("error", error);
       }
-    };
-    fetchData();
+    })();
   }, [difficulty_level]);
 
   const handleFullLengthTest = (id) => {
@@ -53,7 +51,7 @@ const FullLengthTest = () => {
   const renderTestCards = (
     <div className="row">
       {fullLengthTestData?.map(
-        ({ id, exam_name, no_of_questions, exam_type }, index) => (
+        ({ id, name }, index) => (
           <div
             className="col-lg-4 col-md-6 col-12"
             data-aos="fade-up"
@@ -61,17 +59,11 @@ const FullLengthTest = () => {
           >
             <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
               <div className="gridarea__content ">
-                <div className="gridarea__heading">
-                  <h3 className="text-center">IELTS</h3>
-                </div>
-                <div className="gridarea__heading">
+              <div className="gridarea__heading">
                   <h3 className="text-center">Full Length Test </h3>
                 </div>
-                <div className="zoom__meeting__id">
-                  <p>Reading, Writing, Listening, Speaking</p>
-                </div>
-                <div className="zoom__meeting__id">
-                  <p>2.5 Hours</p>
+                <div className="gridarea__heading">
+                  <h3 className="text-center">{name}</h3>
                 </div>
                 <div className="d-flex justify-content-center">
                   <button

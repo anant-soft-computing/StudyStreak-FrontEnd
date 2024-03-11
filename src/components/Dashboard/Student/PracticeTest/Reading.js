@@ -14,8 +14,8 @@ const ReadingTest = ({ readingData }) => {
   return (
     <>
       <div className="row">
-        {readingData.map((data) => (
-          <div className="col-lg-4 col-md-6 col-12">
+        {readingData.map((data, index) => (
+          <div className="col-lg-4 col-md-6 col-12" key={index}>
             <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
               <div className="gridarea__content ">
                 <div className="gridarea__heading">

@@ -6,48 +6,69 @@ import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import { useLocation } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
+import Modal from "react-bootstrap/Modal";
+import { DateRangePicker } from "react-date-range";
+import { addDays, subDays } from "date-fns";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 
 const LiveClass = () => {
   const { batchId } = useLocation()?.state;
   const [liveClass, setLiveClass] = useState([]);
-  const [selectedDate, setSelectedDate] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState([
+    {
+      startDate: subDays(new Date(), 7),
+      endDate: addDays(new Date(), 1),
+      key: "selection",
+    },
+  ]);
 
-  const getLiveClass = async () => {
-    try {
-      const response = await ajaxCall(
-        `/liveclass_listwithid_view/${batchId}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/liveclass_listwithid_view/${batchId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
           },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setLiveClass(response?.data);
-      } else {
-        console.log("error");
+          8000
+        );
+        if (response.status === 200) {
+          setLiveClass(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
       }
-    } catch (error) {
-      console.log("error", error);
-    }
+    })();
+  }, [batchId]);
+
+  const liveClasses = () => {
+    return liveClass.filter(({ start_time }) => {
+      const classDate = new Date(start_time).toISOString().split("T")[0];
+      const { startDate, endDate } = selectedDateRange[0];
+      return (
+        (!startDate || classDate >= startDate.toISOString().split("T")[0]) &&
+        (!endDate || classDate <= endDate.toISOString().split("T")[0])
+      );
+    });
+  };
+
+  const handleDateRangeChange = (ranges) => {
+    setSelectedDateRange([ranges.selection]);
   };
 
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
-  };
-
-  useEffect(() => {
-    getLiveClass();
-  }, [batchId]);
-
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
   };
 
   const isWithin5Minutes = (startTime) => {
@@ -56,13 +77,6 @@ const LiveClass = () => {
     const difference = classStartTime.getTime() - currentTime.getTime();
     return difference >= 0 && difference <= 5 * 60 * 1000;
   };
-
-  const liveClasses = selectedDate
-    ? liveClass.filter(
-        ({ start_time }) =>
-          new Date(start_time).toISOString().split("T")[0] === selectedDate
-      )
-    : liveClass;
 
   return (
     <>
@@ -84,16 +98,17 @@ const LiveClass = () => {
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
                         <h4>Live Classes</h4>
-                        <div className="dashboard__form__input">
-                          <input
-                            type="date"
-                            value={selectedDate}
-                            onChange={handleDateChange}
-                          />
-                        </div>
+                        <h6>
+                          Your Live Class Schedule{" "}
+                          <i
+                            className="icofont-calendar"
+                            style={{ cursor: "pointer", color: "#5f2ded" }}
+                            onClick={() => setIsModalOpen(true)}
+                          ></i>
+                        </h6>
                       </div>
                       <div className="row">
-                        {liveClasses?.map(
+                        {liveClasses().map(
                           ({
                             id,
                             start_time,
@@ -142,14 +157,14 @@ const LiveClass = () => {
                                     <div className="gridarea__heading">
                                       <h3>{meeting_title}</h3>
                                     </div>
-                                    <div class="zoom__meeting__id">
+                                    <div className="zoom__meeting__id">
                                       <p>
                                         Description:
                                         <span>{meeting_description}</span>
                                       </p>
                                     </div>
-                                    <div class="zoom__meeting__time__id">
-                                      <div class="zoom__meeting__time">
+                                    <div className="zoom__meeting__time__id">
+                                      <div className="zoom__meeting__time">
                                         <p>
                                           Starting Time:
                                           <span>
@@ -195,6 +210,26 @@ const LiveClass = () => {
         </div>
       </div>
       <Footer />
+      {isModalOpen && (
+        <Modal
+          size="lg"
+          show={isModalOpen}
+          onHide={() => setIsModalOpen(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Live Class schedule</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <DateRangePicker
+              onChange={handleDateRangeChange}
+              ranges={selectedDateRange}
+              showSelectionPreview={true}
+              moveRangeOnFirstSelection={false}
+              direction="horizontal"
+            />
+          </Modal.Body>
+        </Modal>
+      )}
     </>
   );
 };

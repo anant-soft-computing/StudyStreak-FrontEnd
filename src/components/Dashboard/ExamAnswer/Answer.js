@@ -7,68 +7,86 @@ import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
 
 const Answer = () => {
   const { examId } = useParams();
-  const [answer, setAnswer] = useState([]);
-  const [correctAnswers, setCorrectAnswers] = useState([]);
+  const [correctAnswer, setCorrectAnswer] = useState([]);
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
 
-  const examName = answer[0]?.exam?.exam_name;
-  const totalQuestions = answer[0]?.exam?.no_of_questions;
+  const examName = correctAnswer[0]?.exam?.exam_name;
+  const totalQuestions = correctAnswer[0]?.exam?.no_of_questions;
 
   const { examAnswer, timeTaken, bandValue, gptResponse, examData } =
     useLocation()?.state || {};
 
-  const getAnswere = async () => {
-    try {
-      const response = await ajaxCall(
-        `/answerslistview/${examId}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+  const studentAnswers = examAnswer[0].answers;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/answerslistview/${examId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
           },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setAnswer(response.data);
-      } else {
-        console.log("error");
+          8000
+        );
+        if (response.status === 200) {
+          setCorrectAnswer(response.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
       }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  useEffect(() => {
-    getAnswere();
+    })();
   }, [examId]);
-
-  useEffect(() => {
-    if (examAnswer) {
-      setCorrectAnswers(examAnswer[0].answers);
-    }
-  }, [examAnswer]);
 
   useEffect(() => {
     let correct = 0;
     let incorrect = 0;
-    correctAnswers?.forEach((item, index) => {
-      if (
-        answer[index]?.answer_text.toLowerCase() === item.answer.toLowerCase()
-      ) {
-        correct++;
+    studentAnswers?.forEach((item, index) => {
+      const correctAnswerText = correctAnswer[index]?.answer_text
+        .trim()
+        .toLowerCase();
+      const studentAnswerText = item.answer.trim().toLowerCase();
+
+      if (correctAnswerText?.includes(" OR ")) {
+        const correctOptions = correctAnswerText
+          .split(" OR ")
+          .map((option) => option.trim());
+        if (correctOptions?.includes(studentAnswerText)) {
+          correct++;
+        } else {
+          incorrect++;
+        }
+      } else if (correctAnswerText?.includes(" AND ")) {
+        const correctOptions = correctAnswerText
+          .split(" AND ")
+          .map((option) => option.trim());
+        if (
+          correctOptions.every((option) => studentAnswerText?.includes(option))
+        ) {
+          correct++;
+        } else {
+          incorrect++;
+        }
       } else {
-        incorrect++;
+        if (correctAnswerText === studentAnswerText) {
+          correct++;
+        } else {
+          incorrect++;
+        }
       }
     });
     setCorrectCount(correct);
     setIncorrectCount(incorrect);
-  }, [correctAnswers, answer]);
+  }, [studentAnswers, correctAnswer]);
 
   return (
     <div>
@@ -170,7 +188,7 @@ const Answer = () => {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {answer.map(
+                                  {correctAnswer.map(
                                     (
                                       { id, question_number, answer_text },
                                       index
@@ -192,19 +210,53 @@ const Answer = () => {
                                           </div>
                                         </td>
                                         <td className="text-dark">
-                                          {correctAnswers?.length > 0 &&
-                                            correctAnswers[index] &&
-                                            correctAnswers[index].answer}
+                                          {studentAnswers?.length > 0 &&
+                                            studentAnswers[index] &&
+                                            studentAnswers[index].answer}
                                         </td>
                                         <td className="text-dark">
-                                          {correctAnswers?.length > 0 &&
-                                          correctAnswers[index] &&
-                                          correctAnswers[
+                                          {studentAnswers?.length > 0 &&
+                                          studentAnswers[index] &&
+                                          correctAnswer[
                                             index
-                                          ].answer.toLowerCase() ===
-                                            answer[
-                                              index
-                                            ]?.answer_text.toLowerCase()
+                                          ]?.answer_text.includes(" OR ")
+                                            ? correctAnswer[index]?.answer_text
+                                                .split(" OR ")
+                                                .map((option) =>
+                                                  option.trim().toLowerCase()
+                                                )
+                                                .includes(
+                                                  studentAnswers[
+                                                    index
+                                                  ]?.answer.toLowerCase()
+                                                )
+                                              ? checkIcon()
+                                              : cancelIcon()
+                                            : studentAnswers?.length > 0 &&
+                                              studentAnswers[index] &&
+                                              correctAnswer[
+                                                index
+                                              ]?.answer_text.includes(" AND ")
+                                            ? correctAnswer[index]?.answer_text
+                                                .split(" AND ")
+                                                .map((option) =>
+                                                  option.trim().toLowerCase()
+                                                )
+                                                .every((option) =>
+                                                  studentAnswers[index]?.answer
+                                                    .toLowerCase()
+                                                    .includes(option)
+                                                )
+                                              ? checkIcon()
+                                              : cancelIcon()
+                                            : studentAnswers?.length > 0 &&
+                                              studentAnswers[index] &&
+                                              studentAnswers[
+                                                index
+                                              ].answer.toLowerCase() ===
+                                                correctAnswer[
+                                                  index
+                                                ]?.answer_text.toLowerCase()
                                             ? checkIcon()
                                             : cancelIcon()}
                                         </td>

@@ -7,46 +7,23 @@ import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
+import Modal from "react-bootstrap/Modal";
+import { DateRangePicker } from "react-date-range";
+import { addDays, subDays } from "date-fns";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 
 const DoubtSolving = () => {
   const { studentId } = useLocation()?.state;
-  const [doubtSolvingData, setDoubtSolvingData] = useState([]);
-  const [selectedDate, setSelectedDate] = useState("");
-
-  const date = doubtSolvingData.map(
-    ({ start_time }) => new Date(start_time).toISOString().split("T")[0]
-  );
-
-  console.log(date);
-
-  const getdoubtSolvingData = async () => {
-    try {
-      const response = await ajaxCall(
-        `/liveclass_list_view`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response?.status === 200) {
-        const doubtData = response?.data?.filter(
-          (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
-        );
-        setDoubtSolvingData(doubtData);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState([
+    {
+      startDate: subDays(new Date(), 7),
+      endDate: addDays(new Date(), 1),
+      key: "selection",
+    },
+  ]);
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -80,19 +57,50 @@ const DoubtSolving = () => {
   };
 
   useEffect(() => {
-    getdoubtSolvingData();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/liveclass_list_view`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          const doubtData = response?.data?.filter(
+            (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
+          );
+          setDoubtSolvingClass(doubtData);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
+  const handleDateRangeChange = (ranges) => {
+    setSelectedDateRange([ranges.selection]);
   };
 
-  const dSData = selectedDate
-    ? doubtSolvingData.filter(
-        ({ start_time }) =>
-          new Date(start_time).toISOString().split("T")[0] === selectedDate
-      )
-    : doubtSolvingData;
+  const doubtSolvingClasses = () => {
+    return doubtSolvingClass.filter(({ start_time }) => {
+      const classDate = new Date(start_time).toISOString().split("T")[0];
+      const { startDate, endDate } = selectedDateRange[0];
+      return (
+        (!startDate || classDate >= startDate.toISOString().split("T")[0]) &&
+        (!endDate || classDate <= endDate.toISOString().split("T")[0])
+      );
+    });
+  };
 
   return (
     <>
@@ -114,16 +122,17 @@ const DoubtSolving = () => {
                     <div className="dashboard__content__wraper">
                       <div className="dashboard__section__title">
                         <h4>One To One Doubt Solving</h4>
-                        <div className="dashboard__form__input">
-                          <input
-                            type="date"
-                            value={selectedDate}
-                            onChange={handleDateChange}
-                          />
-                        </div>
+                        <h6>
+                          Your One To One Doubt Solving Class Schedule{" "}
+                          <i
+                            className="icofont-calendar"
+                            style={{ cursor: "pointer", color: "#5f2ded" }}
+                            onClick={() => setIsModalOpen(true)}
+                          ></i>
+                        </h6>
                       </div>
                       <div className="row">
-                        {dSData?.map(
+                        {doubtSolvingClasses().map(
                           ({
                             id,
                             start_time,
@@ -220,6 +229,26 @@ const DoubtSolving = () => {
         </div>
       </div>
       <Footer />
+      {isModalOpen && (
+        <Modal
+          size="lg"
+          show={isModalOpen}
+          onHide={() => setIsModalOpen(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>One To One Solving class schedule</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <DateRangePicker
+              onChange={handleDateRangeChange}
+              ranges={selectedDateRange}
+              showSelectionPreview={true}
+              moveRangeOnFirstSelection={false}
+              direction="horizontal"
+            />
+          </Modal.Body>
+        </Modal>
+      )}
     </>
   );
 };

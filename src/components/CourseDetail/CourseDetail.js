@@ -10,17 +10,15 @@ import { toast } from "react-toastify";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
 
 const CourseDetail = () => {
+  const navigate = useNavigate();
   const { courseId } = useParams();
+  const { checkAuth } = useCheckAuth();
   const authData = useSelector((state) => state.authStore);
 
   const [courseDetail, setCouresDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
   const [activeIndex, setActiveIndex] = useState(0);
   const [showBatchSelection, setShowBatchSelection] = useState(false);
-
-  const navigate = useNavigate();
-
-  const { checkAuth } = useCheckAuth();
 
   useEffect(() => {
     checkAuth();
@@ -42,87 +40,91 @@ const CourseDetail = () => {
       })
     : "";
 
-  const getCourseDetail = async () => {
-    try {
-      const response = await ajaxCall(
-        `/courseretupddelview/${courseId}/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "PATCH",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        const section = [];
-        response.data?.lessons?.map((lesson) => {
-          const isSessionExist = section.find(
-            (item) => item.id === lesson?.section.id
-          );
-          if (!isSessionExist) {
-            section.push(lesson?.section);
-          }
-        });
-        const updatedData = {
-          ...response.data,
-          section,
-        };
-        section.map((sectionItem) => {
-          const lessons = response.data?.lessons?.filter(
-            (lesson) => lesson?.section.id === sectionItem.id
-          );
-          sectionItem.lessons = lessons;
-        });
-
-        setCouresDetail(updatedData);
-      } else {
-        console.log("error");
+  useEffect(() => {
+    (async () => {
+      if (!courseId || isNaN(courseId)) {
+        toast.error("Please select a valid course");
+        navigate("/");
+        return;
       }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const getCoursePackages = async () => {
-    try {
-      const response = await ajaxCall(
-        `/course/${courseId}/packages/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+      try {
+        const response = await ajaxCall(
+          `/courseretupddelview/${courseId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "PATCH",
           },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setCoursePackages(response.data);
-      } else {
-        console.log("error");
+          8000
+        );
+        if (response.status === 200) {
+          const section = [];
+          response.data?.lessons?.map((lesson) => {
+            const isSessionExist = section.find(
+              (item) => item.id === lesson?.section.id
+            );
+            if (!isSessionExist) {
+              section.push(lesson?.section);
+            }
+          });
+          const updatedData = {
+            ...response.data,
+            section,
+          };
+          section.map((sectionItem) => {
+            const lessons = response.data?.lessons?.filter(
+              (lesson) => lesson?.section.id === sectionItem.id
+            );
+            sectionItem.lessons = lessons;
+          });
+
+          setCouresDetail(updatedData);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
       }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+    })();
+  }, [courseId, navigate]);
 
   useEffect(() => {
-    if (!courseId || isNaN(courseId)) {
-      toast.error("Please select a valid course");
-      navigate("/");
-      return;
-    }
-    getCourseDetail();
-    getCoursePackages();
-  }, [courseId]);
+    (async () => {
+      if (!courseId || isNaN(courseId)) {
+        toast.error("Please select a valid course");
+        navigate("/");
+        return;
+      }
+      try {
+        const response = await ajaxCall(
+          `/course/${courseId}/packages/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setCoursePackages(response.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [courseId, navigate]);
 
   return (
     <>
@@ -239,6 +241,7 @@ const CourseDetail = () => {
                           packages={coursePackages?.packages}
                           courseId={courseId}
                           courseName={courseDetail?.Course_Title}
+                          courseType={courseDetail?.course_delivery}
                         />
                       ) : (
                         <div data-aos="fade-up">

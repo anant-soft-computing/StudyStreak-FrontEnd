@@ -232,24 +232,27 @@ const CreateLiveClass = () => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label for="#">Registration Limit</label>
-                <input
-                  type="number"
-                  placeholder="Registration Limit"
-                  value={createLiveClassData?.registration_limit}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "registration_limit",
-                      value: e.target.value,
-                    });
-                  }}
-                />
+          {(createLiveClassData?.liveclasstype === 2 ||
+            createLiveClassData?.liveclasstype === 4) && (
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label for="#">Registration Limit</label>
+                  <input
+                    type="number"
+                    placeholder="Registration Limit"
+                    value={createLiveClassData?.registration_limit}
+                    onChange={(e) => {
+                      dispatchCreateLiveClass({
+                        type: "registration_limit",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
+          )}
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">

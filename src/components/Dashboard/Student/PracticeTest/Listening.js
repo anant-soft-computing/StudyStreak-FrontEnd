@@ -14,7 +14,7 @@ const Listening = ({ listeningData }) => {
   return (
     <div className="row">
       {listeningData.map((data, index) => (
-        <div className="col-lg-4 col-md-6 col-12">
+        <div className="col-lg-4 col-md-6 col-12" key={index}>
           <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
             <div className="gridarea__content ">
               <div className="gridarea__heading">

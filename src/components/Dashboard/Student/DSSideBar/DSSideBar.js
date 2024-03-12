@@ -318,7 +318,7 @@ const DSSidebar = () => {
           setCount({
             practice_test_count:
               packageDetails?.practice_test_count - studentPT || "",
-            mock_test_count:
+            assignment_count:
               packageDetails?.practice_test_count - studentMT || "",
             full_length_test_count:
               packageDetails?.full_length_test_count - studentFLT || "",

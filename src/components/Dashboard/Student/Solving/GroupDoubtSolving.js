@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+import { toast } from "react-toastify";
+import { addDays, subDays } from "date-fns";
 import { useLocation } from "react-router-dom";
+
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DSNavBar from "../DSNavBar/DSNavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { toast } from "react-toastify";
-import Modal from "react-bootstrap/Modal";
-import { DateRangePicker } from "react-date-range";
-import { addDays, subDays } from "date-fns";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
+import SmallModal from "../../../UI/Modal";
+import DateRange from "../../../UI/DateRangePicker";
+import GroupDoubleSolvingList from "./GroupDoubleSolvingList";
+
 const GroupDoubtSolving = () => {
   const { studentId, solvingClassBook } = useLocation()?.state;
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
@@ -92,11 +94,11 @@ const GroupDoubtSolving = () => {
 
   const groupDoubtSolvingClasses = () => {
     return groupDoubtSolvingClass.filter(({ start_time }) => {
-      const classDate = new Date(start_time).toISOString().split("T")[0];
+      const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (
-        (!startDate || classDate >= startDate.toISOString().split("T")[0]) &&
-        (!endDate || classDate <= endDate.toISOString().split("T")[0])
+        (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
+        (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
       );
     });
   };
@@ -130,109 +132,11 @@ const GroupDoubtSolving = () => {
                           ></i>
                         </h6>
                       </div>
-                      <div className="row">
-                        {groupDoubtSolvingClasses().map(
-                          ({
-                            id,
-                            start_time,
-                            end_time,
-                            meeting_title,
-                            meeting_description,
-                          }) => {
-                            const startDate = new Date(start_time);
-                            const isPastDate = startDate < new Date();
-                            return (
-                              <div
-                                key={id}
-                                className="col-lg-4 col-md-6 col-12"
-                                data-aos="fade-up"
-                              >
-                                <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain">
-                                  {solvingClassBook.some(
-                                    (item) => item.id === id
-                                  ) && (
-                                    <>
-                                      <span
-                                        className="tag"
-                                        style={{ backgroundColor: "red" }}
-                                      >
-                                        Booked
-                                      </span>
-                                      <br />
-                                    </>
-                                  )}
-                                  <div className="gridarea__content ">
-                                    <div className="gridarea__list">
-                                      <ul className="ps-0">
-                                        <li>
-                                          <i className="icofont-calendar"></i>{" "}
-                                          {new Date(
-                                            start_time
-                                          ).toLocaleDateString("en-US", {
-                                            year: "numeric",
-                                            month: "short",
-                                            day: "numeric",
-                                          })}
-                                        </li>
-                                        <li>
-                                          <i className="icofont-clock-time"></i>{" "}
-                                          {new Date(
-                                            start_time
-                                          ).toLocaleTimeString("en-US", {
-                                            hour: "numeric",
-                                            minute: "numeric",
-                                          })}{" "}
-                                          -{" "}
-                                          {new Date(
-                                            end_time
-                                          ).toLocaleTimeString("en-US", {
-                                            hour: "numeric",
-                                            minute: "numeric",
-                                          })}
-                                        </li>
-                                      </ul>
-                                    </div>
-                                    <div className="gridarea__heading">
-                                      <h3>{meeting_title}</h3>
-                                    </div>
-                                    <div class="zoom__meeting__id">
-                                      <p>
-                                        Description:
-                                        <span>{meeting_description}</span>
-                                      </p>
-                                    </div>
-                                    <div class="zoom__meeting__time__id">
-                                      <div class="zoom__meeting__time">
-                                        <p>
-                                          Starting Time:
-                                          <span>
-                                            {" "}
-                                            {new Date(
-                                              start_time
-                                            ).toLocaleTimeString("en-US", {
-                                              hour: "numeric",
-                                              minute: "numeric",
-                                            })}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    </div>
-                                    <div className="d-flex justify-content-center">
-                                      <button
-                                        className="default__button"
-                                        onClick={() => handleEnrollNow(id)}
-                                        disabled={isPastDate}
-                                      >
-                                        Book Slot
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
+                      <GroupDoubleSolvingList
+                        groupDoubtSolvingClasses={groupDoubtSolvingClasses()}
+                        solvingClassBook={solvingClassBook}
+                        handleEnrollNow={handleEnrollNow}
+                      />
                     </div>
                   </div>
                 </div>
@@ -242,26 +146,16 @@ const GroupDoubtSolving = () => {
         </div>
       </div>
       <Footer />
-      {isModalOpen && (
-        <Modal
-          size="lg"
-          show={isModalOpen}
-          onHide={() => setIsModalOpen(false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Group Doubt Solving class schedule</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <DateRangePicker
-              onChange={handleDateRangeChange}
-              ranges={selectedDateRange}
-              showSelectionPreview={true}
-              moveRangeOnFirstSelection={false}
-              direction="horizontal"
-            />
-          </Modal.Body>
-        </Modal>
-      )}
+      <SmallModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title="Group Doubt Solving class schedule"
+      >
+        <DateRange
+          selectedRange={selectedDateRange}
+          onChange={handleDateRangeChange}
+        />
+      </SmallModal>
     </>
   );
 };

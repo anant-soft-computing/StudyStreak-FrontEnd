@@ -34,7 +34,7 @@ import StudentProfile from "./components/Dashboard/Student/Profile";
 import StudentSettings from "./components/Dashboard/Student/Setting/Settings";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
-import StudentLiveClass from "./components/Dashboard/Student/LiveClass";
+import StudentLiveClass from "./components/Dashboard/Student/LiveClass/LiveClass";
 import Checkout from "./components/Checkout/Checkout";
 import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";

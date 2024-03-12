@@ -14,13 +14,9 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      - name: Stop PM2
-        run: |
-          sshpass -p "${{ secrets.DROPLET_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} "pm2 stop 0"
-
       - name: Pull fronted development branch and generate latest build
         run: |
-          sshpass -p "${{ secrets.DROPLET_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} " cd ../home/studystreak/StudyStreak && git pull origin main && npm install --legacy-peer-deps && npm run build"
+          sshpass -p "${{ secrets.DROPLET_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} " cd ../home/studystreak/StudyStreak &&  git checkout package-lock.json && git pull origin main && npm install --legacy-peer-deps && NODE_OPTIONS="--max_old_space_size=4096" npm run build"
 
       - name: Start PM2
         run: |

@@ -14,7 +14,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 const SpeakingPractice = () => {
-  const { studentId } = useLocation()?.state;
+  const { studentId, solvingClassBook } = useLocation()?.state;
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -147,7 +147,20 @@ const SpeakingPractice = () => {
                                 key={id}
                                 className="col-lg-4 col-md-6 col-12"
                               >
-                                <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+                                <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain">
+                                  {solvingClassBook.some(
+                                    (item) => item.id === id
+                                  ) && (
+                                    <>
+                                      <span
+                                        className="tag"
+                                        style={{ backgroundColor: "red" }}
+                                      >
+                                        Booked
+                                      </span>
+                                      <br/>
+                                    </>
+                                  )}
                                   <div className="gridarea__content ">
                                     <div className="gridarea__list">
                                       <ul className="ps-0">

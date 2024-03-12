@@ -13,7 +13,7 @@ import { addDays, subDays } from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 const GroupDoubtSolving = () => {
-  const { studentId } = useLocation()?.state;
+  const { studentId, solvingClassBook } = useLocation()?.state;
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -59,7 +59,7 @@ const GroupDoubtSolving = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/liveclass_list_view`,
+          `/liveclass_list_view/`,
           {
             headers: {
               Accept: "application/json",
@@ -147,7 +147,20 @@ const GroupDoubtSolving = () => {
                                 className="col-lg-4 col-md-6 col-12"
                                 data-aos="fade-up"
                               >
-                                <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+                                <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain">
+                                  {solvingClassBook.some(
+                                    (item) => item.id === id
+                                  ) && (
+                                    <>
+                                      <span
+                                        className="tag"
+                                        style={{ backgroundColor: "red" }}
+                                      >
+                                        Booked
+                                      </span>
+                                      <br />
+                                    </>
+                                  )}
                                   <div className="gridarea__content ">
                                     <div className="gridarea__list">
                                       <ul className="ps-0">

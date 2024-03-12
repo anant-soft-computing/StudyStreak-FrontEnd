@@ -24,39 +24,37 @@ export const cancelIcon = () => {
 const Student = () => {
   const [studentList, setStudentList] = useState([]);
 
-  const getStudents = async () => {
-    try {
-      const response = await ajaxCall(
-        `/student_list_view_dashboard`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response?.status === 200) {
-        const studentWithNumbers = response?.data?.map((student, index) => ({
-          ...student,
-          no: index + 1,
-        }));
-        setStudentList(studentWithNumbers);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getStudents();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/student_list_view_dashboard/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          const studentWithNumbers = response?.data?.map((student, index) => ({
+            ...student,
+            no: index + 1,
+          }));
+          setStudentList(studentWithNumbers);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   const renderItemAvailable = ({ value }) => {
@@ -177,7 +175,6 @@ const Student = () => {
                         <h4>Student</h4>
                       </div>
                       <div className="row">
-                        {" "}
                         <div className="ag-theme-alpine">
                           <AgGridReact {...gridOptions} />
                         </div>

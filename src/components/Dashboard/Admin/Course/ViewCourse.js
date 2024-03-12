@@ -37,39 +37,37 @@ const columns = [
 const ViewCourse = () => {
   const [courseList, setCouresList] = useState([]);
 
-  const getCourses = async () => {
-    try {
-      const response = await ajaxCall(
-        `/courselistview`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response.status === 200) {
-        const courseWithNumbers = response?.data?.map((course, index) => ({
-          ...course,
-          no: index + 1,
-        }));
-        setCouresList(courseWithNumbers);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getCourses();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/courselistview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          const courseWithNumbers = response?.data?.map((course, index) => ({
+            ...course,
+            no: index + 1,
+          }));
+          setCouresList(courseWithNumbers);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   const gridOptions = {
@@ -90,4 +88,5 @@ const ViewCourse = () => {
     </div>
   );
 };
+
 export default ViewCourse;

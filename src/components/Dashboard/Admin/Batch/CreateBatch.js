@@ -1,7 +1,6 @@
 import React, { useReducer, useState } from "react";
 import SingleSelection from "../../../UI/SingleSelect";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const initialBatchData = {
@@ -29,7 +28,6 @@ const reducerBatch = (state, action) => {
 const CreateBatch = () => {
   const [batchData, dispatchBatch] = useReducer(reducerBatch, initialBatchData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!batchData.batch_name) {

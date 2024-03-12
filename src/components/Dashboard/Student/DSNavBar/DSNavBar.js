@@ -4,34 +4,32 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 const DSNavBar = () => {
   const [user, setUser] = useState();
 
-  const getStudent = async () => {
-    try {
-      const response = await ajaxCall(
-        `/studentview/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setUser(response.data[0]);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("Error:", error);
-    }
-  };
-
   useEffect(() => {
-    getStudent();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/studentview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setUser(response.data[0]);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   return (

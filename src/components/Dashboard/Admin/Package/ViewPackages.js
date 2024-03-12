@@ -19,41 +19,39 @@ export const cancelIcon = () => {
 const ViewPackages = () => {
   const [packageList, setPackageList] = useState([]);
 
-  const getPackages = async () => {
-    try {
-      const response = await ajaxCall(
-        `/packagelistview`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response?.status === 200) {
-        const packageWithNumbers = response?.data?.map(
-          (packageItem, index) => ({
-            ...packageItem,
-            no: index + 1,
-          })
-        );
-        setPackageList(packageWithNumbers);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getPackages();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/packagelistview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          const packageWithNumbers = response?.data?.map(
+            (packageItem, index) => ({
+              ...packageItem,
+              no: index + 1,
+            })
+          );
+          setPackageList(packageWithNumbers);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   const renderItemAvailable = ({ value }) => {

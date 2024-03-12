@@ -17,39 +17,37 @@ const columns = [
 const ViewBatches = () => {
   const [batchList, setBatchList] = useState([]);
 
-  const getBatches = async () => {
-    try {
-      const response = await ajaxCall(
-        `/batchview`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response?.status === 200) {
-        const batchesWithNumbers = response?.data?.map((batch, index) => ({
-          ...batch,
-          no: index + 1,
-        }));
-        setBatchList(batchesWithNumbers);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getBatches();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/batchview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          const batchesWithNumbers = response?.data?.map((batch, index) => ({
+            ...batch,
+            no: index + 1,
+          }));
+          setBatchList(batchesWithNumbers);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   const gridOptions = {

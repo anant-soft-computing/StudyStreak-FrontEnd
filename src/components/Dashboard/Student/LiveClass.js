@@ -28,7 +28,7 @@ const LiveClass = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/liveclass_listwithid_view/${batchId}`,
+          `/liveclass_listwithid_view/${batchId}/`,
           {
             headers: {
               Accept: "application/json",

@@ -67,52 +67,44 @@ const columns = [
       return endTime;
     },
   },
-  { headerName: "Meeting ID", field: "zoom_meeting_id", filter: true },
-  {
-    headerName: "Meeting Password",
-    field: "zoom_meeting_password",
-    filter: true,
-  },
 ];
 
 const ViewLiveClasses = () => {
   const [liveClassList, setLiveClassList] = useState([]);
 
-  const getLiveClassesList = async () => {
-    try {
-      const response = await ajaxCall(
-        `/liveclass_list_view`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response?.status === 200) {
-        const liveClassWithNumbers = response?.data?.map(
-          (liveClass, index) => ({
-            ...liveClass,
-            no: index + 1,
-          })
-        );
-        setLiveClassList(liveClassWithNumbers);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   useEffect(() => {
-    getLiveClassesList();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/liveclass_list_view/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          const liveClassWithNumbers = response?.data?.map(
+            (liveClass, index) => ({
+              ...liveClass,
+              no: index + 1,
+            })
+          );
+          setLiveClassList(liveClassWithNumbers);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   const gridOptions = {

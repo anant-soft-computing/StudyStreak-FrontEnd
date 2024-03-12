@@ -175,6 +175,7 @@ const CreateLiveClass = () => {
                       value: e.target.value,
                     });
                   }}
+                  min={new Date().toISOString().slice(0, 16)}
                 />
               </div>
             </div>
@@ -192,6 +193,7 @@ const CreateLiveClass = () => {
                       value: e.target.value,
                     });
                   }}
+                  min={new Date().toISOString().slice(0, 16)}
                 />
               </div>
             </div>

@@ -362,7 +362,7 @@ const DSSidebar = () => {
   return (
     <>
       <div className="col-xl-3 col-lg-3 col-md-12">
-        <div className="dashboard__inner sticky-top">
+        <div className="dashboard__inner sticky-top common-background-color-across-app">
           <div className="dashboard__nav__title">
             <h6>Welcome, {userData?.username}</h6>
           </div>
@@ -381,7 +381,7 @@ const DSSidebar = () => {
                     state={item?.state}
                   >
                     <div style={{ width: "10%" }}>{item.icon}</div>
-                    <div style={{ width: "65%" }}>{item.name}</div>
+                    <div className='side-navbar-rexr-color-common' style={{ width: "65%" }}>{item.name}</div>
                     {item.name === "Practice Test" ||
                     item.name === "Assignment" ||
                     item.name === "Full Length Test" ||

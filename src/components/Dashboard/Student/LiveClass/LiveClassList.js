@@ -13,7 +13,7 @@ const LiveClassList = ({
 }) => {
   return (
     <div className="col-lg-4 col-md-6 col-12" key={id}>
-      <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+      <div className="global-neomorphism-card-styling gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
         <div className="gridarea__content ">
           <div className="gridarea__list">
             <ul className="ps-0">
@@ -41,10 +41,12 @@ const LiveClassList = ({
               Starting Time: <span>{moment(start_time).format("hh:mm A")}</span>
             </p>
           </div>
+          </div>
+          <div>
           {zoom_meeting_id && (
             <div className="d-flex justify-content-center">
               <button
-                className="default__button"
+                className="default__button mb-2"
                 onClick={() => joinNow(zoom_meeting_id)}
                 disabled={!isWithin5Minutes(start_time)}
               >

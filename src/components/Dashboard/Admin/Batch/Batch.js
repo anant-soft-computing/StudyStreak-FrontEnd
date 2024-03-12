@@ -23,13 +23,13 @@ const Batch = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DANavBar />
+            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DASideBar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Batch</h4>
                       </div>
@@ -45,8 +45,9 @@ const Batch = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${activeTab === "viewBatch" ? "active" : ""
-                                  }`}
+                                className={`single__tab__link common-background-color-across-app ${
+                                  activeTab === "viewBatch" ? "active" : ""
+                                }`}
                                 onClick={() => handleTabChange("viewBatch")}
                               >
                                 View Batch
@@ -54,8 +55,9 @@ const Batch = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${activeTab === "createBatch" ? "active" : ""
-                                  }`}
+                                className={`single__tab__link common-background-color-across-app ${
+                                  activeTab === "createBatch" ? "active" : ""
+                                }`}
                                 onClick={() => handleTabChange("createBatch")}
                               >
                                 Create Batch
@@ -69,20 +71,24 @@ const Batch = () => {
                           data-aos="fade-up"
                         >
                           <div
-                            className={`tab-pane fade ${activeTab === 'createBatch' ? 'show active' : ''
-                              }`}
-                            id='projects__one'
+                            className={`tab-pane fade ${
+                              activeTab === "createBatch" ? "show active" : ""
+                            }`}
+                            id="projects__one"
                           >
                             <div className="row">
                               <CreateBatch />
                             </div>
                           </div>
                           <div
-                            className={`tab-pane fade ${activeTab === 'viewBatch' ? 'show active' : ''
-                              }`}
-                            id='projects__one'
+                            className={`tab-pane fade ${
+                              activeTab === "viewBatch" ? "show active" : ""
+                            }`}
+                            id="projects__one"
                           >
-                            <div className="row"><ViewBatches key={activeTab} /></div>
+                            <div className="row">
+                              <ViewBatches key={activeTab} />
+                            </div>
                           </div>
                         </div>
                       </div>

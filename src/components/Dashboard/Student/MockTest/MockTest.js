@@ -98,13 +98,13 @@ const MockTest = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DSNavBar />
+            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Assignment</h4>
                       </div>
@@ -120,7 +120,7 @@ const MockTest = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link active"
+                                className="single__tab__link active common-background-color-across-app"
                                 data-bs-toggle="tab"
                                 data-bs-target="#projects__one"
                                 type="button"
@@ -132,7 +132,7 @@ const MockTest = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link"
+                                className="single__tab__link common-background-color-across-app"
                                 data-bs-toggle="tab"
                                 data-bs-target="#projects__two"
                                 type="button"
@@ -145,7 +145,7 @@ const MockTest = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link"
+                                className="single__tab__link common-background-color-across-app"
                                 data-bs-toggle="tab"
                                 data-bs-target="#projects__three"
                                 type="button"
@@ -158,7 +158,7 @@ const MockTest = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link"
+                                className="single__tab__link common-background-color-across-app"
                                 data-bs-toggle="tab"
                                 data-bs-target="#projects__four"
                                 type="button"

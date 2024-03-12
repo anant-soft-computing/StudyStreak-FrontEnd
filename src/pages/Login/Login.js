@@ -218,7 +218,9 @@ const Login = () => {
                     <li className="nav-item">
                       <button
                         className={`single__tab__link ${
-                          activeTab === "login" ? "active" : ""
+                          activeTab === "login"
+                            ? "active common-background-color-across-app"
+                            : ""
                         }`}
                         onClick={() => setActiveTab("login")}
                         type="button"
@@ -229,7 +231,9 @@ const Login = () => {
                     <li className="nav-item">
                       <button
                         className={`single__tab__link ${
-                          activeTab === "signup" ? "active" : ""
+                          activeTab === "signup"
+                            ? "active common-background-color-across-app"
+                            : ""
                         }`}
                         onClick={() => setActiveTab("signup")}
                         type="button"

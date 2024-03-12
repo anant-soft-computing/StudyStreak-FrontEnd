@@ -54,13 +54,13 @@ const Profile = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DSNavBar />
+            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>My Profile</h4>
                         <button
@@ -74,7 +74,7 @@ const Profile = () => {
                         <div className="row">
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              First Name
+                              First Name:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -84,7 +84,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Last Name
+                              Last Name:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -94,7 +94,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Username
+                              Username:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -104,7 +104,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Email
+                              Email:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -114,7 +114,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Phone No
+                              Phone No.:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -124,7 +124,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Whatsapp No
+                              Whatsapp No.:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -134,7 +134,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Last Education
+                              Last Education:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -144,7 +144,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Biography
+                              Biography:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -156,7 +156,7 @@ const Profile = () => {
                         <div className="row">
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Gender
+                              Gender:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -166,7 +166,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              City
+                              City:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -176,7 +176,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              State
+                              State:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -186,7 +186,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Country
+                              Country:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -196,7 +196,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Remark
+                              Remark:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -206,7 +206,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Reference By
+                              Reference By:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -216,7 +216,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Referal Code
+                              Referal Code:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -226,7 +226,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Interested In Visa Counselling
+                              Interested In Visa Counselling:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -240,7 +240,7 @@ const Profile = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Exam Taken Before</h4>
                       </div>
@@ -248,7 +248,7 @@ const Profile = () => {
                         <div className="row">
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              IELTS
+                              IELTS:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -260,7 +260,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              Duolingo
+                              Duolingo:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -272,7 +272,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              PTE
+                              PTE:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -286,7 +286,7 @@ const Profile = () => {
                         <div className="row">
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              TOFEL
+                              TOFEL:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -298,7 +298,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              GRE
+                              GRE:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">
@@ -310,7 +310,7 @@ const Profile = () => {
                           </div>
                           <div className="col-lg-4 col-md-4">
                             <div className="dashboard__form dashboard__form__margin">
-                              GMAT
+                              GMAT:
                             </div>
                           </div>
                           <div className="col-lg-8 col-md-8">

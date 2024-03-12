@@ -2,16 +2,16 @@ import React from "react";
 
 const Attachment = ({ activeLesson }) => {
   return (
-    <div>
+    <div className="attachement-parent-container-mycourse">
       {activeLesson && activeLesson.length > 0 && (
         <>
-          <div className="lesson__content__wrap">
+          {/* <div className="lesson__content__wrap">
             <h3>Attachment</h3>
-          </div>
-          <div className="row">
+          </div> */}
+          <div className="row" >
             <div className="col-xl-12">
               <div className="dashboard__table table-responsive">
-                <table style={{ marginTop: "70px" }}>
+                <table>
                   <thead>
                     <tr>
                       <th>Name</th>

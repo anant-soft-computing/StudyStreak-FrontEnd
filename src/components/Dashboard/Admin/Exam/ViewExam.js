@@ -4,10 +4,7 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const ExamGrid = ({ no, rowData, columnDefs }) => {
-  const gridStyle = {
-    width: no === 1 || no === 2 ? "54%" : "100%",
-  };
+const ExamGrid = ({ rowData, columnDefs }) => {
   const gridOptions = {
     rowData,
     columnDefs,
@@ -21,7 +18,7 @@ const ExamGrid = ({ no, rowData, columnDefs }) => {
   };
 
   return (
-    <div className="ag-theme-alpine" style={gridStyle}>
+    <div className="ag-theme-alpine">
       <AgGridReact {...gridOptions} />
     </div>
   );
@@ -65,17 +62,13 @@ const ViewExam = () => {
   };
 
   useEffect(() => {
-    fetchData("/exam-blocks", () => true, setExamList);
     fetchData(
-      "/moduleListView",
-      ({ exam_test }) => exam_test === "Practice",
-      setPtList
+      "/exam-blocks/",
+      ({ block_type }) => block_type === "Mock Test",
+      setExamList
     );
-    fetchData(
-      "/moduleListView",
-      ({ exam_test }) => exam_test === "Full Length",
-      setFltList
-    );
+    fetchData("/moduleListView/", () => true, setPtList);
+    fetchData("/get/flt/", () => true, setFltList);
   }, []);
 
   return (
@@ -86,7 +79,6 @@ const ViewExam = () => {
         </div>
       </div>
       <ExamGrid
-        no={0}
         rowData={examList}
         columnDefs={[
           { headerName: "No.", field: "no" },
@@ -118,12 +110,35 @@ const ViewExam = () => {
             </div>
           </div>
           <ExamGrid
-            no={1}
             rowData={ptList}
             columnDefs={[
               { headerName: "No.", field: "no" },
               { headerName: "Exam Name", field: "Name", filter: true },
-              { headerName: "Exam Type", field: "exam_test", filter: true },
+              {
+                headerName: "Difficulty Level",
+                field: "difficulty_level",
+                filter: true,
+              },
+              {
+                headerName: "Reading Set",
+                field: "Reading.length",
+                filter: true,
+              },
+              {
+                headerName: "Writing Set",
+                field: "Writing.length",
+                filter: true,
+              },
+              {
+                headerName: "Listening Set",
+                field: "Listening.length",
+                filter: true,
+              },
+              {
+                headerName: "Speaking Set",
+                field: "Speaking.length",
+                filter: true,
+              },
             ]}
           />
         </div>
@@ -135,12 +150,35 @@ const ViewExam = () => {
             </div>
           </div>
           <ExamGrid
-            no={2}
             rowData={fltList}
             columnDefs={[
               { headerName: "No.", field: "no" },
-              { headerName: "Exam Name", field: "Name", filter: true },
-              { headerName: "Exam Type", field: "exam_test", filter: true },
+              { headerName: "Exam Name", field: "name", filter: true },
+              {
+                headerName: "Exam Level",
+                field: "difficulty_level",
+                filter: true,
+              },
+              {
+                headerName: "Reading Set",
+                field: "reading_set.Reading.length",
+                filter: true,
+              },
+              {
+                headerName: "Writing Set",
+                field: "writing_set.Writing.length",
+                filter: true,
+              },
+              {
+                headerName: "Listening Set",
+                field: "listening_set.Listening.length",
+                filter: true,
+              },
+              {
+                headerName: "Speaking Set",
+                field: "speaking_set.Speaking.length",
+                filter: true,
+              },
             ]}
           />
         </div>

@@ -4,13 +4,12 @@ import { AgGridReact } from "ag-grid-react";
 import { toast } from "react-toastify";
 
 const intialFLTData = {
-  Name: "",
+  name: "",
   difficulty_level: "Easy",
-  exam_test: "Full Length",
-  Reading: [],
-  Writing: [],
-  Listening: [],
-  Speaking: [],
+  Reading: "",
+  Writing: "",
+  Listening: "",
+  Speaking: "",
 };
 
 const initialSubmit = {
@@ -49,64 +48,61 @@ const FLT = () => {
     });
   };
 
-  const getExams = async () => {
-    try {
-      const response = await ajaxCall(
-        "/moduleListView",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response.status === 200) {
-        const { data } = response;
-        const pt = data.filter(({ exam_test }) => exam_test === "Practice");
-        const updatedExams = {
-          Reading: pt.filter(({ Reading }) => Reading.length > 0),
-          Writing: pt.filter(({ Writing }) => Writing.length > 0),
-          Listening: pt.filter(({ Listening }) => Listening.length > 0),
-          Speaking: pt.filter(({ Speaking }) => Speaking.length > 0),
-        };
-        setExams(updatedExams);
-      } else {
-        console.error("Error fetching exams");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   useEffect(() => {
-    getExams();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/moduleListView/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          const { data } = response;
+          const updatedExams = {
+            Reading: data.filter(({ Reading }) => Reading.length > 0),
+            Writing: data.filter(({ Writing }) => Writing.length > 0),
+            Listening: data.filter(({ Listening }) => Listening.length > 0),
+            Speaking: data.filter(({ Speaking }) => Speaking.length > 0),
+          };
+          setExams(updatedExams);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
 
   const validateForm = () => {
-    if (!createFLT.Name) {
+    if (!createFLT.name) {
       setFormError("Name is Required");
       return false;
     }
-    if (!createFLT.Reading.length > 0) {
-      setFormError("Please Choose at least one Reading Practice Test");
+    if (!createFLT.Reading) {
+      setFormError("Please Choose a Reading Practice Test");
       return false;
     }
-    if (!createFLT.Writing.length > 0) {
-      setFormError("Please Choose at least one Writing Practice Test");
+    if (!createFLT.Writing) {
+      setFormError("Please Choose a Writing Practice Test");
       return false;
     }
-    if (!createFLT.Listening.length > 0) {
-      setFormError("Please Choose at least one Listening Practice Test");
+    if (!createFLT.Listening) {
+      setFormError("Please Choose a Listening Practice Test");
       return false;
     }
-    if (!createFLT.Speaking.length > 0) {
-      setFormError("Please Choose at least one Speaking Practice Test");
+    if (!createFLT.Speaking) {
+      setFormError("Please Choose a Speaking Practice Test");
       return false;
     }
     setFormStatus({
@@ -122,15 +118,15 @@ const FLT = () => {
     if (!validateForm()) return;
     try {
       const data = {
-        Name: createFLT.Name,
-        exam_test: createFLT.exam_test,
-        Reading: createFLT.Reading,
-        Writing: createFLT.Writing,
-        Listening: createFLT.Listening,
-        Speaking: createFLT.Speaking,
+        name: createFLT.name,
+        reading_set: createFLT.Reading,
+        writing_set: createFLT.Writing,
+        listening_set: createFLT.Listening,
+        speaking_set: createFLT.Speaking,
+        difficulty_level: createFLT.difficulty_level,
       };
       const response = await ajaxCall(
-        "/moduleListView/",
+        "/create-flt/",
         {
           headers: {
             Accept: "application/json",
@@ -160,26 +156,48 @@ const FLT = () => {
     }
   };
 
-  const rowSelection = "multiple";
-
   const handleRowSelection = (type) => (event) => {
-    const selectedNodes = event.api?.getSelectedNodes();
-    const selectedIds = selectedNodes.map((node) => node?.data?.id);
+    const selectedNode = event.api?.getSelectedNodes()[0];
+    const selectedId = selectedNode?.data?.id;
 
     dispatchFLT({
       type,
-      value: selectedIds,
+      value: selectedId,
     });
   };
 
-  const gridOptions = (rowData, handleRowSelection) => ({
+  const gridOptions = (rowData, handleRowSelection, type) => ({
     rowData,
     onSelectionChanged: handleRowSelection,
     columnDefs: [
       { headerCheckboxSelection: true, checkboxSelection: true },
       { headerName: "Exam Name", field: "Name", filter: true },
-      { headerName: "Exam Type", field: "exam_test", filter: true },
-    ],
+      {
+        headerName: "Difficulty Level",
+        field: "difficulty_level",
+        filter: true,
+      },
+      type === "Reading" && {
+        headerName: "Reading Set",
+        field: "Reading.length",
+        filter: true,
+      },
+      type === "Writing" && {
+        headerName: "Writing Set",
+        field: "Writing.length",
+        filter: true,
+      },
+      type === "Listening" && {
+        headerName: "Listening Set",
+        field: "Listening.length",
+        filter: true,
+      },
+      type === "Speaking" && {
+        headerName: "Speaking Set",
+        field: "Speaking.length",
+        filter: true,
+      },
+    ].filter(Boolean),
     pagination: true,
     paginationPageSize: 20,
     domLayout: "autoHeight",
@@ -231,10 +249,10 @@ const FLT = () => {
                                   <input
                                     type="text"
                                     placeholder="Name"
-                                    value={createFLT.Name}
+                                    value={createFLT.name}
                                     onChange={(e) =>
                                       dispatchFLT({
-                                        type: "Name",
+                                        type: "name",
                                         value: e.target.value,
                                       })
                                     }
@@ -295,16 +313,13 @@ const FLT = () => {
                               <div className="dashboard__form__wraper">
                                 <div className="dashboard__form__input">
                                   <label>(1) Reading : </label>
-                                  <div
-                                    className="ag-theme-alpine"
-                                    style={{ width: "63%" }}
-                                  >
+                                  <div className="ag-theme-alpine">
                                     <AgGridReact
                                       {...gridOptions(
                                         exams.Reading,
-                                        handleRowSelection("Reading")
+                                        handleRowSelection("Reading"),
+                                        "Reading"
                                       )}
-                                      rowSelection={rowSelection}
                                     />
                                   </div>
                                 </div>
@@ -312,16 +327,13 @@ const FLT = () => {
                               <div className="dashboard__form__wraper mt-4">
                                 <div className="dashboard__form__input">
                                   <label>(2) Writing : </label>
-                                  <div
-                                    className="ag-theme-alpine"
-                                    style={{ width: "63%" }}
-                                  >
+                                  <div className="ag-theme-alpine">
                                     <AgGridReact
                                       {...gridOptions(
                                         exams.Writing,
-                                        handleRowSelection("Writing")
+                                        handleRowSelection("Writing"),
+                                        "Writing"
                                       )}
-                                      rowSelection={rowSelection}
                                     />
                                   </div>
                                 </div>
@@ -329,16 +341,13 @@ const FLT = () => {
                               <div className="dashboard__form__wraper mt-4">
                                 <div className="dashboard__form__input">
                                   <label>(3) Listening : </label>
-                                  <div
-                                    className="ag-theme-alpine"
-                                    style={{ width: "63%" }}
-                                  >
+                                  <div className="ag-theme-alpine">
                                     <AgGridReact
                                       {...gridOptions(
                                         exams.Listening,
-                                        handleRowSelection("Listening")
+                                        handleRowSelection("Listening"),
+                                        "Listening"
                                       )}
-                                      rowSelection={rowSelection}
                                     />
                                   </div>
                                 </div>
@@ -346,16 +355,13 @@ const FLT = () => {
                               <div className="dashboard__form__wraper mt-4">
                                 <div className="dashboard__form__input">
                                   <label>(4) Speaking : </label>
-                                  <div
-                                    className="ag-theme-alpine"
-                                    style={{ width: "63%" }}
-                                  >
+                                  <div className="ag-theme-alpine">
                                     <AgGridReact
                                       {...gridOptions(
                                         exams.Speaking,
-                                        handleRowSelection("Speaking")
+                                        handleRowSelection("Speaking"),
+                                        "Speaking"
                                       )}
-                                      rowSelection={rowSelection}
                                     />
                                   </div>
                                 </div>

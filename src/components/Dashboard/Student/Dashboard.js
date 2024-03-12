@@ -14,7 +14,7 @@ const Dashboard = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/liveclass_list_view`,
+          `/liveclass_list_view/`,
           {
             headers: {
               Accept: "application/json",

@@ -2,7 +2,6 @@ import React, { useReducer, useState } from "react";
 import SingleSelection from "../../../UI/SingleSelect";
 import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { useSelector } from "react-redux";
 
 const initialPackageData = {
   package_name: "",
@@ -48,7 +47,6 @@ const CreatePackage = () => {
     initialPackageData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!createPackageData.PackageType) {

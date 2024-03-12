@@ -133,7 +133,7 @@ const PracticeLiveExam = () => {
       setExamAnswer(temp);
 
       const words = temp[next]?.data[0]?.answer_text.split(" ");
-      setNumberOfWord(words.length);
+      setNumberOfWord(words.length - 1);
     }
   }, [next, examData]);
 
@@ -293,7 +293,7 @@ const PracticeLiveExam = () => {
 
       {/* Static Container */}
       <div className="lv-container">
-        <div className="lv-container-title">{`${examData?.exam_type} / ${examData?.exam_name} / ${examData?.block_type} / ${examData?.difficulty_level}`}</div>
+        <div className="lv-container-title">{`${examData?.exam_type} / ${examData?.exam_name} / Practice Test / ${examData?.difficulty_level}`}</div>
       </div>
 
       {/* Main Container */}
@@ -319,7 +319,7 @@ const PracticeLiveExam = () => {
                   value={examAnswer[next]?.data[0]?.answer_text || ""}
                   onChange={(e) => handleWritingAnswer(e, next)}
                 />
-                <span>{numberOfWord} Words</span>
+                <span>Word Count : {numberOfWord}</span>
               </div>
             )}
           </div>

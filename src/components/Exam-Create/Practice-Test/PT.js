@@ -26,7 +26,7 @@ const reducerPT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const PT = ({ name, type }) => {
+const PT = ({ type }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -51,43 +51,41 @@ const PT = ({ name, type }) => {
     });
   };
 
-  const getExams = async () => {
-    try {
-      const response = await ajaxCall(
-        "/exam-blocks",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-
-      if (response.status === 200) {
-        const { data } = response;
-        const updatedExams = {
-          Reading: data.filter((exam) => exam.exam_type === type),
-          Writing: data.filter((exam) => exam.exam_type === type),
-          Listening: data.filter((exam) => exam.exam_type === type),
-          Speaking: data.filter((exam) => exam.exam_type === type),
-        };
-        setExams(updatedExams);
-      } else {
-        console.error("Error fetching exams");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   useEffect(() => {
-    getExams();
-  }, []);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/exam-blocks/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          const { data } = response;
+          const updatedExams = {
+            Reading: data.filter(({ exam_type }) => exam_type === type),
+            Writing: data.filter(({ exam_type }) => exam_type === type),
+            Listening: data.filter(({ exam_type }) => exam_type === type),
+            Speaking: data.filter(({ exam_type }) => exam_type === type),
+          };
+          setExams(updatedExams);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [type]);
 
   const validateForm = () => {
     if (!createPT.Name) {

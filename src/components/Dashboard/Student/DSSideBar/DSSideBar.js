@@ -5,6 +5,7 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 
 const DSSidebar = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
+  const [solvingClassBook, setSolvingClassBook] = useState([]);
   const [batchId, setBatchId] = useState([]);
   const [studentId, setStudentId] = useState([]);
   const [count, setCount] = useState({});
@@ -83,7 +84,7 @@ const DSSidebar = () => {
       state: { enrolledCourse: enrolledCourse },
     },
     {
-      name: "Mock Test",
+      name: "Assignment",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -183,7 +184,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/speakingSolving",
-      state: { studentId: studentId },
+      state: { studentId: studentId, solvingClassBook: solvingClassBook[0] },
     },
     {
       name: "Group Doubt Solving",
@@ -204,7 +205,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/groupDoubtSolving",
-      state: { studentId: studentId },
+      state: { studentId: studentId, solvingClassBook: solvingClassBook[0] },
     },
     {
       name: "One To One Doubt Solving",
@@ -225,7 +226,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/doubtSolving",
-      state: { studentId: studentId },
+      state: { studentId: studentId, solvingClassBook: solvingClassBook[0] },
     },
     {
       name: "Settings",
@@ -338,6 +339,11 @@ const DSSidebar = () => {
           setEnrolledCourse(
             response?.data?.student_packages?.map(({ course }) => course)
           );
+          setSolvingClassBook(
+            response?.data?.student_packages?.map(
+              ({ Live_class_enroll }) => Live_class_enroll
+            )
+          );
         } else {
           console.log("error");
         }
@@ -377,7 +383,7 @@ const DSSidebar = () => {
                     <div style={{ width: "10%" }}>{item.icon}</div>
                     <div style={{ width: "65%" }}>{item.name}</div>
                     {item.name === "Practice Test" ||
-                    item.name === "Mock Test" ||
+                    item.name === "Assignment" ||
                     item.name === "Full Length Test" ||
                     item.name === "Speaking Practice" ||
                     item.name === "Group Doubt Solving" ||

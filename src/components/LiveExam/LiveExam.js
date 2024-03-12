@@ -537,7 +537,7 @@ const LiveExam = () => {
 
       {/* Static Container */}
       <div className="lv-container">
-        <div className="lv-container-title">{`${examData?.exam_type} / ${examData?.exam_name} / ${examData?.block_type} / ${examData?.difficulty_level}`}</div>
+        <div className="lv-container-title">{`${examData?.exam_type} / ${examData?.exam_name} / Assignment / ${examData?.difficulty_level}`}</div>
       </div>
 
       {/* Main Container */}
@@ -567,14 +567,14 @@ const LiveExam = () => {
             {examData?.exam_type === "Writing" &&
               uniqueIdArr?.map((item, index) => {
                 return (
-                  <div className="lv-textarea">
+                  <div className="lv-textarea" key={index}>
                     <textarea
                       id={item}
                       style={{ width: "100%", height: "200px" }}
                       value={examAnswer[0]?.answers[0]?.answer || ""}
                       onChange={(e) => handleWritingAnswer(e, 0)}
                     />
-                    <span>{numberOfWord} Words</span>
+                    <span>Word Count : {numberOfWord}</span>
                   </div>
                 );
               })}

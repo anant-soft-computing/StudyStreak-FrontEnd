@@ -1,11 +1,18 @@
-import React from "react";
-import Footer from "../../Footer/Footer";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
-import DANavBar from "./DANavBar/DANavBar";
-import DASideBar from "./DASideBar/DASideBar";
+import React, { useState } from "react";
+import CreateFlashCard from "./CreateFlashCard";
+import ViewFlashCard from "./ViewFlashCard";
+import TopBar from "../../../TopBar/TopBar";
+import NavBar from "../../../NavBar/NavBar";
+import DASideBar from "../DASideBar/DASideBar";
+import Footer from "../../../Footer/Footer";
 
-const User = () => {
+const FlashCard = () => {
+  const [activeTab, setActiveTab] = useState("viewFlashCard");
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
       <TopBar />
@@ -15,15 +22,14 @@ const User = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DANavBar />
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DASideBar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
-                        <h4>User</h4>
+                        <h4>Flash Card</h4>
                       </div>
                       <div className="row">
                         <div
@@ -37,27 +43,26 @@ const User = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link active"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__one"
-                                type="button"
-                                aria-selected="true"
-                                role="tab"
+                                className={`single__tab__link common-background-color-across-app ${
+                                  activeTab === "viewFlashCard" ? "active" : ""
+                                }`}
+                                onClick={() => handleTabChange("viewFlashCard")}
                               >
-                                Create User
+                                View Flash Card
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
+                                className={`single__tab__link common-background-color-across-app ${
+                                  activeTab === "createFlashCard"
+                                    ? "active"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleTabChange("createFlashCard")
+                                }
                               >
-                                View User
+                                Create Flash Card
                               </button>
                             </li>
                           </ul>
@@ -68,20 +73,26 @@ const User = () => {
                           data-aos="fade-up"
                         >
                           <div
-                            className="tab-pane fade active show"
+                            className={`tab-pane fade ${
+                              activeTab === "createFlashCard"
+                                ? "show active"
+                                : ""
+                            }`}
                             id="projects__one"
-                            role="tabpanel"
-                            aria-labelledby="projects__one"
                           >
-                            <div className="row">Create User</div>
+                            <div className="row">
+                              <CreateFlashCard />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
+                            className={`tab-pane fade ${
+                              activeTab === "viewFlashCard" ? "show active" : ""
+                            }`}
                             id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
                           >
-                            <div className="row">View User</div>
+                            <div className="row">
+                              <ViewFlashCard key={activeTab} />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -98,4 +109,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default FlashCard;

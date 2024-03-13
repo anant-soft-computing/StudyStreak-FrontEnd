@@ -6,9 +6,6 @@ import Main from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import CourseDetail from "./components/CourseDetail/CourseDetail";
 import Courses from "./pages/Courses/Courses";
-import Blogs from "./pages/Blogs/Blogs";
-import BlogDetail from "./components/BlogDetail/BlogDetail";
-import Tests from "./pages/Tests/Tests";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
 import AdminLesson from "./components/Dashboard/Admin/Lesson/Lesson";
 import StudentDashboard from "./components/Dashboard/Student/Dashboard";
@@ -27,7 +24,6 @@ import Course from "./components/Dashboard/Admin/Course/Course";
 import Exam from "./components/Dashboard/Admin/Exam/Exam";
 import LiveClass from "./components/Dashboard/Admin/LiveClass/LiveClass";
 import Package from "./components/Dashboard/Admin/Package/Package";
-import User from "./components/Dashboard/Admin/User";
 import Batch from "./components/Dashboard/Admin/Batch/Batch";
 import AdminProfile from "./components/Dashboard/Admin/Profile";
 import StudentProfile from "./components/Dashboard/Student/Profile";
@@ -50,6 +46,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
 import PracticeTestAnswer from "./components/Dashboard/ExamAnswer/PracticeTestAnswer";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
+import FlashCard from "./components/Dashboard/Admin/FlashCard/FlashCard";
 
 const App = () => {
   return (
@@ -79,12 +76,6 @@ const App = () => {
           <Route
             path="/course/:courseId"
             element={<ProtectedRoute element={CourseContent} />}
-          />
-          <Route path="/tests" element={<ProtectedRoute element={Tests} />} />
-          <Route path="/blogs" element={<ProtectedRoute element={Blogs} />} />
-          <Route
-            path="/blog-detail"
-            element={<ProtectedRoute element={BlogDetail} />}
           />
           <Route
             path="/admin-dashboard"
@@ -119,12 +110,12 @@ const App = () => {
             element={<ProtectedRoute element={Package} />}
           />
           <Route
-            path="/admin-user"
-            element={<ProtectedRoute element={User} />}
-          />
-          <Route
             path="/admin-batch"
             element={<ProtectedRoute element={Batch} />}
+          />
+          <Route
+            path="/admin-flashCard"
+            element={<ProtectedRoute element={FlashCard} />}
           />
           <Route
             path="/admin-lesson"

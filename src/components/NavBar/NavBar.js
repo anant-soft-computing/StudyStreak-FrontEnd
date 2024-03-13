@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import logo from "../../img/logo/Logo.png";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
-import DANavBar from "../Dashboard/Admin/DANavBar/DANavBar";
-import DSNavBar from "../Dashboard/Student/DSNavBar/DSNavBar";
 
 const NavBar = () => {
   const token = localStorage.getItem("loginInfo");
@@ -19,7 +18,7 @@ const NavBar = () => {
 
   return (
     <>
-      <header className="header-bar-for-whole-app">
+      <header>
         <div className="headerarea headerarea__3 header__sticky header__area">
           <div className="container desktop__menu__wrapper">
             <div className="row">
@@ -73,13 +72,7 @@ const NavBar = () => {
                   </nav>
                 </div>
               </div>
-              <div className="col-xl-3 col-lg-3 col-md-6 navbar-profile-area-custom">
-              {token &&
-                  (role === 'admin' ? (
-                    <DANavBar />
-                  ) : (
-                    <DSNavBar />
-                  ))}
+              <div className="col-xl-3 col-lg-3 col-md-6">
                 <div className="headerarea__right">
                   <div className="headerarea__login">
                     {token ? (

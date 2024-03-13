@@ -46,7 +46,6 @@ const DSNavBar = () => {
                   <div className="dashboardarea__left__content">
                     <h4>
                       {user?.user?.first_name}
-                      {/* {user?.user?.last_name} */}
                     </h4>
                   </div>
                 </div>

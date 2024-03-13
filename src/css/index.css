@@ -328,12 +328,11 @@ body {
 }
 
 .global-neomorphism-card-styling {
-  border-radius: 50px;
+  border-radius: 10px;
   background: #ebf2f5;
-  box-shadow:  5px 5px 12px #d8dfe1,
-               -5px -5px 12px #feffff;
-  min-height: 300px;
-  padding: 1px 12px;
+  box-shadow: 5px 5px 12px #d8dfe1, -5px -5px 12px #feffff;
+  /* min-height: 300px; */
+  /* padding: 1px 12px; */
 }
 
 .btn-new-class {
@@ -379,7 +378,7 @@ body {
   color: #01579b;
 } */
 
-.common-background-color-across-app{
-  background-color: #ebf2f5 !important;
-  border-radius: 50px !important;
+.common-background-color-across-app {
+  background-color: #ebf2f5;
+  /* border-radius: 50px !important; */
 }

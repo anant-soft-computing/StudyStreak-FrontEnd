@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Footer from "../../../Footer/Footer";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
-import DANavBar from "../DANavBar/DANavBar";
 import DASideBar from "../DASideBar/DASideBar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ExamWriting from "../../../Exam-Create/ExamWriting";
@@ -127,7 +126,6 @@ const Exam = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">

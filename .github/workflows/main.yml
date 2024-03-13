@@ -16,7 +16,7 @@ jobs:
 
       - name: Pull fronted development branch and generate latest build
         run: |
-          sshpass -p "${{ secrets.DROPLET_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} " cd ../home/studystreak/StudyStreak &&  git checkout package-lock.json && git pull origin main && npm install --legacy-peer-deps && NODE_OPTIONS="--max_old_space_size=4096" npm run build"
+          sshpass -p "${{ secrets.DROPLET_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.DROPLET_USERNAME }}@${{ secrets.DROPLET_IP }} " cd ../home/studystreak/StudyStreak &&  git reset --hard HEAD && git pull origin main && npm install --legacy-peer-deps && NODE_OPTIONS="--max_old_space_size=4096" npm run build"
 
       - name: Start PM2
         run: |

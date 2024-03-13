@@ -6,7 +6,6 @@ import { useLocation } from "react-router-dom";
 
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
-import DSNavBar from "../DSNavBar/DSNavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -114,7 +113,6 @@ const DoubtSolving = () => {
             <div className="theme__shadow__circle shadow__right"></div>
           </div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
@@ -127,7 +125,7 @@ const DoubtSolving = () => {
                           Your One To One Doubt Solving Class Schedule{" "}
                           <i
                             className="icofont-calendar"
-                            style={{ cursor: "pointer", color: "#5f2ded" }}
+                            style={{ cursor: "pointer", color: "#01579b" }}
                             onClick={() => setIsModalOpen(true)}
                           ></i>
                         </h6>

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
+
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
-import DSNavBar from "./DSNavBar/DSNavBar";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import ajaxCall from "../../../helpers/ajaxCall";
-import { Link } from "react-router-dom";
 
 const Dashboard = () => {
-  const [lastestLiveClass, setLastestLiveClass] = useState({});
+  const [latestLiveClass, setLatestLiveClass] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -29,7 +30,7 @@ const Dashboard = () => {
         );
 
         if (response?.status === 200) {
-          setLastestLiveClass(response?.data?.[0]);
+          setLatestLiveClass(response?.data?.[0]);
         } else {
           console.log("error");
         }
@@ -50,7 +51,6 @@ const Dashboard = () => {
             <div className="theme__shadow__circle shadow__right"></div>
           </div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
@@ -68,65 +68,62 @@ const Dashboard = () => {
                             </div>
                             <hr />
                             <ul className="ps-0 d-flex justify-content-between">
-                              <li>
-                                <i
-                                  className="icofont-calendar"
-                                  style={{ color: "#5f2ded" }}
-                                ></i>{" "}
-                                {new Date(
-                                  lastestLiveClass?.start_time
-                                ).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "short",
-                                  day: "numeric",
-                                })}
-                              </li>
-                              <li>
-                                <i
-                                  className="icofont-clock-time"
-                                  style={{ color: "#5f2ded" }}
-                                ></i>{" "}
-                                {new Date(
-                                  lastestLiveClass?.start_time
-                                ).toLocaleTimeString("en-US", {
-                                  hour: "numeric",
-                                  minute: "numeric",
-                                })}{" "}
-                                -{" "}
-                                {new Date(
-                                  lastestLiveClass?.end_time
-                                ).toLocaleTimeString("en-US", {
-                                  hour: "numeric",
-                                  minute: "numeric",
-                                })}
-                              </li>
+                              {latestLiveClass?.start_time && (
+                                <li>
+                                  <i
+                                    className="icofont-calendar"
+                                    style={{ color: "#5f2ded" }}
+                                  ></i>
+                                  {moment(latestLiveClass?.start_time).format(
+                                    "MMM DD, YYYY"
+                                  )}
+                                </li>
+                              )}
+                              {latestLiveClass?.start_time &&
+                                latestLiveClass?.end_time && (
+                                  <li>
+                                    <i
+                                      className="icofont-clock-time"
+                                      style={{ color: "#5f2ded" }}
+                                    ></i>
+                                    {moment(latestLiveClass?.start_time).format(
+                                      "hh:mm A"
+                                    )}
+                                    -
+                                    {moment(latestLiveClass?.end_time).format(
+                                      "hh:mm A"
+                                    )}
+                                  </li>
+                                )}
                             </ul>
-                            <p className="text-dark">
-                              Name :
-                              <span>
-                                {" "}
-                                <strong>
-                                  {lastestLiveClass?.meeting_title}
-                                </strong>
-                              </span>
-                            </p>
-                            <p className="text-dark">
-                              ID :
-                              <span>
-                                {" "}
-                                <Link
-                                  to={`${lastestLiveClass?.zoom_meeting_id}`}
-                                  target="_blank"
-                                  className="text-decoration-none"
-                                >
-                                  {
-                                    lastestLiveClass?.zoom_meeting_id?.split(
-                                      "/"
-                                    )[3]
-                                  }
-                                </Link>
-                              </span>
-                            </p>
+                            {latestLiveClass?.meeting_title && (
+                              <p className="text-dark">
+                                Name :
+                                <span>
+                                  <strong>
+                                    {latestLiveClass?.meeting_title}
+                                  </strong>
+                                </span>
+                              </p>
+                            )}
+                            {latestLiveClass?.zoom_meeting_id && (
+                              <p className="text-dark">
+                                ID :
+                                <span>
+                                  <Link
+                                    to={`${latestLiveClass?.zoom_meeting_id}`}
+                                    target="_blank"
+                                    className="text-decoration-none"
+                                  >
+                                    {
+                                      latestLiveClass?.zoom_meeting_id?.split(
+                                        "/"
+                                      )[3]
+                                    }
+                                  </Link>
+                                </span>
+                              </p>
+                            )}
                           </div>
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-12 col-12">
@@ -136,7 +133,7 @@ const Dashboard = () => {
                             </div>
                             <hr />
                             <div className="dashboard__nav">
-                              <div>Writing Task 2 - Eassay Writing</div>
+                              <div>Writing Task 2 - Essay Writing</div>
                               <div className="d-flex justify-content-between">
                                 <div>Lesson No. 7</div>
                                 <div>Take me to the lesson</div>

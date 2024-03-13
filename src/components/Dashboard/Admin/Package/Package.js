@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Footer from "../../../Footer/Footer";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
-import DANavBar from "../DANavBar/DANavBar";
 import DASideBar from "../DASideBar/DASideBar";
 import CreatePackage from "./CreatePackage";
 import ViewPackages from "./ViewPackages";
@@ -23,7 +22,6 @@ const Package = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">

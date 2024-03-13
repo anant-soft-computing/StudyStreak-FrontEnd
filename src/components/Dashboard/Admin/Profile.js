@@ -1,7 +1,6 @@
 import React from "react";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
-import DANavBar from "./DANavBar/DANavBar";
 import DASideBar from "./DASideBar/DASideBar";
 import Footer from "../../Footer/Footer";
 
@@ -15,7 +14,6 @@ const Profile = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">

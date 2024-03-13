@@ -63,7 +63,7 @@ const Login = () => {
 
   useEffect(() => {
     checkAuth();
-  }, [authData]);
+  }, [authData, checkAuth]);
 
   const setFormError = (errMsg) => {
     setFormStatus({
@@ -306,7 +306,9 @@ const Login = () => {
                               <label>Remember me</label>
                             </div>
                             <div className="text-end login__form__link">
-                              <Link to="/forgot-password">
+                              <Link
+                                onClick={() => navigate("/forgot-password")}
+                              >
                                 Forgot your password?
                               </Link>
                             </div>

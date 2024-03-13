@@ -5,9 +5,6 @@ const Attachment = ({ activeLesson }) => {
     <div className="attachement-parent-container-mycourse">
       {activeLesson && activeLesson.length > 0 && (
         <>
-          {/* <div className="lesson__content__wrap">
-            <h3>Attachment</h3>
-          </div> */}
           <div className="row" >
             <div className="col-xl-12">
               <div className="dashboard__table table-responsive">

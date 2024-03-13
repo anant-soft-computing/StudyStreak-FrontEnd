@@ -9,9 +9,6 @@ const Assignment = ({ activeLesson }) => {
     <div>
       {activeLesson && activeLesson.length > 0 && (
         <>
-          {/* <div className="lesson__content__wrap">
-            <h3>Assignment</h3>
-          </div> */}
           <div className="row global-card-container-bgclr-customize">
             {activeLesson.map((exam, index) => (
               <div

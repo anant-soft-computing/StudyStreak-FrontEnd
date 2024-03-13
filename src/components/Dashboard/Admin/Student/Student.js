@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Footer from "../../../Footer/Footer";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
-import DANavBar from "../DANavBar/DANavBar";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -164,7 +163,6 @@ const Student = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">

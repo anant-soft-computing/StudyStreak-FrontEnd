@@ -2,7 +2,6 @@ import React from "react";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
-import DANavBar from "./DANavBar/DANavBar";
 import DASideBar from "./DASideBar/DASideBar";
 import counter1 from "../../../img/counter/counter__1.png";
 import counter2 from "../../../img/counter/counter__2.png";
@@ -21,7 +20,6 @@ const Dashboard = () => {
             <div className="theme__shadow__circle shadow__right"></div>
           </div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">

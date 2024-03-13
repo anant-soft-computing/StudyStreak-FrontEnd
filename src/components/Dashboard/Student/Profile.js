@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
-import DSNavBar from "./DSNavBar/DSNavBar";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import { useNavigate } from "react-router-dom";
 import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
@@ -54,7 +53,6 @@ const Profile = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">

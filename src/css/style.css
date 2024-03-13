@@ -72,8 +72,8 @@
   --whitegrey2: #f2f6f7;
   --whitegrey3: #e7deff;
   --headingColor: #222222;
-  --contentColor: #5f6c76;
-  --contentColor2: #5c727d;
+  --contentColor: #222222;
+  --contentColor2: #222222;
   --primaryColor: #01579b;
   --secondaryColor: #f2277e;
   --secondaryColor2: #ff275a;
@@ -1431,7 +1431,7 @@ Header Area
   font-size: 15px;
   font-weight: 600;
   padding: 8px 15px;
-  border: 1px solid var(--borderColor1);
+  border: 1px solid #01579b;
   display: inline-block;
   text-align: center;
   border-radius: var(--borderRadius);
@@ -11184,7 +11184,7 @@ Course
   font-weight: 400;
   line-height: 30px;
   font-size: 18px;
-  color: var(--darkdeep4);
+  color: var(--blackColor);
   margin-bottom: 20px;
 }
 
@@ -11939,7 +11939,7 @@ Error
 
 .loginarea__wraper form .login__form .common__login__input {
   background-color: transparent;
-  border: 1px solid var(--borderColor);
+  border: 1px solid #01579b;
   font-size: 14px;
   font-weight: 400;
   height: 52px;
@@ -13474,7 +13474,7 @@ Breadcrumb Area
 }
 
 .dashboardarea__inner {
-  background-color: var(--naveBlue);
+  background-color: var(--primaryColor);
   display: flex;
   /* justify-content: space-between; */
   align-items: center;
@@ -14000,18 +14000,28 @@ Breadcrumb Area
 }
 
 .dashboard__select__heading span {
-  font-size: 12px;
+  display: block;
+  font-size: 14px;
+  margin-bottom: 12px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  opacity: 0.5;
-  margin-bottom: 6px;
-  display: inline-block;
+  text-transform: capitalize;
+  color: var(--blackColor);
+}
+
+.dashboard__selector div {
+  width: 100%;
+  border-width: 2px;
+  border-radius: 6px;
+  border-color: #01579b;
+}
+
+.dashboard__selector div:hover {
+  --select-search-selected: #01579b !important;
 }
 
 .dashboard__selector select {
   padding: 13px;
-  border: none;
+  border: 2px solid #01579b;
   box-shadow: var(--boxshadow1);
 }
 
@@ -14036,6 +14046,10 @@ Breadcrumb Area
   margin: 0;
 }
 
+.dashboard__form__input select {
+  border: 2px solid #01579b;
+}
+
 .dashboard__form__input label {
   display: block;
   font-size: 14px;
@@ -14052,7 +14066,7 @@ Breadcrumb Area
 .dashboard__form__input input {
   width: 100%;
   background-color: transparent;
-  border: 2px solid var(--borderColor);
+  border: 2px solid #01579b;
   border-radius: 6px;
   line-height: 23px;
   padding: 10px 20px;
@@ -14064,7 +14078,7 @@ Breadcrumb Area
 .dashboard__form__input textarea {
   width: 100%;
   background-color: transparent;
-  border: 2px solid var(--borderColor);
+  border: 2px solid #01579b;
   border-radius: 6px;
   line-height: 23px;
   padding: 10px 20px;

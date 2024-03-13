@@ -209,7 +209,10 @@ const CourseDetail = () => {
                       </div>
                       <div className="course__date">
                         <div className="course__details__date">
-                          <i className="icofont-book-alt"></i>{" "}
+                          <i
+                            className="icofont-book-alt"
+                            style={{ color: "#01579b" }}
+                          ></i>{" "}
                           {courseDetail?.lessons?.length} Lessons
                         </div>
                       </div>

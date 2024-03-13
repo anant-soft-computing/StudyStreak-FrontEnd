@@ -25,17 +25,17 @@ const MyCourse = () => {
             <div className="theme__shadow__circle shadow__right"></div>
           </div>
           <div className="dashboardarea sp_bottom_100">
-            <DSNavBar />
+            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Courses</h4>
                       </div>
-                      <div className="row">
+                      <div className="row global-card-container-bgclr-customize">
                         {enrolledCourse &&
                           enrolledCourse.map((course) => (
                             <div
@@ -44,8 +44,8 @@ const MyCourse = () => {
                               data-aos="fade-up"
                               onClick={() => handleCourseClick(course.id)}
                             >
-                              <div className="gridarea__wraper gridarea__wraper__2">
-                                <div className="gridarea__img">
+                              <div className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling">
+                                <div className="gridarea__img mt-4">
                                   <img
                                     src={course.Course_Thumbnail}
                                     alt={course.Course_Title}

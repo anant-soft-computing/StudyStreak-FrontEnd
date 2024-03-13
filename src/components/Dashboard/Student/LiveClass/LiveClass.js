@@ -90,13 +90,13 @@ const LiveClass = () => {
             <div className="theme__shadow__circle shadow__right"></div>
           </div>
           <div className="dashboardarea sp_bottom_100">
-            <DSNavBar />
+            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Live Classes</h4>
                         <h6>
@@ -108,7 +108,7 @@ const LiveClass = () => {
                           ></i>
                         </h6>
                       </div>
-                      <div className="row">
+                      <div className="row global-card-container-bgclr-customize">
                         {liveClasses().map((item) => (
                           <LiveClassList
                             key={item.id}

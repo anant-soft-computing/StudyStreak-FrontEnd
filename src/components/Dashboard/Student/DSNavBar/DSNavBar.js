@@ -33,11 +33,11 @@ const DSNavBar = () => {
   }, []);
 
   return (
-    <div className="container-fluid full__width__padding">
+    <div>
       <div className="row">
-        <div className="col-xl-12 mt-4">
-          <div className="dashboardarea__wraper">
-            <div className="dashboardarea__img">
+        <div>
+          <div>
+            <div>
               <div className="dashboardarea__inner">
                 <div className="dashboardarea__left">
                   <div className="dashboardarea__left__img">
@@ -45,7 +45,8 @@ const DSNavBar = () => {
                   </div>
                   <div className="dashboardarea__left__content">
                     <h4>
-                      {user?.user?.first_name} {user?.user?.last_name}
+                      {user?.user?.first_name}
+                      {/* {user?.user?.last_name} */}
                     </h4>
                   </div>
                 </div>

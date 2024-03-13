@@ -15,20 +15,20 @@ const Profile = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DANavBar />
+            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DASideBar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>My Profile</h4>
                       </div>
                       <div className="row">
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form">
-                            Registration Date
+                            Registration Date:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">
@@ -38,7 +38,7 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form dashboard__form__margin">
-                            First Name
+                            First Name:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">
@@ -48,7 +48,7 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form dashboard__form__margin">
-                            Last Name
+                            Last Name:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">
@@ -58,7 +58,7 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form dashboard__form__margin">
-                            Username
+                            Username:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">
@@ -68,7 +68,7 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form dashboard__form__margin">
-                            Email
+                            Email:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">
@@ -78,7 +78,7 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form dashboard__form__margin">
-                            Phone Number
+                            Phone Number:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">
@@ -88,7 +88,7 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form dashboard__form__margin">
-                            Expert
+                            Expert:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">
@@ -98,7 +98,7 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-4 col-md-4">
                           <div className="dashboard__form dashboard__form__margin">
-                            Biography
+                            Biography:
                           </div>
                         </div>
                         <div className="col-lg-8 col-md-8">

@@ -50,19 +50,19 @@ const Dashboard = () => {
             <div className="theme__shadow__circle shadow__right"></div>
           </div>
           <div className="dashboardarea sp_bottom_100">
-            <DSNavBar />
+            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Dashboard</h4>
                       </div>
                       <div className="row">
                         <div className="col-xl-4 col-lg-6 col-md-12 col-12">
-                          <div className="dashboard__inner sticky-top mt-4">
+                          <div className="dashboard__inner sticky-top mt-4 global-neomorphism-card-styling">
                             <div className="dashboard__nav__title">
                               <h6 className="mb-2">Upcoming Live Class</h6>
                             </div>
@@ -130,7 +130,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-12 col-12">
-                          <div className="dashboard__inner sticky-top mt-4">
+                          <div className="dashboard__inner sticky-top mt-4 global-neomorphism-card-styling">
                             <div className="dashboard__nav__title">
                               <h6 className="mb-2">Next Lesson Due</h6>
                             </div>
@@ -145,7 +145,7 @@ const Dashboard = () => {
                           </div>
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-12 col-12">
-                          <div className="dashboard__inner sticky-top mt-4">
+                          <div className="dashboard__inner sticky-top mt-4 global-neomorphism-card-styling">
                             <div className="dashboard__nav__title">
                               <h6 className="mb-2">Today's Mission</h6>
                             </div>
@@ -154,7 +154,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Leaderboard</h4>
                         <h6>Practice daily and lead the game!</h6>

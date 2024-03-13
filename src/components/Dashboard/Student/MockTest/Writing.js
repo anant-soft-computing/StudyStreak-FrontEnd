@@ -15,12 +15,12 @@ const Writing = ({ writingData, givenTest }) => {
             data-aos="fade-up"
             key={index}
           >
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain ">
+            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain global-neomorphism-card-styling d-flex flex-column justify-content-between">
               {givenTest.some((test) => test.id === id) && (
                 <span className="tag">Given</span>
               )}
               <div className="gridarea__content ">
-                <div className="gridarea__heading">
+                <div className="gridarea__heading mt-3">
                   <h3 className="text-center">
                     <Link to={`/live-exam/${writingData?.id}`} target="_blank">
                       {exam_name}
@@ -37,7 +37,9 @@ const Writing = ({ writingData, givenTest }) => {
                     Difficulty Level : <span>{difficulty_level}</span>
                   </p>
                 </div>
-                <div className="d-flex justify-content-center">
+                </div>
+                <div>
+                <div className="d-flex justify-content-center mb-3">
                   <button
                     className="default__button"
                     onClick={() => handleClick(id)}

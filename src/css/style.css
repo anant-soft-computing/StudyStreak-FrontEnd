@@ -74,7 +74,7 @@
   --headingColor: #222222;
   --contentColor: #5f6c76;
   --contentColor2: #5c727d;
-  --primaryColor: #5f2ded;
+  --primaryColor: #01579b;
   --secondaryColor: #f2277e;
   --secondaryColor2: #ff275a;
   --secondaryColor3: #ff2828;
@@ -128,6 +128,8 @@
   --bodyFont: "Inter", sans-serif;
   --headingFont: "Hind", sans-serif;
   --contentFont: "Inter", sans-serif;
+  --newBtnColor: #01579b;
+  --newBtnHover: #80d8ff;
 }
 
 .is_dark {
@@ -504,10 +506,10 @@ li {
 }
 
 .default__button:hover {
-  background-color: var(--whiteColor);
+  background-color: var(--newBtnHover);
   color: var(--primaryColor);
-  border-color: var(--primaryColor);
-  border: 1px solid var(--primaryColor);
+  border-color: var(--newBtnHover);
+  border: 1px solid var(--newBtnHover);
 }
 
 .default__button.default__button--2 {
@@ -516,9 +518,9 @@ li {
 }
 
 .default__button.default__button--2:hover {
-  background-color: var(--whiteColor);
-  color: var(--secondaryColor);
-  border: 1px solid var(--secondaryColor);
+  background-color: var(--newBtnHover);
+  color: var(--primaryColor);
+  border: 1px solid var(--newBtnHover);
 }
 
 .default__button.default__button--3 {
@@ -529,8 +531,8 @@ li {
 
 .default__button.default__button--3:hover {
   color: var(--whiteColor);
-  border: 1px solid var(--primaryColor);
-  background-color: var(--primaryColor);
+  border: 1px solid var(--newBtnHover);
+  background-color: var(--newBtnHover);
 }
 
 .default__button.default__button--4 {
@@ -541,8 +543,8 @@ li {
 
 .default__button.default__button--4:hover {
   color: var(--whiteColor);
-  border: 1px solid var(--secondaryColor);
-  background-color: var(--secondaryColor);
+  border: 1px solid var(--newBtnHover);
+  background-color: var(--newBtnHover);
 }
 
 @keyframes dot-anim {
@@ -13474,9 +13476,9 @@ Breadcrumb Area
 .dashboardarea__inner {
   background-color: var(--naveBlue);
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
-  padding: 40px;
+  padding: 8px 16px 8px 8px;
   border-radius: var(--borderRadius2);
   flex-wrap: wrap;
 }
@@ -13522,6 +13524,7 @@ Breadcrumb Area
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  gap: 8px;
 }
 
 @media (max-width: 767px) {
@@ -13531,31 +13534,36 @@ Breadcrumb Area
 }
 
 .dashboardarea__left__img {
-  width: 120px;
-  height: 120px;
-  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  /* margin-right: 20px; */
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
   .dashboardarea__left__img {
-    width: 100px;
-    height: 100px;
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 40px;
     margin-right: 10px;
   }
 }
 
 .dashboardarea__left__img img {
-  width: 100%;
-  border-radius: 100%;
+  width: 40px;
+  border-radius: 50px;
   border: 2px solid var(--darkdeep7);
-  padding: 4px;
+  /* padding: 4px; */
 }
 
 .dashboardarea__left__content h4 {
   margin: 0;
-  margin-bottom: 0;
   line-height: 1.24;
   color: var(--whiteColor);
+  max-width: 120px;
+  text-overflow: ellipsis;
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -13636,8 +13644,7 @@ Breadcrumb Area
 }
 
 .dashboard__nav__title {
-  margin-bottom: 10px;
-  margin-top: 20px;
+  margin: 20px 0px 10px 30px;
 }
 
 .dashboard__nav__title h6 {

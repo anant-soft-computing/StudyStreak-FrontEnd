@@ -7,7 +7,7 @@ const GroupDoubleSolvingList = ({
   handleEnrollNow,
 }) => {
   return (
-    <div className="row">
+    <div className="row global-card-container-bgclr-customize">
       {groupDoubtSolvingClasses.map(
         ({ id, start_time, end_time, meeting_title, meeting_description }) => {
           const startDate = new Date(start_time);
@@ -18,7 +18,7 @@ const GroupDoubleSolvingList = ({
               className="col-lg-4 col-md-6 col-12"
               data-aos="fade-up"
             >
-              <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain">
+              <div className="global-neomorphism-card-styling gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain d-flex flex-column justify-content-between">
                 {solvingClassBook.some((item) => item.id === id) && (
                   <>
                     <span className="tag" style={{ backgroundColor: "red" }}>
@@ -29,7 +29,7 @@ const GroupDoubleSolvingList = ({
                 )}
                 <div className="gridarea__content ">
                   <div className="gridarea__list">
-                    <ul className="ps-0">
+                    <ul className="ps-0 mt-4">
                       <li>
                         <i className="icofont-calendar"></i>{" "}
                         {moment(start_time).format("DD MMM, YYYY")}
@@ -56,6 +56,8 @@ const GroupDoubleSolvingList = ({
                       <span>{moment(start_time).format("hh:mm A")}</span>
                     </p>
                   </div>
+                </div>
+                <div>
                   <div className="d-flex justify-content-center">
                     <button
                       className="default__button"

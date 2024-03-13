@@ -13,7 +13,7 @@ const Course = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-  
+
   return (
     <>
       <TopBar />
@@ -23,13 +23,13 @@ const Course = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DANavBar />
+            {/* <DANavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DASideBar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Course</h4>
                       </div>
@@ -45,8 +45,9 @@ const Course = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${activeTab === "viewCourse" ? "active" : ""
-                                  }`}
+                                className={`single__tab__link common-background-color-across-app ${
+                                  activeTab === "viewCourse" ? "active" : ""
+                                }`}
                                 onClick={() => handleTabChange("viewCourse")}
                               >
                                 View Course
@@ -54,8 +55,9 @@ const Course = () => {
                             </li>
                             <li className="nav-item" role="presentation">
                               <button
-                                className={`single__tab__link ${activeTab === "createCourse" ? "active" : ""
-                                  }`}
+                                className={`single__tab__link common-background-color-across-app ${
+                                  activeTab === "createCourse" ? "active" : ""
+                                }`}
                                 onClick={() => handleTabChange("createCourse")}
                               >
                                 Create Course
@@ -69,8 +71,9 @@ const Course = () => {
                           data-aos="fade-up"
                         >
                           <div
-                            className={`tab-pane fade ${activeTab === "createCourse" ? "show active" : ""
-                              }`}
+                            className={`tab-pane fade ${
+                              activeTab === "createCourse" ? "show active" : ""
+                            }`}
                             id="projects__one"
                           >
                             <div className="row">
@@ -78,8 +81,9 @@ const Course = () => {
                             </div>
                           </div>
                           <div
-                            className={`tab-pane fade ${activeTab === "viewCourse" ? "show active" : ""
-                              }`}
+                            className={`tab-pane fade ${
+                              activeTab === "viewCourse" ? "show active" : ""
+                            }`}
                             id="projects__two"
                           >
                             <div className="row">

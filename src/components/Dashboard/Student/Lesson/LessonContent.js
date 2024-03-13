@@ -49,7 +49,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
   return (
     <div className="lesson__content__main">
       {activeContentType === "video" && (
-        <>
+        <div className="lesson-content-container-single-myc">
           <div className="plyr__video-embed rbtplayer">
             <ReactPlayer
               url={
@@ -65,7 +65,112 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               width={"100%"}
             />
           </div>
-        </>
+
+          <div className="row">
+            <div className="col-xl-12 aos-init aos-animate" data-aos="fade-up">
+              <ul
+                className="nav  about__button__wrap dashboard__button__wrap"
+                id="myTab"
+                role="tablist"
+              >
+                <li className="nav-item" role="presentation">
+                  <button
+                    style={{
+                      backgroundColor: "#e1f5fe",
+                      color: "#01579b",
+                    }}
+                    className="single__tab__link active"
+                    data-bs-toggle="tab"
+                    data-bs-target="#projects__one"
+                    type="button"
+                    aria-selected="true"
+                    role="tab"
+                  >
+                    Attchment
+                  </button>
+                </li>
+
+                <li className="nav-item" role="presentation">
+                  <button
+                    style={{
+                      backgroundColor: "#e1f5fe",
+                      color: "#01579b",
+                    }}
+                    className="single__tab__link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#projects__two"
+                    type="button"
+                    aria-selected="false"
+                    role="tab"
+                    tabIndex="-1"
+                  >
+                    Assignment
+                  </button>
+                </li>
+
+                <li className="nav-item" role="presentation">
+                  <button
+                    style={{
+                      backgroundColor: "#e1f5fe",
+                      color: "#01579b",
+                    }}
+                    className="single__tab__link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#projects__three"
+                    type="button"
+                    aria-selected="false"
+                    role="tab"
+                    tabIndex="-1"
+                  >
+                    Quizs
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div
+              className="tab-content tab__content__wrapper aos-init aos-animate"
+              id="myTabContent"
+              data-aos="fade-up"
+            >
+              <div
+                className="tab-pane fade active show"
+                id="projects__one"
+                role="tabpanel"
+                aria-labelledby="projects__one"
+              >
+                <div>
+                  <Attachment
+                    activeLesson={
+                      activeLesson?.attachment_lession_count?.attachments
+                    }
+                    lessonName={activeLesson?.Lesson_Title}
+                  />
+                </div>
+              </div>
+
+              <div
+                className="tab-pane fade"
+                id="projects__two"
+                role="tabpanel"
+                aria-labelledby="projects__two"
+              >
+                <Assignment
+                  activeLesson={activeLesson?.lesson_assignment}
+                  lessonName={activeLesson?.Lesson_Title}
+                />
+              </div>
+
+              <div
+                className="tab-pane fade"
+                id="projects__three"
+                role="tabpanel"
+                aria-labelledby="projects__three"
+              >
+                <Quiz activeLesson={activeLesson?.quiz_question_options} />
+              </div>
+            </div>
+          </div>
+        </div>
       )}
       {activeContentType === "attachment" && (
         <Attachment

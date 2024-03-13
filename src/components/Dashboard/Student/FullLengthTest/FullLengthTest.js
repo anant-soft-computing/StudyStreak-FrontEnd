@@ -49,35 +49,35 @@ const FullLengthTest = () => {
   };
 
   const renderTestCards = (
-    <div className="row">
-      {fullLengthTestData?.map(
-        ({ id, name }, index) => (
-          <div
-            className="col-lg-4 col-md-6 col-12"
-            data-aos="fade-up"
-            key={index}
-          >
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
-              <div className="gridarea__content ">
+    <div className="row ">
+      {fullLengthTestData?.map(({ id, name }, index) => (
+        <div
+          className="col-lg-4 col-md-6 col-12"
+          data-aos="fade-up"
+          key={index}
+        >
+          <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
+            <div className="gridarea__content ">
+              <div className="gridarea__heading mt-3">
+                <h3 className="text-center">Full Length Test </h3>
+              </div>
               <div className="gridarea__heading">
-                  <h3 className="text-center">Full Length Test </h3>
-                </div>
-                <div className="gridarea__heading">
-                  <h3 className="text-center">{name}</h3>
-                </div>
-                <div className="d-flex justify-content-center">
-                  <button
-                    className="default__button"
-                    onClick={() => handleFullLengthTest(id)}
-                  >
-                    Take Test
-                  </button>
-                </div>
+                <h3 className="text-center">{name}</h3>
+              </div>
+            </div>
+            <div>
+              <div className="d-flex justify-content-center mb-3">
+                <button
+                  className="default__button"
+                  onClick={() => handleFullLengthTest(id)}
+                >
+                  Take Test
+                </button>
               </div>
             </div>
           </div>
-        )
-      )}
+        </div>
+      ))}
     </div>
   );
 
@@ -90,13 +90,13 @@ const FullLengthTest = () => {
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
-            <DSNavBar />
+            {/* <DSNavBar /> */}
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
                 <div className="row">
                   <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Full Length Test</h4>
                       </div>
@@ -117,7 +117,7 @@ const FullLengthTest = () => {
                                 key={index}
                               >
                                 <button
-                                  className={`single__tab__link ${
+                                  className={`single__tab__link common-background-color-across-app ${
                                     tab === difficulty_level ? "active" : ""
                                   }`}
                                   data-bs-toggle="tab"

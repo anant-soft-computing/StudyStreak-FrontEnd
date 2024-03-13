@@ -3,11 +3,11 @@ import dashboard2 from "../../../../img/dashbord/dashbord__2.jpg";
 
 const DANavBar = () => {
   return (
-    <div className="container-fluid full__width__padding">
-      <div className="row">
-        <div className="col-xl-12 mt-4">
-          <div className="dashboardarea__wraper">
-            <div className="dashboardarea__img">
+    // <div>
+    //   <div className="row">
+    //     <div className="col-xl-12 mt-4">
+    //       <div className="dashboardarea__wraper">
+    //         <div className="dashboardarea__img">
               <div className="dashboardarea__inner">
                 <div className="dashboardarea__left">
                   <div className="dashboardarea__left__img">
@@ -18,11 +18,11 @@ const DANavBar = () => {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
   );
 };
 

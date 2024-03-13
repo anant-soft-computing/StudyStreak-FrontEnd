@@ -320,3 +320,66 @@ body {
   width: 100%;
   height: 300px;
 }
+
+.global-card-container-bgclr-customize {
+  background-color: #ebf2f5;
+  border-radius: 8px;
+  padding: 20px 0px;
+}
+
+.global-neomorphism-card-styling {
+  border-radius: 50px;
+  background: #ebf2f5;
+  box-shadow:  5px 5px 12px #d8dfe1,
+               -5px -5px 12px #feffff;
+  min-height: 300px;
+  padding: 1px 12px;
+}
+
+.btn-new-class {
+  border-radius: 21px;
+  background: #dde7f8;
+  box-shadow: 5px 5px 10px #ced7e7, -5px -5px 10px #ecf7ff;
+}
+
+.header-bar-for-whole-app {
+  border-bottom: 1px solid #ddd;
+  padding: 12px 0px;
+}
+
+.navbar-profile-area-custom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-detail-container-navbar {
+  display: flex;
+  flex-direction: row;
+  /* gap: 16px; */
+}
+
+.profile-name-container-user {
+  display: flex;
+  align-items: center;
+  margin-left: -8px;
+}
+
+/* .dashboard__nav__item_sidebar {
+  padding: 0px 8px;
+  margin: 6px 0px;
+  background-color: #e1f5fe;
+  border-radius: 10px;
+  background: #ebf2f5;
+  box-shadow: 13px 13px 53px #b4c4cb, -13px -13px 53px #ffffff;
+}
+
+.side-navbar-rexr-color-common {
+  color: #01579b;
+} */
+
+.common-background-color-across-app{
+  background-color: #ebf2f5 !important;
+  border-radius: 50px !important;
+}

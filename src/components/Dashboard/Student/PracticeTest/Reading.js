@@ -13,12 +13,12 @@ const ReadingTest = ({ readingData }) => {
 
   return (
     <>
-      <div className="row">
+      <div className="row global-card-container-bgclr-customize">
         {readingData.map((data, index) => (
           <div className="col-lg-4 col-md-6 col-12" key={index}>
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid ">
+            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
               <div className="gridarea__content ">
-                <div className="gridarea__heading">
+                <div className="gridarea__heading mt-3">
                   <h3 className="text-center">
                     <div>{data?.IELTS?.Name}</div>
                   </h3>
@@ -40,7 +40,9 @@ const ReadingTest = ({ readingData }) => {
                     Time :<span>60 mintues</span>
                   </div>
                 </div>
-                <div className="d-flex justify-content-center mt-2">
+              </div>
+              <div>
+                <div className="d-flex justify-content-center mb-3">
                   <button
                     className="default__button"
                     onClick={() => handleClick(data)}

@@ -521,23 +521,24 @@ const LiveExam = () => {
 
   return (
     <>
-      {/* Navbar */}
       <div className="lv-navbar">
         <div className="lv-navbar-title">
-          <h2 style={{ color: "red", marginTop: "10px" }}>IELTS</h2>
+          <h2 style={{ color: "red", marginTop: "10px" }}>
+            {examData?.exam_category}
+          </h2>
           <div className="lv-userName">{userData?.username}</div>
         </div>
         <span>
           Time Taken :
           <span className="lv-userName">
-            {Math.floor(timer / 60)}:{timer % 60}
+            {Math.floor(timer / 60)} : {timer % 60}
           </span>
         </span>
       </div>
 
       {/* Static Container */}
       <div className="lv-container">
-        <div className="lv-container-title">{`${examData?.exam_type} / ${examData?.exam_name} / Assignment / ${examData?.difficulty_level}`}</div>
+        <div className="lv-container-title">{`${examData?.exam_name}`}</div>
       </div>
 
       {/* Main Container */}

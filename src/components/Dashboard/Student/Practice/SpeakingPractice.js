@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { addDays, subDays } from "date-fns";
-import { useLocation } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
@@ -14,7 +13,8 @@ import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
 
 const SpeakingPractice = () => {
-  const { studentId, solvingClassBook } = useLocation()?.state;
+  const navigate = useNavigate();
+  const { studentId, solvingClassBook, count } = useLocation()?.state;
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -24,6 +24,7 @@ const SpeakingPractice = () => {
       key: "selection",
     },
   ]);
+  const { speaking_practice_count } = count;
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -126,11 +127,30 @@ const SpeakingPractice = () => {
                           ></i>
                         </h6>
                       </div>
-                      <SpeakingPracticeList
-                        speakingClasses={speakingClasses()}
-                        solvingClassBook={solvingClassBook}
-                        handleEnrollNow={handleEnrollNow}
-                      />
+                      {speaking_practice_count === "" ? (
+                        <>
+                          <div className="d-flex justify-content-center">
+                            <h5>
+                              No Speaking Practice Class Available , Please Buy
+                              a Course
+                            </h5>
+                          </div>
+                          <div className="d-flex justify-content-center mt-4">
+                            <button
+                              className="default__button"
+                              onClick={() => navigate("/courses")}
+                            >
+                              Buy Course
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <SpeakingPracticeList
+                          speakingClasses={speakingClasses()}
+                          solvingClassBook={solvingClassBook}
+                          handleEnrollNow={handleEnrollNow}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

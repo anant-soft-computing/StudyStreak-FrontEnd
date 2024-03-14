@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import moment from "moment";
-
 import TopBar from "../../TopBar/TopBar";
 import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
@@ -68,8 +66,8 @@ const Dashboard = () => {
                                 <li>
                                   <i
                                     className="icofont-calendar"
-                                    style={{ color: "#5f2ded" }}
-                                  ></i>
+                                    style={{ color: "#01579b" }}
+                                  ></i>{" "}
                                   {moment(latestLiveClass?.start_time).format(
                                     "MMM DD, YYYY"
                                   )}
@@ -80,8 +78,8 @@ const Dashboard = () => {
                                   <li>
                                     <i
                                       className="icofont-clock-time"
-                                      style={{ color: "#5f2ded" }}
-                                    ></i>
+                                      style={{ color: "#01579b" }}
+                                    ></i>{" "}
                                     {moment(latestLiveClass?.start_time).format(
                                       "hh:mm A"
                                     )}
@@ -93,33 +91,20 @@ const Dashboard = () => {
                                 )}
                             </ul>
                             {latestLiveClass?.meeting_title && (
-                              <p className="text-dark">
-                                Name :
-                                <span>
-                                  <strong>
-                                    {latestLiveClass?.meeting_title}
-                                  </strong>
+                              <div className="gridarea__heading">
+                                <h5>{latestLiveClass?.meeting_title}</h5>
+                              </div>
+                            )}
+                            <div className="zoom__meeting__id">
+                              <p>
+                                Starting Time :{" "}
+                                <span style={{ color: "#01579b" }}>
+                                  {moment(latestLiveClass?.start_time).format(
+                                    "hh:mm A"
+                                  )}
                                 </span>
                               </p>
-                            )}
-                            {latestLiveClass?.zoom_meeting_id && (
-                              <p className="text-dark">
-                                ID :
-                                <span>
-                                  <Link
-                                    to={`${latestLiveClass?.zoom_meeting_id}`}
-                                    target="_blank"
-                                    className="text-decoration-none"
-                                  >
-                                    {
-                                      latestLiveClass?.zoom_meeting_id?.split(
-                                        "/"
-                                      )[3]
-                                    }
-                                  </Link>
-                                </span>
-                              </p>
-                            )}
+                            </div>
                           </div>
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-12 col-12">

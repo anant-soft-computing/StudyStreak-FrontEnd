@@ -643,7 +643,7 @@ const FullLengthLiveExam = () => {
 
       {/* Static Container */}
       <div className="lv-container">
-        <div className="lv-container-title">{`${examData?.exam_type} / ${examData?.exam_name} / Full Length Test / ${examData?.difficulty_level}`}</div>
+        <div className="lv-container-title">{`${examData?.exam_name}`}</div>
       </div>
 
       {/* Main Container */}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { addDays, subDays } from "date-fns";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
@@ -14,7 +14,8 @@ import DateRange from "../../../UI/DateRangePicker";
 import GroupDoubleSolvingList from "./GroupDoubleSolvingList";
 
 const GroupDoubtSolving = () => {
-  const { studentId, solvingClassBook } = useLocation()?.state;
+  const navigate = useNavigate();
+  const { studentId, solvingClassBook, count } = useLocation()?.state;
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -24,6 +25,7 @@ const GroupDoubtSolving = () => {
       key: "selection",
     },
   ]);
+  const { group_doubt_solving_count } = count;
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -126,11 +128,30 @@ const GroupDoubtSolving = () => {
                           ></i>
                         </h6>
                       </div>
-                      <GroupDoubleSolvingList
-                        groupDoubtSolvingClasses={groupDoubtSolvingClasses()}
-                        solvingClassBook={solvingClassBook}
-                        handleEnrollNow={handleEnrollNow}
-                      />
+                      {group_doubt_solving_count === "" ? (
+                        <>
+                          <div className="d-flex justify-content-center">
+                            <h5>
+                              No Group Doubt Solving Class Available , Please
+                              Buy a Course
+                            </h5>
+                          </div>
+                          <div className="d-flex justify-content-center mt-4">
+                            <button
+                              className="default__button"
+                              onClick={() => navigate("/courses")}
+                            >
+                              Buy Course
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <GroupDoubleSolvingList
+                          groupDoubtSolvingClasses={groupDoubtSolvingClasses()}
+                          solvingClassBook={solvingClassBook}
+                          handleEnrollNow={handleEnrollNow}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>

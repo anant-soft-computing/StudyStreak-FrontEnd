@@ -15,7 +15,7 @@ const SpeakingPracticeList = ({
           return (
             <div key={id} className="col-lg-4 col-md-6 col-12">
               <div className="global-neomorphism-card-styling gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain d-flex flex-column justify-content-between">
-                {solvingClassBook.some((item) => item.id === id) && (
+                {solvingClassBook?.some((item) => item.id === id) && (
                   <>
                     <span className="tag" style={{ backgroundColor: "red" }}>
                       Booked
@@ -51,8 +51,8 @@ const SpeakingPracticeList = ({
                       <span>{moment(start_time).format("hh:mm A")}</span>
                     </p>
                   </div>
-                  </div>
-                  <div>
+                </div>
+                <div>
                   <div className="d-flex justify-content-center">
                     <button
                       className="default__button mb-2"

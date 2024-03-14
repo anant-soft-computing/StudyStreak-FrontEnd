@@ -55,7 +55,9 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
         );
 
         if (response.status === 200) {
-          setCouresList(response.data);
+          setCouresList(
+            response.data?.filter(({ course_type }) => course_type === "PUBLIC")
+          );
         } else {
           console.log("error");
         }
@@ -74,7 +76,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
           key={course.id}
         >
           <div className="gridarea__wraper gridarea__wraper__2 tagMain">
-            {enrolledCourse.some((item) => item?.id === course.id) && (
+            {enrolledCourse?.some((item) => item?.id === course.id) && (
               <span
                 className="tag"
                 style={{ zIndex: "1", backgroundColor: "red" }}

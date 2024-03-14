@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
@@ -8,8 +10,11 @@ import Footer from "../../../Footer/Footer";
 const difficultLevelTabs = ["Easy", "Medium", "Hard"];
 
 const FullLengthTest = () => {
+  const { state: { count } = {} } = useLocation();
+  const navigate = useNavigate();
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
   const [difficulty_level, setDifficultyLevel] = useState("Easy");
+  const { full_length_test_count } = count;
 
   const handleDifficultyLevel = (e) => {
     setDifficultyLevel(e.target.innerHTML);
@@ -96,58 +101,77 @@ const FullLengthTest = () => {
                       <div className="dashboard__section__title">
                         <h4>Full Length Test</h4>
                       </div>
-                      <div className="row">
-                        <div
-                          className="col-xl-12 aos-init aos-animate"
-                          data-aos="fade-up"
-                        >
-                          <ul
-                            className="nav  about__button__wrap dashboard__button__wrap"
-                            id="myTab"
-                            role="tablist"
+                      {full_length_test_count === "" ? (
+                        <>
+                          <div className="d-flex justify-content-center">
+                            <h5>
+                              No Full Length Test Available , Please Buy a
+                              Course
+                            </h5>
+                          </div>
+                          <div className="d-flex justify-content-center mt-4">
+                            <button
+                              className="default__button"
+                              onClick={() => navigate("/courses")}
+                            >
+                              Buy Course
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="row">
+                          <div
+                            className="col-xl-12 aos-init aos-animate"
+                            data-aos="fade-up"
                           >
-                            {difficultLevelTabs.map((tab, index) => (
-                              <li
-                                className="nav-item"
-                                role="presentation"
+                            <ul
+                              className="nav  about__button__wrap dashboard__button__wrap"
+                              id="myTab"
+                              role="tablist"
+                            >
+                              {difficultLevelTabs.map((tab, index) => (
+                                <li
+                                  className="nav-item"
+                                  role="presentation"
+                                  key={index}
+                                >
+                                  <button
+                                    className={`single__tab__link common-background-color-across-app ${
+                                      tab === difficulty_level ? "active" : ""
+                                    }`}
+                                    data-bs-toggle="tab"
+                                    data-bs-target={`#projects__${tab}`}
+                                    type="button"
+                                    aria-selected="true"
+                                    role="tab"
+                                    onClick={handleDifficultyLevel}
+                                  >
+                                    {tab}
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div
+                            className="tab-content tab__content__wrapper aos-init aos-animate"
+                            id="myTabContent"
+                            data-aos="fade-up"
+                          >
+                            {difficultLevelTabs.map((test, index) => (
+                              <div
+                                className={`tab-pane fade ${
+                                  test === difficulty_level ? "show active" : ""
+                                }`}
+                                id={`projects__${test}`}
+                                role="tabpanel"
                                 key={index}
                               >
-                                <button
-                                  className={`single__tab__link common-background-color-across-app ${
-                                    tab === difficulty_level ? "active" : ""
-                                  }`}
-                                  data-bs-toggle="tab"
-                                  data-bs-target={`#projects__${tab}`}
-                                  type="button"
-                                  aria-selected="true"
-                                  role="tab"
-                                  onClick={handleDifficultyLevel}
-                                >
-                                  {tab}
-                                </button>
-                              </li>
+                                <div className="row">{renderTestCards}</div>
+                              </div>
                             ))}
-                          </ul>
+                          </div>
                         </div>
-                        <div
-                          className="tab-content tab__content__wrapper aos-init aos-animate"
-                          id="myTabContent"
-                          data-aos="fade-up"
-                        >
-                          {difficultLevelTabs.map((test, index) => (
-                            <div
-                              className={`tab-pane fade ${
-                                test === difficulty_level ? "show active" : ""
-                              }`}
-                              id={`projects__${test}`}
-                              role="tabpanel"
-                              key={index}
-                            >
-                              <div className="row">{renderTestCards}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>

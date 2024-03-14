@@ -47,6 +47,7 @@ import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTe
 import PracticeTestAnswer from "./components/Dashboard/ExamAnswer/PracticeTestAnswer";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import FlashCard from "./components/Dashboard/Admin/FlashCard/FlashCard";
+import StudentFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
 
 const App = () => {
   return (
@@ -194,6 +195,7 @@ const App = () => {
           <Route path="/groupDoubtSolving" element={<GroupDoubtSolving />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsAndService />} />
+          <Route path="/flashCard" element={<StudentFlashCard />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

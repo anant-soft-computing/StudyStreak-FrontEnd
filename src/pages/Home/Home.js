@@ -17,10 +17,6 @@ const Main = () => {
       <TopBar />
       <MobileTopBar />
       <NavBar />
-      <div>
-        <div className="theme__shadow__circle"></div>
-        <div className="theme__shadow__circle shadow__right"></div>
-      </div>
       <HeroBanner />
       <BrandSection />
       <Scrollar />

@@ -5106,12 +5106,12 @@ About Area
 
 .about__button__wrap li button {
   padding: 15px 59px;
-  border: none;
-  background: var(--bodyBg1);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background: #01579b36;
   text-transform: uppercase;
   color: var(--blackColor2);
   font-weight: 700;
-  box-shadow: 0 0 50px 10px rgba(95, 45, 237, 0.08);
   position: relative;
 }
 
@@ -10428,7 +10428,7 @@ Blog
 }
 
 .blog__details__form .blog__details__input input {
-  border: 1px solid var(--borderColor2);
+  border: 1px solid #01579b;
   width: 100%;
   margin-bottom: 30px;
   padding-left: 20px;
@@ -10445,7 +10445,7 @@ Blog
   height: 209px;
   padding-left: 20px;
   width: 100%;
-  border: 1px solid var(--borderColor2);
+  border: 1px solid #01579b;
   padding-top: 20px;
   background: none;
   font-weight: 500;
@@ -10577,7 +10577,7 @@ Blog
 Course
 -------------------------------*/
 .course__sidebar__wraper {
-  border: 1px solid var(--borderColor);
+  border: 1px solid #01579b;
   padding: 40px 25px 33px 20px;
   margin-bottom: 10px;
 }
@@ -13295,7 +13295,7 @@ Breadcrumb Area
 }
 
 .checkoutarea__item {
-  border-top: 1px solid var(--borderColor2);
+  border-top: 1px solid #01579b;
 }
 
 .checkoutarea__item td {
@@ -13653,16 +13653,17 @@ Breadcrumb Area
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0;
-  background: var(--lightGrey5);
+  background: #01579b36;
   padding: 10px 10px 7px;
   color: var(--contentColor);
   line-height: 1;
+  border-radius: 10px;
 }
 
 .dashboard__nav ul li {
   padding-bottom: 10px;
   padding-top: 10px;
-  border-bottom: 1px solid var(--borderColor);
+  border-bottom: 1px solid #01579b36;
   width: 100%;
   position: relative;
 }
@@ -13699,7 +13700,7 @@ Breadcrumb Area
 .dashboard__section__title {
   margin-bottom: 24px;
   padding-bottom: 20px;
-  border-bottom: 2px solid var(--borderColor);
+  border-bottom: 2px solid #01579b;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -13733,7 +13734,7 @@ Breadcrumb Area
 }
 
 .dashboard__table table thead {
-  background: var(--lightGrey5);
+  background: #01579b36;
 }
 
 .dashboard__table table thead tr {
@@ -13880,7 +13881,7 @@ Breadcrumb Area
 }
 
 .dashboard__table__row {
-  background: var(--lightGrey5);
+  background: #01579b36;
 }
 
 .dashboard__form {
@@ -14010,7 +14011,7 @@ Breadcrumb Area
 
 .dashboard__selector div {
   width: 100%;
-  border-width: 2px;
+  border-width: 1px;
   border-radius: 6px;
   border-color: #01579b;
 }
@@ -14021,7 +14022,7 @@ Breadcrumb Area
 
 .dashboard__selector select {
   padding: 13px;
-  border: 2px solid #01579b;
+  border: 1px solid #01579b;
   box-shadow: var(--boxshadow1);
 }
 
@@ -14047,7 +14048,7 @@ Breadcrumb Area
 }
 
 .dashboard__form__input select {
-  border: 2px solid #01579b;
+  border: 1px solid #01579b;
 }
 
 .dashboard__form__input label {
@@ -14066,7 +14067,7 @@ Breadcrumb Area
 .dashboard__form__input input {
   width: 100%;
   background-color: transparent;
-  border: 2px solid #01579b;
+  border: 1px solid #01579b;
   border-radius: 6px;
   line-height: 23px;
   padding: 10px 20px;
@@ -14078,7 +14079,7 @@ Breadcrumb Area
 .dashboard__form__input textarea {
   width: 100%;
   background-color: transparent;
-  border: 2px solid #01579b;
+  border: 1px solid #01579b;
   border-radius: 6px;
   line-height: 23px;
   padding: 10px 20px;
@@ -14131,7 +14132,7 @@ Breadcrumb Area
 }
 
 .become__instructor__form {
-  background: var(--darkdeep3);
+  background: #ebf2f5;
   padding: 40px;
 }
 
@@ -16255,7 +16256,7 @@ li {
 }
 
 .checkoutarea__total {
-  border: 1px solid #ccc;
+  border: 1px solid #01579b;
   padding: 15px;
   margin-bottom: 20px;
 }

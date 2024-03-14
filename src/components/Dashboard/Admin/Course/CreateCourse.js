@@ -125,14 +125,6 @@ const CreateCourse = () => {
       setFormError("Max Enrollments is Required");
       return false;
     }
-    if (!createCourseData.Course_Overview_Provider) {
-      setFormError("Course Overview Provider is Required");
-      return false;
-    }
-    if (!createCourseData.Course_Overview_URL) {
-      setFormError("Course Overview URL is Required");
-      return false;
-    }
     if (!createCourseData.Course_Thumbnail) {
       setFormError("Course Thumbnail is Required");
       return false;

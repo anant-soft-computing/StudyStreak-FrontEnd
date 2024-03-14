@@ -132,8 +132,6 @@ const CourseDetail = () => {
       <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
-          <div className="theme__shadow__circle"></div>
-          <div className="theme__shadow__circle shadow__right"></div>
           <div className="blogarea__2 sp_top_100 sp_bottom_100">
             <div className="container">
               <div className="row">

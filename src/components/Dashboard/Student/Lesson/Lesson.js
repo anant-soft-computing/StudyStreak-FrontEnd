@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Footer from "../../../Footer/Footer";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -12,7 +12,6 @@ import LessonContent from "./LessonContent";
 const Lesson = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  const location = useLocation().pathname;
 
   const [courseLessons, setCourseLessons] = useState([]);
   const [activeLesson, setActiveLesson] = useState({});
@@ -90,64 +89,36 @@ const Lesson = () => {
 
   return (
     <>
-      {location === `/courseLessons/${courseId}` ? (
-        <>
-          <TopBar />
-          <NavBar />
-          <div className="body__wrapper">
-            <div className="main_wrapper overflow-hidden">
-              <div className="theme__shadow__circle"></div>
-              <div className="theme__shadow__circle shadow__right"></div>
-              <div className="tution sp_bottom_100 sp_top_50">
-                <div className="container-fluid full__width__padding">
-                  <div className="row">
-                    <div className="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
-                      <LessonList
-                        lessons={courseLessons}
-                        activeIndex={activeIndex}
-                        setActiveIndex={setActiveIndex}
-                        handleContentChange={setActiveContentType}
-                        setActiveLesson={setActiveLesson}
-                      />
-                    </div>
-                    <div className="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
-                      <LessonContent
-                        activeLesson={activeLesson}
-                        activeContentType={activeContentType}
-                      />
-                    </div>
-                  </div>
+      <TopBar />
+      <NavBar />
+      <div className="body__wrapper">
+        <div className="main_wrapper overflow-hidden">
+          <div className="theme__shadow__circle"></div>
+          <div className="theme__shadow__circle shadow__right"></div>
+          <div className="tution sp_bottom_100 sp_top_50">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
+                <div className="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
+                  <LessonList
+                    lessons={courseLessons}
+                    activeIndex={activeIndex}
+                    setActiveIndex={setActiveIndex}
+                    handleContentChange={setActiveContentType}
+                    setActiveLesson={setActiveLesson}
+                  />
+                </div>
+                <div className="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
+                  <LessonContent
+                    activeLesson={activeLesson}
+                    activeContentType={activeContentType}
+                  />
                 </div>
               </div>
             </div>
           </div>
-          <Footer />
-        </>
-      ) : (
-        <div className="body__wrapper">
-          <div className="main_wrapper overflow-hidden">
-            <div className="theme__shadow__circle"></div>
-            <div className="theme__shadow__circle shadow__right"></div>
-            <div className="row">
-              <div className="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
-                <LessonList
-                  lessons={courseLessons}
-                  activeIndex={activeIndex}
-                  setActiveIndex={setActiveIndex}
-                  handleContentChange={setActiveContentType}
-                  setActiveLesson={setActiveLesson}
-                />
-              </div>
-              <div className="col-xl-8 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
-                <LessonContent
-                  activeLesson={activeLesson}
-                  activeContentType={activeContentType}
-                />
-              </div>
-            </div>
-          </div>
         </div>
-      )}
+      </div>
+      <Footer />
     </>
   );
 };

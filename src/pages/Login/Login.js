@@ -306,9 +306,7 @@ const Login = () => {
                               <label>Remember me</label>
                             </div>
                             <div className="text-end login__form__link">
-                              <Link
-                                onClick={() => navigate("/forgot-password")}
-                              >
+                              <Link to="/forgot-password">
                                 Forgot your password?
                               </Link>
                             </div>

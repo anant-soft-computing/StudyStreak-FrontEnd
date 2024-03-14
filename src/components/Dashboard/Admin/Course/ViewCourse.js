@@ -27,11 +27,6 @@ const columns = [
   { headerName: "SEO Meta Keyword", field: "SEO_Meta_Keywords", filter: true },
   { headerName: "SEO Meta Keyword", field: "Meta_Description", filter: true },
   { headerName: "Language", field: "Language.name", filter: true },
-  {
-    headerName: "Primary Instructor",
-    field: "primary_instructor.first_name",
-    filter: true,
-  },
 ];
 
 const ViewCourse = () => {

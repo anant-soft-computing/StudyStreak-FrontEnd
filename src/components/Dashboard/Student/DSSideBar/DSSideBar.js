@@ -62,22 +62,21 @@ const DSSidebar = () => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-courses"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-list-task"
+          viewBox="0 0 16 16"
         >
-          <rect x="2" y="10" width="6" height="8"></rect>
-          <rect x="16" y="10" width="6" height="8"></rect>
-
-          <circle cx="6" cy="5" r="2"></circle>
-          <circle cx="12" cy="5" r="2"></circle>
-          <circle cx="18" cy="5" r="2"></circle>
+          <path
+            fill-rule="evenodd"
+            d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5zM3 3H2v1h1z"
+          />
+          <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1z" />
+          <path
+            fill-rule="evenodd"
+            d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5zM2 7h1v1H2zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm1 .5H2v1h1z"
+          />
         </svg>
       ),
       link: "/studentMyCourse",
@@ -88,78 +87,68 @@ const DSSidebar = () => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-star"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-journals"
+          viewBox="0 0 16 16"
         >
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2" />
+          <path d="M1 6v-.5a.5.5 0 0 1 1 0V6h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V9h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 2.5v.5H.5a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1H2v-.5a.5.5 0 0 0-1 0" />
         </svg>
       ),
       link: "/mockTest",
+      state: { count: count },
     },
     {
       name: "Practice Test",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-star"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-pencil"
+          viewBox="0 0 16 16"
         >
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
         </svg>
       ),
       link: "/practiceTest",
+      state: { count: count },
     },
     {
       name: "Full Length Test",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-star"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-journal-text"
+          viewBox="0 0 16 16"
         >
-          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+          <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+          <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
         </svg>
       ),
       link: "/fullLengthTest",
+      state: { count: count },
     },
     {
       name: "Live Classes",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-live-classes"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-cassette"
+          viewBox="0 0 16 16"
         >
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-          <polygon points="10 15 15 12 10 9 10 15"></polygon>
+          <path d="M4 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2m9-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 6a1 1 0 0 0 0 2h2a1 1 0 1 0 0-2z" />
+          <path d="M1.5 2A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2zM1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-.691l-1.362-2.724A.5.5 0 0 0 12 10H4a.5.5 0 0 0-.447.276L2.19 13H1.5a.5.5 0 0 1-.5-.5zM11.691 11l1 2H3.309l1-2z" />
         </svg>
       ),
       link: "/studentLiveClasses",
@@ -170,45 +159,58 @@ const DSSidebar = () => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-shopping-bag"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-mic"
+          viewBox="0 0 16 16"
         >
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
+          <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3" />
         </svg>
       ),
       link: "/speakingSolving",
-      state: { studentId: studentId, solvingClassBook: solvingClassBook[0] },
+      state: { studentId: studentId, solvingClassBook: solvingClassBook[0], count: count },
     },
     {
       name: "Group Doubt Solving",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-shopping-bag"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-bricks"
+          viewBox="0 0 16 16"
         >
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          <path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5zM3 4v2h4.5V4zm5.5 0v2H13V4zM3 10v2h4.5v-2zm5.5 0v2H13v-2zM1 1v2h3.5V1zm4.5 0v2h5V1zm6 0v2H15V1zM1 7v2h3.5V7zm4.5 0v2h5V7zm6 0v2H15V7zM1 13v2h3.5v-2zm4.5 0v2h5v-2zm6 0v2H15v-2z" />
         </svg>
       ),
       link: "/groupDoubtSolving",
-      state: { studentId: studentId, solvingClassBook: solvingClassBook[0] },
+      state: { studentId: studentId, solvingClassBook: solvingClassBook[0], count: count },
     },
     {
       name: "One To One Doubt Solving",
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-arrow-left-right"
+          viewBox="0 0 16 16"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"
+          />
+        </svg>
+      ),
+      link: "/doubtSolving",
+      state: { studentId: studentId, solvingClassBook: solvingClassBook[0], count: count },
+    },
+    {
+      name: "Flash Card",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -220,13 +222,13 @@ const DSSidebar = () => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          className="feather feather-bookmark"
+          className="feather feather-message-square"
         >
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg>
       ),
-      link: "/doubtSolving",
-      state: { studentId: studentId, solvingClassBook: solvingClassBook[0] },
+      link: "/flashCard",
+      state: { enrolledCourse: enrolledCourse },
     },
     {
       name: "Settings",
@@ -262,18 +264,20 @@ const DSSidebar = () => {
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="feather feather-volume-1"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-box-arrow-left"
+          viewBox="0 0 16 16"
         >
-          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path
+            fill-rule="evenodd"
+            d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"
+          />
+          <path
+            fill-rule="evenodd"
+            d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"
+          />
         </svg>
       ),
       link: "/login",
@@ -381,7 +385,12 @@ const DSSidebar = () => {
                     state={item?.state}
                   >
                     <div style={{ width: "10%" }}>{item.icon}</div>
-                    <div className='side-navbar-rexr-color-common' style={{ width: "65%" }}>{item.name}</div>
+                    <div
+                      className="side-navbar-rexr-color-common"
+                      style={{ width: "65%" }}
+                    >
+                      {item.name}
+                    </div>
                     {item.name === "Practice Test" ||
                     item.name === "Assignment" ||
                     item.name === "Full Length Test" ||

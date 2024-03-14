@@ -10979,16 +10979,16 @@ Course
 }
 
 .course__details__wraper {
-  background: var(--darkdeep3);
+  background: #01579b36;
   display: flex;
   flex-wrap: wrap;
-  /* margin-bottom: 30px; */
 }
 
 .course__details__wraper ul {
   width: 50%;
-  border-right: 2px solid var(--borderColor);
+  border-right: 2px solid #01579b;
   padding: 55px 70px 55px 50px;
+  margin-bottom: 0;
 }
 
 @media (min-width: 992px) and (max-width: 1365px) {
@@ -13641,10 +13641,6 @@ Breadcrumb Area
   .dashboard__inner {
     margin-bottom: 30px;
   }
-}
-
-.dashboard__nav__title {
-  margin: 20px 0px 10px 30px;
 }
 
 .dashboard__nav__title h6 {

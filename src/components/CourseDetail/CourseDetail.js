@@ -20,6 +20,8 @@ const CourseDetail = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showBatchSelection, setShowBatchSelection] = useState(false);
 
+  console.log("courseDetail", courseDetail);
+
   useEffect(() => {
     checkAuth();
   }, [authData]);
@@ -283,6 +285,26 @@ const CourseDetail = () => {
                                 <i className="icofont-paper"></i>Description
                               </button>
                             </li>
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className="single__tab__link"
+                                data-bs-toggle="tab"
+                                data-bs-target="#projects__three"
+                                type="button"
+                              >
+                                <i class="icofont-newspaper"></i>Requirements
+                              </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className="single__tab__link"
+                                data-bs-toggle="tab"
+                                data-bs-target="#projects__four"
+                                type="button"
+                              >
+                                <i class="icofont-outdent"></i>Outcomes
+                              </button>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -386,6 +408,52 @@ const CourseDetail = () => {
                                 __html: courseDetail?.Description,
                               }}
                             ></div>
+                          </div>
+                        </div>
+                        <div
+                          className="tab-pane fade"
+                          id="projects__three"
+                          role="tabpanel"
+                          aria-labelledby="projects__three"
+                        >
+                          <div className="experence__heading">
+                            <h5>Requirements</h5>
+                          </div>
+                          <div className="course__list__wraper">
+                            <div className="aboutarea__list__2 blog__details__list__2">
+                              {courseDetail?.Requirements?.map(
+                                ({ description }) => (
+                                  <ul>
+                                    <li>
+                                      <i className="icofont-check"></i>
+                                      <p>{description}</p>
+                                    </li>
+                                  </ul>
+                                )
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="tab-pane fade"
+                          id="projects__four"
+                          role="tabpanel"
+                          aria-labelledby="projects__four"
+                        >
+                          <div className="experence__heading">
+                            <h5>Outcomes</h5>
+                          </div>
+                          <div className="course__list__wraper">
+                            <div className="aboutarea__list__2 blog__details__list__2">
+                              {courseDetail?.Outcome?.map(({ description }) => (
+                                <ul>
+                                  <li>
+                                    <i className="icofont-check"></i>
+                                    <p>{description}</p>
+                                  </li>
+                                </ul>
+                              ))}
+                            </div>
                           </div>
                         </div>
                       </div>

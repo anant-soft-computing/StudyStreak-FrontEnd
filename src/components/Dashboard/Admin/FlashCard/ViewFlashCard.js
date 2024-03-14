@@ -16,8 +16,6 @@ const columns = [
 const ViewFlashCard = () => {
   const [flashCardList, setFlashCardList] = useState([]);
 
-  console.log("flashCardList", flashCardList);
-
   useEffect(() => {
     (async () => {
       try {

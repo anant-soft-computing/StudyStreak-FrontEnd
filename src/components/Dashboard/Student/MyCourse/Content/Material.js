@@ -35,7 +35,7 @@ const Material = ({ courseId, courseName }) => {
 
   return (
     <div className="col-xl-12 col-lg-9 col-md-12">
-      <div className="dashboard__content__wraper">
+      <div className="dashboard__content__wraper common-background-color-across-app">
         <div className="dashboard__section__title">
           <h4>Course Material</h4>
         </div>

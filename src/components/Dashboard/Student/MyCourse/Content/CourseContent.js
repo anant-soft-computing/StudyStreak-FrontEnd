@@ -6,7 +6,6 @@ import AdditionalResources from "./AdditionalResources";
 import Material from "./Material";
 import { useLocation, useParams } from "react-router-dom";
 import DSSidebar from "../../DSSideBar/DSSideBar";
-import Lesson from "../../Lesson/Lesson";
 
 const CourseContent = () => {
   const { courseId } = useParams();
@@ -22,10 +21,6 @@ const CourseContent = () => {
       <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
-          <div>
-            <div className="theme__shadow__circle"></div>
-            <div className="theme__shadow__circle shadow__right"></div>
-          </div>
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">
               <div className="container-fluid full__width__padding">
@@ -48,25 +43,12 @@ const CourseContent = () => {
                           >
                             <li className="nav-item" role="presentation">
                               <button
-                                className="single__tab__link active"
+                                className="single__tab__link"
                                 data-bs-toggle="tab"
                                 data-bs-target="#projects__one"
                                 type="button"
                                 aria-selected="true"
                                 role="tab"
-                              >
-                                Lessons
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
                               >
                                 Downloads
                               </button>
@@ -83,14 +65,6 @@ const CourseContent = () => {
                             id="projects__one"
                             role="tabpanel"
                             aria-labelledby="projects__one"
-                          >
-                            <Lesson />
-                          </div>
-                          <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
                           >
                             <Material
                               courseId={courseId}

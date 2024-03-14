@@ -19,8 +19,6 @@ const FlashCard = () => {
       <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
-          <div className="theme__shadow__circle"></div>
-          <div className="theme__shadow__circle shadow__right"></div>
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">
               <div className="container-fluid full__width__padding">

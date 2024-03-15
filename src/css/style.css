@@ -7099,7 +7099,7 @@ Event
 
 .pricingarea__content__wraper {
   padding: 50px 40px 40px 40px;
-  background: var(--lightGrey10);
+  background: #01579b36;
   transition: var(--transition);
   border-radius: var(--borderRadius3);
 }
@@ -7175,7 +7175,7 @@ Event
   font-weight: 500;
   font-size: 18px;
   line-height: 22px;
-  color: var(--deepblue);
+  color: black;
   margin-bottom: 30px;
 }
 
@@ -7185,7 +7185,7 @@ Event
   line-height: 21px;
   text-align: center;
   border-radius: 50px;
-  background: var(--secondaryColor);
+  background: #01579b;
   color: var(--whiteColor);
   margin-right: 15px;
   font-size: 12px;
@@ -9702,7 +9702,7 @@ Blog
 
 .sidebar__title {
   font-weight: 700;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 30px;
   position: relative;
   padding-left: 8px;
@@ -10982,6 +10982,7 @@ Course
   background: #01579b36;
   display: flex;
   flex-wrap: wrap;
+  border-radius: 10px;
 }
 
 .course__details__wraper ul {

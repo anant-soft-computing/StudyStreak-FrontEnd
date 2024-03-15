@@ -5,20 +5,22 @@ import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import ajaxCall from "../../../helpers/ajaxCall";
-import { useLocation } from "react-router-dom";
+import { AgGridReact } from "ag-grid-react";
+import { checkIcon } from "../Admin/Student/Student";
+import { cancelIcon } from "../Admin/Student/Student";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 
 const Dashboard = () => {
-  const { packageId } = useLocation()?.state || {};
   const [studentList, setStudentList] = useState([]);
   const [latestLiveClass, setLatestLiveClass] = useState({});
-
-  console.log("studentList", studentList);
+  const batchId = JSON.parse(localStorage.getItem("BatchID"));
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/packageidwisestudentGetview/${packageId}/`,
+          `/batchidwisestudentgetview/${batchId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -31,10 +33,14 @@ const Dashboard = () => {
           },
           8000
         );
-
         if (response?.status === 200) {
-          console.log("-------->", response);
-          setStudentList(response?.data);
+          const studentWithNumbers = response?.data?.students.map(
+            (student, index) => ({
+              ...student,
+              no: index + 1,
+            })
+          );
+          setStudentList(studentWithNumbers);
         } else {
           console.log("error");
         }
@@ -42,7 +48,7 @@ const Dashboard = () => {
         console.log("error", error);
       }
     })();
-  }, [packageId]);
+  }, [batchId]);
 
   useEffect(() => {
     (async () => {
@@ -72,6 +78,112 @@ const Dashboard = () => {
       }
     })();
   }, []);
+
+  const renderItemAvailable = ({ value }) => {
+    return value ? checkIcon() : cancelIcon();
+  };
+
+  const gridOptions = {
+    rowData: studentList,
+    columnDefs: [
+      { headerName: "No.", field: "no", filter: true },
+      { headerName: "First Name", field: "first_name", filter: true },
+      { headerName: "Last Name", field: "last_name", filter: true },
+      {
+        headerName: "Gender",
+        field: "gender",
+        filter: true,
+      },
+      { headerName: "Phone No.", field: "phone_no" },
+      {
+        headerName: "Whatsapp No.",
+        field: "whatsapp_no",
+      },
+      {
+        headerName: "Last Education",
+        field: "last_education",
+      },
+      { headerName: "Batch", field: "select_batch", filter: true },
+      { headerName: "Package", field: "select_package", filter: true },
+      { headerName: "Assignment", field: "student_mock.length", filter: true },
+      { headerName: "Pratice Test", field: "student_pt.length", filter: true },
+      {
+        headerName: "Full Length Test",
+        field: "student_flt.length",
+        filter: true,
+      },
+      {
+        headerName: "City",
+        field: "city",
+      },
+      {
+        headerName: "State",
+        field: "state",
+      },
+      {
+        headerName: "Country",
+        field: "country",
+      },
+      {
+        headerName: "Country Interested In",
+        field: "country_interested_in",
+      },
+      {
+        headerName: "Reference By",
+        field: "reference_by",
+      },
+      {
+        headerName: "Remark",
+        field: "remark",
+      },
+      {
+        headerName: "Biography",
+        field: "biography",
+      },
+      {
+        headerName: "IETLS Taken Before",
+        field: "ielts_taken_before",
+        cellRenderer: renderItemAvailable,
+      },
+      {
+        headerName: "Duolingo Taken Before",
+        field: "duolingo_taken_before",
+        cellRenderer: renderItemAvailable,
+      },
+      {
+        headerName: "PTE Taken Before",
+        field: "pte_taken_before",
+        cellRenderer: renderItemAvailable,
+      },
+      {
+        headerName: "TOFEL Taken Before",
+        field: "toefl_taken_before",
+        cellRenderer: renderItemAvailable,
+      },
+      {
+        headerName: "GRE Taken Before",
+        field: "gre_taken_before",
+        cellRenderer: renderItemAvailable,
+      },
+      {
+        headerName: "GMAT Taken Before",
+        field: "gmat_taken_before",
+        cellRenderer: renderItemAvailable,
+      },
+      {
+        headerName: "Interested In Visa Counselling",
+        field: "interested_in_visa_counselling",
+        cellRenderer: renderItemAvailable,
+      },
+    ],
+    pagination: true,
+    paginationPageSize: 20,
+    domLayout: "autoHeight",
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+    },
+  };
 
   return (
     <>
@@ -179,77 +291,8 @@ const Dashboard = () => {
                         <h4>Leaderboard</h4>
                         <h6>Practice daily and lead the game!</h6>
                       </div>
-                      <div className="row">
-                        <div className="col-xl-12">
-                          <div className="dashboard__table table-responsive">
-                            <table>
-                              <thead>
-                                <tr>
-                                  <th>No.</th>
-                                  <th>Name</th>
-                                  <th>Points</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <th>
-                                    <div>1.</div>
-                                  </th>
-                                  <td>Amish Patel</td>
-                                  <td>
-                                    <div className="dashboard__table__star">
-                                      1240 pts
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr className="dashboard__table__row">
-                                  <th>
-                                    <div>2.</div>
-                                  </th>
-                                  <td>Rohini Chaudhary</td>
-                                  <td>
-                                    <div className="dashboard__table__star">
-                                      1100 pts
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th>
-                                    <div>3.</div>
-                                  </th>
-                                  <td>Sweety Gill</td>
-                                  <td>
-                                    <div className="dashboard__table__star">
-                                      879 pts
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr className="dashboard__table__row">
-                                  <th>
-                                    <div>4.</div>
-                                  </th>
-                                  <td>Amiraj Solanki</td>
-                                  <td>
-                                    <div className="dashboard__table__star">
-                                      800 pts
-                                    </div>
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <th>
-                                    <div>152.</div>
-                                  </th>
-                                  <td>Krina Patel</td>
-                                  <td>
-                                    <div className="dashboard__table__star">
-                                      432 pts
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
+                      <div className="ag-theme-alpine">
+                        <AgGridReact {...gridOptions} />
                       </div>
                     </div>
                   </div>

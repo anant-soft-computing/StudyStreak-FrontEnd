@@ -4,6 +4,8 @@ import Attachment from "./Attachment";
 import Quiz from "./Quiz";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import Material from "../MyCourse/Content/Material";
+import AdditionalResources from "../MyCourse/Content/AdditionalResources";
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
@@ -86,7 +88,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                     aria-selected="true"
                     role="tab"
                   >
-                    Attchment
+                    Attachment
                   </button>
                 </li>
 
@@ -122,7 +124,25 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                     role="tab"
                     tabIndex="-1"
                   >
-                    Quizs
+                    Quiz
+                  </button>
+                </li>
+
+                <li className="nav-item" role="presentation">
+                  <button
+                    style={{
+                      backgroundColor: "#e1f5fe",
+                      color: "#01579b",
+                    }}
+                    className="single__tab__link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#projects__four"
+                    type="button"
+                    aria-selected="false"
+                    role="tab"
+                    tabIndex="-1"
+                  >
+                    Downloads
                   </button>
                 </li>
               </ul>
@@ -168,6 +188,17 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               >
                 <Quiz activeLesson={activeLesson?.quiz_question_options} />
               </div>
+
+              <div
+                className="tab-pane fade"
+                id="projects__four"
+                role="tabpanel"
+                aria-labelledby="projects__four"
+              >
+                <Material courseId={courseId} />
+                <AdditionalResources courseId={courseId} />
+              </div>
+              
             </div>
           </div>
         </div>

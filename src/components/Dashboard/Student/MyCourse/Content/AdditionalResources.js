@@ -4,34 +4,32 @@ import ajaxCall from "../../../../../helpers/ajaxCall";
 const AdditionalResources = ({ courseId, courseName }) => {
   const [additionalResource, setAdditionalResource] = useState([]);
 
-  const getAdditionalResource = async () => {
-    try {
-      const response = await ajaxCall(
-        `/additional-resources/${courseId}`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setAdditionalResource(response?.data?.data);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error:", error);
-    }
-  };
-
   useEffect(() => {
-    getAdditionalResource();
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/additional-resources/${courseId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setAdditionalResource(response?.data?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
   }, [courseId]);
 
   return (

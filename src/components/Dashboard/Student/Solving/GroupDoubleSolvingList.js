@@ -5,13 +5,29 @@ const GroupDoubleSolvingList = ({
   groupDoubtSolvingClasses,
   solvingClassBook,
   handleEnrollNow,
+  joinNow,
+  isWithin5Minutes,
 }) => {
+  if (groupDoubtSolvingClasses.length === 0) {
+    return (
+      <h5 className="text-center">No Group Doubt Solving Classes Available.</h5>
+    );
+  }
+
   return (
     <div className="row global-card-container-bgclr-customize">
       {groupDoubtSolvingClasses.map(
-        ({ id, start_time, end_time, meeting_title, meeting_description }) => {
+        ({
+          id,
+          start_time,
+          end_time,
+          meeting_title,
+          meeting_description,
+          zoom_meeting_id,
+        }) => {
           const startDate = new Date(start_time);
           const isPastDate = startDate < new Date();
+          const isSlotBooked = solvingClassBook?.some((item) => item.id === id);
           return (
             <div
               key={id}
@@ -19,7 +35,7 @@ const GroupDoubleSolvingList = ({
               data-aos="fade-up"
             >
               <div className="global-neomorphism-card-styling gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain d-flex flex-column justify-content-between">
-                {solvingClassBook?.some((item) => item.id === id) && (
+                {isSlotBooked && (
                   <>
                     <span className="tag" style={{ backgroundColor: "red" }}>
                       Booked
@@ -59,13 +75,23 @@ const GroupDoubleSolvingList = ({
                 </div>
                 <div>
                   <div className="d-flex justify-content-center">
-                    <button
-                      className="default__button"
-                      onClick={() => handleEnrollNow(id)}
-                      disabled={isPastDate}
-                    >
-                      Book Slot
-                    </button>
+                    {isSlotBooked ? (
+                      <button
+                        className="default__button mb-2"
+                        onClick={() => joinNow(zoom_meeting_id)}
+                        disabled={!isWithin5Minutes(start_time)}
+                      >
+                        Join Now
+                      </button>
+                    ) : (
+                      <button
+                        className="default__button mb-2"
+                        onClick={() => handleEnrollNow(id)}
+                        disabled={isPastDate}
+                      >
+                        Book Slot
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

@@ -426,7 +426,7 @@ const DragDrop = () => {
 
   const htmlContent = selectedDivs
     .map((header) => {
-      return `<div class="${
+      return `<div className="${
         header === "header1" ? "header21Class" : "header2Class"
       }">${header.passage}</div>`;
     })
@@ -452,14 +452,14 @@ const DragDrop = () => {
           selectElement.id = uniqueId;
         });
 
-        return `<div class="${
+        return `<div className="${
           header.header === "header1" ? "header21Class" : "header2Class"
         }">${doc.documentElement.outerHTML}</div>`;
       })
       .join("");
 
     const paginationContent = uniqueIdArr.map((item, index) => {
-      return `<div class="footer-item" onclick="scrollToContent('${item}')">${
+      return `<div className="footer-item" onclick="scrollToContent('${item}')">${
         index + 1
       }</div>`;
     });
@@ -614,15 +614,15 @@ const DragDrop = () => {
     <body>
     
       <!-- Navbar -->
-      <div class="navbar">
-        <div class="navbar-title">
+      <div className="navbar">
+        <div className="navbar-title">
           <h2 style="color:red">IELTS</h2>
-          <div class="navbar-subtitle">
+          <div className="navbar-subtitle">
             <h4 style="margin-top:5px; margin-bottom:5px">Test taker ID</h4>
             <span>2 years, 11 months, 6 days, 3 hours, 40 minutes remaining Connected</span>
           </div>
         </div>
-        <div class="navbar-right">
+        <div className="navbar-right">
           <h4>Wifi</h4>
           <h4>&#128276;</h4> <!-- Notification Bell Icon -->
           <h4>&#9776;</h4> <!-- Menu Icon -->
@@ -630,8 +630,8 @@ const DragDrop = () => {
       </div>
     
       <!-- Static Container -->
-      <div class="container">
-        <div class="container-title">${
+      <div className="container">
+        <div className="container-title">${
           readingData.exam_type || listeningData.exam_type
         } / ${readingData.exam_name || listeningData.exam_name} / ${
       readingData.block_type || listeningData.block_type
@@ -645,30 +645,30 @@ const DragDrop = () => {
       ${renderAudio()}
       
       </div>
-      <div class="main-container">
+      <div className="main-container">
         <!-- Left Container -->
-        <div class="left-container">
+        <div className="left-container">
           ${displayLeftContainer()}
         </div>
     
         <!-- Right Container -->
-        <div class="right-container" id="right-container">
-          <div class="box-right">
+        <div className="right-container" id="right-container">
+          <div className="box-right">
             ${htmlContent}
           </div>
         </div>
       </div>
     
       <!-- Footer -->
-      <div class="footer">
-        <div class="footer-text">
-        <div class="part-pagination">
+      <div className="footer">
+        <div className="footer-text">
+        <div className="part-pagination">
         </div>
-        <div class="question-pagination">
+        <div className="question-pagination">
         ${paginationContent.join("")}
         </div>
         </div>
-        <button class="footer-button"><span class="arrow">&#x2713;</span></button>
+        <button className="footer-button"><span className="arrow">&#x2713;</span></button>
       </div>
 
       <script>

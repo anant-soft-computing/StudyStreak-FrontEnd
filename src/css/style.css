@@ -13713,10 +13713,10 @@ Breadcrumb Area
 
 .dashboard__single__counter {
   padding: 50px 40px;
-  background: var(--lightGrey5);
+  background: #01579b36;
   margin-bottom: 20px;
   border-radius: var(--borderRadius3);
-  box-shadow: 0 0 1px 1px rgba(95, 45, 237, 0.2);
+  box-shadow: 0 0 1px 1px #01579b;
 }
 
 @media (max-width: 767px) {
@@ -14217,8 +14217,8 @@ Breadcrumb Area
 
 .create__course__accordion__wraper .accordion-item {
   margin-bottom: 20px;
-  background: var(--whiteColor);
-  border: none;
+  background: #01579b36;
+  border-radius: 10px;
   box-shadow: 0 0 20px 10px rgba(95, 45, 237, 0.02);
 }
 

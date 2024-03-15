@@ -6,13 +6,16 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 const DSSidebar = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [solvingClassBook, setSolvingClassBook] = useState([]);
-  const [batchId, setBatchId] = useState([]);
-  const [studentId, setStudentId] = useState([]);
+  const [batchId, setBatchId] = useState();
+  const [studentId, setStudentId] = useState();
+  const [packageId, setPackageId] = useState();
   const [count, setCount] = useState({});
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
+
+  console.log("packageId", packageId);
 
   const menuList = [
     {
@@ -35,6 +38,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentDashboard/",
+      state: { packageId: packageId },
     },
     {
       name: "My Profile",
@@ -65,16 +69,16 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-list-task"
+          className="bi bi-list-task"
           viewBox="0 0 16 16"
         >
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5zM3 3H2v1h1z"
           />
           <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5M5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1z" />
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5zM2 7h1v1H2zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5zm1 .5H2v1h1z"
           />
         </svg>
@@ -90,7 +94,7 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-journals"
+          className="bi bi-journals"
           viewBox="0 0 16 16"
         >
           <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2" />
@@ -108,7 +112,7 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-pencil"
+          className="bi bi-pencil"
           viewBox="0 0 16 16"
         >
           <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
@@ -125,7 +129,7 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-journal-text"
+          className="bi bi-journal-text"
           viewBox="0 0 16 16"
         >
           <path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
@@ -144,7 +148,7 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-cassette"
+          className="bi bi-cassette"
           viewBox="0 0 16 16"
         >
           <path d="M4 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2m9-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 6a1 1 0 0 0 0 2h2a1 1 0 1 0 0-2z" />
@@ -162,7 +166,7 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-mic"
+          className="bi bi-mic"
           viewBox="0 0 16 16"
         >
           <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5" />
@@ -170,7 +174,11 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/speakingSolving",
-      state: { studentId: studentId, solvingClassBook: solvingClassBook[0], count: count },
+      state: {
+        studentId: studentId,
+        solvingClassBook: solvingClassBook[0],
+        count: count,
+      },
     },
     {
       name: "Group Doubt Solving",
@@ -180,14 +188,18 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-bricks"
+          className="bi bi-bricks"
           viewBox="0 0 16 16"
         >
           <path d="M0 .5A.5.5 0 0 1 .5 0h15a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H14v2h1.5a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5H.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5H2v-2H.5a.5.5 0 0 1-.5-.5v-3A.5.5 0 0 1 .5 6H2V4H.5a.5.5 0 0 1-.5-.5zM3 4v2h4.5V4zm5.5 0v2H13V4zM3 10v2h4.5v-2zm5.5 0v2H13v-2zM1 1v2h3.5V1zm4.5 0v2h5V1zm6 0v2H15V1zM1 7v2h3.5V7zm4.5 0v2h5V7zm6 0v2H15V7zM1 13v2h3.5v-2zm4.5 0v2h5v-2zm6 0v2H15v-2z" />
         </svg>
       ),
       link: "/groupDoubtSolving",
-      state: { studentId: studentId, solvingClassBook: solvingClassBook[0], count: count },
+      state: {
+        studentId: studentId,
+        solvingClassBook: solvingClassBook[0],
+        count: count,
+      },
     },
     {
       name: "One To One Doubt Solving",
@@ -197,17 +209,21 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-arrow-left-right"
+          className="bi bi-arrow-left-right"
           viewBox="0 0 16 16"
         >
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5m14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5"
           />
         </svg>
       ),
       link: "/doubtSolving",
-      state: { studentId: studentId, solvingClassBook: solvingClassBook[0], count: count },
+      state: {
+        studentId: studentId,
+        solvingClassBook: solvingClassBook[0],
+        count: count,
+      },
     },
     {
       name: "Flash Card",
@@ -267,15 +283,15 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-box-arrow-left"
+          className="bi bi-box-arrow-left"
           viewBox="0 0 16 16"
         >
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"
           />
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"
           />
         </svg>
@@ -334,17 +350,15 @@ const DSSidebar = () => {
               packageDetails?.one_to_one_doubt_solving_count - studentOTOS ||
               "",
           });
-          setBatchId(response?.data?.student_packages?.[0]?.batch_id);
-          localStorage.setItem(
-            "StudentID",
-            response?.data?.student_packages?.[0]?.student_id
-          );
-          setStudentId(response?.data?.student_packages?.[0]?.student_id);
+          setBatchId(studentPackage?.batch_id);
+          localStorage.setItem("StudentID", studentPackage?.student_id);
+          setStudentId(studentPackage?.student_id);
+          setPackageId(studentPackage?.package.id);
           setEnrolledCourse(
-            response?.data?.student_packages?.map(({ course }) => course)
+            response.data.student_packages?.map(({ course }) => course)
           );
           setSolvingClassBook(
-            response?.data?.student_packages?.map(
+            response.data.student_packages?.map(
               ({ Live_class_enroll }) => Live_class_enroll
             )
           );

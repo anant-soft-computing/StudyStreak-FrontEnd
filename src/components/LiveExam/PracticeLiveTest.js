@@ -349,7 +349,7 @@ const PracticeLiveExam = () => {
       paginationsStrucutre = paginationsStrucutre.flat();
 
       // Display questions for the first page initially
-      questionPassage += `<div class="mainContainer">${$.html()}</div>`;
+      questionPassage += `<div className="mainContainer">${$.html()}</div>`;
 
       const tempAnswer = paginationsStrucutre.map((item) => {
         return {

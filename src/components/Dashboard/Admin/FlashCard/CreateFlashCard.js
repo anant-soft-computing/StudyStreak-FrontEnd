@@ -145,7 +145,7 @@ const CreateFlashCard = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Name</label>
+                <label>Name</label>
                 <input
                   type="text"
                   placeholder="Flash Card Name"
@@ -163,7 +163,7 @@ const CreateFlashCard = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Priority</label>
+                <label>Priority</label>
                 <input
                   type="number"
                   placeholder="Flash Card Priority"
@@ -181,7 +181,7 @@ const CreateFlashCard = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Description</label>
+                <label>Description</label>
                 <input
                   type="text"
                   placeholder="Flash Card Description"

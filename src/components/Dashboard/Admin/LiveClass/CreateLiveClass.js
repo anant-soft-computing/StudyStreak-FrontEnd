@@ -147,7 +147,7 @@ const CreateLiveClass = () => {
           <div className="col-xl-6 mt-3">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Meeting Title</label>
+                <label>Meeting Title</label>
                 <input
                   type="text"
                   placeholder="Meeting Title"
@@ -165,7 +165,7 @@ const CreateLiveClass = () => {
           <div className="col-xl-6 mt-3">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Start Date & Time</label>
+                <label>Start Date & Time</label>
                 <input
                   type="datetime-local"
                   value={createLiveClassData?.start_time}
@@ -183,7 +183,7 @@ const CreateLiveClass = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">End Date & Time</label>
+                <label>End Date & Time</label>
                 <input
                   type="datetime-local"
                   value={createLiveClassData?.end_time}
@@ -201,7 +201,7 @@ const CreateLiveClass = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Meeting ID</label>
+                <label>Meeting ID</label>
                 <input
                   type="text"
                   placeholder="Meeting ID"
@@ -219,7 +219,7 @@ const CreateLiveClass = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Meeting Password</label>
+                <label>Meeting Password</label>
                 <input
                   type="text"
                   placeholder="Meeting Password"
@@ -239,7 +239,7 @@ const CreateLiveClass = () => {
             <div className="col-xl-6">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label for="#">Registration Limit</label>
+                  <label>Registration Limit</label>
                   <input
                     type="number"
                     placeholder="Registration Limit"
@@ -258,7 +258,7 @@ const CreateLiveClass = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Meeting Description</label>
+                <label>Meeting Description</label>
                 <textarea
                   id=""
                   cols="3"

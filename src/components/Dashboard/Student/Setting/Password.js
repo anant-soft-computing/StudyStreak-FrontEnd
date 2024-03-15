@@ -7,7 +7,7 @@ const Password = () => {
       <div className="col-xl-12">
         <div className="dashboard__form__wraper">
           <div className="dashboard__form__input">
-            <label for="#">Current Password</label>
+            <label>Current Password</label>
             <input type="text" placeholder="Current password" />
           </div>
         </div>
@@ -15,7 +15,7 @@ const Password = () => {
       <div className="col-xl-12">
         <div className="dashboard__form__wraper">
           <div className="dashboard__form__input">
-            <label for="#">New Password</label>
+            <label>New Password</label>
             <input type="text" placeholder="New Password" />
           </div>
         </div>
@@ -23,7 +23,7 @@ const Password = () => {
       <div className="col-xl-12">
         <div className="dashboard__form__wraper">
           <div className="dashboard__form__input">
-            <label for="#">Re-Type New Password</label>
+            <label>Re-Type New Password</label>
             <input type="text" placeholder="Re-Type New Password" />
           </div>
         </div>

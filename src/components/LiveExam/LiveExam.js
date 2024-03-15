@@ -395,7 +395,7 @@ const LiveExam = () => {
 
       const paginationsStrucutre = temp.flat();
 
-      const questionPassage = `<div class="mainContainer">${question}</div>`;
+      const questionPassage = `<div className="mainContainer">${question}</div>`;
       setUniqueIdArr(paginationsStrucutre);
 
       const tempAnswer = paginationsStrucutre.map((item) => {
@@ -486,7 +486,7 @@ const LiveExam = () => {
       paginationsStrucutre = paginationsStrucutre.flat();
 
       // Display questions for the first page initially
-      questionPassage += `<div class="mainContainer">${$.html()}</div>`;
+      questionPassage += `<div className="mainContainer">${$.html()}</div>`;
 
       const tempAnswer = paginationsStrucutre.map((item) => {
         return {

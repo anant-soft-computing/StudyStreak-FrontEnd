@@ -130,7 +130,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">First Name</label>
+                <label>First Name</label>
                 <input
                   type="text"
                   placeholder="First Name"
@@ -144,7 +144,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Last Name</label>
+                <label>Last Name</label>
                 <input
                   type="text"
                   placeholder="Last Name"
@@ -158,7 +158,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">User Name</label>
+                <label>User Name</label>
                 <input
                   type="text"
                   placeholder="User Name"
@@ -172,7 +172,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Phone No</label>
+                <label>Phone No</label>
                 <input
                   type="text"
                   placeholder="Phone No"
@@ -186,7 +186,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Whatsapp No</label>
+                <label>Whatsapp No</label>
                 <input
                   type="text"
                   placeholder="Whatsapp No"
@@ -200,7 +200,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Gender</label>
+                <label>Gender</label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -215,7 +215,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">City</label>
+                <label>City</label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -230,7 +230,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">State</label>
+                <label>State</label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -244,7 +244,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6 mt-4">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Country</label>
+                <label>Country</label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -258,7 +258,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6 mt-4">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Country Interested In</label>
+                <label>Country Interested In</label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -272,7 +272,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6 mt-4">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Last Education</label>
+                <label>Last Education</label>
                 <input
                   type="text"
                   placeholder="Last Education"
@@ -286,7 +286,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6 mt-4">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Interested In Visa Counselling</label>
+                <label>Interested In Visa Counselling</label>
                 <select
                   className="form-select"
                   aria-label="Default select example"
@@ -301,7 +301,7 @@ const UpdateProfile = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Image</label>
+                <label>Image</label>
                 <input
                   type="file"
                   name="imageFile"
@@ -372,7 +372,7 @@ const UpdateProfile = () => {
           <div className="col-xl-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Reference By</label>
+                <label>Reference By</label>
                 <textarea
                   id=""
                   cols="10"
@@ -389,7 +389,7 @@ const UpdateProfile = () => {
           <div className="col-xl-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Remark</label>
+                <label>Remark</label>
                 <textarea
                   id=""
                   cols="10"
@@ -406,7 +406,7 @@ const UpdateProfile = () => {
           <div className="col-xl-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Biography</label>
+                <label>Biography</label>
                 <textarea
                   id=""
                   cols="10"

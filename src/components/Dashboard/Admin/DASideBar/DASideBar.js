@@ -62,7 +62,7 @@ const DASideBar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-backpack4"
+          className="bi bi-backpack4"
           viewBox="0 0 16 16"
         >
           <path d="M4 9.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm1 .5v3h6v-3h-1v.5a.5.5 0 0 1-1 0V10z" />
@@ -79,7 +79,7 @@ const DASideBar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-collection"
+          className="bi bi-collection"
           viewBox="0 0 16 16"
         >
           <path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5z" />
@@ -95,7 +95,7 @@ const DASideBar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-journals"
+          className="bi bi-journals"
           viewBox="0 0 16 16"
         >
           <path d="M5 0h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2 2 2 0 0 1-2 2H3a2 2 0 0 1-2-2h1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1H1a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1H3a2 2 0 0 1 2-2" />
@@ -112,7 +112,7 @@ const DASideBar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-cassette"
+          className="bi bi-cassette"
           viewBox="0 0 16 16"
         >
           <path d="M4 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2m9-1a1 1 0 1 1-2 0 1 1 0 0 1 2 0M7 6a1 1 0 0 0 0 2h2a1 1 0 1 0 0-2z" />
@@ -200,15 +200,15 @@ const DASideBar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-box-arrow-left"
+          className="bi bi-box-arrow-left"
           viewBox="0 0 16 16"
         >
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z"
           />
           <path
-            fill-rule="evenodd"
+            fillRule="evenodd"
             d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z"
           />
         </svg>

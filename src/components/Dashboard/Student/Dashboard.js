@@ -5,9 +5,44 @@ import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import ajaxCall from "../../../helpers/ajaxCall";
+import { useLocation } from "react-router-dom";
 
 const Dashboard = () => {
+  const { packageId } = useLocation()?.state || {};
+  const [studentList, setStudentList] = useState([]);
   const [latestLiveClass, setLatestLiveClass] = useState({});
+
+  console.log("studentList", studentList);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/packageidwisestudentGetview/${packageId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          console.log("-------->", response);
+          setStudentList(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [packageId]);
 
   useEffect(() => {
     (async () => {
@@ -95,16 +130,23 @@ const Dashboard = () => {
                                 <h5>{latestLiveClass?.meeting_title}</h5>
                               </div>
                             )}
-                            <div className="zoom__meeting__id">
-                              <p>
-                                Starting Time :{" "}
-                                <span style={{ color: "#01579b" }}>
-                                  {moment(latestLiveClass?.start_time).format(
-                                    "hh:mm A"
-                                  )}
-                                </span>
-                              </p>
-                            </div>
+                            {latestLiveClass?.start_time && (
+                              <div className="zoom__meeting__id">
+                                <p>
+                                  Starting Time :{" "}
+                                  <span
+                                    style={{
+                                      color: "#01579b",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {moment(latestLiveClass?.start_time).format(
+                                      "hh:mm A"
+                                    )}
+                                  </span>
+                                </p>
+                              </div>
+                            )}
                           </div>
                         </div>
                         <div className="col-xl-4 col-lg-6 col-md-12 col-12">

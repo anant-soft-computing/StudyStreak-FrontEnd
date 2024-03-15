@@ -234,6 +234,7 @@ const Exam = () => {
                                     }}
                                     className="col-xl-3 col-lg-6 col-md-12 col-12"
                                     onClick={() => handleNavigate(exam.link)}
+                                    key={index}
                                   >
                                     <div className="dashboard__single__counter">
                                       <div className="counterarea__text__wraper justify-content-center">
@@ -246,11 +247,12 @@ const Exam = () => {
                                 ))}
                               {screenContent.examType &&
                                 !screenContent.examForm &&
-                                examTypes.map((exam) => (
+                                examTypes.map((exam,index) => (
                                   <div
                                     style={{ cursor: "pointer" }}
                                     className="col-xl-3 col-lg-6 col-md-12 col-12"
                                     onClick={() => handleNavigate(exam.link)}
+                                    key={index}
                                   >
                                     <div className="dashboard__single__counter">
                                       <div className="counterarea__text__wraper justify-content-center">
@@ -293,7 +295,7 @@ const Exam = () => {
                             <div className="row">
                               {!screenContent.examType &&
                                 !screenContent.examForm &&
-                                exams.map((exam) => (
+                                exams.map((exam,index) => (
                                   <div
                                     style={{
                                       cursor: "pointer",
@@ -303,6 +305,7 @@ const Exam = () => {
                                     }}
                                     className="col-xl-3 col-lg-6 col-md-12 col-12"
                                     onClick={() => handleNavigate(exam.link)}
+                                    key={index}
                                   >
                                     <div className="dashboard__single__counter">
                                       <div className="counterarea__text__wraper justify-content-center">
@@ -315,11 +318,12 @@ const Exam = () => {
                                 ))}
                               {screenContent.examType &&
                                 !screenContent.examForm &&
-                                examTypes.map((exam) => (
+                                examTypes.map((exam,index) => (
                                   <div
                                     style={{ cursor: "pointer" }}
                                     className="col-xl-3 col-lg-6 col-md-12 col-12"
                                     onClick={() => handleNavigate(exam.link)}
+                                    key={index}
                                   >
                                     <div className="dashboard__single__counter">
                                       <div className="counterarea__text__wraper justify-content-center">
@@ -366,7 +370,7 @@ const Exam = () => {
                             <div className="row">
                               {!screenContent.examType &&
                                 !screenContent.examForm &&
-                                exams.map((exam) => (
+                                exams.map((exam,index) => (
                                   <div
                                     style={{
                                       cursor: "pointer",
@@ -376,6 +380,7 @@ const Exam = () => {
                                     }}
                                     className="col-xl-3 col-lg-6 col-md-12 col-12"
                                     onClick={() => handleNavigate(exam.link)}
+                                    key={index}
                                   >
                                     <div className="dashboard__single__counter">
                                       <div className="counterarea__text__wraper justify-content-center">

@@ -40,7 +40,7 @@ const DoubtSolvingList = ({
                   <div className="gridarea__heading">
                     <h3>{meeting_title}</h3>
                   </div>
-                  <div class="zoom__meeting__id">
+                  <div className="zoom__meeting__id">
                     <p>
                       Description:
                       <span>{meeting_description}</span>

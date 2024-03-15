@@ -20,8 +20,6 @@ const CourseDetail = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showBatchSelection, setShowBatchSelection] = useState(false);
 
-  console.log("courseDetail", courseDetail);
-
   useEffect(() => {
     checkAuth();
   }, [authData]);
@@ -292,7 +290,8 @@ const CourseDetail = () => {
                                 data-bs-target="#projects__three"
                                 type="button"
                               >
-                                <i class="icofont-newspaper"></i>Requirements
+                                <i className="icofont-newspaper"></i>
+                                Requirements
                               </button>
                             </li>
                             <li className="nav-item" role="presentation">
@@ -302,7 +301,7 @@ const CourseDetail = () => {
                                 data-bs-target="#projects__four"
                                 type="button"
                               >
-                                <i class="icofont-outdent"></i>Outcomes
+                                <i className="icofont-outdent"></i>Outcomes
                               </button>
                             </li>
                           </ul>
@@ -422,8 +421,8 @@ const CourseDetail = () => {
                           <div className="course__list__wraper">
                             <div className="aboutarea__list__2 blog__details__list__2">
                               {courseDetail?.Requirements?.map(
-                                ({ description }) => (
-                                  <ul>
+                                ({ description }, index) => (
+                                  <ul key={index}>
                                     <li>
                                       <i className="icofont-check"></i>
                                       <p>{description}</p>
@@ -445,14 +444,16 @@ const CourseDetail = () => {
                           </div>
                           <div className="course__list__wraper">
                             <div className="aboutarea__list__2 blog__details__list__2">
-                              {courseDetail?.Outcome?.map(({ description }) => (
-                                <ul>
-                                  <li>
-                                    <i className="icofont-check"></i>
-                                    <p>{description}</p>
-                                  </li>
-                                </ul>
-                              ))}
+                              {courseDetail?.Outcome?.map(
+                                ({ description }, index) => (
+                                  <ul key={index}>
+                                    <li>
+                                      <i className="icofont-check"></i>
+                                      <p>{description}</p>
+                                    </li>
+                                  </ul>
+                                )
+                              )}
                             </div>
                           </div>
                         </div>

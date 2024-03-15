@@ -127,7 +127,7 @@ const CreateBatch = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Batch Name</label>
+                <label>Batch Name</label>
                 <input
                   type="text"
                   placeholder="Batch Name"
@@ -145,7 +145,7 @@ const CreateBatch = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Start Date</label>
+                <label>Start Date</label>
                 <input
                   type="date"
                   value={batchData?.batch_startdate}
@@ -162,7 +162,7 @@ const CreateBatch = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">Start Time</label>
+                <label>Start Time</label>
                 <input
                   type="time"
                   value={batchData?.batch_start_timing}
@@ -179,7 +179,7 @@ const CreateBatch = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">End Date</label>
+                <label>End Date</label>
                 <input
                   type="date"
                   value={batchData?.batch_enddate}
@@ -196,7 +196,7 @@ const CreateBatch = () => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label for="#">End Time</label>
+                <label>End Time</label>
                 <input
                   type="time"
                   value={batchData?.batch_end_timing}

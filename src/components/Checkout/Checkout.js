@@ -15,6 +15,7 @@ const Checkout = () => {
   const location = useLocation();
   const {
     courseId,
+    courseType,
     packageId,
     selectedBatchIds,
     courseName,
@@ -37,6 +38,44 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
   }
+
+  const handleEnroll = async () => {
+    if (!authData.loggedIn) {
+      navigate("/login");
+      return;
+    }
+    const data = JSON.stringify({
+      package_ids: [packageId],
+    });
+    try {
+      const response = await ajaxCall(
+        `/enrollpackagestudentview/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success(response?.data?.detail);
+      } else if (response.status === 200) {
+        toast.error(response?.data?.msg);
+      } else if (response.status === 400 && response.isError) {
+        toast.error(response?.data?.detail);
+      } else {
+        toast.error("Something went wrong, please try again later");
+      }
+    } catch (error) {
+      toast.error("Something went wrong, please try again later");
+    }
+  };
 
   const handleEnrollNow = async () => {
     if (!authData.loggedIn) {
@@ -159,7 +198,7 @@ const Checkout = () => {
 
         if (result?.status === 200) {
           toast.success("Payment Successful");
-          handleEnrollNow();
+          courseType === "TAUGHT" ? handleEnrollNow() : handleEnroll();
           navigate("/studentDashboard");
         }
       },

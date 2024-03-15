@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import { addDays, subDays } from "date-fns";
 import { useLocation } from "react-router-dom";
@@ -7,14 +7,12 @@ import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
 import TopBar from "../../../TopBar/TopBar";
 import NavBar from "../../../NavBar/NavBar";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import LiveClassList from "./LiveClassList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
 
 const LiveClass = () => {
-  const { batchId } = useLocation()?.state;
-  const [liveClass, setLiveClass] = useState([]);
+  const { solvingClassBook } = useLocation()?.state;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
@@ -24,36 +22,8 @@ const LiveClass = () => {
     },
   ]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/liveclass_listwithid_view/${batchId}/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setLiveClass(response?.data);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, [batchId]);
-
   const liveClasses = () => {
-    return liveClass.filter(({ start_time }) => {
+    return solvingClassBook.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (
@@ -102,16 +72,22 @@ const LiveClass = () => {
                           ></i>
                         </h6>
                       </div>
-                      <div className="row global-card-container-bgclr-customize">
-                        {liveClasses().map((item) => (
-                          <LiveClassList
-                            key={item.id}
-                            joinNow={joinNow}
-                            isWithin5Minutes={isWithin5Minutes}
-                            {...item}
-                          />
-                        ))}
-                      </div>
+                      {solvingClassBook[0]?.length > 0 ? (
+                        <div className="row global-card-container-bgclr-customize">
+                          {liveClasses()[0].map((item) => (
+                            <LiveClassList
+                              key={item.id}
+                              joinNow={joinNow}
+                              isWithin5Minutes={isWithin5Minutes}
+                              {...item}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <h5 className="text-center">
+                          No Live Classes Scheduled
+                        </h5>
+                      )}
                     </div>
                   </div>
                 </div>

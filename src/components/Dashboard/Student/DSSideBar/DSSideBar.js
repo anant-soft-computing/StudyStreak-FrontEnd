@@ -8,14 +8,11 @@ const DSSidebar = () => {
   const [solvingClassBook, setSolvingClassBook] = useState([]);
   const [batchId, setBatchId] = useState();
   const [studentId, setStudentId] = useState();
-  const [packageId, setPackageId] = useState();
   const [count, setCount] = useState({});
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
-
-  console.log("packageId", packageId);
 
   const menuList = [
     {
@@ -38,7 +35,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentDashboard/",
-      state: { packageId: packageId },
+      state: { batchId: batchId, },
     },
     {
       name: "My Profile",
@@ -156,7 +153,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentLiveClasses",
-      state: { batchId: batchId },
+      state: { solvingClassBook: solvingClassBook },
     },
     {
       name: "Speaking Practice",
@@ -178,6 +175,7 @@ const DSSidebar = () => {
         studentId: studentId,
         solvingClassBook: solvingClassBook[0],
         count: count,
+        batchId: batchId,
       },
     },
     {
@@ -199,6 +197,7 @@ const DSSidebar = () => {
         studentId: studentId,
         solvingClassBook: solvingClassBook[0],
         count: count,
+        batchId: batchId,
       },
     },
     {
@@ -223,6 +222,7 @@ const DSSidebar = () => {
         studentId: studentId,
         solvingClassBook: solvingClassBook[0],
         count: count,
+        batchId: batchId,
       },
     },
     {
@@ -352,8 +352,8 @@ const DSSidebar = () => {
           });
           setBatchId(studentPackage?.batch_id);
           localStorage.setItem("StudentID", studentPackage?.student_id);
+          localStorage.setItem("BatchID", studentPackage?.batch_id);
           setStudentId(studentPackage?.student_id);
-          setPackageId(studentPackage?.package.id);
           setEnrolledCourse(
             response.data.student_packages?.map(({ course }) => course)
           );

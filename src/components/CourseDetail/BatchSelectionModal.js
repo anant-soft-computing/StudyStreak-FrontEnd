@@ -73,15 +73,7 @@ const BatchSelection = (props) => {
   };
 
   return (
-    <Modal
-      {...props}
-      show={show}
-      size="lg"
-      keyboard={false}
-      backdrop="static"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
+    <Modal {...props} show={show} size="lg" centered>
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
           Select Preferred Batch
@@ -113,32 +105,32 @@ const BatchSelection = (props) => {
                     }}
                   />
                 </div>
-                <div
-                  className="dashboard__recent__course__content"
-                  style={{ width: "80%" }}
-                >
+                <div className="dashboard__recent__course__content">
                   <div className="dashboard__recent__course__heading">
                     <h3>{batchItem?.batch_name}</h3>
                   </div>
                   <div className="dashboard__recent__course__meta text-xl-center">
                     <ul className="ps-0">
                       <li>
-                        <i className="icofont-calendar"></i> <b>Date</b>:{" "}
+                        <i
+                          className="icofont-calendar"
+                          style={{ color: "#01579b" }}
+                        ></i>{" "}
+                        <b>Date</b>:{" "}
                         {batchItem?.batch_startdate && batchItem?.batch_enddate
                           ? `${batchItem?.batch_startdate} To ${batchItem?.batch_enddate}`
                           : "N/A"}
                       </li>
                       <li>
-                        <i className="icofont-clock-time"></i> <b>Time</b>:{" "}
+                        <i
+                          className="icofont-clock-time"
+                          style={{ color: "#01579b" }}
+                        ></i>{" "}
+                        <b>Time</b>:{" "}
                         {batchItem?.batch_start_timing &&
                         batchItem?.batch_end_timing
                           ? `${batchItem?.batch_start_timing} To ${batchItem?.batch_end_timing}`
                           : "N/A"}
-                      </li>
-
-                      <li>
-                        <i className="icofont-group-students"></i>{" "}
-                        <b>Students</b>: {batchItem?.batchuser}
                       </li>
                     </ul>
                   </div>

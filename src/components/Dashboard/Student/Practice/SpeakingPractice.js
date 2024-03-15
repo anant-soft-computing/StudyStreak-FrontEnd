@@ -14,7 +14,7 @@ import DateRange from "../../../UI/DateRangePicker";
 
 const SpeakingPractice = () => {
   const navigate = useNavigate();
-  const { studentId, solvingClassBook, count } = useLocation()?.state;
+  const { studentId, solvingClassBook, count, batchId } = useLocation()?.state;
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -49,6 +49,7 @@ const SpeakingPractice = () => {
       );
       if (response.status === 200) {
         toast.success("Slot Booked Successfully");
+        navigate("/studentLiveClasses");
       } else if (response.status === 400) {
         toast.error(response?.data?.Message);
       }
@@ -61,7 +62,7 @@ const SpeakingPractice = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/liveclass_list_view`,
+          `/liveclass_listwithid_view/${batchId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -86,10 +87,21 @@ const SpeakingPractice = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [batchId]);
 
   const handleDateRangeChange = (ranges) => {
     setSelectedDateRange([ranges.selection]);
+  };
+
+  const joinNow = (zoom_meeting) => {
+    window.open(zoom_meeting, "__blank");
+  };
+
+  const isWithin5Minutes = (startTime) => {
+    const currentTime = moment();
+    const classStartTime = moment(startTime);
+    const difference = classStartTime.diff(currentTime, "milliseconds");
+    return difference >= 0 && difference <= 5 * 60 * 1000;
   };
 
   const speakingClasses = () => {
@@ -149,6 +161,8 @@ const SpeakingPractice = () => {
                           speakingClasses={speakingClasses()}
                           solvingClassBook={solvingClassBook}
                           handleEnrollNow={handleEnrollNow}
+                          joinNow={joinNow}
+                          isWithin5Minutes={isWithin5Minutes}
                         />
                       )}
                     </div>

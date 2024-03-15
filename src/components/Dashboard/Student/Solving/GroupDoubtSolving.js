@@ -15,7 +15,7 @@ import GroupDoubleSolvingList from "./GroupDoubleSolvingList";
 
 const GroupDoubtSolving = () => {
   const navigate = useNavigate();
-  const { studentId, solvingClassBook, count } = useLocation()?.state;
+  const { studentId, solvingClassBook, count, batchId } = useLocation()?.state;
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -50,6 +50,7 @@ const GroupDoubtSolving = () => {
       );
       if (response.status === 200) {
         toast.success("Slot Booked Successfully");
+        navigate("/studentLiveClasses");
       } else if (response.status === 400) {
         toast.error(response?.data?.Message);
       }
@@ -62,7 +63,7 @@ const GroupDoubtSolving = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/liveclass_list_view/`,
+          `/liveclass_listwithid_view/${batchId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -87,10 +88,21 @@ const GroupDoubtSolving = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [batchId]);
 
   const handleDateRangeChange = (ranges) => {
     setSelectedDateRange([ranges.selection]);
+  };
+
+  const joinNow = (zoom_meeting) => {
+    window.open(zoom_meeting, "__blank");
+  };
+
+  const isWithin5Minutes = (startTime) => {
+    const currentTime = moment();
+    const classStartTime = moment(startTime);
+    const difference = classStartTime.diff(currentTime, "milliseconds");
+    return difference >= 0 && difference <= 5 * 60 * 1000;
   };
 
   const groupDoubtSolvingClasses = () => {
@@ -120,7 +132,7 @@ const GroupDoubtSolving = () => {
                       <div className="dashboard__section__title">
                         <h4>Group Doubt Solving</h4>
                         <h6>
-                          Your Groupe Doubt Solving Class Schedule{" "}
+                          Your Group Doubt Solving Class Schedule{" "}
                           <i
                             className="icofont-calendar"
                             style={{ cursor: "pointer", color: "#01579b" }}
@@ -150,6 +162,8 @@ const GroupDoubtSolving = () => {
                           groupDoubtSolvingClasses={groupDoubtSolvingClasses()}
                           solvingClassBook={solvingClassBook}
                           handleEnrollNow={handleEnrollNow}
+                          joinNow={joinNow}
+                          isWithin5Minutes={isWithin5Minutes}
                         />
                       )}
                     </div>

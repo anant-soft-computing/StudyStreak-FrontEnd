@@ -136,18 +136,12 @@ const CourseDetail = () => {
             <div className="container">
               <div className="row">
                 <div className="col-xl-12 col-lg-12">
-                  <div
-                    className="blogarae__img__2 course__details__img__2"
-                    data-aos="fade-up"
-                  >
+                  <div className="blogarae__img__2 course__details__img__2">
                     <div className="row">
                       <div className="col-xl-6 col-lg-6">
                         <img src={courseDetail?.Course_Thumbnail} alt="blog" />
                       </div>
-                      <div
-                        className="course__details__wraper col-xl-6 col-lg-6"
-                        data-aos="fade-up"
-                      >
+                      <div className="course__details__wraper col-xl-6 col-lg-6">
                         <ul>
                           <li>
                             Instructor :
@@ -199,7 +193,7 @@ const CourseDetail = () => {
                     </div>
                   </div>
                   <div className="blog__details__content__wraper">
-                    <div className="course__button__wraper" data-aos="fade-up">
+                    <div className="course__button__wraper">
                       <div className="course__button">
                         {courseDetail?.Category?.name && (
                           <Link to="">{courseDetail?.Category?.name}</Link>
@@ -215,10 +209,7 @@ const CourseDetail = () => {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="course__details__heading"
-                      data-aos="fade-up"
-                    >
+                    <div className="course__details__heading">
                       <h3>{courseDetail?.Course_Title}</h3>
                     </div>
                     <div
@@ -231,10 +222,8 @@ const CourseDetail = () => {
                         }}
                       ></div>
                     </div>
-                    <h4 className="sidebar__title" data-aos="fade-up">
-                      Packages
-                    </h4>
-                    <div data-aos="fade-up" className="mb-4">
+                    <h4 className="sidebar__title">Packages</h4>
+                    <div className="mb-4">
                       {coursePackages?.packages?.length >= 1 ? (
                         <PackageDetails
                           showBatchSelection={showBatchSelection}
@@ -245,17 +234,14 @@ const CourseDetail = () => {
                           courseType={courseDetail?.course_delivery}
                         />
                       ) : (
-                        <div data-aos="fade-up">
+                        <div>
                           <div className="sp_20 col--30">
-                            {"No packages available"}
+                            No packages available
                           </div>
                         </div>
                       )}
                     </div>
-                    <div
-                      className="course__details__tab__wrapper"
-                      data-aos="fade-up"
-                    >
+                    <div className="course__details__tab__wrapper">
                       <div className="row">
                         <div className="col-xl-12">
                           <ul
@@ -459,14 +445,11 @@ const CourseDetail = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="course__list__wraper" data-aos="fade-up">
+                    <div className="course__list__wraper">
                       <div className="blog__details__heading__2">
                         <h5>Why course is important ?</h5>
                       </div>
-                      <div
-                        className="aboutarea__list__2 blog__details__list__2"
-                        data-aos="fade-up"
-                      >
+                      <div className="aboutarea__list__2 blog__details__list__2">
                         <ul className="ps-0">
                           <li>
                             <div

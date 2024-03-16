@@ -187,9 +187,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      {/* <TopBar /> */}
+      {/* <NavBar /> */}
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">

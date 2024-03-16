@@ -382,3 +382,41 @@ body {
   background-color: #ebf2f5;
   /* border-radius: 50px !important; */
 }
+
+.common-navbar-topside-customization {
+  background-color: #ebf2f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.fixing-navbar-at-top-side {
+  position: fixed;
+  top: 0;
+  z-index: 11111;
+  width: 100%;
+}
+
+.all-component-main-container {
+  margin-top: 110px;
+}
+
+.getting-it-fixed {
+  /* position: absolute; */
+}
+
+@media (min-width: 1365px) and (max-width: 1499px) {
+  .all-component-main-container {
+    margin-top: 160px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1365px) {
+  .all-component-main-container {
+    margin-top: 140px;
+  }
+}
+
+@media (min-width: 1px) and (max-width: 992px) {
+  .all-component-main-container {
+    margin-top: 0px;
+  }
+}

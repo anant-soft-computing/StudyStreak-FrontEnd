@@ -1,6 +1,4 @@
 import React from "react";
-import TopBar from "../../../../TopBar/TopBar";
-import NavBar from "../../../../NavBar/NavBar";
 import Footer from "../../../../Footer/Footer";
 import AdditionalResources from "./AdditionalResources";
 import Material from "./Material";
@@ -17,9 +15,7 @@ const CourseContent = () => {
 
   return (
     <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">
@@ -27,7 +23,7 @@ const CourseContent = () => {
                 <div className="row">
                   <DSSidebar />
                   <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper">
+                    <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>{Course_Title}</h4>
                       </div>

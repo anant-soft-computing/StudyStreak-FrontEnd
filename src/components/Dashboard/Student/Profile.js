@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import { useNavigate } from "react-router-dom";
@@ -46,9 +44,7 @@ const Profile = () => {
 
   return (
     <div>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">

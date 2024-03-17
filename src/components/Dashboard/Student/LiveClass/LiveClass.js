@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import moment from "moment";
 import { addDays, subDays } from "date-fns";
 import { useLocation } from "react-router-dom";
-
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
 import LiveClassList from "./LiveClassList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
@@ -50,9 +47,7 @@ const LiveClass = () => {
 
   return (
     <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">

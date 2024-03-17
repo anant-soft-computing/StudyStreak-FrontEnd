@@ -89,9 +89,7 @@ const Lesson = () => {
 
   return (
     <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="theme__shadow__circle"></div>
           <div className="theme__shadow__circle shadow__right"></div>

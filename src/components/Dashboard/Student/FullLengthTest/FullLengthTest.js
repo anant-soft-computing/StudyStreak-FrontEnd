@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Footer from "../../../Footer/Footer";
@@ -87,8 +84,6 @@ const FullLengthTest = () => {
 
   return (
     <>
-      <TopBar />
-      <NavBar />
       <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">

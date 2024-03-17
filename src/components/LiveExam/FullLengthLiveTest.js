@@ -1,20 +1,21 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
 import Modal from "react-bootstrap/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
+import SmallModal from "../UI/Modal";
 const Cheerio = require("cheerio");
 
 const FullLengthLiveExam = () => {
   const containerRef = useRef(null);
+  const { examId } = useParams();
   const navigate = useNavigate();
   const examType = useLocation()?.pathname?.split("/")?.[4];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
-  const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
@@ -25,6 +26,14 @@ const FullLengthLiveExam = () => {
   const [fullPaper, setFullPaper] = useState([]);
   const [fullLengthId, setFullLengthId] = useState("");
   const [next, setNext] = useState(0);
+  const [count, setCount] = useState(0);
+  const [modalCounter, setModalCounter] = useState(0);
+  const [displayWritingModal, setDisplayWritingModal] = useState(false);
+  const [writingModalOpenOnce, setWritingModalOpenOnce] = useState(false);
+  const [displayListeningModal, setDisplayListeningModal] = useState(false);
+  const [listeningModalOpenOnce, setListeningModalOpenOnce] = useState(false);
+  const [displaySpeakingModal, setDisplaySpeakingModal] = useState(false);
+  const [speakingModalOpenOnce, setSpeakingModalOpenOnce] = useState(false);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [recordedFilePath, setRecordedFilePath] = useState("");
@@ -630,6 +639,112 @@ const FullLengthLiveExam = () => {
     }
   }, [recordedFilePath]);
 
+  const handleBackSectionClicked = () => {
+    setNext(next - 1);
+    setCount((prev) => prev - 1);
+  };
+  const handleNextSectionClicked = () => {
+    setNext(next + 1);
+    setCount((prev) => prev + 1);
+  };
+
+  useEffect(() => {
+    if (count === 3 && !writingModalOpenOnce) {
+      setDisplayWritingModal(true);
+      setWritingModalOpenOnce(true);
+    } else if (count === 5 && !listeningModalOpenOnce) {
+      setDisplayListeningModal(true);
+      setListeningModalOpenOnce(true);
+    } else if (count === 9 && !speakingModalOpenOnce) {
+      setDisplaySpeakingModal(true);
+      setSpeakingModalOpenOnce(true);
+    }
+  }, [count]);
+
+  const displayReadingModalContent = () => {
+    return (
+      <div className="px-3">
+        <p>There are four parts with related questions.</p>
+        <div>
+          <ul>
+            <li>Three sections with tasks: </li>
+            <br />
+            <li>• Section 1: Two or three factual texts</li>
+            <br />
+            <li>• Section 2: Two short, work-related factual texts</li>
+            <br />
+            <li>
+              • Section 3: One longer text on a topic of general interest.
+            </li>
+          </ul>
+        </div>
+        <p>
+          A range of native-speaker accents is used. All standard varieties of
+          English are accepted as responses in all parts of the test.
+        </p>
+        <p>
+          Texts ranging from the descriptive and factual to the discursive and
+          analytical.
+        </p>
+        <p>
+          Text might include non-verbal material such as diagrams, graphs or
+          illustrations.
+        </p>
+        <p>
+          Texts are authentic and are sourced from books, journals and
+          newspapers.
+        </p>
+      </div>
+    );
+  };
+
+  const displayWritingModalContent = () => {
+    return (
+      <div className="px-3">
+        <p>There are two tasks:</p>
+        <ul>
+          <li>
+            Task 1 – summarise, describe or explain a table, graph, chart or
+            diagram in 150 words.
+          </li>
+
+          <li>Task 2 – short essay task of at least 250 words.</li>
+        </ul>
+      </div>
+    );
+  };
+
+  const displayListeningModalContent = () => {
+    return (
+      <div className="px-3">
+        <p>Four long sections with tasks</p>
+        <p>
+          Texts ranging from the descriptive and factual to the discursive and
+          analytical.
+        </p>
+      </div>
+    );
+  };
+
+  const displaySpeakingModalContent = () => {
+    return (
+      <div className="px-3">
+        <p>There are three parts:</p>
+        <ul>
+          <li>• Short questions </li>
+          <br />
+          <li>• Speaking at length about a familiar topic</li>
+          <br />
+          <li>• Structured discussion.</li>
+        </ul>
+        <p>
+          The Speaking test is a face-to-face conversation with a real person
+          making similar to a real-life situation.
+        </p>
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Navbar */}
@@ -644,6 +759,29 @@ const FullLengthLiveExam = () => {
       {/* Static Container */}
       <div className="lv-container">
         <div className="lv-container-title">{`${examData?.exam_name}`}</div>
+      </div>
+
+      <div>
+        <SmallModal
+          isOpen={displayWritingModal}
+          onClose={() => setDisplayWritingModal(false)}
+          title={"Writing Section"}
+          children={displayWritingModalContent()}
+        />
+
+        <SmallModal
+          isOpen={displayListeningModal}
+          onClose={() => setDisplayListeningModal(false)}
+          title={"Listening Section"}
+          children={displayListeningModalContent()}
+        />
+
+        <SmallModal
+          isOpen={displaySpeakingModal}
+          onClose={() => setDisplaySpeakingModal(false)}
+          title={"Speaking Section"}
+          children={displaySpeakingModalContent()}
+        />
       </div>
 
       {/* Main Container */}
@@ -733,9 +871,7 @@ const FullLengthLiveExam = () => {
               cursor: linkAnswer ? "not-allowed" : "pointer",
               opacity: linkAnswer ? 0.5 : 1,
             }}
-            onClick={() => {
-              setNext(next - 1);
-            }}
+            onClick={handleBackSectionClicked}
             disabled={linkAnswer}
           >
             <span>Back</span>
@@ -747,9 +883,7 @@ const FullLengthLiveExam = () => {
               cursor: linkAnswer ? "not-allowed" : "pointer",
               opacity: linkAnswer ? 0.5 : 1,
             }}
-            onClick={() => {
-              setNext(next + 1);
-            }}
+            onClick={handleNextSectionClicked}
             disabled={linkAnswer}
           >
             <span>&#10152;</span>

@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
+import "../../../css/student panel/dashboard.css";
 import moment from "moment";
-import TopBar from "../../TopBar/TopBar";
-import NavBar from "../../NavBar/NavBar";
 import Footer from "../../Footer/Footer";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import ajaxCall from "../../../helpers/ajaxCall";
-import { AgGridReact } from "ag-grid-react";
-import { checkIcon } from "../Admin/Student/Student";
-import { cancelIcon } from "../Admin/Student/Student";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
@@ -79,116 +75,8 @@ const Dashboard = () => {
     })();
   }, []);
 
-  const renderItemAvailable = ({ value }) => {
-    return value ? checkIcon() : cancelIcon();
-  };
-
-  const gridOptions = {
-    rowData: studentList,
-    columnDefs: [
-      { headerName: "No.", field: "no", filter: true },
-      { headerName: "First Name", field: "first_name", filter: true },
-      { headerName: "Last Name", field: "last_name", filter: true },
-      {
-        headerName: "Gender",
-        field: "gender",
-        filter: true,
-      },
-      { headerName: "Phone No.", field: "phone_no" },
-      {
-        headerName: "Whatsapp No.",
-        field: "whatsapp_no",
-      },
-      {
-        headerName: "Last Education",
-        field: "last_education",
-      },
-      { headerName: "Batch", field: "select_batch", filter: true },
-      { headerName: "Package", field: "select_package", filter: true },
-      { headerName: "Assignment", field: "student_mock.length", filter: true },
-      { headerName: "Pratice Test", field: "student_pt.length", filter: true },
-      {
-        headerName: "Full Length Test",
-        field: "student_flt.length",
-        filter: true,
-      },
-      {
-        headerName: "City",
-        field: "city",
-      },
-      {
-        headerName: "State",
-        field: "state",
-      },
-      {
-        headerName: "Country",
-        field: "country",
-      },
-      {
-        headerName: "Country Interested In",
-        field: "country_interested_in",
-      },
-      {
-        headerName: "Reference By",
-        field: "reference_by",
-      },
-      {
-        headerName: "Remark",
-        field: "remark",
-      },
-      {
-        headerName: "Biography",
-        field: "biography",
-      },
-      {
-        headerName: "IETLS Taken Before",
-        field: "ielts_taken_before",
-        cellRenderer: renderItemAvailable,
-      },
-      {
-        headerName: "Duolingo Taken Before",
-        field: "duolingo_taken_before",
-        cellRenderer: renderItemAvailable,
-      },
-      {
-        headerName: "PTE Taken Before",
-        field: "pte_taken_before",
-        cellRenderer: renderItemAvailable,
-      },
-      {
-        headerName: "TOFEL Taken Before",
-        field: "toefl_taken_before",
-        cellRenderer: renderItemAvailable,
-      },
-      {
-        headerName: "GRE Taken Before",
-        field: "gre_taken_before",
-        cellRenderer: renderItemAvailable,
-      },
-      {
-        headerName: "GMAT Taken Before",
-        field: "gmat_taken_before",
-        cellRenderer: renderItemAvailable,
-      },
-      {
-        headerName: "Interested In Visa Counselling",
-        field: "interested_in_visa_counselling",
-        cellRenderer: renderItemAvailable,
-      },
-    ],
-    pagination: true,
-    paginationPageSize: 20,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-  };
-
   return (
     <>
-      {/* <TopBar /> */}
-      {/* <NavBar /> */}
       <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
@@ -291,8 +179,38 @@ const Dashboard = () => {
                         <h4>Leaderboard</h4>
                         <h6>Practice daily and lead the game!</h6>
                       </div>
-                      <div className="ag-theme-alpine">
-                        <AgGridReact {...gridOptions} />
+                      <div>
+                        <table className="student-dashboard-leaderboard-table">
+                          <thead className="student-dashboard-leaderboard-table-head">
+                            <tr>
+                              <th className="sd-leaderboard-header-cell">
+                                No.
+                              </th>
+                              <th className="sd-leaderboard-header-cell">
+                                First Name
+                              </th>
+                              <th className="sd-leaderboard-header-cell">
+                                Last Name
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {studentList?.length > 0 &&
+                              studentList?.map((elem) => (
+                                <tr key={elem?.id}>
+                                  <td className="sd-leaderboard-header-cell">
+                                    {`${elem?.no}.`}
+                                  </td>
+                                  <td className="sd-leaderboard-header-cell">
+                                    {elem?.first_name}
+                                  </td>
+                                  <td className="sd-leaderboard-header-cell">
+                                    {elem?.last_name}
+                                  </td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>

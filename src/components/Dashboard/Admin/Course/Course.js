@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import Footer from "../../../Footer/Footer";
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
 import DASideBar from "../DASideBar/DASideBar";
 import CreateCourse from "./CreateCourse";
 import ViewCourse from "./ViewCourse";
@@ -14,77 +11,73 @@ const Course = () => {
   };
 
   return (
-    <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
-                  <DASideBar />
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>Course</h4>
-                      </div>
-                      <div className="row">
-                        <div
-                          className="col-xl-12 aos-init aos-animate"
-                          data-aos="fade-up"
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="dashboardarea sp_bottom_100">
+          <div className="dashboard">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
+                <DASideBar />
+                <div className="col-xl-9 col-lg-9 col-md-12">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
+                    <div className="dashboard__section__title">
+                      <h4>Course</h4>
+                    </div>
+                    <div className="row">
+                      <div
+                        className="col-xl-12 aos-init aos-animate"
+                        data-aos="fade-up"
+                      >
+                        <ul
+                          className="nav  about__button__wrap dashboard__button__wrap"
+                          id="myTab"
+                          role="tablist"
                         >
-                          <ul
-                            className="nav  about__button__wrap dashboard__button__wrap"
-                            id="myTab"
-                            role="tablist"
-                          >
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className={`single__tab__link common-background-color-across-app ${
-                                  activeTab === "viewCourse" ? "active" : ""
-                                }`}
-                                onClick={() => handleTabChange("viewCourse")}
-                              >
-                                View Course
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className={`single__tab__link common-background-color-across-app ${
-                                  activeTab === "createCourse" ? "active" : ""
-                                }`}
-                                onClick={() => handleTabChange("createCourse")}
-                              >
-                                Create Course
-                              </button>
-                            </li>
-                          </ul>
+                          <li className="nav-item" role="presentation">
+                            <button
+                              className={`single__tab__link common-background-color-across-app ${
+                                activeTab === "viewCourse" ? "active" : ""
+                              }`}
+                              onClick={() => handleTabChange("viewCourse")}
+                            >
+                              View Course
+                            </button>
+                          </li>
+                          <li className="nav-item" role="presentation">
+                            <button
+                              className={`single__tab__link common-background-color-across-app ${
+                                activeTab === "createCourse" ? "active" : ""
+                              }`}
+                              onClick={() => handleTabChange("createCourse")}
+                            >
+                              Create Course
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        className="tab-content tab__content__wrapper aos-init aos-animate"
+                        id="myTabContent"
+                        data-aos="fade-up"
+                      >
+                        <div
+                          className={`tab-pane fade ${
+                            activeTab === "createCourse" ? "show active" : ""
+                          }`}
+                          id="projects__one"
+                        >
+                          <div className="row">
+                            <CreateCourse />
+                          </div>
                         </div>
                         <div
-                          className="tab-content tab__content__wrapper aos-init aos-animate"
-                          id="myTabContent"
-                          data-aos="fade-up"
+                          className={`tab-pane fade ${
+                            activeTab === "viewCourse" ? "show active" : ""
+                          }`}
+                          id="projects__two"
                         >
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "createCourse" ? "show active" : ""
-                            }`}
-                            id="projects__one"
-                          >
-                            <div className="row">
-                              <CreateCourse />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "viewCourse" ? "show active" : ""
-                            }`}
-                            id="projects__two"
-                          >
-                            <div className="row">
-                              <ViewCourse key={activeTab} />
-                            </div>
+                          <div className="row">
+                            <ViewCourse key={activeTab} />
                           </div>
                         </div>
                       </div>
@@ -96,8 +89,7 @@ const Course = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 

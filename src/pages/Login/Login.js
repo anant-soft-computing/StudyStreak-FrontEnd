@@ -1,18 +1,15 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ajaxCall from "../../helpers/ajaxCall";
-import { authAction } from "../../store/authStore";
-import { Link, useNavigate } from "react-router-dom";
-import { setToLocalStorage } from "../../helpers/helperFunction";
-import Register from "./Register";
-import TopBar from "../../components/TopBar/TopBar";
-import NavBar from "../../components/NavBar/NavBar";
-import Footer from "../../components/Footer/Footer";
-import { useCheckAuth } from "../../hooks/useCheckAuth";
-import { Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { GoogleLogin } from "@react-oauth/google";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
+import { Spinner } from "react-bootstrap";
+import { useCheckAuth } from "../../hooks/useCheckAuth";
+import { authAction } from "../../store/authStore";
+import { GoogleLogin } from "@react-oauth/google";
+import { setToLocalStorage } from "../../helpers/helperFunction";
+import ajaxCall from "../../helpers/ajaxCall";
+import Register from "./Register";
 
 const intialLoginData = {
   username: "",
@@ -205,183 +202,179 @@ const Login = () => {
   }
 
   return (
-    <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="loginarea sp_top_100 sp_bottom_100">
-            <div className="container">
-              <div className="row">
-                <div className="col-xl-8 col-md-8 offset-md-2">
-                  <ul className="nav tab__button__wrap text-center">
-                    <li className="nav-item">
-                      <button
-                        className={`single__tab__link ${
-                          activeTab === "login"
-                            ? "active common-background-color-across-app"
-                            : ""
-                        }`}
-                        onClick={() => setActiveTab("login")}
-                        type="button"
-                      >
-                        Login
-                      </button>
-                    </li>
-                    <li className="nav-item">
-                      <button
-                        className={`single__tab__link ${
-                          activeTab === "signup"
-                            ? "active common-background-color-across-app"
-                            : ""
-                        }`}
-                        onClick={() => setActiveTab("signup")}
-                        type="button"
-                      >
-                        Sign up
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-                <div className="tab-content tab__content__wrapper">
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "login" ? "active show" : ""
-                    }`}
-                  >
-                    <div className="col-xl-8 col-md-8 offset-md-2">
-                      <div className="loginarea__wraper">
-                        <div className="login__heading">
-                          <h5 className="login__title">Login</h5>
-                          <p className="login__description">
-                            Don't have an account yet?{" "}
-                            <Link to="/login" onClick={toggleForm}>
-                              Sign up for free
-                            </Link>
-                          </p>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="loginarea sp_top_100 sp_bottom_100">
+          <div className="container">
+            <div className="row">
+              <div className="col-xl-8 col-md-8 offset-md-2">
+                <ul className="nav tab__button__wrap text-center">
+                  <li className="nav-item">
+                    <button
+                      className={`single__tab__link ${
+                        activeTab === "login"
+                          ? "active common-background-color-across-app"
+                          : ""
+                      }`}
+                      onClick={() => setActiveTab("login")}
+                      type="button"
+                    >
+                      Login
+                    </button>
+                  </li>
+                  <li className="nav-item">
+                    <button
+                      className={`single__tab__link ${
+                        activeTab === "signup"
+                          ? "active common-background-color-across-app"
+                          : ""
+                      }`}
+                      onClick={() => setActiveTab("signup")}
+                      type="button"
+                    >
+                      Sign up
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div className="tab-content tab__content__wrapper">
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "login" ? "active show" : ""
+                  }`}
+                >
+                  <div className="col-xl-8 col-md-8 offset-md-2">
+                    <div className="loginarea__wraper">
+                      <div className="login__heading">
+                        <h5 className="login__title">Login</h5>
+                        <p className="login__description">
+                          Don't have an account yet?{" "}
+                          <Link to="/login" onClick={toggleForm}>
+                            Sign up for free
+                          </Link>
+                        </p>
+                      </div>
+                      <form method="POST" onSubmit={doLogin}>
+                        <div className="login__form">
+                          <label className="form__label">Username</label>
+                          <input
+                            className="common__login__input"
+                            type="text"
+                            placeholder="Username or Email"
+                            value={loginData.username}
+                            onChange={(e) =>
+                              dispatchLogin({
+                                type: "username",
+                                value: e.target.value,
+                              })
+                            }
+                          />
                         </div>
-                        <form method="POST" onSubmit={doLogin}>
-                          <div className="login__form">
-                            <label className="form__label">Username</label>
+                        <div className="login__form">
+                          <label className="form__label">Password</label>
+                          <div className="password-input-container">
                             <input
                               className="common__login__input"
-                              type="text"
-                              placeholder="Username or Email"
-                              value={loginData.username}
+                              type={showPassword ? "text" : "password"}
+                              name="password"
+                              placeholder="Password"
+                              value={loginData.password}
                               onChange={(e) =>
                                 dispatchLogin({
-                                  type: "username",
+                                  type: "password",
                                   value: e.target.value,
                                 })
                               }
                             />
+                            <i
+                              className={`eye-icon icofont-eye-open ${
+                                showPassword ? "visible" : "hidden"
+                              }`}
+                              onClick={() => setShowPassword(!showPassword)}
+                            ></i>
                           </div>
-                          <div className="login__form">
-                            <label className="form__label">Password</label>
-                            <div className="password-input-container">
-                              <input
-                                className="common__login__input"
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                placeholder="Password"
-                                value={loginData.password}
-                                onChange={(e) =>
-                                  dispatchLogin({
-                                    type: "password",
-                                    value: e.target.value,
-                                  })
-                                }
-                              />
-                              <i
-                                className={`eye-icon icofont-eye-open ${
-                                  showPassword ? "visible" : "hidden"
-                                }`}
-                                onClick={() => setShowPassword(!showPassword)}
-                              ></i>
-                            </div>
+                        </div>
+                        <div className="login__form d-flex justify-content-between flex-wrap gap-2">
+                          <div className="form__check">
+                            <input type="checkbox" />
+                            <label>Remember me</label>
                           </div>
-                          <div className="login__form d-flex justify-content-between flex-wrap gap-2">
-                            <div className="form__check">
-                              <input type="checkbox" />
-                              <label>Remember me</label>
-                            </div>
-                            <div className="text-end login__form__link">
-                              <Link to="/forgot-password">
-                                Forgot your password?
-                              </Link>
-                            </div>
+                          <div className="text-end login__form__link">
+                            <Link to="/forgot-password">
+                              Forgot your password?
+                            </Link>
                           </div>
-                          <div className="login__button">
-                            {formStatus.isError && (
-                              <div className="text-danger d-flex justify-content-center mb-2">
-                                {formStatus.errMsg}
-                              </div>
-                            )}
-                            <div className="d-flex justify-content-center">
-                              <button
-                                className="default__button"
-                                disabled={formStatus?.isSubmitting}
-                              >
-                                {formStatus.isSubmitting && (
-                                  <Spinner
-                                    animation="border"
-                                    role="status"
-                                    size="sm"
-                                    className="me-2"
-                                  >
-                                    <span className="visually-hidden">
-                                      Loading...
-                                    </span>
-                                  </Spinner>
-                                )}
-                                Log In
-                              </button>
+                        </div>
+                        <div className="login__button">
+                          {formStatus.isError && (
+                            <div className="text-danger d-flex justify-content-center mb-2">
+                              {formStatus.errMsg}
                             </div>
+                          )}
+                          <div className="d-flex justify-content-center">
+                            <button
+                              className="default__button"
+                              disabled={formStatus?.isSubmitting}
+                            >
+                              {formStatus.isSubmitting && (
+                                <Spinner
+                                  animation="border"
+                                  role="status"
+                                  size="sm"
+                                  className="me-2"
+                                >
+                                  <span className="visually-hidden">
+                                    Loading...
+                                  </span>
+                                </Spinner>
+                              )}
+                              Log In
+                            </button>
                           </div>
-                        </form>
-                        <div className="login__social__option">
-                          <div
-                            style={{
-                              marginTop: "20px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
+                        </div>
+                      </form>
+                      <div className="login__social__option">
+                        <div
+                          style={{
+                            marginTop: "20px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <GoogleLogin
+                            onSuccess={(credentialResponse) => {
+                              const decodedData = jwtDecode(
+                                credentialResponse.credential
+                              );
+                              console.log(decodedData);
                             }}
-                          >
-                            <GoogleLogin
-                              onSuccess={(credentialResponse) => {
-                                const decodedData = jwtDecode(
-                                  credentialResponse.credential
-                                );
-                                console.log(decodedData);
-                              }}
-                              onError={() => {
-                                console.log("Login Failed");
-                              }}
-                            />
-                          </div>
+                            onError={() => {
+                              console.log("Login Failed");
+                            }}
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "signup" ? "active show" : ""
-                    }`}
-                  >
-                    <div className="col-xl-8 offset-md-2">
-                      <div className="loginarea__wraper">
-                        <div className="login__heading">
-                          <h5 className="login__title">Sing Up</h5>
-                          <p className="login__description">
-                            Already have an account?{" "}
-                            <Link to="/login" onClick={toggleForm}>
-                              Login
-                            </Link>
-                          </p>
-                        </div>
-                        <Register />
+                </div>
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "signup" ? "active show" : ""
+                  }`}
+                >
+                  <div className="col-xl-8 offset-md-2">
+                    <div className="loginarea__wraper">
+                      <div className="login__heading">
+                        <h5 className="login__title">Sing Up</h5>
+                        <p className="login__description">
+                          Already have an account?{" "}
+                          <Link to="/login" onClick={toggleForm}>
+                            Login
+                          </Link>
+                        </p>
                       </div>
+                      <Register />
                     </div>
                   </div>
                 </div>
@@ -390,8 +383,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 

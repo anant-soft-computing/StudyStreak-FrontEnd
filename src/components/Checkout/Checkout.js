@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../Footer/Footer";
-import TopBar from "../TopBar/TopBar";
-import NavBar from "../NavBar/NavBar";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../img/logo/Logo.png";
 import ajaxCall from "../../helpers/ajaxCall";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
 
 const Checkout = () => {
   const [userDetails, setUserDetails] = useState({});
@@ -46,6 +43,7 @@ const Checkout = () => {
     }
     const data = JSON.stringify({
       package_ids: [packageId],
+      course_ids: [courseId],
     });
     try {
       const response = await ajaxCall(
@@ -248,61 +246,53 @@ const Checkout = () => {
   }, []);
 
   return (
-    <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="checkoutarea sp_bottom_100 sp_top_100">
-            <div className="container">
-              <div className="row">
-                <div className="col-xl-6 col-lg-6 col-md-12"></div>
-                <div className="col-lg-6 col-md-12 col-12">
-                  <div className="checkoutarea__payment__wraper">
-                    <div className="checkoutarea__total">
-                      <h3>Your order</h3>
-                      <div className="checkoutarea__table__wraper">
-                        <table className="checkoutarea__table">
-                          <thead>
-                            <tr className="checkoutarea__item">
-                              <td className="checkoutarea__ctg__type">
-                                Course
-                              </td>
-                              <td className="checkoutarea__cgt__des">
-                                {courseName}
-                              </td>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="checkoutarea__item prd-name">
-                              <td className="checkoutarea__ctg__type">
-                                Package
-                              </td>
-                              <td className="checkoutarea__cgt__des">
-                                {packageName}
-                              </td>
-                            </tr>
-                            <tr className="checkoutarea__item">
-                              <td className="checkoutarea__ctg__type">Total</td>
-                              <td className="checkoutarea__cgt__des">
-                                <i className="icofont-rupee"></i>
-                                {packagePrice}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="checkoutarea sp_bottom_100 sp_top_100">
+          <div className="container">
+            <div className="row">
+              <div className="col-xl-6 col-lg-6 col-md-12"></div>
+              <div className="col-lg-6 col-md-12 col-12">
+                <div className="checkoutarea__payment__wraper">
+                  <div className="checkoutarea__total">
+                    <h3>Your order</h3>
+                    <div className="checkoutarea__table__wraper">
+                      <table className="checkoutarea__table">
+                        <thead>
+                          <tr className="checkoutarea__item">
+                            <td className="checkoutarea__ctg__type">Course</td>
+                            <td className="checkoutarea__cgt__des">
+                              {courseName}
+                            </td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="checkoutarea__item prd-name">
+                            <td className="checkoutarea__ctg__type">Package</td>
+                            <td className="checkoutarea__cgt__des">
+                              {packageName}
+                            </td>
+                          </tr>
+                          <tr className="checkoutarea__item">
+                            <td className="checkoutarea__ctg__type">Total</td>
+                            <td className="checkoutarea__cgt__des">
+                              <i className="icofont-rupee"></i>
+                              {packagePrice}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                    <div className="checkoutarea__payment clearfix">
-                      <div className="checkoutarea__payment__toggle">
-                        <div className="checkoutarea__payment__input__box">
-                          <button
-                            className="default__button"
-                            onClick={handleEnrollButton}
-                          >
-                            Buy
-                          </button>
-                        </div>
+                  </div>
+                  <div className="checkoutarea__payment clearfix">
+                    <div className="checkoutarea__payment__toggle">
+                      <div className="checkoutarea__payment__input__box">
+                        <button
+                          className="default__button"
+                          onClick={handleEnrollButton}
+                        >
+                          Buy
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -312,8 +302,7 @@ const Checkout = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 

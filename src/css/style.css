@@ -274,7 +274,7 @@ li {
 
 @media (min-width: 1500px) and (max-width: 1920px) {
   .container-fluid.full__width__padding {
-    padding: 0 100px;
+    padding: 0 150px;
   }
 }
 
@@ -1560,13 +1560,13 @@ Header Area
   margin-bottom: 5px;
 }
 
-@media (min-width: 768px) and (max-width: 992px) {
+@media (min-width: 768px) and (max-width: 991px) {
   .topbararea {
     display: none;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .topbararea {
     display: none;
   }
@@ -2457,7 +2457,7 @@ Mobile Menu
   color: var(--darkdeep1);
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 991px) {
   .desktop__menu__wrapper {
     display: none;
   }
@@ -3063,7 +3063,7 @@ Mobile Menu
   color: var(--darkdeep1);
 }
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 991px) {
   .desktop__menu__wrapper {
     display: none;
   }
@@ -3397,7 +3397,7 @@ Hero Banner Area
   animation: 3s linear 0s infinite alternate none running dot-anim;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .herobannerarea__icon__2 .herobanner__common__img.herobanner__img__3 {
     left: 140px;
     display: none;

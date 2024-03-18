@@ -35,7 +35,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentDashboard/",
-      state: { batchId: batchId, },
+      state: { batchId: batchId },
     },
     {
       name: "My Profile",
@@ -379,7 +379,7 @@ const DSSidebar = () => {
 
   return (
     <>
-      <div className="col-xl-3 col-lg-3 col-md-12 getting-it-fixed">
+      <div className="col-xl-3 col-lg-3 col-md-12">
         <div className="dashboard__inner sticky-top common-background-color-across-app">
           <div className="dashboard__nav__title">
             <h6>Welcome, {userData?.username}</h6>

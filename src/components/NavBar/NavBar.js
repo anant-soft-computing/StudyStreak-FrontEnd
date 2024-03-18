@@ -17,7 +17,7 @@ const NavBar = () => {
 
   return (
     <>
-      <header>
+      <header className="common-navbar-topside-customization">
         <div className="headerarea headerarea__3 header__sticky header__area">
           <div className="container desktop__menu__wrapper">
             <div className="row">

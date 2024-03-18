@@ -1,6 +1,4 @@
 import React from "react";
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Profile from "./UpdateProfile";
 import Password from "./Password";
@@ -9,9 +7,7 @@ import Footer from "../../../Footer/Footer";
 const Settings = () => {
   return (
     <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">

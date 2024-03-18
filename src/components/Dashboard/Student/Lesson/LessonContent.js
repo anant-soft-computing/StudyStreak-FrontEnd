@@ -6,9 +6,17 @@ import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Material from "../MyCourse/Content/Material";
 import AdditionalResources from "../MyCourse/Content/AdditionalResources";
+import notebookIcon from "../../../../img/icon/notebook.webp";
+import FloatingNote from "./FloatingNote";
+import { useState } from "react";
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
+  const [isFloatingNotes, setIsFloatingNotes] = useState(false);
+
+  const handleTakeNotesClick = () => {
+    setIsFloatingNotes(!isFloatingNotes);
+  };
 
   const updateWatchedUpto = async (watchedTime) => {
     if (watchedTime < 1) return;
@@ -66,9 +74,15 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               height={"590px"}
               width={"100%"}
             />
+            <div
+              className="floating-notes-container-icon"
+              onClick={handleTakeNotesClick}
+            >
+              <img style={{ width: "40px" }} src={notebookIcon} alt="notes" />
+            </div>
           </div>
 
-          <div className="row">
+          <div className="row mt-3">
             <div className="col-xl-12 aos-init aos-animate" data-aos="fade-up">
               <ul
                 className="nav  about__button__wrap dashboard__button__wrap"
@@ -198,7 +212,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                 <Material courseId={courseId} />
                 <AdditionalResources courseId={courseId} />
               </div>
-              
             </div>
           </div>
         </div>
@@ -216,6 +229,11 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
           lessonName={activeLesson?.Lesson_Title}
         />
       )}
+      <div>
+        {isFloatingNotes && (
+          <FloatingNote setIsFloatingNotes={setIsFloatingNotes} />
+        )}
+      </div>
     </div>
   );
 };

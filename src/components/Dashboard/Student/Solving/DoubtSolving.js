@@ -3,9 +3,6 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { addDays, subDays } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
-
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -118,9 +115,7 @@ const DoubtSolving = () => {
 
   return (
     <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">

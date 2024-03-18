@@ -1,0 +1,20 @@
+.customization-of-flesh-card-modal {
+  z-index: 11000;
+  margin-top: 30px;
+}
+
+.custom-css-for-flesh-card-modal-bg {
+  background-color: #ebf2f5;
+}
+
+.flesh-card-modal-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.flesh-card-modal-container {
+  width: 90%;
+  margin: auto;
+}

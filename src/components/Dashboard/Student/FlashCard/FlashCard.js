@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
+import "../../../../css/student panel/fleshcards.css";
 import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
 import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import CardFlip from "react-card-flip";
+import FleshCardModal from "./FleshCardModal";
 
 const FlashCard = () => {
   const { state: { enrolledCourse } = {} } = useLocation();
   const [flashCardList, setFlashCardList] = useState([]);
   const [isFlipped, setIsFlipped] = useState({});
+  const [modalShow, setModalShow] = useState(false);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -40,7 +41,7 @@ const FlashCard = () => {
             acc[curr.id] = false;
             return acc;
           }, {});
-          
+
           setIsFlipped(initialFlipState);
         } else {
           console.log("error");
@@ -51,15 +52,14 @@ const FlashCard = () => {
     })();
   }, [enrolledCourse]);
 
-  const handleClick = (id) => {
-    setIsFlipped((prev) => ({ ...prev, [id]: !prev[id] }));
+  const handleCloseModal = () => {
+    setModalShow(false);
+    setCurrentCardIndex(0);
   };
 
   return (
     <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
+      <div className="body__wrapper all-component-main-container">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">
@@ -86,63 +86,51 @@ const FlashCard = () => {
                                 className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
                                 data-aos="fade-up"
                               >
-                                <CardFlip
-                                  isFlipped={isFlipped[id]}
-                                  flipDirection="horizontal"
+                                <div
+                                  className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
+                                  onClick={() => setModalShow(true)}
                                 >
-                                  <div
-                                    className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
-                                    onClick={() => handleClick(id)}
-                                  >
-                                    <div className="gridarea__content">
-                                      <div className="gridarea__heading">
-                                        <h3>{course?.Course_Title}</h3>
-                                      </div>
-                                      <div className="zoom__meeting__id">
-                                        <p>
-                                          Description :{" "}
-                                          <span
-                                            style={{
-                                              color: "#01579b",
-                                              fontWeight: "700",
-                                            }}
-                                          >
-                                            {description}
-                                          </span>
-                                        </p>
-                                      </div>
-                                      <div className="zoom__meeting__id">
-                                        <p>
-                                          Priority :{" "}
-                                          <span
-                                            style={{
-                                              color: "#01579b",
-                                              fontWeight: "700",
-                                            }}
-                                          >
-                                            {set_priority}
-                                          </span>
-                                        </p>
-                                      </div>
+                                  <div className="gridarea__content">
+                                    <div className="gridarea__heading">
+                                      <h3>{course?.Course_Title}</h3>
+                                    </div>
+                                    <div className="zoom__meeting__id">
+                                      <p>
+                                        Description :{" "}
+                                        <span
+                                          style={{
+                                            color: "#01579b",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {description}
+                                        </span>
+                                      </p>
+                                    </div>
+                                    <div className="zoom__meeting__id">
+                                      <p>
+                                        Priority :{" "}
+                                        <span
+                                          style={{
+                                            color: "#01579b",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {set_priority}
+                                        </span>
+                                      </p>
                                     </div>
                                   </div>
-                                  <div
-                                    className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
-                                    onClick={() => handleClick(id)}
-                                  >
-                                    <div>
-                                      {flash_card_items.map((item, index) => (
-                                        <ul>
-                                          <li key={index}>
-                                            <i class="icofont-check"></i>{" "}
-                                            <span>{item.content}</span>
-                                          </li>
-                                          <br />
-                                        </ul>
-                                      ))}
-                                    </div>
-                                  </div>
-                                </CardFlip>
+                                </div>
+                                <FleshCardModal
+                                  show={modalShow}
+                                  onHide={handleCloseModal}
+                                  flash_card_items={flash_card_items}
+                                  isFlipped={isFlipped}
+                                  setIsFlipped={setIsFlipped}
+                                  currentCardIndex={currentCardIndex}
+                                  setCurrentCardIndex={setCurrentCardIndex}
+                                />
                               </div>
                             )
                           )}

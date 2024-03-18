@@ -44,9 +44,7 @@ const DSNavBar = () => {
                     <img src={user?.user_image} alt="" />
                   </div>
                   <div className="dashboardarea__left__content">
-                    <h4>
-                      {user?.user?.first_name}
-                    </h4>
+                    <h4>{user?.user?.first_name}</h4>
                   </div>
                 </div>
               </div>

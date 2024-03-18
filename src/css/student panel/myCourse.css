@@ -1,10 +1,44 @@
 .attachement-parent-container-mycourse {
-    padding: 0 16px;
+  padding: 0 16px;
 }
 
 .lesson-content-container-single-myc {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.floating-notes-container-icon {
+  position: fixed;
+  top: 60%;
+  right: 0;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.floating-note {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ebf2f5;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: grab;
+  z-index: 2000;
+}
+
+.floating-note textarea {
+  width: 300px;
+  height: 150px;
+  resize: none;
+  border: none;
+  background-color: #ebf2f5;
+}
+
+.button-container-for-floating-notes {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: space-between;
+  margin-top: 16px;
 }

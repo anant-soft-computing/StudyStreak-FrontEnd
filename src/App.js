@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Main from "./pages/Home/Home";
@@ -50,6 +50,7 @@ import FlashCard from "./components/Dashboard/Admin/FlashCard/FlashCard";
 import StudentFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
 import TopBar from "./components/TopBar/TopBar";
 import NavBar from "./components/NavBar/NavBar";
+import Footer from "./components/Footer/Footer";
 
 const App = () => {
   return (
@@ -69,7 +70,6 @@ const App = () => {
           fontWeight: "600",
         }}
       />
-      {/* <Router> */}
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/login" element={<Login />} />
@@ -198,10 +198,11 @@ const App = () => {
         <Route path="/groupDoubtSolving" element={<GroupDoubtSolving />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsAndService />} />
+
         <Route path="/flashCard" element={<StudentFlashCard />} />
         <Route path="*" element={<ErrorPage />} />
       </Routes>
-      {/* </Router> */}
+      <Footer />
     </div>
   );
 };

@@ -59,7 +59,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
   return (
     <div className="lesson__content__main">
       {activeContentType === "video" && (
-        <div className="lesson-content-container-single-myc">
+        <div>
           <div className="plyr__video-embed rbtplayer">
             <ReactPlayer
               url={
@@ -81,7 +81,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               <img style={{ width: "40px" }} src={notebookIcon} alt="notes" />
             </div>
           </div>
-
           <div className="row mt-3">
             <div className="col-xl-12 aos-init aos-animate" data-aos="fade-up">
               <ul

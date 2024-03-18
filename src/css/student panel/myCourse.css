@@ -1,14 +1,3 @@
-.attachement-parent-container-mycourse {
-  padding: 0 16px;
-}
-
-.lesson-content-container-single-myc {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 24px;
-}
-
 .floating-notes-container-icon {
   position: fixed;
   top: 60%;

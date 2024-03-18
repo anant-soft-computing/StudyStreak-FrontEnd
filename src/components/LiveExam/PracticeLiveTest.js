@@ -566,8 +566,6 @@ const PracticeLiveExam = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer */}
       <div className="d-flex justify-content-between">
         <div className="lv-question-pagination">
           {uniqueIdArr?.map((item, index) => {

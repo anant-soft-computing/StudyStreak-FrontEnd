@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../../../Footer/Footer";
-import TopBar from "../../../TopBar/TopBar";
-import NavBar from "../../../NavBar/NavBar";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
@@ -155,25 +152,21 @@ const Student = () => {
   };
 
   return (
-    <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
-                  <DASideBar />
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>Student</h4>
-                      </div>
-                      <div className="row">
-                        <div className="ag-theme-alpine">
-                          <AgGridReact {...gridOptions} />
-                        </div>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="dashboardarea sp_bottom_100">
+          <div className="dashboard">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
+                <DASideBar />
+                <div className="col-xl-9 col-lg-9 col-md-12">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
+                    <div className="dashboard__section__title">
+                      <h4>Student</h4>
+                    </div>
+                    <div className="row">
+                      <div className="ag-theme-alpine">
+                        <AgGridReact {...gridOptions} />
                       </div>
                     </div>
                   </div>
@@ -183,8 +176,7 @@ const Student = () => {
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 

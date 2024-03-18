@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import "../../css/index.css";
-import TopBar from "../TopBar/TopBar";
-import NavBar from "../NavBar/NavBar";
-import Footer from "../Footer/Footer";
 import ajaxCall from "../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 import {
@@ -829,235 +826,220 @@ const DragDrop = () => {
   };
 
   return (
-    <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="theme__shadow__circle"></div>
-          <div className="theme__shadow__circle shadow__right"></div>
-          <div className="dashboard">
-            <div className="container-fluid full__width__padding">
-              <div className="d-flex">
-                <div>
-                  <div className="box-left">
-                    <div
-                      onClick={() =>
-                        handleClick("header2", "Matching Headings")
-                      }
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="theme__shadow__circle"></div>
+        <div className="theme__shadow__circle shadow__right"></div>
+        <div className="dashboard">
+          <div className="container-fluid full__width__padding">
+            <div className="d-flex">
+              <div>
+                <div className="box-left">
+                  <div
+                    onClick={() => handleClick("header2", "Matching Headings")}
+                  >
+                    Matching Headings
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleClick("header3", "Locating Information")
+                    }
+                  >
+                    Locating Information
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleClick("header4", "True False Not Given")
+                    }
+                  >
+                    True False Not Given
+                  </div>
+                  <div
+                    onClick={() => handleClick("header6", "Summary Completion")}
+                  >
+                    Summary Completion
+                  </div>
+                  <div
+                    onClick={() => handleClick("header7", "Diagram Labling")}
+                  >
+                    Diagram Labling
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleClick("header8", "Matching Sentence Endings")
+                    }
+                  >
+                    Matching Sentence Endings
+                  </div>
+                  <div
+                    onClick={() => handleClick("header9", "Matching Features")}
+                  >
+                    Matching Features
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleClick("header10", "Sentence Completion")
+                    }
+                  >
+                    Sentence Completion
+                  </div>
+                  <div
+                    onClick={() => handleClick("header11", "Short Answer Que")}
+                  >
+                    Short Answer Que
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleClick("header12", "Flow Chart Completion")
+                    }
+                  >
+                    Flow Chart Completion
+                  </div>
+                  <div
+                    onClick={() => handleClick("header13", "Note Completion")}
+                  >
+                    Note Completion
+                  </div>
+                  <div onClick={() => handleClick("header14", "Yes No")}>
+                    Yes No Not Given
+                  </div>
+                  <div
+                    onClick={() => handleClick("header15", "Table Completion")}
+                  >
+                    Table Completion
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleClick("header16", "Radio Choice Questions")
+                    }
+                  >
+                    Radio Choice Questions
+                  </div>
+                  <div
+                    className="mb-4"
+                    onClick={() =>
+                      handleClick("header17", "Checkbox Choice Questions")
+                    }
+                  >
+                    Checkbox Choice Questions
+                  </div>
+                  <div className="d-flex mt-4">
+                    <button
+                      type="button"
+                      className="btn danger reset"
+                      onClick={handleReset}
                     >
-                      Matching Headings
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header3", "Locating Information")
-                      }
-                    >
-                      Locating Information
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header4", "True False Not Given")
-                      }
-                    >
-                      True False Not Given
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header6", "Summary Completion")
-                      }
-                    >
-                      Summary Completion
-                    </div>
-                    <div
-                      onClick={() => handleClick("header7", "Diagram Labling")}
-                    >
-                      Diagram Labling
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header8", "Matching Sentence Endings")
-                      }
-                    >
-                      Matching Sentence Endings
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header9", "Matching Features")
-                      }
-                    >
-                      Matching Features
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header10", "Sentence Completion")
-                      }
-                    >
-                      Sentence Completion
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header11", "Short Answer Que")
-                      }
-                    >
-                      Short Answer Que
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header12", "Flow Chart Completion")
-                      }
-                    >
-                      Flow Chart Completion
-                    </div>
-                    <div
-                      onClick={() => handleClick("header13", "Note Completion")}
-                    >
-                      Note Completion
-                    </div>
-                    <div onClick={() => handleClick("header14", "Yes No")}>
-                      Yes No Not Given
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header15", "Table Completion")
-                      }
-                    >
-                      Table Completion
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleClick("header16", "Radio Choice Questions")
-                      }
-                    >
-                      Radio Choice Questions
-                    </div>
-                    <div
-                      className="mb-4"
-                      onClick={() =>
-                        handleClick("header17", "Checkbox Choice Questions")
-                      }
-                    >
-                      Checkbox Choice Questions
-                    </div>
-                    <div className="d-flex mt-4">
+                      Reset
+                    </button>
+                    <Link to="/live-writing-exam" target="_blank">
                       <button
                         type="button"
-                        className="btn danger reset"
-                        onClick={handleReset}
+                        className="btn save"
+                        onClick={downloadHTMLFile}
+                        disabled={selectedDivs.length === 0}
+                        style={{ display: "none" }}
                       >
-                        Reset
+                        <span>Save</span>
                       </button>
-                      <Link to="/live-writing-exam" target="_blank">
-                        <button
-                          type="button"
-                          className="btn save"
-                          onClick={downloadHTMLFile}
-                          disabled={selectedDivs.length === 0}
-                          style={{ display: "none" }}
-                        >
-                          <span>Save</span>
-                        </button>
-                      </Link>
-                    </div>
+                    </Link>
                   </div>
                 </div>
-                <div>
-                  <div className="box-right">
-                    {selectedDivs.map((header, index) => (
+              </div>
+              <div>
+                <div className="box-right">
+                  {selectedDivs.map((header, index) => (
+                    <div
+                      key={header.header}
+                      className={
+                        header.header === "header1"
+                          ? "header21Class"
+                          : "header2Class"
+                      }
+                    >
+                      <div className="d-flex justify-content-end">
+                        <button onClick={() => handleDelete(header)}>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-close"
+                          >
+                            <path d="M18 6L6 18M6 6l12 12"></path>
+                          </svg>
+                        </button>
+                      </div>
                       <div
-                        key={header.header}
-                        className={
-                          header.header === "header1"
-                            ? "header21Class"
-                            : "header2Class"
+                        contentEditable
+                        dangerouslySetInnerHTML={{
+                          __html: header.passage,
+                        }}
+                        onBlur={(event) =>
+                          handleContentChange(event, header, index)
                         }
-                      >
-                        <div className="d-flex justify-content-end">
-                          <button onClick={() => handleDelete(header)}>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="feather feather-close"
-                            >
-                              <path d="M18 6L6 18M6 6l12 12"></path>
-                            </svg>
-                          </button>
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="col-xl-4 col-lg-4 col-md-12 col-12 box-right">
+                {answer.map((answer, parentIndex) => (
+                  <div className="row" key={parentIndex}>
+                    <h5>{answer.title}</h5>
+                    {answer.answers.map((item, childIndex) => (
+                      <div className="col-xl-8 col-lg-6 col-md-6 col-12">
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>Question No. {item.question_number}</label>
+                            <input
+                              type="text"
+                              placeholder="Answer"
+                              value={answer.answer_text}
+                              onChange={(e) =>
+                                handleAnswerChange(e, parentIndex, childIndex)
+                              }
+                              style={{
+                                borderColor: item.error === "" ? "" : "red",
+                              }}
+                            />
+                            {item.error !== "" && (
+                              <label style={{ color: "red" }}>Required</label>
+                            )}
+                          </div>
                         </div>
-                        <div
-                          contentEditable
-                          dangerouslySetInnerHTML={{
-                            __html: header.passage,
-                          }}
-                          onBlur={(event) =>
-                            handleContentChange(event, header, index)
-                          }
-                        />
                       </div>
                     ))}
                   </div>
-                </div>
-                <div className="col-xl-4 col-lg-4 col-md-12 col-12 box-right">
-                  {answer.map((answer, parentIndex) => (
-                    <div className="row" key={parentIndex}>
-                      <h5>{answer.title}</h5>
-                      {answer.answers.map((item, childIndex) => (
-                        <div className="col-xl-8 col-lg-6 col-md-6 col-12">
-                          <div className="dashboard__form__wraper">
-                            <div className="dashboard__form__input">
-                              <label>Question No. {item.question_number}</label>
-                              <input
-                                type="text"
-                                placeholder="Answer"
-                                value={answer.answer_text}
-                                onChange={(e) =>
-                                  handleAnswerChange(e, parentIndex, childIndex)
-                                }
-                                style={{
-                                  borderColor: item.error === "" ? "" : "red",
-                                }}
-                              />
-                              {item.error !== "" && (
-                                <label style={{ color: "red" }}>Required</label>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                  {formStatus.isError ? (
-                    <div className="text-danger mb-2">{formStatus.errMsg}</div>
-                  ) : (
-                    <div className="text-success mb-2">{formStatus.errMsg}</div>
-                  )}
-                  {answer.length > 0 && (
-                    <button
-                      className="default__button"
-                      disabled={formStatus.isSubmitting}
-                      onClick={
-                        listeningData.exam_type === "Listening"
-                          ? doListening
-                          : doReading
-                      }
-                    >
-                      Submit
-                    </button>
-                  )}
-                </div>
+                ))}
+                {formStatus.isError ? (
+                  <div className="text-danger mb-2">{formStatus.errMsg}</div>
+                ) : (
+                  <div className="text-success mb-2">{formStatus.errMsg}</div>
+                )}
+                {answer.length > 0 && (
+                  <button
+                    className="default__button"
+                    disabled={formStatus.isSubmitting}
+                    onClick={
+                      listeningData.exam_type === "Listening"
+                        ? doListening
+                        : doReading
+                    }
+                  >
+                    Submit
+                  </button>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 

@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { addDays, subDays } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import Footer from "../../../Footer/Footer";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SpeakingPracticeList from "./SpeakingPracticeList";
 import SmallModal from "../../../UI/Modal";
@@ -115,7 +114,7 @@ const SpeakingPractice = () => {
 
   return (
     <>
-      <div className="body__wrapper all-component-main-container">
+      <div className="body__wrapper">
         <div className="main_wrapper overflow-hidden">
           <div className="dashboardarea sp_bottom_100">
             <div className="dashboard">
@@ -169,7 +168,6 @@ const SpeakingPractice = () => {
           </div>
         </div>
       </div>
-      <Footer />
       <SmallModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}

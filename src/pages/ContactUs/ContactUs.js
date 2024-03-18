@@ -1,9 +1,7 @@
 import React, { useReducer, useRef, useState } from "react";
-import emailjs from "emailjs-com";
-import TopBar from "../../components/TopBar/TopBar";
-import NavBar from "../../components/NavBar/NavBar";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import emailjs from "emailjs-com";
 
 const initialContactData = {
   name: "",
@@ -111,86 +109,82 @@ const ContactUs = () => {
   };
 
   return (
-    <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div>
-            <div className="theme__shadow__circle"></div>
-            <div className="theme__shadow__circle shadow__right"></div>
-          </div>
-          <div className="blogarea__2 sp_top_100 sp_bottom_100">
-            <div className="container">
-              <div className="d-flex justify-content-center">
-                <div className="col-xl-8 col-lg-8">
-                  <div className="blog__details__content__wraper">
-                    <div className="blog__details__form">
-                      <div className="blog__details__input__heading">
-                        <h5>Send Us a Message</h5>
-                      </div>
-                      <form id="contact-form" ref={form} onSubmit={sendEmail}>
-                        <div className="row">
-                          <div className="col-xl-6">
-                            <div className="blog__details__input">
-                              <input
-                                type="text"
-                                placeholder="Your Name*"
-                                name="name"
-                                value={contactData.name}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-6">
-                            <div className="blog__details__input">
-                              <input
-                                type="email"
-                                placeholder="Email Address*"
-                                name="email"
-                                value={contactData.email}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-6">
-                            <div className="blog__details__input">
-                              <input
-                                type="tel"
-                                placeholder="Phone Number*"
-                                name="phone"
-                                value={contactData.phone}
-                                onChange={handleInputChange}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-12">
-                            <div className="blog__details__input">
-                              <textarea
-                                cols="30"
-                                rows="10"
-                                placeholder="Your message*"
-                                name="message"
-                                value={contactData.message}
-                                onChange={handleInputChange}
-                              ></textarea>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="blog__details__button">
-                          {formStatus.isError ? (
-                            <div className="text-danger mb-2">
-                              {formStatus.errMsg}
-                            </div>
-                          ) : (
-                            <div className="text-success mb-2">
-                              {formStatus.errMsg}
-                            </div>
-                          )}
-                          <button className="default__button">Send</button>
-                        </div>
-                      </form>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div>
+          <div className="theme__shadow__circle"></div>
+          <div className="theme__shadow__circle shadow__right"></div>
+        </div>
+        <div className="blogarea__2 sp_top_100 sp_bottom_100">
+          <div className="container">
+            <div className="d-flex justify-content-center">
+              <div className="col-xl-8 col-lg-8">
+                <div className="blog__details__content__wraper">
+                  <div className="blog__details__form">
+                    <div className="blog__details__input__heading">
+                      <h5>Send Us a Message</h5>
                     </div>
+                    <form id="contact-form" ref={form} onSubmit={sendEmail}>
+                      <div className="row">
+                        <div className="col-xl-6">
+                          <div className="blog__details__input">
+                            <input
+                              type="text"
+                              placeholder="Your Name*"
+                              name="name"
+                              value={contactData.name}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-xl-6">
+                          <div className="blog__details__input">
+                            <input
+                              type="email"
+                              placeholder="Email Address*"
+                              name="email"
+                              value={contactData.email}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-xl-6">
+                          <div className="blog__details__input">
+                            <input
+                              type="tel"
+                              placeholder="Phone Number*"
+                              name="phone"
+                              value={contactData.phone}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-xl-12">
+                          <div className="blog__details__input">
+                            <textarea
+                              cols="30"
+                              rows="10"
+                              placeholder="Your message*"
+                              name="message"
+                              value={contactData.message}
+                              onChange={handleInputChange}
+                            ></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="blog__details__button">
+                        {formStatus.isError ? (
+                          <div className="text-danger mb-2">
+                            {formStatus.errMsg}
+                          </div>
+                        ) : (
+                          <div className="text-success mb-2">
+                            {formStatus.errMsg}
+                          </div>
+                        )}
+                        <button className="default__button">Send</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -198,7 +192,7 @@ const ContactUs = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

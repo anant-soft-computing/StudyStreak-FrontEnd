@@ -2,9 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import CourseListItem from "./CourseListItem";
-import TopBar from "../../components/TopBar/TopBar";
-import NavBar from "../../components/NavBar/NavBar";
-import Footer from "../../components/Footer/Footer";
 import Loading from "../../components/UI/Loading";
 
 const Courses = () => {
@@ -97,75 +94,48 @@ const Courses = () => {
   }, []);
 
   return (
-    <>
-      <TopBar />
-      <NavBar />
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="theme__shadow__circle"></div>
-          <div className="theme__shadow__circle shadow__right"></div>
-          <div className="coursearea sp_top_100 sp_bottom_100">
-            <div className="container">
-              <div className="row">
-                <div className="col-xl-3 col-lg-3 col-md-4 col-12">
-                  <div className="course__sidebar__wraper" data-aos="fade-up">
-                    <div className="course__heading">
-                      <h5>Search</h5>
-                    </div>
-                    <div className="course__input">
-                      <input
-                        type="text"
-                        placeholder="Search course here..."
-                        value={search}
-                        onChange={(e) => handleSearch(e.target.value)}
-                      />
-                      <div className="search__button">
-                        <button>
-                          <i className="icofont-search-1"></i>
-                        </button>
-                      </div>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="theme__shadow__circle"></div>
+        <div className="theme__shadow__circle shadow__right"></div>
+        <div className="coursearea sp_top_100 sp_bottom_100">
+          <div className="container">
+            <div className="row">
+              <div className="col-xl-3 col-lg-3 col-md-4 col-12">
+                <div className="course__sidebar__wraper" data-aos="fade-up">
+                  <div className="course__heading">
+                    <h5>Search</h5>
+                  </div>
+                  <div className="course__input">
+                    <input
+                      type="text"
+                      placeholder="Search course here..."
+                      value={search}
+                      onChange={(e) => handleSearch(e.target.value)}
+                    />
+                    <div className="search__button">
+                      <button>
+                        <i className="icofont-search-1"></i>
+                      </button>
                     </div>
                   </div>
-                  <div className="course__sidebar__wraper" data-aos="fade-up">
-                    <div className="categori__wraper">
-                      <div className="course__heading">
-                        <h5>Categories</h5>
-                      </div>
-                      <div className="course__tag__list">
-                        <ul>
-                          {category.map(({ id, name, selected }) => (
-                            <li key={id}>
-                              <label className="d-flex gap-2">
-                                <input
-                                  type="checkbox"
-                                  checked={selected}
-                                  onChange={() =>
-                                    handleCategory({ name, selected })
-                                  }
-                                />
-                                <span className={selected ? "active" : ""}>
-                                  {name}
-                                </span>
-                              </label>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="course__sidebar__wraper" data-aos="fade-up">
+                </div>
+                <div className="course__sidebar__wraper" data-aos="fade-up">
+                  <div className="categori__wraper">
                     <div className="course__heading">
-                      <h5>Skill Level</h5>
+                      <h5>Categories</h5>
                     </div>
                     <div className="course__tag__list">
                       <ul>
-                        {level.map(({ id, name, selected }) => (
+                        {category.map(({ id, name, selected }) => (
                           <li key={id}>
                             <label className="d-flex gap-2">
                               <input
                                 type="checkbox"
                                 checked={selected}
-                                onChange={() => handleLevel({ name, selected })}
+                                onChange={() =>
+                                  handleCategory({ name, selected })
+                                }
                               />
                               <span className={selected ? "active" : ""}>
                                 {name}
@@ -177,53 +147,75 @@ const Courses = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-9 col-lg-9 col-md-8 col-12">
-                  <div className="tab-content tab__content__wrapper with__sidebar__content">
-                    <div>
-                      {isLoading ? (
-                        <Loading />
-                      ) : (
-                        <CourseListItem
-                          search={search}
-                          selectedCategory={selectedCategory}
-                          selectedLevel={selectedLevel}
-                        />
-                      )}
-                    </div>
+                <div className="course__sidebar__wraper" data-aos="fade-up">
+                  <div className="course__heading">
+                    <h5>Skill Level</h5>
                   </div>
-                  <div className="main__pagination__wrapper" data-aos="fade-up">
-                    <ul className="main__page__pagination">
-                      <li>
-                        <Link className="disable" to=" ">
-                          <i className="icofont-double-left"></i>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="active" to="">
-                          1
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="">2</Link>
-                      </li>
-                      <li>
-                        <Link to="">3</Link>
-                      </li>
-                      <li>
-                        <Link to="">
-                          <i className="icofont-double-right"></i>
-                        </Link>
-                      </li>
+                  <div className="course__tag__list">
+                    <ul>
+                      {level.map(({ id, name, selected }) => (
+                        <li key={id}>
+                          <label className="d-flex gap-2">
+                            <input
+                              type="checkbox"
+                              checked={selected}
+                              onChange={() => handleLevel({ name, selected })}
+                            />
+                            <span className={selected ? "active" : ""}>
+                              {name}
+                            </span>
+                          </label>
+                        </li>
+                      ))}
                     </ul>
                   </div>
+                </div>
+              </div>
+              <div className="col-xl-9 col-lg-9 col-md-8 col-12">
+                <div className="tab-content tab__content__wrapper with__sidebar__content">
+                  <div>
+                    {isLoading ? (
+                      <Loading />
+                    ) : (
+                      <CourseListItem
+                        search={search}
+                        selectedCategory={selectedCategory}
+                        selectedLevel={selectedLevel}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="main__pagination__wrapper" data-aos="fade-up">
+                  <ul className="main__page__pagination">
+                    <li>
+                      <Link className="disable" to=" ">
+                        <i className="icofont-double-left"></i>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link className="active" to="">
+                        1
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="">2</Link>
+                    </li>
+                    <li>
+                      <Link to="">3</Link>
+                    </li>
+                    <li>
+                      <Link to="">
+                        <i className="icofont-double-right"></i>
+                      </Link>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 export default Courses;

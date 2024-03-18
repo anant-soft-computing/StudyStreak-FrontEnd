@@ -2,10 +2,10 @@ import React from "react";
 
 const Attachment = ({ activeLesson }) => {
   return (
-    <div className="attachement-parent-container-mycourse">
+    <div>
       {activeLesson && activeLesson.length > 0 && (
         <>
-          <div className="row" >
+          <div className="row">
             <div className="col-xl-12">
               <div className="dashboard__table table-responsive">
                 <table>

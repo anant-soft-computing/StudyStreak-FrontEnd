@@ -49,7 +49,7 @@ const FullLengthTest = () => {
   };
 
   const renderTestCards = (
-    <div className="row ">
+    <div className="row">
       {fullLengthTestData?.map(({ id, name }, index) => (
         <div
           className="col-lg-4 col-md-6 col-12"

@@ -3124,6 +3124,7 @@ Hero Banner Area
 
 .herobannerarea.herobannerarea__2 {
   background: var(--lightGrey11);
+  margin-top: 112px;
 }
 
 @media (min-width: 992px) and (max-width: 1365px) {
@@ -3135,6 +3136,7 @@ Hero Banner Area
 
 @media (min-width: 768px) and (max-width: 991px) {
   .herobannerarea.herobannerarea__2 {
+    margin-top: 0px;
     padding-top: 100px;
     padding-bottom: 100px;
   }
@@ -3142,6 +3144,7 @@ Hero Banner Area
 
 @media (max-width: 767px) {
   .herobannerarea.herobannerarea__2 {
+    margin-top: 0px;
     padding-top: 50px;
     padding-bottom: 50px;
   }

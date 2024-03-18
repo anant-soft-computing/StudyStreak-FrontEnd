@@ -140,24 +140,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                     Quiz
                   </button>
                 </li>
-
-                <li className="nav-item" role="presentation">
-                  <button
-                    style={{
-                      backgroundColor: "#e1f5fe",
-                      color: "#01579b",
-                    }}
-                    className="single__tab__link"
-                    data-bs-toggle="tab"
-                    data-bs-target="#projects__four"
-                    type="button"
-                    aria-selected="false"
-                    role="tab"
-                    tabIndex="-1"
-                  >
-                    Downloads
-                  </button>
-                </li>
               </ul>
             </div>
             <div
@@ -180,7 +162,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                   />
                 </div>
               </div>
-
               <div
                 className="tab-pane fade"
                 id="projects__two"
@@ -192,7 +173,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                   lessonName={activeLesson?.Lesson_Title}
                 />
               </div>
-
               <div
                 className="tab-pane fade"
                 id="projects__three"
@@ -201,7 +181,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               >
                 <Quiz activeLesson={activeLesson?.quiz_question_options} />
               </div>
-
               <div
                 className="tab-pane fade"
                 id="projects__four"

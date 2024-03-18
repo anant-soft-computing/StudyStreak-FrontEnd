@@ -37,8 +37,8 @@ const Writing = ({ writingData, givenTest }) => {
                     Difficulty Level : <span>{difficulty_level}</span>
                   </p>
                 </div>
-                </div>
-                <div>
+              </div>
+              <div>
                 <div className="d-flex justify-content-center mb-3">
                   <button
                     className="default__button"

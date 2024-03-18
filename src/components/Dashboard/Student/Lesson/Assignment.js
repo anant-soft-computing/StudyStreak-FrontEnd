@@ -9,7 +9,7 @@ const Assignment = ({ activeLesson }) => {
     <div>
       {activeLesson && activeLesson.length > 0 && (
         <>
-          <div className="row global-card-container-bgclr-customize">
+          <div className="row">
             {activeLesson.map((exam, index) => (
               <div
                 className="col-lg-4 col-md-6 col-12"

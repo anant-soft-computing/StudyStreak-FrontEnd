@@ -8,7 +8,7 @@ const initialFlashCardData = {
   title: "",
   description: "",
   set_priority: "",
-  flash_card_items: [{ content: "" }],
+  flash_card_items: [{ front: "", back: "" }],
 };
 
 const initialSubmit = {
@@ -76,7 +76,7 @@ const CreateFlashCard = () => {
   const addContent = () => {
     dispatchFlashCardData({
       type: "flash_card_items",
-      value: [...flashCardData.flash_card_items, { content: "" }],
+      value: [...flashCardData.flash_card_items, { front: "", back: "" }],
     });
   };
 
@@ -197,62 +197,93 @@ const CreateFlashCard = () => {
             </div>
           </div>
           {flashCardData.flash_card_items.map((item, index) => (
-            <div className="col-xl-6" key={index}>
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label htmlFor="#">Content</label>
-                  <div className="d-flex align-items-center">
-                    <textarea
-                      cols="30"
-                      rows="5"
-                      type="text"
-                      className="form-control"
-                      placeholder="Flash Card Content"
-                      value={item.content}
-                      onChange={(e) => {
-                        const updatedItems = [
-                          ...flashCardData.flash_card_items,
-                        ];
-                        updatedItems[index].content = e.target.value;
-                        dispatchFlashCardData({
-                          type: "flash_card_items",
-                          value: updatedItems,
-                        });
-                      }}
-                    />
-                    {flashCardData.flash_card_items.length > 1 && (
-                      <button
-                        className="dashboard__small__btn__2"
-                        style={{ marginLeft: "10px" }}
-                        onClick={() => removeContent(index)}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="feather feather-trash-2"
-                        >
-                          <polyline points="3 6 5 6 21 6"></polyline>
-                          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                          <line x1="10" y1="11" x2="10" y2="17"></line>
-                          <line x1="14" y1="11" x2="14" y2="17"></line>
-                        </svg>
-                      </button>
-                    )}
+            <>
+              <div className="col-xl-6" key={index}>
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label htmlFor={`front-${index}`}>Front</label>
+                    <div className="d-flex align-items-center">
+                      <textarea
+                        id={`front-${index}`}
+                        cols="30"
+                        rows="5"
+                        type="text"
+                        className="form-control"
+                        placeholder="Front of Flash Card"
+                        value={item.front}
+                        onChange={(e) => {
+                          const updatedItems = [
+                            ...flashCardData.flash_card_items,
+                          ];
+                          updatedItems[index].front = e.target.value;
+                          dispatchFlashCardData({
+                            type: "flash_card_items",
+                            value: updatedItems,
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+              <div className="col-xl-6" key={index}>
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label htmlFor={`back-${index}`}>Back</label>
+                    <div className="d-flex align-items-center">
+                      <textarea
+                        id={`back-${index}`}
+                        cols="30"
+                        rows="5"
+                        type="text"
+                        className="form-control"
+                        placeholder="Back of Flash Card"
+                        value={item.back}
+                        onChange={(e) => {
+                          const updatedItems = [
+                            ...flashCardData.flash_card_items,
+                          ];
+                          updatedItems[index].back = e.target.value;
+                          dispatchFlashCardData({
+                            type: "flash_card_items",
+                            value: updatedItems,
+                          });
+                        }}
+                      />
+                      {flashCardData.flash_card_items.length > 1 && (
+                        <button
+                          className="dashboard__small__btn__2"
+                          style={{ marginLeft: "10px" }}
+                          onClick={() => removeContent(index)}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-trash-2"
+                          >
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            <line x1="10" y1="11" x2="10" y2="17"></line>
+                            <line x1="14" y1="11" x2="14" y2="17"></line>
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
           ))}
           <div className="col-xl-12">
             <button className="dashboard__small__btn__2" onClick={addContent}>
-              + content
+              + Front & Back
             </button>
           </div>
           <div className="col-xl-12">

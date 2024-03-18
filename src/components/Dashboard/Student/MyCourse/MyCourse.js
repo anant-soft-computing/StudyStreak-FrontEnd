@@ -35,7 +35,7 @@ const MyCourse = () => {
                     <div className="dashboard__section__title">
                       <h4>Courses</h4>
                     </div>
-                    <div className="row global-card-container-bgclr-customize">
+                    <div className="row">
                       {enrolledCourse &&
                         enrolledCourse?.map((course) => (
                           <div

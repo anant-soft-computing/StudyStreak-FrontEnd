@@ -8,7 +8,7 @@ import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
 
 const LiveClass = () => {
-  const { solvingClassBook } = useLocation()?.state;
+  const { solvingClassBook } = useLocation()?.state || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
@@ -66,8 +66,8 @@ const LiveClass = () => {
                           ></i>
                         </h6>
                       </div>
-                      {solvingClassBook[0]?.length > 0 ? (
-                        <div className="row global-card-container-bgclr-customize">
+                      {solvingClassBook?.[0]?.length > 0 ? (
+                        <div className="row">
                           {liveClasses()[0].map((item) => (
                             <LiveClassList
                               key={item.id}

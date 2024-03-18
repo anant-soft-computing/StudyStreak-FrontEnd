@@ -129,7 +129,6 @@ const App = () => {
           path="/admin-profile"
           element={<ProtectedRoute element={AdminProfile} />}
         />
-
         <Route path="/contactUs" element={<ContactUs />} />
         <Route
           path="/exam-create"

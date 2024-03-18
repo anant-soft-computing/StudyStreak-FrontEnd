@@ -17,7 +17,7 @@ const DoubtSolvingList = ({
   }
 
   return (
-    <div className="row global-card-container-bgclr-customize">
+    <div className="row">
       {doubtSolvingClasses.map(
         ({
           id,

@@ -13,7 +13,7 @@ const ReadingTest = ({ readingData }) => {
 
   return (
     <>
-      <div className="row global-card-container-bgclr-customize">
+      <div className="row">
         {readingData.map((data, index) => (
           <div className="col-lg-4 col-md-6 col-12" key={index}>
             <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">

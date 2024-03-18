@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import CardFlip from "react-card-flip";
 import Modal from "react-bootstrap/Modal";
 
-const FleshCardModal = ({
+const FlashCardModal = ({
   show,
   onHide,
   flash_card_items,
@@ -42,7 +42,7 @@ const FleshCardModal = ({
         className="custom-css-for-flesh-card-modal-bg"
       />
       <Modal.Body className="custom-css-for-flesh-card-modal-bg">
-        <div className="row global-card-container-bgclr-customize">
+        <div className="row">
           <div className="flesh-card-modal-container" data-aos="fade-up">
             <CardFlip
               isFlipped={isFlipped[currentCardIndex]}
@@ -90,4 +90,4 @@ const FleshCardModal = ({
   );
 };
 
-export default FleshCardModal;
+export default FlashCardModal;

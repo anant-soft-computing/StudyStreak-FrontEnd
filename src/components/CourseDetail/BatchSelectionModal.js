@@ -15,6 +15,7 @@ const BatchSelection = (props) => {
     show,
     onHide,
     courseId,
+    courseType,
     courseName,
     packageName,
     packagePrice,
@@ -63,6 +64,7 @@ const BatchSelection = (props) => {
         courseName,
         packageName,
         packagePrice,
+        courseType,
       },
     });
   };

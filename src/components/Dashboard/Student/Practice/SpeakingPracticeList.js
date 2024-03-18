@@ -15,7 +15,7 @@ const SpeakingPracticeList = ({
   }
 
   return (
-    <div className="row global-card-container-bgclr-customize">
+    <div className="row">
       {speakingClasses.map(
         ({
           id,

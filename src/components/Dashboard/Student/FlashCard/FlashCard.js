@@ -3,7 +3,7 @@ import "../../../../css/student panel/fleshcards.css";
 import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import FleshCardModal from "./FleshCardModal";
+import FlashCardModal from "./FlashCardModal";
 
 const FlashCard = () => {
   const { state: { enrolledCourse } = {} } = useLocation();
@@ -69,7 +69,7 @@ const FlashCard = () => {
                     <div className="dashboard__section__title">
                       <h4>Flash Cards</h4>
                     </div>
-                    <div className="row global-card-container-bgclr-customize">
+                    <div className="row">
                       {flashCardList &&
                         flashCardList.map(
                           ({
@@ -120,7 +120,7 @@ const FlashCard = () => {
                                   </div>
                                 </div>
                               </div>
-                              <FleshCardModal
+                              <FlashCardModal
                                 show={modalShow}
                                 onHide={handleCloseModal}
                                 flash_card_items={flash_card_items}

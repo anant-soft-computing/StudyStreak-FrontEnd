@@ -164,6 +164,7 @@ const PackageDetails = (props) => {
           courseName={courseName}
           packageName={packageName}
           packagePrice={packagePrice}
+          courseType={courseType}
         />
       </div>
     </>

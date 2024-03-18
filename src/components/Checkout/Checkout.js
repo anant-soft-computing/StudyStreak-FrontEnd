@@ -43,7 +43,7 @@ const Checkout = () => {
     }
     const data = JSON.stringify({
       package_ids: [packageId],
-      course_ids: [courseId],
+      course_ids: [parseInt(courseId)],
     });
     try {
       const response = await ajaxCall(

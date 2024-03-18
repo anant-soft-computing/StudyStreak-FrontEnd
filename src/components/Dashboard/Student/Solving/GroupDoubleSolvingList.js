@@ -15,7 +15,7 @@ const GroupDoubleSolvingList = ({
   }
 
   return (
-    <div className="row global-card-container-bgclr-customize">
+    <div className="row">
       {groupDoubtSolvingClasses.map(
         ({
           id,

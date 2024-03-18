@@ -51,6 +51,7 @@ import StudentFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard
 import TopBar from "./components/TopBar/TopBar";
 import NavBar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
+import RegularClass from "./components/Dashboard/Student/RegularClass/RegularClass";
 
 const App = () => {
   return (
@@ -68,6 +69,7 @@ const App = () => {
           fontSize: "14px",
           width: "auto",
           fontWeight: "600",
+          zIndex: 10000,
         }}
       />
       <Routes>
@@ -185,6 +187,10 @@ const App = () => {
         <Route
           path="/studentLiveClasses"
           element={<ProtectedRoute element={StudentLiveClass} />}
+        />
+        <Route
+          path="/regularClasses"
+          element={<ProtectedRoute element={RegularClass} />}
         />
         <Route path="/studentProfile" element={<StudentProfile />} />
         <Route path="/studentSettings" element={<StudentSettings />} />

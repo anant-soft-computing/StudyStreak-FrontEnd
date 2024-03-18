@@ -169,6 +169,8 @@ const GroupDoubtSolving = () => {
         </div>
       </div>
       <SmallModal
+        size="lg"
+        centered
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Group Doubt Solving class schedule"

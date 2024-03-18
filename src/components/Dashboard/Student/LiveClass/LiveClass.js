@@ -68,7 +68,7 @@ const LiveClass = () => {
                       </div>
                       {solvingClassBook?.[0]?.length > 0 ? (
                         <div className="row">
-                          {liveClasses()[0].map((item) => (
+                          {liveClasses()[0]?.map((item) => (
                             <LiveClassList
                               key={item.id}
                               joinNow={joinNow}
@@ -91,9 +91,11 @@ const LiveClass = () => {
         </div>
       </div>
       <SmallModal
+        size="lg"
+        centered
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
         title="Live Class schedule"
+        onClose={() => setIsModalOpen(false)}
       >
         <DateRange
           selectedRange={selectedDateRange}

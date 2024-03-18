@@ -169,6 +169,8 @@ const DoubtSolving = () => {
         </div>
       </div>
       <SmallModal
+        size="lg"
+        centered
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="One To One Solving class schedule"

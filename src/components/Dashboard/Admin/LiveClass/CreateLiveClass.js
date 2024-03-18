@@ -10,7 +10,6 @@ const initialLiveClassData = {
   meeting_description: "",
   start_time: "",
   end_time: "",
-  zoom_meeting_id: "",
   zoom_meeting_password: "",
   registration_limit: 0,
 };
@@ -194,42 +193,6 @@ const CreateLiveClass = () => {
                     });
                   }}
                   min={new Date().toISOString().slice(0, 16)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Meeting ID</label>
-                <input
-                  type="text"
-                  placeholder="Meeting ID"
-                  value={createLiveClassData?.zoom_meeting_id}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "zoom_meeting_id",
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Meeting Password</label>
-                <input
-                  type="text"
-                  placeholder="Meeting Password"
-                  value={createLiveClassData?.zoom_meeting_password}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "zoom_meeting_password",
-                      value: e.target.value,
-                    });
-                  }}
                 />
               </div>
             </div>

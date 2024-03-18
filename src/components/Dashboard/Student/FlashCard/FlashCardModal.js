@@ -1,6 +1,6 @@
 import React from "react";
 import CardFlip from "react-card-flip";
-import Modal from "react-bootstrap/Modal";
+import SmallModal from "../../../UI/Modal";
 
 const FlashCardModal = ({
   show,
@@ -29,46 +29,12 @@ const FlashCardModal = ({
   };
 
   return (
-    <Modal
-      show={show}
-      onHide={onHide}
+    <SmallModal
       size="md"
-      aria-labelledby="contained-modal-title-vcenter"
       centered
-      className="customization-of-flesh-card-modal"
-    >
-      <Modal.Header
-        closeButton
-        className="custom-css-for-flesh-card-modal-bg"
-      />
-      <Modal.Body className="custom-css-for-flesh-card-modal-bg">
-        <div className="row">
-          <div className="flesh-card-modal-container" data-aos="fade-up">
-            <CardFlip
-              isFlipped={isFlipped[currentCardIndex]}
-              flipDirection="horizontal"
-            >
-              <div
-                className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
-                onClick={() => handleClick(currentCardIndex)}
-              >
-                <div>
-                  <h3>{flash_card_items[currentCardIndex]?.front}</h3>
-                </div>
-              </div>
-              <div
-                className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
-                onClick={() => handleClick(currentCardIndex)}
-              >
-                <div>
-                  <h3>{flash_card_items[currentCardIndex]?.back}</h3>
-                </div>
-              </div>
-            </CardFlip>
-          </div>
-        </div>
-      </Modal.Body>
-      <Modal.Footer className="custom-css-for-flesh-card-modal-bg">
+      isOpen={show}
+      onClose={onHide}
+      footer={
         <div className="flesh-card-modal-footer">
           <button
             disabled={currentCardIndex === 0}
@@ -85,8 +51,34 @@ const FlashCardModal = ({
             Next
           </button>
         </div>
-      </Modal.Footer>
-    </Modal>
+      }
+    >
+      <div className="row">
+        <div className="flesh-card-modal-container" data-aos="fade-up">
+          <CardFlip
+            isFlipped={isFlipped[currentCardIndex]}
+            flipDirection="horizontal"
+          >
+            <div
+              className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
+              onClick={() => handleClick(currentCardIndex)}
+            >
+              <div>
+                <h3>{flash_card_items[currentCardIndex]?.front}</h3>
+              </div>
+            </div>
+            <div
+              className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
+              onClick={() => handleClick(currentCardIndex)}
+            >
+              <div>
+                <h3>{flash_card_items[currentCardIndex]?.back}</h3>
+              </div>
+            </div>
+          </CardFlip>
+        </div>
+      </div>
+    </SmallModal>
   );
 };
 

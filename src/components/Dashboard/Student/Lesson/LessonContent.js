@@ -1,22 +1,16 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
 import Quiz from "./Quiz";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import Material from "../MyCourse/Content/Material";
-import AdditionalResources from "../MyCourse/Content/AdditionalResources";
 import notebookIcon from "../../../../img/icon/notebook.webp";
 import FloatingNote from "./FloatingNote";
-import { useState } from "react";
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
-
-  const handleTakeNotesClick = () => {
-    setIsFloatingNotes(!isFloatingNotes);
-  };
 
   const updateWatchedUpto = async (watchedTime) => {
     if (watchedTime < 1) return;
@@ -76,7 +70,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
             />
             <div
               className="floating-notes-container-icon"
-              onClick={handleTakeNotesClick}
+              onClick={() => setIsFloatingNotes(!isFloatingNotes)}
             >
               <img style={{ width: "40px" }} src={notebookIcon} alt="notes" />
             </div>
@@ -181,15 +175,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               >
                 <Quiz activeLesson={activeLesson?.quiz_question_options} />
               </div>
-              <div
-                className="tab-pane fade"
-                id="projects__four"
-                role="tabpanel"
-                aria-labelledby="projects__four"
-              >
-                <Material courseId={courseId} />
-                <AdditionalResources courseId={courseId} />
-              </div>
             </div>
           </div>
         </div>
@@ -209,7 +194,10 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
       )}
       <div>
         {isFloatingNotes && (
-          <FloatingNote setIsFloatingNotes={setIsFloatingNotes} />
+          <FloatingNote
+            setIsFloatingNotes={setIsFloatingNotes}
+            lessonId={activeLesson?.id}
+          />
         )}
       </div>
     </div>

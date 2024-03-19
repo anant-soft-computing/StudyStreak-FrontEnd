@@ -163,7 +163,7 @@ const DSSidebar = () => {
           width="16"
           height="16"
           fill="currentColor"
-          class="bi bi-cast"
+          className="bi bi-cast"
           viewBox="0 0 16 16"
         >
           <path d="m7.646 9.354-3.792 3.792a.5.5 0 0 0 .353.854h7.586a.5.5 0 0 0 .354-.854L8.354 9.354a.5.5 0 0 0-.708 0" />

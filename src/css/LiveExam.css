@@ -5,7 +5,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-top: 1px solid #01579b;
   border-bottom: 1px solid #01579b;
+  margin-top: 113px;
 }
 
 .lv-navbar-title {

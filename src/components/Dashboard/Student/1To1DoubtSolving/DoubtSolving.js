@@ -5,14 +5,15 @@ import { addDays, subDays } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import SpeakingPracticeList from "./SpeakingPracticeList";
+import DoubtSolvingList from "./DoubtSolvingList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
+import UpcommingDoubtSolving from "./UpcommingDoubtSolving";
 
-const SpeakingPractice = () => {
+const DoubtSolving = () => {
   const navigate = useNavigate();
   const { studentId, solvingClassBook, count, batchId } = useLocation()?.state;
-  const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
+  const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
@@ -21,7 +22,7 @@ const SpeakingPractice = () => {
       key: "selection",
     },
   ]);
-  const { speaking_practice_count } = count;
+  const { one_to_one_doubt_solving_count } = count;
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -73,10 +74,10 @@ const SpeakingPractice = () => {
           8000
         );
         if (response?.status === 200) {
-          const speakingData = response?.data?.filter(
-            (item) => item?.liveclasstype?.name === "Speaking-Practice"
+          const doubtData = response?.data?.filter(
+            (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
           );
-          setSpeakingSolvingClass(speakingData);
+          setDoubtSolvingClass(doubtData);
         } else {
           console.log("error");
         }
@@ -101,8 +102,8 @@ const SpeakingPractice = () => {
     return difference >= 0 && difference <= 5 * 60 * 1000;
   };
 
-  const speakingClasses = () => {
-    return speakingSolvingClass.filter(({ start_time }) => {
+  const doubtSolvingClasses = () => {
+    return doubtSolvingClass.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (
@@ -124,9 +125,9 @@ const SpeakingPractice = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
-                        <h4>Speaking Practice</h4>
+                        <h4>One To One Doubt Solving</h4>
                         <h6>
-                          Your Speaking Practice Class Schedule{" "}
+                          Your One To One Doubt Solving Class Schedule{" "}
                           <i
                             className="icofont-calendar"
                             style={{ cursor: "pointer", color: "#01579b" }}
@@ -134,12 +135,12 @@ const SpeakingPractice = () => {
                           ></i>
                         </h6>
                       </div>
-                      {speaking_practice_count === "" ? (
+                      {one_to_one_doubt_solving_count === "" ? (
                         <>
                           <div className="d-flex justify-content-center">
                             <h5>
-                              No Speaking Practice Class Available , Please Buy
-                              a Course
+                              No One To One Doubt Solving Class Available ,
+                              Please Buy a Course
                             </h5>
                           </div>
                           <div className="d-flex justify-content-center mt-4">
@@ -152,13 +153,18 @@ const SpeakingPractice = () => {
                           </div>
                         </>
                       ) : (
-                        <SpeakingPracticeList
-                          speakingClasses={speakingClasses()}
-                          solvingClassBook={solvingClassBook}
-                          handleEnrollNow={handleEnrollNow}
-                          joinNow={joinNow}
-                          isWithin5Minutes={isWithin5Minutes}
-                        />
+                        <>
+                          <UpcommingDoubtSolving
+                            joinNow={joinNow}
+                            isWithin5Minutes={isWithin5Minutes}
+                            doubtSolvingClasses={doubtSolvingClasses()}
+                            solvingClassBook={solvingClassBook}
+                          />
+                          <DoubtSolvingList
+                            doubtSolvingClasses={doubtSolvingClasses()}
+                            handleEnrollNow={handleEnrollNow}
+                          />
+                        </>
                       )}
                     </div>
                   </div>
@@ -173,7 +179,7 @@ const SpeakingPractice = () => {
         centered
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Speaking Practice class schedule"
+        title="One To One Solving class schedule"
       >
         <DateRange
           selectedRange={selectedDateRange}
@@ -184,4 +190,4 @@ const SpeakingPractice = () => {
   );
 };
 
-export default SpeakingPractice;
+export default DoubtSolving;

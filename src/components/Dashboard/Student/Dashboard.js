@@ -8,7 +8,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 const Dashboard = () => {
   const [studentList, setStudentList] = useState([]);
   const [latestLiveClass, setLatestLiveClass] = useState({});
-  const batchId = JSON.parse(localStorage.getItem("BatchID"));
+  const batchId = localStorage.getItem("BatchID");
 
   useEffect(() => {
     (async () => {

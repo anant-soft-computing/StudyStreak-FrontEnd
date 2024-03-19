@@ -391,7 +391,7 @@ const CourseDetail = () => {
                           <h5>Requirements</h5>
                         </div>
                         <div className="course__list__wraper">
-                          <div className="aboutarea__list__2 blog__details__list__2">
+                          <div className="   blog__details__list__2">
                             {courseDetail?.Requirements?.map(
                               ({ description }, index) => (
                                 <ul key={index}>

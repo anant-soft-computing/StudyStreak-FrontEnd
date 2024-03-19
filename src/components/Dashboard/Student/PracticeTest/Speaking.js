@@ -25,23 +25,18 @@ const SpeakingTest = ({ speakingData }) => {
               <div className="d-flex justify-content-between">
                 <div className="zoom__meeting__id">
                   <div>
-                    Sections :<span>2</span>
+                    Sections :<span>3</span>
                   </div>
                 </div>
                 <div className="zoom__meeting__id">
                   <div>
-                    Questions :<span>20</span>
+                    Time :<span>15 Mintues</span>
                   </div>
                 </div>
               </div>
-              <div className="zoom__meeting__id mt-2">
-                <div>
-                  Time :<span>15 Mintues</span>
-                </div>
-              </div>
-              </div>
-              <div>
-              <div className="d-flex justify-content-center mb-3">
+            </div>
+            <div>
+              <div className="d-flex justify-content-center mt-2 mb-3">
                 <button
                   className="default__button"
                   onClick={() => handleClick(data)}

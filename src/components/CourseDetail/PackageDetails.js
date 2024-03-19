@@ -62,79 +62,79 @@ const PackageDetails = (props) => {
           <div className="row">
             {packages?.map((packageItem, index) => (
               <div
-                class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12"
+                className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12"
                 key={index}
               >
-                <div class="pricingarea__content__wraper">
-                  <div class="pricingarea__heading">
-                    <div class="pricingarea__plan__type">
+                <div className="pricingarea__content__wraper">
+                  <div className="pricingarea__heading">
+                    <div className="pricingarea__plan__type">
                       <h6>{packageItem?.package_name}</h6>
                       <img src={image1} alt="" />
                     </div>
-                    <div class="pricingarea__number">
+                    <div className="pricingarea__number">
                       <h1>
                         <i className="icofont-rupee"></i>
-                        <span class="price__currency">
+                        <span className="price__currency">
                           {packageItem?.package_price}
                         </span>
-                        <span class="price__durition">/ month</span>
+                        <span className="price__durition">/ month</span>
                       </h1>
                     </div>
                     <p>Perfect for startup</p>
                   </div>
-                  <div class="pricingarea__list">
+                  <div className="pricingarea__list">
                     <ul>
                       <li>
-                        <i class="icofont-check"></i> Duration{" "}
+                        <i className="icofont-check"></i> Duration{" "}
                         <b>{packageItem?.duration} Mins </b>
                       </li>
                       <li>
                         {packageItem?.full_length_test ? (
-                          <i class="icofont-check"></i>
+                          <i className="icofont-check"></i>
                         ) : (
-                          <i class="icofont-close close__button"></i>
+                          <i className="icofont-close close__button"></i>
                         )}
                         ({packageItem?.full_length_test_count || 0}) Full Length
                         Test
                       </li>
                       <li>
                         {packageItem?.practice_test ? (
-                          <i class="icofont-check"></i>
+                          <i className="icofont-check"></i>
                         ) : (
-                          <i class="icofont-close close__button"></i>
+                          <i className="icofont-close close__button"></i>
                         )}
                         ({packageItem?.practice_test_count || 0}) Practice Test
                       </li>
                       <li>
                         {packageItem?.speaking_test ? (
-                          <i class="icofont-check"></i>
+                          <i className="icofont-check"></i>
                         ) : (
-                          <i class="icofont-close close__button"></i>
+                          <i className="icofont-close close__button"></i>
                         )}
                         ({packageItem?.speaking_test_count || 0}) Speaking
                         Practice Classes
                       </li>
                       <li>
                         {packageItem?.group_doubt_solving ? (
-                          <i class="icofont-check"></i>
+                          <i className="icofont-check"></i>
                         ) : (
-                          <i class="icofont-close close__button"></i>
+                          <i className="icofont-close close__button"></i>
                         )}
                         ({packageItem?.group_doubt_solving_count || 0}) Group
                         Doubt Solving
                       </li>
                       <li>
                         {packageItem?.one_to_one_doubt_solving ? (
-                          <i class="icofont-check"></i>
+                          <i className="icofont-check"></i>
                         ) : (
-                          <i class="icofont-close close__button"></i>
+                          <i className="icofont-close close__button"></i>
                         )}
                         ({packageItem?.one_to_one_doubt_solving_count || 0}) One
                         To One Doubt Solving
                       </li>
                     </ul>
                   </div>
-                  <div class="pricingarea__button">
+                  <div className="pricingarea__button">
                     <div className="course__summery__button mt-2">
                       <button
                         type="button"

@@ -35,6 +35,14 @@ const CreateLiveClass = () => {
   const [formStatus, setFormStatus] = useState(initialSubmit);
 
   const validateForm = () => {
+    if (!createLiveClassData.select_batch) {
+      setFormError("Batch is Required");
+      return false;
+    }
+    if (!createLiveClassData.liveclasstype) {
+      setFormError("Live Class Type is Required");
+      return false;
+    }
     if (!createLiveClassData.meeting_title) {
       setFormError("Meeting Title is Required");
       return false;

@@ -6,7 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
-import Modal from "react-bootstrap/Modal";
+import SmallModal from "../UI/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 const Cheerio = require("cheerio");
@@ -236,13 +236,15 @@ const PracticeLiveExam = () => {
     return (
       <>
         {image && (
-          <img
-            className="mb-2"
-            src={image}
-            alt="Study Streak"
-            height={250}
-            width={250}
-          />
+          <div className="text-center">
+            <img
+              className="mb-2"
+              src={image}
+              alt="Study Streak"
+              height={250}
+              width={250}
+            />
+          </div>
         )}
         <div
           dangerouslySetInnerHTML={{
@@ -523,7 +525,7 @@ const PracticeLiveExam = () => {
       </div>
 
       {/* Main Container */}
-      <div>{renderAudio(examData?.audio_file)}</div>
+      {renderAudio(examData?.audio_file)}
       <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">
@@ -566,7 +568,7 @@ const PracticeLiveExam = () => {
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between mb-2">
         <div className="lv-question-pagination">
           {uniqueIdArr?.map((item, index) => {
             return (
@@ -654,43 +656,34 @@ const PracticeLiveExam = () => {
       {isModalOpen &&
         (examData?.exam_type === "Reading" ||
           examData?.exam_type === "Listening") && (
-          <Modal
+          <SmallModal
             size="lg"
-            show={isModalOpen}
-            onHide={() => setIsModalOpen(false)}
+            centered
+            title="Your Answers"
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>Your Answers</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div>
-                {examAnswer.map((test, index) => (
-                  <div key={index}>
-                    <h4>Test : {index + 1}</h4>
-                    <div className="card-container">
-                      {test.data.map((answer, idx) => (
-                        <div
-                          key={idx}
-                          className="card"
-                          style={{ maxWidth: "30%" }}
-                        >
-                          <div className="card-body">
-                            <h6 className="card-title">Q. {idx + 1}</h6>
-                            <h6 className="card-text">
-                              Answer :{" "}
-                              <span className="text-success">
-                                {answer.answer_text}
-                              </span>
-                            </h6>
-                          </div>
-                        </div>
-                      ))}
+            {examAnswer.map((test, index) => (
+              <div key={index}>
+                <h4>Test : {index + 1}</h4>
+                <div className="card-container">
+                  {test.data.map((answer, idx) => (
+                    <div key={idx} className="card" style={{ maxWidth: "30%" }}>
+                      <div className="card-body">
+                        <h6 className="card-title">Q. {idx + 1}</h6>
+                        <h6 className="card-text">
+                          Answer :{" "}
+                          <span className="text-success">
+                            {answer.answer_text}
+                          </span>
+                        </h6>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </Modal.Body>
-          </Modal>
+            ))}
+          </SmallModal>
         )}
     </>
   );

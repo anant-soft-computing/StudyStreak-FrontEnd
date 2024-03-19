@@ -30,6 +30,10 @@ const CreateBatch = () => {
   const [formStatus, setFormStatus] = useState(initialSubmit);
 
   const validateForm = () => {
+    if (!batchData.add_package) {
+      setFormError("Package is Required");
+      return false;
+    }
     if (!batchData.batch_name) {
       setFormError("Batch Name is Required");
       return false;

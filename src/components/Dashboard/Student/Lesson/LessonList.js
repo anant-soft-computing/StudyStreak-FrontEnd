@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 const LessonList = ({
@@ -38,8 +39,8 @@ const LessonList = ({
           >
             <div className="accordion-body">
               {section.lessons.map((lesson, lessonIndex) => (
-                <>
-                  <div key={lessonIndex} className="scc__wrap">
+                <div key={lessonIndex}>
+                  <div className="scc__wrap">
                     <div className="scc__info align-items-center">
                       <i className="icofont-video-alt"></i>
                       <h5>
@@ -59,7 +60,7 @@ const LessonList = ({
                       <strong>{lesson.Lesson_Duration}</strong>
                     </div>
                   </div>
-                </>
+                </div>
               ))}
             </div>
           </div>

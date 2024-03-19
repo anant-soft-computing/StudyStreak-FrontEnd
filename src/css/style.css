@@ -5111,7 +5111,7 @@ About Area
   padding: 15px 59px;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
-  background: #01579b36;
+  background: #01579b36 !important;
   text-transform: uppercase;
   color: var(--blackColor2);
   font-weight: 700;

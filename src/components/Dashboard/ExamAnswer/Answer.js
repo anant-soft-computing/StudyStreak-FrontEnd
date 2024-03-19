@@ -49,11 +49,10 @@ const Answer = () => {
     let correct = 0;
     let incorrect = 0;
     studentAnswers?.forEach((item, index) => {
-      const correctAnswerText = correctAnswer[index]?.answer_text
-        .trim()
-        .toLowerCase();
-      const studentAnswerText = item.answer.trim().toLowerCase();
 
+      const correctAnswerText = correctAnswer[index]?.answer_text.trim();
+      const studentAnswerText = item.answer.trim();
+      
       if (correctAnswerText?.includes(" OR ")) {
         const correctOptions = correctAnswerText
           .split(" OR ")
@@ -240,12 +239,8 @@ const Answer = () => {
                                             : cancelIcon()
                                           : studentAnswers?.length > 0 &&
                                             studentAnswers[index] &&
-                                            studentAnswers[
-                                              index
-                                            ].answer.toLowerCase() ===
-                                              correctAnswer[
-                                                index
-                                              ]?.answer_text.toLowerCase()
+                                            studentAnswers[index].answer ===
+                                              correctAnswer[index]?.answer_text
                                           ? checkIcon()
                                           : cancelIcon()}
                                       </td>

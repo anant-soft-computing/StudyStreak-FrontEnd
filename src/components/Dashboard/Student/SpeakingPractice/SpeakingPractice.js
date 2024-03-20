@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { addDays, subDays } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -17,8 +16,8 @@ const SpeakingPractice = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
-      startDate: subDays(new Date(), 7),
-      endDate: addDays(new Date(), 1),
+      startDate: new Date(),
+      endDate: new Date(),
       key: "selection",
     },
   ]);
@@ -113,6 +112,11 @@ const SpeakingPractice = () => {
     });
   };
 
+  const speackingClasses = speakingClasses().filter((item) => {
+    return solvingClassBook.some((index) => index.id === item.id);
+  });
+  
+
   return (
     <>
       <div className="body__wrapper">
@@ -157,8 +161,7 @@ const SpeakingPractice = () => {
                           <UpcommingSpeakingPractice
                             joinNow={joinNow}
                             isWithin5Minutes={isWithin5Minutes}
-                            speakingClasses={speakingClasses()}
-                            solvingClassBook={solvingClassBook}
+                            speakingClasses={speackingClasses}
                           />
                           <SpeakingPracticeList
                             speakingClasses={speakingClasses()}

@@ -5,19 +5,15 @@ const UpcommingGroupDoubtSolving = ({
   joinNow,
   isWithin5Minutes,
   groupDoubtSolvingClasses,
-  solvingClassBook,
 }) => {
-  const gClasses = groupDoubtSolvingClasses.filter((item) => {
-    return solvingClassBook.some((index) => index.id === item.id);
-  });
   return (
     <>
       <div className="dashboard__section__title">
         <h4>Upcomming</h4>
       </div>
-      {gClasses.length > 0 ? (
+      {groupDoubtSolvingClasses.length > 0 ? (
         <div className="row">
-          {gClasses.map(
+          {groupDoubtSolvingClasses.map(
             ({
               id,
               start_time,

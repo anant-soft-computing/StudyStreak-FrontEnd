@@ -3,22 +3,17 @@ import moment from "moment";
 
 const UpcommingSpeakingPractice = ({
   speakingClasses,
-  solvingClassBook,
   joinNow,
   isWithin5Minutes,
 }) => {
-  const sPClasses = speakingClasses.filter((item) => {
-    return solvingClassBook.some((index) => index.id === item.id);
-  });
-
   return (
     <>
       <div className="dashboard__section__title">
         <h4>Upcomming</h4>
       </div>
-      {sPClasses.length > 0 ? (
+      {speakingClasses.length > 0 ? (
         <div className="row">
-          {sPClasses.map(
+          {speakingClasses.map(
             ({
               id,
               start_time,

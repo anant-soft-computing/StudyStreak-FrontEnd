@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { addDays, subDays } from "date-fns";
 import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -14,8 +13,8 @@ const RegularClass = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
-      startDate: subDays(new Date(), 7),
-      endDate: addDays(new Date(), 1),
+      startDate: new Date(),
+      endDate: new Date(),
       key: "selection",
     },
   ]);

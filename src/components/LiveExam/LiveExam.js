@@ -230,10 +230,30 @@ const LiveExam = () => {
     ) {
       let totalCorrect = 0;
       examAnswer[0]?.answers?.forEach((answer, index) => {
-        const correctAnswer =
-          examData?.answers[index]?.answer_text.toLowerCase();
-        if (answer.answer.toLowerCase() === correctAnswer) {
-          totalCorrect += 1;
+        const correctAnswer = examData?.answers[index]?.answer_text.trim();
+        const studentAnswer = answer.answer.trim();
+
+        if (correctAnswer.includes(" OR ")) {
+          const correctOptions = correctAnswer
+            .split(" OR ")
+            .map((option) => option.trim());
+          if (correctOptions.includes(studentAnswer)) {
+            totalCorrect++;
+          }
+        } else if (correctAnswer.includes(" AND ")) {
+          const correctOptions = correctAnswer
+            .split(" AND ")
+            .map((option) => option.trim());
+          if (
+            correctOptions.every((option) => studentAnswer.includes(option))
+          ) {
+            totalCorrect++;
+          }
+        } else {
+          const correctAnswer = examData?.answers[index]?.answer_text;
+          if (answer.answer === correctAnswer) {
+            totalCorrect++;
+          }
         }
       });
 

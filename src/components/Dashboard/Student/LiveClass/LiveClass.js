@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import moment from "moment";
-import { addDays, subDays } from "date-fns";
 import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import LiveClassList from "./LiveClassList";
@@ -12,8 +11,8 @@ const LiveClass = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
-      startDate: subDays(new Date(), 7),
-      endDate: addDays(new Date(), 1),
+      startDate: new Date(),
+      endDate: new Date(),
       key: "selection",
     },
   ]);
@@ -56,7 +55,7 @@ const LiveClass = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
-                        <h4>Live Classes</h4>
+                        <h4>Upcoming Live Classes</h4>
                         <h6>
                           Your Live Class Schedule{" "}
                           <i

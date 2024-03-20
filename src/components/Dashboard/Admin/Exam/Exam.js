@@ -16,16 +16,14 @@ const exams = [
     isDisabled: false,
   },
   {
-    name: "TOEFL",
-    subMenu: [],
-    link: "/admin-exam/TOEFL",
-    isDisabled: true,
+    name: "TOFEL",
+    link: "/admin-exam/TOFEL",
+    isDisabled: false,
   },
   {
     name: "PTE",
-    subMenu: [],
     link: "/admin-exam/PTE",
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     name: "DUOLINGO",
@@ -35,40 +33,19 @@ const exams = [
   },
   {
     name: "GRE",
-    subMenu: [],
     link: "/admin-exam/GRE",
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     name: "GMAT",
-    subMenu: [],
     link: "/admin-exam/GMAT",
-    isDisabled: true,
+    isDisabled: false,
   },
   {
     name: "GENERAL",
     subMenu: [],
     link: "/admin-exam/GENERAL",
     isDisabled: true,
-  },
-];
-
-const examTypes = [
-  {
-    name: "Reading",
-    link: "/admin-exam/IELTS/Reading",
-  },
-  {
-    name: "Writing",
-    link: "/admin-exam/IELTS/Writing",
-  },
-  {
-    name: "Listening",
-    link: "/admin-exam/IELTS/Listening",
-  },
-  {
-    name: "Speaking",
-    link: "/admin-exam/IELTS/Speaking",
   },
 ];
 
@@ -81,6 +58,45 @@ const Exam = () => {
     examForm: "",
   });
   const [activeTab, setActiveTab] = useState("viewExam");
+
+  const examTypes =
+    screenContent?.examType === "GRE" || screenContent?.examType === "GMAT"
+      ? [
+          {
+            name: "AWA",
+            link: `/admin-exam/${screenContent?.examType}/AWA`,
+          },
+          {
+            name: "Integrated Reasoning",
+            link: `/admin-exam/${screenContent?.examType}/Intergrated-Reasoning`,
+          },
+          {
+            name: "Quantitative Reasoning",
+            link: `/admin-exam/${screenContent?.examType}/Quantitative-Reasoning`,
+          },
+          {
+            name: "Verbal Reasoning",
+            link: `/admin-exam/${screenContent?.examType}/Verbal-Reasoning`,
+          },
+        ]
+      : [
+          {
+            name: "Reading",
+            link: `/admin-exam/${screenContent?.examType}/Reading`,
+          },
+          {
+            name: "Writing",
+            link: `/admin-exam/${screenContent?.examType}/Writing`,
+          },
+          {
+            name: "Listening",
+            link: `/admin-exam/${screenContent?.examType}/Listening`,
+          },
+          {
+            name: "Speaking",
+            link: `/admin-exam/${screenContent?.examType}/Speaking`,
+          },
+        ];
 
   useEffect(() => {
     const examType = location.pathname.split("/")[2];

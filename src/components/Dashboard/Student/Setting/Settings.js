@@ -1,7 +1,6 @@
 import React from "react";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Profile from "./UpdateProfile";
-import Password from "./Password";
 
 const Settings = () => {
   return (
@@ -39,19 +38,6 @@ const Settings = () => {
                               Profile
                             </button>
                           </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className="single__tab__link common-background-color-across-app"
-                              data-bs-toggle="tab"
-                              data-bs-target="#projects__two"
-                              type="button"
-                              aria-selected="false"
-                              role="tab"
-                              tabIndex="-1"
-                            >
-                              Password
-                            </button>
-                          </li>
                         </ul>
                       </div>
                       <div
@@ -66,14 +52,6 @@ const Settings = () => {
                           aria-labelledby="projects__one"
                         >
                           <Profile />
-                        </div>
-                        <div
-                          className="tab-pane fade"
-                          id="projects__two"
-                          role="tabpanel"
-                          aria-labelledby="projects__two"
-                        >
-                          <Password />
                         </div>
                       </div>
                     </div>

@@ -5,7 +5,7 @@ const SpeakingPracticeList = ({ speakingClasses, handleEnrollNow }) => {
   return (
     <>
       <div className="dashboard__section__title">
-        <h4>Slot Available</h4>
+        <h4>Available Slot</h4>
       </div>
       {speakingClasses.length > 0 ? (
         <div className="row">
@@ -69,9 +69,7 @@ const SpeakingPracticeList = ({ speakingClasses, handleEnrollNow }) => {
           )}
         </div>
       ) : (
-        <div className="text-center">
-          No Speaking Practice Classes Available.
-        </div>
+        <h5 className="text-center">No Speaking Practice Classes Available.</h5>
       )}
     </>
   );

@@ -8,7 +8,7 @@ const GroupDoubleSolvingList = ({
   return (
     <>
       <div className="dashboard__section__title">
-        <h4>Slot Available</h4>
+        <h4>Available Slot</h4>
       </div>
       {groupDoubtSolvingClasses.length > 0 ? (
         <div className="row">

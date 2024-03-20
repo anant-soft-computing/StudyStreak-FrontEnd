@@ -5,7 +5,7 @@ const DoubtSolvingList = ({ doubtSolvingClasses, handleEnrollNow }) => {
   return (
     <>
       <div className="dashboard__section__title">
-        <h4>Slot Available</h4>
+        <h4>Available Slot</h4>
       </div>
       {doubtSolvingClasses.length > 0 ? (
         <div className="row">

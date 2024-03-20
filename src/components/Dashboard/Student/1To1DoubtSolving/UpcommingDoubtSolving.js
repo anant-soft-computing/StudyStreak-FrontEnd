@@ -5,20 +5,15 @@ const UpcommingDoubtSolving = ({
   joinNow,
   isWithin5Minutes,
   doubtSolvingClasses,
-  solvingClassBook,
 }) => {
-  const dPClasses = doubtSolvingClasses.filter((item) => {
-    return solvingClassBook.some((index) => index.id === item.id);
-  });
-
   return (
     <>
       <div className="dashboard__section__title">
         <h4>Upcomming</h4>
       </div>
-      {dPClasses.length > 0 ? (
+      {doubtSolvingClasses.length > 0 ? (
         <div className="row">
-          {dPClasses.map(
+          {doubtSolvingClasses.map(
             ({
               id,
               start_time,

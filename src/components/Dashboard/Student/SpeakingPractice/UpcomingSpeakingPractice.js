@@ -1,19 +1,19 @@
 import React from "react";
 import moment from "moment";
 
-const UpcommingGroupDoubtSolving = ({
+const UpcomingSpeakingPractice = ({
+  speakingClasses,
   joinNow,
   isWithin5Minutes,
-  groupDoubtSolvingClasses,
 }) => {
   return (
     <>
       <div className="dashboard__section__title">
         <h4>Upcomming</h4>
       </div>
-      {groupDoubtSolvingClasses.length > 0 ? (
+      {speakingClasses.length > 0 ? (
         <div className="row">
-          {groupDoubtSolvingClasses.map(
+          {speakingClasses.map(
             ({
               id,
               start_time,
@@ -77,11 +77,11 @@ const UpcommingGroupDoubtSolving = ({
         </div>
       ) : (
         <h5 className="text-center">
-          No One To One Doubt Solving Classes Available.
+          No Upcomming Speaking Practice Classes Available.
         </h5>
       )}
     </>
   );
 };
 
-export default UpcommingGroupDoubtSolving;
+export default UpcomingSpeakingPractice;

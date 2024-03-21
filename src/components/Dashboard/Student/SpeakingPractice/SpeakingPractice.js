@@ -7,11 +7,12 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import SpeakingPracticeList from "./SpeakingPracticeList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
-import UpcommingSpeakingPractice from "./UpcommingSpeakingPractice";
+import UpcomingSpeakingPractice from "./UpcomingSpeakingPractice";
 
 const SpeakingPractice = () => {
   const navigate = useNavigate();
-  const { studentId, solvingClassBook, count, batchId } = useLocation()?.state;
+  const { state: { studentId, solvingClassBook, count, batchId } = {} } =
+    useLocation();
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -112,10 +113,14 @@ const SpeakingPractice = () => {
     });
   };
 
-  const speackingClasses = speakingClasses().filter((item) => {
-    return solvingClassBook.some((index) => index.id === item.id);
-  });
-  
+  const speackingClasses = speakingClasses().filter((item) =>
+    solvingClassBook.some((index) => index.id === item.id)
+  );
+
+  const bookClass = solvingClassBook.map((item) => item?.id);
+  const speakingPracticeClasses = speakingClasses().filter(
+    (item) => !bookClass.includes(item?.id)
+  );
 
   return (
     <>
@@ -143,8 +148,8 @@ const SpeakingPractice = () => {
                         <>
                           <div className="d-flex justify-content-center">
                             <h5>
-                              No Speaking Practice Class Available , Please Buy
-                              a Course
+                              No Speaking Practice Class Available, Please Buy a
+                              Course
                             </h5>
                           </div>
                           <div className="d-flex justify-content-center mt-4">
@@ -158,13 +163,13 @@ const SpeakingPractice = () => {
                         </>
                       ) : (
                         <>
-                          <UpcommingSpeakingPractice
+                          <UpcomingSpeakingPractice
                             joinNow={joinNow}
                             isWithin5Minutes={isWithin5Minutes}
                             speakingClasses={speackingClasses}
                           />
                           <SpeakingPracticeList
-                            speakingClasses={speakingClasses()}
+                            speakingClasses={speakingPracticeClasses}
                             handleEnrollNow={handleEnrollNow}
                           />
                         </>

@@ -419,12 +419,10 @@ const PracticeLiveExam = () => {
   const handleRLSubmit = async () => {
     const answersArray = [];
     let bandValue = null;
-    let isAllAnswered = true;
 
     examAnswer.forEach((item, index) => {
       const temp = item.data.map((answer, index2) => {
-        if (answer.answer_text === "") isAllAnswered = false;
-
+        if (answer.answer_text === "")
         return {
           question_number: index2 + 1,
           answer_text: answer.answer_text,
@@ -437,10 +435,6 @@ const PracticeLiveExam = () => {
       answersArray.push(tempObj);
     });
 
-    if (!isAllAnswered) {
-      toast.error("Please answer all the questions before submitting.");
-      return;
-    }
     if (examForm === "Reading" || examForm === "Listening") {
       let totalCorrect = 0;
       correctAnswers.forEach((correctAns, index) => {

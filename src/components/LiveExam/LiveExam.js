@@ -233,14 +233,14 @@ const LiveExam = () => {
         const correctAnswer = examData?.answers[index]?.answer_text.trim();
         const studentAnswer = answer.answer.trim();
 
-        if (correctAnswer.includes(" OR ")) {
+        if (correctAnswer?.includes(" OR ")) {
           const correctOptions = correctAnswer
             .split(" OR ")
             .map((option) => option.trim());
           if (correctOptions.includes(studentAnswer)) {
             totalCorrect++;
           }
-        } else if (correctAnswer.includes(" AND ")) {
+        } else if (correctAnswer?.includes(" AND ")) {
           const correctOptions = correctAnswer
             .split(" AND ")
             .map((option) => option.trim());

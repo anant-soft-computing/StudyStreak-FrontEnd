@@ -7,11 +7,12 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import DoubtSolvingList from "./DoubtSolvingList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
-import UpcommingDoubtSolving from "./UpcommingDoubtSolving";
+import UpcomingDoubtSolving from "./UpcomingDoubtSolving";
 
 const DoubtSolving = () => {
   const navigate = useNavigate();
-  const { studentId, solvingClassBook, count, batchId } = useLocation()?.state;
+  const { state: { studentId, solvingClassBook, count, batchId } = {} } =
+    useLocation();
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -116,6 +117,11 @@ const DoubtSolving = () => {
     return solvingClassBook.some((index) => index.id === item.id);
   });
 
+  const bookClass = solvingClassBook.map((item) => item?.id);
+  const oToclasses = doubtSolvingClasses().filter(
+    (item) => !bookClass.includes(item?.id)
+  );
+
   return (
     <>
       <div className="body__wrapper">
@@ -157,13 +163,13 @@ const DoubtSolving = () => {
                         </>
                       ) : (
                         <>
-                          <UpcommingDoubtSolving
+                          <UpcomingDoubtSolving
                             joinNow={joinNow}
                             isWithin5Minutes={isWithin5Minutes}
                             doubtSolvingClasses={oneToOneDoubtSolvingClasses}
                           />
                           <DoubtSolvingList
-                            doubtSolvingClasses={doubtSolvingClasses()}
+                            doubtSolvingClasses={oToclasses}
                             handleEnrollNow={handleEnrollNow}
                           />
                         </>

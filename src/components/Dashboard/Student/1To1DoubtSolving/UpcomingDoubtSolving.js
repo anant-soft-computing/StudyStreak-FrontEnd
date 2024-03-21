@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 
-const UpcommingDoubtSolving = ({
+const UpcomingDoubtSolving = ({
   joinNow,
   isWithin5Minutes,
   doubtSolvingClasses,
@@ -84,4 +84,4 @@ const UpcommingDoubtSolving = ({
   );
 };
 
-export default UpcommingDoubtSolving;
+export default UpcomingDoubtSolving;

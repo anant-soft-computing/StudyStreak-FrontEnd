@@ -55,6 +55,34 @@ const GroupDoubtSolving = () => {
     }
   };
 
+  const bookCount = async (Id) => {
+    try {
+      const response = await ajaxCall(
+        `/add-bookslot/${Id}/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        handleEnrollNow(Id);
+      } else if (response.status === 400) {
+        toast.error(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -169,7 +197,7 @@ const GroupDoubtSolving = () => {
                           />
                           <GroupDoubleSolvingList
                             groupDoubtSolvingClasses={groupClasses}
-                            handleEnrollNow={handleEnrollNow}
+                            bookCount={bookCount}
                           />
                         </>
                       )}

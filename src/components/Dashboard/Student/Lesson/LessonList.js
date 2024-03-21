@@ -26,7 +26,7 @@ const LessonList = ({
                 setActiveIndex(activeIndex === index ? null : index)
               }
             >
-              {section.name}
+              {section?.name}
             </button>
           </h2>
           <div
@@ -38,30 +38,36 @@ const LessonList = ({
             data-bs-parent="#accordionLessons"
           >
             <div className="accordion-body">
-              {section.lessons.map((lesson, lessonIndex) => (
-                <div key={lessonIndex}>
-                  <div className="scc__wrap">
-                    <div className="scc__info align-items-center">
-                      <i className="icofont-video-alt"></i>
-                      <h5>
-                        <div
-                          onClick={() => {
-                            setActiveLesson(lesson);
-                            handleContentChange("video");
-                          }}
-                        >
-                          <Link>
-                            <span>{lesson.Lesson_Title}</span>
-                          </Link>
-                        </div>
-                      </h5>
-                    </div>
-                    <div className="scc__meta">
-                      <strong>{lesson.Lesson_Duration}</strong>
+              {section?.lessons
+                .sort((a, b) => {
+                  const lessonA = parseInt(a?.Lesson_Title.match(/\d+/)[0]);
+                  const lessonB = parseInt(b?.Lesson_Title.match(/\d+/)[0]);
+                  return lessonA - lessonB;
+                })
+                .map((lesson, lessonIndex) => (
+                  <div key={lessonIndex}>
+                    <div className="scc__wrap">
+                      <div className="scc__info align-items-center">
+                        <i className="icofont-video-alt"></i>
+                        <h5>
+                          <div
+                            onClick={() => {
+                              setActiveLesson(lesson);
+                              handleContentChange("video");
+                            }}
+                          >
+                            <Link>
+                              <span>{lesson?.Lesson_Title}</span>
+                            </Link>
+                          </div>
+                        </h5>
+                      </div>
+                      <div className="scc__meta">
+                        <strong>{lesson?.Lesson_Duration}</strong>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>

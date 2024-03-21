@@ -6,7 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
-import Modal from "react-bootstrap/Modal";
+import SmallModal from "../UI/Modal";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -229,11 +229,31 @@ const LiveExam = () => {
       examData?.exam_type === "Listening"
     ) {
       let totalCorrect = 0;
-      examAnswer[0].answers.forEach((answer, index) => {
-        const correctAnswer =
-          examData?.answers[index].answer_text.toLowerCase();
-        if (answer.answer.toLowerCase() === correctAnswer) {
-          totalCorrect += 1;
+      examAnswer[0]?.answers?.forEach((answer, index) => {
+        const correctAnswer = examData?.answers[index]?.answer_text.trim();
+        const studentAnswer = answer.answer.trim();
+
+        if (correctAnswer.includes(" OR ")) {
+          const correctOptions = correctAnswer
+            .split(" OR ")
+            .map((option) => option.trim());
+          if (correctOptions.includes(studentAnswer)) {
+            totalCorrect++;
+          }
+        } else if (correctAnswer.includes(" AND ")) {
+          const correctOptions = correctAnswer
+            .split(" AND ")
+            .map((option) => option.trim());
+          if (
+            correctOptions.every((option) => studentAnswer.includes(option))
+          ) {
+            totalCorrect++;
+          }
+        } else {
+          const correctAnswer = examData?.answers[index]?.answer_text;
+          if (answer.answer === correctAnswer) {
+            totalCorrect++;
+          }
         }
       });
 
@@ -542,7 +562,7 @@ const LiveExam = () => {
       </div>
 
       {/* Main Container */}
-      <div>{renderAudio(examData?.audio_file)}</div>
+      {renderAudio(examData?.audio_file)}
       <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">
@@ -589,7 +609,7 @@ const LiveExam = () => {
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between mb-2">
         <div className="lv-question-pagination">
           {uniqueIdArr?.map((item, index) => {
             return (
@@ -638,30 +658,27 @@ const LiveExam = () => {
       {isModalOpen &&
         (examData?.exam_type === "Reading" ||
           examData?.exam_type === "Listening") && (
-          <Modal
+          <SmallModal
             size="lg"
-            show={isModalOpen}
-            onHide={() => setIsModalOpen(false)}
+            centered
+            title="Your Answers"
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>Your Answers</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div className="card-container">
-                {examAnswer[0]?.answers.map((answer, index) => (
-                  <div key={index} className="card" style={{ maxWidth: "30%" }}>
-                    <div className="card-body">
-                      <h6 className="card-title">Q. {index + 1}</h6>
-                      <h6 className="card-text">
-                        Answer :{" "}
-                        <span className="text-success">{answer.answer}</span>
-                      </h6>
-                    </div>
+            <div className="card-container">
+              {examAnswer[0]?.answers.map((answer, index) => (
+                <div key={index} className="card" style={{ maxWidth: "30%" }}>
+                  <div className="card-body">
+                    <h6 className="card-title">Q. {index + 1}</h6>
+                    <h6 className="card-text">
+                      Answer :{" "}
+                      <span className="text-success">{answer.answer}</span>
+                    </h6>
                   </div>
-                ))}
-              </div>
-            </Modal.Body>
-          </Modal>
+                </div>
+              ))}
+            </div>
+          </SmallModal>
         )}
     </>
   );

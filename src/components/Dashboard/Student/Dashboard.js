@@ -8,7 +8,18 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 const Dashboard = () => {
   const [studentList, setStudentList] = useState([]);
   const [latestLiveClass, setLatestLiveClass] = useState({});
-  const batchId = JSON.parse(localStorage.getItem("BatchID"));
+  const batchId = localStorage.getItem("BatchID");
+
+  const joinNow = (zoom_meeting) => {
+    window.open(zoom_meeting, "__blank");
+  };
+
+  const isWithin5Minutes = (startTime) => {
+    const currentTime = moment();
+    const classStartTime = moment(startTime);
+    const difference = classStartTime.diff(currentTime, "milliseconds");
+    return difference >= 0 && difference <= 5 * 60 * 1000;
+  };
 
   useEffect(() => {
     (async () => {
@@ -142,6 +153,21 @@ const Dashboard = () => {
                                   )}
                                 </span>
                               </p>
+                            </div>
+                          )}
+                          {latestLiveClass?.zoom_meeting_id && (
+                            <div className="d-flex justify-content-center">
+                              <button
+                                className="default__button mb-2"
+                                onClick={() =>
+                                  joinNow(latestLiveClass?.zoom_meeting_id)
+                                }
+                                disabled={
+                                  !isWithin5Minutes(latestLiveClass?.start_time)
+                                }
+                              >
+                                Join Now
+                              </button>
                             </div>
                           )}
                         </div>

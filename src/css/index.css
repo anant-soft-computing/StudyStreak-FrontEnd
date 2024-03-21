@@ -209,7 +209,7 @@ pre {
   margin-bottom: 0.2em;
   text-align: center;
   line-height: 2.7rem;
-  background: #5f2ded;
+  background: #01579b;
   border: 0px solid #252525;
   color: white;
   cursor: all-scroll;
@@ -329,7 +329,7 @@ body {
 
 .global-neomorphism-card-styling {
   border-radius: 10px;
-  background: #ebf2f5;
+  background: #ebf2f5 !important;
   box-shadow: 5px 5px 12px #d8dfe1, -5px -5px 12px #feffff;
   /* min-height: 300px; */
   /* padding: 1px 12px; */
@@ -379,7 +379,7 @@ body {
 } */
 
 .common-background-color-across-app {
-  background-color: #ebf2f5;
+  background-color: #ebf2f5 !important;
 }
 
 .navbarWrap {

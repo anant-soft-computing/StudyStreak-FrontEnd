@@ -44,7 +44,7 @@ const WritingTest = ({ writingData }) => {
               </div>
             </div>
             <div>
-              <div className="d-flex justify-content-center mb-3">
+              <div className="d-flex justify-content-center mt-2 mb-3">
                 <button
                   className="default__button"
                   onClick={() => handleClick(data)}

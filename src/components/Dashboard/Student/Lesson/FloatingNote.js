@@ -1,43 +1,127 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback, useReducer } from "react";
 import "../../../../css/student panel/myCourse.css";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import { toast } from "react-toastify";
+import SmallModal from "../../../UI/Modal";
 
-const FloatingNote = ({ setIsFloatingNotes }) => {
-  const [noteText, setNoteText] = useState("");
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+const initialNoteData = {
+  note: "",
+};
+
+const initialSubmit = {
+  isError: false,
+  errMsg: null,
+  isSubmitting: false,
+};
+
+const reducerNote = (state, action) => {
+  if (action.type === "reset") {
+    return action.payload || initialNoteData;
+  }
+  return { ...state, [action.type]: action.value };
+};
+
+const FloatingNote = ({ setIsFloatingNotes, lessonId }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [notes, setNotes] = useState([]);
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const [noteData, dispatchNote] = useReducer(reducerNote, initialNoteData);
+  const [formStatus, setFormStatus] = useState(initialSubmit);
 
-  const handleCancelClick = () => {
-    setIsFloatingNotes(false);
-    setNoteText("");
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/notes/${lessonId}/${studentId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setNotes(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [lessonId, studentId]);
+
+  const createNote = async (e) => {
+    e.preventDefault();
+    const { note } = noteData;
+    if (!note || !lessonId) {
+      setFormStatus({
+        isError: true,
+        errMsg: !note
+          ? "Note is Required"
+          : "Please choose at least one lesson before adding note",
+        isSubmitting: false,
+      });
+      return;
+    }
+    const data = { note, lesson: lessonId, student: studentId };
+    try {
+      const response = await ajaxCall(
+        "/notes/createview/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        dispatchNote({ type: "reset" });
+        toast.success("Note Created Successfully");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
   };
 
   const handleMouseDown = (e) => {
-    // Setting the dragging true when mouse is clicked.
     setIsDragging(true);
-    // Setting the initial position of mouse.
     setOffset({
       x: e.clientX - position.x,
       y: e.clientY - position.y,
     });
   };
 
-  const handleMouseMove = (e) => {
-    // if isDragging is false, we'll do nothing.
-    if (!isDragging) return;
-    // if isFragging is true, we'll update the position accoring to the mouse moves.
-    setPosition({
-      x: e.clientX - offset.x,
-      y: e.clientY - offset.y,
-    });
-  };
-
-  const handleMouseUp = () => {
-    // once cursor leave the floating note, setting the dragging false.
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false);
-  };
+  }, []);
 
   useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+      setPosition({
+        x: e.clientX - offset.x,
+        y: e.clientY - offset.y,
+      });
+    };
+
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
 
@@ -45,28 +129,69 @@ const FloatingNote = ({ setIsFloatingNotes }) => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [handleMouseMove, handleMouseUp]);
+  }, [isDragging, offset, handleMouseUp]);
 
   return (
-    <div
-      className="floating-note"
-      style={{ left: position.x, top: position.y }}
-      onMouseDown={handleMouseDown}
-    >
-      <div>
+    <>
+      <div
+        className="floating-note"
+        style={{ left: position.x, top: position.y }}
+        onMouseDown={handleMouseDown}
+      >
         <textarea
-          value={noteText}
-          onChange={(e) => setNoteText(e.target.value)}
-          placeholder="Type your notes here..."
+          placeholder="Type your lesson notes here..."
+          value={noteData.note}
+          onChange={(e) => {
+            dispatchNote({ type: "note", value: e.target.value });
+          }}
         />
+        <div className="button-container-for-floating-notes">
+          <div>
+            <div
+              className={
+                formStatus.isError ? "text-danger mb-2" : "text-success mb-2"
+              }
+            >
+              {formStatus.errMsg}
+            </div>
+            <button
+              className="default__button"
+              onClick={() => setIsFloatingNotes(false)}
+            >
+              Cancel
+            </button>{" "}
+            <button className="default__button" onClick={createNote}>
+              Save
+            </button>{" "}
+            {notes.length > 0 && (
+              <button
+                className="default__button"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Previous Notes
+              </button>
+            )}
+          </div>
+        </div>
       </div>
-      <div className="button-container-for-floating-notes">
-        <button className="default__button" onClick={handleCancelClick}>
-          Cancel
-        </button>
-        <button className="default__button">Save</button>
-      </div>
-    </div>
+      <SmallModal
+        size="md"
+        centered
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      >
+        <div className="aboutarea__list__2">
+          {notes?.map((note) => (
+            <ul key={note.id}>
+              <li>
+                <i className="icofont-check"></i>
+                <span>{note.note}</span>
+              </li>
+            </ul>
+          ))}
+        </div>
+      </SmallModal>
+    </>
   );
 };
 

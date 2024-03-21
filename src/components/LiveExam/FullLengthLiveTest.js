@@ -4,7 +4,6 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
-import Modal from "react-bootstrap/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
@@ -14,7 +13,6 @@ const FullLengthLiveExam = () => {
   const containerRef = useRef(null);
   const { examId } = useParams();
   const navigate = useNavigate();
-  const examType = useLocation()?.pathname?.split("/")?.[4];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const [examData, setExamData] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
@@ -27,7 +25,6 @@ const FullLengthLiveExam = () => {
   const [fullLengthId, setFullLengthId] = useState("");
   const [next, setNext] = useState(0);
   const [count, setCount] = useState(0);
-  const [modalCounter, setModalCounter] = useState(0);
   const [displayWritingModal, setDisplayWritingModal] = useState(false);
   const [writingModalOpenOnce, setWritingModalOpenOnce] = useState(false);
   const [displayListeningModal, setDisplayListeningModal] = useState(false);
@@ -269,13 +266,15 @@ const FullLengthLiveExam = () => {
     return (
       <>
         {image && (
-          <img
-            className="mb-2"
-            src={image}
-            alt="Study Streak"
-            height={250}
-            width={250}
-          />
+          <div className="text-center">
+            <img
+              className="mb-2"
+              src={image}
+              alt="Study Streak"
+              height={250}
+              width={250}
+            />
+          </div>
         )}
         <div
           dangerouslySetInnerHTML={{
@@ -785,7 +784,7 @@ const FullLengthLiveExam = () => {
       </div>
 
       {/* Main Container */}
-      <div>{renderAudio(examData?.audio_file)}</div>
+      {renderAudio(examData?.audio_file)}
       <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">
@@ -829,7 +828,7 @@ const FullLengthLiveExam = () => {
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between mb-2">
         <div className="lv-question-pagination">
           {uniqueIdArr?.map((item, index) => {
             return (
@@ -903,43 +902,34 @@ const FullLengthLiveExam = () => {
       {isModalOpen &&
         (examData?.exam_type === "Reading" ||
           examData?.exam_type === "Listening") && (
-          <Modal
+          <SmallModal
             size="lg"
-            show={isModalOpen}
-            onHide={() => setIsModalOpen(false)}
+            centered
+            title="Your Answers"
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
           >
-            <Modal.Header closeButton>
-              <Modal.Title>Your Answers</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <div>
-                {examAnswer.map((test, index) => (
-                  <div key={index}>
-                    <h4>Test : {index + 1}</h4>
-                    <div className="card-container">
-                      {test.data.map((answer, idx) => (
-                        <div
-                          key={idx}
-                          className="card"
-                          style={{ maxWidth: "30%" }}
-                        >
-                          <div className="card-body">
-                            <h6 className="card-title">Q. {idx + 1}</h6>
-                            <h6 className="card-text">
-                              Answer :{" "}
-                              <span className="text-success">
-                                {answer.answer_text}
-                              </span>
-                            </h6>
-                          </div>
-                        </div>
-                      ))}
+            {examAnswer.map((test, index) => (
+              <div key={index}>
+                <h4>Test : {index + 1}</h4>
+                <div className="card-container">
+                  {test.data.map((answer, idx) => (
+                    <div key={idx} className="card" style={{ maxWidth: "30%" }}>
+                      <div className="card-body">
+                        <h6 className="card-title">Q. {idx + 1}</h6>
+                        <h6 className="card-text">
+                          Answer :{" "}
+                          <span className="text-success">
+                            {answer.answer_text}
+                          </span>
+                        </h6>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </Modal.Body>
-          </Modal>
+            ))}
+          </SmallModal>
         )}
     </>
   );

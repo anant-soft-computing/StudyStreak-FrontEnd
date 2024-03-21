@@ -325,7 +325,7 @@ const PracticeLiveExam = () => {
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-between">
+      <div className="d-flex justify-content-between mb-2">
         <div className="lv-question-pagination"></div>
         <div className="lv-footer-btn">
           <button

@@ -1,27 +1,27 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { addDays, subDays } from "date-fns";
 import { useLocation, useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import DoubtSolvingList from "./DoubtSolvingList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
+import GroupDoubleSolvingList from "./GroupDoubleSolvingList";
+import UpcommingGroupDoubtSolving from "./UpcommingGroupDoubtSolving";
 
-const DoubtSolving = () => {
+const GroupDoubtSolving = () => {
   const navigate = useNavigate();
   const { studentId, solvingClassBook, count, batchId } = useLocation()?.state;
-  const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
+  const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
-      startDate: subDays(new Date(), 7),
-      endDate: addDays(new Date(), 1),
+      startDate: new Date(),
+      endDate: new Date(),
       key: "selection",
     },
   ]);
-  const { one_to_one_doubt_solving_count } = count;
+  const { group_doubt_solving_count } = count;
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -73,10 +73,10 @@ const DoubtSolving = () => {
           8000
         );
         if (response?.status === 200) {
-          const doubtData = response?.data?.filter(
-            (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
+          const groupDoubtData = response?.data?.filter(
+            (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
           );
-          setDoubtSolvingClass(doubtData);
+          setGroupDoubtSolvingClass(groupDoubtData);
         } else {
           console.log("error");
         }
@@ -101,8 +101,8 @@ const DoubtSolving = () => {
     return difference >= 0 && difference <= 5 * 60 * 1000;
   };
 
-  const doubtSolvingClasses = () => {
-    return doubtSolvingClass.filter(({ start_time }) => {
+  const groupDoubtSolvingClasses = () => {
+    return groupDoubtSolvingClass.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (
@@ -111,6 +111,10 @@ const DoubtSolving = () => {
       );
     });
   };
+
+  const groupSolvingClasses = groupDoubtSolvingClasses().filter((item) => {
+    return solvingClassBook.some((index) => index.id === item.id);
+  });
 
   return (
     <>
@@ -124,9 +128,9 @@ const DoubtSolving = () => {
                   <div className="col-xl-9 col-lg-9 col-md-12">
                     <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
-                        <h4>One To One Doubt Solving</h4>
+                        <h4>Group Doubt Solving</h4>
                         <h6>
-                          Your One To One Doubt Solving Class Schedule{" "}
+                          Your Group Doubt Solving Class Schedule{" "}
                           <i
                             className="icofont-calendar"
                             style={{ cursor: "pointer", color: "#01579b" }}
@@ -134,12 +138,12 @@ const DoubtSolving = () => {
                           ></i>
                         </h6>
                       </div>
-                      {one_to_one_doubt_solving_count === "" ? (
+                      {group_doubt_solving_count === "" ? (
                         <>
                           <div className="d-flex justify-content-center">
                             <h5>
-                              No One To One Doubt Solving Class Available ,
-                              Please Buy a Course
+                              No Group Doubt Solving Class Available , Please
+                              Buy a Course
                             </h5>
                           </div>
                           <div className="d-flex justify-content-center mt-4">
@@ -152,13 +156,17 @@ const DoubtSolving = () => {
                           </div>
                         </>
                       ) : (
-                        <DoubtSolvingList
-                          doubtSolvingClasses={doubtSolvingClasses()}
-                          solvingClassBook={solvingClassBook}
-                          handleEnrollNow={handleEnrollNow}
-                          joinNow={joinNow}
-                          isWithin5Minutes={isWithin5Minutes}
-                        />
+                        <>
+                          <UpcommingGroupDoubtSolving
+                            joinNow={joinNow}
+                            isWithin5Minutes={isWithin5Minutes}
+                            groupDoubtSolvingClasses={groupSolvingClasses}
+                          />
+                          <GroupDoubleSolvingList
+                            groupDoubtSolvingClasses={groupDoubtSolvingClasses()}
+                            handleEnrollNow={handleEnrollNow}
+                          />
+                        </>
                       )}
                     </div>
                   </div>
@@ -173,7 +181,7 @@ const DoubtSolving = () => {
         centered
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="One To One Solving class schedule"
+        title="Group Doubt Solving class schedule"
       >
         <DateRange
           selectedRange={selectedDateRange}
@@ -184,4 +192,4 @@ const DoubtSolving = () => {
   );
 };
 
-export default DoubtSolving;
+export default GroupDoubtSolving;

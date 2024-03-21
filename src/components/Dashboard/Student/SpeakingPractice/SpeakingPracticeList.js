@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 
-const SpeakingPracticeList = ({ speakingClasses, handleEnrollNow }) => {
+const SpeakingPracticeList = ({ speakingClasses, bookCount }) => {
   return (
     <>
       <div className="dashboard__section__title">
@@ -55,7 +55,7 @@ const SpeakingPracticeList = ({ speakingClasses, handleEnrollNow }) => {
                       <div className="d-flex justify-content-center">
                         <button
                           className="default__button mb-2"
-                          onClick={() => handleEnrollNow(id)}
+                          onClick={() => bookCount(id)}
                           disabled={isPastDate}
                         >
                           Book Slot

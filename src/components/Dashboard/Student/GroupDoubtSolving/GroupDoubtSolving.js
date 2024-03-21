@@ -7,7 +7,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
 import GroupDoubleSolvingList from "./GroupDoubleSolvingList";
-import UpcommingGroupDoubtSolving from "./UpcommingGroupDoubtSolving";
+import UpcomingGroupDoubtSolving from "./UpcomingGroupDoubtSolving";
 
 const GroupDoubtSolving = () => {
   const navigate = useNavigate();
@@ -116,6 +116,11 @@ const GroupDoubtSolving = () => {
     return solvingClassBook.some((index) => index.id === item.id);
   });
 
+  const bookClass = solvingClassBook.map((item) => item?.id);
+  const groupClasses = groupDoubtSolvingClasses().filter(
+    (item) => !bookClass.includes(item?.id)
+  );
+
   return (
     <>
       <div className="body__wrapper">
@@ -157,13 +162,13 @@ const GroupDoubtSolving = () => {
                         </>
                       ) : (
                         <>
-                          <UpcommingGroupDoubtSolving
+                          <UpcomingGroupDoubtSolving
                             joinNow={joinNow}
                             isWithin5Minutes={isWithin5Minutes}
                             groupDoubtSolvingClasses={groupSolvingClasses}
                           />
                           <GroupDoubleSolvingList
-                            groupDoubtSolvingClasses={groupDoubtSolvingClasses()}
+                            groupDoubtSolvingClasses={groupClasses}
                             handleEnrollNow={handleEnrollNow}
                           />
                         </>

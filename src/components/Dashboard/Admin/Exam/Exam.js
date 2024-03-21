@@ -272,7 +272,14 @@ const Exam = () => {
                                 </div>
                               ))}
                             {(screenContent.examType &&
-                              screenContent.examForm === "Reading" && (
+                              (screenContent.examForm === "Reading" ||
+                                screenContent.examForm === "AWA" ||
+                                screenContent.examForm ===
+                                  "Intergrated-Reasoning" ||
+                                screenContent.examForm ===
+                                  "Quantitative-Reasoning" ||
+                                screenContent.examForm ===
+                                  "Verbal-Reasoning") && (
                                 <ExamReading
                                   category={screenContent.examType}
                                 />

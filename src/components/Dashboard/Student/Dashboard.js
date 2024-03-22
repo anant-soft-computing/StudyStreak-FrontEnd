@@ -8,7 +8,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 const Dashboard = () => {
   const [studentList, setStudentList] = useState([]);
   const [latestLiveClass, setLatestLiveClass] = useState({});
-  const batchId = localStorage.getItem("BatchID");
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
 
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
@@ -24,36 +24,37 @@ const Dashboard = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await ajaxCall(
-          `/batchidwisestudentgetview/${batchId}/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+        let totalCount = 0;
+        const studentData = [];
+  
+        for (let i = 0; i < batchIds.length; i++) {
+          const batchId = batchIds[i];
+          const response = await ajaxCall(
+            `/batchidwisestudentgetview/${batchId}/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const studentWithNumbers = response?.data?.students.map(
-            (student, index) => ({
-              ...student,
-              no: index + 1,
-            })
+            8000
           );
-          setStudentList(studentWithNumbers);
-        } else {
-          console.log("error");
+          const students = response.data.students.map((student) => ({
+            ...student,
+            no: ++totalCount,
+          }));
+          studentData.push(...students);
         }
+        setStudentList(studentData);
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, [batchId]);
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -211,11 +212,15 @@ const Dashboard = () => {
                                 <th>No.</th>
                                 <th>First Name</th>
                                 <th>Last Name</th>
+                                <th>Batch Name</th>
                               </tr>
                             </thead>
                             <tbody>
                               {studentList.map(
-                                ({ no, first_name, last_name }, index) => (
+                                (
+                                  { no, first_name, last_name, select_batch },
+                                  index
+                                ) => (
                                   <tr
                                     key={index}
                                     className={`${
@@ -228,10 +233,11 @@ const Dashboard = () => {
                                       <div>{no}.</div>
                                     </th>
                                     <td>{first_name}</td>
+                                    <td>{last_name}</td>
                                     <td>
-                                      <div className="dashboard__table__star">
-                                        {last_name}
-                                      </div>
+                                      {select_batch
+                                        .map((item) => item)
+                                        .join(", ")}
                                     </td>
                                   </tr>
                                 )

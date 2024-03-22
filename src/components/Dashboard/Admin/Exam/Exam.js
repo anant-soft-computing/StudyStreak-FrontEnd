@@ -68,7 +68,7 @@ const Exam = () => {
           },
           {
             name: "Integrated Reasoning",
-            link: `/admin-exam/${screenContent?.examType}/Intergrated-Reasoning`,
+            link: `/admin-exam/${screenContent?.examType}/Integrated-Reasoning`,
           },
           {
             name: "Quantitative Reasoning",
@@ -275,13 +275,14 @@ const Exam = () => {
                               (screenContent.examForm === "Reading" ||
                                 screenContent.examForm === "AWA" ||
                                 screenContent.examForm ===
-                                  "Intergrated-Reasoning" ||
+                                  "Integrated-Reasoning" ||
                                 screenContent.examForm ===
                                   "Quantitative-Reasoning" ||
                                 screenContent.examForm ===
                                   "Verbal-Reasoning") && (
                                 <ExamReading
                                   category={screenContent.examType}
+                                  examType={screenContent.examForm}
                                 />
                               )) ||
                               (screenContent.examForm === "Writing" && (

@@ -373,13 +373,14 @@ const DSSidebar = () => {
           });
           setBatchId(studentPackage?.batch_id);
           localStorage.setItem("StudentID", studentPackage?.student_id);
-          localStorage.setItem("BatchID", studentPackage?.batch_id);
-          setStudentId(studentPackage?.student_id);
-          setEnrolledCourse(
-            response.data.student_packages?.map(({ course }) => course)
+          localStorage.setItem(
+            "BatchIds",
+            JSON.stringify(data?.student_packages.map((item) => item.batch_id))
           );
+          setStudentId(studentPackage?.student_id);
+          setEnrolledCourse(data.student_packages?.map(({ course }) => course));
           setSolvingClassBook(
-            response.data.student_packages?.map(
+            data.student_packages?.map(
               ({ Live_class_enroll }) => Live_class_enroll
             )
           );

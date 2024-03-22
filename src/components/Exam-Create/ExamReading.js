@@ -12,7 +12,7 @@ const intialReadingField = {
   passage: "",
   passage_image: "",
   question: "",
-  exam_type: "Reading",
+  exam_type: "",
 };
 
 const initialSubmit = {
@@ -25,7 +25,7 @@ const reducerReading = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const ExamReading = ({ category }) => {
+const ExamReading = ({ category, examType }) => {
   const [readingData, dispatchReadingData] = useReducer(
     reducerReading,
     intialReadingField
@@ -82,7 +82,7 @@ const ExamReading = ({ category }) => {
 
   const handleOnNext = () => {
     if (!validateForm()) return;
-    navigate("/exam-create", { state: { readingData, category } });
+    navigate("/exam-create", { state: { readingData, category, examType } });
   };
 
   return (

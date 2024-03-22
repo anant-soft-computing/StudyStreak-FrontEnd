@@ -176,7 +176,7 @@ const CourseDetail = () => {
                                 parseInt(lesson?.Lesson_Duration),
                               0
                             )}{" "}
-                            Minutes
+                            Min
                           </span>
                         </li>
                       </ul>
@@ -332,8 +332,17 @@ const CourseDetail = () => {
                                 data-bs-parent="#accordionCourseContent"
                               >
                                 <div className="accordion-body">
-                                  {sectionItem?.lessons?.map(
-                                    (lessonItem, index) => (
+                                  {sectionItem?.lessons
+                                    ?.sort((a, b) => {
+                                      const lessonA = parseInt(
+                                        a?.Lesson_Title.match(/\d+/)[0]
+                                      );
+                                      const lessonB = parseInt(
+                                        b?.Lesson_Title.match(/\d+/)[0]
+                                      );
+                                      return lessonA - lessonB;
+                                    })
+                                    .map((lessonItem, index) => (
                                       <div className="scc__wrap" key={index}>
                                         <div
                                           className="scc__info align-items-center"
@@ -356,8 +365,7 @@ const CourseDetail = () => {
                                           </span>
                                         </div>
                                       </div>
-                                    )
-                                  )}
+                                    ))}
                                 </div>
                               </div>
                             </div>

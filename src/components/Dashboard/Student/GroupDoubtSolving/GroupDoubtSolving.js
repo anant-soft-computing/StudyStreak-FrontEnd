@@ -11,7 +11,8 @@ import UpcomingGroupDoubtSolving from "./UpcomingGroupDoubtSolving";
 
 const GroupDoubtSolving = () => {
   const navigate = useNavigate();
-  const { studentId, solvingClassBook, count, batchId } = useLocation()?.state;
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const { studentId, solvingClassBook, count } = useLocation()?.state;
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -86,33 +87,38 @@ const GroupDoubtSolving = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await ajaxCall(
-          `/liveclass_listwithid_view/${batchId}/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+        const gPClass = [];
+        for (let i = 0; i < batchIds.length; i++) {
+          const batchId = batchIds[i];
+          const response = await ajaxCall(
+            `/liveclass_listwithid_view/${batchId}/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const groupDoubtData = response?.data?.filter(
-            (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
+            8000
           );
-          setGroupDoubtSolvingClass(groupDoubtData);
-        } else {
-          console.log("error");
+          if (response?.status === 200) {
+            const groupDoubtData = response?.data?.filter(
+              (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
+            );
+            gPClass.push(...groupDoubtData);
+          } else {
+            console.log("error");
+          }
         }
+        setGroupDoubtSolvingClass(gPClass);
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, [batchId]);
+  }, []);
 
   const handleDateRangeChange = (ranges) => {
     setSelectedDateRange([ranges.selection]);

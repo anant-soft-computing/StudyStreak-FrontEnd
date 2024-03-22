@@ -11,8 +11,8 @@ import UpcomingDoubtSolving from "./UpcomingDoubtSolving";
 
 const DoubtSolving = () => {
   const navigate = useNavigate();
-  const { state: { studentId, solvingClassBook, count, batchId } = {} } =
-    useLocation();
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const { state: { studentId, solvingClassBook, count } = {} } = useLocation();
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -87,33 +87,38 @@ const DoubtSolving = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await ajaxCall(
-          `/liveclass_listwithid_view/${batchId}/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+        const oToclass = [];
+        for (let i = 0; i < batchIds.length; i++) {
+          const batchId = batchIds[i];
+          const response = await ajaxCall(
+            `/liveclass_listwithid_view/${batchId}/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const doubtData = response?.data?.filter(
-            (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
+            8000
           );
-          setDoubtSolvingClass(doubtData);
-        } else {
-          console.log("error");
+          if (response?.status === 200) {
+            const oToclassData = response?.data?.filter(
+              (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
+            );
+            oToclass.push(...oToclassData);
+          } else {
+            console.log("error");
+          }
         }
+        setDoubtSolvingClass(oToclass);
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, [batchId]);
+  }, []);
 
   const handleDateRangeChange = (ranges) => {
     setSelectedDateRange([ranges.selection]);

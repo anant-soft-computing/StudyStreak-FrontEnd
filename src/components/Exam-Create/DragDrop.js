@@ -52,6 +52,7 @@ const initialSubmit = {
 const DragDrop = () => {
   const location = useLocation();
   const category = location.state?.category || {};
+  const examType = location.state?.examType || {};
   const readingData = location.state?.readingData || {};
   const listeningData = location.state?.listeningData || {};
   const [audioLink, setAudioLink] = useState();
@@ -725,7 +726,7 @@ const DragDrop = () => {
     formData.append("block_type", readingData.block_type);
     formData.append("difficulty_level", readingData.difficulty_level);
     formData.append("exam_name", readingData.exam_name);
-    formData.append("exam_type", readingData.exam_type);
+    formData.append("exam_type", examType);
     formData.append("no_of_questions", readingData.no_of_questions);
     formData.append("passage", readingData.passage);
     formData.append("passage_image", readingData.passage_image);

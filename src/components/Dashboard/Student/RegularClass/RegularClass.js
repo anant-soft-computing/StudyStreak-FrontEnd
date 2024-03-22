@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
@@ -8,7 +7,7 @@ import DateRange from "../../../UI/DateRangePicker";
 import RegularClassList from "./RegularClassList";
 
 const RegularClass = () => {
-  const { batchId } = useLocation()?.state;
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [regularClass, setRegularClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -22,33 +21,39 @@ const RegularClass = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await ajaxCall(
-          `/liveclass_listwithid_view/${batchId}/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+        const regularClassData = [];
+
+        for (let i = 0; i < batchIds.length; i++) {
+          const batchId = batchIds[i];
+          const response = await ajaxCall(
+            `/liveclass_listwithid_view/${batchId}/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const data = response?.data?.filter(
-            (item) => item?.liveclasstype?.name === "Regular Class"
+            8000
           );
-          setRegularClass(data);
-        } else {
-          console.log("error");
+          if (response?.status === 200) {
+            const data = response?.data?.filter(
+              (item) => item?.liveclasstype?.name === "Regular Class"
+            );
+            regularClassData.push(...data);
+          } else {
+            console.log("error");
+          }
         }
+        setRegularClass(regularClassData);
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, [batchId]);
+  }, []);
 
   const handleDateRangeChange = (ranges) => {
     setSelectedDateRange([ranges.selection]);

@@ -11,8 +11,8 @@ import UpcomingSpeakingPractice from "./UpcomingSpeakingPractice";
 
 const SpeakingPractice = () => {
   const navigate = useNavigate();
-  const { state: { studentId, solvingClassBook, count, batchId } = {} } =
-    useLocation();
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const { state: { studentId, solvingClassBook, count } = {} } = useLocation();
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -87,33 +87,38 @@ const SpeakingPractice = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await ajaxCall(
-          `/liveclass_listwithid_view/${batchId}/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+        const speakingClass = [];
+        for (let i = 0; i < batchIds.length; i++) {
+          const batchId = batchIds[i];
+          const response = await ajaxCall(
+            `/liveclass_listwithid_view/${batchId}/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const speakingData = response?.data?.filter(
-            (item) => item?.liveclasstype?.name === "Speaking-Practice"
+            8000
           );
-          setSpeakingSolvingClass(speakingData);
-        } else {
-          console.log("error");
+          if (response?.status === 200) {
+            const speakingData = response?.data?.filter(
+              (item) => item?.liveclasstype?.name === "Speaking-Practice"
+            );
+            speakingClass.push(...speakingData);
+          } else {
+            console.log("error");
+          }
         }
+        setSpeakingSolvingClass(speakingClass);
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, [batchId]);
+  }, []);
 
   const handleDateRangeChange = (ranges) => {
     setSelectedDateRange([ranges.selection]);

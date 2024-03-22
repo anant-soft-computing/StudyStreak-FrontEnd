@@ -65,22 +65,11 @@ const LiveClass = () => {
                           ></i>
                         </h6>
                       </div>
-                      {solvingClassBook?.[0]?.length > 0 ? (
-                        <div className="row">
-                          {liveClasses()[0]?.map((item) => (
-                            <LiveClassList
-                              key={item.id}
-                              joinNow={joinNow}
-                              isWithin5Minutes={isWithin5Minutes}
-                              {...item}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <h5 className="text-center">
-                          No Live Classes Scheduled
-                        </h5>
-                      )}
+                      <LiveClassList
+                        liveClasses={liveClasses()}
+                        joinNow={joinNow}
+                        isWithin5Minutes={isWithin5Minutes}
+                      />
                     </div>
                   </div>
                 </div>

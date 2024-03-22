@@ -6,7 +6,6 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 const DSSidebar = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [solvingClassBook, setSolvingClassBook] = useState([]);
-  const [batchId, setBatchId] = useState();
   const [studentId, setStudentId] = useState();
   const [count, setCount] = useState({});
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -35,7 +34,6 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentDashboard/",
-      state: { batchId: batchId },
     },
     {
       name: "My Profile",
@@ -153,7 +151,7 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentLiveClasses",
-      state: { solvingClassBook: solvingClassBook },
+      state: { solvingClassBook: solvingClassBook[0] },
     },
     {
       name: "Regular Class",
@@ -173,7 +171,6 @@ const DSSidebar = () => {
       link: "/regularClasses",
       state: {
         studentId: studentId,
-        batchId: batchId,
       },
     },
     {
@@ -196,7 +193,6 @@ const DSSidebar = () => {
         studentId: studentId,
         solvingClassBook: solvingClassBook[0],
         count: count,
-        batchId: batchId,
       },
     },
     {
@@ -218,7 +214,6 @@ const DSSidebar = () => {
         studentId: studentId,
         solvingClassBook: solvingClassBook[0],
         count: count,
-        batchId: batchId,
       },
     },
     {
@@ -243,7 +238,6 @@ const DSSidebar = () => {
         studentId: studentId,
         solvingClassBook: solvingClassBook[0],
         count: count,
-        batchId: batchId,
       },
     },
     {
@@ -371,7 +365,6 @@ const DSSidebar = () => {
               packageDetails?.one_to_one_doubt_solving_count - studentOTOS ||
               "",
           });
-          setBatchId(studentPackage?.batch_id);
           localStorage.setItem("StudentID", studentPackage?.student_id);
           localStorage.setItem(
             "BatchIds",

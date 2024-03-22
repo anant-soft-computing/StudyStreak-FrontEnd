@@ -7,8 +7,8 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 const Dashboard = () => {
   const [studentList, setStudentList] = useState([]);
+  const [batchId, setBatchId] = useState([]);
   const [latestLiveClass, setLatestLiveClass] = useState({});
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
 
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
@@ -24,13 +24,41 @@ const Dashboard = () => {
   useEffect(() => {
     (async () => {
       try {
+        const response = await ajaxCall(
+          `/batchview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setBatchId(response?.data?.map((item) => item.id));
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
         let totalCount = 0;
         const studentData = [];
-  
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
+        for (let i = 0; i < batchId.length; i++) {
+          const id = batchId[i];
           const response = await ajaxCall(
-            `/batchidwisestudentgetview/${batchId}/`,
+            `/batchidwisestudentgetview/${id}/`,
             {
               headers: {
                 Accept: "application/json",
@@ -54,7 +82,7 @@ const Dashboard = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [batchId]);
 
   useEffect(() => {
     (async () => {

@@ -52,6 +52,7 @@ import TopBar from "./components/TopBar/TopBar";
 import NavBar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
 import RegularClass from "./components/Dashboard/Student/RegularClass/RegularClass";
+import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
 
 const App = () => {
   return (
@@ -167,6 +168,10 @@ const App = () => {
         <Route
           path="/fulllength-live-exam/:examId"
           element={<ProtectedRoute element={FullLengthLiveExam} />}
+        />
+        <Route
+          path="/gmat-live-mock-test/:examId"
+          element={<GmatLiveMockTest />}
         />
         <Route
           path="/eaxm-answere/:examId"

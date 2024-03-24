@@ -18,7 +18,7 @@ const LiveClass = () => {
   ]);
 
   const liveClasses = () => {
-    return solvingClassBook.filter(({ start_time }) => {
+    return solvingClassBook?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (

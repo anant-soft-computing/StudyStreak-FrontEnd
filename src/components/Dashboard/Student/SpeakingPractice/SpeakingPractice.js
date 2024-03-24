@@ -9,8 +9,9 @@ import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
 import UpcomingSpeakingPractice from "./UpcomingSpeakingPractice";
 
-const SpeakingPractice = () => {
+const SpeakingPractice = ({ sepakingCount = "" }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { state: { studentId, solvingClassBook, count } = {} } = useLocation();
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
@@ -22,7 +23,7 @@ const SpeakingPractice = () => {
       key: "selection",
     },
   ]);
-  const { speaking_practice_count } = count;
+  const { speaking_practice_count } = count || sepakingCount;
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -157,56 +158,58 @@ const SpeakingPractice = () => {
 
   return (
     <>
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
-                  <DSSidebar />
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>Speaking Practice</h4>
-                        <h6>
-                          Your Speaking Practice Class Schedule{" "}
-                          <i
-                            className="icofont-calendar"
-                            style={{ cursor: "pointer", color: "#01579b" }}
-                            onClick={() => setIsModalOpen(true)}
-                          ></i>
-                        </h6>
+      {pathname === "/speakingSolving" ? (
+        <div className="body__wrapper">
+          <div className="main_wrapper overflow-hidden">
+            <div className="dashboardarea sp_bottom_100">
+              <div className="dashboard">
+                <div className="container-fluid full__width__padding">
+                  <div className="row">
+                    <DSSidebar />
+                    <div className="col-xl-9 col-lg-9 col-md-12">
+                      <div className="dashboard__content__wraper common-background-color-across-app">
+                        <div className="dashboard__section__title">
+                          <h4>Speaking Practice</h4>
+                          <h6>
+                            Your Speaking Practice Class Schedule{" "}
+                            <i
+                              className="icofont-calendar"
+                              style={{ cursor: "pointer", color: "#01579b" }}
+                              onClick={() => setIsModalOpen(true)}
+                            ></i>
+                          </h6>
+                        </div>
+                        {speaking_practice_count === "" ? (
+                          <>
+                            <div className="d-flex justify-content-center">
+                              <h5>
+                                No Speaking Practice Class Available, Please Buy
+                                a Course
+                              </h5>
+                            </div>
+                            <div className="d-flex justify-content-center mt-4">
+                              <button
+                                className="default__button"
+                                onClick={() => navigate("/courses")}
+                              >
+                                Buy Course
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <UpcomingSpeakingPractice
+                              joinNow={joinNow}
+                              isWithin5Minutes={isWithin5Minutes}
+                              speakingClasses={speackingClasses}
+                            />
+                            <SpeakingPracticeList
+                              speakingClasses={speakingPracticeClasses}
+                              bookCount={bookCount}
+                            />
+                          </>
+                        )}
                       </div>
-                      {speaking_practice_count === "" ? (
-                        <>
-                          <div className="d-flex justify-content-center">
-                            <h5>
-                              No Speaking Practice Class Available, Please Buy a
-                              Course
-                            </h5>
-                          </div>
-                          <div className="d-flex justify-content-center mt-4">
-                            <button
-                              className="default__button"
-                              onClick={() => navigate("/courses")}
-                            >
-                              Buy Course
-                            </button>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <UpcomingSpeakingPractice
-                            joinNow={joinNow}
-                            isWithin5Minutes={isWithin5Minutes}
-                            speakingClasses={speackingClasses}
-                          />
-                          <SpeakingPracticeList
-                            speakingClasses={speakingPracticeClasses}
-                            bookCount={bookCount}
-                          />
-                        </>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -214,7 +217,52 @@ const SpeakingPractice = () => {
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <div className="live__class__schedule_header">
+            <h6>
+              Your Speaking Practice Class Schedule{" "}
+              <i
+                className="icofont-calendar"
+                style={{ cursor: "pointer", color: "#01579b" }}
+                onClick={() => setIsModalOpen(true)}
+              ></i>
+            </h6>
+          </div>
+          <div>
+            {speaking_practice_count === "" ? (
+              <>
+                <div className="d-flex justify-content-center">
+                  <h5>
+                    No Speaking Practice Class Available, Please Buy a Course
+                  </h5>
+                </div>
+                <div className="d-flex justify-content-center mt-4">
+                  <button
+                    className="default__button"
+                    onClick={() => navigate("/courses")}
+                  >
+                    Buy Course
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <UpcomingSpeakingPractice
+                  joinNow={joinNow}
+                  isWithin5Minutes={isWithin5Minutes}
+                  speakingClasses={speackingClasses}
+                />
+                <SpeakingPracticeList
+                  speakingClasses={speakingPracticeClasses}
+                  bookCount={bookCount}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       <SmallModal
         size="lg"
         centered

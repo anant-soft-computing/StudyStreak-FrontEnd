@@ -5,8 +5,10 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
 import RegularClassList from "./RegularClassList";
+import { useLocation } from "react-router";
 
 const RegularClass = () => {
+  const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [regularClass, setRegularClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,31 +85,33 @@ const RegularClass = () => {
 
   return (
     <>
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
-                  <DSSidebar />
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>Regular Class</h4>
-                        <h6>
-                          Your Regular Class Schedule{" "}
-                          <i
-                            className="icofont-calendar"
-                            style={{ cursor: "pointer", color: "#01579b" }}
-                            onClick={() => setIsModalOpen(true)}
-                          ></i>
-                        </h6>
+      {pathname === "/regularClasses" ? (
+        <div className="body__wrapper">
+          <div className="main_wrapper overflow-hidden">
+            <div className="dashboardarea sp_bottom_100">
+              <div className="dashboard">
+                <div className="container-fluid full__width__padding">
+                  <div className="row">
+                    <DSSidebar />
+                    <div className="col-xl-9 col-lg-9 col-md-12">
+                      <div className="dashboard__content__wraper common-background-color-across-app">
+                        <div className="dashboard__section__title">
+                          <h4>Regular Class</h4>
+                          <h6>
+                            Your Regular Class Schedule{" "}
+                            <i
+                              className="icofont-calendar"
+                              style={{ cursor: "pointer", color: "#01579b" }}
+                              onClick={() => setIsModalOpen(true)}
+                            ></i>
+                          </h6>
+                        </div>
+                        <RegularClassList
+                          regularClass={regularClasses()}
+                          joinNow={joinNow}
+                          isWithin5Minutes={isWithin5Minutes}
+                        />
                       </div>
-                      <RegularClassList
-                        regularClass={regularClasses()}
-                        joinNow={joinNow}
-                        isWithin5Minutes={isWithin5Minutes}
-                      />
                     </div>
                   </div>
                 </div>
@@ -115,7 +119,27 @@ const RegularClass = () => {
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <div className="live__class__schedule_header">
+            <h6>
+              Your Regular Class Schedule{" "}
+              <i
+                className="icofont-calendar"
+                style={{ cursor: "pointer", color: "#01579b" }}
+                onClick={() => setIsModalOpen(true)}
+              ></i>
+            </h6>
+          </div>
+          <div>
+            <RegularClassList
+              regularClass={regularClasses()}
+              joinNow={joinNow}
+              isWithin5Minutes={isWithin5Minutes}
+            />
+          </div>
+        </div>
+      )}
       <SmallModal
         size="lg"
         centered

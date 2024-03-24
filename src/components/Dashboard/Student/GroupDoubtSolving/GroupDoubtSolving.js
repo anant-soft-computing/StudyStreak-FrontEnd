@@ -9,8 +9,9 @@ import DateRange from "../../../UI/DateRangePicker";
 import GroupDoubleSolvingList from "./GroupDoubleSolvingList";
 import UpcomingGroupDoubtSolving from "./UpcomingGroupDoubtSolving";
 
-const GroupDoubtSolving = () => {
+const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state;
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
@@ -22,7 +23,7 @@ const GroupDoubtSolving = () => {
       key: "selection",
     },
   ]);
-  const { group_doubt_solving_count } = count;
+  const { group_doubt_solving_count } = count || doubtCount;
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -157,56 +158,58 @@ const GroupDoubtSolving = () => {
 
   return (
     <>
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
-                  <DSSidebar />
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>Group Doubt Solving</h4>
-                        <h6>
-                          Your Group Doubt Solving Class Schedule{" "}
-                          <i
-                            className="icofont-calendar"
-                            style={{ cursor: "pointer", color: "#01579b" }}
-                            onClick={() => setIsModalOpen(true)}
-                          ></i>
-                        </h6>
+      {pathname === "/groupDoubtSolving" ? (
+        <div className="body__wrapper">
+          <div className="main_wrapper overflow-hidden">
+            <div className="dashboardarea sp_bottom_100">
+              <div className="dashboard">
+                <div className="container-fluid full__width__padding">
+                  <div className="row">
+                    <DSSidebar />
+                    <div className="col-xl-9 col-lg-9 col-md-12">
+                      <div className="dashboard__content__wraper common-background-color-across-app">
+                        <div className="dashboard__section__title">
+                          <h4>Group Doubt Solving</h4>
+                          <h6>
+                            Your Group Doubt Solving Class Schedule{" "}
+                            <i
+                              className="icofont-calendar"
+                              style={{ cursor: "pointer", color: "#01579b" }}
+                              onClick={() => setIsModalOpen(true)}
+                            ></i>
+                          </h6>
+                        </div>
+                        {group_doubt_solving_count === "" ? (
+                          <>
+                            <div className="d-flex justify-content-center">
+                              <h5>
+                                No Group Doubt Solving Class Available , Please
+                                Buy a Course
+                              </h5>
+                            </div>
+                            <div className="d-flex justify-content-center mt-4">
+                              <button
+                                className="default__button"
+                                onClick={() => navigate("/courses")}
+                              >
+                                Buy Course
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <UpcomingGroupDoubtSolving
+                              joinNow={joinNow}
+                              isWithin5Minutes={isWithin5Minutes}
+                              groupDoubtSolvingClasses={groupSolvingClasses}
+                            />
+                            <GroupDoubleSolvingList
+                              groupDoubtSolvingClasses={groupClasses}
+                              bookCount={bookCount}
+                            />
+                          </>
+                        )}
                       </div>
-                      {group_doubt_solving_count === "" ? (
-                        <>
-                          <div className="d-flex justify-content-center">
-                            <h5>
-                              No Group Doubt Solving Class Available , Please
-                              Buy a Course
-                            </h5>
-                          </div>
-                          <div className="d-flex justify-content-center mt-4">
-                            <button
-                              className="default__button"
-                              onClick={() => navigate("/courses")}
-                            >
-                              Buy Course
-                            </button>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <UpcomingGroupDoubtSolving
-                            joinNow={joinNow}
-                            isWithin5Minutes={isWithin5Minutes}
-                            groupDoubtSolvingClasses={groupSolvingClasses}
-                          />
-                          <GroupDoubleSolvingList
-                            groupDoubtSolvingClasses={groupClasses}
-                            bookCount={bookCount}
-                          />
-                        </>
-                      )}
                     </div>
                   </div>
                 </div>
@@ -214,7 +217,52 @@ const GroupDoubtSolving = () => {
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <div className="live__class__schedule_header">
+            <h6>
+              Your Group Doubt Solving Class Schedule{" "}
+              <i
+                className="icofont-calendar"
+                style={{ cursor: "pointer", color: "#01579b" }}
+                onClick={() => setIsModalOpen(true)}
+              ></i>
+            </h6>
+          </div>
+          <div>
+            {group_doubt_solving_count === "" ? (
+              <>
+                <div className="d-flex justify-content-center">
+                  <h5>
+                    No Group Doubt Solving Class Available , Please Buy a Course
+                  </h5>
+                </div>
+                <div className="d-flex justify-content-center mt-4">
+                  <button
+                    className="default__button"
+                    onClick={() => navigate("/courses")}
+                  >
+                    Buy Course
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <UpcomingGroupDoubtSolving
+                  joinNow={joinNow}
+                  isWithin5Minutes={isWithin5Minutes}
+                  groupDoubtSolvingClasses={groupSolvingClasses}
+                />
+                <GroupDoubleSolvingList
+                  groupDoubtSolvingClasses={groupClasses}
+                  bookCount={bookCount}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       <SmallModal
         size="lg"
         centered

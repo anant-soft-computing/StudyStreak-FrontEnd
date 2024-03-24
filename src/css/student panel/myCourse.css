@@ -1,9 +1,13 @@
 .floating-notes-container-icon {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   position: fixed;
   top: 60%;
   right: 0;
   margin-right: 12px;
   cursor: pointer;
+  background: #ebf2f5;
 }
 
 .floating-note {
@@ -26,8 +30,8 @@
 
 .button-container-for-floating-notes {
   display: flex;
-  flex-direction: row;
-  gap: 16px;
+  flex-direction: column;
+  gap: 4px;
   justify-content: space-between;
   margin-top: 16px;
 }

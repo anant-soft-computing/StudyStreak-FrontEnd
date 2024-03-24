@@ -3,14 +3,14 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
-import SmallModal from "../UI/Modal";
+import InstructionsPage from "./Instruction";
 const Cheerio = require("cheerio");
 
-const LiveExam = () => {
+const GmatLiveMockTest = () => {
   const containerRef = useRef(null);
+  const [Instruction, setInstruction] = useState(1);
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
@@ -539,149 +539,56 @@ const LiveExam = () => {
     }
   }, [recordedFilePath]);
 
-  return (
+  return Instruction !== 3 ? (
+    <InstructionsPage
+      Instruction={Instruction}
+      setInstruction={setInstruction}
+    />
+  ) : (
     <>
-      <div className="lv-navbar">
-        <div className="lv-navbar-title">
-          <h2 style={{ color: "red", marginTop: "40px" }}>
-            {examData?.exam_category}
-          </h2>
-          <div className="lv-userName">{userData?.username}</div>
-        </div>
-        <span>
-          Time Taken :
-          <span className="lv-userName">
-            {Math.floor(timer / 60)} : {timer % 60}
-          </span>
-        </span>
-      </div>
+      <div className="lv-navbar" />
 
       {/* Static Container */}
-      <div className="lv-container">
-        <div className="lv-container-title">{`${examData?.exam_name}`}</div>
-      </div>
 
       {/* Main Container */}
-      {renderAudio(examData?.audio_file)}
-      <div className="lv-main-container">
-        {/* Left Container */}
-        <div className="lv-left-container">
-          {displayLeftContainer(examData?.passage, examData?.passage_image)}
-        </div>
-
-        {/* Right Container */}
-        <div
-          className="lv-right-container"
-          id="right-container"
-          ref={containerRef}
-        >
+      <div className="gmat-paper-container" style={{ marginTop: "25px" }}>
+        <div className="gmat-paper">
+          {/* Right Container */}
+          <div className="instruction">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h4 className="text-center gmat-text">1 of 5</h4>
+              <span style={{ marginTop: "40px" }}>
+                <span className="gmt-timer">
+                  {Math.floor(timer / 60)} : {timer % 60}
+                </span>
+              </span>
+            </div>
+            <div
+              style={{
+                border: "dotted 1px #bbb",
+                marginTop: "20px",
+                marginBottom: "30px",
+              }}
+            ></div>
+          </div>
           <div className="lv-box-right">
             {/* Replace the following with your actual content */}
-            {(examData?.exam_type === "Reading" ||
-              examData?.exam_type === "Listening") && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: htmlContent,
-                }}
-              />
-            )}
-            {examData?.exam_type === "Writing" &&
-              uniqueIdArr?.map((item, index) => {
-                return (
-                  <div className="lv-textarea" key={index}>
-                    <textarea
-                      id={item}
-                      style={{ width: "100%", height: "200px" }}
-                      value={examAnswer[0]?.answers[0]?.answer || ""}
-                      onChange={(e) => handleWritingAnswer(e, 0)}
-                    />
-                    <span>Word Count : {numberOfWord}</span>
-                  </div>
-                );
-              })}
-            {examData?.exam_type === "Speaking" && (
-              <AudioRecorder
-                setRecordedFilePath={setRecordedFilePath}
-                next={0}
-                exam_id={examData?.id}
-              />
-            )}
+            <div
+              dangerouslySetInnerHTML={{
+                __html: htmlContent,
+              }}
+            />
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-between mb-2">
-        <div className="lv-question-pagination">
-          {uniqueIdArr?.map((item, index) => {
-            return (
-              <div
-                className={`lv-footer-item ${
-                  examAnswer[0].answers.length > 0 &&
-                  examAnswer[0].answers.find((val) => val.questionId === item)
-                    ?.answer !== ""
-                    ? "lv-completed-questions"
-                    : ""
-                }`}
-                onClick={() => scrollToContent(item)}
-                key={index}
-              >
-                {index + 1}
-              </div>
-            );
-          })}
-        </div>
-        {(examData?.exam_type === "Reading" ||
-          examData?.exam_type === "Listening") && (
-          <button
-            className="lv-footer-review-button"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Review
-          </button>
-        )}
-        <button
-          className="lv-footer-button"
-          onClick={() => {
-            if (
-              examData?.exam_type === "Reading" ||
-              examData?.exam_type === "Listening" ||
-              examData?.exam_type === "Speaking"
-            ) {
-              handleRLSubmit();
-            } else if (examData?.exam_type === "Writing") {
-              doAnswerSubmit();
-            }
-          }}
-        >
-          <span>&#x2713;</span>
-        </button>
-      </div>
-      {isModalOpen &&
-        (examData?.exam_type === "Reading" ||
-          examData?.exam_type === "Listening") && (
-          <SmallModal
-            size="lg"
-            centered
-            title="Your Answers"
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-          >
-            <div className="card-container">
-              {examAnswer[0]?.answers.map((answer, index) => (
-                <div key={index} className="card" style={{ maxWidth: "30%" }}>
-                  <div className="card-body">
-                    <h6 className="card-title">Q. {index + 1}</h6>
-                    <h6 className="card-text">
-                      Answer :{" "}
-                      <span className="text-success">{answer.answer}</span>
-                    </h6>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </SmallModal>
-        )}
     </>
   );
 };
 
-export default LiveExam;
+export default GmatLiveMockTest;

@@ -133,3 +133,160 @@
   flex-direction: row;
   justify-content: space-evenly;
 }
+
+.info-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.page-wrapper h1 {
+  font-family: "Montserrat";
+  font-weight: 300;
+  color: #515151;
+  text-transform: uppercase;
+  margin: 17px 0;
+}
+
+.questions::before {
+  content: "";
+  display: inline-block;
+  margin-right: 5px;
+  width: 10px;
+  height: 10px;
+  background-color: #21db6e;
+  border-radius: 50%;
+}
+
+.test-info.time {
+  padding-left: 25px;
+  background-image: url("https://gmat.london.edu/static/skin/img/icongroup.png");
+  background-repeat: no-repeat;
+  background-position: -6px -23px;
+}
+
+.gmat-paper-container {
+  flex: 1 1;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #ebe8e5;
+  border-radius: 8px;
+  padding: 20px 140px;
+}
+
+.gmat-text {
+  color: #515151;
+}
+
+.gmat-paper {
+  background-color: white;
+  border-radius: 2px;
+  padding: 40px 40px 20px 40px;
+  margin-left: 10px;
+}
+
+.welcome-info {
+  margin-top: -15px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  line-height: 24px;
+  text-align: left;
+  font-family: "HelveticaNeueLTPro-Md", arial;
+  font-weight: normal;
+  color: #4a4a4a;
+}
+
+.instruction h4 {
+  font-family: "Montserrat";
+  font-weight: normal;
+  color: #4a4a4a;
+  border: none;
+}
+
+.instruction p {
+  color: #595959;
+  margin: 20px 0 20px 0;
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.gmat-button {
+  width: "auto";
+  height: "auto";
+  margin-right: 10px;
+  background-color: #001e62;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 25px;
+  font-weight: bold;
+  color: white;
+}
+
+.gmat-button:hover {
+  color: white;
+}
+
+.info {
+  font-size: 14px;
+  font-weight: normal;
+  color: #595959;
+  margin: 50px 0 40px 0;
+  line-height: 1.4em;
+  display: block;
+  text-align: center;
+}
+
+.content-size-wrapper {
+  width: 47%;
+  float: left;
+  margin-right: 3%;
+}
+
+.content-size-wrapper-right {
+  width: 43%;
+  float: right;
+  margin-right: 3%;
+  margin-left: 3%;
+  text-align: left;
+}
+
+.example-title {
+  background: #0658a9;
+  font-family: "Montserrat";
+  font-weight: 300;
+  color: #fff;
+  font-size: 21px;
+  padding: 4px 0;
+  text-transform: uppercase;
+  font-style: normal;
+  margin-top: 40px;
+  width: -webkit-fill-available;
+}
+
+.example-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.example-center {
+  color: #739c24;
+  font-weight: 600;
+}
+
+.gmt-timer {
+  font-size: 16px;
+  padding-bottom: 7px;
+  padding-right: 14px;
+  background-color: #64696d;
+  border-radius: 0;
+  border: none;
+  border-radius: 3px;
+  width: 88px;
+  margin: 0;
+  padding: 8px 8px 4px 6px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}

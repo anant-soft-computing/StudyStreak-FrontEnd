@@ -731,18 +731,15 @@ const DragDrop = () => {
     formData.append("passage", readingData.passage);
     formData.append("passage_image", readingData.passage_image);
     formData.append("question", htmlContent);
-    formData.append(
-      "answers",
-      answer.forEach((item) => {
-        item.answers.forEach((answer, index) => {
-          formData.append(
-            `answers[${index}]question_number`,
-            answer.question_number
-          );
-          formData.append(`answers[${index}]answer_text`, answer.answer_text);
-        });
-      })
-    );
+    answer.forEach((item) => {
+      item.answers.forEach((answer, index) => {
+        formData.append(
+          `answers[${index}]question_number`,
+          answer.question_number
+        );
+        formData.append(`answers[${index}]answer_text`, answer.answer_text);
+      });
+    });
     formData.append("question_structure", JSON.stringify(questionStructure));
     formData.append("exam_category", category);
 
@@ -786,18 +783,15 @@ const DragDrop = () => {
     formData.append("no_of_questions", listeningData.no_of_questions);
     formData.append("passage", listeningData.passage);
     formData.append("question", htmlContent);
-    formData.append(
-      "answers",
-      answer.forEach((item) => {
-        item.answers.forEach((answer, index) => {
-          formData.append(
-            `answers[${index}]question_number`,
-            answer.question_number
-          );
-          formData.append(`answers[${index}]answer_text`, answer.answer_text);
-        });
-      })
-    );
+    answer.forEach((item) => {
+      item.answers.forEach((answer, index) => {
+        formData.append(
+          `answers[${index}]question_number`,
+          answer.question_number
+        );
+        formData.append(`answers[${index}]answer_text`, answer.answer_text);
+      });
+    });
     formData.append("audio_file", listeningData.audio_file);
     formData.append("question_structure", JSON.stringify(questionStructure));
     formData.append("exam_category", category);

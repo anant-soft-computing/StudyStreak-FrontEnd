@@ -25,6 +25,7 @@ const PracticeLiveExam = () => {
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
+  const [reRenderAudio, setReRenderAudio] = useState(false);
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [recordedFilePath, setRecordedFilePath] = useState("");
@@ -156,6 +157,7 @@ const PracticeLiveExam = () => {
           no: index + 1,
         })
       );
+      setReRenderAudio(true);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
@@ -218,10 +220,10 @@ const PracticeLiveExam = () => {
 
   const renderAudio = (audio_file) => {
     // Replace this with your actual implementation
-    if (audio_file) {
+    if (audio_file && reRenderAudio) {
       return (
         <div>
-          <audio controls autoPlay>
+          <audio controls autoPlay controlsList="nodownload">
             <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>
@@ -421,13 +423,10 @@ const PracticeLiveExam = () => {
     let bandValue = null;
 
     examAnswer.forEach((item, index) => {
-      const temp = item.data.map((answer, index2) => {
-        if (answer.answer_text === "")
-        return {
-          question_number: index2 + 1,
-          answer_text: answer.answer_text,
-        };
-      });
+      const temp = item.data.map((answer, index2) => ({
+        question_number: index2 + 1,
+        answer_text: answer.answer_text,
+      }));
       const tempObj = {
         exam_id: item.exam_id,
         data: temp,
@@ -603,6 +602,7 @@ const PracticeLiveExam = () => {
               opacity: linkAnswer ? 0.5 : 1,
             }}
             onClick={() => {
+              setReRenderAudio(false);
               setNext(next - 1);
             }}
             disabled={linkAnswer}
@@ -622,6 +622,7 @@ const PracticeLiveExam = () => {
               opacity: linkAnswer ? 0.5 : 1,
             }}
             onClick={() => {
+              setReRenderAudio(false);
               setNext(next + 1);
             }}
             disabled={linkAnswer}

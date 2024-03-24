@@ -15,6 +15,7 @@ const FullLengthLiveExam = () => {
   const navigate = useNavigate();
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const [examData, setExamData] = useState([]);
+  const [reRenderAudio, setReRenderAudio] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
@@ -186,6 +187,7 @@ const FullLengthLiveExam = () => {
         ...examBlock,
         no: index + 1,
       }));
+      setReRenderAudio(true);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
@@ -248,10 +250,10 @@ const FullLengthLiveExam = () => {
 
   const renderAudio = (audio_file) => {
     // Replace this with your actual implementation
-    if (audio_file) {
+    if (audio_file && reRenderAudio) {
       return (
         <div>
-          <audio controls autoPlay>
+          <audio controls autoPlay controlsList="nodownload">
             <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>
@@ -406,7 +408,7 @@ const FullLengthLiveExam = () => {
       setLinkAnswer(true);
       return questionPassage;
     }
-  }, [examData?.question]);
+  }, [examData]);
 
   const renderTime = useMemo(
     () => (
@@ -453,15 +455,12 @@ const FullLengthLiveExam = () => {
     const answersArray = [];
     let bandValue = 0;
 
-    examAnswer.forEach((item, index) => {
-      const temp = item.data.map((answer, index2) => {
-        if (answer.answer_text === "")
 
-        return {
-          question_number: index2 + 1,
-          answer_text: answer.answer_text,
-        };
-      });
+    examAnswer.forEach((item, index) => {
+      const temp = item.data.map((answer, index2) => ({
+        question_number: index2 + 1,
+        answer_text: answer.answer_text,
+      }));
       const tempObj = {
         exam_id: item.exam_id,
         data: temp,
@@ -473,6 +472,7 @@ const FullLengthLiveExam = () => {
 
     let newAnswersArray = [];
     let isError = false;
+
     try {
       // Wait for all ChatGPT API calls to complete for writing only
       await Promise.all(
@@ -504,31 +504,39 @@ const FullLengthLiveExam = () => {
               ],
             };
 
-            const res = await fetch(
-              "https://api.openai.com/v1/chat/completions",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-                },
-                body: JSON.stringify(gptBody),
-              }
-            );
-
-            if (!res.ok)
-              throw new Error("Some Problem Occurred. Please try again.");
-            const data = await res.json();
-            bandValue = data?.choices?.[0]?.message?.content
-              ?.split("#Band:")[1]
-              .split(" ")[1];
-            gptResponse = data?.choices?.[0]?.message?.content;
-            newAnswersArray.push({
-              exam_id: item.exam_id,
-              band: bandValue,
-              AI_Assessment: gptResponse,
-              data: item.data,
-            });
+            if (item.data[0].answer_text !== "") {
+              const res = await fetch(
+                "https://api.openai.com/v1/chat/completions",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+                  },
+                  body: JSON.stringify(gptBody),
+                }
+              );
+              if (!res.ok)
+                throw new Error("Some Problem Occurred. Please try again.");
+              const data = await res.json();
+              bandValue = data?.choices?.[0]?.message?.content
+                ?.split("#Band:")[1]
+                .split(" ")[1];
+              gptResponse = data?.choices?.[0]?.message?.content;
+              newAnswersArray.push({
+                exam_id: item.exam_id,
+                band: bandValue,
+                AI_Assessment: gptResponse,
+                data: item.data,
+              });
+            } else {
+              newAnswersArray.push({
+                exam_id: item.exam_id,
+                band: 0,
+                AI_Assessment: "",
+                data: item.data,
+              });
+            }
           } else if (
             item.exam_type === "Reading" ||
             item.exam_type === "Listening"
@@ -540,7 +548,7 @@ const FullLengthLiveExam = () => {
 
             item.data.forEach((answer, index) => {
               if (
-                answer.answer_text === tempCorrectAnswers[index].answer_text
+                answer.answer_text === tempCorrectAnswers?.[index]?.answer_text
               ) {
                 totalCorrect++;
               }
@@ -633,10 +641,12 @@ const FullLengthLiveExam = () => {
   }, [recordedFilePath]);
 
   const handleBackSectionClicked = () => {
+    setReRenderAudio(false);
     setNext(next - 1);
     setCount((prev) => prev - 1);
   };
   const handleNextSectionClicked = () => {
+    setReRenderAudio(false);
     setNext(next + 1);
     setCount((prev) => prev + 1);
   };
@@ -784,7 +794,7 @@ const FullLengthLiveExam = () => {
       </div>
 
       {/* Main Container */}
-      {renderAudio(examData?.audio_file)}
+      {examData?.exam_type === "Listening" && renderAudio(examData?.audio_file)}
       <div className="lv-main-container">
         {/* Left Container */}
         <div className="lv-left-container">

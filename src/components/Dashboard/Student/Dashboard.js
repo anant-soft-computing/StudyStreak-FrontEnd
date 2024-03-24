@@ -7,6 +7,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 const Dashboard = () => {
   const [studentList, setStudentList] = useState([]);
+  const [pointHistory, setPointHistory] = useState([]);
   const [batchId, setBatchId] = useState([]);
   const [latestLiveClass, setLatestLiveClass] = useState({});
 
@@ -48,6 +49,36 @@ const Dashboard = () => {
         console.log("error", error);
       }
     })();
+  }, []);
+
+  const fetchPointHistory = async () => {
+    try {
+      const response = await ajaxCall(
+        `/pointhistory/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response?.status === 200) {
+        setPointHistory(response?.data);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPointHistory();
   }, []);
 
   useEffect(() => {
@@ -226,52 +257,147 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
+
+                  {/* Leaderboard and point history */}
                   <div className="dashboard__content__wraper common-background-color-across-app">
-                    <div className="dashboard__section__title">
-                      <h4>Leaderboard</h4>
-                      <h6>Practice daily and lead the game!</h6>
-                    </div>
                     <div className="row">
-                      <div className="col-xl-12">
-                        <div className="dashboard__table table-responsive">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>No.</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Batch Name</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {studentList.map(
-                                (
-                                  { no, first_name, last_name, select_batch },
-                                  index
-                                ) => (
-                                  <tr
-                                    key={index}
-                                    className={`${
-                                      index % 2 === 0
-                                        ? ""
-                                        : "dashboard__table__row"
-                                    }`}
-                                  >
-                                    <th>
-                                      <div>{no}.</div>
-                                    </th>
-                                    <td>{first_name}</td>
-                                    <td>{last_name}</td>
-                                    <td>
-                                      {select_batch
-                                        .map((item) => item)
-                                        .join(", ")}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
+                      <div
+                        className="col-xl-12 aos-init aos-animate"
+                        data-aos="fade-up"
+                      >
+                        <ul
+                          className="nav  about__button__wrap dashboard__button__wrap"
+                          id="myTab"
+                          role="tablist"
+                        >
+                          <li className="nav-item" role="presentation">
+                            <button
+                              className="single__tab__link active common-background-color-across-app"
+                              data-bs-toggle="tab"
+                              data-bs-target="#leaderboard"
+                              type="button"
+                              aria-selected="true"
+                              role="tab"
+                            >
+                              Leaderboard
+                            </button>
+                          </li>
+                          <li className="nav-item" role="presentation">
+                            <button
+                              className="single__tab__link common-background-color-across-app"
+                              data-bs-toggle="tab"
+                              data-bs-target="#pointHistory"
+                              type="button"
+                              aria-selected="false"
+                              role="tab"
+                              tabIndex="-1"
+                            >
+                              My Point History
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                      <div
+                        className="tab-content tab__content__wrapper aos-init aos-animate"
+                        id="myTabContent"
+                        data-aos="fade-up"
+                      >
+                        <div
+                          className="tab-pane fade active show"
+                          id="leaderboard"
+                          role="tabpanel"
+                          aria-labelledby="leaderboard"
+                        >
+                          <div className="row">
+                            <div className="col-xl-12">
+                              <div className="dashboard__table table-responsive">
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>No.</th>
+                                      <th>First Name</th>
+                                      <th>Last Name</th>
+                                      <th>Batch Name</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {studentList.map(
+                                      (
+                                        {
+                                          no,
+                                          first_name,
+                                          last_name,
+                                          select_batch,
+                                        },
+                                        index
+                                      ) => (
+                                        <tr
+                                          key={index}
+                                          className={`${
+                                            index % 2 === 0
+                                              ? ""
+                                              : "dashboard__table__row"
+                                          }`}
+                                        >
+                                          <th>
+                                            <div>{no}.</div>
+                                          </th>
+                                          <td>{first_name}</td>
+                                          <td>{last_name}</td>
+                                          <td>
+                                            {select_batch
+                                              .map((item) => item)
+                                              .join(", ")}
+                                          </td>
+                                        </tr>
+                                      )
+                                    )}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          className="tab-pane fade active show"
+                          id="pointHistory"
+                          role="tabpanel"
+                          aria-labelledby="pointHistory"
+                        >
+                          <div className="row">
+                            <div className="col-xl-12">
+                              <div className="dashboard__table table-responsive">
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th>No.</th>
+                                      <th>Exam</th>
+                                      <th>Point</th>
+                                      <th>Date</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {pointHistory.map((item, index) => (
+                                      <tr
+                                        key={index}
+                                        className={`${
+                                          index % 2 === 0
+                                            ? ""
+                                            : "dashboard__table__row"
+                                        }`}
+                                      >
+                                        <th>
+                                          <div>{index + 1}.</div>
+                                        </th>
+                                        <td>{item.model}</td>
+                                        <td>{item.points}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

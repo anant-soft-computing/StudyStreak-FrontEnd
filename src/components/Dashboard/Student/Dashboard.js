@@ -265,37 +265,46 @@ const Dashboard = () => {
                         className="col-xl-12 aos-init aos-animate"
                         data-aos="fade-up"
                       >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                          }}
                         >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className="single__tab__link active common-background-color-across-app"
-                              data-bs-toggle="tab"
-                              data-bs-target="#leaderboard"
-                              type="button"
-                              aria-selected="true"
-                              role="tab"
-                            >
-                              Leaderboard
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className="single__tab__link common-background-color-across-app"
-                              data-bs-toggle="tab"
-                              data-bs-target="#pointHistory"
-                              type="button"
-                              aria-selected="false"
-                              role="tab"
-                              tabIndex="-1"
-                            >
-                              My Point History
-                            </button>
-                          </li>
-                        </ul>
+                          <ul
+                            className="nav  about__button__wrap dashboard__button__wrap"
+                            id="myTab"
+                            role="tablist"
+                          >
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className="single__tab__link active common-background-color-across-app"
+                                data-bs-toggle="tab"
+                                data-bs-target="#leaderboard"
+                                type="button"
+                                aria-selected="true"
+                                role="tab"
+                              >
+                                Leaderboard
+                              </button>
+                            </li>
+                            <li className="nav-item" role="presentation">
+                              <button
+                                className="single__tab__link common-background-color-across-app"
+                                data-bs-toggle="tab"
+                                data-bs-target="#pointHistory"
+                                type="button"
+                                aria-selected="false"
+                                role="tab"
+                                tabIndex="-1"
+                              >
+                                My Point History
+                              </button>
+                            </li>
+                          </ul>
+                          <h4>My Points:{pointHistory.total_points}</h4>
+                        </div>
                       </div>
                       <div
                         className="tab-content tab__content__wrapper aos-init aos-animate"
@@ -373,26 +382,27 @@ const Dashboard = () => {
                                       <th>No.</th>
                                       <th>Exam</th>
                                       <th>Point</th>
-                                      <th>Date</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {pointHistory.map((item, index) => (
-                                      <tr
-                                        key={index}
-                                        className={`${
-                                          index % 2 === 0
-                                            ? ""
-                                            : "dashboard__table__row"
-                                        }`}
-                                      >
-                                        <th>
-                                          <div>{index + 1}.</div>
-                                        </th>
-                                        <td>{item.model}</td>
-                                        <td>{item.points}</td>
-                                      </tr>
-                                    ))}
+                                    {pointHistory?.history?.map(
+                                      (item, index) => (
+                                        <tr
+                                          key={index}
+                                          className={`${
+                                            index % 2 === 0
+                                              ? ""
+                                              : "dashboard__table__row"
+                                          }`}
+                                        >
+                                          <th>
+                                            <div>{index + 1}.</div>
+                                          </th>
+                                          <td>{item.model}</td>
+                                          <td>{item.points}</td>
+                                        </tr>
+                                      )
+                                    )}
                                   </tbody>
                                 </table>
                               </div>

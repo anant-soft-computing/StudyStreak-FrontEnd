@@ -2,7 +2,7 @@ import React from "react";
 
 function TermsAndConditions() {
   return (
-    <div style={{ padding: "10px" }}>
+    <div style={{ padding: "10px", marginTop: "120px" }}>
       <h1 style={{ textAlign: "center" }}>
         <span style={{ fontSize: "24pt" }}>
           <span style={{ fontFamily: "Roboto, sans-serif" }}>

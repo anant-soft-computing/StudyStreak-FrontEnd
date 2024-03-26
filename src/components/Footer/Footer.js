@@ -15,8 +15,13 @@ const Footer = () => {
                 </Link>
               </div>
             </div>
+
             <div className="col-xl-6 col-lg-6">
-              <div className="footerarea__copyright__content footerarea__copyright__content__2">
+              <div className="footerarea__content__Wrap">
+                <Link to="/privacy-policy">Privacy Policy</Link>
+                <Link to="/terms-of-service">Terms & Conditions</Link>
+              </div>
+              <div className="footerarea__copyright__content footerarea__copyright__content__2 text-center mt-4">
                 <p>
                   Copyright © <span>2023</span> by StudyStreak. All Rights
                   Reserved.

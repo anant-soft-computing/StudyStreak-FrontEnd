@@ -5,7 +5,6 @@ import DSSidebar from "../DSSideBar/DSSideBar";
 import LiveClassList from "./LiveClassList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import RegularClass from "../RegularClass/RegularClass";
 import SpeakingPractice from "../SpeakingPractice/SpeakingPractice";
 import GroupDoubtSolving from "../GroupDoubtSolving/GroupDoubtSolving";

@@ -5,8 +5,8 @@ import Attachment from "./Attachment";
 import Quiz from "./Quiz";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import notebookIcon from "../../../../img/icon/notebook.webp";
-import view_notes from "../../../../img/icon/view_notes.webp";
+import noteBook from "../../../../img/icon/notebook.svg";
+import viewNote from "../../../../img/icon/tv.svg";
 import FloatingNote from "./FloatingNote";
 import SmallModal from "../../../UI/Modal";
 
@@ -107,14 +107,12 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
             />
             <div className="floating-notes-container-icon">
               <img
-                style={{ width: "40px" }}
-                src={notebookIcon}
+                src={noteBook}
                 alt="notes"
                 onClick={() => setIsFloatingNotes(!isFloatingNotes)}
               />
               <img
-                style={{ width: "40px" }}
-                src={view_notes}
+                src={viewNote}
                 alt="notes"
                 onClick={() => setIsModalOpen(true)}
               />

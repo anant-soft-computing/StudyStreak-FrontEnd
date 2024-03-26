@@ -1,3 +1,7 @@
+.floating-notes-container-icon img {
+  width: 30px;
+}
+
 .floating-notes-container-icon {
   display: flex;
   flex-direction: column;
@@ -8,6 +12,7 @@
   margin-right: 12px;
   cursor: pointer;
   background: #ebf2f5;
+  z-index: -1;
 }
 
 .floating-note {

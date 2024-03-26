@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
@@ -6,11 +6,19 @@ import Quiz from "./Quiz";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import notebookIcon from "../../../../img/icon/notebook.webp";
+import view_notes from "../../../../img/icon/view_notes.webp";
 import FloatingNote from "./FloatingNote";
+import SmallModal from "../../../UI/Modal";
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+
+  const lessonId = activeLesson?.id;
+  const [notes, setNotes] = useState([]);
 
   const updateWatchedUpto = async (watchedTime) => {
     if (watchedTime < 1) return;
@@ -50,6 +58,35 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/notes/${lessonId}/${studentId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setNotes(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [lessonId, studentId, isFloatingNotes]);
+
   return (
     <div className="lesson__content__main">
       {activeContentType === "video" && (
@@ -68,11 +105,19 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               height={"590px"}
               width={"100%"}
             />
-            <div
-              className="floating-notes-container-icon"
-              onClick={() => setIsFloatingNotes(!isFloatingNotes)}
-            >
-              <img style={{ width: "40px" }} src={notebookIcon} alt="notes" />
+            <div className="floating-notes-container-icon">
+              <img
+                style={{ width: "40px" }}
+                src={notebookIcon}
+                alt="notes"
+                onClick={() => setIsFloatingNotes(!isFloatingNotes)}
+              />
+              <img
+                style={{ width: "40px" }}
+                src={view_notes}
+                alt="notes"
+                onClick={() => setIsModalOpen(true)}
+              />
             </div>
           </div>
           <div className="row mt-3">
@@ -200,6 +245,24 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
           />
         )}
       </div>
+      <SmallModal
+        size="md"
+        centered
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={"Notes"}
+      >
+        <div className="aboutarea__list__2">
+          {notes?.map((note) => (
+            <ul key={note.id}>
+              <li>
+                <i className="icofont-check"></i>
+                <span>{note.note}</span>
+              </li>
+            </ul>
+          ))}
+        </div>
+      </SmallModal>
     </div>
   );
 };

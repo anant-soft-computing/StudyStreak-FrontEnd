@@ -151,7 +151,11 @@ const DSSidebar = () => {
         </svg>
       ),
       link: "/studentLiveClasses",
-      state: { solvingClassBook: solvingClassBook[0] },
+      state: {
+        studentId: studentId,
+        solvingClassBook: solvingClassBook[0],
+        count: count,
+      },
     },
     {
       name: "Regular Class",

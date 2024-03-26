@@ -7,9 +7,9 @@ const SpeakingPracticeList = ({ speakingClasses, bookCount }) => {
       <div className="dashboard__section__title">
         <h4>Available Slot</h4>
       </div>
-      {speakingClasses.length > 0 ? (
+      {speakingClasses?.length > 0 ? (
         <div className="row">
-          {speakingClasses.map(
+          {speakingClasses?.map(
             ({
               id,
               start_time,

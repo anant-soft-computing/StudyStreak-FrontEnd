@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const LessonList = ({
@@ -8,9 +8,27 @@ const LessonList = ({
   setActiveLesson,
   handleContentChange,
 }) => {
+  const [courselessons, setCourseLessons] = useState([]);
+
+  useEffect(() => {
+    lessons[0]?.section?.sort((a, b) => {
+      const nameA = a?.name?.toLowerCase();
+      const nameB = b?.name?.toLowerCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
+
+    setCourseLessons(lessons);
+  }, [lessons]);
+
   return (
     <div className="accordion content__cirriculum__wrap" id="accordionLessons">
-      {lessons[0]?.section?.map((section, index) => (
+      {courselessons[0]?.section?.map((section, index) => (
         <div className="accordion-item" key={index}>
           <h2 className="accordion-header" id={`section-${index}`}>
             <button

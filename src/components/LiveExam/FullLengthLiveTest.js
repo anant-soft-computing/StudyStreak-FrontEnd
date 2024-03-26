@@ -770,6 +770,8 @@ const FullLengthLiveExam = () => {
           onClose={() => setDisplayWritingModal(false)}
           title={"Writing Section"}
           children={displayWritingModalContent()}
+          size={"lg"}
+          centered
         />
 
         <SmallModal
@@ -777,6 +779,8 @@ const FullLengthLiveExam = () => {
           onClose={() => setDisplayListeningModal(false)}
           title={"Listening Section"}
           children={displayListeningModalContent()}
+          size={"lg"}
+          centered
         />
 
         <SmallModal
@@ -784,6 +788,8 @@ const FullLengthLiveExam = () => {
           onClose={() => setDisplaySpeakingModal(false)}
           title={"Speaking Section"}
           children={displaySpeakingModalContent()}
+          size={"lg"}
+          centered
         />
       </div>
 

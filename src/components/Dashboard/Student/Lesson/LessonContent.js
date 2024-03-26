@@ -9,6 +9,7 @@ import noteBook from "../../../../img/icon/notebook.svg";
 import viewNote from "../../../../img/icon/tv.svg";
 import FloatingNote from "./FloatingNote";
 import SmallModal from "../../../UI/Modal";
+import FlashCard from "../FlashCard/FlashCard";
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
@@ -177,6 +178,24 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                     Quiz
                   </button>
                 </li>
+
+                <li className="nav-item" role="presentation">
+                  <button
+                    style={{
+                      backgroundColor: "#e1f5fe",
+                      color: "#01579b",
+                    }}
+                    className="single__tab__link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#projects__four"
+                    type="button"
+                    aria-selected="false"
+                    role="tab"
+                    tabIndex="-1"
+                  >
+                    Flash Card
+                  </button>
+                </li>
               </ul>
             </div>
             <div
@@ -217,6 +236,14 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                 aria-labelledby="projects__three"
               >
                 <Quiz activeLesson={activeLesson?.quiz_question_options} />
+              </div>
+              <div
+                className="tab-pane fade"
+                id="projects__four"
+                role="tabpanel"
+                aria-labelledby="projects__four"
+              >
+                <FlashCard courseId={courseId} />
               </div>
             </div>
           </div>

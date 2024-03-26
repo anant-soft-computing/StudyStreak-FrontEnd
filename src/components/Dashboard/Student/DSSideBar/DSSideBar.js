@@ -13,7 +13,6 @@ import regularClass from "../../../../img/icon/regularClass.svg";
 import speakingClass from "../../../../img/icon/speakingClass.svg";
 import oneToOneClass from "../../../../img/icon/oneToOneClass.svg";
 import groupClass from "../../../../img/icon/groupClass.svg";
-import flashCard from "../../../../img/icon/flashCard.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 
@@ -113,12 +112,6 @@ const DSSidebar = () => {
         solvingClassBook: solvingClassBook[0],
         count: count,
       },
-    },
-    {
-      name: "Flash Card",
-      icon: <img src={flashCard} alt="Flash Card" />,
-      link: "/flashCard",
-      state: { enrolledCourse: enrolledCourse },
     },
     {
       name: "Settings",

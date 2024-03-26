@@ -12,7 +12,7 @@ const MockTest = () => {
   const navigate = useNavigate();
   const [mockTestData, setMockTestData] = useState([]);
   const [givenTest, setGivenTest] = useState([]);
-  const { assignment_count } = count;
+  const { mini_test_count } = count;
 
   const readingData = mockTestData?.filter(
     (item) => item.exam_type === "Reading"
@@ -100,9 +100,9 @@ const MockTest = () => {
                 <div className="col-xl-9 col-lg-9 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <h4>Assignment</h4>
+                      <h4>Mini Test</h4>
                     </div>
-                    {assignment_count === "" ? (
+                    {mini_test_count === "" ? (
                       <>
                         <div className="d-flex justify-content-center">
                           <h5>No Assignment Available , Please Buy a Course</h5>

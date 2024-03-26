@@ -8,7 +8,7 @@ import CourseDetail from "./components/CourseDetail/CourseDetail";
 import Courses from "./pages/Courses/Courses";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
 import AdminLesson from "./components/Dashboard/Admin/Lesson/Lesson";
-import StudentDashboard from "./components/Dashboard/Student/Dashboard";
+import StudentDashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
 import AdminDashboard from "./components/Dashboard/Admin/Dashboard";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import DragDrop from "./components/Exam-Create/DragDrop";

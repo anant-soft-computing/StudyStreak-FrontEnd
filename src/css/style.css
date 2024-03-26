@@ -4841,6 +4841,7 @@ About Area
   transition: var(--transition);
   display: inline-block;
   margin-right: 15px;
+  border-radius: 20px;
 }
 
 .about__right__wraper__2 {
@@ -7573,7 +7574,7 @@ Register Area
   width: 100%;
   left: 0;
   right: auto;
-  background: rgba(38, 0, 148, 0.93);
+  background: #01579b;
   top: 0;
   bottom: 0;
 }
@@ -11040,9 +11041,11 @@ Course
 
 .content__cirriculum__wrap .accordion-button {
   font-size: 20px;
-  color: var(--headingColor);
+  color: #01579b;
   font-weight: 700;
   box-shadow: none;
+  background-color: #01579b36;
+  border-radius: 10px;
 }
 
 .content__cirriculum__wrap .accordion-body {
@@ -11063,7 +11066,7 @@ Course
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--borderColor);
+  border-bottom: 1px solid #01579b !important;
   padding: 15px 0;
   flex-wrap: wrap;
 }
@@ -11119,6 +11122,8 @@ Course
 .content__cirriculum__wrap .accordion-item {
   margin-bottom: 25px;
   border: 1px solid var(--borderColor);
+  border-radius: 10px;
+  background-color: #01579b36;
 }
 
 .course__tap__wrap {
@@ -11126,7 +11131,7 @@ Course
 }
 
 .course__tap__wrap li {
-  border-right: 2px solid var(--borderColor);
+  border-right: 10px solid var(--borderColor);
 }
 
 .course__tap__wrap li:last-child {
@@ -11143,7 +11148,7 @@ Course
   border: none;
   background: var(--whiteColor);
   color: var(--blackColor);
-  box-shadow: 0 0 50px 10px rgba(95, 45, 237, 0.1);
+  border-radius: 10px;
 }
 
 @media (min-width: 992px) and (max-width: 1365px) {
@@ -14902,7 +14907,7 @@ Breadcrumb Area
 Footer Area
 -------------------------------*/
 .footerarea {
-  background: var(--darkblack);
+  background: #01579b;
 }
 
 .footerarea__newsletter__wraper {
@@ -15274,7 +15279,7 @@ Footer Area
 }
 
 .footerarea__copyright__wrapper .footerarea__copyright__content p span {
-  color: var(--primaryColor);
+  color: black;
 }
 
 .footerarea__copyright__wrapper .footerarea__copyright__content p a {
@@ -15420,7 +15425,7 @@ Footer Area
 }
 
 .footerarea__icon__2 ul li a {
-  width: 40.19px;
+  width: 40px;
   height: 37px;
   background: rgba(255, 255, 255, 0.1);
   color: var(--whiteColor);
@@ -15437,11 +15442,6 @@ Footer Area
     line-height: 35px;
     margin-right: 3px;
   }
-}
-
-.footerarea__icon__2 ul li a:hover {
-  background: var(--primaryColor);
-  color: var(--whiteColor);
 }
 
 @media (min-width: 992px) and (max-width: 1365px),
@@ -16137,6 +16137,7 @@ Dark Mode
 .logoSize {
   width: 150px;
   height: 50px;
+  border: 1px solid magenta
 }
 
 .exam {
@@ -16382,4 +16383,16 @@ div.gridarea__wraper {
   box-shadow: 0 calc(-1 * var(--f)) 0 inset #0005;
   color: var(--whiteColor);
   font-weight: bold;
+}
+
+.footerarea__content__Wrap {
+  gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footerarea__content__Wrap a {
+  text-decoration: none;
+  color: white;
 }

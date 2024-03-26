@@ -7,6 +7,7 @@ const PrivacyPolicy = () => {
         fontFamily: "Roboto, sans-serif",
         color: "#0d0d0d",
         padding: "10px",
+        marginTop: "120px",
       }}
     >
       <h1 style={{ textAlign: "center", fontSize: "30pt" }}>

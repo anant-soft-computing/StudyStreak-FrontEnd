@@ -20,7 +20,7 @@ const Lesson = () => {
   const getCourseLessons = async () => {
     try {
       const response = await ajaxCall(
-        `/courseretupddelview/${courseId}`,
+        `/courseretupddelview/${courseId}/`,
         {
           headers: {
             Accept: "application/json",

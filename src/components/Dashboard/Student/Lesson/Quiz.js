@@ -16,8 +16,8 @@ const Quiz = ({ activeLesson }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const anyAnswerSelected = userSelections.some(
-      (questionSelection) => Object.values(questionSelection)?.includes(true)
+    const anyAnswerSelected = userSelections.some((questionSelection) =>
+      Object.values(questionSelection)?.includes(true)
     );
     if (anyAnswerSelected) {
       setShowAnswers(true);
@@ -27,74 +27,67 @@ const Quiz = ({ activeLesson }) => {
     }
   };
 
-  return (
-    <div>
-      {activeLesson?.length > 0 && (
-        <>
-          <div className="lesson__content__wrap">
-            <h3>Quiz</h3>
-          </div>
-          <div className="lesson__quiz__wrap">
-            <form onSubmit={handleSubmit}>
-              {activeLesson.map((question, questionIndex) => (
-                <div className="quiz__single__attemp" key={questionIndex}>
-                  <li style={{ marginTop: "70px" }}>{`Question : ${
-                    questionIndex + 1
-                  }/${question.quiz_options.length}`}</li>
-                  <hr />
-                  <h3>{question.Question}</h3>
-                  <div className="row">
-                    {question.quiz_options.map((option, optionIndex) => (
-                      <div className="col-md-6" key={optionIndex}>
-                        <div className="form-check">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id={`flexCheckDefault_${optionIndex}`}
-                            checked={
-                              userSelections[questionIndex]?.[optionIndex]
-                            }
-                            onChange={() =>
-                              handleCheckboxChange(questionIndex, optionIndex)
-                            }
-                          />
-                          <label
-                            className={
-                              "form-check-label" +
-                              (showAnswers &&
-                              option.correct_answer
-                                ? " text-success"
-                                : showAnswers &&
-                                  userSelections[questionIndex]?.[
-                                    optionIndex
-                                  ] &&
-                                  !option.correct_answer
-                                ? " text-danger"
-                                : "")
-                            }
-                            htmlFor={`flexCheckDefault_${optionIndex}`}
-                          >
-                            {option.Answers}
-                            {showAnswers && option.correct_answer && (
-                              <span> (Correct)</span>
-                            )}
-                          </label>
-                        </div>
-                      </div>
-                    ))}
+  return activeLesson?.length > 0 ? (
+    <>
+      <div className="lesson__content__wrap">
+        <h3>Quiz</h3>
+      </div>
+      <div className="lesson__quiz__wrap">
+        <form onSubmit={handleSubmit}>
+          {activeLesson.map((question, questionIndex) => (
+            <div className="quiz__single__attemp" key={questionIndex}>
+              <li style={{ marginTop: "70px" }}>{`Question : ${
+                questionIndex + 1
+              }/${question.quiz_options.length}`}</li>
+              <hr />
+              <h3>{question.Question}</h3>
+              <div className="row">
+                {question.quiz_options.map((option, optionIndex) => (
+                  <div className="col-md-6" key={optionIndex}>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={`flexCheckDefault_${optionIndex}`}
+                        checked={userSelections[questionIndex]?.[optionIndex]}
+                        onChange={() =>
+                          handleCheckboxChange(questionIndex, optionIndex)
+                        }
+                      />
+                      <label
+                        className={
+                          "form-check-label" +
+                          (showAnswers && option.correct_answer
+                            ? " text-success"
+                            : showAnswers &&
+                              userSelections[questionIndex]?.[optionIndex] &&
+                              !option.correct_answer
+                            ? " text-danger"
+                            : "")
+                        }
+                        htmlFor={`flexCheckDefault_${optionIndex}`}
+                      >
+                        {option.Answers}
+                        {showAnswers && option.correct_answer && (
+                          <span> (Correct)</span>
+                        )}
+                      </label>
+                    </div>
                   </div>
-                </div>
-              ))}
-              <div className="text-center">
-                <button type="submit" className="default__button mt-4">
-                  Submit
-                </button>
+                ))}
               </div>
-            </form>
+            </div>
+          ))}
+          <div className="text-center">
+            <button type="submit" className="default__button mt-4">
+              Submit
+            </button>
           </div>
-        </>
-      )}
-    </div>
+        </form>
+      </div>
+    </>
+  ) : (
+    <h5 className="text-danger">Please Select Lesson for Quiz !!</h5>
   );
 };
 

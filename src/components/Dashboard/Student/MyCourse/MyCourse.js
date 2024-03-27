@@ -36,7 +36,7 @@ const MyCourse = () => {
                       <h4>Courses</h4>
                     </div>
                     <div className="row">
-                      {enrolledCourse &&
+                      {enrolledCourse?.length > 0 ? (
                         enrolledCourse?.map((course) => (
                           <div
                             key={course?.id}
@@ -85,7 +85,22 @@ const MyCourse = () => {
                               </div>
                             </div>
                           </div>
-                        ))}
+                        ))
+                      ) : (
+                        <div>
+                          <h5 className="text-center text-danger">
+                            No Courses Available , Please Buy a Course !!
+                          </h5>
+                          <div className="d-flex justify-content-center mt-4">
+                            <button
+                              className="default__button"
+                              onClick={() => navigate("/courses")}
+                            >
+                              Buy Course
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

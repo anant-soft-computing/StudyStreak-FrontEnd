@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback, useReducer } from "react";
-import "../../../../css/student panel/myCourse.css";
+import "../../../../css/custom.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
+import SmallModal from "../../../UI/Modal";
 
 const initialNoteData = {
   note: "",
@@ -20,13 +21,44 @@ const reducerNote = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const FloatingNote = ({ setIsFloatingNotes, lessonId }) => {
+const FloatingNote = ({ setIsFloatingNotes, lessonId, lessonName }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [notes, setNotes] = useState([]);
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const [noteData, dispatchNote] = useReducer(reducerNote, initialNoteData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/notes/${lessonId}/${studentId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setNotes(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [lessonId, studentId]);
 
   const createNote = async (e) => {
     e.preventDefault();
@@ -131,10 +163,36 @@ const FloatingNote = ({ setIsFloatingNotes, lessonId }) => {
             </button>
             <button className="default__button" onClick={createNote}>
               Save
-            </button>
+            </button>{" "}
+            {notes.length > 0 && (
+              <button
+                className="default__button"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Previous Notes
+              </button>
+            )}
           </div>
         </div>
       </div>
+      <SmallModal
+        size="lg"
+        title={`Notes For : ${lessonName}`}
+        centered
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      >
+        <div className="aboutarea__list__2">
+          {notes?.map((note) => (
+            <ul key={note.id}>
+              <li>
+                <i className="icofont-check"></i>
+                <span>{note.note}</span>
+              </li>
+            </ul>
+          ))}
+        </div>
+      </SmallModal>
     </>
   );
 };

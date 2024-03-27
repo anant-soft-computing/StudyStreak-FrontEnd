@@ -25,9 +25,8 @@ const PracticeTest = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
             },
             method: "GET",
           },
@@ -78,11 +77,9 @@ const PracticeTest = () => {
                     </div>
                     {practice_test_count === "" ? (
                       <>
-                        <div className="d-flex justify-content-center">
-                          <h5>
-                            No Practice Test Available , Please Buy a Course
-                          </h5>
-                        </div>
+                        <h5 className="text-center text-danger">
+                          No Practice Test Available , Please Buy a Course !!
+                        </h5>
                         <div className="d-flex justify-content-center mt-4">
                           <button
                             className="default__button"

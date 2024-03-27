@@ -74,8 +74,8 @@ const GroupDoubleSolvingList = ({ groupDoubtSolvingClasses, bookCount }) => {
           )}
         </div>
       ) : (
-        <h5 className="text-center">
-          No Group Doubt Solving Classes Available.
+        <h5 className="text-center text-danger">
+          No Group Doubt Solving Classes Available !!
         </h5>
       )}
     </>

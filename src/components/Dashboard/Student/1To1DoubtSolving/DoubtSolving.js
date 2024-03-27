@@ -150,7 +150,7 @@ const DoubtSolving = () => {
     return solvingClassBook.some((index) => index.id === item.id);
   });
 
-  const bookClass = solvingClassBook.map((item) => item?.id);
+  const bookClass = solvingClassBook?.map((item) => item?.id);
   const oToclasses = doubtSolvingClasses().filter(
     (item) => !bookClass.includes(item?.id)
   );
@@ -179,12 +179,10 @@ const DoubtSolving = () => {
                       </div>
                       {one_to_one_doubt_solving_count === "" ? (
                         <>
-                          <div className="d-flex justify-content-center">
-                            <h5>
-                              No One To One Doubt Solving Class Available ,
-                              Please Buy a Course
-                            </h5>
-                          </div>
+                          <h5 className="text-center text-danger">
+                            No One To One Doubt Solving Class Available , Please
+                            Buy a Course !!
+                          </h5>
                           <div className="d-flex justify-content-center mt-4">
                             <button
                               className="default__button"

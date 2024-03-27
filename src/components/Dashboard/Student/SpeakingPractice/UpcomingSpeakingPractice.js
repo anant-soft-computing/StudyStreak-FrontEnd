@@ -76,8 +76,8 @@ const UpcomingSpeakingPractice = ({
           )}
         </div>
       ) : (
-        <h5 className="text-center">
-          No Upcomming Speaking Practice Classes Available.
+        <h5 className="text-center text-danger">
+          No Upcomming Speaking Practice Classes Available !!
         </h5>
       )}
     </>

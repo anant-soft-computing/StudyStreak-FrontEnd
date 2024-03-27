@@ -76,8 +76,8 @@ const UpcommingGroupDoubtSolving = ({
           )}
         </div>
       ) : (
-        <h5 className="text-center">
-          No One To One Doubt Solving Classes Available.
+        <h5 className="text-center text-danger">
+          No One To One Doubt Solving Classes Available !!
         </h5>
       )}
     </>

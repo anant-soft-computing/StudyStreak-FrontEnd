@@ -69,7 +69,9 @@ const SpeakingPracticeList = ({ speakingClasses, bookCount }) => {
           )}
         </div>
       ) : (
-        <h5 className="text-center">No Speaking Practice Classes Available.</h5>
+        <h5 className="text-center text-danger">
+          No Speaking Practice Classes Available !!
+        </h5>
       )}
     </>
   );

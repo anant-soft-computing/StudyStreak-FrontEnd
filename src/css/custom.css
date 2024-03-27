@@ -1,0 +1,137 @@
+/* ---------------------Privacy Policy & Terms & Conditions---------------- */
+
+.mainWrap {
+    font-family: sans-serif;
+    color: #0d0d0d;
+    padding: 10px;
+    margin-top: 120px;
+  }
+  
+  .mainWrap h1 {
+    text-align: center;
+    font-size: 40px;
+    color: #01579b;
+  }
+  
+  .mainContent1 {
+    padding: 10px;
+    color: black;
+    background-color: #01579b36;
+    border: 2px solid #01579b;
+    border-radius: 10px;
+  }
+  
+  .mainContent11 {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #01579b36;
+    border: 2px solid #01579b;
+    border-radius: 10px;
+  }
+  
+  .mainContent11 div {
+    display: flex;
+    align-items: center;
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+  
+  .mainContent11 div div {
+    color: #01579b;
+    font-weight: bolder;
+  }
+  
+  .heading {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .heading i {
+    padding: 6px;
+    background-color: #01579b;
+    border-radius: 20px;
+    color: white;
+  }
+  
+  .heading div {
+    font-weight: bolder;
+    font-size: 22px;
+    color: #01579b;
+  }
+  
+  .mainContent2 {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #01579b36;
+    border: 2px solid #01579b;
+    border-radius: 10px;
+  }
+  
+  .mainContent2 div {
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+
+  /* --------------------FlashCard---------------------- */
+
+  .customization-of-flesh-card-modal {
+    z-index: 11000;
+    margin-top: 30px;
+  }
+  
+  .custom-css-for-flesh-card-modal-bg {
+    background-color: #ebf2f5;
+  }
+  
+  .flesh-card-modal-footer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .flesh-card-modal-container {
+    width: 90%;
+    margin: auto;
+  }
+
+/* --------------------Floating Notes------------------- */
+
+.floating-notes-container-icon img {
+  width: 30px;
+}
+
+.floating-notes-container-icon {
+  position: fixed;
+  top: 60%;
+  right: 0;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+.floating-note {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ebf2f5;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: grab;
+  z-index: 2000;
+}
+
+.floating-note textarea {
+  width: 340px;
+  height: 150px;
+  resize: none;
+  border: none;
+  background-color: #ebf2f5;
+}
+
+.button-container-for-floating-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: space-between;
+  margin-top: 16px;
+}

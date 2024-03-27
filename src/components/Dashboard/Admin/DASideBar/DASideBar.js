@@ -8,6 +8,8 @@ import course from "../../../../img/icon/course.svg";
 import exam from "../../../../img/icon/assignment.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import batch from "../../../../img/icon/batch.svg";
+import badges from "../../../../img/icon/badges.svg";
+import gamification from "../../../../img/icon/gamification.svg";
 import flashCard from "../../../../img/icon/flashCard.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
@@ -58,9 +60,19 @@ const DASideBar = () => {
       link: "/admin-batch",
     },
     {
+      name: "Badges",
+      icon: <img src={badges} alt="Badges" />,
+      link: "/admin-badges",
+    },
+    {
       name: "Flash Card",
       icon: <img src={flashCard} alt="Flash Card" />,
       link: "/admin-flashCard",
+    },
+    {
+      name: "Gamification",
+      icon: <img src={gamification} alt="Gamification" />,
+      link: "/admin-gamification",
     },
     {
       name: "Settings",

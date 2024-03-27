@@ -52,6 +52,8 @@ import NavBar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
 import RegularClass from "./components/Dashboard/Student/RegularClass/RegularClass";
 import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
+import Badge from "./components/Dashboard/Admin/Badge/Badge";
+import Gamification from "./components/Dashboard/Admin/Gamification/Gamification";
 
 const App = () => {
   return (
@@ -119,9 +121,17 @@ const App = () => {
           path="/admin-batch"
           element={<ProtectedRoute element={Batch} />}
         />
+         <Route
+          path="/admin-badges"
+          element={<ProtectedRoute element={Badge} />}
+        />
         <Route
           path="/admin-flashCard"
           element={<ProtectedRoute element={FlashCard} />}
+        />
+        <Route
+          path="/admin-gamification"
+          element={<ProtectedRoute element={Gamification} />}
         />
         <Route
           path="/admin-lesson"

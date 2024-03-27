@@ -25,9 +25,7 @@ const UpcomingDoubtSolving = ({
               return (
                 <div key={id} className="col-lg-4 col-md-6 col-12">
                   <div className="global-neomorphism-card-styling gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain d-flex flex-column justify-content-between">
-                    <span className="tag">
-                      Booked
-                    </span>
+                    <span className="tag">Booked</span>
                     <br />
                     <div className="gridarea__content ">
                       <div className="gridarea__list mt-1">
@@ -76,8 +74,8 @@ const UpcomingDoubtSolving = ({
           )}
         </div>
       ) : (
-        <h5 className="text-center">
-          No One To One Doubt Solving Classes Available.
+        <h5 className="text-center text-danger">
+          No One To One Doubt Solving Classes Available !!
         </h5>
       )}
     </>

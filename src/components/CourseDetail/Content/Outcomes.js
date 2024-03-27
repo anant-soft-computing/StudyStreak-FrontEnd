@@ -8,19 +8,27 @@ const Outcomes = ({ courseDetail }) => {
       role="tabpanel"
       aria-labelledby="projects__four"
     >
-      <div className="experence__heading">
-        <h5>Outcomes</h5>
-      </div>
       <div className="course__list__wraper">
         <div className="aboutarea__list__2 blog__details__list__2">
-          {courseDetail?.Outcome?.map(({ description }, index) => (
-            <ul key={index}>
-              <li>
-                <i className="icofont-check"></i>
-                <p>{description}</p>
-              </li>
-            </ul>
-          ))}
+          {courseDetail?.Outcome.length > 0 ? (
+            <div>
+              <div className="experence__heading">
+                <h5>Outcomes</h5>
+              </div>
+              {courseDetail?.Outcome?.map(({ description }, index) => (
+                <ul key={index}>
+                  <li>
+                    <i className="icofont-check"></i>
+                    <p>{description}</p>
+                  </li>
+                </ul>
+              ))}
+            </div>
+          ) : (
+            <h5 className="text-center text-danger">
+              No Outcomes Available !!
+            </h5>
+          )}
         </div>
       </div>
     </div>

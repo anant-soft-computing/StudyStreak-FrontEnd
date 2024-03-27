@@ -3,7 +3,7 @@ import moment from "moment";
 
 const LiveClassList = ({ liveClasses, joinNow, isWithin5Minutes }) => {
   if (liveClasses?.length === 0) {
-    return <h5 className="text-center">No LiveClasses Available.</h5>;
+    return <h5 className="text-center text-danger">No LiveClasses Available !!</h5>;
   }
 
   return (

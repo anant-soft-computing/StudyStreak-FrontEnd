@@ -166,9 +166,9 @@ const CourseDetail = () => {
                       />
                     ) : (
                       <div>
-                        <div className="sp_20 col--30">
-                          No packages available
-                        </div>
+                        <h5 className="text-danger sp_20 col--30">
+                          No Packages Available For This Course !!
+                        </h5>
                       </div>
                     )}
                   </div>

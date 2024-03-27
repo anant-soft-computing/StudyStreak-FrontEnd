@@ -4,7 +4,7 @@ import moment from "moment";
 const RegularClassList = ({ regularClass, joinNow, isWithin5Minutes }) => {
 
   if (regularClass.length === 0) {
-    return <h5 className="text-center">No Regular Classes Available.</h5>;
+    return <h5 className="text-center text-danger">No Regular Classes Available !!</h5>;
   }
 
   return (

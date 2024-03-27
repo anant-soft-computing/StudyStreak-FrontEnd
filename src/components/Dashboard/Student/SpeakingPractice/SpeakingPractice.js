@@ -151,7 +151,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
     solvingClassBook.some((index) => index.id === item.id)
   );
 
-  const bookClass = solvingClassBook.map((item) => item?.id);
+  const bookClass = solvingClassBook?.map((item) => item?.id);
   const speakingPracticeClasses = speakingClasses().filter(
     (item) => !bookClass.includes(item?.id)
   );
@@ -181,12 +181,10 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                         </div>
                         {speaking_practice_count === "" ? (
                           <>
-                            <div className="d-flex justify-content-center">
-                              <h5>
-                                No Speaking Practice Class Available, Please Buy
-                                a Course
-                              </h5>
-                            </div>
+                            <h5 className="text-center text-danger">
+                              No Speaking Practice Class Available, Please Buy a
+                              Course !!
+                            </h5>
                             <div className="d-flex justify-content-center mt-4">
                               <button
                                 className="default__button"
@@ -232,11 +230,9 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
           <div>
             {speaking_practice_count === "" ? (
               <>
-                <div className="d-flex justify-content-center">
-                  <h5>
-                    No Speaking Practice Class Available, Please Buy a Course
-                  </h5>
-                </div>
+                <h5 className="text-center text-danger">
+                  No Speaking Practice Class Available, Please Buy a Course !!
+                </h5>
                 <div className="d-flex justify-content-center mt-4">
                   <button
                     className="default__button"

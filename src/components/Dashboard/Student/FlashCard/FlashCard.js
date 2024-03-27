@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../../../../css/student panel/fleshcards.css";
+import "../../../../css/custom.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import FlashCardModal from "./FlashCardModal";
 
@@ -53,14 +53,18 @@ const FlashCard = ({ courseId }) => {
     setCurrentCardIndex(0);
   };
 
-  return (
-    <div className="row">
-      {flashCardList &&
-        flashCardList.map(
-          ({ id, description, set_priority, course, flash_card_items }) => (
+  return flashCardList.length > 0 ? (
+    flashCardList.map(
+      ({ id, description, set_priority, course, flash_card_items }) => (
+        <>
+          <div className="lesson__content__wrap">
+            <h3>Flash Card</h3>
+          </div>
+          <div className="row">
             <div
               key={id}
               className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
+              style={{ marginTop: "70px" }}
               data-aos="fade-up"
             >
               <div
@@ -109,9 +113,12 @@ const FlashCard = ({ courseId }) => {
                 setCurrentCardIndex={setCurrentCardIndex}
               />
             </div>
-          )
-        )}
-    </div>
+          </div>
+        </>
+      )
+    )
+  ) : (
+    <h5 className="text-danger">No Flash Card Available !!</h5>
   );
 };
 

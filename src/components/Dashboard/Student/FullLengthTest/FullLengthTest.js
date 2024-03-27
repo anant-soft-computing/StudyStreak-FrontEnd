@@ -96,11 +96,9 @@ const FullLengthTest = () => {
                     </div>
                     {full_length_test_count === "" ? (
                       <>
-                        <div className="d-flex justify-content-center">
-                          <h5>
-                            No Full Length Test Available , Please Buy a Course
-                          </h5>
-                        </div>
+                        <h5 className="text-center text-danger">
+                          No Full Length Test Available , Please Buy a Course !!
+                        </h5>
                         <div className="d-flex justify-content-center mt-4">
                           <button
                             className="default__button"

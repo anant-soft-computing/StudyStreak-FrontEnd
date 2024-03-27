@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
@@ -6,20 +6,12 @@ import Quiz from "./Quiz";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import noteBook from "../../../../img/icon/notebook.svg";
-import viewNote from "../../../../img/icon/tv.svg";
 import FloatingNote from "./FloatingNote";
-import SmallModal from "../../../UI/Modal";
 import FlashCard from "../FlashCard/FlashCard";
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
-
-  const lessonId = activeLesson?.id;
-  const [notes, setNotes] = useState([]);
 
   const updateWatchedUpto = async (watchedTime) => {
     if (watchedTime < 1) return;
@@ -59,35 +51,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/notes/${lessonId}/${studentId}/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-
-        if (response?.status === 200) {
-          setNotes(response?.data);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, [lessonId, studentId, isFloatingNotes]);
-
   return (
     <div className="lesson__content__main">
       {activeContentType === "video" && (
@@ -111,11 +74,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                 src={noteBook}
                 alt="notes"
                 onClick={() => setIsFloatingNotes(!isFloatingNotes)}
-              />
-              <img
-                src={viewNote}
-                alt="notes"
-                onClick={() => setIsModalOpen(true)}
               />
             </div>
           </div>
@@ -267,27 +225,10 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
           <FloatingNote
             setIsFloatingNotes={setIsFloatingNotes}
             lessonId={activeLesson?.id}
+            lessonName={activeLesson?.Lesson_Title}
           />
         )}
       </div>
-      <SmallModal
-        size="md"
-        centered
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title={"Notes"}
-      >
-        <div className="aboutarea__list__2">
-          {notes?.map((note) => (
-            <ul key={note.id}>
-              <li>
-                <i className="icofont-check"></i>
-                <span>{note.note}</span>
-              </li>
-            </ul>
-          ))}
-        </div>
-      </SmallModal>
     </div>
   );
 };

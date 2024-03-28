@@ -84,7 +84,7 @@ const PracticeTestAnswer = () => {
               <div className="col-xl-8 col-lg-8">
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">
-                    Solution For : Sagar Ramani
+                    Solution For : Practice Test
                   </h4>
                   <div className="course__details__wraper">
                     <ul className="answerContent">
@@ -126,10 +126,7 @@ const PracticeTestAnswer = () => {
                     </div>
                     <div className="row">
                       <div className="col-xl-12">
-                        <div
-                          className="dashboard__table table-responsive Sagar"
-                          style={{ maxHeight: "270px" }}
-                        >
+                        <div className="dashboard__table table-responsive table__height">
                           <table>
                             <thead>
                               <tr>

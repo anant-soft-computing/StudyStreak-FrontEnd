@@ -49,10 +49,9 @@ const Answer = () => {
     let correct = 0;
     let incorrect = 0;
     studentAnswers?.forEach((item, index) => {
-
       const correctAnswerText = correctAnswer[index]?.answer_text.trim();
       const studentAnswerText = item.answer.trim();
-      
+
       if (correctAnswerText?.includes(" OR ")) {
         const correctOptions = correctAnswerText
           .split(" OR ")
@@ -139,33 +138,22 @@ const Answer = () => {
                     </ul>
                   </div>
                   {examData?.exam_type === "Writing" && (
-                    <div style={{ marginTop: "50px" }}>
+                    <div className="writing__exam">
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Assessment</h4>
                       </div>
-                      <div
-                        style={{
-                          fontWeight: "400",
-                          fontSize: "18px",
-                          lineHeight: "30px",
-                        }}
-                      >
-                        {gptResponse}
-                      </div>
+                      <div className="gptResponse">{gptResponse}</div>
                     </div>
                   )}
                   {(examData?.exam_type === "Reading" ||
                     examData?.exam_type === "Listening") && (
-                    <div style={{ marginTop: "50px" }}>
+                    <div className="writing__exam">
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Answer Table</h4>
                       </div>
                       <div className="row">
                         <div className="col-xl-12">
-                          <div
-                            className="dashboard__table table-responsive Sagar"
-                            style={{ maxHeight: "270px" }}
-                          >
+                          <div className="dashboard__table table-responsive table__height">
                             <table>
                               <thead>
                                 <tr>

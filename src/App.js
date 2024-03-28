@@ -67,12 +67,7 @@ const App = () => {
         theme="colored"
         position="top-center"
         autoClose={3000}
-        style={{
-          fontSize: "14px",
-          width: "auto",
-          fontWeight: "600",
-          zIndex: 10000,
-        }}
+        className="toast-container"
       />
       <Routes>
         <Route path="/" element={<Main />} />

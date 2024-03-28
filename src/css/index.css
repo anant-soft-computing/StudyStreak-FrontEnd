@@ -390,7 +390,7 @@ body {
 .fixing-navbar-at-top-side {
   position: fixed;
   top: 0;
-  z-index: 10000;
+  z-index: 10;
   width: 100%;
 }
 

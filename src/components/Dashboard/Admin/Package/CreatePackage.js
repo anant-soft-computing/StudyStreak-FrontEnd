@@ -143,10 +143,7 @@ const CreatePackage = () => {
     <>
       <div className="container">
         <div className="row">
-          <div
-            className="col-xl-8 col-lg-8 col-md-12 col-12"
-            style={{ width: "-webkit-fill-available" }}
-          >
+          <div className="col-xl-8 col-lg-8 col-md-12 col-12 create__course__acc">
             <div className="create__course__accordion__wraper">
               <div className="accordion" id="accordionExample">
                 <div className="accordion-item w-auto">

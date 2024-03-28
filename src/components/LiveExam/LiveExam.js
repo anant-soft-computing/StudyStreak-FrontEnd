@@ -543,9 +543,7 @@ const LiveExam = () => {
     <>
       <div className="lv-navbar">
         <div className="lv-navbar-title">
-          <h2 style={{ color: "red", marginTop: "40px" }}>
-            {examData?.exam_category}
-          </h2>
+          <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
         </div>
         <span>
@@ -590,8 +588,8 @@ const LiveExam = () => {
                 return (
                   <div className="lv-textarea" key={index}>
                     <textarea
+                      className="writing__textarea"
                       id={item}
-                      style={{ width: "100%", height: "200px" }}
                       value={examAnswer[0]?.answers[0]?.answer || ""}
                       onChange={(e) => handleWritingAnswer(e, 0)}
                     />
@@ -667,7 +665,7 @@ const LiveExam = () => {
           >
             <div className="card-container">
               {examAnswer[0]?.answers.map((answer, index) => (
-                <div key={index} className="card" style={{ maxWidth: "30%" }}>
+                <div key={index} className="card answer__width">
                   <div className="card-body">
                     <h6 className="card-title">Q. {index + 1}</h6>
                     <h6 className="card-text">

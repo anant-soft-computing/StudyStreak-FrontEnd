@@ -455,7 +455,6 @@ const FullLengthLiveExam = () => {
     const answersArray = [];
     let bandValue = 0;
 
-
     examAnswer.forEach((item, index) => {
       const temp = item.data.map((answer, index2) => ({
         question_number: index2 + 1,
@@ -753,7 +752,7 @@ const FullLengthLiveExam = () => {
       {/* Navbar */}
       <div className="lv-navbar">
         <div className="lv-navbar-title">
-          <h2 style={{ color: "red", marginTop: "10px" }}>IELTS</h2>
+          <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
         </div>
         {renderTime}
@@ -821,7 +820,7 @@ const FullLengthLiveExam = () => {
               <div className="lv-textarea">
                 <textarea
                   id={`textarea_${next}`}
-                  style={{ width: "100%", height: "200px" }}
+                  className="writing__textarea"
                   value={examAnswer[next]?.data[0]?.answer_text || ""}
                   onChange={(e) => handleWritingAnswer(e, next)}
                 />
@@ -864,8 +863,7 @@ const FullLengthLiveExam = () => {
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening") && (
             <button
-              className="lv-footer-button"
-              style={{ fontSize: "20px" }}
+              className="lv-footer-button review_size"
               onClick={() => setIsModalOpen(true)}
             >
               Review
@@ -924,7 +922,7 @@ const FullLengthLiveExam = () => {
                 <h4>Test : {index + 1}</h4>
                 <div className="card-container">
                   {test.data.map((answer, idx) => (
-                    <div key={idx} className="card" style={{ maxWidth: "30%" }}>
+                    <div key={idx} className="card answer__width">
                       <div className="card-body">
                         <h6 className="card-title">Q. {idx + 1}</h6>
                         <h6 className="card-text">

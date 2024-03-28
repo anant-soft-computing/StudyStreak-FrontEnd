@@ -252,8 +252,7 @@ const CreateFlashCard = () => {
                       />
                       {flashCardData.flash_card_items.length > 1 && (
                         <button
-                          className="dashboard__small__btn__2"
-                          style={{ marginLeft: "10px" }}
+                          className="dashboard__small__btn__2 flash-card__remove__btn"
                           onClick={() => removeContent(index)}
                         >
                           <svg

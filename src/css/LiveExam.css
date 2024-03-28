@@ -17,6 +17,11 @@
   align-items: center;
 }
 
+.lv-navbar-title h2 {
+  color: red;
+  margin-top: 15px;
+}
+
 .lv-container {
   background-color: #01579b36;
   padding: 20px;
@@ -165,6 +170,10 @@
   background-position: -6px -23px;
 }
 
+.gmat-paper-1 {
+  margin-top: 25px;
+}
+
 .gmat-paper-container {
   flex: 1 1;
   overflow-y: auto;
@@ -174,8 +183,32 @@
   padding: 20px 140px;
 }
 
+.gmat-paper-container-1 {
+  margin-top: 150px;
+  margin-bottom: 10px;
+}
+
+.gmat-border {
+  border: dotted 1px #bbb;
+  margin-bottom: 30px;
+}
+
+.tutorial {
+  margin-top: 40px;
+}
+
 .gmat-text {
   color: #515151;
+}
+
+.gmat-text-1 {
+  margin-top: 40px;
+}
+
+.gmat-text-2 {
+  border: dotted 1px #bbb;
+  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .gmat-paper {
@@ -194,6 +227,12 @@
   font-family: "HelveticaNeueLTPro-Md", arial;
   font-weight: normal;
   color: #4a4a4a;
+}
+
+.instruction-1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .instruction h4 {
@@ -221,6 +260,11 @@
   font-size: 25px;
   font-weight: bold;
   color: white;
+}
+
+.gmat-button-1 {
+  width: max-content;
+  padding: 5px 20px;
 }
 
 .gmat-button:hover {
@@ -270,9 +314,14 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .example-center {
   color: #739c24;
   font-weight: 600;
+}
+
+.example-center-1 {
+  margin-right: 10px;
 }
 
 .gmt-timer {

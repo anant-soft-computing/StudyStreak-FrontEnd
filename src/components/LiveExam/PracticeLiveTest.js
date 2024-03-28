@@ -506,7 +506,7 @@ const PracticeLiveExam = () => {
       {/* Navbar */}
       <div className="lv-navbar">
         <div className="lv-navbar-title">
-          <h2 style={{ color: "red", marginTop: "10px" }}>IELTS</h2>
+          <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
         </div>
         {renderTime}
@@ -587,8 +587,7 @@ const PracticeLiveExam = () => {
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening") && (
             <button
-              className="lv-footer-button"
-              style={{ fontSize: "20px" }}
+              className="lv-footer-button review_size"
               onClick={() => setIsModalOpen(true)}
             >
               Review
@@ -663,7 +662,7 @@ const PracticeLiveExam = () => {
                 <h4>Test : {index + 1}</h4>
                 <div className="card-container">
                   {test.data.map((answer, idx) => (
-                    <div key={idx} className="card" style={{ maxWidth: "30%" }}>
+                    <div key={idx} className="card answer__width">
                       <div className="card-body">
                         <h6 className="card-title">Q. {idx + 1}</h6>
                         <h6 className="card-text">

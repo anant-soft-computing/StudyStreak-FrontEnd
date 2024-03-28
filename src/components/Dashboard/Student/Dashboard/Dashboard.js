@@ -53,29 +53,23 @@ const Dashboard = () => {
                           <ul className="ps-0 d-flex justify-content-between">
                             {latestLiveClass?.[0]?.start_time && (
                               <li>
-                                <i
-                                  className="icofont-calendar"
-                                  style={{ color: "#01579b" }}
-                                ></i>{" "}
-                                {moment(latestLiveClass?.[0]?.start_time).format(
-                                  "MMM DD, YYYY"
-                                )}
+                                <i className="icofont-calendar"></i>{" "}
+                                {moment(
+                                  latestLiveClass?.[0]?.start_time
+                                ).format("MMM DD, YYYY")}
                               </li>
                             )}
                             {latestLiveClass?.[0]?.start_time &&
                               latestLiveClass?.[0]?.end_time && (
                                 <li>
-                                  <i
-                                    className="icofont-clock-time"
-                                    style={{ color: "#01579b" }}
-                                  ></i>{" "}
+                                  <i className="icofont-clock-time"></i>{" "}
                                   {moment(
                                     latestLiveClass[0]?.start_time
                                   ).format("hh:mm A")}
                                   -
-                                  {moment(latestLiveClass?.[0]?.end_time).format(
-                                    "hh:mm A"
-                                  )}
+                                  {moment(
+                                    latestLiveClass?.[0]?.end_time
+                                  ).format("hh:mm A")}
                                 </li>
                               )}
                           </ul>
@@ -88,12 +82,7 @@ const Dashboard = () => {
                             <div className="zoom__meeting__id">
                               <p>
                                 Starting Time :{" "}
-                                <span
-                                  style={{
-                                    color: "#01579b",
-                                    fontWeight: "700",
-                                  }}
-                                >
+                                <span className="start__time">
                                   {moment(
                                     latestLiveClass?.[0]?.start_time
                                   ).format("hh:mm A")}

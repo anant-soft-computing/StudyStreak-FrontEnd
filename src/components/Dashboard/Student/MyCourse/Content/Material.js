@@ -67,7 +67,7 @@ const Material = ({ courseId, courseName }) => {
                         </th>
                         <td></td>
                         <td></td>
-                        <td style={{ width: "0%" }}>
+                        <td className="download">
                           <div className="dashboard__button__group">
                             <a
                               className="dashboard__small__btn__2"

@@ -551,31 +551,19 @@ const GmatLiveMockTest = () => {
       {/* Static Container */}
 
       {/* Main Container */}
-      <div className="gmat-paper-container" style={{ marginTop: "25px" }}>
+      <div className="gmat-paper-container gmat-paper-1">
         <div className="gmat-paper">
           {/* Right Container */}
           <div className="instruction">
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
+            <div className="instruction-1">
               <h4 className="text-center gmat-text">1 of 5</h4>
-              <span style={{ marginTop: "40px" }}>
+              <span className="gmat-text-1">
                 <span className="gmt-timer">
                   {Math.floor(timer / 60)} : {timer % 60}
                 </span>
               </span>
             </div>
-            <div
-              style={{
-                border: "dotted 1px #bbb",
-                marginTop: "20px",
-                marginBottom: "30px",
-              }}
-            ></div>
+            <div className="gmat-text-2"></div>
           </div>
           <div className="lv-box-right">
             {/* Replace the following with your actual content */}

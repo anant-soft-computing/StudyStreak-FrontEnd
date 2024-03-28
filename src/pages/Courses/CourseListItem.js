@@ -78,19 +78,14 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
           >
             <div className="gridarea__wraper gridarea__wraper__2 tagMain">
               {enrolledCourse?.some((item) => item?.id === course.id) && (
-                <span
-                  className="tag"
-                  style={{ zIndex: "1", backgroundColor: "red" }}
-                >
-                  Enrolled
-                </span>
+                <span className="tag tag__color">Enrolled</span>
               )}
               <div className="gridarea__img">
                 <Link to={`/courseDetail/${course?.id}`}>
                   <img
                     src={course?.Course_Thumbnail}
                     alt={course?.Course_Title}
-                    style={{ height: "220px" }}
+                    className="course__image"
                   />
                 </Link>
               </div>

@@ -7,7 +7,7 @@ const Attachment = ({ activeLesson }) => {
         <h3>Attachment</h3>
       </div>
       <div className="row">
-        <div className="col-xl-12" style={{ marginTop: "70px" }}>
+        <div className="col-xl-12 card__title">
           <div className="dashboard__table table-responsive">
             <table>
               <thead>
@@ -38,7 +38,7 @@ const Attachment = ({ activeLesson }) => {
                       </th>
                       <td></td>
                       <td></td>
-                      <td style={{ width: "0%" }}>
+                      <td className="download">
                         <div className="dashboard__button__group">
                           <a
                             className="dashboard__small__btn__2"

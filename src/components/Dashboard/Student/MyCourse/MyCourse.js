@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const MyCourse = () => {
   const { state: { enrolledCourse } = {} } = useLocation();
@@ -87,19 +88,7 @@ const MyCourse = () => {
                           </div>
                         ))
                       ) : (
-                        <div>
-                          <h5 className="text-center text-danger">
-                            No Courses Available , Please Buy a Course !!
-                          </h5>
-                          <div className="d-flex justify-content-center mt-4">
-                            <button
-                              className="default__button"
-                              onClick={() => navigate("/courses")}
-                            >
-                              Buy Course
-                            </button>
-                          </div>
-                        </div>
+                        <BuyCourse message="No Courses Available , Please Buy a Course !!" />
                       )}
                     </div>
                   </div>

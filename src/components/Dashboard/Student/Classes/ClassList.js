@@ -1,35 +1,30 @@
 import React from "react";
 import moment from "moment";
 
-const UpcomingDoubtSolving = ({
-  joinNow,
-  isWithin5Minutes,
-  doubtSolvingClasses,
-}) => {
+const ClassList = ({ classes, bookCount, message }) => {
   return (
     <>
       <div className="dashboard__section__title">
-        <h4>Upcomming</h4>
+        <h4>Available Slot</h4>
       </div>
-      {doubtSolvingClasses.length > 0 ? (
+      {classes.length > 0 ? (
         <div className="row">
-          {doubtSolvingClasses.map(
+          {classes.map(
             ({
               id,
               start_time,
               end_time,
               meeting_title,
               meeting_description,
-              zoom_meeting_id,
             }) => {
+              const startDate = new Date(start_time);
+              const isPastDate = startDate < new Date();
               return (
                 <div key={id} className="col-lg-4 col-md-6 col-12">
                   <div className="global-neomorphism-card-styling gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain d-flex flex-column justify-content-between">
-                    <span className="tag">Booked</span>
-                    <br />
                     <div className="gridarea__content ">
                       <div className="gridarea__list mt-1">
-                        <ul className="ps-0">
+                        <ul className="ps-0 mt-4">
                           <li>
                             <i className="icofont-calendar"></i>{" "}
                             {moment(start_time).format("DD MMM, YYYY")}
@@ -46,7 +41,8 @@ const UpcomingDoubtSolving = ({
                       </div>
                       <div className="zoom__meeting__id">
                         <p>
-                          Description: <span>{meeting_description}</span>
+                          Description:
+                          <span>{meeting_description}</span>
                         </p>
                       </div>
                       <div className="zoom__meeting__id">
@@ -60,10 +56,10 @@ const UpcomingDoubtSolving = ({
                       <div className="d-flex justify-content-center">
                         <button
                           className="default__button mb-2"
-                          onClick={() => joinNow(zoom_meeting_id)}
-                          disabled={!isWithin5Minutes(start_time)}
+                          onClick={() => bookCount(id)}
+                          disabled={isPastDate}
                         >
-                          Join Now
+                          Book Slot
                         </button>
                       </div>
                     </div>
@@ -74,12 +70,10 @@ const UpcomingDoubtSolving = ({
           )}
         </div>
       ) : (
-        <h5 className="text-center text-danger">
-          No One To One Doubt Solving Classes Available !!
-        </h5>
+        <h5 className="text-center text-danger">{message}</h5>
       )}
     </>
   );
 };
 
-export default UpcomingDoubtSolving;
+export default ClassList;

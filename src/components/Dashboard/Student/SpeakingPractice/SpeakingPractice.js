@@ -4,16 +4,17 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import SpeakingPracticeList from "./SpeakingPracticeList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
-import UpcomingSpeakingPractice from "./UpcomingSpeakingPractice";
+import BuyCourse from "../BuyCourse/BuyCourse";
+import UpcomingClass from "../Classes/UpcomingClass";
+import ClassList from "../Classes/ClassList";
 
 const SpeakingPractice = ({ sepakingCount = "" }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const { state: { studentId, solvingClassBook, count } = {} } = useLocation();
+  const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -137,7 +138,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
   };
 
   const speakingClasses = () => {
-    return speakingSolvingClass.filter(({ start_time }) => {
+    return speakingSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (
@@ -147,13 +148,13 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
     });
   };
 
-  const speackingClasses = speakingClasses().filter((item) =>
-    solvingClassBook.some((index) => index.id === item.id)
+  const speackingClasses = speakingClasses()?.filter((item) =>
+    solvingClassBook?.some((index) => index.id === item.id)
   );
 
   const bookClass = solvingClassBook?.map((item) => item?.id);
-  const speakingPracticeClasses = speakingClasses().filter(
-    (item) => !bookClass.includes(item?.id)
+  const speakingPracticeClasses = speakingClasses()?.filter(
+    (item) => !bookClass?.includes(item?.id)
   );
 
   return (
@@ -179,30 +180,19 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                           </h6>
                         </div>
                         {speaking_practice_count === "" ? (
-                          <>
-                            <h5 className="text-center text-danger">
-                              No Speaking Practice Class Available, Please Buy a
-                              Course !!
-                            </h5>
-                            <div className="d-flex justify-content-center mt-4">
-                              <button
-                                className="default__button"
-                                onClick={() => navigate("/courses")}
-                              >
-                                Buy Course
-                              </button>
-                            </div>
-                          </>
+                          <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
                         ) : (
                           <>
-                            <UpcomingSpeakingPractice
+                            <UpcomingClass
                               joinNow={joinNow}
                               isWithin5Minutes={isWithin5Minutes}
-                              speakingClasses={speackingClasses}
+                              classes={speackingClasses}
+                              message="No Upcomming Speaking Practice Classes Available !!"
                             />
-                            <SpeakingPracticeList
-                              speakingClasses={speakingPracticeClasses}
+                            <ClassList
+                              classes={speakingPracticeClasses}
                               bookCount={bookCount}
+                              message="No Speaking Practice Classes Available !!"
                             />
                           </>
                         )}
@@ -227,36 +217,25 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
           </div>
           <div>
             {speaking_practice_count === "" ? (
-              <>
-                <h5 className="text-center text-danger">
-                  No Speaking Practice Class Available, Please Buy a Course !!
-                </h5>
-                <div className="d-flex justify-content-center mt-4">
-                  <button
-                    className="default__button"
-                    onClick={() => navigate("/courses")}
-                  >
-                    Buy Course
-                  </button>
-                </div>
-              </>
+              <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
             ) : (
               <>
-                <UpcomingSpeakingPractice
+                <UpcomingClass
                   joinNow={joinNow}
                   isWithin5Minutes={isWithin5Minutes}
-                  speakingClasses={speackingClasses}
+                  classes={speackingClasses}
+                  message="No Upcomming Speaking Practice Classes Available !!"
                 />
-                <SpeakingPracticeList
-                  speakingClasses={speakingPracticeClasses}
+                <ClassList
+                  classes={speakingPracticeClasses}
                   bookCount={bookCount}
+                  message="No Speaking Practice Classes Available !!"
                 />
               </>
             )}
           </div>
         </div>
       )}
-
       <SmallModal
         size="lg"
         centered

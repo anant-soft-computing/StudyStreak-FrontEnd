@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const difficultLevelTabs = ["Easy", "Medium", "Hard"];
 
 const FullLengthTest = () => {
   const { state: { count } = {} } = useLocation();
-  const navigate = useNavigate();
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
   const [difficulty_level, setDifficultyLevel] = useState("Easy");
   const { full_length_test_count } = count;
@@ -95,19 +95,7 @@ const FullLengthTest = () => {
                       <h4>Full Length Test</h4>
                     </div>
                     {full_length_test_count === "" ? (
-                      <>
-                        <h5 className="text-center text-danger">
-                          No Full Length Test Available , Please Buy a Course !!
-                        </h5>
-                        <div className="d-flex justify-content-center mt-4">
-                          <button
-                            className="default__button"
-                            onClick={() => navigate("/courses")}
-                          >
-                            Buy Course
-                          </button>
-                        </div>
-                      </>
+                      <BuyCourse message="No Full Length Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">
                         <div

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Reading from "./Reading";
 import Listening from "./Listening";
 import Writing from "./Writing";
 import Speaking from "./Speaking";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const PracticeTest = () => {
   const { state: { count } = {} } = useLocation();
-  const navigate = useNavigate();
   const [readingData, setReadingData] = useState([]);
   const [listeningData, setListeningData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
@@ -25,8 +25,9 @@ const PracticeTest = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
@@ -76,19 +77,7 @@ const PracticeTest = () => {
                       <h4>Practice Test</h4>
                     </div>
                     {practice_test_count === "" ? (
-                      <>
-                        <h5 className="text-center text-danger">
-                          No Practice Test Available , Please Buy a Course !!
-                        </h5>
-                        <div className="d-flex justify-content-center mt-4">
-                          <button
-                            className="default__button"
-                            onClick={() => navigate("/courses")}
-                          >
-                            Buy Course
-                          </button>
-                        </div>
-                      </>
+                      <BuyCourse message="No Practice Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">
                         <div

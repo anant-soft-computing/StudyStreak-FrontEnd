@@ -4,15 +4,16 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import DoubtSolvingList from "./DoubtSolvingList";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
-import UpcomingDoubtSolving from "./UpcomingDoubtSolving";
+import BuyCourse from "../BuyCourse/BuyCourse";
+import UpcomingClass from "../Classes/UpcomingClass";
+import ClassList from "../Classes/ClassList";
 
 const DoubtSolving = () => {
   const navigate = useNavigate();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const { state: { studentId, solvingClassBook, count } = {} } = useLocation();
+  const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -136,7 +137,7 @@ const DoubtSolving = () => {
   };
 
   const doubtSolvingClasses = () => {
-    return doubtSolvingClass.filter(({ start_time }) => {
+    return doubtSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (
@@ -146,13 +147,13 @@ const DoubtSolving = () => {
     });
   };
 
-  const oneToOneDoubtSolvingClasses = doubtSolvingClasses().filter((item) => {
-    return solvingClassBook.some((index) => index.id === item.id);
+  const oneToOneDoubtSolvingClasses = doubtSolvingClasses()?.filter((item) => {
+    return solvingClassBook?.some((index) => index.id === item.id);
   });
 
   const bookClass = solvingClassBook?.map((item) => item?.id);
-  const oToclasses = doubtSolvingClasses().filter(
-    (item) => !bookClass.includes(item?.id)
+  const oToclasses = doubtSolvingClasses()?.filter(
+    (item) => !bookClass?.includes(item?.id)
   );
 
   return (
@@ -177,30 +178,19 @@ const DoubtSolving = () => {
                         </h6>
                       </div>
                       {one_to_one_doubt_solving_count === "" ? (
-                        <>
-                          <h5 className="text-center text-danger">
-                            No One To One Doubt Solving Class Available , Please
-                            Buy a Course !!
-                          </h5>
-                          <div className="d-flex justify-content-center mt-4">
-                            <button
-                              className="default__button"
-                              onClick={() => navigate("/courses")}
-                            >
-                              Buy Course
-                            </button>
-                          </div>
-                        </>
+                        <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
                       ) : (
                         <>
-                          <UpcomingDoubtSolving
+                          <UpcomingClass
                             joinNow={joinNow}
                             isWithin5Minutes={isWithin5Minutes}
-                            doubtSolvingClasses={oneToOneDoubtSolvingClasses}
+                            classes={oneToOneDoubtSolvingClasses}
+                            message="No Upcomming One To One Doubt Solving Classes Available !!"
                           />
-                          <DoubtSolvingList
-                            doubtSolvingClasses={oToclasses}
+                          <ClassList
+                            classes={oToclasses}
                             bookCount={bookCount}
+                            message="No One To One Doubt Solving Classes Available !!"
                           />
                         </>
                       )}

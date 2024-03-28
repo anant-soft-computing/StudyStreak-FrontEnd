@@ -27,9 +27,8 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-          }`,
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
         },
         method: "POST",
       },
@@ -86,11 +85,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               >
                 <li className="nav-item" role="presentation">
                   <button
-                    style={{
-                      backgroundColor: "#e1f5fe",
-                      color: "#01579b",
-                    }}
-                    className="single__tab__link active"
+                    className="single__tab__link active lesson__tab__button"
                     data-bs-toggle="tab"
                     data-bs-target="#projects__one"
                     type="button"
@@ -103,11 +98,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
 
                 <li className="nav-item" role="presentation">
                   <button
-                    style={{
-                      backgroundColor: "#e1f5fe",
-                      color: "#01579b",
-                    }}
-                    className="single__tab__link"
+                    className="single__tab__link lesson__tab__button"
                     data-bs-toggle="tab"
                     data-bs-target="#projects__two"
                     type="button"
@@ -121,11 +112,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
 
                 <li className="nav-item" role="presentation">
                   <button
-                    style={{
-                      backgroundColor: "#e1f5fe",
-                      color: "#01579b",
-                    }}
-                    className="single__tab__link"
+                    className="single__tab__link lesson__tab__button"
                     data-bs-toggle="tab"
                     data-bs-target="#projects__three"
                     type="button"
@@ -139,11 +126,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
 
                 <li className="nav-item" role="presentation">
                   <button
-                    style={{
-                      backgroundColor: "#e1f5fe",
-                      color: "#01579b",
-                    }}
-                    className="single__tab__link"
+                    className="single__tab__link lesson__tab__button"
                     data-bs-toggle="tab"
                     data-bs-target="#projects__four"
                     type="button"

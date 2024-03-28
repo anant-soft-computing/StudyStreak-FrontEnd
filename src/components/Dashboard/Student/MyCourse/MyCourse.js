@@ -48,13 +48,13 @@ const MyCourse = () => {
                                 <img
                                   src={course?.Course_Thumbnail}
                                   alt={course?.Course_Title}
-                                  style={{ height: "220px" }}
+                                  className="course__image"
                                 />
                               </div>
                               <div className="gridarea__content d-flex flex-column justify-content-between">
                                 <div
+                                  className="course__pointer"
                                   onClick={() => handleCourseClick(course?.id)}
-                                  style={{ cursor: "pointer" }}
                                 >
                                   <div className="gridarea__heading">
                                     <h3>{course?.Course_Title}</h3>

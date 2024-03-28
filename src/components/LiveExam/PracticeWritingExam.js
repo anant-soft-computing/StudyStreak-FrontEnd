@@ -285,7 +285,7 @@ const PracticeLiveExam = () => {
       {/* Navbar */}
       <div className="lv-navbar">
         <div className="lv-navbar-title">
-          <h2 style={{ color: "red", marginTop: "10px" }}>IELTS</h2>
+          <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
         </div>
         {renderTime}
@@ -314,8 +314,8 @@ const PracticeLiveExam = () => {
             {examData?.exam_type === "Writing" && (
               <div className="lv-textarea">
                 <textarea
+                  className="writing__textarea"
                   id={`textarea_${next}`}
-                  style={{ width: "100%", height: "200px" }}
                   value={examAnswer[next]?.data[0]?.answer_text || ""}
                   onChange={(e) => handleWritingAnswer(e, next)}
                 />

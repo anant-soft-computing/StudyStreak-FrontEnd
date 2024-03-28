@@ -173,8 +173,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                           <h6>
                             Your Speaking Practice Class Schedule{" "}
                             <i
-                              className="icofont-calendar"
-                              style={{ cursor: "pointer", color: "#01579b" }}
+                              className="icofont-calendar one_to_one_icon"
                               onClick={() => setIsModalOpen(true)}
                             ></i>
                           </h6>
@@ -221,8 +220,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
             <h6>
               Your Speaking Practice Class Schedule{" "}
               <i
-                className="icofont-calendar"
-                style={{ cursor: "pointer", color: "#01579b" }}
+                className="icofont-calendar one_to_one_icon"
                 onClick={() => setIsModalOpen(true)}
               ></i>
             </h6>

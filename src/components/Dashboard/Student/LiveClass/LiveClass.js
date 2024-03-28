@@ -138,11 +138,7 @@ const LiveClass = () => {
                               <h6>
                                 Your Live Class Schedule{" "}
                                 <i
-                                  className="icofont-calendar"
-                                  style={{
-                                    cursor: "pointer",
-                                    color: "#01579b",
-                                  }}
+                                  className="icofont-calendar one_to_one_icon"
                                   onClick={() => setIsModalOpen(true)}
                                 ></i>
                               </h6>

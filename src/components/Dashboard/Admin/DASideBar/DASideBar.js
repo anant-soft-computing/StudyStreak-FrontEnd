@@ -98,17 +98,17 @@ const DASideBar = () => {
               {menuList.map((item, index) => (
                 <li key={index}>
                   <Link
-                    className={location === item.link ? "active" : ""}
+                    className={
+                      location === item.link
+                        ? "active admin__menu"
+                        : "admin__menu"
+                    }
                     to={item.link}
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
                     onClick={item.name === "Logout" ? logout : () => {}}
                     state={item?.state}
                   >
-                    <div style={{ width: "10%" }}>{item.icon}</div>
-                    <div style={{ width: "65%" }}>{item.name}</div>
+                    <div className="admin__menu__icon">{item.icon}</div>
+                    <div className="admin__menu__title">{item.name}</div>
                   </Link>
                 </li>
               ))}

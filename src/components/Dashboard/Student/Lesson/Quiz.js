@@ -36,7 +36,7 @@ const Quiz = ({ activeLesson }) => {
         <form onSubmit={handleSubmit}>
           {activeLesson.map((question, questionIndex) => (
             <div className="quiz__single__attemp" key={questionIndex}>
-              <li style={{ marginTop: "70px" }}>{`Question : ${
+              <li className="card__title">{`Question : ${
                 questionIndex + 1
               }/${question.quiz_options.length}`}</li>
               <hr />

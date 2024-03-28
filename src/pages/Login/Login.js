@@ -334,14 +334,7 @@ const Login = () => {
                         </div>
                       </form>
                       <div className="login__social__option">
-                        <div
-                          style={{
-                            marginTop: "20px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
+                        <div className="google_login_logo">
                           <GoogleLogin
                             onSuccess={(credentialResponse) => {
                               const decodedData = jwtDecode(

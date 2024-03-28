@@ -114,21 +114,13 @@ const BatchSelection = (props) => {
                   <div className="dashboard__recent__course__meta text-xl-center">
                     <ul className="ps-0">
                       <li>
-                        <i
-                          className="icofont-calendar"
-                          style={{ color: "#01579b" }}
-                        ></i>{" "}
-                        <b>Date</b>:{" "}
+                        <i className="icofont-calendar"></i> <b>Date</b>:{" "}
                         {batchItem?.batch_startdate && batchItem?.batch_enddate
                           ? `${batchItem?.batch_startdate} To ${batchItem?.batch_enddate}`
                           : "N/A"}
                       </li>
                       <li>
-                        <i
-                          className="icofont-clock-time"
-                          style={{ color: "#01579b" }}
-                        ></i>{" "}
-                        <b>Time</b>:{" "}
+                        <i className="icofont-clock-time"></i> <b>Time</b>:{" "}
                         {batchItem?.batch_start_timing &&
                         batchItem?.batch_end_timing
                           ? `${batchItem?.batch_start_timing} To ${batchItem?.batch_end_timing}`
@@ -141,7 +133,7 @@ const BatchSelection = (props) => {
             ))}
           </div>
         ) : (
-          <p>No Batches Available</p>
+          <h5 className="text-center text-danger">No Batches Available !!</h5>
         )}
       </Modal.Body>
       <Modal.Footer>

@@ -2,24 +2,19 @@ import React from "react";
 
 const InstructionsPage = ({ Instruction, setInstruction }) => {
   return (
-    <div
-      className="gmat-paper-container"
-      style={{ marginTop: "150px", marginBottom: "10px" }}
-    >
+    <div className="gmat-paper-container gmat-paper-container-1">
       <h1 className="text-center gmat-text">THE GMAT SIMULATION TEST</h1>
       <div className="gmat-paper">
         {Instruction === 1 && (
           <div className="instruction">
             <h4 className="text-center gmat-text">Instruction</h4>
-            <div
-              style={{ border: "dotted 1px #bbb", marginBottom: "30px" }}
-            ></div>
+            <div className="gmat-border"></div>
             <span className="welcome-info">
               Welcome to the GMAT Tutor Free Simulation Test!. This test
               simulates the Graduate Management Admission Test™.
             </span>
 
-            <h4 style={{ marginTop: "40px" }}>Tutorial</h4>
+            <h4 className="tutorial">Tutorial</h4>
             <p>
               Each question on the Quantitative and Verbal sections is a
               multiple-choice question with five answer choices. You must solve
@@ -138,10 +133,7 @@ const InstructionsPage = ({ Instruction, setInstruction }) => {
                   What is the value of x?
                 </strong>
                 <div>
-                  <strong
-                    className="example-center"
-                    style={{ marginRight: "10px" }}
-                  >
+                  <strong className="example-center example-center-1">
                     <em>(1)</em> x is an integer
                   </strong>
                   <strong className="example-center">
@@ -187,9 +179,8 @@ const InstructionsPage = ({ Instruction, setInstruction }) => {
           </div>
         )}
         <button
-          className="gmat-button"
+          className="gmat-button gmat-button-1"
           onClick={() => setInstruction(Instruction + 1)}
-          style={{ width: "max-content", padding: "5px 20px" }}
         >
           Start the Test
         </button>

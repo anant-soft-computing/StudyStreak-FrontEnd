@@ -8567,6 +8567,7 @@ Counter Area
   color: var(--blackColor);
   margin: 0;
 }
+
 @media (max-width: 767px) {
   .counter__content__wraper {
     text-align: center;
@@ -14224,6 +14225,10 @@ Breadcrumb Area
   }
 }
 
+.create__course__acc {
+  width: 100% !important;
+}
+
 .create__course__accordion__wraper .accordion-item {
   margin-bottom: 20px;
   background: #01579b36;
@@ -16137,7 +16142,7 @@ Dark Mode
 .logoSize {
   width: 150px;
   height: 50px;
-  border: 1px solid magenta
+  border: 1px solid magenta;
 }
 
 .exam {
@@ -16171,6 +16176,7 @@ Dark Mode
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
 .course__videos iframe {
   border-radius: 10px;
 }
@@ -16180,6 +16186,7 @@ Dark Mode
     margin-bottom: 25px;
     order: 1;
   }
+
   .course__lessons {
     order: 2;
   }
@@ -16195,6 +16202,7 @@ Dark Mode
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
 .course__videos iframe {
   border-radius: 10px;
 }
@@ -16204,6 +16212,7 @@ Dark Mode
     margin-bottom: 25px;
     order: 1;
   }
+
   .course__lessons {
     order: 2;
   }
@@ -16261,6 +16270,7 @@ li {
   padding: 15px;
   margin-bottom: 20px;
 }
+
 .borderBox {
   border: 1px solid #ccc;
   padding: 20px;
@@ -16355,6 +16365,10 @@ div.gridarea__wraper {
   margin: 10px;
 }
 
+.answer__width {
+  max-width: 30%;
+}
+
 .faqs p strong {
   font-size: 18px;
 }
@@ -16395,4 +16409,187 @@ div.gridarea__wraper {
 .footerarea__content__Wrap a {
   text-decoration: none;
   color: white;
+}
+
+.download {
+  width: 0%;
+}
+
+.card__title {
+  margin-top: 70px !important;
+}
+
+.sticky-top {
+  z-index: 1 !important;
+}
+
+.toast-container {
+  font-size: 14px;
+  width: auto;
+  font-weight: 600;
+  z-index: 10000;
+}
+
+.icofont-calendar {
+  color: #01579b;
+}
+
+.icofont-clock-time {
+  color: #01579b;
+}
+
+.icofont-book-alt {
+  color: #01579b;
+}
+
+.admin__menu {
+  display: flex;
+  flex-direction: row;
+}
+
+.admin__menu__icon {
+  width: 10%;
+}
+
+.admin__menu__title {
+  width: 65%;
+}
+
+.flash-card__remove__btn {
+  margin-left: 10px;
+}
+
+.gptResponse {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.writing__exam {
+  margin-top: 50px;
+}
+
+.table__height {
+  max-height: 270px;
+}
+
+.level__band {
+  background-color: #86e9a9;
+  padding: 10px;
+}
+
+.level__good {
+  background-color: #f7cb5e;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.level__competent {
+  background-color: #ff4d4d;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.level__modest {
+  background-color: #24d9d9;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.level__limited {
+  background-color: #dcdcdc;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.one_to_one_icon {
+  cursor: pointer;
+  color: #01579b;
+}
+
+.start__time {
+  color: #01579b;
+  font-weight: 700;
+}
+
+.lesson__tab__button {
+  background-color: #e1f5fe;
+  color: #01579b;
+}
+
+.course__image {
+  height: 220px;
+}
+
+.course__pointer {
+  cursor: pointer;
+}
+
+.google_login_logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.tag__color {
+  z-index: 1;
+  background-color: red;
+}
+
+.mobile_menu_left {
+  padding-left: 0px;
+}
+
+.mobile_menu_name {
+  text-decoration: none;
+}
+
+.writing__textarea {
+  width: 100%;
+  height: 220px;
+}
+
+.review_size {
+  font-size: 20px;
+}
+
+.path__main {
+  line-height: 30px;
+}
+
+.path__ielts {
+  padding: 10px;
+  background-color: #dc3545;
+  border-radius: 10px;
+  color: white;
+  font-weight: 900;
+}
+
+.path__pte {
+  padding: 10px;
+  background-color: #027eff;
+  border-radius: 10px;
+  color: white;
+  font-weight: 900;
+}
+
+.path__tofel {
+  padding: 10px;
+  background-color: #fd7e14;
+  border-radius: 10px;
+  color: white;
+  font-weight: 900;
+}
+
+.path__duolingo {
+  padding: 10px;
+  background-color: #ffc107;
+  border-radius: 10px;
+  color: white;
+  font-weight: 900;
+}
+
+.description {
+  margin-top: 25px;
 }

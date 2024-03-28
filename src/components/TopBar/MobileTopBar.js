@@ -66,12 +66,13 @@ const MobileTopBar = () => {
           <div className="mobile-menu-wrap headerarea">
             <div className="mobile-navigation">
               <nav>
-                <ul className="mobile-menu" style={{ paddingLeft: 0 }}>
+                <ul className="mobile-menu mobile_menu_left">
                   {menu.map((item, index) => (
-                    <li className="menu-item-has-children" key={index + 1}>
-                      <Link to={item.link} style={{ textDecoration: "auto" }}>
-                        {item.name}
-                      </Link>
+                    <li
+                      className="menu-item-has-children mobile_menu_name"
+                      key={index + 1}
+                    >
+                      <Link to={item.link}>{item.name}</Link>
                     </li>
                   ))}
                 </ul>

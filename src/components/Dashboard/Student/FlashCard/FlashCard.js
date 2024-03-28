@@ -63,8 +63,7 @@ const FlashCard = ({ courseId }) => {
           <div className="row">
             <div
               key={id}
-              className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-              style={{ marginTop: "70px" }}
+              className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12 card__title"
               data-aos="fade-up"
             >
               <div
@@ -78,27 +77,13 @@ const FlashCard = ({ courseId }) => {
                   <div className="zoom__meeting__id">
                     <p>
                       Description :{" "}
-                      <span
-                        style={{
-                          color: "#01579b",
-                          fontWeight: "700",
-                        }}
-                      >
-                        {description}
-                      </span>
+                      <span className="start__time">{description}</span>
                     </p>
                   </div>
                   <div className="zoom__meeting__id">
                     <p>
                       Priority :{" "}
-                      <span
-                        style={{
-                          color: "#01579b",
-                          fontWeight: "700",
-                        }}
-                      >
-                        {set_priority}
-                      </span>
+                      <span className="start__time">{set_priority}</span>
                     </p>
                   </div>
                 </div>

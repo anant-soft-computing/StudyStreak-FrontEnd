@@ -214,20 +214,17 @@ const DSSidebar = () => {
               {menuList.map((item, index) => (
                 <li key={index}>
                   <Link
-                    className={location === item.link ? "active" : ""}
+                    className={
+                      location === item.link
+                        ? "active admin__menu"
+                        : "admin__menu"
+                    }
                     to={item.link}
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
                     onClick={item.name === "Logout" ? logout : () => {}}
                     state={item?.state}
                   >
-                    <div style={{ width: "10%" }}>{item.icon}</div>
-                    <div
-                      className="side-navbar-rexr-color-common"
-                      style={{ width: "65%" }}
-                    >
+                    <div className="admin__menu__icon">{item.icon}</div>
+                    <div className="side-navbar-rexr-color-common admin__menu__title">
                       {item.name}
                     </div>
                     {item.name === "Practice Test" ||

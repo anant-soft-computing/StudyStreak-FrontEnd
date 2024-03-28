@@ -171,8 +171,7 @@ const DoubtSolving = () => {
                         <h6>
                           Your One To One Doubt Solving Class Schedule{" "}
                           <i
-                            className="icofont-calendar"
-                            style={{ cursor: "pointer", color: "#01579b" }}
+                            className="icofont-calendar one_to_one_icon"
                             onClick={() => setIsModalOpen(true)}
                           ></i>
                         </h6>

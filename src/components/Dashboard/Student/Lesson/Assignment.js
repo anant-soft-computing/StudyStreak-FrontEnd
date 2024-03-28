@@ -13,10 +13,9 @@ const Assignment = ({ activeLesson }) => {
       <div className="row">
         {activeLesson.map((exam, index) => (
           <div
-            className="col-lg-4 col-md-6 col-12"
+            className="col-lg-4 col-md-6 col-12 card__title"
             data-aos="fade-up"
             key={index}
-            style={{ marginTop: "70px" }}
           >
             <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
               <div className="gridarea__content">

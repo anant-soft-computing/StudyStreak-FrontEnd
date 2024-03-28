@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import Reading from "./Reading";
 import Writing from "./Writing";
 import Listening from "./Listening";
 import Speaking from "./Speaking";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const MockTest = () => {
   const { state: { count } = {} } = useLocation();
-  const navigate = useNavigate();
   const [mockTestData, setMockTestData] = useState([]);
   const [givenTest, setGivenTest] = useState([]);
   const { mini_test_count } = count;
@@ -103,19 +103,7 @@ const MockTest = () => {
                       <h4>Mini Test</h4>
                     </div>
                     {mini_test_count === "" ? (
-                      <>
-                        <h5 className="text-center text-danger">
-                          No Mini Test Available , Please Buy a Course !!
-                        </h5>
-                        <div className="d-flex justify-content-center mt-4">
-                          <button
-                            className="default__button"
-                            onClick={() => navigate("/courses")}
-                          >
-                            Buy Course
-                          </button>
-                        </div>
-                      </>
+                      <BuyCourse message="No Mini Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">
                         <div

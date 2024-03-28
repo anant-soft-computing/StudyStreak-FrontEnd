@@ -6,14 +6,15 @@ import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
-import GroupDoubleSolvingList from "./GroupDoubleSolvingList";
-import UpcomingGroupDoubtSolving from "./UpcomingGroupDoubtSolving";
+import BuyCourse from "../BuyCourse/BuyCourse";
+import UpcomingClass from "../Classes/UpcomingClass";
+import ClassList from "../Classes/ClassList";
 
 const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const { studentId, solvingClassBook, count } = useLocation()?.state;
+  const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -137,7 +138,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
   };
 
   const groupDoubtSolvingClasses = () => {
-    return groupDoubtSolvingClass.filter(({ start_time }) => {
+    return groupDoubtSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange[0];
       return (
@@ -147,13 +148,13 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
     });
   };
 
-  const groupSolvingClasses = groupDoubtSolvingClasses().filter((item) => {
-    return solvingClassBook.some((index) => index.id === item.id);
+  const groupSolvingClasses = groupDoubtSolvingClasses()?.filter((item) => {
+    return solvingClassBook?.some((index) => index.id === item.id);
   });
 
   const bookClass = solvingClassBook?.map((item) => item?.id);
-  const groupClasses = groupDoubtSolvingClasses().filter(
-    (item) => !bookClass.includes(item?.id)
+  const groupClasses = groupDoubtSolvingClasses()?.filter(
+    (item) => !bookClass?.includes(item?.id)
   );
 
   return (
@@ -179,30 +180,19 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
                           </h6>
                         </div>
                         {group_doubt_solving_count === "" ? (
-                          <>
-                            <h5 className="text-center text-danger">
-                              No Group Doubt Solving Class Available , Please
-                              Buy a Course !!
-                            </h5>
-                            <div className="d-flex justify-content-center mt-4">
-                              <button
-                                className="default__button"
-                                onClick={() => navigate("/courses")}
-                              >
-                                Buy Course
-                              </button>
-                            </div>
-                          </>
+                          <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
                         ) : (
                           <>
-                            <UpcomingGroupDoubtSolving
+                            <UpcomingClass
                               joinNow={joinNow}
                               isWithin5Minutes={isWithin5Minutes}
-                              groupDoubtSolvingClasses={groupSolvingClasses}
+                              classes={groupSolvingClasses}
+                              message="No Upcomming Group Doubt Solving Classes Available !!"
                             />
-                            <GroupDoubleSolvingList
-                              groupDoubtSolvingClasses={groupClasses}
+                            <ClassList
+                              classes={groupClasses}
                               bookCount={bookCount}
+                              message=" No Group Doubt Solving Classes Available !!"
                             />
                           </>
                         )}
@@ -227,37 +217,25 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
           </div>
           <div>
             {group_doubt_solving_count === "" ? (
-              <>
-                <h5 className="text-center text-danger">
-                  No Group Doubt Solving Class Available , Please Buy a Course
-                  !!
-                </h5>
-                <div className="d-flex justify-content-center mt-4">
-                  <button
-                    className="default__button"
-                    onClick={() => navigate("/courses")}
-                  >
-                    Buy Course
-                  </button>
-                </div>
-              </>
+              <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
             ) : (
               <>
-                <UpcomingGroupDoubtSolving
+                <UpcomingClass
                   joinNow={joinNow}
                   isWithin5Minutes={isWithin5Minutes}
-                  groupDoubtSolvingClasses={groupSolvingClasses}
+                  classes={groupSolvingClasses}
+                  message="No Upcomming Group Doubt Solving Classes Available !!"
                 />
-                <GroupDoubleSolvingList
-                  groupDoubtSolvingClasses={groupClasses}
+                <ClassList
+                  classes={groupClasses}
                   bookCount={bookCount}
+                  message=" No Group Doubt Solving Classes Available !!"
                 />
               </>
             )}
           </div>
         </div>
       )}
-
       <SmallModal
         size="lg"
         centered

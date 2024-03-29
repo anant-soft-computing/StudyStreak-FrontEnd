@@ -147,6 +147,14 @@ const LiveClass = () => {
         isOpen={isModalOpen}
         title="Live Class schedule"
         onClose={() => setIsModalOpen(false)}
+        footer={
+          <button
+            className="default__button"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Apply
+          </button>
+        }
       >
         <DateRange
           selectedRange={selectedDateRange}

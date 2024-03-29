@@ -3,6 +3,7 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
+import SmallModal from "../UI/Modal";
 
 const PracticeLiveExam = () => {
   const containerRef = useRef(null);
@@ -14,6 +15,7 @@ const PracticeLiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
   const [next, setNext] = useState(0);
   const [numberOfWord, setNumberOfWord] = useState(0);
@@ -365,12 +367,34 @@ const PracticeLiveExam = () => {
                   ? "none"
                   : "block",
             }}
-            onClick={handleWritingSubmit}
+            onClick={() => setIsModalOpen(true)}
           >
-            <span>&#x2713;</span>
+            Submit
           </button>
         </div>
       </div>
+      {isModalOpen && (
+        <SmallModal
+          size="md"
+          centered
+          isOpen={isModalOpen}
+          footer={
+            <div className="d-flex gap-2">
+              <button className="btn btn-success" onClick={handleWritingSubmit}>
+                Yes
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => setIsModalOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          }
+        >
+          <h5>Are You Sure You Want To Submit ?</h5>
+        </SmallModal>
+      )}
     </>
   );
 };

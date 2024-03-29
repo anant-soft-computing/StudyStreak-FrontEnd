@@ -22,6 +22,7 @@ const FullLengthLiveExam = () => {
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
   const [fullLengthId, setFullLengthId] = useState("");
   const [next, setNext] = useState(0);
@@ -900,13 +901,35 @@ const FullLengthLiveExam = () => {
               cursor: linkAnswer ? "not-allowed" : "pointer",
               opacity: linkAnswer ? 0.5 : 1,
             }}
-            onClick={handleRLSubmit}
+            onClick={() => setIsConfirmModalOpen(true)}
             disabled={linkAnswer}
           >
-            <span>&#x2713;</span>
+            Submit
           </button>
         </div>
       </div>
+      {isConfirmModalOpen && (
+        <SmallModal
+          size="md"
+          centered
+          isOpen={isConfirmModalOpen}
+          footer={
+            <div className="d-flex gap-2">
+              <button className="btn btn-success" onClick={handleRLSubmit}>
+                Yes
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => setIsConfirmModalOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          }
+        >
+          <h5>Are You Sure You Want To Submit ?</h5>
+        </SmallModal>
+      )}
       {isModalOpen &&
         (examData?.exam_type === "Reading" ||
           examData?.exam_type === "Listening") && (

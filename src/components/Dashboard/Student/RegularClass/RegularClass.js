@@ -144,6 +144,14 @@ const RegularClass = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Regular class schedule"
+        footer={
+          <button
+            className="default__button"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Apply
+          </button>
+        }
       >
         <DateRange
           selectedRange={selectedDateRange}

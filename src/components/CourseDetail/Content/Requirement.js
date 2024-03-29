@@ -4,7 +4,6 @@ const Requirement = ({ courseDetail }) => {
   return (
     <div
       className="tab-pane fade"
-      id="projects__three"
       role="tabpanel"
       aria-labelledby="projects__three"
     >

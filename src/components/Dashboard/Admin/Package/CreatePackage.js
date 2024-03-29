@@ -2,6 +2,7 @@ import React, { useReducer, useState } from "react";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
+import Tab from "../../../UI/Tab";
 
 const initialPackageData = {
   package_name: "",
@@ -57,8 +58,8 @@ const CreatePackage = () => {
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("Package");
 
-  const handleTabChange = (tabName) => {
-    setActiveTab(tabName);
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
   };
 
   const validateForm = () => {
@@ -154,36 +155,16 @@ const CreatePackage = () => {
 
   return (
     <div>
-      <div className="col-xl-12 aos-init aos-animate" data-aos="fade-up">
-        <ul
-          className="nav about__button__wrap dashboard__button__wrap"
-          id="myTab"
-          role="tablist"
-        >
-          {tabs.map((tab, index) => (
-            <li className="nav-item" role="presentation" key={index}>
-              <button
-                className={`single__tab__link common-background-color-across-app ${
-                  activeTab === tab.name ? "active" : ""
-                }`}
-                onClick={() => handleTabChange(tab.name)}
-              >
-                {tab.name}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div
-        className="tab-content tab__content__wrapper aos-init aos-animate"
-        id="myTabContent"
-        data-aos="fade-up"
-      >
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
         <div
           className={`tab-pane fade ${
             activeTab === "Package" ? "show active" : ""
           }`}
-          id="projects__one"
         >
           <div className="row">
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
@@ -300,7 +281,6 @@ const CreatePackage = () => {
           className={`tab-pane fade ${
             activeTab === "Materials" ? "show active" : ""
           }`}
-          id="projects__two"
         >
           <div className="d-flex gap-4">
             <div className="form__check">
@@ -337,7 +317,6 @@ const CreatePackage = () => {
           className={`tab-pane fade ${
             activeTab === "Tests" ? "show active" : ""
           }`}
-          id="projects__three"
         >
           <div className="row">
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
@@ -459,7 +438,6 @@ const CreatePackage = () => {
           className={`tab-pane fade ${
             activeTab === "Membership" ? "show active" : ""
           }`}
-          id="projects__four"
         >
           <div className="d-flex gap-4">
             <div className="form__check">
@@ -510,7 +488,6 @@ const CreatePackage = () => {
           className={`tab-pane fade ${
             activeTab === "Doubt Solving" ? "show active" : ""
           }`}
-          id="projects__five"
         >
           <div className="row">
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">

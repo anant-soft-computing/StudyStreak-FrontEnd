@@ -4,18 +4,8 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import DASideBar from "../DASideBar/DASideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
-
-export const checkIcon = () => {
-  return (
-    <i className="icofont-check-circled text-success icofont-md icofont-bold"></i>
-  );
-};
-
-export const cancelIcon = () => {
-  return (
-    <i className="icofont-close-circled text-danger icofont-md icofont-bold"></i>
-  );
-};
+import CheckIcon from "../../../UI/CheckIcon";
+import CancelIcon from "../../../UI/CancelIcon";
 
 const Student = () => {
   const [studentList, setStudentList] = useState([]);
@@ -54,7 +44,7 @@ const Student = () => {
   }, []);
 
   const renderItemAvailable = ({ value }) => {
-    return value ? checkIcon() : cancelIcon();
+    return value ? <CheckIcon /> : <CancelIcon />;
   };
 
   const gridOptions = {

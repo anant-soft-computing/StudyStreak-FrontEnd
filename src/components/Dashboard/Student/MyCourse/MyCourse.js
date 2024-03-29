@@ -42,7 +42,6 @@ const MyCourse = () => {
                           <div
                             key={course?.id}
                             className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                            data-aos="fade-up"
                           >
                             <div className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling">
                               <div className="gridarea__img mt-2">

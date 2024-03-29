@@ -20,7 +20,7 @@ const ErrorPage = () => {
           <div className="container">
             <div className="row">
               <div className="col-xl-8 col-lg-10 col-sm-12 col-12 m-auto">
-                <div className="errorarea__inner" data-aos="fade-up">
+                <div className="errorarea__inner">
                   <div className="error__img">
                     <img src={error} alt="error" />
                   </div>

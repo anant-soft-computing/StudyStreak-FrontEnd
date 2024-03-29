@@ -140,10 +140,7 @@ const CourseDetail = () => {
                   <div className="course__details__heading">
                     <h3>{courseDetail?.Course_Title}</h3>
                   </div>
-                  <div
-                    className="course__details__paragraph"
-                    data-aos="fade-up"
-                  >
+                  <div className="course__details__paragraph">
                     <div
                       dangerouslySetInnerHTML={{
                         __html: courseDetail?.Short_Description,

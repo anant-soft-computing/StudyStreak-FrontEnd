@@ -3,18 +3,8 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
-
-export const checkIcon = () => {
-  return (
-    <i className="icofont-check-circled text-success icofont-md icofont-bold"></i>
-  );
-};
-
-export const cancelIcon = () => {
-  return (
-    <i className="icofont-close-circled text-danger icofont-md icofont-bold"></i>
-  );
-};
+import CheckIcon from "../../../UI/CheckIcon";
+import CancelIcon from "../../../UI/CancelIcon";
 
 const ViewPackages = () => {
   const [packageList, setPackageList] = useState([]);
@@ -55,7 +45,7 @@ const ViewPackages = () => {
   }, []);
 
   const renderItemAvailable = ({ value }) => {
-    return value ? checkIcon() : cancelIcon();
+    return value ? <CheckIcon /> : <CancelIcon />;
   };
 
   const gridOptions = {

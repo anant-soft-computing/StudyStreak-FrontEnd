@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import ajaxCall from "../../../helpers/ajaxCall";
-import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
+import ajaxCall from "../../helpers/ajaxCall";
 import BandScoreCard from "./BandScoreCard";
 import AnswerCard from "./AnswerCard";
+import CheckIcon from "../UI/CheckIcon";
+import CancelIcon from "../UI/CancelIcon";
 
 const PracticeTestAnswer = () => {
   const { examId } = useParams();
@@ -142,9 +143,11 @@ const PracticeTestAnswer = () => {
                                     </td>
                                     <td>
                                       {answer_text ===
-                                      correctAnswers[index]?.answer_text
-                                        ? checkIcon()
-                                        : cancelIcon()}
+                                      correctAnswers[index]?.answer_text ? (
+                                        <CheckIcon />
+                                      ) : (
+                                        <CancelIcon />
+                                      )}
                                     </td>
                                   </tr>
                                 )

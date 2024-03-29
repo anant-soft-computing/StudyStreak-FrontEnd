@@ -10,11 +10,7 @@ const Reading = ({ readingData, givenTest }) => {
     <div className="row">
       {readingData?.map(
         ({ id, exam_name, no_of_questions, difficulty_level }, index) => (
-          <div
-            className="col-lg-4 col-md-6 col-12"
-            data-aos="fade-up"
-            key={index}
-          >
+          <div className="col-lg-4 col-md-6 col-12" key={index}>
             <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid tagMain global-neomorphism-card-styling d-flex flex-column justify-content-between">
               {givenTest.some((test) => test.id === id) && (
                 <span className="tag">Given</span>

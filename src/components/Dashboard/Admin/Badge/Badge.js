@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import DASideBar from "../DASideBar/DASideBar";
 import CreateBadge from "./CreateBadge";
 import ViewBadges from "./ViewBadges";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "View Badge" }, { name: "Create Badge" }];
 
 const Badge = () => {
-  const [activeTab, setActiveTab] = useState("viewBadge");
+  const [activeTab, setActiveTab] = useState("View Badge");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -24,47 +27,16 @@ const Badge = () => {
                       <h4>Badge</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewBadge" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("viewBadge")}
-                            >
-                              View Badge
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "createBadge" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("createBadge")}
-                            >
-                              Create Badge
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "createBadge" ? "show active" : ""
+                            activeTab === "Create Badge" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <CreateBadge />
@@ -72,9 +44,8 @@ const Badge = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewBadge" ? "show active" : ""
+                            activeTab === "View Badge" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <ViewBadges key={activeTab} />

@@ -7,12 +7,25 @@ import Listening from "./Listening";
 import Speaking from "./Speaking";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
+import Tab from "../../../UI/Tab";
+
+const tabs = [
+  { name: "Reading" },
+  { name: "Writing" },
+  { name: "Listening" },
+  { name: "Speaking" },
+];
 
 const MockTest = () => {
   const { state: { count } = {} } = useLocation();
+  const [activeTab, setActiveTab] = useState("Reading");
   const [mockTestData, setMockTestData] = useState([]);
   const [givenTest, setGivenTest] = useState([]);
   const { mini_test_count } = count;
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const readingData = mockTestData?.filter(
     (item) => item.exam_type === "Reading"
@@ -106,116 +119,59 @@ const MockTest = () => {
                       <BuyCourse message="No Mini Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">
-                        <div
-                          className="col-xl-12 aos-init aos-animate"
-                          data-aos="fade-up"
-                        >
-                          <ul
-                            className="nav  about__button__wrap dashboard__button__wrap"
-                            id="myTab"
-                            role="tablist"
-                          >
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link active common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__one"
-                                type="button"
-                                aria-selected="true"
-                                role="tab"
-                              >
-                                Reading
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Writing
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__three"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Listening
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__four"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Speaking
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                        <div
-                          className="tab-content tab__content__wrapper aos-init aos-animate"
-                          id="myTabContent"
-                          data-aos="fade-up"
-                        >
+                        <Tab
+                          tabs={tabs}
+                          activeTab={activeTab}
+                          handleTabChange={handleTabChange}
+                        />
+                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
                           <div
-                            className="tab-pane fade active show"
-                            id="projects__one"
-                            role="tabpanel"
-                            aria-labelledby="projects__one"
+                            className={`tab-pane fade ${
+                              activeTab === "Reading" ? "show active" : ""
+                            }`}
                           >
-                            <Reading
-                              readingData={readingData}
-                              givenTest={givenTest}
-                            />
+                            <div className="row">
+                              <Reading
+                                readingData={readingData}
+                                givenTest={givenTest}
+                              />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
+                            className={`tab-pane fade ${
+                              activeTab === "Writing" ? "show active" : ""
+                            }`}
                           >
-                            <Writing
-                              writingData={writingData}
-                              givenTest={givenTest}
-                            />
+                            <div className="row">
+                              <Writing
+                                writingData={writingData}
+                                givenTest={givenTest}
+                              />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__three"
-                            role="tabpanel"
-                            aria-labelledby="projects__three"
+                            className={`tab-pane fade ${
+                              activeTab === "Listening" ? "show active" : ""
+                            }`}
                           >
-                            <Listening
-                              listeningData={listeningData}
-                              givenTest={givenTest}
-                            />
+                            <div className="row">
+                              <Listening
+                                listeningData={listeningData}
+                                givenTest={givenTest}
+                              />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__four"
-                            role="tabpanel"
-                            aria-labelledby="projects__four"
+                            className={`tab-pane fade ${
+                              activeTab === "Speaking" ? "show active" : ""
+                            }`}
                           >
-                            <Speaking
-                              speakingData={speakingData}
-                              givenTest={givenTest}
-                            />
+                            <div className="row">
+                              <Speaking
+                                speakingData={speakingData}
+                                givenTest={givenTest}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>

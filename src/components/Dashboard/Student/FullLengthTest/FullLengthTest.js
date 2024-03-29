@@ -51,11 +51,7 @@ const FullLengthTest = () => {
   const renderTestCards = (
     <div className="row">
       {fullLengthTestData?.map(({ id, name }, index) => (
-        <div
-          className="col-lg-4 col-md-6 col-12"
-          data-aos="fade-up"
-          key={index}
-        >
+        <div className="col-lg-4 col-md-6 col-12" key={index}>
           <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
             <div className="gridarea__content ">
               <div className="gridarea__heading mt-3">
@@ -98,10 +94,7 @@ const FullLengthTest = () => {
                       <BuyCourse message="No Full Length Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">
-                        <div
-                          className="col-xl-12 aos-init aos-animate"
-                          data-aos="fade-up"
-                        >
+                        <div className="col-xl-12 aos-init aos-animate">
                           <ul
                             className="nav  about__button__wrap dashboard__button__wrap"
                             id="myTab"
@@ -130,11 +123,7 @@ const FullLengthTest = () => {
                             ))}
                           </ul>
                         </div>
-                        <div
-                          className="tab-content tab__content__wrapper aos-init aos-animate"
-                          id="myTabContent"
-                          data-aos="fade-up"
-                        >
+                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
                           {difficultLevelTabs.map((test, index) => (
                             <div
                               className={`tab-pane fade ${

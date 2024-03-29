@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import DASideBar from "../DASideBar/DASideBar";
 import CreateBatch from "./CreateBatch";
 import ViewBatches from "./ViewBatches";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "View Batch" }, { name: "Create Batch" }];
 
 const Batch = () => {
-  const [activeTab, setActiveTab] = useState("viewBatch");
+  const [activeTab, setActiveTab] = useState("View Batch");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -24,47 +27,16 @@ const Batch = () => {
                       <h4>Batch</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewBatch" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("viewBatch")}
-                            >
-                              View Batch
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "createBatch" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("createBatch")}
-                            >
-                              Create Batch
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "createBatch" ? "show active" : ""
+                            activeTab === "Create Batch" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <CreateBatch />
@@ -72,9 +44,8 @@ const Batch = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewBatch" ? "show active" : ""
+                            activeTab === "View Batch" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <ViewBatches key={activeTab} />

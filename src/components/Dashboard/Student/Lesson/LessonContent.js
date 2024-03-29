@@ -8,10 +8,23 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import noteBook from "../../../../img/icon/notebook.svg";
 import FloatingNote from "./FloatingNote";
 import FlashCard from "../FlashCard/FlashCard";
+import Tab from "../../../UI/Tab";
+
+const tabs = [
+  { name: "Attachment" },
+  { name: "Assignment" },
+  { name: "Quiz" },
+  { name: "Flash Card" },
+];
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
+  const [activeTab, setActiveTab] = useState("Attachment");
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const updateWatchedUpto = async (watchedTime) => {
     if (watchedTime < 1) return;
@@ -27,8 +40,9 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+          }`,
         },
         method: "POST",
       },
@@ -77,80 +91,18 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
             </div>
           </div>
           <div className="row mt-3">
-            <div className="col-xl-12 aos-init aos-animate" data-aos="fade-up">
-              <ul
-                className="nav  about__button__wrap dashboard__button__wrap"
-                id="myTab"
-                role="tablist"
-              >
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="single__tab__link active lesson__tab__button"
-                    data-bs-toggle="tab"
-                    data-bs-target="#projects__one"
-                    type="button"
-                    aria-selected="true"
-                    role="tab"
-                  >
-                    Attachment
-                  </button>
-                </li>
-
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="single__tab__link lesson__tab__button"
-                    data-bs-toggle="tab"
-                    data-bs-target="#projects__two"
-                    type="button"
-                    aria-selected="false"
-                    role="tab"
-                    tabIndex="-1"
-                  >
-                    Assignment
-                  </button>
-                </li>
-
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="single__tab__link lesson__tab__button"
-                    data-bs-toggle="tab"
-                    data-bs-target="#projects__three"
-                    type="button"
-                    aria-selected="false"
-                    role="tab"
-                    tabIndex="-1"
-                  >
-                    Quiz
-                  </button>
-                </li>
-
-                <li className="nav-item" role="presentation">
-                  <button
-                    className="single__tab__link lesson__tab__button"
-                    data-bs-toggle="tab"
-                    data-bs-target="#projects__four"
-                    type="button"
-                    aria-selected="false"
-                    role="tab"
-                    tabIndex="-1"
-                  >
-                    Flash Card
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div
-              className="tab-content tab__content__wrapper aos-init aos-animate"
-              id="myTabContent"
-              data-aos="fade-up"
-            >
+            <Tab
+              tabs={tabs}
+              activeTab={activeTab}
+              handleTabChange={handleTabChange}
+            />
+            <div className="tab-content tab__content__wrapper aos-init aos-animate">
               <div
-                className="tab-pane fade active show"
-                id="projects__one"
-                role="tabpanel"
-                aria-labelledby="projects__one"
+                className={`tab-pane fade ${
+                  activeTab === "Attachment" ? "show active" : ""
+                }`}
               >
-                <div>
+                <div className="row">
                   <Attachment
                     activeLesson={
                       activeLesson?.attachment_lession_count?.attachments
@@ -160,31 +112,34 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                 </div>
               </div>
               <div
-                className="tab-pane fade"
-                id="projects__two"
-                role="tabpanel"
-                aria-labelledby="projects__two"
+                className={`tab-pane fade ${
+                  activeTab === "Assignment" ? "show active" : ""
+                }`}
               >
-                <Assignment
-                  activeLesson={activeLesson?.lesson_assignment}
-                  lessonName={activeLesson?.Lesson_Title}
-                />
+                <div className="row">
+                  <Assignment
+                    activeLesson={activeLesson?.lesson_assignment}
+                    lessonName={activeLesson?.Lesson_Title}
+                  />
+                </div>
               </div>
               <div
-                className="tab-pane fade"
-                id="projects__three"
-                role="tabpanel"
-                aria-labelledby="projects__three"
+                className={`tab-pane fade ${
+                  activeTab === "Quiz" ? "show active" : ""
+                }`}
               >
-                <Quiz activeLesson={activeLesson?.quiz_question_options} />
+                <div className="row">
+                  <Quiz activeLesson={activeLesson?.quiz_question_options} />
+                </div>
               </div>
               <div
-                className="tab-pane fade"
-                id="projects__four"
-                role="tabpanel"
-                aria-labelledby="projects__four"
+                className={`tab-pane fade ${
+                  activeTab === "Flash Card" ? "show active" : ""
+                }`}
               >
-                <FlashCard courseId={courseId} />
+                <div className="row">
+                  <FlashCard courseId={courseId} />
+                </div>
               </div>
             </div>
           </div>

@@ -8,10 +8,19 @@ import DateRange from "../../../UI/DateRangePicker";
 import RegularClass from "../RegularClass/RegularClass";
 import SpeakingPractice from "../SpeakingPractice/SpeakingPractice";
 import GroupDoubtSolving from "../GroupDoubtSolving/GroupDoubtSolving";
+import Tab from "../../../UI/Tab";
+
+const tabs = [
+  { name: "Live" },
+  { name: "Regular" },
+  { name: "Speaking Practice" },
+  { name: "Group Dobut" },
+];
 
 const LiveClass = () => {
   const { solvingClassBook, count } = useLocation()?.state || {};
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Live");
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -19,6 +28,10 @@ const LiveClass = () => {
       key: "selection",
     },
   ]);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const liveClasses = () => {
     return solvingClassBook?.filter(({ start_time }) => {
@@ -61,117 +74,62 @@ const LiveClass = () => {
                         <h4>Upcoming Live Classes</h4>
                       </div>
                       <div className="row">
-                        <div
-                          className="col-xl-12 aos-init aos-animate"
-                          data-aos="fade-up"
-                        >
-                          <ul
-                            className="nav  about__button__wrap dashboard__button__wrap"
-                            id="myTab"
-                            role="tablist"
-                          >
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link active common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__one"
-                                type="button"
-                                aria-selected="true"
-                                role="tab"
-                              >
-                                Live
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Regular
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__three"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Speaking Practise
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__four"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Group Doubts
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                        <div
-                          className="tab-content tab__content__wrapper aos-init aos-animate"
-                          id="myTabContent"
-                          data-aos="fade-up"
-                        >
+                        <Tab
+                          tabs={tabs}
+                          activeTab={activeTab}
+                          handleTabChange={handleTabChange}
+                        />
+                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
                           <div
-                            className="tab-pane fade active show"
-                            id="projects__one"
-                            role="tabpanel"
-                            aria-labelledby="projects__one"
+                            className={`tab-pane fade ${
+                              activeTab === "Live" ? "show active" : ""
+                            }`}
                           >
-                            <div className="live__class__schedule_header">
-                              <h6>
-                                Your Live Class Schedule{" "}
-                                <i
-                                  className="icofont-calendar one_to_one_icon"
-                                  onClick={() => setIsModalOpen(true)}
-                                ></i>
-                              </h6>
+                            <div className="row">
+                              <div className="live__class__schedule_header">
+                                <h6>
+                                  Your Live Class Schedule{" "}
+                                  <i
+                                    className="icofont-calendar one_to_one_icon"
+                                    onClick={() => setIsModalOpen(true)}
+                                  ></i>
+                                </h6>
+                              </div>
+                              <LiveClassList
+                                liveClasses={liveClasses()}
+                                joinNow={joinNow}
+                                isWithin5Minutes={isWithin5Minutes}
+                              />
                             </div>
-                            <LiveClassList
-                              liveClasses={liveClasses()}
-                              joinNow={joinNow}
-                              isWithin5Minutes={isWithin5Minutes}
-                            />
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
+                            className={`tab-pane fade ${
+                              activeTab === "Regular" ? "show active" : ""
+                            }`}
                           >
-                            <RegularClass />
+                            <div className="row">
+                              <RegularClass />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__three"
-                            role="tabpanel"
-                            aria-labelledby="projects__three"
+                            className={`tab-pane fade ${
+                              activeTab === "Speaking Practice"
+                                ? "show active"
+                                : ""
+                            }`}
                           >
-                            <SpeakingPractice sepakingCount={count} />
+                            <div className="row">
+                              <SpeakingPractice sepakingCount={count} />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__four"
-                            role="tabpanel"
-                            aria-labelledby="projects__four"
+                            className={`tab-pane fade ${
+                              activeTab === "Group Dobut" ? "show active" : ""
+                            }`}
                           >
-                            <GroupDoubtSolving doubtCount={count} />
+                            <div className="row">
+                              <GroupDoubtSolving doubtCount={count} />
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -17,10 +17,7 @@ const Settings = () => {
                       <h4>Settings</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
+                      <div className="col-xl-12 aos-init aos-animate">
                         <ul
                           className="nav  about__button__wrap dashboard__button__wrap"
                           id="myTab"
@@ -40,14 +37,9 @@ const Settings = () => {
                           </li>
                         </ul>
                       </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className="tab-pane fade active show"
-                          id="projects__one"
                           role="tabpanel"
                           aria-labelledby="projects__one"
                         >

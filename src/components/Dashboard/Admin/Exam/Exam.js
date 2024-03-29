@@ -8,6 +8,14 @@ import ExamSpeaking from "../../../Exam-Create/ExamSpeaking";
 import ViewExam from "./ViewExam";
 import FLT from "../../../Exam-Create/FullLength-Test/FLT";
 import PT from "../../../Exam-Create/Practice-Test/PT";
+import Tab from "../../../UI/Tab";
+
+const tabs = [
+  { name: "View Exam" },
+  { name: "Create MT" },
+  { name: "Create PT" },
+  { name: "Create FLT" },
+];
 
 const exams = [
   {
@@ -57,7 +65,7 @@ const Exam = () => {
     examType: "",
     examForm: "",
   });
-  const [activeTab, setActiveTab] = useState("viewExam");
+  const [activeTab, setActiveTab] = useState("View Exam");
 
   const examTypes =
     screenContent?.examType === "GRE" || screenContent?.examType === "GMAT"
@@ -167,67 +175,16 @@ const Exam = () => {
                       </nav>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewExam" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("viewExam")}
-                            >
-                              View Exam
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "create MT" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("create MT")}
-                            >
-                              Create MT
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "create PT" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("create PT")}
-                            >
-                              Create PT
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "create FLT" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("create FLT")}
-                            >
-                              Create FLT
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "create MT" ? "show active" : ""
+                            activeTab === "Create MT" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             {!screenContent.examType &&
@@ -304,9 +261,8 @@ const Exam = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "create PT" ? "show active" : ""
+                            activeTab === "Create PT" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             {!screenContent.examType &&
@@ -379,9 +335,8 @@ const Exam = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "create FLT" ? "show active" : ""
+                            activeTab === "Create FLT" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             {!screenContent.examType &&
@@ -412,9 +367,8 @@ const Exam = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewExam" ? "show active" : ""
+                            activeTab === "View Exam" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <ViewExam key={activeTab} />
                         </div>

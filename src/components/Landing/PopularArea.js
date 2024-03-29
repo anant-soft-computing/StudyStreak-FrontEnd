@@ -12,10 +12,7 @@ const PopulerArea = () => {
     <div className="populerarea__2 sp_top_50 sp_bottom_50">
       <div className="container">
         <div className="row">
-          <div
-            className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 about__wrap__content"
-            data-aos="fade-up"
-          >
+          <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 about__wrap__content">
             <div className="service__animate__shape__1">
               <img src={img1} alt="" />
             </div>
@@ -50,10 +47,7 @@ const PopulerArea = () => {
               <img src={img2} alt="" />
             </div>
             <div className="row">
-              <div
-                className="col-xl-6 col-lg-6 col-md-6 col-sm-12"
-                data-aos="fade-up"
-              >
+              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                 <div className="single__service">
                   <div className="service__img">
                     <img src={img3} alt="" />
@@ -90,10 +84,7 @@ const PopulerArea = () => {
                   </div>
                 </div>
               </div>
-              <div
-                className="col-xl-6 col-lg-6 col-md-6 col-sm-12"
-                data-aos="fade-up"
-              >
+              <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12">
                 <div className="single__service ss_margin">
                   <div className="service__img">
                     <img src={img5} alt="" />

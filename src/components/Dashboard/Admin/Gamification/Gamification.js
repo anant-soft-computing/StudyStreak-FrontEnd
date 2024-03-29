@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import DASideBar from "../DASideBar/DASideBar";
 import CreateGamification from "./CreateGamification";
 import ViewGamification from "./ViewGamification";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "View Gamification" }, { name: "Create Gamification" }];
 
 const Gamification = () => {
-  const [activeTab, setActiveTab] = useState("viewGamification");
+  const [activeTab, setActiveTab] = useState("View Gamification");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-  
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -24,55 +27,18 @@ const Gamification = () => {
                       <h4>Gamification</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewGamification" ? "active" : ""
-                              }`}
-                              onClick={() =>
-                                handleTabChange("viewGamification")
-                              }
-                            >
-                              View Gamification
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "createGamification"
-                                  ? "active"
-                                  : ""
-                              }`}
-                              onClick={() =>
-                                handleTabChange("createGamification")
-                              }
-                            >
-                              Create Gamification
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "createGamification"
+                            activeTab === "Create Gamification"
                               ? "show active"
                               : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <CreateGamification />
@@ -80,11 +46,10 @@ const Gamification = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewGamification"
+                            activeTab === "View Gamification"
                               ? "show active"
                               : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <ViewGamification key={activeTab} />

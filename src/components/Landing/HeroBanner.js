@@ -23,10 +23,7 @@ const HeroBanner = () => {
     <div className="herobannerarea herobannerarea__2">
       <div className="container">
         <div className="row">
-          <div
-            className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12"
-            data-aos="fade-up"
-          >
+          <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
             <div className="herobannerarea__content__wraper">
               <div className="herobannerarea__title">
                 <div className="herobannerarea__small__title">
@@ -49,10 +46,7 @@ const HeroBanner = () => {
               </div>
             </div>
           </div>
-          <div
-            className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12"
-            data-aos="fade-up"
-          >
+          <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
             <div className="aboutarea__img__2" data-tilt>
               <img className="aboutimg__1" src={about10} alt="aboutimg" />
             </div>

@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import DASideBar from "../DASideBar/DASideBar";
 import CreateLiveClass from "./CreateLiveClass";
 import ViewLiveClasses from "./ViewLiveClasses";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "View LiveClass" }, { name: "Create LiveClass" }];
 
 const LiveClass = () => {
-  const [activeTab, setActiveTab] = useState("viewLiveClass");
+  const [activeTab, setActiveTab] = useState("View LiveClass");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -24,47 +27,18 @@ const LiveClass = () => {
                       <h4>LiveClass</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewLiveClass" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("viewLiveClass")}
-                            >
-                              View LiveClass
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "createLiveClass" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("createLiveClass")}
-                            >
-                              Create LiveClass
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "createLiveClass" ? "show active" : ""
+                            activeTab === "Create LiveClass"
+                              ? "show active"
+                              : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <CreateLiveClass />
@@ -72,9 +46,8 @@ const LiveClass = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewLiveClass" ? "show active" : ""
+                            activeTab === "View LiveClass" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <ViewLiveClasses key={activeTab} />

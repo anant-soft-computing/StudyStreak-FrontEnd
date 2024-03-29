@@ -7,6 +7,14 @@ import Listening from "./Listening";
 import Writing from "./Writing";
 import Speaking from "./Speaking";
 import BuyCourse from "../BuyCourse/BuyCourse";
+import Tab from "../../../UI/Tab";
+
+const tabs = [
+  { name: "Reading" },
+  { name: "Writing" },
+  { name: "Listening" },
+  { name: "Speaking" },
+];
 
 const PracticeTest = () => {
   const { state: { count } = {} } = useLocation();
@@ -14,7 +22,12 @@ const PracticeTest = () => {
   const [listeningData, setListeningData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
   const [writingData, setWritingData] = useState([]);
+  const [activeTab, setActiveTab] = useState("Reading");
   const { practice_test_count } = count;
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   useEffect(() => {
     (async () => {
@@ -80,104 +93,47 @@ const PracticeTest = () => {
                       <BuyCourse message="No Practice Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">
-                        <div
-                          className="col-xl-12 aos-init aos-animate"
-                          data-aos="fade-up"
-                        >
-                          <ul
-                            className="nav  about__button__wrap dashboard__button__wrap"
-                            id="myTab"
-                            role="tablist"
-                          >
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link active common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__one"
-                                type="button"
-                                aria-selected="true"
-                                role="tab"
-                              >
-                                Reading
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__two"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Writing
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__three"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Listening
-                              </button>
-                            </li>
-                            <li className="nav-item" role="presentation">
-                              <button
-                                className="single__tab__link common-background-color-across-app"
-                                data-bs-toggle="tab"
-                                data-bs-target="#projects__four"
-                                type="button"
-                                aria-selected="false"
-                                role="tab"
-                                tabIndex="-1"
-                              >
-                                Speaking
-                              </button>
-                            </li>
-                          </ul>
-                        </div>
-                        <div
-                          className="tab-content tab__content__wrapper aos-init aos-animate"
-                          id="myTabContent"
-                          data-aos="fade-up"
-                        >
+                        <Tab
+                          tabs={tabs}
+                          activeTab={activeTab}
+                          handleTabChange={handleTabChange}
+                        />
+                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
                           <div
-                            className="tab-pane fade active show"
-                            id="projects__one"
-                            role="tabpanel"
-                            aria-labelledby="projects__one"
+                            className={`tab-pane fade ${
+                              activeTab === "Reading" ? "show active" : ""
+                            }`}
                           >
-                            <Reading readingData={readingData} />
+                            <div className="row">
+                              <Reading readingData={readingData} />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__two"
-                            role="tabpanel"
-                            aria-labelledby="projects__two"
+                            className={`tab-pane fade ${
+                              activeTab === "Writing" ? "show active" : ""
+                            }`}
                           >
-                            <Writing writingData={writingData} />
+                            <div className="row">
+                              <Writing writingData={writingData} />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__three"
-                            role="tabpanel"
-                            aria-labelledby="projects__three"
+                            className={`tab-pane fade ${
+                              activeTab === "Listening" ? "show active" : ""
+                            }`}
                           >
-                            <Listening listeningData={listeningData} />
+                            <div className="row">
+                              <Listening listeningData={listeningData} />
+                            </div>
                           </div>
                           <div
-                            className="tab-pane fade"
-                            id="projects__four"
-                            role="tabpanel"
-                            aria-labelledby="projects__four"
+                            className={`tab-pane fade ${
+                              activeTab === "Speaking" ? "show active" : ""
+                            }`}
                           >
-                            <Speaking speakingData={speakingData} />
+                            <div className="row">
+                              <Speaking speakingData={speakingData} />
+                            </div>
                           </div>
                         </div>
                       </div>

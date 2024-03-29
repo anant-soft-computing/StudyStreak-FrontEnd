@@ -5,7 +5,6 @@ const Curriculum = ({ courseDetail }) => {
   return (
     <div
       className="tab-pane fade  active show"
-      id="projects__two"
       role="tabpanel"
       aria-labelledby="projects__two"
     >

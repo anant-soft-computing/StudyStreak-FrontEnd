@@ -24,10 +24,7 @@ const Package = () => {
                       <h4>Package</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
+                      <div className="col-xl-12 aos-init aos-animate">
                         <ul
                           className="nav  about__button__wrap dashboard__button__wrap"
                           id="myTab"
@@ -55,16 +52,11 @@ const Package = () => {
                           </li>
                         </ul>
                       </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
                             activeTab === "createPackage" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <CreatePackage />
@@ -74,7 +66,6 @@ const Package = () => {
                           className={`tab-pane fade ${
                             activeTab === "viewPackage" ? "show active" : ""
                           }`}
-                          id="projects__two"
                         >
                           <div className="row">
                             <ViewPackages key={activeTab} />

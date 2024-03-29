@@ -54,7 +54,7 @@ const FlashCardModal = ({
       }
     >
       <div className="row">
-        <div className="flesh-card-modal-container" data-aos="fade-up">
+        <div className="flesh-card-modal-container">
           <CardFlip
             isFlipped={isFlipped[currentCardIndex]}
             flipDirection="horizontal"

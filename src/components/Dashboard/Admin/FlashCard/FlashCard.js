@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import CreateFlashCard from "./CreateFlashCard";
 import ViewFlashCard from "./ViewFlashCard";
 import DASideBar from "../DASideBar/DASideBar";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "View FlashCard" }, { name: "Create FlashCard" }];
 
 const FlashCard = () => {
-  const [activeTab, setActiveTab] = useState("viewFlashCard");
+  const [activeTab, setActiveTab] = useState("View FlashCard");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -24,47 +27,18 @@ const FlashCard = () => {
                       <h4>Flash Card</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewFlashCard" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("viewFlashCard")}
-                            >
-                              View Flash Card
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "createFlashCard" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("createFlashCard")}
-                            >
-                              Create Flash Card
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "createFlashCard" ? "show active" : ""
+                            activeTab === "Create FlashCard"
+                              ? "show active"
+                              : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <CreateFlashCard />
@@ -72,9 +46,8 @@ const FlashCard = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewFlashCard" ? "show active" : ""
+                            activeTab === "View FlashCard" ? "show active" : ""
                           }`}
-                          id="projects__two"
                         >
                           <div className="row">
                             <ViewFlashCard key={activeTab} />

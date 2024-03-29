@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import DSSidebar from "./DSSideBar/DSSideBar";
 import { useNavigate } from "react-router-dom";
-import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
 import ajaxCall from "../../../helpers/ajaxCall";
+import CheckIcon from "../../UI/CheckIcon";
+import CancelIcon from "../../UI/CancelIcon";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState();
@@ -222,9 +223,11 @@ const Profile = () => {
                         <div className="col-lg-8 col-md-8">
                           <div className="dashboard__form dashboard__form__margin">
                             {profileData?.interested_in_visa_counselling ===
-                            "Yes"
-                              ? checkIcon()
-                              : cancelIcon()}
+                            "Yes" ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -243,9 +246,11 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-8 col-md-8">
                           <div className="dashboard__form dashboard__form__margin">
-                            {profileData?.ielts_taken_before
-                              ? checkIcon()
-                              : cancelIcon()}
+                            {profileData?.ielts_taken_before ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-4 col-md-4">
@@ -255,9 +260,11 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-8 col-md-8">
                           <div className="dashboard__form dashboard__form__margin">
-                            {profileData?.duolingo_taken_before
-                              ? checkIcon()
-                              : cancelIcon()}
+                            {profileData?.duolingo_taken_before ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-4 col-md-4">
@@ -267,9 +274,11 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-8 col-md-8">
                           <div className="dashboard__form dashboard__form__margin">
-                            {profileData?.pte_taken_before
-                              ? checkIcon()
-                              : cancelIcon()}
+                            {profileData?.pte_taken_before ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -281,9 +290,11 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-8 col-md-8">
                           <div className="dashboard__form dashboard__form__margin">
-                            {profileData?.toefl_taken_before
-                              ? checkIcon()
-                              : cancelIcon()}
+                            {profileData?.toefl_taken_before ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-4 col-md-4">
@@ -293,9 +304,11 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-8 col-md-8">
                           <div className="dashboard__form dashboard__form__margin">
-                            {profileData?.gre_taken_before
-                              ? checkIcon()
-                              : cancelIcon()}
+                            {profileData?.gre_taken_before ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            )}
                           </div>
                         </div>
                         <div className="col-lg-4 col-md-4">
@@ -305,9 +318,11 @@ const Profile = () => {
                         </div>
                         <div className="col-lg-8 col-md-8">
                           <div className="dashboard__form dashboard__form__margin">
-                            {profileData?.gmat_taken_before
-                              ? checkIcon()
-                              : cancelIcon()}
+                            {profileData?.gmat_taken_before ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            )}
                           </div>
                         </div>
                       </div>

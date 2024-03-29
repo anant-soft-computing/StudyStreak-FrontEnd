@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import DASideBar from "../DASideBar/DASideBar";
 import CreateCourse from "./CreateCourse";
 import ViewCourse from "./ViewCourse";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "View Course" }, { name: "Create Course" }];
 
 const Course = () => {
-  const [activeTab, setActiveTab] = useState("viewCourse");
+  const [activeTab, setActiveTab] = useState("View Course");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -24,47 +27,16 @@ const Course = () => {
                       <h4>Course</h4>
                     </div>
                     <div className="row">
-                      <div
-                        className="col-xl-12 aos-init aos-animate"
-                        data-aos="fade-up"
-                      >
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewCourse" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("viewCourse")}
-                            >
-                              View Course
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "createCourse" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("createCourse")}
-                            >
-                              Create Course
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                      <div
-                        className="tab-content tab__content__wrapper aos-init aos-animate"
-                        id="myTabContent"
-                        data-aos="fade-up"
-                      >
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "createCourse" ? "show active" : ""
+                            activeTab === "Create Course" ? "show active" : ""
                           }`}
-                          id="projects__one"
                         >
                           <div className="row">
                             <CreateCourse />
@@ -72,9 +44,8 @@ const Course = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewCourse" ? "show active" : ""
+                            activeTab === "View Course" ? "show active" : ""
                           }`}
-                          id="projects__two"
                         >
                           <div className="row">
                             <ViewCourse key={activeTab} />

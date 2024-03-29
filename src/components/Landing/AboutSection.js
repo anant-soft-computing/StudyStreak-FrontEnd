@@ -12,10 +12,7 @@ const AboutSection = () => {
       <div className="aboutarea__3 testimonial__area__2 sp_bottom_90 sp_top_120">
         <div className="container">
           <div className="row">
-            <div
-              className="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 custom__review__grid"
-              data-aos="fade-up"
-            >
+            <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 custom__review__grid">
               <div className="section__title aboutarea__3__section__title">
                 <div className="section__title__button">
                   <div className="default__small__button">About Us</div>
@@ -31,7 +28,8 @@ const AboutSection = () => {
               <div className="aboutarea__3__content">
                 <p>
                   Construction is a general term meaning the art and science to
-                  form systems organizations and comes from Latin Construction is
+                  form systems organizations and comes from Latin Construction
+                  is
                 </p>
               </div>
               <div className="aboutarea__3__button">
@@ -41,16 +39,13 @@ const AboutSection = () => {
                 </Link>
               </div>
             </div>
-            <div
-              className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 custom__review__grid"
-              data-aos="fade-up"
-            >
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 custom__review__grid">
               <div className="aboutarea__content__wraper__3">
                 <div className="aboutarea__para__3">
                   <p>
-                    “The other hand we denounce righteou indg ation men who are so
-                    beguiled and demoralized by the the moment. Dislike men who so
-                    development co”
+                    “The other hand we denounce righteou indg ation men who are
+                    so beguiled and demoralized by the the moment. Dislike men
+                    who so development co”
                   </p>
                   <div className="aboutarea__icon__3">
                     <i className="icofont-quote-left"></i>
@@ -65,16 +60,13 @@ const AboutSection = () => {
                 </div>
               </div>
             </div>
-            <div
-              className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 custom__review__grid"
-              data-aos="fade-up"
-            >
+            <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12 custom__review__grid">
               <div className="aboutarea__content__wraper__3">
                 <div className="aboutarea__para__3">
                   <p>
-                    “The other hand we denounce righteou indg ation men who are so
-                    beguiled and demoralized by the the moment. Dislike men who so
-                    development co”
+                    “The other hand we denounce righteou indg ation men who are
+                    so beguiled and demoralized by the the moment. Dislike men
+                    who so development co”
                   </p>
                   <div className="aboutarea__icon__3">
                     <i className="icofont-quote-left"></i>

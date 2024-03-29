@@ -102,7 +102,7 @@ const Courses = () => {
           <div className="container">
             <div className="row">
               <div className="col-xl-3 col-lg-3 col-md-4 col-12">
-                <div className="course__sidebar__wraper" data-aos="fade-up">
+                <div className="course__sidebar__wraper">
                   <div className="course__heading">
                     <h5>Search</h5>
                   </div>
@@ -120,7 +120,7 @@ const Courses = () => {
                     </div>
                   </div>
                 </div>
-                <div className="course__sidebar__wraper" data-aos="fade-up">
+                <div className="course__sidebar__wraper">
                   <div className="categori__wraper">
                     <div className="course__heading">
                       <h5>Categories</h5>
@@ -147,7 +147,7 @@ const Courses = () => {
                     </div>
                   </div>
                 </div>
-                <div className="course__sidebar__wraper" data-aos="fade-up">
+                <div className="course__sidebar__wraper">
                   <div className="course__heading">
                     <h5>Skill Level</h5>
                   </div>
@@ -185,7 +185,7 @@ const Courses = () => {
                     )}
                   </div>
                 </div>
-                <div className="main__pagination__wrapper" data-aos="fade-up">
+                <div className="main__pagination__wrapper">
                   <ul className="main__page__pagination">
                     <li>
                       <Link className="disable" to=" ">

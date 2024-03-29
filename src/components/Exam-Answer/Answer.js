@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import ajaxCall from "../../../helpers/ajaxCall";
-import { cancelIcon, checkIcon } from "../../CourseDetail/PackageDetails";
+import ajaxCall from "../../helpers/ajaxCall";
 import BandScoreCard from "./BandScoreCard";
 import AnswerCard from "./AnswerCard";
+import CheckIcon from "../UI/CheckIcon";
+import CancelIcon from "../UI/CancelIcon";
 
 const Answer = () => {
   const { examId } = useParams();
@@ -160,42 +161,49 @@ const Answer = () => {
                                         studentAnswers[index] &&
                                         correctAnswer[
                                           index
-                                        ]?.answer_text.includes(" OR ")
-                                          ? correctAnswer[index]?.answer_text
-                                              .split(" OR ")
-                                              .map((option) =>
-                                                option.trim().toLowerCase()
-                                              )
-                                              .includes(
-                                                studentAnswers[
-                                                  index
-                                                ]?.answer.toLowerCase()
-                                              )
-                                            ? checkIcon()
-                                            : cancelIcon()
-                                          : studentAnswers?.length > 0 &&
-                                            studentAnswers[index] &&
-                                            correctAnswer[
-                                              index
-                                            ]?.answer_text.includes(" AND ")
-                                          ? correctAnswer[index]?.answer_text
-                                              .split(" AND ")
-                                              .map((option) =>
-                                                option.trim().toLowerCase()
-                                              )
-                                              .every((option) =>
-                                                studentAnswers[index]?.answer
-                                                  .toLowerCase()
-                                                  .includes(option)
-                                              )
-                                            ? checkIcon()
-                                            : cancelIcon()
-                                          : studentAnswers?.length > 0 &&
-                                            studentAnswers[index] &&
-                                            studentAnswers[index].answer ===
-                                              correctAnswer[index]?.answer_text
-                                          ? checkIcon()
-                                          : cancelIcon()}
+                                        ]?.answer_text.includes(" OR ") ? (
+                                          correctAnswer[index]?.answer_text
+                                            .split(" OR ")
+                                            .map((option) =>
+                                              option.trim().toLowerCase()
+                                            )
+                                            .includes(
+                                              studentAnswers[
+                                                index
+                                              ]?.answer.toLowerCase()
+                                            ) ? (
+                                            <CheckIcon />
+                                          ) : (
+                                            <CancelIcon />
+                                          )
+                                        ) : studentAnswers?.length > 0 &&
+                                          studentAnswers[index] &&
+                                          correctAnswer[
+                                            index
+                                          ]?.answer_text.includes(" AND ") ? (
+                                          correctAnswer[index]?.answer_text
+                                            .split(" AND ")
+                                            .map((option) =>
+                                              option.trim().toLowerCase()
+                                            )
+                                            .every((option) =>
+                                              studentAnswers[index]?.answer
+                                                .toLowerCase()
+                                                .includes(option)
+                                            ) ? (
+                                            <CheckIcon />
+                                          ) : (
+                                            <CancelIcon />
+                                          )
+                                        ) : studentAnswers?.length > 0 &&
+                                          studentAnswers[index] &&
+                                          studentAnswers[index].answer ===
+                                            correctAnswer[index]
+                                              ?.answer_text ? (
+                                          <CheckIcon />
+                                        ) : (
+                                          <CancelIcon />
+                                        )}
                                       </td>
                                     </tr>
                                   )

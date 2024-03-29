@@ -12,10 +12,7 @@ const BrandSection = () => {
     <div className="brandarea__2">
       <div className="container">
         <div className="row">
-          <div
-            className="brandarea__wraper brandarea__wraper__2"
-            data-aos="fade-up"
-          >
+          <div className="brandarea__wraper brandarea__wraper__2">
             <div className="brandarea__img">
               <Link to="/">
                 <img className="exam" src={ielts} alt="ielts" />

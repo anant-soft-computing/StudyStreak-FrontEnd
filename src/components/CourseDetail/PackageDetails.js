@@ -3,18 +3,6 @@ import BatchSelection from "./BatchSelectionModal";
 import { useNavigate } from "react-router-dom";
 import image1 from "../../img/icon/price__3.png";
 
-export const checkIcon = () => {
-  return (
-    <i className="icofont-check-circled text-success icofont-md icofont-bold"></i>
-  );
-};
-
-export const cancelIcon = () => {
-  return (
-    <i className="icofont-close-circled text-danger icofont-md icofont-bold"></i>
-  );
-};
-
 const PackageDetails = (props) => {
   const {
     courseType,

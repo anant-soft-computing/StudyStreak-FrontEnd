@@ -4,7 +4,6 @@ const Outcomes = ({ courseDetail }) => {
   return (
     <div
       className="tab-pane fade"
-      id="projects__four"
       role="tabpanel"
       aria-labelledby="projects__four"
     >

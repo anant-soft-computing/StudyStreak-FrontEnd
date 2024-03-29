@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import LeaderBoard from "./LeaderBoard";
 import PointHistory from "./PointHistory";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "Leader Board" }, { name: "Point History" }];
 
 const DashboardContent = () => {
-  const [activeTab, setActiveTab] = useState("leaderBoard");
+  const [activeTab, setActiveTab] = useState("Leader Board");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -12,44 +15,16 @@ const DashboardContent = () => {
   return (
     <div className="dashboard__content__wraper common-background-color-across-app">
       <div className="row">
-        <div className="col-xl-12 aos-init aos-animate" data-aos="fade-up">
-          <ul
-            className="nav  about__button__wrap dashboard__button__wrap"
-            id="myTab"
-            role="tablist"
-          >
-            <li className="nav-item" role="presentation">
-              <button
-                className={`single__tab__link common-background-color-across-app ${
-                  activeTab === "leaderBoard" ? "active" : ""
-                }`}
-                onClick={() => handleTabChange("leaderBoard")}
-              >
-                Leader Board
-              </button>
-            </li>
-            <li className="nav-item" role="presentation">
-              <button
-                className={`single__tab__link common-background-color-across-app ${
-                  activeTab === "pointHistory" ? "active" : ""
-                }`}
-                onClick={() => handleTabChange("pointHistory")}
-              >
-                Point History
-              </button>
-            </li>
-          </ul>
-        </div>
-        <div
-          className="tab-content tab__content__wrapper aos-init aos-animate"
-          id="myTabContent"
-          data-aos="fade-up"
-        >
+        <Tab
+          tabs={tabs}
+          activeTab={activeTab}
+          handleTabChange={handleTabChange}
+        />
+        <div className="tab-content tab__content__wrapper aos-init aos-animate">
           <div
             className={`tab-pane fade ${
-              activeTab === "leaderBoard" ? "show active" : ""
+              activeTab === "Leader Board" ? "show active" : ""
             }`}
-            id="projects__one"
           >
             <div className="row">
               <LeaderBoard />
@@ -57,9 +32,8 @@ const DashboardContent = () => {
           </div>
           <div
             className={`tab-pane fade ${
-              activeTab === "pointHistory" ? "show active" : ""
+              activeTab === "Point History" ? "show active" : ""
             }`}
-            id="projects__one"
           >
             <div className="row">
               <PointHistory />

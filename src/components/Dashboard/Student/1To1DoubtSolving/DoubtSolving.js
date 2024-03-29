@@ -9,6 +9,9 @@ import DateRange from "../../../UI/DateRangePicker";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
 
 const DoubtSolving = () => {
   const navigate = useNavigate();
@@ -16,6 +19,7 @@ const DoubtSolving = () => {
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Upcoming");
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -24,6 +28,10 @@ const DoubtSolving = () => {
     },
   ]);
   const { one_to_one_doubt_solving_count } = count;
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -180,19 +188,44 @@ const DoubtSolving = () => {
                       {one_to_one_doubt_solving_count === "" ? (
                         <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
                       ) : (
-                        <>
-                          <UpcomingClass
-                            joinNow={joinNow}
-                            isWithin5Minutes={isWithin5Minutes}
-                            classes={oneToOneDoubtSolvingClasses}
-                            message="No Upcomming One To One Doubt Solving Classes Available !!"
+                        <div className="row">
+                          <Tab
+                            tabs={tabs}
+                            activeTab={activeTab}
+                            handleTabChange={handleTabChange}
                           />
-                          <ClassList
-                            classes={oToclasses}
-                            bookCount={bookCount}
-                            message="No One To One Doubt Solving Classes Available !!"
-                          />
-                        </>
+                          <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                            <div
+                              className={`tab-pane fade ${
+                                activeTab === "Upcoming" ? "show active" : ""
+                              }`}
+                            >
+                              <div className="row">
+                                <UpcomingClass
+                                  joinNow={joinNow}
+                                  isWithin5Minutes={isWithin5Minutes}
+                                  classes={oneToOneDoubtSolvingClasses}
+                                  message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                                />
+                              </div>
+                            </div>
+                            <div
+                              className={`tab-pane fade ${
+                                activeTab === "Available Slot"
+                                  ? "show active"
+                                  : ""
+                              }`}
+                            >
+                              <div className="row">
+                                <ClassList
+                                  classes={oToclasses}
+                                  bookCount={bookCount}
+                                  message="No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -208,6 +241,14 @@ const DoubtSolving = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="One To One Solving class schedule"
+        footer={
+          <button
+            className="default__button"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Apply
+          </button>
+        }
       >
         <DateRange
           selectedRange={selectedDateRange}

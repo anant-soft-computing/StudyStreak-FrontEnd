@@ -21,6 +21,7 @@ const LiveExam = () => {
   const [timerRunning, setTimerRunning] = useState(true);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
@@ -638,21 +639,46 @@ const LiveExam = () => {
         )}
         <button
           className="lv-footer-button"
-          onClick={() => {
-            if (
-              examData?.exam_type === "Reading" ||
-              examData?.exam_type === "Listening" ||
-              examData?.exam_type === "Speaking"
-            ) {
-              handleRLSubmit();
-            } else if (examData?.exam_type === "Writing") {
-              doAnswerSubmit();
-            }
-          }}
+          onClick={() => setIsConfirmModalOpen(true)}
         >
-          <span>&#x2713;</span>
+          Submit
         </button>
       </div>
+      {isConfirmModalOpen && (
+        <SmallModal
+          size="md"
+          centered
+          isOpen={isConfirmModalOpen}
+          footer={
+            <div className="d-flex gap-2">
+              <button
+                className="btn btn-success"
+                onClick={() => {
+                  if (
+                    examData?.exam_type === "Reading" ||
+                    examData?.exam_type === "Listening" ||
+                    examData?.exam_type === "Speaking"
+                  ) {
+                    handleRLSubmit();
+                  } else if (examData?.exam_type === "Writing") {
+                    doAnswerSubmit();
+                  }
+                }}
+              >
+                Yes
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => setIsConfirmModalOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          }
+        >
+          <h5>Are You Sure You Want To Submit ?</h5>
+        </SmallModal>
+      )}
       {isModalOpen &&
         (examData?.exam_type === "Reading" ||
           examData?.exam_type === "Listening") && (

@@ -9,6 +9,9 @@ import DateRange from "../../../UI/DateRangePicker";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
 
 const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const navigate = useNavigate();
@@ -17,6 +20,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Upcoming");
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -25,6 +29,10 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
     },
   ]);
   const { group_doubt_solving_count } = count || doubtCount;
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -182,19 +190,44 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
                         {group_doubt_solving_count === "" ? (
                           <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
                         ) : (
-                          <>
-                            <UpcomingClass
-                              joinNow={joinNow}
-                              isWithin5Minutes={isWithin5Minutes}
-                              classes={groupSolvingClasses}
-                              message="No Upcomming Group Doubt Solving Classes Available !!"
+                          <div className="row">
+                            <Tab
+                              tabs={tabs}
+                              activeTab={activeTab}
+                              handleTabChange={handleTabChange}
                             />
-                            <ClassList
-                              classes={groupClasses}
-                              bookCount={bookCount}
-                              message=" No Group Doubt Solving Classes Available !!"
-                            />
-                          </>
+                            <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                              <div
+                                className={`tab-pane fade ${
+                                  activeTab === "Upcoming" ? "show active" : ""
+                                }`}
+                              >
+                                <div className="row">
+                                  <UpcomingClass
+                                    joinNow={joinNow}
+                                    isWithin5Minutes={isWithin5Minutes}
+                                    classes={groupSolvingClasses}
+                                    message="No Upcomming Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                className={`tab-pane fade ${
+                                  activeTab === "Available Slot"
+                                    ? "show active"
+                                    : ""
+                                }`}
+                              >
+                                <div className="row">
+                                  <ClassList
+                                    classes={groupClasses}
+                                    bookCount={bookCount}
+                                    message=" No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -219,19 +252,42 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
             {group_doubt_solving_count === "" ? (
               <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
             ) : (
-              <>
-                <UpcomingClass
-                  joinNow={joinNow}
-                  isWithin5Minutes={isWithin5Minutes}
-                  classes={groupSolvingClasses}
-                  message="No Upcomming Group Doubt Solving Classes Available !!"
+              <div className="row">
+                <Tab
+                  tabs={tabs}
+                  activeTab={activeTab}
+                  handleTabChange={handleTabChange}
                 />
-                <ClassList
-                  classes={groupClasses}
-                  bookCount={bookCount}
-                  message=" No Group Doubt Solving Classes Available !!"
-                />
-              </>
+                <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "Upcoming" ? "show active" : ""
+                    }`}
+                  >
+                    <div className="row">
+                      <UpcomingClass
+                        joinNow={joinNow}
+                        isWithin5Minutes={isWithin5Minutes}
+                        classes={groupSolvingClasses}
+                        message="No Upcomming Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "Available Slot" ? "show active" : ""
+                    }`}
+                  >
+                    <div className="row">
+                      <ClassList
+                        classes={groupClasses}
+                        bookCount={bookCount}
+                        message=" No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -242,6 +298,14 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Group Doubt Solving class schedule"
+        footer={
+          <button
+            className="default__button"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Apply
+          </button>
+        }
       >
         <DateRange
           selectedRange={selectedDateRange}

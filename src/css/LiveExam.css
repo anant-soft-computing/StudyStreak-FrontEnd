@@ -82,7 +82,6 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 25px;
-  font-weight: bold;
   color: white;
 }
 
@@ -91,14 +90,14 @@
 }
 
 .lv-footer-button {
-  width: 80px;
-  margin-right: 10px;
+  width: 100px;
+  margin-right: 5px;
+  margin-left: 5px;
   background-color: #01579b;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 25px;
-  font-weight: bold;
   color: white;
 }
 

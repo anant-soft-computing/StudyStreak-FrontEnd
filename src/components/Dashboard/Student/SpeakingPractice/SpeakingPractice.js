@@ -9,6 +9,9 @@ import DateRange from "../../../UI/DateRangePicker";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
 
 const SpeakingPractice = ({ sepakingCount = "" }) => {
   const navigate = useNavigate();
@@ -17,6 +20,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Upcoming");
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -25,6 +29,10 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
     },
   ]);
   const { speaking_practice_count } = count || sepakingCount;
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -182,19 +190,44 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                         {speaking_practice_count === "" ? (
                           <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
                         ) : (
-                          <>
-                            <UpcomingClass
-                              joinNow={joinNow}
-                              isWithin5Minutes={isWithin5Minutes}
-                              classes={speackingClasses}
-                              message="No Upcomming Speaking Practice Classes Available !!"
+                          <div className="row">
+                            <Tab
+                              tabs={tabs}
+                              activeTab={activeTab}
+                              handleTabChange={handleTabChange}
                             />
-                            <ClassList
-                              classes={speakingPracticeClasses}
-                              bookCount={bookCount}
-                              message="No Speaking Practice Classes Available !!"
-                            />
-                          </>
+                            <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                              <div
+                                className={`tab-pane fade ${
+                                  activeTab === "Upcoming" ? "show active" : ""
+                                }`}
+                              >
+                                <div className="row">
+                                  <UpcomingClass
+                                    joinNow={joinNow}
+                                    isWithin5Minutes={isWithin5Minutes}
+                                    classes={speackingClasses}
+                                    message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                                  />
+                                </div>
+                              </div>
+                              <div
+                                className={`tab-pane fade ${
+                                  activeTab === "Available Slot"
+                                    ? "show active"
+                                    : ""
+                                }`}
+                              >
+                                <div className="row">
+                                  <ClassList
+                                    classes={speakingPracticeClasses}
+                                    bookCount={bookCount}
+                                    message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -219,19 +252,42 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
             {speaking_practice_count === "" ? (
               <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
             ) : (
-              <>
-                <UpcomingClass
-                  joinNow={joinNow}
-                  isWithin5Minutes={isWithin5Minutes}
-                  classes={speackingClasses}
-                  message="No Upcomming Speaking Practice Classes Available !!"
+              <div className="row">
+                <Tab
+                  tabs={tabs}
+                  activeTab={activeTab}
+                  handleTabChange={handleTabChange}
                 />
-                <ClassList
-                  classes={speakingPracticeClasses}
-                  bookCount={bookCount}
-                  message="No Speaking Practice Classes Available !!"
-                />
-              </>
+                <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "Upcoming" ? "show active" : ""
+                    }`}
+                  >
+                    <div className="row">
+                      <UpcomingClass
+                        joinNow={joinNow}
+                        isWithin5Minutes={isWithin5Minutes}
+                        classes={speackingClasses}
+                        message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "Available Slot" ? "show active" : ""
+                    }`}
+                  >
+                    <div className="row">
+                      <ClassList
+                        classes={speakingPracticeClasses}
+                        bookCount={bookCount}
+                        message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -242,6 +298,14 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Speaking Practice class schedule"
+        footer={
+          <button
+            className="default__button"
+            onClick={() => setIsModalOpen(false)}
+          >
+            Apply
+          </button>
+        }
       >
         <DateRange
           selectedRange={selectedDateRange}

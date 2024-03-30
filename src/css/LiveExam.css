@@ -5,9 +5,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 1px solid #01579b;
+  /* border-top: 1px solid #01579b; */
   border-bottom: 1px solid #01579b;
-  margin-top: 113px;
+  margin-top: 130px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: white;
+  margin-bottom: 100px;
 }
 
 .lv-navbar-title {

@@ -35,6 +35,8 @@ const FullLengthLiveExam = () => {
   const [speakingModalOpenOnce, setSpeakingModalOpenOnce] = useState(false);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [numberOfWord, setNumberOfWord] = useState(0);
+  const [speaking, setSpeaking] = useState(0);
+  const synth = window.speechSynthesis;
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -748,6 +750,59 @@ const FullLengthLiveExam = () => {
     );
   };
 
+  const speak = () => {
+    const utterance = new SpeechSynthesisUtterance(examData?.passage);
+    utterance.voice = synth
+      .getVoices()
+      .find(
+        (voice) => voice.name === "Microsoft Zira - English (United States)"
+      );
+    synth.speak(utterance);
+    setSpeaking(1);
+    utterance.onstart = () => {
+      setSpeaking(1);
+    };
+    utterance.onend = () => {
+      setSpeaking(2);
+    };
+  };
+
+  const stopSpeaking = () => {
+    if (synth.speaking) {
+      synth.cancel();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", stopSpeaking);
+    setSpeaking(0);
+
+    return () => {
+      window.removeEventListener("beforeunload", stopSpeaking);
+      stopSpeaking(0);
+    };
+  }, [next]);
+
+  const reviewContent = () =>
+    examAnswer.map((test, index) => (
+      <div key={index}>
+        <h4>Test : {index + 1}</h4>
+        <div className="card-container">
+          {test.data.map((answer, idx) => (
+            <div key={idx} className="card answer__width">
+              <div className="card-body">
+                <h6 className="card-title">Q. {idx + 1}</h6>
+                <h6 className="card-text">
+                  Answer :{" "}
+                  <span className="text-success">{answer.answer_text}</span>
+                </h6>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ));
+
   return (
     <>
       {/* Navbar */}
@@ -755,13 +810,23 @@ const FullLengthLiveExam = () => {
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
+          <div style={{ margin: "0 0px 0 10px" }}>/</div>
+          <div className="lv-userName">{examData?.exam_name}</div>
+          {examData?.exam_type === "Speaking" && (
+            <button
+              className="lv-footer-button"
+              onClick={speak}
+              disabled={speaking === 1}
+              style={{
+                opacity: speaking === 1 ? 0.5 : 1,
+                cursor: speaking === 1 ? "not-allowed" : "pointer",
+              }}
+            >
+              {speaking ? "Replay" : "Start"}
+            </button>
+          )}
         </div>
         {renderTime}
-      </div>
-
-      {/* Static Container */}
-      <div className="lv-container">
-        <div className="lv-container-title">{`${examData?.exam_name}`}</div>
       </div>
 
       <div>
@@ -793,175 +858,160 @@ const FullLengthLiveExam = () => {
         />
       </div>
 
-      {/* Main Container */}
-      {examData?.exam_type === "Listening" && renderAudio(examData?.audio_file)}
-      <div className="lv-main-container">
-        {/* Left Container */}
-        <div className="lv-left-container">
-          {displayLeftContainer(examData?.passage, examData?.passage_image)}
-        </div>
+      <div style={{ marginTop: "200px" }}>
+        {/* Main Container */}
+        {examData?.exam_type === "Listening" &&
+          renderAudio(examData?.audio_file)}
+        <div className="lv-main-container">
+          {/* Left Container */}
+          <div className="lv-left-container">
+            {displayLeftContainer(examData?.passage, examData?.passage_image)}
+          </div>
 
-        {/* Right Container */}
-        <div
-          className="lv-right-container"
-          id="right-container"
-          ref={containerRef}
-        >
-          <div className="lv-box-right">
-            {/* Replace the following with your actual content */}
-            {(examData?.exam_type === "Reading" ||
-              examData?.exam_type === "Listening") && (
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: htmlContent,
-                }}
-              />
-            )}
-            {examData?.exam_type === "Writing" && (
-              <div className="lv-textarea">
-                <textarea
-                  id={`textarea_${next}`}
-                  className="writing__textarea"
-                  value={examAnswer[next]?.data[0]?.answer_text || ""}
-                  onChange={(e) => handleWritingAnswer(e, next)}
+          {/* Right Container */}
+          <div
+            className="lv-right-container"
+            id="right-container"
+            ref={containerRef}
+          >
+            <div className="lv-box-right">
+              {/* Replace the following with your actual content */}
+              {(examData?.exam_type === "Reading" ||
+                examData?.exam_type === "Listening") && (
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: htmlContent,
+                  }}
                 />
-                <span>{numberOfWord} Words</span>
-              </div>
-            )}
-            {examData?.exam_type === "Speaking" && (
-              <AudioRecorder
-                setRecordedFilePath={setRecordedFilePath}
-                next={next}
-                exam_id={examData?.id}
-              />
-            )}
+              )}
+              {examData?.exam_type === "Writing" && (
+                <div className="lv-textarea">
+                  <textarea
+                    id={`textarea_${next}`}
+                    className="writing__textarea"
+                    value={examAnswer[next]?.data[0]?.answer_text || ""}
+                    onChange={(e) => handleWritingAnswer(e, next)}
+                  />
+                  <span>{numberOfWord} Words</span>
+                </div>
+              )}
+              {examData?.exam_type === "Speaking" && (
+                <AudioRecorder
+                  setRecordedFilePath={setRecordedFilePath}
+                  next={next}
+                  exam_id={examData?.id}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="d-flex justify-content-between mb-2">
-        <div className="lv-question-pagination">
-          {uniqueIdArr?.map((item, index) => {
-            return (
-              <div
-                className={`lv-footer-item ${
-                  examAnswer[next] &&
-                  examAnswer[next].data.length > 0 &&
-                  examAnswer[next].data.find(
-                    (val) => val.question_number === item
-                  )?.answer_text !== ""
-                    ? "lv-completed-questions"
-                    : ""
-                }`}
-                onClick={() => scrollToContent(item)}
-                key={index}
-              >
-                {index + 1}
-              </div>
-            );
-          })}
-        </div>
-        <div className="lv-footer-btn">
-          {(examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening") && (
-            <button
-              className="lv-footer-button review_size"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Review
-            </button>
-          )}
-          <button
-            className="lv-footer-button"
-            style={{
-              display: next === 0 ? "none" : "block",
-              cursor: linkAnswer ? "not-allowed" : "pointer",
-              opacity: linkAnswer ? 0.5 : 1,
-            }}
-            onClick={handleBackSectionClicked}
-            disabled={linkAnswer}
-          >
-            <span>Back</span>
-          </button>
-          <button
-            className="lv-footer-button"
-            style={{
-              display: fullPaper.length === next + 1 ? "none" : "block",
-              cursor: linkAnswer ? "not-allowed" : "pointer",
-              opacity: linkAnswer ? 0.5 : 1,
-            }}
-            onClick={handleNextSectionClicked}
-            disabled={linkAnswer}
-          >
-            <span>&#10152;</span>
-          </button>
-          <button
-            className="lv-footer-button"
-            style={{
-              display: next !== (fullPaper.length > 0 ? "none" : "block"),
-              cursor: linkAnswer ? "not-allowed" : "pointer",
-              opacity: linkAnswer ? 0.5 : 1,
-            }}
-            onClick={() => setIsConfirmModalOpen(true)}
-            disabled={linkAnswer}
-          >
-            Submit
-          </button>
-        </div>
-      </div>
-      {isConfirmModalOpen && (
-        <SmallModal
-          size="md"
-          centered
-          isOpen={isConfirmModalOpen}
-          footer={
-            <div className="d-flex gap-2">
-              <button className="btn btn-success" onClick={handleRLSubmit}>
-                Yes
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => setIsConfirmModalOpen(false)}
-              >
-                No
-              </button>
-            </div>
-          }
-        >
-          <h5>Are You Sure You Want To Submit ?</h5>
-        </SmallModal>
-      )}
-      {isModalOpen &&
-        (examData?.exam_type === "Reading" ||
-          examData?.exam_type === "Listening") && (
-          <SmallModal
-            size="lg"
-            centered
-            title="Your Answers"
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-          >
-            {examAnswer.map((test, index) => (
-              <div key={index}>
-                <h4>Test : {index + 1}</h4>
-                <div className="card-container">
-                  {test.data.map((answer, idx) => (
-                    <div key={idx} className="card answer__width">
-                      <div className="card-body">
-                        <h6 className="card-title">Q. {idx + 1}</h6>
-                        <h6 className="card-text">
-                          Answer :{" "}
-                          <span className="text-success">
-                            {answer.answer_text}
-                          </span>
-                        </h6>
-                      </div>
-                    </div>
-                  ))}
+        <div className="d-flex justify-content-between mb-2">
+          <div className="lv-question-pagination">
+            {uniqueIdArr?.map((item, index) => {
+              return (
+                <div
+                  className={`lv-footer-item ${
+                    examAnswer[next] &&
+                    examAnswer[next].data.length > 0 &&
+                    examAnswer[next].data.find(
+                      (val) => val.question_number === item
+                    )?.answer_text !== ""
+                      ? "lv-completed-questions"
+                      : ""
+                  }`}
+                  onClick={() => scrollToContent(item)}
+                  key={index}
+                >
+                  {index + 1}
                 </div>
+              );
+            })}
+          </div>
+          <div className="lv-footer-btn">
+            {(examData?.exam_type === "Reading" ||
+              examData?.exam_type === "Listening") && (
+              <button
+                className="lv-footer-button review_size"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Review
+              </button>
+            )}
+            <button
+              className="lv-footer-button"
+              style={{
+                display: next === 0 ? "none" : "block",
+                cursor: linkAnswer ? "not-allowed" : "pointer",
+                opacity: linkAnswer ? 0.5 : 1,
+              }}
+              onClick={handleBackSectionClicked}
+              disabled={linkAnswer}
+            >
+              <span>Back</span>
+            </button>
+            <button
+              className="lv-footer-button"
+              style={{
+                display: fullPaper.length === next + 1 ? "none" : "block",
+                cursor: linkAnswer ? "not-allowed" : "pointer",
+                opacity: linkAnswer ? 0.5 : 1,
+              }}
+              onClick={handleNextSectionClicked}
+              disabled={linkAnswer}
+            >
+              <span>&#10152;</span>
+            </button>
+            <button
+              className="lv-footer-button"
+              style={{
+                display: next !== (fullPaper.length > 0 ? "none" : "block"),
+                cursor: linkAnswer ? "not-allowed" : "pointer",
+                opacity: linkAnswer ? 0.5 : 1,
+              }}
+              onClick={() => setIsConfirmModalOpen(true)}
+              disabled={linkAnswer}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+        {isConfirmModalOpen && (
+          <SmallModal
+            size="md"
+            centered
+            isOpen={isConfirmModalOpen}
+            footer={
+              <div className="d-flex gap-2">
+                <button className="btn btn-success" onClick={handleRLSubmit}>
+                  Yes
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => setIsConfirmModalOpen(false)}
+                >
+                  No
+                </button>
               </div>
-            ))}
+            }
+          >
+            <h5>Are You Sure You Want To Submit ?</h5>
+            {reviewContent()}
           </SmallModal>
         )}
+        {isModalOpen &&
+          (examData?.exam_type === "Reading" ||
+            examData?.exam_type === "Listening") && (
+            <SmallModal
+              size="lg"
+              centered
+              title="Your Answers"
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            >
+              {reviewContent()}
+            </SmallModal>
+          )}
+      </div>
     </>
   );
 };

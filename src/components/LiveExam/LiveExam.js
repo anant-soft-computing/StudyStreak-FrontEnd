@@ -7,6 +7,7 @@ import AudioRecorder from "../Exam-Create/AudioRecorder";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
+import { htmlToText } from "html-to-text";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -542,13 +543,14 @@ const LiveExam = () => {
     }
   }, [recordedFilePath]);
 
+  const extractVisibleText = (htmlContent) => {
+    return htmlToText(htmlContent);
+  };
+
   const speak = () => {
-    const utterance = new SpeechSynthesisUtterance(examData?.passage);
-    utterance.voice = synth
-      .getVoices()
-      .find(
-        (voice) => voice.name === "Microsoft Zira - English (United States)"
-      );
+    const utterance = new SpeechSynthesisUtterance(
+      extractVisibleText(examData?.passage)
+    );
     synth.speak(utterance);
     setSpeaking(1);
     utterance.onstart = () => {
@@ -596,7 +598,7 @@ const LiveExam = () => {
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
-          <div style={{ margin: "0 0px 0 10px" }}>/</div>
+          <div style={{ margin: "15px 0px 0 10px" }}>/</div>
           <div className="lv-userName">{`${examData?.exam_name}`}</div>
           {examData?.exam_type === "Speaking" && (
             <button
@@ -612,15 +614,46 @@ const LiveExam = () => {
             </button>
           )}
         </div>
-        <span>
+        <span className="lv-navbar-title">
           Time Taken :
           <span className="lv-userName">
             {Math.floor(timer / 60)} : {timer % 60}
           </span>
         </span>
+        <div className="lv-navbar-title-mobile">
+          <div className="username-mobile">
+            <h2>{examData?.exam_category}</h2>
+            <div className="mobile-breadcumb">
+              <div className="lv-userName">{userData?.username}</div>
+              <div style={{ margin: "15px 0px 0 10px" }}>/</div>
+              <div className="lv-userName">{`${examData?.exam_name}`}</div>
+            </div>
+          </div>
+          <div className="lv-navbar-footer">
+            {examData?.exam_type === "Speaking" && (
+              <button
+                className="lv-footer-button"
+                onClick={speak}
+                disabled={speaking === 1}
+                style={{
+                  opacity: speaking === 1 ? 0.5 : 1,
+                  cursor: speaking === 1 ? "not-allowed" : "pointer",
+                }}
+              >
+                {speaking ? "Replay" : "Start"}
+              </button>
+            )}
+            <span>
+              Time Taken :
+              <span className="lv-userName">
+                {Math.floor(timer / 60)} : {timer % 60}
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
 
-      <div style={{ marginTop: "200px" }}>
+      <div className="lv-container">
         {/* Main Container */}
         {renderAudio(examData?.audio_file)}
         <div className="lv-main-container">

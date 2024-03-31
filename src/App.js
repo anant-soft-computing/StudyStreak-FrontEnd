@@ -71,6 +71,7 @@ import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
 import PracticeTestAnswer from "./components/Exam-Answer/PracticeTestAnswer";
+import MobileTopBar from "./components/TopBar/MobileTopBar";
 
 const App = () => {
   return (
@@ -78,6 +79,7 @@ const App = () => {
       <div className="fixing-navbar-at-top-side">
         <TopBar />
         <NavBar />
+        <MobileTopBar />
       </div>
       <ToastContainer
         limit={1}

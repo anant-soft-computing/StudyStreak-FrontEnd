@@ -21,6 +21,8 @@ const DSSidebar = () => {
   const [solvingClassBook, setSolvingClassBook] = useState([]);
   const [studentId, setStudentId] = useState();
   const [count, setCount] = useState({});
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const [showMobileNavBtn, setShowMobileNavBtn] = useState(true);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const navigate = useNavigate();
   const location = useLocation().pathname;
@@ -125,6 +127,8 @@ const DSSidebar = () => {
     },
   ];
 
+  const handleMobileMenu = () => setOpenMobileMenu(!openMobileMenu);
+
   useEffect(() => {
     (async () => {
       try {
@@ -196,6 +200,14 @@ const DSSidebar = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    // set openmobileMenu to true for screen width less than 768px
+    if (window.innerWidth > 990) {
+      setOpenMobileMenu(true);
+      setShowMobileNavBtn(false);
+    }
+  }, []);
+
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
@@ -204,12 +216,25 @@ const DSSidebar = () => {
 
   return (
     <>
-      <div className="col-xl-3 col-lg-3 col-md-12">
+      <div
+        className="col-xl-3 col-lg-3 col-md-12"
+        style={{
+          marginTop: openMobileMenu ? "0px" : "70px",
+        }}
+      >
         <div className="dashboard__inner sticky-top common-background-color-across-app">
           <div className="dashboard__nav__title">
             <h6>Welcome, {userData?.username}</h6>
+            {showMobileNavBtn && (
+              <button
+                className="mobile-aside-button"
+                onClick={handleMobileMenu}
+              >
+                <i className="icofont-navigation-menu"></i>
+              </button>
+            )}
           </div>
-          <div className="dashboard__nav">
+          <div className={`dashboard__nav ${openMobileMenu && "active"}`}>
             <ul>
               {menuList.map((item, index) => (
                 <li key={index}>

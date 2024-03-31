@@ -1889,6 +1889,7 @@ Mobile Menu
   display: none;
   padding-top: 15px;
   padding-bottom: 15px;
+  background: white;
 }
 
 .mobile-off-canvas .mobile-aside-button {
@@ -1951,6 +1952,8 @@ Mobile Menu
   opacity: 1;
   visibility: visible;
 }
+
+.container-fluid mob_menu_wrapper
 
 .mobile-off-canvas-active .mobile-aside-close {
   width: 40px;
@@ -13653,17 +13656,33 @@ Breadcrumb Area
   }
 }
 
+.dashboard__nav__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #01579b36;
+  padding: 10px 10px 7px;
+  color: var(--contentColor);
+  line-height: 1;
+  border-radius: 10px;
+}
+
 .dashboard__nav__title h6 {
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 0;
-  background: #01579b36;
-  padding: 10px 10px 7px;
-  color: var(--contentColor);
-  line-height: 1;
-  border-radius: 10px;
+}
+
+.dashboard__nav{
+  height: 0;
+  overflow: hidden;
+  transition: height 4.5s ease-in-out;
+}
+
+.dashboard__nav.active {
+  height: auto;
 }
 
 .dashboard__nav ul li {

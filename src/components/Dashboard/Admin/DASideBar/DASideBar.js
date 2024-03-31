@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 import dashBoard from "../../../../img/icon/dashboard.svg";
@@ -15,8 +15,12 @@ import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 
 const DASideBar = () => {
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const [showMobileNavBtn, setShowMobileNavBtn] = useState(true);
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
+
+  const handleMobileMenu = () => setOpenMobileMenu(!openMobileMenu);
 
   const logout = (event) => {
     event.preventDefault();
@@ -86,14 +90,35 @@ const DASideBar = () => {
     },
   ];
 
+  useEffect(() => {
+    // set openmobileMenu to true for screen width less than 768px
+    if (window.innerWidth > 990) {
+      setOpenMobileMenu(true);
+      setShowMobileNavBtn(false);
+    }
+  }, []);
+
   return (
     <>
-      <div className="col-xl-3 col-lg-3 col-md-12">
+      <div
+        className="col-xl-3 col-lg-3 col-md-12"
+        style={{
+          marginTop: showMobileNavBtn ? "70px" : 0,
+        }}
+      >
         <div className="dashboard__inner sticky-top common-background-color-across-app">
           <div className="dashboard__nav__title">
             <h6>Welcome, Admin</h6>
+            {showMobileNavBtn && (
+              <button
+                className="mobile-aside-button"
+                onClick={handleMobileMenu}
+              >
+                <i className="icofont-navigation-menu"></i>
+              </button>
+            )}
           </div>
-          <div className="dashboard__nav">
+          <div className={`dashboard__nav ${openMobileMenu && "active"}`}>
             <ul>
               {menuList.map((item, index) => (
                 <li key={index}>

@@ -289,112 +289,132 @@ const PracticeLiveExam = () => {
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
+          <div style={{ margin: "15px 0px 0 10px" }}>/</div>
+          <div className="lv-userName">{`${examData?.exam_name}`}</div>
         </div>
-        {renderTime}
-      </div>
-
-      {/* Static Container */}
-      <div className="lv-container">
-        <div className="lv-container-title">{`${examData?.exam_name}`}</div>
-      </div>
-
-      {/* Main Container */}
-      <div className="lv-main-container">
-        {/* Left Container */}
-        <div className="lv-left-container">
-          {displayLeftContainer(examData?.passage)}
-        </div>
-
-        {/* Right Container */}
-        <div
-          className="lv-right-container"
-          id="right-container"
-          ref={containerRef}
-        >
-          <div className="lv-box-right">
-            {/* Replace the following with your actual content */}
-            {examData?.exam_type === "Writing" && (
-              <div className="lv-textarea">
-                <textarea
-                  className="writing__textarea"
-                  id={`textarea_${next}`}
-                  value={examAnswer[next]?.data[0]?.answer_text || ""}
-                  onChange={(e) => handleWritingAnswer(e, next)}
-                />
-                <span>Word Count : {numberOfWord}</span>
-              </div>
-            )}
+        <span className="lv-navbar-title">
+          Time Taken :<span className="lv-userName">{timeTaken}</span>
+        </span>
+        <div className="lv-navbar-title-mobile">
+          <div className="username-mobile">
+            <h2>{examData?.exam_category}</h2>
+            <div className="mobile-breadcumb">
+              <div className="lv-userName">{userData?.username}</div>
+              <div style={{ margin: "15px 0px 0 10px" }}>/</div>
+              <div className="lv-userName">{`${examData?.exam_name}`}</div>
+            </div>
+          </div>
+          <div className="lv-navbar-footer">
+            <div />
+            <span>
+              Time Taken :<span className="lv-userName">{timeTaken}</span>
+            </span>
           </div>
         </div>
       </div>
-      <div className="d-flex justify-content-between mb-2">
-        <div className="lv-question-pagination"></div>
-        <div className="lv-footer-btn">
-          <button
-            className="lv-footer-button"
-            style={{
-              display: next === 0 ? "none" : "block",
-            }}
-            onClick={() => {
-              setNext(next - 1);
-            }}
+
+      <div className="lv-container">
+        {/* Main Container */}
+        <div className="lv-main-container">
+          {/* Left Container */}
+          <div className="lv-left-container">
+            {displayLeftContainer(examData?.passage)}
+          </div>
+
+          {/* Right Container */}
+          <div
+            className="lv-right-container"
+            id="right-container"
+            ref={containerRef}
           >
-            <span>Back</span>
-          </button>
-          <button
-            className="lv-footer-button"
-            style={{
-              display:
-                next ===
-                (fullPaper.length > 0 &&
-                  fullPaper?.[0][examType][examForm]?.length - 1)
-                  ? "none"
-                  : "block",
-            }}
-            onClick={() => {
-              setNext(next + 1);
-            }}
-          >
-            <span>&#10152;</span>
-          </button>
-          <button
-            className="lv-footer-button"
-            style={{
-              display:
-                next !==
-                (fullPaper.length > 0 &&
-                  fullPaper?.[0][examType][examForm]?.length - 1)
-                  ? "none"
-                  : "block",
-            }}
-            onClick={() => setIsModalOpen(true)}
-          >
-            Submit
-          </button>
-        </div>
-      </div>
-      {isModalOpen && (
-        <SmallModal
-          size="md"
-          centered
-          isOpen={isModalOpen}
-          footer={
-            <div className="d-flex gap-2">
-              <button className="btn btn-success" onClick={handleWritingSubmit}>
-                Yes
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => setIsModalOpen(false)}
-              >
-                No
-              </button>
+            <div className="lv-box-right">
+              {/* Replace the following with your actual content */}
+              {examData?.exam_type === "Writing" && (
+                <div className="lv-textarea">
+                  <textarea
+                    className="writing__textarea"
+                    id={`textarea_${next}`}
+                    value={examAnswer[next]?.data[0]?.answer_text || ""}
+                    onChange={(e) => handleWritingAnswer(e, next)}
+                  />
+                  <span>Word Count : {numberOfWord}</span>
+                </div>
+              )}
             </div>
-          }
-        >
-          <h5>Are You Sure You Want To Submit ?</h5>
-        </SmallModal>
-      )}
+          </div>
+        </div>
+        <div className="d-flex justify-content-between mb-2">
+          <div className="lv-question-pagination"></div>
+          <div className="lv-footer-btn">
+            <button
+              className="lv-footer-button"
+              style={{
+                display: next === 0 ? "none" : "block",
+              }}
+              onClick={() => {
+                setNext(next - 1);
+              }}
+            >
+              <span>Back</span>
+            </button>
+            <button
+              className="lv-footer-button"
+              style={{
+                display:
+                  next ===
+                  (fullPaper.length > 0 &&
+                    fullPaper?.[0][examType][examForm]?.length - 1)
+                    ? "none"
+                    : "block",
+              }}
+              onClick={() => {
+                setNext(next + 1);
+              }}
+            >
+              <span>&#10152;</span>
+            </button>
+            <button
+              className="lv-footer-button"
+              style={{
+                display:
+                  next !==
+                  (fullPaper.length > 0 &&
+                    fullPaper?.[0][examType][examForm]?.length - 1)
+                    ? "none"
+                    : "block",
+              }}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+        {isModalOpen && (
+          <SmallModal
+            size="md"
+            centered
+            isOpen={isModalOpen}
+            footer={
+              <div className="d-flex gap-2">
+                <button
+                  className="btn btn-success"
+                  onClick={handleWritingSubmit}
+                >
+                  Yes
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  No
+                </button>
+              </div>
+            }
+          >
+            <h5>Are You Sure You Want To Submit ?</h5>
+          </SmallModal>
+        )}
+      </div>
     </>
   );
 };

@@ -219,7 +219,7 @@ const DSSidebar = () => {
       <div
         className="col-xl-3 col-lg-3 col-md-12"
         style={{
-          marginTop: openMobileMenu ? "0px" : "70px",
+          marginTop: !showMobileNavBtn ? "0px" : "70px",
         }}
       >
         <div className="dashboard__inner sticky-top common-background-color-across-app">

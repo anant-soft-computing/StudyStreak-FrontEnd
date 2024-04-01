@@ -8,13 +8,13 @@ const tabs = [
   {
     title: "Curriculum",
     icon: "icofont-book-alt",
-    target: "projects__two",
+    target: "projects__one",
     active: true,
   },
   {
     title: "Description",
     icon: "icofont-paper",
-    target: "projects__one",
+    target: "projects__two",
     active: false,
   },
   {

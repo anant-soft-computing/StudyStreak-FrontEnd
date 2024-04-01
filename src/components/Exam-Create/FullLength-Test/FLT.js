@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from "react";
 import ajaxCall from "../../../helpers/ajaxCall";
 import { AgGridReact } from "ag-grid-react";
 import { toast } from "react-toastify";
+import Tab from "../../UI/Tab";
 
 const intialFLTData = {
   name: "",
@@ -24,6 +25,8 @@ const reducerFLT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
+const tabs = [{ name: "FLT Details" }, { name: "FLT Content" }];
+
 const FLT = () => {
   const [exams, setExams] = useState({
     Reading: [],
@@ -33,6 +36,11 @@ const FLT = () => {
   });
   const [createFLT, dispatchFLT] = useReducer(reducerFLT, intialFLTData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [activeTab, setActiveTab] = useState("FLT Details");
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const setFormError = (errMsg) => {
     setFormStatus({
@@ -208,187 +216,139 @@ const FLT = () => {
   });
 
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="theme__shadow__circle"></div>
-        <div className="theme__shadow__circle shadow__right"></div>
-        <div className="container">
+    <>
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "FLT Details" ? "show active" : ""
+          }`}
+        >
           <div className="row">
-            <div className="col-xl-8 col-lg-8 col-md-12 col-12 create__course__acc">
-              <div className="create__course__accordion__wraper">
-                <div className="accordion" id="accordionExample">
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingOne">
-                      <button
-                        className="accordion-button"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseOne"
-                        aria-expanded="true"
-                        aria-controls="collapseOne"
-                      >
-                        FLT Details
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseOne"
-                      className="accordion-collapse collapse show"
-                      aria-labelledby="headingOne"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div className="accordion-body">
-                        <div className="become__instructor__form">
-                          <div className="row">
-                            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                              <div className="dashboard__form__wraper">
-                                <div className="dashboard__form__input">
-                                  <label>Full Length Test Name</label>
-                                  <input
-                                    type="text"
-                                    placeholder="Name"
-                                    value={createFLT.name}
-                                    onChange={(e) =>
-                                      dispatchFLT({
-                                        type: "name",
-                                        value: e.target.value,
-                                      })
-                                    }
-                                  />
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                              <div className="dashboard__form__wraper">
-                                <div className="dashboard__form__input">
-                                  <label>Difficulty Level</label>
-                                  <select
-                                    className="form-select"
-                                    aria-label="Default select example"
-                                    value={createFLT.difficulty_level}
-                                    onChange={(e) =>
-                                      dispatchFLT({
-                                        type: "difficulty_level",
-                                        value: e.target.value,
-                                      })
-                                    }
-                                  >
-                                    <option value="Easy">Easy</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="Hard">Hard</option>
-                                  </select>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="accordion-item">
-                    <h2 className="accordion-header" id="headingTwo">
-                      <button
-                        className="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#collapseTwo"
-                        aria-expanded="false"
-                        aria-controls="collapseTwo"
-                      >
-                        FLT Content
-                      </button>
-                    </h2>
-                    <div
-                      id="collapseTwo"
-                      className="accordion-collapse collapse"
-                      aria-labelledby="headingTwo"
-                      data-bs-parent="#accordionExample"
-                    >
-                      <div className="accordion-body">
-                        <div className="become__instructor__form">
-                          <div className="row">
-                            <div className="col-xl-12 col-lg-12 col-md-12 col-12">
-                              <div className="dashboard__form__wraper">
-                                <div className="dashboard__form__input">
-                                  <label>(1) Reading : </label>
-                                  <div className="ag-theme-alpine">
-                                    <AgGridReact
-                                      {...gridOptions(
-                                        exams.Reading,
-                                        handleRowSelection("Reading"),
-                                        "Reading"
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="dashboard__form__wraper mt-4">
-                                <div className="dashboard__form__input">
-                                  <label>(2) Writing : </label>
-                                  <div className="ag-theme-alpine">
-                                    <AgGridReact
-                                      {...gridOptions(
-                                        exams.Writing,
-                                        handleRowSelection("Writing"),
-                                        "Writing"
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="dashboard__form__wraper mt-4">
-                                <div className="dashboard__form__input">
-                                  <label>(3) Listening : </label>
-                                  <div className="ag-theme-alpine">
-                                    <AgGridReact
-                                      {...gridOptions(
-                                        exams.Listening,
-                                        handleRowSelection("Listening"),
-                                        "Listening"
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="dashboard__form__wraper mt-4">
-                                <div className="dashboard__form__input">
-                                  <label>(4) Speaking : </label>
-                                  <div className="ag-theme-alpine">
-                                    <AgGridReact
-                                      {...gridOptions(
-                                        exams.Speaking,
-                                        handleRowSelection("Speaking"),
-                                        "Speaking"
-                                      )}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Full Length Test Name</label>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={createFLT.name}
+                    onChange={(e) =>
+                      dispatchFLT({
+                        type: "name",
+                        value: e.target.value,
+                      })
+                    }
+                  />
                 </div>
               </div>
-              <div className="create__course__bottom__button">
-                {formStatus.isError ? (
-                  <div className="text-danger mb-2">{formStatus.errMsg}</div>
-                ) : (
-                  <div className="text-success mb-2">{formStatus.errMsg}</div>
-                )}
-                <button
-                  className="default__button"
-                  onClick={createFullLengthTest}
-                >
-                  Create FLT
-                </button>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Difficulty Level</label>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={createFLT.difficulty_level}
+                    onChange={(e) =>
+                      dispatchFLT({
+                        type: "difficulty_level",
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div
+          className={`tab-pane fade ${
+            activeTab === "FLT Content" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <div className="col-xl-12 col-lg-12 col-md-12 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>(1) Reading : </label>
+                  <div className="ag-theme-alpine">
+                    <AgGridReact
+                      {...gridOptions(
+                        exams.Reading,
+                        handleRowSelection("Reading"),
+                        "Reading"
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="dashboard__form__wraper mt-4">
+                <div className="dashboard__form__input">
+                  <label>(2) Writing : </label>
+                  <div className="ag-theme-alpine">
+                    <AgGridReact
+                      {...gridOptions(
+                        exams.Writing,
+                        handleRowSelection("Writing"),
+                        "Writing"
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="dashboard__form__wraper mt-4">
+                <div className="dashboard__form__input">
+                  <label>(3) Listening : </label>
+                  <div className="ag-theme-alpine">
+                    <AgGridReact
+                      {...gridOptions(
+                        exams.Listening,
+                        handleRowSelection("Listening"),
+                        "Listening"
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="dashboard__form__wraper mt-4">
+                <div className="dashboard__form__input">
+                  <label>(4) Speaking : </label>
+                  <div className="ag-theme-alpine">
+                    <AgGridReact
+                      {...gridOptions(
+                        exams.Speaking,
+                        handleRowSelection("Speaking"),
+                        "Speaking"
+                      )}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="create__course__bottom__button text-center">
+            {formStatus.isError ? (
+              <div className="text-danger mb-2">{formStatus.errMsg}</div>
+            ) : (
+              <div className="text-success mb-2">{formStatus.errMsg}</div>
+            )}
+            <button className="default__button" onClick={createFullLengthTest}>
+              Create FLT
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

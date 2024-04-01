@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
 import SelectionBox from "../../../UI/SelectionBox";
+import Tab from "../../../UI/Tab";
 
 const initialCourseData = {
   Course_Title: "",
@@ -59,12 +60,25 @@ const initialSubmit = {
   isSubmitting: false,
 };
 
+const tabs = [
+  { name: "Course Details" },
+  { name: "Requirements & Outcomes" },
+  { name: "Course Media" },
+  { name: "Course SEO" },
+  { name: "Lessons" },
+];
+
 const CreateCourse = () => {
   const [createCourseData, dispatchCreateCourse] = useReducer(
     reducerCreateCourse,
     initialCourseData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [activeTab, setActiveTab] = useState("Course Details");
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   const resetReducerForm = () => {
     dispatchCreateCourse({
@@ -251,626 +265,522 @@ const CreateCourse = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="row">
-          <div className="col-xl-8 col-lg-8 col-md-12 col-12 create__course__acc">
-            <div className="create__course__accordion__wraper">
-              <div className="accordion" id="accordionExample">
-                <div className="accordion-item w-auto">
-                  <h2 className="accordion-header" id="headingOne">
-                    <button
-                      className="accordion-button"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseOne"
-                      aria-expanded="true"
-                      aria-controls="collapseOne"
-                    >
-                      Course Details
-                    </button>
-                  </h2>
-                  <div
-                    id="collapseOne"
-                    className="accordion-collapse collapse show"
-                    aria-labelledby="headingOne"
-                    data-bs-parent="#accordionExample"
-                  >
-                    <div className="accordion-body">
-                      <div className="become__instructor__form">
-                        <div className="row">
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Course Title</label>
-                                <input
-                                  type="text"
-                                  placeholder="Course Title"
-                                  value={createCourseData.Course_Title}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "Course_Title",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Course Identifire</label>
-                                <input
-                                  type="text"
-                                  placeholder="Course Identifire"
-                                  value={createCourseData.course_identifier}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "course_identifier",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Short Description</label>
-                                <textarea
-                                  type="text"
-                                  placeholder="Short Description"
-                                  value={createCourseData.Short_Description}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "Short_Description",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Description</label>
-                                <textarea
-                                  type="text"
-                                  placeholder="Description"
-                                  value={createCourseData.Description}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "Description",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
-                            <div className="dashboard__select__heading">
-                              <span>Category</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <SingleSelection
-                                value={createCourseData.Category}
-                                onChange={(val) => {
-                                  dispatchCreateCourse({
-                                    type: "Category",
-                                    value: val,
-                                  });
-                                }}
-                                url="/categoryview/"
-                                objKey={["name"]}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
-                            <div className="dashboard__select__heading">
-                              <span>Level</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <SingleSelection
-                                value={createCourseData.Level}
-                                onChange={(val) => {
-                                  dispatchCreateCourse({
-                                    type: "Level",
-                                    value: val,
-                                  });
-                                }}
-                                url="/levelView/"
-                                objKey={["name"]}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
-                            <div className="dashboard__select__heading">
-                              <span>Language</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <SingleSelection
-                                value={createCourseData.Language}
-                                onChange={(val) => {
-                                  dispatchCreateCourse({
-                                    type: "Language",
-                                    value: val,
-                                  });
-                                }}
-                                url="/languageview/"
-                                objKey={["name"]}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
-                            <div className="dashboard__select__heading">
-                              <span>Tutor</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <SelectionBox
-                                value={createCourseData.tutor}
-                                onSelect={addedSelectVal.bind(
-                                  null,
-                                  "tutor",
-                                  "tutorId",
-                                  false
-                                )}
-                                url="/tutorcourses/"
-                                name="username"
-                                objKey={["username"]}
-                                multiple={true}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Enrollment StartDate</label>
-                                <input
-                                  type="date"
-                                  value={createCourseData.EnrollmentStartDate}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "EnrollmentStartDate",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Enrollment EndDate</label>
-                                <input
-                                  type="date"
-                                  value={createCourseData.EnrollmentEndDate}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "EnrollmentEndDate",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-12 col-lg-12 col-md-12 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Max Enrollments</label>
-                                <input
-                                  type="number"
-                                  value={createCourseData.max_enrollments}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "max_enrollments",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>FAQS</label>
-                                <textarea
-                                  type="text"
-                                  value={createCourseData.faqs}
-                                  onChange={(e) =>
-                                    dispatchCreateCourse({
-                                      type: "faqs",
-                                      value: e.target.value,
-                                    })
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__select__heading">
-                              <span>Course Type</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                value={createCourseData.course_type}
-                                onChange={(e) =>
-                                  dispatchCreateCourse({
-                                    type: "course_type",
-                                    value: e.target.value,
-                                  })
-                                }
-                              >
-                                <option value="PRIVATE">Private</option>
-                                <option value="PUBLIC">Public</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__select__heading">
-                              <span>Course Delivery</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <select
-                                className="form-select"
-                                aria-label="Default select example"
-                                value={createCourseData.course_delivery}
-                                onChange={(e) => {
-                                  dispatchCreateCourse({
-                                    type: "course_delivery",
-                                    value: e.target.value,
-                                  });
-                                }}
-                              >
-                                <option value="SELF-STUDY">
-                                  Self-Study Course
-                                </option>
-                                <option value="TAUGHT">Taught Course</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__select__heading">
-                              <span>Primary Instructor</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <SingleSelection
-                                value={createCourseData.primary_instructor}
-                                onChange={(val) => {
-                                  dispatchCreateCourse({
-                                    type: "primary_instructor",
-                                    value: val,
-                                  });
-                                }}
-                                url="/instructorcourses/"
-                                objKey={["username"]}
-                              />
-                            </div>
-                          </div>
-                          <div className="d-flex flex-wrap gap-4 mt-4">
-                            <div className="form__check">
-                              <label>Featured</label>{" "}
-                              <input
-                                type="checkbox"
-                                value={createCourseData.Featured}
-                                onChange={(e) => {
-                                  dispatchCreateCourse({
-                                    type: "Featured",
-                                    value: e.target.checked,
-                                  });
-                                }}
-                              />
-                            </div>
-                            <div className="form__check">
-                              <label>Support Available</label>{" "}
-                              <input
-                                type="checkbox"
-                                value={createCourseData.Support_Available}
-                                onChange={(e) => {
-                                  dispatchCreateCourse({
-                                    type: "Support_Available",
-                                    value: e.target.checked,
-                                  });
-                                }}
-                              />
-                            </div>
-                            <div className="form__check">
-                              <label>Is Active</label>{" "}
-                              <input
-                                type="checkbox"
-                                value={createCourseData.is_active}
-                                onChange={(e) => {
-                                  dispatchCreateCourse({
-                                    type: "is_active",
-                                    value: e.target.checked,
-                                  });
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="headingTwo">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseTwo"
-                      aria-expanded="false"
-                      aria-controls="collapseTwo"
-                    >
-                      Requirements & Outcomes
-                    </button>
-                  </h2>
-                  <div
-                    id="collapseTwo"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="headingTwo"
-                    data-bs-parent="#accordionExample"
-                  >
-                    <div className="accordion-body">
-                      <div className="become__instructor__form">
-                        <div className="row">
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__select__heading">
-                              <span>Requirements</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <SelectionBox
-                                value={createCourseData.Requirements}
-                                onSelect={addedSelectVal.bind(
-                                  null,
-                                  "Requirements",
-                                  "requirementId",
-                                  false
-                                )}
-                                url="/requirementsview/"
-                                name="description"
-                                objKey={["description"]}
-                                multiple={true}
-                              />
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__select__heading">
-                              <span>Outcome</span>
-                            </div>
-                            <div className="dashboard__selector">
-                              <SelectionBox
-                                value={createCourseData.Outcome}
-                                onSelect={addedSelectVal.bind(
-                                  null,
-                                  "Outcome",
-                                  "outcomeId",
-                                  false
-                                )}
-                                url="/outcomesview/"
-                                name="description"
-                                objKey={["description"]}
-                                multiple={true}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="headingFour">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseFour"
-                      aria-expanded="false"
-                      aria-controls="collapseFour"
-                    >
-                      Course Media
-                    </button>
-                  </h2>
-                  <div
-                    id="collapseFour"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="headingFour"
-                    data-bs-parent="#accordionExample"
-                  >
-                    <div className="accordion-body">
-                      <div className="become__instructor__form">
-                        <div className="row">
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Course Overview Provider</label>
-                                <input
-                                  type="text"
-                                  placeholder="Course Overview Provider"
-                                  value={
-                                    createCourseData.Course_Overview_Provider
-                                  }
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "Course_Overview_Provider",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Course Overview URL</label>
-                                <input
-                                  type="text"
-                                  placeholder="Course Overview URL"
-                                  value={createCourseData.Course_Overview_URL}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "Course_Overview_URL",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Course Thumbnail</label>
-                                <input
-                                  type="file"
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "Course_Thumbnail",
-                                      value: e.target.files[0],
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="headingFive">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseFive"
-                      aria-expanded="false"
-                      aria-controls="collapseFive"
-                    >
-                      Course SEO
-                    </button>
-                  </h2>
-                  <div
-                    id="collapseFive"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="headingFive"
-                    data-bs-parent="#accordionExample"
-                  >
-                    <div className="accordion-body">
-                      <div className="become__instructor__form">
-                        <div className="row">
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>SEO Meta Keywords</label>
-                                <input
-                                  type="text"
-                                  placeholder="SEO Meta Keywords"
-                                  value={createCourseData.SEO_Meta_Keywords[0]}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "SEO_Meta_Keywords",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                            <div className="dashboard__form__wraper">
-                              <div className="dashboard__form__input">
-                                <label>Meta Description</label>
-                                <input
-                                  type="text"
-                                  placeholder="Meta Description"
-                                  value={createCourseData.Meta_Description[0]}
-                                  onChange={(e) => {
-                                    dispatchCreateCourse({
-                                      type: "Meta_Description",
-                                      value: e.target.value,
-                                    });
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="accordion-item">
-                  <h2 className="accordion-header" id="headingSix">
-                    <button
-                      className="accordion-button collapsed"
-                      type="button"
-                      data-bs-toggle="collapse"
-                      data-bs-target="#collapseSix"
-                      aria-expanded="false"
-                      aria-controls="collapseSix"
-                    >
-                      Lessons
-                    </button>
-                  </h2>
-                  <div
-                    id="collapseSix"
-                    className="accordion-collapse collapse"
-                    aria-labelledby="headingSix"
-                    data-bs-parent="#accordionExample"
-                  >
-                    <div className="accordion-body">
-                      <div className="become__instructor__form">
-                        <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                          <div className="dashboard__select__heading">
-                            <span>Lessons</span>
-                          </div>
-                          <div className="dashboard__selector">
-                            <SelectionBox
-                              value={createCourseData.lessons}
-                              onSelect={addedSelectVal.bind(
-                                null,
-                                "lessons",
-                                "lessonsId",
-                                false
-                              )}
-                              url="/lessonview/"
-                              name="Lesson_Title"
-                              objKey={["Lesson_Title"]}
-                              multiple={true}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Course Details" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Course Title</label>
+                  <input
+                    type="text"
+                    placeholder="Course Title"
+                    value={createCourseData.Course_Title}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "Course_Title",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
                 </div>
               </div>
             </div>
-            <div className="row">
-              <div className="col-xl-8 col-lg-8 col-md-6 col-12">
-                <div className="create__course__bottom__button">
-                  {formStatus.isError ? (
-                    <div className="text-danger mb-2">{formStatus.errMsg}</div>
-                  ) : (
-                    <div className="text-success mb-2">{formStatus.errMsg}</div>
-                  )}
-                  <button className="default__button" onClick={createCourse}>
-                    Create Course
-                  </button>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Course Identifire</label>
+                  <input
+                    type="text"
+                    placeholder="Course Identifire"
+                    value={createCourseData.course_identifier}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "course_identifier",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
                 </div>
               </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Short Description</label>
+                  <textarea
+                    type="text"
+                    placeholder="Short Description"
+                    value={createCourseData.Short_Description}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "Short_Description",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Description</label>
+                  <textarea
+                    type="text"
+                    placeholder="Description"
+                    value={createCourseData.Description}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "Description",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
+              <div className="dashboard__select__heading">
+                <span>Category</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={createCourseData.Category}
+                  onChange={(val) => {
+                    dispatchCreateCourse({
+                      type: "Category",
+                      value: val,
+                    });
+                  }}
+                  url="/categoryview/"
+                  objKey={["name"]}
+                />
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
+              <div className="dashboard__select__heading">
+                <span>Level</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={createCourseData.Level}
+                  onChange={(val) => {
+                    dispatchCreateCourse({
+                      type: "Level",
+                      value: val,
+                    });
+                  }}
+                  url="/levelView/"
+                  objKey={["name"]}
+                />
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
+              <div className="dashboard__select__heading">
+                <span>Language</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={createCourseData.Language}
+                  onChange={(val) => {
+                    dispatchCreateCourse({
+                      type: "Language",
+                      value: val,
+                    });
+                  }}
+                  url="/languageview/"
+                  objKey={["name"]}
+                />
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
+              <div className="dashboard__select__heading">
+                <span>Tutor</span>
+              </div>
+              <div className="dashboard__selector">
+                <SelectionBox
+                  value={createCourseData.tutor}
+                  onSelect={addedSelectVal.bind(
+                    null,
+                    "tutor",
+                    "tutorId",
+                    false
+                  )}
+                  url="/tutorcourses/"
+                  name="username"
+                  objKey={["username"]}
+                  multiple={true}
+                />
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Enrollment StartDate</label>
+                  <input
+                    type="date"
+                    value={createCourseData.EnrollmentStartDate}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "EnrollmentStartDate",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Enrollment EndDate</label>
+                  <input
+                    type="date"
+                    value={createCourseData.EnrollmentEndDate}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "EnrollmentEndDate",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-12 col-lg-12 col-md-12 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Max Enrollments</label>
+                  <input
+                    type="number"
+                    value={createCourseData.max_enrollments}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "max_enrollments",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>FAQS</label>
+                  <textarea
+                    type="text"
+                    value={createCourseData.faqs}
+                    onChange={(e) =>
+                      dispatchCreateCourse({
+                        type: "faqs",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__select__heading">
+                <span>Course Type</span>
+              </div>
+              <div className="dashboard__selector">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={createCourseData.course_type}
+                  onChange={(e) =>
+                    dispatchCreateCourse({
+                      type: "course_type",
+                      value: e.target.value,
+                    })
+                  }
+                >
+                  <option value="PRIVATE">Private</option>
+                  <option value="PUBLIC">Public</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__select__heading">
+                <span>Course Delivery</span>
+              </div>
+              <div className="dashboard__selector">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={createCourseData.course_delivery}
+                  onChange={(e) => {
+                    dispatchCreateCourse({
+                      type: "course_delivery",
+                      value: e.target.value,
+                    });
+                  }}
+                >
+                  <option value="SELF-STUDY">Self-Study Course</option>
+                  <option value="TAUGHT">Taught Course</option>
+                </select>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__select__heading">
+                <span>Primary Instructor</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={createCourseData.primary_instructor}
+                  onChange={(val) => {
+                    dispatchCreateCourse({
+                      type: "primary_instructor",
+                      value: val,
+                    });
+                  }}
+                  url="/instructorcourses/"
+                  objKey={["username"]}
+                />
+              </div>
+            </div>
+            <div className="d-flex flex-wrap gap-4 mt-4">
+              <div className="form__check">
+                <label>Featured</label>{" "}
+                <input
+                  type="checkbox"
+                  value={createCourseData.Featured}
+                  onChange={(e) => {
+                    dispatchCreateCourse({
+                      type: "Featured",
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+              </div>
+              <div className="form__check">
+                <label>Support Available</label>{" "}
+                <input
+                  type="checkbox"
+                  value={createCourseData.Support_Available}
+                  onChange={(e) => {
+                    dispatchCreateCourse({
+                      type: "Support_Available",
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+              </div>
+              <div className="form__check">
+                <label>Is Active</label>{" "}
+                <input
+                  type="checkbox"
+                  value={createCourseData.is_active}
+                  onChange={(e) => {
+                    dispatchCreateCourse({
+                      type: "is_active",
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Requirements & Outcomes" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__select__heading">
+                <span>Requirements</span>
+              </div>
+              <div className="dashboard__selector">
+                <SelectionBox
+                  value={createCourseData.Requirements}
+                  onSelect={addedSelectVal.bind(
+                    null,
+                    "Requirements",
+                    "requirementId",
+                    false
+                  )}
+                  url="/requirementsview/"
+                  name="description"
+                  objKey={["description"]}
+                  multiple={true}
+                />
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__select__heading">
+                <span>Outcome</span>
+              </div>
+              <div className="dashboard__selector">
+                <SelectionBox
+                  value={createCourseData.Outcome}
+                  onSelect={addedSelectVal.bind(
+                    null,
+                    "Outcome",
+                    "outcomeId",
+                    false
+                  )}
+                  url="/outcomesview/"
+                  name="description"
+                  objKey={["description"]}
+                  multiple={true}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Course Media" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Course Overview Provider</label>
+                  <input
+                    type="text"
+                    placeholder="Course Overview Provider"
+                    value={createCourseData.Course_Overview_Provider}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "Course_Overview_Provider",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Course Overview URL</label>
+                  <input
+                    type="text"
+                    placeholder="Course Overview URL"
+                    value={createCourseData.Course_Overview_URL}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "Course_Overview_URL",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Course Thumbnail</label>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "Course_Thumbnail",
+                        value: e.target.files[0],
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Course SEO" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>SEO Meta Keywords</label>
+                  <input
+                    type="text"
+                    placeholder="SEO Meta Keywords"
+                    value={createCourseData.SEO_Meta_Keywords[0]}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "SEO_Meta_Keywords",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Meta Description</label>
+                  <input
+                    type="text"
+                    placeholder="Meta Description"
+                    value={createCourseData.Meta_Description[0]}
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "Meta_Description",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Lessons" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__select__heading">
+                <span>Lessons</span>
+              </div>
+              <div className="dashboard__selector">
+                <SelectionBox
+                  value={createCourseData.lessons}
+                  onSelect={addedSelectVal.bind(
+                    null,
+                    "lessons",
+                    "lessonsId",
+                    false
+                  )}
+                  url="/lessonview/"
+                  name="Lesson_Title"
+                  objKey={["Lesson_Title"]}
+                  multiple={true}
+                />
+              </div>
+            </div>
+            <div className="create__course__bottom__button text-center mt-2">
+              {formStatus.isError ? (
+                <div className="text-danger mb-2">{formStatus.errMsg}</div>
+              ) : (
+                <div className="text-success mb-2">{formStatus.errMsg}</div>
+              )}
+              <button className="default__button" onClick={createCourse}>
+                Create Course
+              </button>
             </div>
           </div>
         </div>

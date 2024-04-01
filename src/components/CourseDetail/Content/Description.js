@@ -4,8 +4,9 @@ const Description = ({ courseDetail }) => {
   return (
     <div
       className="tab-pane fade"
+      id="projects__two"
       role="tabpanel"
-      aria-labelledby="projects__one"
+      aria-labelledby="projects__two"
     >
       <div className="experence__heading">
         <h5>Experience Description</h5>

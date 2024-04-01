@@ -5,8 +5,9 @@ const Curriculum = ({ courseDetail }) => {
   return (
     <div
       className="tab-pane fade  active show"
+      id="projects__one"
       role="tabpanel"
-      aria-labelledby="projects__two"
+      aria-labelledby="projects__one"
     >
       <div
         className="accordion content__cirriculum__wrap"

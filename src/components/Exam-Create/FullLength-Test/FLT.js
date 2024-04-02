@@ -1,6 +1,8 @@
 import React, { useEffect, useReducer, useState } from "react";
 import ajaxCall from "../../../helpers/ajaxCall";
 import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import { toast } from "react-toastify";
 import Tab from "../../UI/Tab";
 
@@ -178,40 +180,51 @@ const FLT = () => {
     rowData,
     onSelectionChanged: handleRowSelection,
     columnDefs: [
-      { headerCheckboxSelection: true, checkboxSelection: true },
-      { headerName: "Exam Name", field: "Name", filter: true },
+      { headerCheckboxSelection: true, checkboxSelection: true, width: 200 },
+      { headerName: "Exam Name", field: "Name", filter: true, width: 300 },
       {
         headerName: "Difficulty Level",
         field: "difficulty_level",
         filter: true,
+        width: 300,
       },
       type === "Reading" && {
         headerName: "Reading Set",
         field: "Reading.length",
         filter: true,
+        width: 300,
       },
       type === "Writing" && {
         headerName: "Writing Set",
         field: "Writing.length",
         filter: true,
+        width: 300,
       },
       type === "Listening" && {
         headerName: "Listening Set",
         field: "Listening.length",
         filter: true,
+        width: 300,
       },
       type === "Speaking" && {
         headerName: "Speaking Set",
         field: "Speaking.length",
         filter: true,
+        width: 300,
       },
     ].filter(Boolean),
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
+    },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
     },
   });
 
@@ -281,7 +294,7 @@ const FLT = () => {
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>(1) Reading : </label>
-                  <div className="ag-theme-alpine">
+                  <div className="ag-theme-quartz">
                     <AgGridReact
                       {...gridOptions(
                         exams.Reading,
@@ -295,7 +308,7 @@ const FLT = () => {
               <div className="dashboard__form__wraper mt-4">
                 <div className="dashboard__form__input">
                   <label>(2) Writing : </label>
-                  <div className="ag-theme-alpine">
+                  <div className="ag-theme-quartz">
                     <AgGridReact
                       {...gridOptions(
                         exams.Writing,
@@ -309,7 +322,7 @@ const FLT = () => {
               <div className="dashboard__form__wraper mt-4">
                 <div className="dashboard__form__input">
                   <label>(3) Listening : </label>
-                  <div className="ag-theme-alpine">
+                  <div className="ag-theme-quartz">
                     <AgGridReact
                       {...gridOptions(
                         exams.Listening,
@@ -323,7 +336,7 @@ const FLT = () => {
               <div className="dashboard__form__wraper mt-4">
                 <div className="dashboard__form__input">
                   <label>(4) Speaking : </label>
-                  <div className="ag-theme-alpine">
+                  <div className="ag-theme-quartz">
                     <AgGridReact
                       {...gridOptions(
                         exams.Speaking,

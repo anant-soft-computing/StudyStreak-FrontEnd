@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no" },
+  { headerName: "No.", field: "no", resizable: false, width: 110 },
   { headerName: "Name", field: "title", filter: true },
   { headerName: "Description", field: "description", filter: true },
   { headerName: "Priority", field: "set_priority", filter: true },
@@ -34,10 +34,12 @@ const ViewFlashCard = () => {
           8000
         );
         if (response?.status === 200) {
-          const flashCardWithNumbers = response?.data?.map((flashCard, index) => ({
-            ...flashCard,
-            no: index + 1,
-          }));
+          const flashCardWithNumbers = response?.data?.map(
+            (flashCard, index) => ({
+              ...flashCard,
+              no: index + 1,
+            })
+          );
           setFlashCardList(flashCardWithNumbers);
         } else {
           console.log("error");
@@ -52,16 +54,22 @@ const ViewFlashCard = () => {
     rowData: flashCardList,
     columnDefs: columns,
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
     },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
+    },
   };
 
   return (
-    <div className="ag-theme-alpine">
+    <div className="ag-theme-quartz">
       <AgGridReact {...gridOptions} />
     </div>
   );

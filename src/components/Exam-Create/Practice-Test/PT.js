@@ -1,4 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import React, { useEffect, useReducer, useState } from "react";
 import ajaxCall from "../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
@@ -80,10 +82,22 @@ const PT = ({ type }) => {
         if (response.status === 200) {
           const { data } = response;
           const updatedExams = {
-            Reading: data.filter(({ exam_type }) => exam_type === type),
-            Writing: data.filter(({ exam_type }) => exam_type === type),
-            Listening: data.filter(({ exam_type }) => exam_type === type),
-            Speaking: data.filter(({ exam_type }) => exam_type === type),
+            Reading: data.filter(
+              ({ exam_type, block_type }) =>
+                exam_type === type && block_type === "Mock Test"
+            ),
+            Writing: data.filter(
+              ({ exam_type, block_type }) =>
+                exam_type === type && block_type === "Mock Test"
+            ),
+            Listening: data.filter(
+              ({ exam_type, block_type }) =>
+                exam_type === type && block_type === "Mock Test"
+            ),
+            Speaking: data.filter(
+              ({ exam_type, block_type }) =>
+                exam_type === type && block_type === "Mock Test"
+            ),
           };
           setExams(updatedExams);
         } else {
@@ -190,7 +204,12 @@ const PT = ({ type }) => {
     rowData,
     onSelectionChanged: handleRowSelection,
     columnDefs: [
-      { headerCheckboxSelection: true, checkboxSelection: true },
+      {
+        headerCheckboxSelection: true,
+        checkboxSelection: true,
+        resizable: false,
+        width: 110,
+      },
       { headerName: "Exam Name", field: "exam_name", filter: true },
       { headerName: "Exam Type", field: "exam_type", filter: true },
       {
@@ -206,11 +225,17 @@ const PT = ({ type }) => {
       },
     ],
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
+    },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
     },
   });
 
@@ -283,7 +308,7 @@ const PT = ({ type }) => {
             </div>
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <div className="ag-theme-alpine">
+                <div className="ag-theme-quartz">
                   <AgGridReact
                     {...gridOptions(exams.Reading, handleRowSelection(type))}
                     rowSelection={rowSelection}

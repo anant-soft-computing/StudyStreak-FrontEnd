@@ -1,17 +1,38 @@
 import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no" },
+  {
+    headerName: "No.",
+    field: "no",
+    resizable: false,
+    width: 76,
+    headerClass: "ag-grid-header",
+  },
   { headerName: "Name", field: "batch_name", filter: true },
   { headerName: "Package", field: "add_package.package_name", filter: true },
-  { headerName: "Start Date", field: "batch_startdate", filter: true },
-  { headerName: "End Date", field: "batch_enddate", filter: true },
-  { headerName: "Start Time", field: "batch_start_timing", filter: true },
-  { headerName: "End Time", field: "batch_end_timing", filter: true },
+  {
+    headerName: "Start Date",
+    field: "batch_startdate",
+    filter: true,
+    width: 160,
+  },
+  { headerName: "End Date", field: "batch_enddate", filter: true, width: 160 },
+  {
+    headerName: "Start Time",
+    field: "batch_start_timing",
+    filter: true,
+    width: 160,
+  },
+  {
+    headerName: "End Time",
+    field: "batch_end_timing",
+    filter: true,
+    width: 160,
+  },
 ];
 
 const ViewBatches = () => {
@@ -54,16 +75,22 @@ const ViewBatches = () => {
     rowData: batchList,
     columnDefs: columns,
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
     },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
+    },
   };
 
   return (
-    <div className="ag-theme-alpine">
+    <div className="ag-theme-quartz">
       <AgGridReact {...gridOptions} />
     </div>
   );

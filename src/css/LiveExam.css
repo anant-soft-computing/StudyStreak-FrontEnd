@@ -5,9 +5,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* border-top: 1px solid #01579b; */
+  border-top: 1px solid #01579b;
   border-bottom: 1px solid #01579b;
-  margin-top: 130px;
+  margin-top: 112px;
   position: fixed;
   top: 0;
   left: 0;
@@ -154,7 +154,7 @@
   border-radius: 10px;
   padding: 8px;
   margin-left: 10px;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 }
 
 .lv-footer-item:hover {
@@ -379,7 +379,7 @@
 
 @media (max-width: 978px) {
   .lv-navbar {
-    margin-top: 70px;
+    margin-top: 80px;
     flex-direction: column;
   }
   .lv-container {

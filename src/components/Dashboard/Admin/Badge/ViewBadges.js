@@ -51,7 +51,7 @@ const ViewBadges = () => {
     rowData: badgeList,
     columnDefs: columns,
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,

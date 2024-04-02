@@ -5,13 +5,17 @@ const Assignment = ({ activeLesson }) => {
     window.open(`/live-exam/${id}`, "_blank");
   };
 
-  return activeLesson && activeLesson.length > 0 ? (
+  const assignments = activeLesson?.filter(
+    (exam) => exam.block_type === "Assignments"
+  );
+
+  return assignments && assignments.length > 0 ? (
     <>
       <div className="lesson__content__wrap">
         <h3>Assignment</h3>
       </div>
       <div className="row">
-        {activeLesson.map((exam, index) => (
+        {assignments.map((exam, index) => (
           <div className="col-lg-4 col-md-6 col-12 card__title" key={index}>
             <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
               <div className="gridarea__content">
@@ -49,7 +53,7 @@ const Assignment = ({ activeLesson }) => {
       </div>
     </>
   ) : (
-    <h5 className="text-danger">Please Select Lesson for Assignment !!</h5>
+    <h5 className="text-danger">Assignment Not Found !!</h5>
   );
 };
 

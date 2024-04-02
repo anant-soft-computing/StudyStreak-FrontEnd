@@ -558,21 +558,8 @@ const PracticeLiveExam = () => {
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
-          <div style={{ margin: "15px 0px 0 10px" }}>/</div>
+          <div style={{ marginLeft: "10px" }}>/</div>
           <div className="lv-userName">{`${examData?.exam_name}`}</div>
-          {examData?.exam_type === "Speaking" && (
-            <button
-              className="lv-footer-button"
-              onClick={speak}
-              disabled={speaking === 1}
-              style={{
-                opacity: speaking === 1 ? 0.5 : 1,
-                cursor: speaking === 1 ? "not-allowed" : "pointer",
-              }}
-            >
-              {speaking ? "Replay" : "Start"}
-            </button>
-          )}
         </div>
         <span className="lv-navbar-title">
           Time Taken :<span className="lv-userName">{timeTaken}</span>
@@ -587,19 +574,6 @@ const PracticeLiveExam = () => {
             </div>
           </div>
           <div className="lv-navbar-footer">
-            {examData?.exam_type === "Speaking" && (
-              <button
-                className="lv-footer-button"
-                onClick={speak}
-                disabled={speaking === 1}
-                style={{
-                  opacity: speaking === 1 ? 0.5 : 1,
-                  cursor: speaking === 1 ? "not-allowed" : "pointer",
-                }}
-              >
-                {speaking ? "Replay" : "Start"}
-              </button>
-            )}
             <span>
               Time Taken :<span className="lv-userName">{timeTaken}</span>
             </span>
@@ -612,9 +586,28 @@ const PracticeLiveExam = () => {
         {renderAudio(examData?.audio_file)}
         <div className="lv-main-container">
           {/* Left Container */}
-          <div className="lv-left-container">
-            {displayLeftContainer(examData?.passage, examData?.passage_image)}
-          </div>
+          {(examData?.exam_type === "Reading" ||
+            examData?.exam_type === "Listening" ||
+            examData?.exam_type === "Writing") && (
+            <div className="lv-left-container">
+              {displayLeftContainer(examData?.passage, examData?.passage_image)}
+            </div>
+          )}
+          {examData?.exam_type === "Speaking" && (
+            <div className="lv-left-container">
+              <button
+                className="lv-footer-button"
+                onClick={speak}
+                disabled={speaking === 1}
+                style={{
+                  opacity: speaking === 1 ? 0.5 : 1,
+                  cursor: speaking === 1 ? "not-allowed" : "pointer",
+                }}
+              >
+                {speaking ? "Replay" : "Start"}
+              </button>
+            </div>
+          )}
 
           {/* Right Container */}
           <div

@@ -97,13 +97,13 @@ const RegularClass = () => {
                       <div className="dashboard__content__wraper common-background-color-across-app">
                         <div className="dashboard__section__title">
                           <h4>Regular Class</h4>
-                          <h6>
+                          <h5>
                             Your Regular Class Schedule{" "}
                             <i
                               className="icofont-calendar one_to_one_icon"
                               onClick={() => setIsModalOpen(true)}
                             ></i>
-                          </h6>
+                          </h5>
                         </div>
                         <RegularClassList
                           regularClass={regularClasses()}
@@ -121,13 +121,13 @@ const RegularClass = () => {
       ) : (
         <div>
           <div className="live__class__schedule_header">
-            <h6>
+            <h5>
               Your Regular Class Schedule{" "}
               <i
                 className="icofont-calendar one_to_one_icon"
                 onClick={() => setIsModalOpen(true)}
               ></i>
-            </h6>
+            </h5>
           </div>
           <div>
             <RegularClassList

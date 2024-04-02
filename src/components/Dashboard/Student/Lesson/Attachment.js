@@ -61,7 +61,7 @@ const Attachment = ({ activeLesson }) => {
       </div>
     </>
   ) : (
-    <h5 className="text-danger">Please Select Lesson for Attachment !!</h5>
+    <h5 className="text-danger">Attachment Not Found !!</h5>
   );
 };
 

@@ -8,6 +8,7 @@ import DateRange from "../../../UI/DateRangePicker";
 import RegularClass from "../RegularClass/RegularClass";
 import SpeakingPractice from "../SpeakingPractice/SpeakingPractice";
 import GroupDoubtSolving from "../GroupDoubtSolving/GroupDoubtSolving";
+import DoubtSolving from "../1To1DoubtSolving/DoubtSolving";
 import Tab from "../../../UI/Tab";
 
 const tabs = [
@@ -15,6 +16,7 @@ const tabs = [
   { name: "Regular" },
   { name: "Speaking Practice" },
   { name: "Group Dobut" },
+  { name: "One TO One Doubt" },
 ];
 
 const LiveClass = () => {
@@ -87,13 +89,13 @@ const LiveClass = () => {
                           >
                             <div className="row">
                               <div className="live__class__schedule_header">
-                                <h6>
+                                <h5>
                                   Your Live Class Schedule{" "}
                                   <i
                                     className="icofont-calendar one_to_one_icon"
                                     onClick={() => setIsModalOpen(true)}
                                   ></i>
-                                </h6>
+                                </h5>
                               </div>
                               <LiveClassList
                                 liveClasses={liveClasses()}
@@ -129,6 +131,17 @@ const LiveClass = () => {
                           >
                             <div className="row">
                               <GroupDoubtSolving doubtCount={count} />
+                            </div>
+                          </div>
+                          <div
+                            className={`tab-pane fade ${
+                              activeTab === "One TO One Doubt"
+                                ? "show active"
+                                : ""
+                            }`}
+                          >
+                            <div className="row">
+                              <DoubtSolving doubtCount={count} />
                             </div>
                           </div>
                         </div>

@@ -179,13 +179,13 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                       <div className="dashboard__content__wraper common-background-color-across-app">
                         <div className="dashboard__section__title">
                           <h4>Speaking Practice</h4>
-                          <h6>
+                          <h5>
                             Your Speaking Practice Class Schedule{" "}
                             <i
                               className="icofont-calendar one_to_one_icon"
                               onClick={() => setIsModalOpen(true)}
                             ></i>
-                          </h6>
+                          </h5>
                         </div>
                         {speaking_practice_count === "" ? (
                           <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
@@ -240,13 +240,13 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
       ) : (
         <div>
           <div className="live__class__schedule_header">
-            <h6>
+            <h5>
               Your Speaking Practice Class Schedule{" "}
               <i
                 className="icofont-calendar one_to_one_icon"
                 onClick={() => setIsModalOpen(true)}
               ></i>
-            </h6>
+            </h5>
           </div>
           <div>
             {speaking_practice_count === "" ? (

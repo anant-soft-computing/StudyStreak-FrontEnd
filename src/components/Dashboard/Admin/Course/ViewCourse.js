@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no" },
+  { headerName: "No.", field: "no", resizable: false, width: 60 },
   { headerName: "Course Title", field: "Course_Title", filter: true },
   { headerName: "Course Identifire", field: "course_identifier", filter: true },
-  { headerName: "Course Delivery", field: "course_delivery", filter: true },
-  { headerName: "Course Type", field: "course_type", filter: true },
+  {
+    headerName: "Course Delivery",
+    field: "course_delivery",
+    filter: true,
+    width: 160,
+  },
+  { headerName: "Course Type", field: "course_type", filter: true, width: 130 },
   {
     headerName: "Enrollment Start Date",
     field: "EnrollmentStartDate",
@@ -20,13 +25,27 @@ const columns = [
     field: "EnrollmentEndDate",
     filter: true,
   },
-  { headerName: "Max Enrollment", field: "max_enrollments", filter: true },
-  { headerName: "Category", field: "Category.name", filter: true },
-  { headerName: "Level", field: "Level.name", filter: true },
-  { headerName: "Language", field: "Language.name", filter: true },
-  { headerName: "SEO Meta Keyword", field: "SEO_Meta_Keywords", filter: true },
-  { headerName: "SEO Meta Keyword", field: "Meta_Description", filter: true },
-  { headerName: "Language", field: "Language.name", filter: true },
+  {
+    headerName: "Max Enrollment",
+    field: "max_enrollments",
+    filter: true,
+    width: 170,
+  },
+  { headerName: "Category", field: "Category.name", filter: true, width: 110 },
+  { headerName: "Level", field: "Level.name", filter: true, width: 110 },
+  { headerName: "Language", field: "Language.name", filter: true, width: 120 },
+  {
+    headerName: "SEO Meta Keyword",
+    field: "SEO_Meta_Keywords",
+    filter: true,
+    width: 180,
+  },
+  {
+    headerName: "SEO Meta Keyword",
+    field: "Meta_Description",
+    filter: true,
+    width: 180,
+  },
 ];
 
 const ViewCourse = () => {
@@ -69,16 +88,22 @@ const ViewCourse = () => {
     rowData: courseList,
     columnDefs: columns,
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
     },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
+    },  
   };
 
   return (
-    <div className="ag-theme-alpine">
+    <div className="ag-theme-quartz">
       <AgGridReact {...gridOptions} />
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const ExamGrid = ({ rowData, columnDefs }) => {
@@ -9,16 +9,22 @@ const ExamGrid = ({ rowData, columnDefs }) => {
     rowData,
     columnDefs,
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
     },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
+    },
   };
 
   return (
-    <div className="ag-theme-alpine">
+    <div className="ag-theme-quartz">
       <AgGridReact {...gridOptions} />
     </div>
   );
@@ -81,19 +87,31 @@ const ViewExam = () => {
       <ExamGrid
         rowData={examList}
         columnDefs={[
-          { headerName: "No.", field: "no" },
-          { headerName: "Exam Name", field: "exam_name", filter: true },
-          { headerName: "Exam Type", field: "exam_type", filter: true },
+          { headerName: "No.", field: "no", resizable: false, width: 68 },
+          {
+            headerName: "Exam Name",
+            field: "exam_name",
+            filter: true,
+            width: 162,
+          },
+          {
+            headerName: "Exam Type",
+            field: "exam_type",
+            filter: true,
+            width: 162,
+          },
           {
             headerName: "No. Of Questions",
             field: "no_of_questions",
             filter: true,
+            width: 162,
           },
           { headerName: "Block Type", field: "block_type", filter: true },
           {
             headerName: "Difficulty Level",
             field: "difficulty_level",
             filter: true,
+            width: 162,
           },
           {
             headerName: "Block Threshold",
@@ -112,7 +130,7 @@ const ViewExam = () => {
           <ExamGrid
             rowData={ptList}
             columnDefs={[
-              { headerName: "No.", field: "no" },
+              { headerName: "No.", field: "no", resizable: false, width: 68 },
               { headerName: "Exam Name", field: "Name", filter: true },
               {
                 headerName: "Difficulty Level",
@@ -123,21 +141,25 @@ const ViewExam = () => {
                 headerName: "Reading Set",
                 field: "Reading.length",
                 filter: true,
+                width: 162,
               },
               {
                 headerName: "Writing Set",
                 field: "Writing.length",
                 filter: true,
+                width: 162,
               },
               {
                 headerName: "Listening Set",
                 field: "Listening.length",
                 filter: true,
+                width: 162,
               },
               {
                 headerName: "Speaking Set",
                 field: "Speaking.length",
                 filter: true,
+                width: 162,
               },
             ]}
           />
@@ -152,7 +174,7 @@ const ViewExam = () => {
           <ExamGrid
             rowData={fltList}
             columnDefs={[
-              { headerName: "No.", field: "no" },
+              { headerName: "No.", field: "no", resizable: false, width: 68 },
               { headerName: "Exam Name", field: "name", filter: true },
               {
                 headerName: "Exam Level",
@@ -163,21 +185,25 @@ const ViewExam = () => {
                 headerName: "Reading Set",
                 field: "reading_set.Reading.length",
                 filter: true,
+                width: 162,
               },
               {
                 headerName: "Writing Set",
                 field: "writing_set.Writing.length",
                 filter: true,
+                width: 162,
               },
               {
                 headerName: "Listening Set",
                 field: "listening_set.Listening.length",
                 filter: true,
+                width: 162,
               },
               {
                 headerName: "Speaking Set",
                 field: "speaking_set.Speaking.length",
                 filter: true,
+                width: 162,
               },
             ]}
           />

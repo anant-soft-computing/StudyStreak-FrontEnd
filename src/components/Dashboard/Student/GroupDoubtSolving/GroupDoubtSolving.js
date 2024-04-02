@@ -179,13 +179,13 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
                       <div className="dashboard__content__wraper common-background-color-across-app">
                         <div className="dashboard__section__title">
                           <h4>Group Doubt Solving</h4>
-                          <h6>
+                          <h5>
                             Your Group Doubt Solving Class Schedule{" "}
                             <i
                               className="icofont-calendar one_to_one_icon"
                               onClick={() => setIsModalOpen(true)}
                             ></i>
-                          </h6>
+                          </h5>
                         </div>
                         {group_doubt_solving_count === "" ? (
                           <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
@@ -240,13 +240,13 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
       ) : (
         <div>
           <div className="live__class__schedule_header">
-            <h6>
+            <h5>
               Your Group Doubt Solving Class Schedule{" "}
               <i
                 className="icofont-calendar one_to_one_icon"
                 onClick={() => setIsModalOpen(true)}
               ></i>
-            </h6>
+            </h5>
           </div>
           <div>
             {group_doubt_solving_count === "" ? (

@@ -15,6 +15,7 @@ const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
 
 const DoubtSolving = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
@@ -166,67 +167,69 @@ const DoubtSolving = () => {
 
   return (
     <>
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
-                  <DSSidebar />
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>One To One Doubt Solving</h4>
-                        <h6>
-                          Your One To One Doubt Solving Class Schedule{" "}
-                          <i
-                            className="icofont-calendar one_to_one_icon"
-                            onClick={() => setIsModalOpen(true)}
-                          ></i>
-                        </h6>
-                      </div>
-                      {one_to_one_doubt_solving_count === "" ? (
-                        <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
-                      ) : (
-                        <div className="row">
-                          <Tab
-                            tabs={tabs}
-                            activeTab={activeTab}
-                            handleTabChange={handleTabChange}
-                          />
-                          <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                            <div
-                              className={`tab-pane fade ${
-                                activeTab === "Upcoming" ? "show active" : ""
-                              }`}
-                            >
-                              <div className="row">
-                                <UpcomingClass
-                                  joinNow={joinNow}
-                                  isWithin5Minutes={isWithin5Minutes}
-                                  classes={oneToOneDoubtSolvingClasses}
-                                  message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
-                                />
+      {pathname === "/doubtSolving" ? (
+        <div className="body__wrapper">
+          <div className="main_wrapper overflow-hidden">
+            <div className="dashboardarea sp_bottom_100">
+              <div className="dashboard">
+                <div className="container-fluid full__width__padding">
+                  <div className="row">
+                    <DSSidebar />
+                    <div className="col-xl-9 col-lg-9 col-md-12">
+                      <div className="dashboard__content__wraper common-background-color-across-app">
+                        <div className="dashboard__section__title">
+                          <h4>One To One Doubt Solving</h4>
+                          <h5>
+                            Your One To One Doubt Solving Class Schedule{" "}
+                            <i
+                              className="icofont-calendar one_to_one_icon"
+                              onClick={() => setIsModalOpen(true)}
+                            ></i>
+                          </h5>
+                        </div>
+                        {one_to_one_doubt_solving_count === "" ? (
+                          <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
+                        ) : (
+                          <div className="row">
+                            <Tab
+                              tabs={tabs}
+                              activeTab={activeTab}
+                              handleTabChange={handleTabChange}
+                            />
+                            <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                              <div
+                                className={`tab-pane fade ${
+                                  activeTab === "Upcoming" ? "show active" : ""
+                                }`}
+                              >
+                                <div className="row">
+                                  <UpcomingClass
+                                    joinNow={joinNow}
+                                    isWithin5Minutes={isWithin5Minutes}
+                                    classes={oneToOneDoubtSolvingClasses}
+                                    message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                                  />
+                                </div>
                               </div>
-                            </div>
-                            <div
-                              className={`tab-pane fade ${
-                                activeTab === "Available Slot"
-                                  ? "show active"
-                                  : ""
-                              }`}
-                            >
-                              <div className="row">
-                                <ClassList
-                                  classes={oToclasses}
-                                  bookCount={bookCount}
-                                  message="No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
-                                />
+                              <div
+                                className={`tab-pane fade ${
+                                  activeTab === "Available Slot"
+                                    ? "show active"
+                                    : ""
+                                }`}
+                              >
+                                <div className="row">
+                                  <ClassList
+                                    classes={oToclasses}
+                                    bookCount={bookCount}
+                                    message="No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                                  />
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -234,13 +237,67 @@ const DoubtSolving = () => {
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div>
+          <div className="live__class__schedule_header">
+            <h5>
+              Your One To One Doubt Solving Class Schedule{" "}
+              <i
+                className="icofont-calendar one_to_one_icon"
+                onClick={() => setIsModalOpen(true)}
+              ></i>
+            </h5>
+          </div>
+          <div>
+            {one_to_one_doubt_solving_count === "" ? (
+              <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
+            ) : (
+              <div className="row">
+                <Tab
+                  tabs={tabs}
+                  activeTab={activeTab}
+                  handleTabChange={handleTabChange}
+                />
+                <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "Upcoming" ? "show active" : ""
+                    }`}
+                  >
+                    <div className="row">
+                      <UpcomingClass
+                        joinNow={joinNow}
+                        isWithin5Minutes={isWithin5Minutes}
+                        classes={oneToOneDoubtSolvingClasses}
+                        message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "Available Slot" ? "show active" : ""
+                    }`}
+                  >
+                    <div className="row">
+                      <ClassList
+                        classes={oToclasses}
+                        bookCount={bookCount}
+                        message=" No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
       <SmallModal
         size="lg"
         centered
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="One To One Solving class schedule"
+        title="One To One Doubt Solving class schedule"
         footer={
           <button
             className="default__button"

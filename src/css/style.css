@@ -1953,9 +1953,10 @@ Mobile Menu
   visibility: visible;
 }
 
-.container-fluid mob_menu_wrapper
-
-.mobile-off-canvas-active .mobile-aside-close {
+.container-fluid
+  mob_menu_wrapper
+  .mobile-off-canvas-active
+  .mobile-aside-close {
   width: 40px;
   height: 40px;
   display: inline-block;
@@ -13675,7 +13676,7 @@ Breadcrumb Area
   margin-bottom: 0;
 }
 
-.dashboard__nav{
+.dashboard__nav {
   height: 0;
   overflow: hidden;
   transition: height 4.5s ease-in-out;
@@ -16611,4 +16612,16 @@ div.gridarea__wraper {
 
 .description {
   margin-top: 25px;
+}
+
+.instruction {
+  margin-left: 10px;
+  color: #000;
+}
+
+.ag-theme-quartz {
+  --ag-header-foreground-color: black !important;
+  --ag-header-background-color: #01579b36 !important;
+  --ag-odd-row-background-color: rgb(0, 0, 0, 0.03) !important;
+  --ag-header-column-resize-handle-color: #01579b !important;
 }

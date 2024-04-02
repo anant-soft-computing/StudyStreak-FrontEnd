@@ -36,9 +36,9 @@ const Quiz = ({ activeLesson }) => {
         <form onSubmit={handleSubmit}>
           {activeLesson.map((question, questionIndex) => (
             <div className="quiz__single__attemp" key={questionIndex}>
-              <li className="card__title">{`Question : ${
-                questionIndex + 1
-              }/${question.quiz_options.length}`}</li>
+              <li className="card__title">{`Question : ${questionIndex + 1}/${
+                question.quiz_options.length
+              }`}</li>
               <hr />
               <h3>{question.Question}</h3>
               <div className="row">
@@ -87,7 +87,7 @@ const Quiz = ({ activeLesson }) => {
       </div>
     </>
   ) : (
-    <h5 className="text-danger">Please Select Lesson for Quiz !!</h5>
+    <h5 className="text-danger">Quiz Not Found !!</h5>
   );
 };
 

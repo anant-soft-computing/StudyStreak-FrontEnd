@@ -90,7 +90,7 @@ const MockTest = () => {
         );
         if (response.status === 200) {
           const mockTest = response?.data?.filter(
-            (item) => item.block_type === "Mock Test"
+            (item) => item.block_type === "Assignments"
           );
           setMockTestData(mockTest);
         } else {

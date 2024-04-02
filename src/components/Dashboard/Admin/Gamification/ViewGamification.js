@@ -2,23 +2,35 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 const columns = [
-  { headerName: "No.", field: "no" },
-  { headerName: "Model", field: "model", filter: true },
-  { headerName: "Exam Name", field: "exam_name", filter: true },
-  { headerName: "Exam Type", field: "exam_type", filter: true },
+  { headerName: "No.", field: "no", resizable: false, width: 68 },
+  { headerName: "Model", field: "model", filter: true, width: 100 },
+  {
+    headerName: "Exam Name",
+    field: "exam_name",
+    filter: true,
+    width: 162,
+  },
+  {
+    headerName: "Exam Type",
+    field: "exam_type",
+    filter: true,
+    width: 120,
+  },
   {
     headerName: "No. Of Questions",
     field: "no_of_questions",
     filter: true,
+    width: 162,
   },
-  { headerName: "Block Type", field: "block_type", filter: true },
+  { headerName: "Block Type", field: "block_type", filter: true, width: 120 },
   {
     headerName: "Difficulty Level",
     field: "difficulty_level",
     filter: true,
+    width: 162,
   },
   {
     headerName: "Block Threshold",
@@ -69,15 +81,21 @@ const ViewGamification = () => {
     rowData: gamificationList,
     columnDefs: columns,
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
     },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
+    },
   };
   return (
-    <div className="ag-theme-alpine">
+    <div className="ag-theme-quartz">
       <AgGridReact {...gridOptions} />
     </div>
   );

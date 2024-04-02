@@ -1,71 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import moment from "moment";
 
 const columns = [
-  { headerName: "No.", field: "no", filter: true },
+  { headerName: "No.", field: "no", filter: true, resizable: false, width: 86 },
   {
     headerName: "Batch",
     field: "select_batch.batch_name",
     filter: true,
   },
   { headerName: "Live Class Type", field: "liveclasstype.name", filter: true },
-  { headerName: "Meeting Name", field: "meeting_title", filter: true },
+  {
+    headerName: "Meeting Name",
+    field: "meeting_title",
+    filter: true,
+    width: 150,
+  },
   {
     headerName: "Start Date",
     field: "start_time",
     filter: true,
-    valueFormatter: ({ value }) => {
-      const startDate = new Date(value).toLocaleString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-      const [month, day, year] = startDate.split("/");
-      return `${year}-${month}-${day}`;
-    },
+    width: 120,
+    valueFormatter: ({ value }) => moment(value).format("YYYY-MM-DD"),
   },
   {
     headerName: "Start Time",
     field: "start_time",
     filter: true,
-    valueFormatter: ({ value }) => {
-      const startTime = new Date(value).toLocaleString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-      return startTime;
-    },
+    width: 120,
+    valueFormatter: ({ value }) => moment(value).format("HH:mm:ss"),
   },
   {
     headerName: "End Date",
     field: "end_time",
     filter: true,
-    valueFormatter: ({ value }) => {
-      const endDate = new Date(value).toLocaleString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-      const [month, day, year] = endDate.split("/");
-      return `${year}-${month}-${day}`;
-    },
+    width: 120,
+    valueFormatter: ({ value }) => moment(value).format("YYYY-MM-DD"),
   },
   {
     headerName: "End Time",
     field: "end_time",
     filter: true,
-    valueFormatter: ({ value }) => {
-      const endTime = new Date(value).toLocaleString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-      return endTime;
-    },
+    width: 120,
+    valueFormatter: ({ value }) => moment(value).format("HH:mm:ss"),
   },
 ];
 
@@ -111,16 +91,22 @@ const ViewLiveClasses = () => {
     rowData: liveClassList,
     columnDefs: columns,
     pagination: true,
-    paginationPageSize: 20,
+    paginationPageSize: 10,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,
       resizable: true,
     },
+    getRowStyle: (params) => {
+      if (params.node.rowIndex % 2 === 1) {
+        return { background: "#01579b36" };
+      }
+      return null;
+    },
   };
 
   return (
-    <div className="ag-theme-alpine">
+    <div className="ag-theme-quartz">
       <AgGridReact {...gridOptions} />
     </div>
   );

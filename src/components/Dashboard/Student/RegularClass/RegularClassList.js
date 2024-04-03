@@ -2,7 +2,6 @@ import React from "react";
 import moment from "moment";
 
 const RegularClassList = ({ regularClass, joinNow, isWithin5Minutes }) => {
-  console.log("regularClass", regularClass);
   return regularClass.length > 0 ? (
     <div className="row">
       {regularClass.map(

@@ -37,9 +37,9 @@ const LeaderBoard = () => {
   useEffect(() => {
     (async () => {
       try {
-        let totalCount = 0;
         const studentData = [];
         for (let i = 0; i < batchId.length; i++) {
+          let totalCount = 0;
           const id = batchId[i];
           const response = await ajaxCall(
             `/batchidwisestudentgetview/${id}/`,
@@ -67,7 +67,7 @@ const LeaderBoard = () => {
       }
     })();
   }, [batchId]);
-  
+
   return (
     <div>
       <div className="col-xl-12">

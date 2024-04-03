@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import TopBar from "./components/TopBar/TopBar";
+import MobileTopBar from "./components/TopBar/MobileTopBar";
 import NavBar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -67,11 +68,11 @@ import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import PracticeWritingExam from "./components/LiveExam/PracticeWritingExam";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
+import SpeakingInstruction from "./components/Dashboard/Student/SpeakingInstruction/SpeakingInstruction";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
 import PracticeTestAnswer from "./components/Exam-Answer/PracticeTestAnswer";
-import MobileTopBar from "./components/TopBar/MobileTopBar";
 
 const App = () => {
   return (
@@ -165,7 +166,7 @@ const App = () => {
           path="/gmat-live-mock-test/:examId"
           element={<GmatLiveMockTest />}
         />
-
+        <Route path="/speaking-instruction" element={<SpeakingInstruction />} />
         <Route path="/eaxm-answere/:examId" element={<Answer />} />
         <Route
           path="/eaxm-practice-test-answere/:examId"

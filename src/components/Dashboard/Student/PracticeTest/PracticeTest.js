@@ -17,13 +17,12 @@ const tabs = [
 ];
 
 const PracticeTest = () => {
-  const { state: { count } = {} } = useLocation();
+  const { count } = useLocation().state || {};
   const [readingData, setReadingData] = useState([]);
   const [listeningData, setListeningData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
   const [writingData, setWritingData] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
-  const { practice_test_count } = count;
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -89,7 +88,7 @@ const PracticeTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Practice Test</h4>
                     </div>
-                    {practice_test_count === "" ? (
+                    {count?.practice_test_count === "" ? (
                       <BuyCourse message="No Practice Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">

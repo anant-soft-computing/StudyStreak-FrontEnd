@@ -90,59 +90,61 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               />
             </div>
           </div>
-          <div className="row mt-3">
-            <Tab
-              tabs={tabs}
-              activeTab={activeTab}
-              handleTabChange={handleTabChange}
-            />
-            <div className="tab-content tab__content__wrapper aos-init aos-animate">
-              <div
-                className={`tab-pane fade ${
-                  activeTab === "Attachment" ? "show active" : ""
-                }`}
-              >
-                <div className="row">
-                  <Attachment
-                    activeLesson={
-                      activeLesson?.attachment_lession_count?.attachments
-                    }
-                    lessonName={activeLesson?.Lesson_Title}
-                  />
+          {activeLesson?.Lesson_Video && (
+            <div className="row mt-3">
+              <Tab
+                tabs={tabs}
+                activeTab={activeTab}
+                handleTabChange={handleTabChange}
+              />
+              <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Attachment" ? "show active" : ""
+                  }`}
+                >
+                  <div className="row">
+                    <Attachment
+                      activeLesson={
+                        activeLesson?.attachment_lession_count?.attachments
+                      }
+                      lessonName={activeLesson?.Lesson_Title}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div
-                className={`tab-pane fade ${
-                  activeTab === "Assignment" ? "show active" : ""
-                }`}
-              >
-                <div className="row">
-                  <Assignment
-                    activeLesson={activeLesson?.lesson_assignment}
-                    lessonName={activeLesson?.Lesson_Title}
-                  />
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Assignment" ? "show active" : ""
+                  }`}
+                >
+                  <div className="row">
+                    <Assignment
+                      activeLesson={activeLesson?.lesson_assignment}
+                      lessonName={activeLesson?.Lesson_Title}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div
-                className={`tab-pane fade ${
-                  activeTab === "Quiz" ? "show active" : ""
-                }`}
-              >
-                <div className="row">
-                  <Quiz activeLesson={activeLesson?.quiz_question_options} />
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Quiz" ? "show active" : ""
+                  }`}
+                >
+                  <div className="row">
+                    <Quiz activeLesson={activeLesson?.quiz_question_options} />
+                  </div>
                 </div>
-              </div>
-              <div
-                className={`tab-pane fade ${
-                  activeTab === "Flash Card" ? "show active" : ""
-                }`}
-              >
-                <div className="row">
-                  <FlashCard courseId={courseId} />
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Flash Card" ? "show active" : ""
+                  }`}
+                >
+                  <div className="row">
+                    <FlashCard courseId={courseId} />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
       {activeContentType === "attachment" && (

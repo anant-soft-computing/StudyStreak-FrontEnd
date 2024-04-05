@@ -93,7 +93,7 @@ const Answer = () => {
         <div className="blogarea__2 sp_top_100 sp_bottom_100">
           <div className="container">
             <div className="row">
-              <div className="col-xl-8 col-lg-8">
+              <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
                   <AnswerCard

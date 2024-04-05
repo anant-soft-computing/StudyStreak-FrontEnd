@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import BandScoreCard from "./BandScoreCard";
 import AnswerCard from "./AnswerCard";
@@ -7,10 +7,11 @@ import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
 
 const PracticeTestAnswer = () => {
-  const { examId } = useParams();
+  const [examName, setExamName] = useState("");
   const [studentAnswer, setStudentAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
-  const { timeTaken, bandValue, examForm } = useLocation()?.state || {};
+  const { timeTaken, bandValue, examForm, fullPaper } =
+    useLocation()?.state || {};
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
 
@@ -18,7 +19,7 @@ const PracticeTestAnswer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/practice-answers/50`,
+          `/practice-answers/${fullPaper[0].IELTS.id}`,
           {
             headers: {
               Accept: "application/json",
@@ -31,8 +32,8 @@ const PracticeTestAnswer = () => {
           },
           8000
         );
-        console.log("Response", response);
         if (response.status === 200) {
+          setExamName(response?.data?.name)
           let studentAnswers;
           if (examForm === "Reading") {
             studentAnswers = response.data?.student_answers.Reading?.reduce(
@@ -76,7 +77,7 @@ const PracticeTestAnswer = () => {
         console.log("error", error);
       }
     })();
-  }, [examId]);
+  }, [fullPaper[0].IELTS.id]);
 
   return (
     <div className="body__wrapper">
@@ -84,9 +85,9 @@ const PracticeTestAnswer = () => {
         <div className="blogarea__2 sp_top_100 sp_bottom_100">
           <div className="container">
             <div className="row">
-              <div className="col-xl-8 col-lg-8">
+              <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
-                  <h4 className="sidebar__title">Solution For :</h4>
+                  <h4 className="sidebar__title">Solution For : {examName}</h4>
                   <AnswerCard
                     timeTaken={timeTaken}
                     correctCount={correctCount}

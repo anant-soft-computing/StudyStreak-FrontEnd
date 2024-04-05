@@ -1,14 +1,16 @@
 import React from "react";
 import "../../../../css/custom.css";
 import cpuJack from "../../../../img/service/img.png";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const SpeakingInstruction = () => {
+  const navigate = useNavigate();
   const { id, data, test } = useLocation()?.state || {};
 
   const handleClickStartTest = () => {
     if (test === "Mini Test") {
       window.open(`/live-exam/${id}`, "_blank");
+      navigate("/mockTest");
     } else
       Object?.keys(data?.IELTS)?.forEach((key) => {
         if (Array.isArray(data?.IELTS[key])) {
@@ -17,6 +19,7 @@ const SpeakingInstruction = () => {
               `/practice-live-exam/IELTS/${key}/${data.id}`,
               "_blank"
             );
+            navigate("/practiceTest");
           }
         }
       });

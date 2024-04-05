@@ -17,11 +17,10 @@ const tabs = [
 ];
 
 const MockTest = () => {
-  const { state: { count } = {} } = useLocation();
+  const { count } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [mockTestData, setMockTestData] = useState([]);
   const [givenTest, setGivenTest] = useState([]);
-  const { mini_test_count } = count;
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -115,7 +114,7 @@ const MockTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Mini Test</h4>
                     </div>
-                    {mini_test_count === "" ? (
+                    {count?.mini_test_count === "" ? (
                       <BuyCourse message="No Mini Test Available , Please Buy a Course !!" />
                     ) : (
                       <div className="row">

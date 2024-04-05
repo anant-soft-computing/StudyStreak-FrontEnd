@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback, useReducer } from "react";
 import "../../../../css/custom.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
-import SmallModal from "../../../UI/Modal";
 
 const initialNoteData = {
   note: "",
@@ -23,7 +22,6 @@ const reducerNote = (state, action) => {
 
 const FloatingNote = ({ setIsFloatingNotes, lessonId, lessonName }) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [notes, setNotes] = useState([]);
@@ -133,67 +131,60 @@ const FloatingNote = ({ setIsFloatingNotes, lessonId, lessonName }) => {
   }, [isDragging, offset, handleMouseUp]);
 
   return (
-    <>
-      <div
-        className="floating-note"
-        style={{ left: position.x, top: position.y }}
-        onMouseDown={handleMouseDown}
-      >
-        <textarea
-          placeholder="Type your lesson notes here..."
-          value={noteData.note}
-          onChange={(e) => {
-            dispatchNote({ type: "note", value: e.target.value });
-          }}
-        />
-        <div className="button-container-for-floating-notes">
+    <div
+      className="floating-note"
+      style={{ left: position.x, top: position.y }}
+      onMouseDown={handleMouseDown}
+    >
+      {notes?.length > 0 && (
+        <div>
+          <h6>Pervious Notes :</h6>
           <div
-            className={
-              formStatus.isError ? "text-danger mb-2" : "text-success mb-2"
-            }
+            className="aboutarea__list__2"
+            style={{ backgroundColor: "#ebeff2" }}
           >
-            {formStatus.errMsg}
+            <div style={{ paddingLeft: "7px" }}>
+              {notes?.map((note) => (
+                <ul key={note.id} style={{ paddingLeft: "10px" }}>
+                  <li>
+                    <i className="icofont-check"></i>
+                    <span>{note.note}</span>
+                  </li>
+                </ul>
+              ))}
+            </div>
           </div>
-          <div className="d-flex justify-content-between">
-            <button
-              className="default__button"
-              onClick={() => setIsFloatingNotes(false)}
-            >
-              Cancel
-            </button>
-            <button className="default__button" onClick={createNote}>
-              Save
-            </button>{" "}
-            {notes.length > 0 && (
-              <button
-                className="default__button"
-                onClick={() => setIsModalOpen(true)}
-              >
-                Previous Notes
-              </button>
-            )}
-          </div>
+        </div>
+      )}
+      <textarea
+        placeholder="Type your lesson notes here..."
+        value={noteData.note}
+        onChange={(e) => {
+          dispatchNote({ type: "note", value: e.target.value });
+        }}
+        className="mt-2"
+      />
+      <div className="button-container-for-floating-notes">
+        <div
+          className={
+            formStatus.isError ? "text-danger mb-2" : "text-success mb-2"
+          }
+        >
+          {formStatus.errMsg}
+        </div>
+        <div className="d-flex justify-content-between">
+          <button
+            className="default__button"
+            onClick={() => setIsFloatingNotes(false)}
+          >
+            Cancel
+          </button>
+          <button className="default__button" onClick={createNote}>
+            Save
+          </button>
         </div>
       </div>
-      <SmallModal
-        size="lg"
-        title={`Notes For : ${lessonName}`}
-        centered
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      >
-        <div className="aboutarea__list__2">
-          {notes?.map((note) => (
-            <ul key={note.id}>
-              <li>
-                <i className="icofont-check"></i>
-                <span>{note.note}</span>
-              </li>
-            </ul>
-          ))}
-        </div>
-      </SmallModal>
-    </>
+    </div>
   );
 };
 

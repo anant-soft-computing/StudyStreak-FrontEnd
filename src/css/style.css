@@ -16625,3 +16625,9 @@ div.gridarea__wraper {
   --ag-odd-row-background-color: rgb(0, 0, 0, 0.03) !important;
   --ag-header-column-resize-handle-color: #01579b !important;
 }
+
+@media screen and (max-width: 768px) {
+  .AnswerCard {
+    margin-top: 70px !important;
+  }
+}

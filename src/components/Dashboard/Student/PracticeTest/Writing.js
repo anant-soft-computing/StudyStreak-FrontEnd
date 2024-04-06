@@ -6,7 +6,7 @@ const WritingTest = ({ writingData }) => {
       if (Array.isArray(data?.IELTS[key])) {
         if (data?.IELTS[key]?.length > 0) {
           window.open(
-            `/practice-live-writing-exam/IELTS/${key}/${data.id}`,
+            `/practice-live-exam/IELTS/${key}/${data.id}`,
             "_blank"
           );
         }

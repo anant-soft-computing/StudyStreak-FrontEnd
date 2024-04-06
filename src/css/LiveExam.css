@@ -7,7 +7,7 @@
   align-items: center;
   border-top: 1px solid #01579b;
   border-bottom: 1px solid #01579b;
-  margin-top: 112px;
+  margin-top: 132px;
   position: fixed;
   top: 0;
   left: 0;
@@ -142,6 +142,24 @@
   color: white;
 }
 
+.lv-section-pagination {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.lv-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-name {
+  font-weight: bold;
+}
+
 .lv-footer-item {
   cursor: pointer;
   padding: 5px 10px;
@@ -171,6 +189,7 @@
 }
 
 .lv-footer-btn {
+  height: fit-content;
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;

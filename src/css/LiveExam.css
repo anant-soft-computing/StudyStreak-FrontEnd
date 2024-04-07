@@ -102,13 +102,13 @@
 .lv-part-pagination {
   display: flex;
   margin-left: 10px;
-  width: 50%;
   overflow-x: auto;
+  height: 50px;
 }
 
 .lv-completed-questions {
-  background-color: green;
-  border-radius: 10px;
+  background: grey !important;
+  color: white !important;
 }
 
 .lv-footer-review-button {
@@ -144,7 +144,7 @@
 
 .lv-section-pagination {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: flex-start;
 }
@@ -160,10 +160,34 @@
   font-weight: bold;
 }
 
+.lv-footer-section {
+  width: max-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-right: 2px;
+  margin-left: 10px;
+  border-radius: 5px;
+  background-color: #01579b;
+  color: white;
+  padding: 1px 5px;
+}
+
+.lv-footer-section:hover {
+  color: white;
+  border: none;
+}
+
 .lv-footer-item {
   cursor: pointer;
-  padding: 5px 10px;
-  margin-right: 20px;
+  /* padding: 5px 10px; */
+  margin-right: 2px;
+  width: 20px;
+  text-align: center;
+  background: white;
+  border-radius: 2px;
+  /* font-size: 15px; */
 }
 
 .lv-userName {
@@ -177,11 +201,9 @@
 
 .lv-footer-item:hover {
   text-decoration: none;
-  border: 1px solid white;
   font-weight: bold;
-  background-color: #01579b;
+  background-color: grey;
   color: white;
-  border-radius: 10px;
 }
 
 .lv-highlight {
@@ -396,6 +418,78 @@
   font-weight: bold;
 }
 
+.test-instruction {
+  padding: 15px;
+}
+
+.instruction-heading {
+  margin-bottom: 0.5rem;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+}
+/* Instruction css */
+.instruction-card {
+  margin-top: 140px;
+  border: 1px solid grey;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  border-radius: 6px;
+  background: "linear-gradient(0deg, #cdcbd8 10%, #fffefd 90%)";
+}
+
+.instruction-type {
+  font-size: 13pt;
+  font-weight: bolder;
+  line-height: 24px;
+  margin-bottom: 30px;
+}
+
+.instruction-content {
+  width: -webkit-fill-available;
+  text-align: justify;
+  margin-bottom: 20px;
+}
+
+.instruction-wishes,
+.instruction-note {
+  width: -webkit-fill-available;
+  text-align: justify;
+  margin-bottom: 20px;
+}
+
+.instruction-note::before {
+  content: "Important: ";
+  font-weight: bold;
+  color: #595959;
+}
+
+.instruction-attention::before {
+  content: "!";
+  background: red;
+  padding: 0px 8px;
+  border-radius: 20px;
+  font-weight: bolder;
+  color: white;
+  margin-right: 5px;
+}
+.instruction-attention {
+  margin-bottom: 20px;
+}
+
+.start-btn {
+  background: #f3f3f3;
+  padding: 5px 40px;
+  border-radius: 10px;
+  border: solid 1px #b7b7b7;
+  color: #606060;
+}
+
 @media (max-width: 978px) {
   .lv-navbar {
     margin-top: 80px;
@@ -412,5 +506,11 @@
   }
   .lv-main-container {
     flex-direction: column;
+  }
+}
+
+@media (min-width: 1500px) {
+  .lv-navbar {
+    margin-top: 110px;
   }
 }

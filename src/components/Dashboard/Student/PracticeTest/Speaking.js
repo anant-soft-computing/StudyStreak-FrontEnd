@@ -1,14 +1,13 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 const SpeakingTest = ({ speakingData }) => {
-  const navigate = useNavigate();
-
-  const handleTakeTestData = (data) => {
-    navigate("/speaking-instruction", {
-      state: {
-        data,
-      },
+  const handleClick = (data) => {
+    Object?.keys(data?.IELTS)?.forEach((key) => {
+      if (Array.isArray(data?.IELTS[key])) {
+        if (data?.IELTS[key].length > 0) {
+          window.open(`/practice-live-exam/IELTS/${key}/${data.id}`, "_blank");
+        }
+      }
     });
   };
 
@@ -40,7 +39,7 @@ const SpeakingTest = ({ speakingData }) => {
               <div className="d-flex justify-content-center mt-2 mb-3">
                 <button
                   className="default__button"
-                  onClick={() => handleTakeTestData(data)}
+                  onClick={() => handleClick(data)}
                 >
                   Take Test
                 </button>

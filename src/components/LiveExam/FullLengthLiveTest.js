@@ -8,7 +8,22 @@ import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
 import { htmlToText } from "html-to-text";
+import ReadingInstruction from "./Instruction/ReadingInstruction";
+import WritingInstruction from "./Instruction/WritingInstruction";
+import ListeningInstruction from "./Instruction/ListeningInstruction";
+import SpeakingInstruction from "./Instruction/SpeakingInstruction";
 const Cheerio = require("cheerio");
+
+const intialInstructionState = {
+  showInstruction: true,
+  type: {
+    // 0 for incoming, 1 for instruction on screen, 2 for completed
+    reading: 1,
+    writing: 0,
+    listening: 0,
+    speaking: 0,
+  },
+};
 
 const FullLengthLiveExam = () => {
   const containerRef = useRef(null);
@@ -16,6 +31,7 @@ const FullLengthLiveExam = () => {
   const navigate = useNavigate();
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const [examData, setExamData] = useState([]);
+  const [htmlContents, setHtmlContents] = useState([]);
   const [reRenderAudio, setReRenderAudio] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
@@ -27,22 +43,30 @@ const FullLengthLiveExam = () => {
   const [fullPaper, setFullPaper] = useState([]);
   const [fullLengthId, setFullLengthId] = useState("");
   const [next, setNext] = useState(0);
-  const [count, setCount] = useState(0);
-  const [displayWritingModal, setDisplayWritingModal] = useState(false);
-  const [writingModalOpenOnce, setWritingModalOpenOnce] = useState(false);
-  const [displayListeningModal, setDisplayListeningModal] = useState(false);
-  const [listeningModalOpenOnce, setListeningModalOpenOnce] = useState(false);
-  const [displaySpeakingModal, setDisplaySpeakingModal] = useState(false);
-  const [speakingModalOpenOnce, setSpeakingModalOpenOnce] = useState(false);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [speaking, setSpeaking] = useState(0);
+  const [instructionCompleted, setInstructionCompleted] = useState(
+    intialInstructionState
+  );
+
   const synth = window.speechSynthesis;
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   let highlightedElement = null;
+
+  const handleInstruction = (instruction) => {
+    setInstructionCompleted((prev) => ({
+      ...prev,
+      showInstruction: false,
+      type: {
+        ...prev.type,
+        [instruction]: 2,
+      },
+    }));
+  };
 
   useEffect(() => {
     if (
@@ -192,9 +216,47 @@ const FullLengthLiveExam = () => {
         no: index + 1,
       }));
       setReRenderAudio(true);
+      const newInstructionType =
+        examBlockWithNumbers[next].exam_type?.toLowerCase();
+      if (instructionCompleted.type[newInstructionType] === 0) {
+        setInstructionCompleted((prev) => ({
+          ...prev,
+          showInstruction: true,
+          type: {
+            ...prev.type,
+            [newInstructionType]: 1,
+          },
+        }));
+      }
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
+
+  useEffect(() => {
+    (async () => {
+      if (fullPaper?.length !== 0) {
+        const examDataList = fullPaper?.map((examBlock, index) => ({
+          ...examBlock,
+          no: index + 1,
+        }));
+        let tempHtmlContents = [];
+        let tempExamAnswer = [];
+        for (let paper of examDataList) {
+          const index = examDataList.indexOf(paper);
+          const returnContent = await fetchHtmlContent(paper, index);
+          tempHtmlContents.push(returnContent.questionPassage);
+          const tempUniqueArr = {
+            name: `section-${index + 1}`,
+            ...returnContent.tempAnswer,
+          };
+          tempExamAnswer.push(tempUniqueArr);
+        }
+        setHtmlContents(tempHtmlContents);
+        setExamAnswer(tempExamAnswer);
+        setLinkAnswer(!linkAnswer);
+      }
+    })();
+  }, [fullPaper]);
 
   const handleAnswerLinking = (e, question_number, next) => {
     const { value, id } = e.target;
@@ -214,9 +276,10 @@ const FullLengthLiveExam = () => {
   };
 
   useEffect(() => {
-    if (linkAnswer && examAnswer[next] && examAnswer[next].data.length > 0) {
-      setTimeout(() => {
-        examAnswer[next].data.forEach((item) => {
+    if (!instructionCompleted.showInstruction && examAnswer.length > 0) {
+      for (let tempExamAnswer of examAnswer) {
+        let examIndex = examAnswer.indexOf(tempExamAnswer);
+        tempExamAnswer.data.forEach((item) => {
           const contentElements = document.querySelectorAll(
             `[id="${item.question_number}"]`
           );
@@ -227,14 +290,13 @@ const FullLengthLiveExam = () => {
           }
           contentElements.forEach((element) => {
             element.addEventListener("change", (e) => {
-              handleAnswerLinking(e, item.question_number, next);
+              handleAnswerLinking(e, item.question_number, examIndex);
             });
           });
         });
-        setLinkAnswer(false);
-      }, 500);
+      }
     }
-  }, [linkAnswer, examAnswer]);
+  }, [linkAnswer, next, instructionCompleted]);
 
   // Function to scroll to content
   const scrollToContent = (contentId) => {
@@ -291,37 +353,45 @@ const FullLengthLiveExam = () => {
     );
   };
 
-  const htmlContent = useMemo(() => {
-    const question = examData?.question;
+  const fetchHtmlContent = async (paperData, index) => {
+    const question = paperData?.question;
+    let tempAnswer = {};
+
     if (
-      examData?.exam_type === "Writing" ||
-      examData?.exam_type === "Speaking"
+      paperData?.exam_type === "Writing" ||
+      paperData?.exam_type === "Speaking"
     ) {
-      const temp = [...examAnswer];
-      temp[next] = {
-        exam_id: examData?.id,
-        question: examData?.question,
+      tempAnswer = {
+        exam_id: paperData?.id,
         data: [
           {
             question_number:
-              examData?.exam_type === "Writing"
-                ? `textarea_${next}`
-                : `speaking_${next}`,
-            answer_text: (temp[next] && temp[next]?.data[0]?.answer_text) || "",
+              paperData?.exam_type === "Writing"
+                ? `textarea_${index}_1`
+                : `speaking_${index}_1`,
+            answer_text: "",
           },
         ],
-        exam_type: examData?.exam_type,
       };
-      setExamAnswer(temp);
-      setLinkAnswer(true);
-      if (examData?.exam_type === "Writing") {
-        setUniqueIdArr([`textarea_${next}`]);
+      if (paperData?.exam_type === "Writing") {
+        const tempUniqueArr = {
+          name: `section-${index + 1}`,
+          paginationsIds: [`textarea_${index}_1`],
+        };
+        setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       } else {
-        setUniqueIdArr([`speaking_${next}`]);
+        const tempUniqueArr = {
+          name: `section-${index + 1}`,
+          paginationsIds: [`speaking_${index}_1`],
+        };
+        setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       }
+      return new Promise((resolve) => {
+        resolve({ questionPassage: "", tempAnswer });
+      });
     } else if (
-      examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Listening"
+      paperData?.exam_type === "Reading" ||
+      paperData?.exam_type === "Listening"
     ) {
       const $ = Cheerio.load(question.toString());
 
@@ -335,8 +405,8 @@ const FullLengthLiveExam = () => {
 
       const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
 
-      let questionPassage = "";
       const temp = [];
+      let questionPassage = "";
 
       questionTags.forEach((tag, tagIndex) => {
         // Find elements for current tag
@@ -351,7 +421,7 @@ const FullLengthLiveExam = () => {
             type: tagIds[tagIndex],
             paginationsIds: [],
           };
-          elements.each((index, element) => {
+          elements.each((j, element) => {
             if (
               tag === "input[type='radio']" ||
               tag === "input[type='checkbox']"
@@ -359,13 +429,13 @@ const FullLengthLiveExam = () => {
               const name = $(element).attr("name");
               if (!radioCheckboxtypeQuestionsGroup[name]) {
                 radioCheckboxtypeQuestionsGroup[name] = [];
-                uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+                uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
                 tagQuestions.paginationsIds.push(uniqueId);
               }
               $(element).attr("id", uniqueId);
               radioCheckboxtypeQuestionsGroup[name].push(element);
             } else {
-              const uniqueId = `${tagIds[tagIndex]}_${index + 1}`;
+              const uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
               tagQuestions.paginationsIds.push(uniqueId);
               $(element).attr("id", uniqueId);
             }
@@ -376,7 +446,7 @@ const FullLengthLiveExam = () => {
 
       let paginationsStrucutre = [];
 
-      examData?.question_structure?.forEach((item, index) => {
+      paperData?.question_structure?.forEach((item, index) => {
         temp.forEach((element) => {
           if (element.type === item.type) {
             paginationsStrucutre.push(
@@ -391,28 +461,27 @@ const FullLengthLiveExam = () => {
       // Display questions for the first page initially
       questionPassage += `<div className="mainContainer">${$.html()}</div>`;
 
-      const tempAnswer = paginationsStrucutre.map((item) => {
+      const tempPaginationStructure = paginationsStrucutre.map((item) => {
         return {
           question_number: item,
           answer_text: "",
         };
       });
 
-      const tempAnswerArr = [...examAnswer];
-
-      if (!tempAnswerArr[next] || tempAnswerArr[next]?.data.length === 0) {
-        tempAnswerArr[next] = {
-          exam_id: examData?.id,
-          data: tempAnswer,
-          exam_type: examData?.exam_type,
-        };
-        setExamAnswer(tempAnswerArr);
-      }
-      setUniqueIdArr(paginationsStrucutre);
-      setLinkAnswer(true);
-      return questionPassage;
+      tempAnswer = {
+        exam_id: paperData?.id,
+        data: tempPaginationStructure,
+      };
+      const tempUniqueArr = {
+        name: `section-${index + 1}`,
+        paginationsIds: paginationsStrucutre,
+      };
+      setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
+      return new Promise((resolve) => {
+        resolve({ questionPassage, tempAnswer }); // resolve with the question passage once it's constructed
+      });
     }
-  }, [examData]);
+  };
 
   const practiceTestSubmit = async () => {
     const data = {
@@ -637,109 +706,10 @@ const FullLengthLiveExam = () => {
   const handleBackSectionClicked = () => {
     setReRenderAudio(false);
     setNext(next - 1);
-    setCount((prev) => prev - 1);
   };
   const handleNextSectionClicked = () => {
     setReRenderAudio(false);
     setNext(next + 1);
-    setCount((prev) => prev + 1);
-  };
-
-  useEffect(() => {
-    if (count === 3 && !writingModalOpenOnce) {
-      setDisplayWritingModal(true);
-      setWritingModalOpenOnce(true);
-    } else if (count === 5 && !listeningModalOpenOnce) {
-      setDisplayListeningModal(true);
-      setListeningModalOpenOnce(true);
-    } else if (count === 9 && !speakingModalOpenOnce) {
-      setDisplaySpeakingModal(true);
-      setSpeakingModalOpenOnce(true);
-    }
-  }, [count]);
-
-  const displayReadingModalContent = () => {
-    return (
-      <div className="px-3">
-        <p>There are four parts with related questions.</p>
-        <div>
-          <ul>
-            <li>Three sections with tasks: </li>
-            <br />
-            <li>• Section 1: Two or three factual texts</li>
-            <br />
-            <li>• Section 2: Two short, work-related factual texts</li>
-            <br />
-            <li>
-              • Section 3: One longer text on a topic of general interest.
-            </li>
-          </ul>
-        </div>
-        <p>
-          A range of native-speaker accents is used. All standard varieties of
-          English are accepted as responses in all parts of the test.
-        </p>
-        <p>
-          Texts ranging from the descriptive and factual to the discursive and
-          analytical.
-        </p>
-        <p>
-          Text might include non-verbal material such as diagrams, graphs or
-          illustrations.
-        </p>
-        <p>
-          Texts are authentic and are sourced from books, journals and
-          newspapers.
-        </p>
-      </div>
-    );
-  };
-
-  const displayWritingModalContent = () => {
-    return (
-      <div className="px-3">
-        <p>There are two tasks:</p>
-        <ul>
-          <li>
-            Task 1 – summarise, describe or explain a table, graph, chart or
-            diagram in 150 words.
-          </li>
-
-          <li>Task 2 – short essay task of at least 250 words.</li>
-        </ul>
-      </div>
-    );
-  };
-
-  const displayListeningModalContent = () => {
-    return (
-      <div className="px-3">
-        <p>Four long sections with tasks</p>
-        <p>
-          Texts ranging from the descriptive and factual to the discursive and
-          analytical.
-        </p>
-      </div>
-    );
-  };
-
-  const displaySpeakingModalContent = () => {
-    return (
-      <div className="px-3">
-        <p>There are three parts:</p>
-        <ul>
-          <li>• Short questions </li>
-          <br />
-          <li>• Speaking at length about a familiar topic</li>
-          <br />
-          <li>• Structured discussion.</li>
-        </ul>
-        <p>
-          The Speaking test is a face-to-face conversation with a real person
-          making similar to a real-life situation.
-        </p>
-      </div>
-    );
   };
 
   const extractVisibleText = (htmlContent) => {
@@ -796,7 +766,64 @@ const FullLengthLiveExam = () => {
       </div>
     ));
 
-  return (
+  const renderPagination = useMemo(() => {
+    if (uniqueIdArr.length === 0 && examAnswer.length === 0) {
+      return null;
+    }
+    return uniqueIdArr?.map((item, sectionIndex) => {
+      return (
+        <div className="lv-section" key={sectionIndex}>
+          {/* Section name */}
+          <button
+            className="lv-footer-section"
+            onClick={() => setNext(sectionIndex)}
+          >
+            {item.name}
+          </button>
+          {/* Section pagination */}
+          {item.paginationsIds?.map((pagination, paginationIndex) => (
+            <div
+              className={`lv-footer-item ${
+                examAnswer[sectionIndex] &&
+                examAnswer[sectionIndex].data.length > 0 &&
+                examAnswer[sectionIndex].data.find(
+                  (val) => val.question_number === pagination
+                )?.answer_text !== ""
+                  ? "lv-completed-questions"
+                  : ""
+              }`}
+              onClick={() => {
+                if (next !== sectionIndex) setNext(sectionIndex);
+                setTimeout(() => {
+                  scrollToContent(pagination, sectionIndex);
+                }, 100);
+              }}
+              key={paginationIndex}
+            >
+              {paginationIndex + 1}
+            </div>
+          ))}
+        </div>
+      );
+    });
+  }, [uniqueIdArr, examAnswer, next]);
+
+  return instructionCompleted.showInstruction ? (
+    <div className="test-instruction">
+      {instructionCompleted.type.reading === 1 && (
+        <ReadingInstruction startTest={handleInstruction} />
+      )}
+      {instructionCompleted.type.writing === 1 && (
+        <WritingInstruction startTest={handleInstruction} />
+      )}
+      {instructionCompleted.type.listening === 1 && (
+        <ListeningInstruction startTest={handleInstruction} />
+      )}
+      {instructionCompleted.type.speaking === 1 && (
+        <SpeakingInstruction startTest={handleInstruction} />
+      )}
+    </div>
+  ) : (
     <>
       {/* Navbar */}
       <div className="lv-navbar">
@@ -854,35 +881,6 @@ const FullLengthLiveExam = () => {
         </div>
       </div>
 
-      <div>
-        <SmallModal
-          isOpen={displayWritingModal}
-          onClose={() => setDisplayWritingModal(false)}
-          title={"Writing Section"}
-          children={displayWritingModalContent()}
-          size={"lg"}
-          centered
-        />
-
-        <SmallModal
-          isOpen={displayListeningModal}
-          onClose={() => setDisplayListeningModal(false)}
-          title={"Listening Section"}
-          children={displayListeningModalContent()}
-          size={"lg"}
-          centered
-        />
-
-        <SmallModal
-          isOpen={displaySpeakingModal}
-          onClose={() => setDisplaySpeakingModal(false)}
-          title={"Speaking Section"}
-          children={displaySpeakingModalContent()}
-          size={"lg"}
-          centered
-        />
-      </div>
-
       <div className="lv-container">
         {/* Main Container */}
         {examData?.exam_type === "Listening" &&
@@ -905,7 +903,7 @@ const FullLengthLiveExam = () => {
                 examData?.exam_type === "Listening") && (
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: htmlContent,
+                    __html: htmlContents?.[next],
                   }}
                 />
               )}
@@ -932,25 +930,7 @@ const FullLengthLiveExam = () => {
         </div>
         <div className="d-flex justify-content-between mb-2">
           <div className="lv-question-pagination">
-            {uniqueIdArr?.map((item, index) => {
-              return (
-                <div
-                  className={`lv-footer-item ${
-                    examAnswer[next] &&
-                    examAnswer[next].data.length > 0 &&
-                    examAnswer[next].data.find(
-                      (val) => val.question_number === item
-                    )?.answer_text !== ""
-                      ? "lv-completed-questions"
-                      : ""
-                  }`}
-                  onClick={() => scrollToContent(item)}
-                  key={index}
-                >
-                  {index + 1}
-                </div>
-              );
-            })}
+            <div className="lv-section-pagination">{renderPagination}</div>
           </div>
           <div className="lv-footer-btn">
             {(examData?.exam_type === "Reading" ||
@@ -966,11 +946,8 @@ const FullLengthLiveExam = () => {
               className="lv-footer-button"
               style={{
                 display: next === 0 ? "none" : "block",
-                cursor: linkAnswer ? "not-allowed" : "pointer",
-                opacity: linkAnswer ? 0.5 : 1,
               }}
               onClick={handleBackSectionClicked}
-              disabled={linkAnswer}
             >
               <span>Back</span>
             </button>
@@ -978,11 +955,8 @@ const FullLengthLiveExam = () => {
               className="lv-footer-button"
               style={{
                 display: fullPaper.length === next + 1 ? "none" : "block",
-                cursor: linkAnswer ? "not-allowed" : "pointer",
-                opacity: linkAnswer ? 0.5 : 1,
               }}
               onClick={handleNextSectionClicked}
-              disabled={linkAnswer}
             >
               <span>&#10152;</span>
             </button>
@@ -990,11 +964,8 @@ const FullLengthLiveExam = () => {
               className="lv-footer-button"
               style={{
                 display: next !== (fullPaper.length > 0 ? "none" : "block"),
-                cursor: linkAnswer ? "not-allowed" : "pointer",
-                opacity: linkAnswer ? 0.5 : 1,
               }}
               onClick={() => setIsConfirmModalOpen(true)}
-              disabled={linkAnswer}
             >
               Submit
             </button>

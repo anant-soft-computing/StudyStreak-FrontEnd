@@ -8,6 +8,10 @@ import SmallModal from "../UI/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import { htmlToText } from "html-to-text";
+import ReadingInstruction from "./Instruction/ReadingInstruction";
+import WritingInstruction from "./Instruction/WritingInstruction";
+import ListeningInstruction from "./Instruction/ListeningInstruction";
+import SpeakingInstruction from "./Instruction/SpeakingInstruction";
 const Cheerio = require("cheerio");
 
 const PracticeLiveExam = () => {
@@ -23,11 +27,12 @@ const PracticeLiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [timer, setTimer] = useState(3600);
-  const [timerRunning, setTimerRunning] = useState(true);
+  const [timerRunning, setTimerRunning] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
   const [reRenderAudio, setReRenderAudio] = useState(false);
+  const [instructionCompleted, setInstructionCompleted] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
   const [speaking, setSpeaking] = useState(0);
   const [next, setNext] = useState(0);
@@ -38,6 +43,8 @@ const PracticeLiveExam = () => {
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const [numberOfWord, setNumberOfWord] = useState(0);
   let highlightedElement = null;
+
+  const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
   useEffect(() => {
     if (
@@ -122,6 +129,7 @@ const PracticeLiveExam = () => {
   };
 
   const speak = () => {
+    setTimerRunning(true);
     const utterance = new SpeechSynthesisUtterance(
       extractVisibleText(examData?.passage)
     );
@@ -167,7 +175,7 @@ const PracticeLiveExam = () => {
   };
 
   useEffect(() => {
-    if (examAnswer.length > 0) {
+    if (instructionCompleted && examAnswer.length > 0) {
       for (let tempExamAnswer of examAnswer) {
         let examIndex = examAnswer.indexOf(tempExamAnswer);
         tempExamAnswer.data.forEach((item) => {
@@ -187,7 +195,7 @@ const PracticeLiveExam = () => {
         });
       }
     }
-  }, [linkAnswer, next]);
+  }, [linkAnswer, next, instructionCompleted]);
 
   // Function to scroll to content
   const scrollToContent = (contentId, sectionIndex) => {
@@ -399,6 +407,9 @@ const PracticeLiveExam = () => {
         setHtmlContents(tempHtmlContents);
         setExamAnswer(tempExamAnswer);
         setLinkAnswer(!linkAnswer);
+        if (examForm !== "Speaking") {
+          setTimerRunning(true);
+        }
 
         // fetch correct answers
         try {
@@ -720,12 +731,16 @@ const PracticeLiveExam = () => {
       return (
         <div className="lv-section" key={sectionIndex}>
           {/* Section name */}
-          <div className="lv-footer-item section-name">{item.name}</div>
+          <button
+            className="lv-footer-section"
+            onClick={() => setNext(sectionIndex)}
+          >
+            {item.name}
+          </button>
           {/* Section pagination */}
           {item.paginationsIds?.map((pagination, paginationIndex) => (
             <div
               className={`lv-footer-item ${
-                // next === sectionIndex &&
                 examAnswer[sectionIndex] &&
                 examAnswer[sectionIndex].data.length > 0 &&
                 examAnswer[sectionIndex].data.find(
@@ -761,9 +776,23 @@ const PracticeLiveExam = () => {
     setNumberOfWord(words.length);
   };
 
-  return (
+  return !instructionCompleted ? (
+    <div className="test-instruction">
+      {examData.exam_type === "Reading" && (
+        <ReadingInstruction startTest={handleCompleteInstruciton} />
+      )}
+      {examData.exam_type === "Listening" && (
+        <ListeningInstruction startTest={handleCompleteInstruciton} />
+      )}
+      {examData.exam_type === "Writing" && (
+        <WritingInstruction startTest={handleCompleteInstruciton} />
+      )}
+      {examData.exam_type === "Speaking" && (
+        <SpeakingInstruction startTest={handleCompleteInstruciton} />
+      )}
+    </div>
+  ) : (
     <>
-      {/* Navbar */}
       <div className="lv-navbar">
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
@@ -790,7 +819,6 @@ const PracticeLiveExam = () => {
           </div>
         </div>
       </div>
-
       <div className="lv-container">
         {/* Main Container */}
         {renderAudio(examData?.audio_file)}
@@ -816,7 +844,6 @@ const PracticeLiveExam = () => {
               >
                 {speaking ? "Replay" : "Start"}
               </button>
-              {displayLeftContainer(examData?.passage, examData?.passage_image)}
             </div>
           )}
 

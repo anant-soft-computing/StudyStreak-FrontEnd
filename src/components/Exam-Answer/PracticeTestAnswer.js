@@ -33,14 +33,20 @@ const PracticeTestAnswer = () => {
           8000
         );
         if (response.status === 200) {
-          setExamName(response?.data?.name)
+          setExamName(response?.data?.name);
           let studentAnswers;
+          let correctAnswers = [];
           if (examForm === "Reading") {
             studentAnswers = response.data?.student_answers.Reading?.reduce(
               (acc, curr) => {
                 return acc.concat(curr.answers);
               },
               []
+            );
+            correctAnswers.push(
+              ...response.data?.correct_answers.Reading?.reduce((acc, curr) => {
+                return acc.concat(curr.answers);
+              }, [])
             );
           } else if (examForm === "Listening") {
             studentAnswers = response.data?.student_answers.Listening?.reduce(
@@ -49,13 +55,16 @@ const PracticeTestAnswer = () => {
               },
               []
             );
+
+            correctAnswers.push(
+              ...response.data?.correct_answers.Listening?.reduce(
+                (acc, curr) => {
+                  return acc.concat(curr.answers);
+                },
+                []
+              )
+            );
           }
-          const correctAnswers = response.data?.correct_answers.Reading?.reduce(
-            (acc, curr) => {
-              return acc.concat(curr.answers);
-            },
-            []
-          );
           setStudentAnswer(studentAnswers);
           setCorrectAnswers(correctAnswers);
 
@@ -124,16 +133,14 @@ const PracticeTestAnswer = () => {
                                         : "dashboard__table__row"
                                     }`}
                                   >
+                                    <td className="text-dark">{index + 1}.</td>
                                     <td className="text-dark">
-                                      {question_number}.
-                                    </td>
-                                    <td className="text-dark">
-                                      {correctAnswers[index]?.answer_text}
+                                      {correctAnswers?.[index]?.answer_text}
                                     </td>
                                     <td
                                       className={`text-dark ${
                                         answer_text ===
-                                        correctAnswers[index]?.answer_text
+                                        correctAnswers?.[index]?.answer_text
                                           ? "correct-answer"
                                           : "incorrect-answer"
                                       }`}
@@ -144,7 +151,7 @@ const PracticeTestAnswer = () => {
                                     </td>
                                     <td>
                                       {answer_text ===
-                                      correctAnswers[index]?.answer_text ? (
+                                      correctAnswers?.[index]?.answer_text ? (
                                         <CheckIcon />
                                       ) : (
                                         <CancelIcon />

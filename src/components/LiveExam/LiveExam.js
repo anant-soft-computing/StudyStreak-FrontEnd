@@ -695,41 +695,46 @@ const LiveExam = () => {
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-between mb-2">
+        <div className="d-flex justify-content-between">
           <div className="lv-question-pagination">
-            {uniqueIdArr?.map((item, index) => {
-              return (
-                <div
-                  className={`lv-footer-item ${
-                    examAnswer[0].answers.length > 0 &&
-                    examAnswer[0].answers.find((val) => val.questionId === item)
-                      ?.answer !== ""
-                      ? "lv-completed-questions"
-                      : ""
-                  }`}
-                  onClick={() => scrollToContent(item)}
-                  key={index}
-                >
-                  {index + 1}
-                </div>
-              );
-            })}
+            <div className="lv-section-pagination">
+              {uniqueIdArr?.map((item, index) => {
+                return (
+                  <div
+                    className={`lv-footer-item ${
+                      examAnswer[0].answers.length > 0 &&
+                      examAnswer[0].answers.find(
+                        (val) => val.questionId === item
+                      )?.answer !== ""
+                        ? "lv-completed-questions"
+                        : ""
+                    }`}
+                    onClick={() => scrollToContent(item)}
+                    key={index}
+                  >
+                    {index + 1}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          {(examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening") && (
+          <div className="lv-footer-btn">
+            {(examData?.exam_type === "Reading" ||
+              examData?.exam_type === "Listening") && (
+              <button
+                className="lv-footer-button review_size"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Review
+              </button>
+            )}
             <button
-              className="lv-footer-review-button"
-              onClick={() => setIsModalOpen(true)}
+              className="lv-footer-button"
+              onClick={() => setIsConfirmModalOpen(true)}
             >
-              Review
+              Submit
             </button>
-          )}
-          <button
-            className="lv-footer-button"
-            onClick={() => setIsConfirmModalOpen(true)}
-          >
-            Submit
-          </button>
+          </div>
         </div>
         {isConfirmModalOpen && (
           <SmallModal

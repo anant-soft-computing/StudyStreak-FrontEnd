@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import DashboardContent from "./DashboardContent";
 import { useLocation } from "react-router-dom";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const Dashboard = () => {
+  const [batchData, setBatchData] = useState([]);
   const { solvingClassBook } = useLocation()?.state || {};
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+
+  const studentBatch = batchData?.filter((item) =>
+    batchIds?.includes(item?.id)
+  );
 
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
@@ -30,6 +37,35 @@ const Dashboard = () => {
     return dateB.date() - dateA.date();
   });
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/batchview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setBatchData(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -42,6 +78,20 @@ const Dashboard = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Dashboard</h4>
+                      <div>
+                        <h5>
+                          {studentBatch.map((batch) => (
+                            <span key={batch.id}>
+                              {batch.batch_name} :{" "}
+                              {moment(
+                                batch.batch_start_timing,
+                                "HH:mm:ss"
+                              ).format("hh:mm A")}{" "}
+                              |{" "}
+                            </span>
+                          ))}
+                        </h5>
+                      </div>
                     </div>
                     <div className="row">
                       <div className="col-xl-4 col-lg-6 col-md-12 col-12">
@@ -111,7 +161,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                  <DashboardContent />
+                  <DashboardContent batchData={batchData} />
                 </div>
               </div>
             </div>

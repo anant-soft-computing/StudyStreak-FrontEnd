@@ -1,38 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const LeaderBoard = () => {
+const LeaderBoard = ({ batchId }) => {
   const [studentList, setStudentList] = useState([]);
-  const [batchId, setBatchId] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/batchview/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-
-        if (response?.status === 200) {
-          setBatchId(response?.data?.map((item) => item.id));
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, []);
 
   useEffect(() => {
     (async () => {

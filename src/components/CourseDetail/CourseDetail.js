@@ -14,9 +14,15 @@ const CourseDetail = () => {
   const { checkAuth } = useCheckAuth();
   const authData = useSelector((state) => state.authStore);
 
+  const [batchData, setBatchData] = useState([]);
   const [courseDetail, setCouresDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
   const [showBatchSelection, setShowBatchSelection] = useState(false);
+
+  const packageIds = coursePackages?.packages?.map((item) => item?.package_id);
+  const batches = batchData.filter((batch) =>
+    packageIds?.includes(batch?.add_package?.id)
+  );
 
   useEffect(() => {
     checkAuth();
@@ -108,6 +114,35 @@ const CourseDetail = () => {
     })();
   }, [courseId, navigate]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/batchview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setBatchData(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -120,7 +155,7 @@ const CourseDetail = () => {
                     <div className="col-xl-6 col-lg-6">
                       <img src={courseDetail?.Course_Thumbnail} alt="blog" />
                     </div>
-                    <DetailCard courseDetail={courseDetail} />
+                    <DetailCard courseDetail={courseDetail} batches={batches} />
                   </div>
                 </div>
                 <div className="blog__details__content__wraper">

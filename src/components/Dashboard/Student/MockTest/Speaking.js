@@ -1,16 +1,9 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Speaking = ({ speakingData, givenTest }) => {
-  const navigate = useNavigate();
-
-  const handleTakeTestID = (id) => {
-    navigate("/speaking-instruction", {
-      state: {
-        id,
-        test: "Mini Test",
-      },
-    });
+  const handleClick = (id) => {
+    window.open(`/live-exam/${id}`, "_blank");
   };
 
   return (
@@ -46,7 +39,7 @@ const Speaking = ({ speakingData, givenTest }) => {
                   <div className="d-flex justify-content-center mb-3">
                     <button
                       className="default__button"
-                      onClick={() => handleTakeTestID(id)}
+                      onClick={() => handleClick(id)}
                     >
                       Take Test
                     </button>

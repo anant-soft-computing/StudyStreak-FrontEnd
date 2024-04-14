@@ -1,12 +1,12 @@
 import React from "react";
 import cpuJack from "../../../img/service/img.png";
 
-function SpeakingInstruction({ startTest }) {
+function SpeakingInstruction({ testType = "Practice", startTest }) {
   return (
     <div className="instruction-card">
       <h3 className="instruction-heading">Instructions</h3>
       <div className="instruction-type">
-        Practice Listening Test - Instructions
+        {testType} Speaking Test - Instructions
       </div>
       <div className="instruction-content">
         This test will last for about 11 to 14 minutes.
@@ -45,6 +45,22 @@ function SpeakingInstruction({ startTest }) {
         Please ensure that you have a good internet connectivity for a smooth
         speaking session.
       </div>
+      <div className="instruction-content">
+        <span style={{ fontWeight: "bold", color: "#595959" }}>Part 1: </span>
+        Introduction General questions on familiar topics like family, friends,
+        home, hobbies, or work.
+      </div>
+      <div className="instruction-content">
+        <span style={{ fontWeight: "bold", color: "#595959" }}>Part 2: </span>
+        Cue Card You need to speak on the topic given in the cue card. After
+        that, the examiner asks questions on the same topic.
+      </div>
+      <div className="instruction-content">
+        <span style={{ fontWeight: "bold", color: "#595959" }}>Part 3: </span>
+        Discussion The examiner discusses the topic given in Part 2 in detail
+        with you.
+      </div>
+
       <p className="instruction-wishes">Good Luck!</p>
       <div className="instruction-attention">
         Do not click 'start test' untill you are told to do so.

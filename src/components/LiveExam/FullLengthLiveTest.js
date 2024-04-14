@@ -18,9 +18,9 @@ const intialInstructionState = {
   showInstruction: true,
   type: {
     // 0 for incoming, 1 for instruction on screen, 2 for completed
-    reading: 1,
+    reading: 0,
     writing: 0,
-    listening: 0,
+    listening: 1,
     speaking: 0,
   },
 };
@@ -102,6 +102,16 @@ const FullLengthLiveExam = () => {
     }
   }, [timer]);
 
+  const sortPapers = (arr) => {
+    return arr.sort((a, b) => {
+      const tempExamName1Array = a.exam_name.split(" ");
+      const tempExamName2array = b.exam_name.split(" ");
+      const tempExamName1 = tempExamName1Array[tempExamName1Array.length - 1];
+      const tempExamName2 = tempExamName2array[tempExamName2array.length - 1];
+      return tempExamName1.localeCompare(tempExamName2);
+    });
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -124,19 +134,21 @@ const FullLengthLiveExam = () => {
             (examBlock) => examBlock?.id.toString() === examId.toString()
           );
           let pappers = [];
-          filteredData[0].reading_set.Reading.forEach((item) => {
+          sortPapers(filteredData[0].listening_set.Listening).forEach(
+            (item) => {
+              pappers.push({
+                ...item,
+                paperId: filteredData[0].listening_set.id,
+              });
+            }
+          );
+          sortPapers(filteredData[0].reading_set.Reading).forEach((item) => {
             pappers.push({ ...item, paperId: filteredData[0].reading_set.id });
           });
-          filteredData[0].writing_set.Writing.forEach((item) => {
+          sortPapers(filteredData[0].writing_set.Writing).forEach((item) => {
             pappers.push({ ...item, paperId: filteredData[0].writing_set.id });
           });
-          filteredData[0].listening_set.Listening.forEach((item) => {
-            pappers.push({
-              ...item,
-              paperId: filteredData[0].listening_set.id,
-            });
-          });
-          filteredData[0].speaking_set.Speaking.forEach((item) => {
+          sortPapers(filteredData[0].speaking_set.Speaking).forEach((item) => {
             pappers.push({ ...item, paperId: filteredData[0].speaking_set.id });
           });
           filteredData[0].papers = pappers;
@@ -372,6 +384,8 @@ const FullLengthLiveExam = () => {
             answer_text: "",
           },
         ],
+        exam_type: paperData?.exam_type,
+        question: paperData?.question,
       };
       if (paperData?.exam_type === "Writing") {
         const tempUniqueArr = {
@@ -471,6 +485,7 @@ const FullLengthLiveExam = () => {
       tempAnswer = {
         exam_id: paperData?.id,
         data: tempPaginationStructure,
+        exam_type: paperData?.exam_type,
       };
       const tempUniqueArr = {
         name: `section-${index + 1}`,
@@ -617,10 +632,10 @@ const FullLengthLiveExam = () => {
               }
             });
 
-            if (examForm === "Reading") {
-              bandValue = readingBandValues[totalCorrect];
-            } else if (examForm === "Listening") {
-              bandValue = listeningBandValues[totalCorrect];
+            if (item.exam_type === "Reading") {
+              bandValue = readingBandValues[totalCorrect * 3];
+            } else if (item.exam_type === "Listening") {
+              bandValue = listeningBandValues[totalCorrect * 4];
             }
 
             newAnswersArray.push({
@@ -770,6 +785,7 @@ const FullLengthLiveExam = () => {
     if (uniqueIdArr.length === 0 && examAnswer.length === 0) {
       return null;
     }
+    let tempQuestionNumber = 0;
     return uniqueIdArr?.map((item, sectionIndex) => {
       return (
         <div className="lv-section" key={sectionIndex}>
@@ -781,28 +797,31 @@ const FullLengthLiveExam = () => {
             {item.name}
           </button>
           {/* Section pagination */}
-          {item.paginationsIds?.map((pagination, paginationIndex) => (
-            <div
-              className={`lv-footer-item ${
-                examAnswer[sectionIndex] &&
-                examAnswer[sectionIndex].data.length > 0 &&
-                examAnswer[sectionIndex].data.find(
-                  (val) => val.question_number === pagination
-                )?.answer_text !== ""
-                  ? "lv-completed-questions"
-                  : ""
-              }`}
-              onClick={() => {
-                if (next !== sectionIndex) setNext(sectionIndex);
-                setTimeout(() => {
-                  scrollToContent(pagination, sectionIndex);
-                }, 100);
-              }}
-              key={paginationIndex}
-            >
-              {paginationIndex + 1}
-            </div>
-          ))}
+          {item.paginationsIds?.map((pagination, paginationIndex) => {
+            tempQuestionNumber = tempQuestionNumber + 1;
+            return (
+              <div
+                className={`lv-footer-item ${
+                  examAnswer[sectionIndex] &&
+                  examAnswer[sectionIndex].data.length > 0 &&
+                  examAnswer[sectionIndex].data.find(
+                    (val) => val.question_number === pagination
+                  )?.answer_text !== ""
+                    ? "lv-completed-questions"
+                    : ""
+                }`}
+                onClick={() => {
+                  if (next !== sectionIndex) setNext(sectionIndex);
+                  setTimeout(() => {
+                    scrollToContent(pagination, sectionIndex);
+                  }, 100);
+                }}
+                key={paginationIndex}
+              >
+                {tempQuestionNumber}
+              </div>
+            );
+          })}
         </div>
       );
     });
@@ -811,16 +830,28 @@ const FullLengthLiveExam = () => {
   return instructionCompleted.showInstruction ? (
     <div className="test-instruction">
       {instructionCompleted.type.reading === 1 && (
-        <ReadingInstruction startTest={handleInstruction} />
+        <ReadingInstruction
+          testType="Full Length"
+          startTest={handleInstruction}
+        />
       )}
       {instructionCompleted.type.writing === 1 && (
-        <WritingInstruction startTest={handleInstruction} />
+        <WritingInstruction
+          testType="Full Length"
+          startTest={handleInstruction}
+        />
       )}
       {instructionCompleted.type.listening === 1 && (
-        <ListeningInstruction startTest={handleInstruction} />
+        <ListeningInstruction
+          testType="Full Length"
+          startTest={handleInstruction}
+        />
       )}
       {instructionCompleted.type.speaking === 1 && (
-        <SpeakingInstruction startTest={handleInstruction} />
+        <SpeakingInstruction
+          testType="Full Length"
+          startTest={handleInstruction}
+        />
       )}
     </div>
   ) : (
@@ -832,19 +863,6 @@ const FullLengthLiveExam = () => {
           <div className="lv-userName">{userData?.username}</div>
           <div style={{ margin: "15px 0px 0 10px" }}>/</div>
           <div className="lv-userName">{`${examData?.exam_name}`}</div>
-          {examData?.exam_type === "Speaking" && (
-            <button
-              className="lv-footer-button"
-              onClick={speak}
-              disabled={speaking === 1}
-              style={{
-                opacity: speaking === 1 ? 0.5 : 1,
-                cursor: speaking === 1 ? "not-allowed" : "pointer",
-              }}
-            >
-              {speaking ? "Replay" : "Start"}
-            </button>
-          )}
         </div>
         <span className="lv-navbar-title">
           Time Taken :<span className="lv-userName">{timeTaken}</span>
@@ -859,21 +877,6 @@ const FullLengthLiveExam = () => {
             </div>
           </div>
           <div className="lv-navbar-footer">
-            {examData?.exam_type === "Speaking" ? (
-              <button
-                className="lv-footer-button"
-                onClick={speak}
-                disabled={speaking === 1}
-                style={{
-                  opacity: speaking === 1 ? 0.5 : 1,
-                  cursor: speaking === 1 ? "not-allowed" : "pointer",
-                }}
-              >
-                {speaking ? "Replay" : "Start"}
-              </button>
-            ) : (
-              <div />
-            )}
             <span>
               Time Taken :<span className="lv-userName">{timeTaken}</span>
             </span>
@@ -887,9 +890,29 @@ const FullLengthLiveExam = () => {
           renderAudio(examData?.audio_file)}
         <div className="lv-main-container">
           {/* Left Container */}
-          <div className="lv-left-container">
-            {displayLeftContainer(examData?.passage, examData?.passage_image)}
-          </div>
+          {(examData?.exam_type === "Reading" ||
+            examData?.exam_type === "Listening" ||
+            examData?.exam_type === "Writing") && (
+            <div className="lv-left-container">
+              {displayLeftContainer(examData?.passage, examData?.passage_image)}
+            </div>
+          )}
+
+          {examData?.exam_type === "Speaking" && (
+            <div className="lv-left-container">
+              <button
+                className="lv-footer-button"
+                onClick={speak}
+                disabled={speaking === 1}
+                style={{
+                  opacity: speaking === 1 ? 0.5 : 1,
+                  cursor: speaking === 1 ? "not-allowed" : "pointer",
+                }}
+              >
+                {speaking ? "Replay" : "Start"}
+              </button>
+            </div>
+          )}
 
           {/* Right Container */}
           <div
@@ -923,6 +946,7 @@ const FullLengthLiveExam = () => {
                   setRecordedFilePath={setRecordedFilePath}
                   next={next}
                   exam_id={examData?.id}
+                  enableRecording={speaking === 2}
                 />
               )}
             </div>

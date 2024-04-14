@@ -172,7 +172,6 @@ const App = () => {
           path="/eaxm-practice-test-answere/:examId"
           element={<PracticeTestAnswer />}
         />
-
         <Route path="/admin-exam/:examType" element={<Exam />} />
         <Route path="/admin-exam/:examType/:examForm" element={<Exam />} />
 

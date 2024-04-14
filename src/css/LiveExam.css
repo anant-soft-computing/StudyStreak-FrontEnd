@@ -490,6 +490,10 @@
   color: #606060;
 }
 
+.mic-icon:hover {
+  cursor: pointer;
+}
+
 @media (max-width: 978px) {
   .lv-navbar {
     margin-top: 80px;

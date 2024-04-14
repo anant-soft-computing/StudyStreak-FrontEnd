@@ -98,9 +98,27 @@ const PracticeLiveExam = () => {
           8000
         );
         if (response.status === 200) {
-          const filteredData = response?.data?.filter(
+          let filteredData = response?.data?.filter(
             (examBlock) => examBlock?.id.toString() === examId.toString()
           );
+          filteredData[0].IELTS[examForm] = filteredData[0].IELTS[
+            examForm
+          ].sort((a, b) => {
+            const tempExamName1Array = a.exam_name.split(" ");
+            const tempExamName2array = b.exam_name.split(" ");
+            const tempExamName1 =
+              tempExamName1Array[tempExamName1Array.length - 1];
+            const tempExamName2 =
+              tempExamName2array[tempExamName2array.length - 1];
+            if (tempExamName1 > tempExamName2) {
+              return 1;
+            }
+            if (tempExamName1 < tempExamName2) {
+              return -1;
+            }
+            return 0;
+          });
+
           setFullPaper(filteredData);
         } else {
           console.log("error");
@@ -507,7 +525,9 @@ const PracticeLiveExam = () => {
     if (examForm === "Reading" || examForm === "Listening") {
       let totalCorrect = 0;
       correctAnswers.forEach((correctAns, index) => {
-        const tempExamAnswer = examAnswer[index];
+        const tempExamAnswer = answersArray.find(
+          (answer) => answer.exam_id === correctAns.exam_id
+        );
         correctAns.data.forEach((correct, idx) => {
           if (correct.answer_text === tempExamAnswer.data[idx].answer_text) {
             totalCorrect += 1;
@@ -516,9 +536,9 @@ const PracticeLiveExam = () => {
       });
 
       if (examForm === "Reading") {
-        bandValue = readingBandValues[totalCorrect];
+        bandValue = readingBandValues[totalCorrect * 3];
       } else if (examForm === "Listening") {
-        bandValue = listeningBandValues[totalCorrect];
+        bandValue = listeningBandValues[totalCorrect * 4];
       }
     }
 
@@ -727,6 +747,7 @@ const PracticeLiveExam = () => {
     if (uniqueIdArr.length === 0 && examAnswer.length === 0) {
       return null;
     }
+    let tempQuestionNumber = 0;
     return uniqueIdArr?.map((item, sectionIndex) => {
       return (
         <div className="lv-section" key={sectionIndex}>
@@ -738,28 +759,31 @@ const PracticeLiveExam = () => {
             {item.name}
           </button>
           {/* Section pagination */}
-          {item.paginationsIds?.map((pagination, paginationIndex) => (
-            <div
-              className={`lv-footer-item ${
-                examAnswer[sectionIndex] &&
-                examAnswer[sectionIndex].data.length > 0 &&
-                examAnswer[sectionIndex].data.find(
-                  (val) => val.question_number === pagination
-                )?.answer_text !== ""
-                  ? "lv-completed-questions"
-                  : ""
-              }`}
-              onClick={() => {
-                if (next !== sectionIndex) setNext(sectionIndex);
-                setTimeout(() => {
-                  scrollToContent(pagination, sectionIndex);
-                }, 100);
-              }}
-              key={paginationIndex}
-            >
-              {paginationIndex + 1}
-            </div>
-          ))}
+          {item.paginationsIds?.map((pagination, paginationIndex) => {
+            tempQuestionNumber = tempQuestionNumber + 1;
+            return (
+              <div
+                className={`lv-footer-item ${
+                  examAnswer[sectionIndex] &&
+                  examAnswer[sectionIndex].data.length > 0 &&
+                  examAnswer[sectionIndex].data.find(
+                    (val) => val.question_number === pagination
+                  )?.answer_text !== ""
+                    ? "lv-completed-questions"
+                    : ""
+                }`}
+                onClick={() => {
+                  if (next !== sectionIndex) setNext(sectionIndex);
+                  setTimeout(() => {
+                    scrollToContent(pagination, sectionIndex);
+                  }, 100);
+                }}
+                key={paginationIndex}
+              >
+                {tempQuestionNumber}
+              </div>
+            );
+          })}
         </div>
       );
     });
@@ -779,16 +803,28 @@ const PracticeLiveExam = () => {
   return !instructionCompleted ? (
     <div className="test-instruction">
       {examData.exam_type === "Reading" && (
-        <ReadingInstruction startTest={handleCompleteInstruciton} />
+        <ReadingInstruction
+          testType="Practice"
+          startTest={handleCompleteInstruciton}
+        />
       )}
       {examData.exam_type === "Listening" && (
-        <ListeningInstruction startTest={handleCompleteInstruciton} />
+        <ListeningInstruction
+          testType="Practice"
+          startTest={handleCompleteInstruciton}
+        />
       )}
       {examData.exam_type === "Writing" && (
-        <WritingInstruction startTest={handleCompleteInstruciton} />
+        <WritingInstruction
+          testType="Practice"
+          startTest={handleCompleteInstruciton}
+        />
       )}
       {examData.exam_type === "Speaking" && (
-        <SpeakingInstruction startTest={handleCompleteInstruciton} />
+        <SpeakingInstruction
+          testType="Practice"
+          startTest={handleCompleteInstruciton}
+        />
       )}
     </div>
   ) : (
@@ -879,6 +915,7 @@ const PracticeLiveExam = () => {
                   setRecordedFilePath={setRecordedFilePath}
                   next={next}
                   exam_id={examData?.id}
+                  enableRecording={speaking === 2}
                 />
               )}
             </div>

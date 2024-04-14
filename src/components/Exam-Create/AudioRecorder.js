@@ -1,7 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import ajaxCall from "../../helpers/ajaxCall";
 
-const AudioRecorder = ({ setRecordedFilePath, next, exam_id }) => {
+const AudioRecorder = ({
+  setRecordedFilePath,
+  next,
+  exam_id,
+  enableRecording = true,
+}) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
 
@@ -78,18 +83,22 @@ const AudioRecorder = ({ setRecordedFilePath, next, exam_id }) => {
   return (
     <div>
       <h1>
-        {(isRecording && "Recording...") ||
-          (!isRecording && !audioBlob && "Click to Start Recording") ||
+        {(!enableRecording && "Finish listening content") ||
+          (isRecording && "Recording...") ||
+          (!isRecording && !audioBlob && "Click on Mic to Recording") ||
           "Recording Completed"}
       </h1>
       <button
+        disabled={!enableRecording}
         className="audio__recorder__btn"
         onClick={isRecording ? handleStopRecording : handleStartRecording}
       >
         {isRecording ? (
           <i className="icofont-stop audio_stop_icon"></i>
         ) : (
-          <i className="icofont-record audio_recorder_icon"></i>
+          <i
+            class={`icofont-mic audio-30  ${enableRecording && "audio_recorder_icon"}`}
+          ></i>
         )}
       </button>
       {audioBlob && (

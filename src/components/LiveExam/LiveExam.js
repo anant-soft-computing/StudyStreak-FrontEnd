@@ -8,6 +8,10 @@ import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
 import { htmlToText } from "html-to-text";
+import ReadingInstruction from "./Instruction/ReadingInstruction";
+import ListeningInstruction from "./Instruction/ListeningInstruction";
+import WritingInstruction from "./Instruction/WritingInstruction";
+import SpeakingInstruction from "./Instruction/SpeakingInstruction";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -28,8 +32,11 @@ const LiveExam = () => {
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const synth = window.speechSynthesis;
   const [speaking, setSpeaking] = useState(0);
+  const [instructionCompleted, setInstructionCompleted] = useState(false);
   let highlightedElement = null;
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
+
+  const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
   useEffect(() => {
     let interval;
@@ -592,7 +599,34 @@ const LiveExam = () => {
     </div>
   );
 
-  return (
+  return !instructionCompleted ? (
+    <div className="test-instruction">
+      {examData.exam_type === "Reading" && (
+        <ReadingInstruction
+          testType="Mini"
+          startTest={handleCompleteInstruciton}
+        />
+      )}
+      {examData.exam_type === "Listening" && (
+        <ListeningInstruction
+          testType="Mini"
+          startTest={handleCompleteInstruciton}
+        />
+      )}
+      {examData.exam_type === "Writing" && (
+        <WritingInstruction
+          testType="Mini"
+          startTest={handleCompleteInstruciton}
+        />
+      )}
+      {examData.exam_type === "Speaking" && (
+        <SpeakingInstruction
+          testType="Mini"
+          startTest={handleCompleteInstruciton}
+        />
+      )}
+    </div>
+  ) : (
     <>
       <div className="lv-navbar">
         <div className="lv-navbar-title">
@@ -690,6 +724,7 @@ const LiveExam = () => {
                   setRecordedFilePath={setRecordedFilePath}
                   next={0}
                   exam_id={examData?.id}
+                  enableRecording={speaking === 2}
                 />
               )}
             </div>

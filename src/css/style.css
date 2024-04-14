@@ -16334,23 +16334,25 @@ div.gridarea__wraper {
   border-radius: 50%;
 }
 
-.audio_recorder_icon {
+.audio-30{
   font-size: 30px;
+  color: black;
+  padding: 20px;
 }
 
 .audio_stop_icon {
+  color: black;
   font-size: 30px;
 }
 
 .audio__recorder__btn:hover {
-  background-color: grey;
+  border: none;
 }
 
 .audio_recorder_icon:hover {
-  color: white;
-}
-
-.audio_stop_icon:hover {
+  border-radius: 50px;
+  border: none;
+  background-color: black;
   color: white;
 }
 

@@ -1,11 +1,11 @@
 import React from "react";
 
-function ReadingInstruction({ startTest }) {
+function ReadingInstruction({ testType = "Practice", startTest }) {
   return (
     <div className="instruction-card">
       <h3 className="instruction-heading">Instructions</h3>
       <div className="instruction-type">
-        Practice Reading Test - Instructions
+        {testType} Reading Test - Instructions
       </div>
       <div className="instruction-content">
         You will be given three reading passages based on which you will have to

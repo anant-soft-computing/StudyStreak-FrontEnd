@@ -1,11 +1,11 @@
 import React from "react";
 
-function ListeningInstruction({ startTest }) {
+function ListeningInstruction({ testType = "Practice", startTest }) {
   return (
     <div className="instruction-card">
       <h3 className="instruction-heading">Instructions</h3>
       <div className="instruction-type">
-        Practice Listening Test - Instructions
+        {testType} Listening Test - Instructions
       </div>
       <div className="instruction-content">
         You will be given 4 sections/audio tracks and you will have to answer a

@@ -477,12 +477,11 @@ const PracticeLiveExam = () => {
   const practiceTestSubmit = async () => {
     const data = {
       student_id: studentId,
-      exam_id: parseInt(examId),
-      typetest: "Practice",
+      module_id: parseInt(examId),
     };
     try {
       const response = await ajaxCall(
-        "/student-mocktest-submit/",
+        "/student-pt-submit/",
         {
           headers: {
             Accept: "application/json",

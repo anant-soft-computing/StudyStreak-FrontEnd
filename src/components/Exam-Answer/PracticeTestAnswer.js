@@ -86,7 +86,7 @@ const PracticeTestAnswer = () => {
         console.log("error", error);
       }
     })();
-  }, [fullPaper[0].IELTS.id]);
+  }, [fullPaper?.[0]?.IELTS?.id]);
 
   return (
     <div className="body__wrapper">

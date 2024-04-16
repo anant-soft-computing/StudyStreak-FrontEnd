@@ -91,7 +91,7 @@ const LiveExam = () => {
     const data = {
       student_id: studentId,
       exam_id: parseInt(examId),
-      typetest: examData?.block_type,
+      typetest: "Mock Test",
     };
     try {
       const response = await ajaxCall(

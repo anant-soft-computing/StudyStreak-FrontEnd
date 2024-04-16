@@ -501,12 +501,11 @@ const FullLengthLiveExam = () => {
   const practiceTestSubmit = async () => {
     const data = {
       student_id: studentId,
-      exam_id: parseInt(examId),
-      typetest: "Practice",
+      flt_id: parseInt(examId),
     };
     try {
       const response = await ajaxCall(
-        "/student-mocktest-submit/",
+        "/student-flt-submit/",
         {
           headers: {
             Accept: "application/json",

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
+
+import DSSidebar from "../DSSideBar/DSSideBar";
+import BuyCourse from "../BuyCourse/BuyCourse";
+import Tab from "../../../UI/Tab";
+
 import Reading from "./Reading";
 import Listening from "./Listening";
 import Writing from "./Writing";
 import Speaking from "./Speaking";
-import BuyCourse from "../BuyCourse/BuyCourse";
-import Tab from "../../../UI/Tab";
 
 const tabs = [
   { name: "Reading" },
@@ -17,7 +19,7 @@ const tabs = [
 ];
 
 const PracticeTest = () => {
-  const { count } = useLocation().state || {};
+  const { count, givenTest } = useLocation().state || {};
   const [readingData, setReadingData] = useState([]);
   const [listeningData, setListeningData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
@@ -46,31 +48,24 @@ const PracticeTest = () => {
           8000
         );
         if (response.status === 200) {
+          const { data } = response;
           setReadingData(
-            response?.data?.filter(
-              (examBlock) => examBlock?.exam_type === "Reading"
-            )
+            data?.filter(({ exam_type }) => exam_type === "Reading")
           );
           setSpeakingData(
-            response?.data?.filter(
-              (examBlock) => examBlock?.exam_type === "Speaking"
-            )
+            data?.filter(({ exam_type }) => exam_type === "Speaking")
           );
           setWritingData(
-            response?.data?.filter(
-              (examBlock) => examBlock?.exam_type === "Writing"
-            )
+            data?.filter(({ exam_type }) => exam_type === "Writing")
           );
           setListeningData(
-            response?.data?.filter(
-              (examBlock) => examBlock?.exam_type === "Listening"
-            )
+            data?.filter(({ exam_type }) => exam_type === "Listening")
           );
         } else {
           console.log("error");
         }
       } catch (error) {
-        console.log("error", error);
+        console.error("error", error);
       }
     })();
   }, []);
@@ -98,42 +93,30 @@ const PracticeTest = () => {
                           handleTabChange={handleTabChange}
                         />
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Reading" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Reading readingData={readingData} />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Writing" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Writing writingData={writingData} />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Listening" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Listening listeningData={listeningData} />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Speaking" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Speaking speakingData={speakingData} />
-                            </div>
-                          </div>
+                          {activeTab === "Reading" && (
+                            <Reading
+                              readingData={readingData}
+                              givenTest={givenTest}
+                            />
+                          )}
+                          {activeTab === "Writing" && (
+                            <Writing
+                              writingData={writingData}
+                              givenTest={givenTest}
+                            />
+                          )}
+                          {activeTab === "Listening" && (
+                            <Listening
+                              listeningData={listeningData}
+                              givenTest={givenTest}
+                            />
+                          )}
+                          {activeTab === "Speaking" && (
+                            <Speaking
+                              speakingData={speakingData}
+                              givenTest={givenTest}
+                            />
+                          )}
                         </div>
                       </div>
                     )}

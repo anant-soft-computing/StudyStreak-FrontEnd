@@ -477,7 +477,7 @@ const PracticeLiveExam = () => {
   const practiceTestSubmit = async () => {
     const data = {
       student_id: studentId,
-      module_id: parseInt(examId),
+      pt_id: parseInt(examId),
     };
     try {
       const response = await ajaxCall(

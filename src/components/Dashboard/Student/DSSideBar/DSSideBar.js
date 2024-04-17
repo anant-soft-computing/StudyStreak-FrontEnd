@@ -19,6 +19,9 @@ import logOut from "../../../../img/icon/logout.svg";
 const DSSidebar = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [solvingClassBook, setSolvingClassBook] = useState([]);
+  const [givenMT, setGivenMT] = useState([]);
+  const [givenPT, setGivenPT] = useState([]);
+  const [givenFLT, setGivenFLT] = useState([]);
   const [studentId, setStudentId] = useState();
   const [count, setCount] = useState({});
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -53,19 +56,19 @@ const DSSidebar = () => {
       name: "Mini Test",
       icon: <img src={assignment} alt="Mini Test" />,
       link: "/mockTest",
-      state: { count: count },
+      state: { count: count, givenTest: givenMT },
     },
     {
       name: "Practice Test",
       icon: <img src={practiceTest} alt="Practice Test" />,
       link: "/practiceTest",
-      state: { count: count },
+      state: { count: count, givenTest: givenPT },
     },
     {
       name: "Full Length Test",
       icon: <img src={fullLengthTest} alt="Full Length Test" />,
       link: "/fullLengthTest",
-      state: { count: count },
+      state: { count: count, givenTest: givenFLT },
     },
     {
       name: "Live Classes",
@@ -191,6 +194,36 @@ const DSSidebar = () => {
               ({ Live_class_enroll }) => Live_class_enroll
             )
           );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/studentview/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setGivenMT(response?.data[0].student_mock);
+          setGivenPT(response?.data[0].student_pt);
+          setGivenFLT(response?.data[0].student_flt);
         } else {
           console.log("error");
         }

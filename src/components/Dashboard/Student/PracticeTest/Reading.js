@@ -1,6 +1,6 @@
 import React from "react";
 
-const ReadingTest = ({ readingData }) => {
+const ReadingTest = ({ readingData, givenTest }) => {
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
       if (Array.isArray(data?.IELTS[key])) {
@@ -16,7 +16,10 @@ const ReadingTest = ({ readingData }) => {
       <div className="row">
         {readingData.map((data, index) => (
           <div className="col-lg-4 col-md-6 col-12" key={index}>
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
+            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling tagMain d-flex flex-column justify-content-between">
+              {givenTest.some((test) => test.id === data.id) && (
+                <span className="tag">Given</span>
+              )}
               <div className="gridarea__content ">
                 <div className="gridarea__heading mt-3">
                   <h3 className="text-center">

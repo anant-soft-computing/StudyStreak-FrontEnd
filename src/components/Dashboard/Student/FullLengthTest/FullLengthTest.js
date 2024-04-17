@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
+
+import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 
 const difficultLevelTabs = ["Easy", "Medium", "Hard"];
 
 const FullLengthTest = () => {
-  const { state: { count } = {} } = useLocation();
+  const { count, givenTest } = useLocation().state || {};
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
   const [difficulty_level, setDifficultyLevel] = useState("Easy");
   const { full_length_test_count } = count;
@@ -53,7 +54,10 @@ const FullLengthTest = () => {
       {fullLengthTestData.length > 0 ? (
         fullLengthTestData?.map(({ id, name }, index) => (
           <div className="col-lg-4 col-md-6 col-12" key={index}>
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
+            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling tagMain d-flex flex-column justify-content-between">
+              {givenTest.some((test) => test.id === id) && (
+                <span className="tag">Given</span>
+              )}
               <div className="gridarea__content ">
                 <div className="gridarea__heading mt-3">
                   <h3 className="text-center">Full Length Test </h3>
@@ -76,7 +80,9 @@ const FullLengthTest = () => {
           </div>
         ))
       ) : (
-        <div className="text-center text-danger">No Full Length Test Available !!</div>
+        <div className="text-center text-danger">
+          No Full Length Test Available !!
+        </div>
       )}
     </div>
   );

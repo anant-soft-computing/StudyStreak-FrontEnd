@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import ajaxCall from "../../../../helpers/ajaxCall";
+
 import DSSidebar from "../DSSideBar/DSSideBar";
+import BuyCourse from "../BuyCourse/BuyCourse";
+import Tab from "../../../UI/Tab";
+
 import Reading from "./Reading";
 import Writing from "./Writing";
 import Listening from "./Listening";
 import Speaking from "./Speaking";
-import ajaxCall from "../../../../helpers/ajaxCall";
-import BuyCourse from "../BuyCourse/BuyCourse";
-import Tab from "../../../UI/Tab";
 
 const tabs = [
   { name: "Reading" },
@@ -17,36 +19,15 @@ const tabs = [
 ];
 
 const MockTest = () => {
-  const { count } = useLocation().state || {};
+  const { count, givenTest } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [mockTestData, setMockTestData] = useState([]);
-  const [givenTest, setGivenTest] = useState([]);
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const readingData = mockTestData?.filter(
-    (item) => item.exam_type === "Reading"
-  );
-
-  const writingData = mockTestData?.filter(
-    (item) => item.exam_type === "Writing"
-  );
-
-  const listeningData = mockTestData?.filter(
-    (item) => item.exam_type === "Listening"
-  );
-
-  const speakingData = mockTestData?.filter(
-    (item) => item.exam_type === "Speaking"
-  );
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/studentview/",
+          "/exam-blocks/",
           {
             headers: {
               Accept: "application/json",
@@ -59,47 +40,28 @@ const MockTest = () => {
           },
           8000
         );
-        if (response.status === 200) {
-          setGivenTest(response?.data[0].student_mock);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/exam-blocks/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
         if (response.status === 200) {
-          const mockTest = response?.data?.filter(
-            (item) => item.block_type === "Assignments"
+          const { data } = response;
+          const mockTest = data?.filter(
+            ({ block_type }) => block_type === "Assignments"
           );
           setMockTestData(mockTest);
         } else {
           console.log("error");
         }
       } catch (error) {
-        console.log("error", error);
+        console.error("error", error);
       }
     })();
   }, []);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const testByExamType = (examType) =>
+    mockTestData?.filter(({ exam_type }) => exam_type === examType);
 
   return (
     <div className="body__wrapper">
@@ -115,7 +77,7 @@ const MockTest = () => {
                       <h4>Mini Test</h4>
                     </div>
                     {count?.mini_test_count === "" ? (
-                      <BuyCourse message="No Mini Test Available , Please Buy a Course !!" />
+                      <BuyCourse message="No Mini Test Available, Please Buy a Course!" />
                     ) : (
                       <div className="row">
                         <Tab
@@ -124,54 +86,30 @@ const MockTest = () => {
                           handleTabChange={handleTabChange}
                         />
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Reading" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Reading
-                                readingData={readingData}
-                                givenTest={givenTest}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Writing" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Writing
-                                writingData={writingData}
-                                givenTest={givenTest}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Listening" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Listening
-                                listeningData={listeningData}
-                                givenTest={givenTest}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Speaking" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <Speaking
-                                speakingData={speakingData}
-                                givenTest={givenTest}
-                              />
-                            </div>
-                          </div>
+                          {activeTab === "Reading" && (
+                            <Reading
+                              readingData={testByExamType("Reading")}
+                              givenTest={givenTest}
+                            />
+                          )}
+                          {activeTab === "Writing" && (
+                            <Writing
+                              writingData={testByExamType("Writing")}
+                              givenTest={givenTest}
+                            />
+                          )}
+                          {activeTab === "Listening" && (
+                            <Listening
+                              listeningData={testByExamType("Listening")}
+                              givenTest={givenTest}
+                            />
+                          )}
+                          {activeTab === "Speaking" && (
+                            <Speaking
+                              speakingData={testByExamType("Speaking")}
+                              givenTest={givenTest}
+                            />
+                          )}
                         </div>
                       </div>
                     )}

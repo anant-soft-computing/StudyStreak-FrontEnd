@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 import DSSidebar from "../DSSideBar/DSSideBar";
@@ -49,42 +52,74 @@ const FullLengthTest = () => {
     window.open(`/fulllength-live-exam/${id}`, "_blank");
   };
 
-  const renderTestCards = (
-    <div className="row">
-      {fullLengthTestData.length > 0 ? (
-        fullLengthTestData?.map(({ id, name }, index) => (
-          <div className="col-lg-4 col-md-6 col-12" key={index}>
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling tagMain d-flex flex-column justify-content-between">
-              {givenTest.some((test) => test.id === id) && (
-                <span className="tag">Given</span>
-              )}
-              <div className="gridarea__content ">
-                <div className="gridarea__heading mt-3">
-                  <h3 className="text-center">Full Length Test </h3>
-                </div>
-                <div className="gridarea__heading">
-                  <h3 className="text-center">{name}</h3>
-                </div>
-              </div>
-              <div>
-                <div className="d-flex justify-content-center mt-2 mb-3">
-                  <button
-                    className="default__button"
-                    onClick={() => handleFullLengthTest(id)}
-                  >
-                    Take Test
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))
+  const columns = [
+    {
+      headerName: "Take Test",
+      field: "button",
+      cellRenderer: (params) => {
+        return (
+          <button
+            className="take-test"
+            onClick={() => handleFullLengthTest(params.data.id)}
+          >
+            Take Test
+          </button>
+        );
+      },
+      width: 365,
+    },
+    {
+      headerName: "Name",
+      field: "name",
+      cellRenderer: (params) => <div>{params.data?.name}</div>,
+      width: 365,
+    },
+    {
+      headerName: "Status",
+      field: "Status",
+      cellRenderer: (params) => {
+        const examId = params.data.id;
+        const isGiven = givenTest.find((test) => test.id === examId);
+        if (isGiven) {
+          return <button className="given-tag">Given</button>;
+        } else {
+          return (
+            <button className="given-tag" style={{ backgroundColor: "red" }}>
+              Not Given
+            </button>
+          );
+        }
+      },
+      width: 365,
+    },
+  ];
+
+  const renderTestGrid = (
+    <>
+      {fullLengthTestData.length === 0 ? (
+        <h5 className="text-center text-danger">No Tests Available !!</h5>
       ) : (
-        <div className="text-center text-danger">
-          No Full Length Test Available !!
+        <div className="ag-theme-alpine">
+          <AgGridReact
+            rowData={fullLengthTestData}
+            columnDefs={columns}
+            pagination={true}
+            paginationPageSize={10}
+            domLayout="autoHeight"
+            defaultColDef={{
+              sortable: true,
+              resizable: true,
+            }}
+            getRowStyle={(params) => {
+              if (params.node.rowIndex % 2 === 1) {
+                return { background: "#01579b36" };
+              }
+              return null;
+            }}
+          ></AgGridReact>
         </div>
       )}
-    </div>
+    </>
   );
 
   return (
@@ -101,12 +136,12 @@ const FullLengthTest = () => {
                       <h4>Full Length Test</h4>
                     </div>
                     {full_length_test_count === "" ? (
-                      <BuyCourse message="No Full Length Test Available , Please Buy a Course !!" />
+                      <BuyCourse message="No Full Length Test Available, Please Buy a Course!" />
                     ) : (
                       <div className="row">
                         <div className="col-xl-12 aos-init aos-animate">
                           <ul
-                            className="nav  about__button__wrap dashboard__button__wrap"
+                            className="nav about__button__wrap dashboard__button__wrap"
                             id="myTab"
                             role="tablist"
                           >
@@ -134,18 +169,13 @@ const FullLengthTest = () => {
                           </ul>
                         </div>
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          {difficultLevelTabs.map((test, index) => (
-                            <div
-                              className={`tab-pane fade ${
-                                test === difficulty_level ? "show active" : ""
-                              }`}
-                              id={`projects__${test}`}
-                              role="tabpanel"
-                              key={index}
-                            >
-                              <div className="row">{renderTestCards}</div>
-                            </div>
-                          ))}
+                          <div
+                            className="tab-pane fade show active"
+                            id={`projects__${difficulty_level}`}
+                            role="tabpanel"
+                          >
+                            <div className="row">{renderTestGrid}</div>
+                          </div>
                         </div>
                       </div>
                     )}

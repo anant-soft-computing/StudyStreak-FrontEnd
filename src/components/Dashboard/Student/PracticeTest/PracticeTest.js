@@ -5,11 +5,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import Tab from "../../../UI/Tab";
-
-import Reading from "./Reading";
-import Listening from "./Listening";
-import Writing from "./Writing";
-import Speaking from "./Speaking";
+import PracticeTestTable from "./PracticeTestTable";
 
 const tabs = [
   { name: "Reading" },
@@ -94,27 +90,31 @@ const PracticeTest = () => {
                         />
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
                           {activeTab === "Reading" && (
-                            <Reading
-                              readingData={readingData}
+                            <PracticeTestTable
+                              testData={readingData}
                               givenTest={givenTest}
+                              testType="Reading"
                             />
                           )}
                           {activeTab === "Writing" && (
-                            <Writing
-                              writingData={writingData}
+                            <PracticeTestTable
+                              testData={writingData}
                               givenTest={givenTest}
+                              testType="Writing"
                             />
                           )}
                           {activeTab === "Listening" && (
-                            <Listening
-                              listeningData={listeningData}
+                            <PracticeTestTable
+                              testData={listeningData}
                               givenTest={givenTest}
+                              testType="Listening"
                             />
                           )}
                           {activeTab === "Speaking" && (
-                            <Speaking
-                              speakingData={speakingData}
+                            <PracticeTestTable
+                              testData={speakingData}
                               givenTest={givenTest}
+                              testType="Speaking"
                             />
                           )}
                         </div>

@@ -5,11 +5,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import Tab from "../../../UI/Tab";
-
-import Reading from "./Reading";
-import Writing from "./Writing";
-import Listening from "./Listening";
-import Speaking from "./Speaking";
+import TestTable from "./TestTable";
 
 const tabs = [
   { name: "Reading" },
@@ -87,27 +83,31 @@ const MockTest = () => {
                         />
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
                           {activeTab === "Reading" && (
-                            <Reading
-                              readingData={testByExamType("Reading")}
+                            <TestTable
+                              testData={testByExamType("Reading")}
                               givenTest={givenTest}
+                              testType={"Reading"}
                             />
                           )}
                           {activeTab === "Writing" && (
-                            <Writing
-                              writingData={testByExamType("Writing")}
+                            <TestTable
+                              testData={testByExamType("Writing")}
                               givenTest={givenTest}
+                              testType={"Writing"}
                             />
                           )}
                           {activeTab === "Listening" && (
-                            <Listening
-                              listeningData={testByExamType("Listening")}
+                            <TestTable
+                              testData={testByExamType("Listening")}
                               givenTest={givenTest}
+                              testType={"Listening"}
                             />
                           )}
                           {activeTab === "Speaking" && (
-                            <Speaking
-                              speakingData={testByExamType("Speaking")}
+                            <TestTable
+                              testData={testByExamType("Speaking")}
                               givenTest={givenTest}
+                              testType={"Speaking"}
                             />
                           )}
                         </div>

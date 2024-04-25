@@ -1,8 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import Table from "../../../UI/Table";
 
 const UpcomingClass = ({ joinNow, isWithin5Minutes, classes, message }) => {
   const handleJoinNow = (params) => (
@@ -34,53 +32,38 @@ const UpcomingClass = ({ joinNow, isWithin5Minutes, classes, message }) => {
       cellRenderer: handleBook,
     },
   ];
-  const gridOptions = {
-    rowData: classes.map(
-      ({
-        id,
-        start_time,
-        end_time,
-        meeting_title,
-        meeting_description,
-        zoom_meeting_id,
-        select_batch,
-      }) => ({
-        id,
-        date: moment(start_time).format("DD MMM, YYYY"),
-        time: `${moment(start_time).format("hh:mm A")} - ${moment(
-          end_time
-        ).format("hh:mm A")}`,
-        meeting_title,
-        batch_name: select_batch?.batch_name,
-        meeting_description,
-        zoom_meeting_id,
-        start_time: moment(start_time).format("hh:mm A"),
-      })
-    ),
-    columnDefs: columns,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
-  };
+
+  const rowData = classes.map(
+    ({
+      id,
+      start_time,
+      end_time,
+      meeting_title,
+      meeting_description,
+      zoom_meeting_id,
+      select_batch,
+    }) => ({
+      id,
+      date: moment(start_time).format("DD MMM, YYYY"),
+      time: `${moment(start_time).format("hh:mm A")} - ${moment(
+        end_time
+      ).format("hh:mm A")}`,
+      meeting_title,
+      batch_name: select_batch?.batch_name,
+      meeting_description,
+      zoom_meeting_id,
+      start_time: moment(start_time).format("hh:mm A"),
+    })
+  );
 
   return (
-    <div className="ag-theme-alpine">
+    <>
       {classes.length > 0 ? (
-        <AgGridReact {...gridOptions} />
+        <Table rowData={rowData} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">{message}</h5>
       )}
-    </div>
+    </>
   );
 };
 

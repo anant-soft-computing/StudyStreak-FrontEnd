@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import Table from "../../../UI/Table";
 
 const columns = [
   { headerName: "No.", field: "no" },
@@ -11,8 +9,6 @@ const columns = [
 
 const ViewBadges = () => {
   const [badgeList, setBadgeList] = useState([]);
-
-  console.log("badgeList", badgeList);
 
   useEffect(() => {
     (async () => {
@@ -47,23 +43,7 @@ const ViewBadges = () => {
     })();
   }, []);
 
-  const gridOptions = {
-    rowData: badgeList,
-    columnDefs: columns,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-  };
-
-  return (
-    <div className="ag-theme-alpine">
-      <AgGridReact {...gridOptions} />
-    </div>
-  );
+  return <Table rowData={badgeList} columnDefs={columns} />;
 };
 
 export default ViewBadges;

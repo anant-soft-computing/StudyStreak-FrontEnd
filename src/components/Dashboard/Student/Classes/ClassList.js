@@ -1,8 +1,6 @@
 import React from "react";
 import moment from "moment";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
+import Table from "../../../UI/Table";
 
 const ClassList = ({ classes, bookCount, message }) => {
   const handleBook = (params) => {
@@ -67,28 +65,7 @@ const ClassList = ({ classes, bookCount, message }) => {
       {classes.length === 0 ? (
         <h5 className="text-center text-danger">{message}</h5>
       ) : (
-        <div
-          className="ag-theme-alpine"
-          style={{ height: "500px", width: "100%" }}
-        >
-          <AgGridReact
-            columnDefs={columns}
-            rowData={rowData}
-            pagination={true}
-            paginationPageSize={10}
-            domLayout="autoHeight"
-            defaultColDef={{
-              sortable: true,
-              resizable: true,
-            }}
-            getRowStyle={(params) => {
-              if (params.node.rowIndex % 2 === 1) {
-                return { background: "#01579b36" };
-              }
-              return null;
-            }}
-          />
-        </div>
+        <Table rowData={rowData} columnDefs={columns} />
       )}
     </>
   );

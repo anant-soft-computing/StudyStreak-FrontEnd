@@ -1,7 +1,5 @@
 import React from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import Table from "../../../UI/Table";
 
 const TestTable = ({ testData, givenTest, testType }) => {
   const takeTest = (params) => {
@@ -58,32 +56,12 @@ const TestTable = ({ testData, givenTest, testType }) => {
     },
   ];
 
-  const gridOptions = {
-    rowData: testData,
-    columnDefs: columns,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
-  };
-
   return (
     <>
       {testData.length === 0 ? (
         <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
       ) : (
-        <div className="ag-theme-alpine">
-          <AgGridReact {...gridOptions} />
-        </div>
+        <Table rowData={testData} columnDefs={columns}/>
       )}
     </>
   );

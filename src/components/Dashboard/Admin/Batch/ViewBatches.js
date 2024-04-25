@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import Table from "../../../UI/Table";
 
 const columns = [
   {
@@ -71,29 +69,7 @@ const ViewBatches = () => {
     })();
   }, []);
 
-  const gridOptions = {
-    rowData: batchList,
-    columnDefs: columns,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
-  };
-
-  return (
-    <div className="ag-theme-quartz">
-      <AgGridReact {...gridOptions} />
-    </div>
-  );
+  return <Table rowData={batchList} columnDefs={columns} />;
 };
 
 export default ViewBatches;

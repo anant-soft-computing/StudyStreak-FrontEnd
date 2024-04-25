@@ -1,7 +1,5 @@
 import React from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import Table from "../../../UI/Table";
 
 const PracticeTestTable = ({ testData, givenTest, testType }) => {
   const handleClick = (data) => {
@@ -35,6 +33,7 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
       cellRenderer: (params) => {
         return <div>{params.data.IELTS?.Name}</div>;
       },
+      filter: true,
     },
     {
       headerName: "Sections",
@@ -54,6 +53,7 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
         }
       },
       width: 155,
+      filter: true,
     },
     {
       headerName: "Questions",
@@ -73,6 +73,7 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
         }
       },
       width: 160,
+      filter: true,
     },
     {
       headerName: "Time",
@@ -91,6 +92,7 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
             return "";
         }
       },
+      filter: true,
     },
     {
       headerName: "Status",
@@ -108,47 +110,30 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
           );
         }
       },
+      filter: true,
     },
   ];
 
-  const gridOptions = {
-    rowData: testData.map((data) => ({
-      ...data,
-      sections:
-        testType === "Speaking" ? "3" : testType === "Listening" ? "4" : "3",
-      questions:
-        testType === "Speaking" ? "" : testType === "Writing" ? "20" : "40",
-      time:
-        testType === "Speaking"
-          ? "15 Minutes"
-          : testType === "Listening"
-          ? "30 Minutes"
-          : "60 Minutes",
-    })),
-    columnDefs: columns,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
-  };
+  const rowData = testData.map((data) => ({
+    ...data,
+    sections:
+      testType === "Speaking" ? "3" : testType === "Listening" ? "4" : "3",
+    questions:
+      testType === "Speaking" ? "" : testType === "Writing" ? "20" : "40",
+    time:
+      testType === "Speaking"
+        ? "15 Minutes"
+        : testType === "Listening"
+        ? "30 Minutes"
+        : "60 Minutes",
+  }));
 
   return (
     <>
       {testData.length === 0 ? (
         <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
       ) : (
-        <div className="ag-theme-alpine">
-          <AgGridReact {...gridOptions} />
-        </div>
+        <Table rowData={rowData} columnDefs={columns} />
       )}
     </>
   );

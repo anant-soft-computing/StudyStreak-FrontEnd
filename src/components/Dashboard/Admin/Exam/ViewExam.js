@@ -1,34 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
-
-const ExamGrid = ({ rowData, columnDefs }) => {
-  const gridOptions = {
-    rowData,
-    columnDefs,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
-  };
-
-  return (
-    <div className="ag-theme-quartz">
-      <AgGridReact {...gridOptions} />
-    </div>
-  );
-};
+import Table from "../../../UI/Table";
 
 const ViewExam = () => {
   const [examList, setExamList] = useState([]);
@@ -84,7 +56,7 @@ const ViewExam = () => {
           <label>(1) Mock Tests : </label>
         </div>
       </div>
-      <ExamGrid
+      <Table
         rowData={examList}
         columnDefs={[
           { headerName: "No.", field: "no", resizable: false, width: 68 },
@@ -127,7 +99,7 @@ const ViewExam = () => {
               <label>(2) Practice Tests : </label>
             </div>
           </div>
-          <ExamGrid
+          <Table
             rowData={ptList}
             columnDefs={[
               { headerName: "No.", field: "no", resizable: false, width: 68 },
@@ -171,7 +143,7 @@ const ViewExam = () => {
               <label>(3) Full Length Tests : </label>
             </div>
           </div>
-          <ExamGrid
+          <Table
             rowData={fltList}
             columnDefs={[
               { headerName: "No.", field: "no", resizable: false, width: 68 },

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-alpine.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
+import Table from "../../../UI/Table";
 
 const difficultLevelTabs = ["Easy", "Medium", "Hard"];
 
@@ -99,25 +97,7 @@ const FullLengthTest = () => {
       {fullLengthTestData.length === 0 ? (
         <h5 className="text-center text-danger">No Tests Available !!</h5>
       ) : (
-        <div className="ag-theme-alpine">
-          <AgGridReact
-            rowData={fullLengthTestData}
-            columnDefs={columns}
-            pagination={true}
-            paginationPageSize={10}
-            domLayout="autoHeight"
-            defaultColDef={{
-              sortable: true,
-              resizable: true,
-            }}
-            getRowStyle={(params) => {
-              if (params.node.rowIndex % 2 === 1) {
-                return { background: "#01579b36" };
-              }
-              return null;
-            }}
-          ></AgGridReact>
-        </div>
+        <Table rowData={fullLengthTestData} columnDefs={columns} />
       )}
     </>
   );

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import moment from "moment";
+import Table from "../../../UI/Table";
 
 const columns = [
   { headerName: "No.", field: "no", filter: true, resizable: false, width: 86 },
@@ -87,28 +85,6 @@ const ViewLiveClasses = () => {
     })();
   }, []);
 
-  const gridOptions = {
-    rowData: liveClassList,
-    columnDefs: columns,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
-  };
-
-  return (
-    <div className="ag-theme-quartz">
-      <AgGridReact {...gridOptions} />
-    </div>
-  );
+  return <Table columnDefs={columns} rowData={liveClassList} />;
 };
 export default ViewLiveClasses;

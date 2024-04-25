@@ -1,9 +1,9 @@
+import React, { useEffect, useReducer, useState } from "react";
+import { toast } from "react-toastify";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import React, { useEffect, useReducer, useState } from "react";
 import ajaxCall from "../../../helpers/ajaxCall";
-import { toast } from "react-toastify";
 import Tab from "../../UI/Tab";
 
 const intialPT = {
@@ -169,7 +169,7 @@ const PT = ({ type }) => {
       );
       if (response.status === 201) {
         resetReducerForm();
-        toast.success("Full Length Exam Create Successfully");
+        toast.success("Practice Exam Create Successfully");
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -230,12 +230,6 @@ const PT = ({ type }) => {
     defaultColDef: {
       sortable: true,
       resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
     },
   });
 

@@ -220,12 +220,6 @@ const FLT = () => {
       sortable: true,
       resizable: true,
     },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
   });
 
   return (

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import Table from "../../../UI/Table";
 
 const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 68 },
@@ -77,28 +75,7 @@ const ViewGamification = () => {
     })();
   }, []);
 
-  const gridOptions = {
-    rowData: gamificationList,
-    columnDefs: columns,
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-    getRowStyle: (params) => {
-      if (params.node.rowIndex % 2 === 1) {
-        return { background: "#01579b36" };
-      }
-      return null;
-    },
-  };
-  return (
-    <div className="ag-theme-quartz">
-      <AgGridReact {...gridOptions} />
-    </div>
-  );
+  return <Table rowData={gamificationList} columnDefs={columns} />;
 };
 
 export default ViewGamification;

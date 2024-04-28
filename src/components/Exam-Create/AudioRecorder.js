@@ -1,11 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import ajaxCall from "../../helpers/ajaxCall";
+import {
+  speakingApiService,
+  writingApiService,
+} from "../../utils/chatgpt/chatgptApiService";
 
 const AudioRecorder = ({
   setRecordedFilePath,
   next,
   exam_id,
   enableRecording = true,
+  questions,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -50,44 +55,38 @@ const AudioRecorder = ({
   };
 
   useEffect(() => {
-    if (audioBlob) {
-      const formData = new FormData();
-      formData.append("file", audioBlob);
-      formData.append("exam_id", exam_id);
-      formData.append("extension", "mp3");
+    (async () => {
+      if (audioBlob) {
+        const formData = new FormData();
+        formData.append("file", audioBlob);
+        formData.append("model", "whisper-1");
+        formData.append("response_format", "json");
+        formData.append("temperature", 0);
+        formData.append("language", "en");
 
-      ajaxCall(
-        "/save-audio-file/",
-        {
-          method: "POST",
-          body: formData,
-
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-        },
-        8000
-      )
-        .then((response) => {
-          setRecordedFilePath(response?.data?.file_path);
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    }
+        const res = await speakingApiService(formData);
+        const writingRes = await writingApiService(questions, res.text);
+        setRecordedFilePath(writingRes?.choices?.[0]?.message?.content);
+      }
+    })();
   }, [audioBlob]); // Include 'next' as a dependency here
 
   return (
-    <div>
-      <h1>
-        {(!enableRecording && "Finish listening content") ||
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        borderBottom: "grey 1px solid",
+      }}
+    >
+      <h5 style={{ alignSelf: "center" }}>
+        {(!enableRecording &&
+          "Click on the Mic icon to Record your Response") ||
           (isRecording && "Recording...") ||
           (!isRecording && !audioBlob && "Click on Mic to Recording") ||
           "Recording Completed"}
-      </h1>
+      </h5>
       <button
         disabled={!enableRecording}
         className="audio__recorder__btn"
@@ -97,7 +96,9 @@ const AudioRecorder = ({
           <i className="icofont-stop audio_stop_icon"></i>
         ) : (
           <i
-            class={`icofont-mic audio-30  ${enableRecording && "audio_recorder_icon"}`}
+            class={`icofont-mic audio-30  ${
+              enableRecording && "audio_recorder_icon"
+            }`}
           ></i>
         )}
       </button>

@@ -494,6 +494,11 @@
   cursor: pointer;
 }
 
+.lv-speaking-question{
+  display: flex;
+  flex-direction: row;
+}
+
 .lv-box-right {
   display: flex;
   flex-direction: column;

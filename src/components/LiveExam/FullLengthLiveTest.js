@@ -256,10 +256,10 @@ const FullLengthLiveExam = () => {
         for (let paper of examDataList) {
           const index = examDataList.indexOf(paper);
           const returnContent = await fetchHtmlContent(paper, index);
-          tempHtmlContents.push(returnContent.questionPassage);
+          tempHtmlContents.push(returnContent?.questionPassage);
           const tempUniqueArr = {
             name: `section-${index + 1}`,
-            ...returnContent.tempAnswer,
+            ...returnContent?.tempAnswer,
           };
           tempExamAnswer.push(tempUniqueArr);
         }
@@ -270,28 +270,76 @@ const FullLengthLiveExam = () => {
     })();
   }, [fullPaper]);
 
-  const handleAnswerLinking = (e, question_number, next) => {
-    const { value, id } = e.target;
+  const handleAnswerLinking = (e, questionId, next) => {
+    const { value, id, name, checked } = e.target;
 
     const elementId = id.split("_")[0];
 
     const temp = [...examAnswer];
-    temp[next].data.map((item) => {
-      if (item.question_number === id && elementId === "InputText") {
-        const trimedValue = value.trim();
-        item.answer_text = trimedValue;
-      } else if (item.question_number === id) {
-        item.answer_text = value;
+    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+
+    // is this a multipleTypeQuestions
+    const isMultiQuestions = examAnswer[next].data.filter(
+      (item) => item.question_number === id
+    );
+
+    if (isMultiQuestions?.length <= 1) {
+      temp[next].data.forEach((item) => {
+        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+        if (item.question_number === id && elementId === "InputText") {
+          const trimedValue = value.trim();
+          item.answer_text = trimedValue;
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id && elementId === "Checkbox") {
+          item.answer_text = checked ? value : "";
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id) {
+          item.answer_text = value;
+          conditionSatisfied = true; // Set the flag to true
+        }
+      });
+
+      setExamAnswer(temp);
+    } else {
+      const multipleTypeQuestions = checked
+        ? examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text === ""
+          )
+        : examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text !== ""
+          );
+      if (multipleTypeQuestions !== -1) {
+        temp[next].data[multipleTypeQuestions].answer_text = checked
+          ? value
+          : "";
+        setExamAnswer(temp);
+      } else {
+        const contentElements = document.querySelectorAll(`[id="${id}"]`);
+        contentElements.forEach((element) => {
+          const isAlreadyAnswered = isMultiQuestions.findIndex(
+            (a) => a.answer_text === element.value
+          );
+
+          if (isAlreadyAnswered === -1) element.checked = false;
+        });
       }
-    });
-    setExamAnswer(temp);
+    }
   };
 
   useEffect(() => {
     if (!instructionCompleted.showInstruction && examAnswer.length > 0) {
       for (let tempExamAnswer of examAnswer) {
+        if (!tempExamAnswer.data) return;
         let examIndex = examAnswer.indexOf(tempExamAnswer);
-        tempExamAnswer.data.forEach((item) => {
+        // remove duplicate
+        const filteredData = tempExamAnswer.data.filter(
+          (item, index) =>
+            index ===
+            tempExamAnswer.data.findIndex(
+              (element) => element.question_number === item.question_number
+            )
+        );
+        filteredData.forEach((item) => {
           const contentElements = document.querySelectorAll(
             `[id="${item.question_number}"]`
           );
@@ -463,9 +511,23 @@ const FullLengthLiveExam = () => {
       paperData?.question_structure?.forEach((item, index) => {
         temp.forEach((element) => {
           if (element.type === item.type) {
-            paginationsStrucutre.push(
-              element.paginationsIds.splice(0, item.numberOfQuestions)
-            );
+            if (element.type === "Checkbox" && item?.isMultiQuestions) {
+              const multipleTypeQuestionsGroup = element.paginationsIds.splice(
+                0,
+                1
+              );
+              paginationsStrucutre = [
+                ...paginationsStrucutre,
+                ...Array.from(
+                  { length: item.numberOfQuestions },
+                  () => multipleTypeQuestionsGroup
+                ),
+              ];
+            } else if (element.type === item.type) {
+              paginationsStrucutre.push(
+                element.paginationsIds.splice(0, item.numberOfQuestions)
+              );
+            }
           }
         });
       });
@@ -803,9 +865,8 @@ const FullLengthLiveExam = () => {
                 className={`lv-footer-item ${
                   examAnswer[sectionIndex] &&
                   examAnswer[sectionIndex].data.length > 0 &&
-                  examAnswer[sectionIndex].data.find(
-                    (val) => val.question_number === pagination
-                  )?.answer_text !== ""
+                  examAnswer[sectionIndex].data[paginationIndex].answer_text !==
+                    ""
                     ? "lv-completed-questions"
                     : ""
                 }`}
@@ -934,7 +995,7 @@ const FullLengthLiveExam = () => {
                   <textarea
                     id={`textarea_${next}`}
                     className="writing__textarea"
-                    value={examAnswer[next]?.data[0]?.answer_text || ""}
+                    value={examAnswer[next]?.data?.[0]?.answer_text || ""}
                     onChange={(e) => handleWritingAnswer(e, next)}
                   />
                   <span>{numberOfWord} Words</span>

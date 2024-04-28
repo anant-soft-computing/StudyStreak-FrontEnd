@@ -177,26 +177,75 @@ const PracticeLiveExam = () => {
     };
   }, [next]);
 
-  const handleAnswerLinking = (e, question_number, next) => {
-    const { value, id } = e.target;
+  const handleAnswerLinking = (e, questionId, next) => {
+    const { value, id, name, checked } = e.target;
+
     const elementId = id.split("_")[0];
+
     const temp = [...examAnswer];
-    temp[next].data.map((item) => {
-      if (item.question_number === id && elementId === "InputText") {
-        const trimedValue = value.trim();
-        item.answer_text = trimedValue;
-      } else if (item.question_number === id) {
-        item.answer_text = value;
+    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+
+    // is this a multipleTypeQuestions
+    const isMultiQuestions = examAnswer[next].data.filter(
+      (item) => item.question_number === id
+    );
+
+    if (isMultiQuestions?.length <= 1) {
+      temp[next].data.forEach((item) => {
+        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+        if (item.question_number === id && elementId === "InputText") {
+          const trimedValue = value.trim();
+          item.answer_text = trimedValue;
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id && elementId === "Checkbox") {
+          item.answer_text = checked ? value : "";
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id) {
+          item.answer_text = value;
+          conditionSatisfied = true; // Set the flag to true
+        }
+      });
+
+      setExamAnswer(temp);
+    } else {
+      const multipleTypeQuestions = checked
+        ? examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text === ""
+          )
+        : examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text !== ""
+          );
+      if (multipleTypeQuestions !== -1) {
+        temp[next].data[multipleTypeQuestions].answer_text = checked
+          ? value
+          : "";
+        setExamAnswer(temp);
+      } else {
+        const contentElements = document.querySelectorAll(`[id="${id}"]`);
+        contentElements.forEach((element) => {
+          const isAlreadyAnswered = isMultiQuestions.findIndex(
+            (a) => a.answer_text === element.value
+          );
+
+          if (isAlreadyAnswered === -1) element.checked = false;
+        });
       }
-    });
-    setExamAnswer(temp);
+    }
   };
 
   useEffect(() => {
     if (instructionCompleted && examAnswer.length > 0) {
       for (let tempExamAnswer of examAnswer) {
         let examIndex = examAnswer.indexOf(tempExamAnswer);
-        tempExamAnswer.data.forEach((item) => {
+        // remove duplicate
+        const filteredExamAnswer = tempExamAnswer.data.filter(
+          (item, index) =>
+            index ===
+            tempExamAnswer.data.findIndex(
+              (i) => i.question_number === item.question_number
+            )
+        );
+        filteredExamAnswer.forEach((item) => {
           const contentElements = document.querySelectorAll(
             `[id="${item.question_number}"]`
           );
@@ -366,9 +415,23 @@ const PracticeLiveExam = () => {
       paperData?.question_structure?.forEach((item, index) => {
         temp.forEach((element) => {
           if (element.type === item.type) {
-            paginationsStrucutre.push(
-              element.paginationsIds.splice(0, item.numberOfQuestions)
-            );
+            if (element.type === "Checkbox" && item?.isMultiQuestions) {
+              const multipleTypeQuestionsGroup = element.paginationsIds.splice(
+                0,
+                1
+              );
+              paginationsStrucutre = [
+                ...paginationsStrucutre,
+                ...Array.from(
+                  { length: item.numberOfQuestions },
+                  () => multipleTypeQuestionsGroup
+                ),
+              ];
+            } else if (element.type === item.type) {
+              paginationsStrucutre.push(
+                element.paginationsIds.splice(0, item.numberOfQuestions)
+              );
+            }
           }
         });
       });
@@ -539,6 +602,17 @@ const PracticeLiveExam = () => {
       } else if (examForm === "Listening") {
         bandValue = listeningBandValues[totalCorrect * 4];
       }
+    } else if (examForm === "Speaking") {
+      let tempBandValueArr = [];
+      examAnswer.forEach((item, index) => {
+        item.data.forEach((answer, index2) => {
+          tempBandValueArr.push(
+            answer.answer_text?.split("#Band:")[1].split(" ")[1]
+          );
+        });
+      });
+      bandValue =
+        tempBandValueArr.reduce((a, b) => a + b, 0) / tempBandValueArr.length;
     }
 
     try {
@@ -765,9 +839,8 @@ const PracticeLiveExam = () => {
                 className={`lv-footer-item ${
                   examAnswer[sectionIndex] &&
                   examAnswer[sectionIndex].data.length > 0 &&
-                  examAnswer[sectionIndex].data.find(
-                    (val) => val.question_number === pagination
-                  )?.answer_text !== ""
+                  examAnswer[sectionIndex].data[paginationIndex].answer_text !==
+                    ""
                     ? "lv-completed-questions"
                     : ""
                 }`}

@@ -21,6 +21,7 @@ import {
   MultipleChoiceQue,
   MultipleCheckboxChoiceQue,
 } from "../../utils/HTMLContent";
+import MultipleChoicesAnswer from "../../utils/HTMLContent/MultipleChoicesAnswer";
 
 const Cheerio = require("cheerio");
 
@@ -41,6 +42,7 @@ const initialDivContents = {
   header15: TableCompletion,
   header16: MultipleChoiceQue,
   header17: MultipleCheckboxChoiceQue,
+  header18: MultipleChoicesAnswer,
 };
 
 const initialSubmit = {
@@ -111,7 +113,8 @@ const DragDrop = () => {
     htmlContents,
     index = null,
     type = "",
-    id = 0
+    id = 0,
+    isMultiQuestions = false
   ) => {
     let tag = null;
     const $ = Cheerio.load(htmlContents);
@@ -161,7 +164,12 @@ const DragDrop = () => {
       if (index === null)
         setQuestionStructure((prev) => [
           ...prev,
-          { type: "Select", id, numberOfQuestions: numberOfSelectQuestions },
+          {
+            type: "Select",
+            id,
+            numberOfQuestions: numberOfSelectQuestions,
+            isMultiQuestions,
+          },
         ]);
       else {
         const newQuestionStructure = [...questionStructure];
@@ -169,6 +177,7 @@ const DragDrop = () => {
           type: "Select",
           id,
           numberOfQuestions: numberOfSelectQuestions,
+          isMultiQuestions,
         };
         setQuestionStructure(newQuestionStructure);
       }
@@ -185,6 +194,7 @@ const DragDrop = () => {
             type: "Textarea",
             id,
             numberOfQuestions: numberOfTextareaQuestions,
+            isMultiQuestions,
           },
         ]);
       else {
@@ -193,6 +203,7 @@ const DragDrop = () => {
           type: "Textarea",
           id,
           numberOfQuestions: numberOfTextareaQuestions,
+          isMultiQuestions,
         };
         setQuestionStructure(newQuestionStructure);
       }
@@ -209,6 +220,7 @@ const DragDrop = () => {
             type: "InputText",
             id,
             numberOfQuestions: numberOfTextInputQuestions,
+            isMultiQuestions,
           },
         ]);
       else {
@@ -217,6 +229,7 @@ const DragDrop = () => {
           type: "InputText",
           id,
           numberOfQuestions: numberOfTextInputQuestions,
+          isMultiQuestions,
         };
         setQuestionStructure(newQuestionStructure);
       }
@@ -229,7 +242,12 @@ const DragDrop = () => {
       if (index === null)
         setQuestionStructure((prev) => [
           ...prev,
-          { type: "Radio", id, numberOfQuestions: numberOfRadioGroups },
+          {
+            type: "Radio",
+            id,
+            numberOfQuestions: numberOfRadioGroups,
+            isMultiQuestions,
+          },
         ]);
       else {
         const newQuestionStructure = [...questionStructure];
@@ -237,6 +255,7 @@ const DragDrop = () => {
           type: "Radio",
           id,
           numberOfQuestions: numberOfRadioGroups,
+          isMultiQuestions,
         };
         setQuestionStructure(newQuestionStructure);
       }
@@ -249,7 +268,12 @@ const DragDrop = () => {
       if (index === null)
         setQuestionStructure((prev) => [
           ...prev,
-          { type: "Checkbox", id, numberOfQuestions: numberOfCheckboxGroups },
+          {
+            type: "Checkbox",
+            id,
+            numberOfQuestions: numberOfCheckboxGroups,
+            isMultiQuestions,
+          },
         ]);
       else {
         const newQuestionStructure = [...questionStructure];
@@ -257,6 +281,7 @@ const DragDrop = () => {
           type: "Checkbox",
           id,
           numberOfQuestions: numberOfCheckboxGroups,
+          isMultiQuestions,
         };
         setQuestionStructure(newQuestionStructure);
       }
@@ -340,7 +365,8 @@ const DragDrop = () => {
       divContents[header],
       null,
       type,
-      randomNumbers[0]
+      randomNumbers[0],
+      type === "Multiple Questions"
     );
 
     setSelectedDivs((prev) => [
@@ -349,6 +375,41 @@ const DragDrop = () => {
     ]);
 
     // Generate answer field
+  };
+
+  const handleNumberOfQuestionsChange = (e, index) => {
+    const { value } = e.target;
+    const newQuestionStructure = [...questionStructure];
+    newQuestionStructure[index].numberOfQuestions = parseInt(value, 10);
+    setQuestionStructure(newQuestionStructure);
+    const tempAnswer = [...answer];
+    tempAnswer[index].answers = Array.from(
+      { length: parseInt(value, 10) },
+      (_, i) => ({
+        question_number: i + 1,
+        answer_text: "",
+        error: "",
+      })
+    );
+    setAnswer(tempAnswer);
+  };
+
+  const handleNumberOfQuestionsChangeBlur = (index) => {
+    const value = 1;
+    const newQuestionStructure = [...questionStructure];
+    if (newQuestionStructure[index].numberOfQuestions > 0) return;
+    newQuestionStructure[index].numberOfQuestions = parseInt(value, 10);
+    setQuestionStructure(newQuestionStructure);
+    const tempAnswer = [...answer];
+    tempAnswer[index].answers = Array.from(
+      { length: parseInt(value, 10) },
+      (_, i) => ({
+        question_number: i + 1,
+        answer_text: "",
+        error: "",
+      })
+    );
+    setAnswer(tempAnswer);
   };
 
   const renderAudio = () => {
@@ -383,12 +444,14 @@ const DragDrop = () => {
     tempSelectedDivs[divIndex].passage = event.target.innerHTML;
     setSelectedDivs(tempSelectedDivs);
 
-    generateAnswerField(
-      event.target.innerHTML,
-      divIndex,
-      header.type,
-      header.id
-    );
+    if (header.type !== "Multiple Questions")
+      generateAnswerField(
+        event.target.innerHTML,
+        divIndex,
+        header.type,
+        header.id,
+        false
+      );
   };
 
   const handleReset = () => {
@@ -911,12 +974,19 @@ const DragDrop = () => {
                     Radio Choice Questions
                   </div>
                   <div
-                    className="mb-4"
                     onClick={() =>
                       handleClick("header17", "Checkbox Choice Questions")
                     }
                   >
                     Checkbox Choice Questions
+                  </div>
+                  <div
+                    className="mb-4"
+                    onClick={() =>
+                      handleClick("header18", "Multiple Questions")
+                    }
+                  >
+                    Multiple Questions
                   </div>
                   <div className="d-flex mt-4">
                     <button
@@ -943,41 +1013,58 @@ const DragDrop = () => {
               <div>
                 <div className="box-right">
                   {selectedDivs.map((header, index) => (
-                    <div
-                      key={header.header}
-                      className={
-                        header.header === "header1"
-                          ? "header21Class"
-                          : "header2Class"
-                      }
-                    >
-                      <div className="d-flex justify-content-end">
-                        <button onClick={() => handleDelete(header)}>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-close"
-                          >
-                            <path d="M18 6L6 18M6 6l12 12"></path>
-                          </svg>
-                        </button>
-                      </div>
+                    <div>
                       <div
-                        contentEditable
-                        dangerouslySetInnerHTML={{
-                          __html: header.passage,
-                        }}
-                        onBlur={(event) =>
-                          handleContentChange(event, header, index)
+                        key={header.header}
+                        className={
+                          header.header === "header1"
+                            ? "header21Class"
+                            : "header2Class"
                         }
-                      />
+                      >
+                        <div className="d-flex justify-content-end">
+                          <button onClick={() => handleDelete(header)}>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="feather feather-close"
+                            >
+                              <path d="M18 6L6 18M6 6l12 12"></path>
+                            </svg>
+                          </button>
+                        </div>
+                        <div
+                          contentEditable
+                          dangerouslySetInnerHTML={{
+                            __html: header.passage,
+                          }}
+                          onBlur={(event) =>
+                            handleContentChange(event, header, index)
+                          }
+                        />
+                      </div>
+                      {header.type === "Multiple Questions" && (
+                        <div style={{ display: "flex", marginBottom: "20px" }}>
+                          <h5>Number Of Questions:</h5>
+                          <input
+                            type="number"
+                            value={questionStructure[index].numberOfQuestions}
+                            onChange={(e) =>
+                              handleNumberOfQuestionsChange(e, index)
+                            }
+                            onBlur={() =>
+                              handleNumberOfQuestionsChangeBlur(index)
+                            }
+                          />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

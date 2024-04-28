@@ -107,7 +107,7 @@
 }
 
 .lv-completed-questions {
-  background: grey !important;
+  background: green !important;
   color: white !important;
 }
 
@@ -492,6 +492,13 @@
 
 .mic-icon:hover {
   cursor: pointer;
+}
+
+.lv-box-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
 }
 
 @media (max-width: 978px) {

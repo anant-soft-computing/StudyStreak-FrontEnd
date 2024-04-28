@@ -151,7 +151,7 @@ const LiveExam = () => {
         },
         {
           role: "user",
-          content: `Questions: ${examData?.question}`,
+          content: `Questions: ${examData?.passage}`,
         },
         {
           role: "user",
@@ -273,6 +273,10 @@ const LiveExam = () => {
       } else if (examData?.exam_type === "Listening") {
         bandValue = listeningBandValues[totalCorrect];
       }
+    } else if (examData?.exam_type === "Speaking") {
+      bandValue = examAnswer[0]?.answers?.[0]?.answer
+        ?.split("#Band:")[1]
+        .split(" ")[1];
     }
 
     try {
@@ -371,26 +375,75 @@ const LiveExam = () => {
   };
 
   const handleAnswerLinking = (e, questionId, next) => {
-    const { value, id } = e.target;
+    const { value, id, name, checked } = e.target;
 
     const elementId = id.split("_")[0];
 
     const temp = [...examAnswer];
-    temp[next].answers.map((item) => {
-      if (item.questionId === id && elementId === "InputText") {
-        const trimedValue = value.trim();
-        item.answer = trimedValue;
-      } else if (item.questionId === id) {
-        item.answer = value;
+    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+
+    // is this a multipleTypeQuestions
+    const isMultiQuestions = examAnswer[next].answers.filter(
+      (item) => item.questionId === id
+    );
+
+    if (isMultiQuestions?.length <= 1) {
+      temp[next].answers.forEach((item) => {
+        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+        if (item.questionId === id && elementId === "InputText") {
+          const trimedValue = value.trim();
+          item.answer = trimedValue;
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.questionId === id && elementId === "Checkbox") {
+          item.answer = checked ? value : "";
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.questionId === id) {
+          item.answer = value;
+          conditionSatisfied = true; // Set the flag to true
+        }
+      });
+
+      setExamAnswer(temp);
+    } else {
+      const multipleTypeQuestions = checked
+        ? examAnswer[next].answers.findIndex(
+            (item) => item.questionId === id && item.answer === ""
+          )
+        : examAnswer[next].answers.findIndex(
+            (item) => item.questionId === id && item.answer !== ""
+          );
+      if (multipleTypeQuestions !== -1) {
+        temp[next].answers[multipleTypeQuestions].answer = checked ? value : "";
+        setExamAnswer(temp);
+      } else {
+        const contentElements = document.querySelectorAll(`[id="${id}"]`);
+        contentElements.forEach((element) => {
+          const isAlreadyAnswered = isMultiQuestions.findIndex(
+            (a) => a.answer === element.value
+          );
+
+          if (isAlreadyAnswered === -1) element.checked = false;
+        });
       }
-    });
-    setExamAnswer(temp);
+    }
   };
 
   useEffect(() => {
-    if (linkAnswer && examAnswer[0] && examAnswer[0].answers.length > 0) {
+    if (
+      instructionCompleted &&
+      examAnswer[0] &&
+      examAnswer[0].answers.length > 0
+    ) {
       setTimeout(() => {
-        examAnswer[0].answers.forEach((item) => {
+        // remove duplicate answers
+        const uniqueAnswers = examAnswer[0].answers.filter((item, index) => {
+          return (
+            examAnswer[0].answers.findIndex(
+              (obj) => obj.questionId === item.questionId
+            ) === index
+          );
+        });
+        uniqueAnswers.forEach((item) => {
           const contentElements = document.querySelectorAll(
             `[id="${item.questionId}"]`
           );
@@ -405,10 +458,9 @@ const LiveExam = () => {
             });
           });
         });
-        setLinkAnswer(false);
       }, 500);
     }
-  }, [linkAnswer, examAnswer]);
+  }, [instructionCompleted]);
 
   const htmlContent = useMemo(() => {
     const question = examData?.question || examData?.passage;
@@ -507,9 +559,23 @@ const LiveExam = () => {
       examData?.question_structure?.forEach((item, index) => {
         temp.forEach((element) => {
           if (element.type === item.type) {
-            paginationsStrucutre.push(
-              element.paginationsIds.splice(0, item.numberOfQuestions)
-            );
+            if (element.type === "Checkbox" && item?.isMultiQuestions) {
+              const multipleTypeQuestionsGroup = element.paginationsIds.splice(
+                0,
+                1
+              );
+              paginationsStrucutre = [
+                ...paginationsStrucutre,
+                ...Array.from(
+                  { length: item.numberOfQuestions },
+                  () => multipleTypeQuestionsGroup
+                ),
+              ];
+            } else if (element.type === item.type) {
+              paginationsStrucutre.push(
+                element.paginationsIds.splice(0, item.numberOfQuestions)
+              );
+            }
           }
         });
       });
@@ -674,18 +740,38 @@ const LiveExam = () => {
             </div>
           )}
           {examData?.exam_type === "Speaking" && (
-            <div className="lv-left-container">
-              <button
-                className="lv-footer-button"
-                onClick={speak}
-                disabled={speaking === 1}
-                style={{
-                  opacity: speaking === 1 ? 0.5 : 1,
-                  cursor: speaking === 1 ? "not-allowed" : "pointer",
-                }}
-              >
-                {speaking ? "Replay" : "Start"}
-              </button>
+            <div
+              className="lv-left-container"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+              }}
+            >
+              {["", "", ""].map((item, i) => (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    borderBottom: "grey 1px solid",
+                    paddingBottom: "20px",
+                    marginTop: "15px",
+                  }}
+                >
+                  <h4>Listen {i + 1} passage</h4>
+                  <button
+                    className="lv-footer-button"
+                    onClick={speak}
+                    disabled={speaking === 1}
+                    style={{
+                      opacity: speaking === 1 ? 0.5 : 1,
+                      cursor: speaking === 1 ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {speaking ? "Replay" : "Start"}
+                  </button>
+                </div>
+              ))}
             </div>
           )}
 
@@ -719,14 +805,16 @@ const LiveExam = () => {
                     </div>
                   );
                 })}
-              {examData?.exam_type === "Speaking" && (
-                <AudioRecorder
-                  setRecordedFilePath={setRecordedFilePath}
-                  next={0}
-                  exam_id={examData?.id}
-                  enableRecording={speaking === 2}
-                />
-              )}
+              {examData?.exam_type === "Speaking" &&
+                ["", "", ""].map((item, i) => (
+                  <AudioRecorder
+                    setRecordedFilePath={setRecordedFilePath}
+                    next={0}
+                    exam_id={examData?.id}
+                    enableRecording={speaking === 2}
+                    questions={examData?.passage}
+                  />
+                ))}
             </div>
           </div>
         </div>
@@ -738,9 +826,7 @@ const LiveExam = () => {
                   <div
                     className={`lv-footer-item ${
                       examAnswer[0].answers.length > 0 &&
-                      examAnswer[0].answers.find(
-                        (val) => val.questionId === item
-                      )?.answer !== ""
+                      examAnswer[0].answers[index].answer !== ""
                         ? "lv-completed-questions"
                         : ""
                     }`}

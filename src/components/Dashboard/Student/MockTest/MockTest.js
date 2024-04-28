@@ -18,6 +18,7 @@ const MockTest = () => {
   const { count, givenTest } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [mockTestData, setMockTestData] = useState([]);
+  const [speakingData, setSpeakingData] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -43,6 +44,41 @@ const MockTest = () => {
             ({ block_type }) => block_type === "Assignments"
           );
           setMockTestData(mockTest);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.error("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/speaking-block/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          const { data } = response;
+          const speakingDataFormat = data.map((item) => ({
+            ...item,
+            exam_name: item.name,
+            no_of_questions: item.questions.length,
+          }));
+          setSpeakingData(speakingDataFormat);
         } else {
           console.log("error");
         }
@@ -105,7 +141,7 @@ const MockTest = () => {
                           )}
                           {activeTab === "Speaking" && (
                             <TestTable
-                              testData={testByExamType("Speaking")}
+                              testData={speakingData}
                               givenTest={givenTest}
                               testType={"Speaking"}
                             />

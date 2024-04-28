@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Speaking = ({ speakingData, givenTest }) => {
   const handleClick = (id) => {
-    window.open(`/live-exam/${id}`, "_blank");
+    window.open(`/live-speaking-exam/${id}`, "_blank");
   };
 
   return (

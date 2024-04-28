@@ -6,7 +6,14 @@ const TestTable = ({ testData, givenTest, testType }) => {
     return (
       <button
         className="take-test"
-        onClick={() => window.open(`/live-exam/${params.data.id}`, "_blank")}
+        onClick={() =>
+          window.open(
+            `/${testType !== "Speaking" ? "live-exam" : "live-speaking-exam"}/${
+              params.data.id
+            }`,
+            "_blank"
+          )
+        }
       >
         Take Test
       </button>
@@ -61,7 +68,7 @@ const TestTable = ({ testData, givenTest, testType }) => {
       {testData.length === 0 ? (
         <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
       ) : (
-        <Table rowData={testData} columnDefs={columns}/>
+        <Table rowData={testData} columnDefs={columns} />
       )}
     </>
   );

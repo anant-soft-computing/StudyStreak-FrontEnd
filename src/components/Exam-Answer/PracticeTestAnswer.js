@@ -19,7 +19,7 @@ const PracticeTestAnswer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/practice-answers/${fullPaper[0].IELTS.id}`,
+          `/practice-answers/${fullPaper}`,
           {
             headers: {
               Accept: "application/json",
@@ -70,7 +70,7 @@ const PracticeTestAnswer = () => {
 
           let correct = 0;
           let incorrect = 0;
-          studentAnswers.forEach((studentAns, index) => {
+          studentAnswers?.forEach((studentAns, index) => {
             if (studentAns.answer_text === correctAnswers[index].answer_text) {
               correct++;
             } else {
@@ -86,7 +86,7 @@ const PracticeTestAnswer = () => {
         console.log("error", error);
       }
     })();
-  }, [fullPaper?.[0]?.IELTS?.id]);
+  }, [examForm, fullPaper]);
 
   return (
     <div className="body__wrapper">
@@ -98,6 +98,7 @@ const PracticeTestAnswer = () => {
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
                   <AnswerCard
+                    totalQuestions={correctAnswers.length}
                     timeTaken={timeTaken}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}

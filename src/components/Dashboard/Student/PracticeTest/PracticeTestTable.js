@@ -1,7 +1,9 @@
 import React from "react";
 import Table from "../../../UI/Table";
+import { useNavigate } from "react-router-dom";
 
 const PracticeTestTable = ({ testData, givenTest, testType }) => {
+  const navigate = useNavigate();
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
       if (Array.isArray(data?.IELTS[key])) {
@@ -12,20 +14,38 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
     });
   };
 
+  const testButton = (params) => {
+    const examId = params.data.id;
+    const paperId = params.data.IELTS.id;
+    const isGiven = givenTest.find((test) => test.id === examId);
+    if (isGiven) {
+      return (
+        <button
+          className="take-test"
+          onClick={() =>
+            navigate(`/eaxm-practice-test-answere/${examId}`, {
+              state: { fullPaper: paperId, examForm: testType },
+            })
+          }
+          style={{ backgroundColor: "green", border: "1px solid green" }}
+        >
+          Review Test
+        </button>
+      );
+    } else {
+      return (
+        <button className="take-test" onClick={() => handleClick(params.data)}>
+          Take Test
+        </button>
+      );
+    }
+  };
+
   const columns = [
     {
       headerName: "Take Test",
       field: "button",
-      cellRenderer: (params) => {
-        return (
-          <button
-            className="take-test"
-            onClick={() => handleClick(params.data)}
-          >
-            Take Test
-          </button>
-        );
-      },
+      cellRenderer: testButton,
     },
     {
       headerName: "Name",
@@ -101,7 +121,11 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
         const examId = params.data.id;
         const isGiven = givenTest.find((test) => test.id === examId);
         if (isGiven) {
-          return <button className="given-tag">Given</button>;
+          return (
+            <button className="given-tag" style={{ backgroundColor: "green" }}>
+              Given
+            </button>
+          );
         } else {
           return (
             <button className="given-tag" style={{ backgroundColor: "red" }}>

@@ -18,12 +18,21 @@ const AnswerCard = ({
             </div>
           </li>
         )}
-        <li className="text-dark">
-          Time Taken :
-          <div className="scc__meta">
-            <strong className="answerCount">{timeTaken}</strong>
-          </div>
-        </li>
+        {timeTaken ? (
+          <li className="text-dark">
+            Time Taken :
+            <div className="scc__meta">
+              <strong className="answerCount">{timeTaken}</strong>
+            </div>
+          </li>
+        ) : (
+          <li className="text-dark">
+            Band Score :
+            <div className="scc__meta">
+              <strong className="answerCount">{bandValue}</strong>
+            </div>
+          </li>
+        )}
       </ul>
       <ul className="answerContent">
         <li className="text-dark">
@@ -38,12 +47,14 @@ const AnswerCard = ({
             <strong className="answerCount">{incorrectCount}</strong>
           </div>
         </li>
-        <li className="text-dark">
-          Band Score :
-          <div className="scc__meta">
-            <strong className="answerCount">{bandValue}</strong>
-          </div>
-        </li>
+        {timeTaken && (
+          <li className="text-dark">
+            Band Score :
+            <div className="scc__meta">
+              <strong className="answerCount">{bandValue}</strong>
+            </div>
+          </li>
+        )}
       </ul>
     </div>
   );

@@ -644,7 +644,12 @@ const PracticeLiveExam = () => {
         setTimerRunning(false);
         practiceTestSubmit();
         navigate(`/eaxm-practice-test-answere/${examId}`, {
-          state: { timeTaken, bandValue, examForm, fullPaper },
+          state: {
+            timeTaken,
+            bandValue,
+            examForm,
+            fullPaper: fullPaper[0].IELTS.id,
+          },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

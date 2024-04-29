@@ -13,12 +13,11 @@ const Answer = () => {
   const [incorrectCount, setIncorrectCount] = useState(0);
 
   const examName = correctAnswer[0]?.exam?.exam_name;
-  const totalQuestions = correctAnswer[0]?.exam?.no_of_questions;
 
   const { examAnswer, timeTaken, bandValue, gptResponse, examData } =
     useLocation()?.state || {};
 
-  const studentAnswers = examAnswer[0].answers;
+  const studentAnswers = examAnswer?.[0]?.answers;
 
   useEffect(() => {
     (async () => {
@@ -97,7 +96,7 @@ const Answer = () => {
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
                   <AnswerCard
-                    totalQuestions={totalQuestions}
+                    totalQuestions={correctAnswer.length}
                     timeTaken={timeTaken}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}

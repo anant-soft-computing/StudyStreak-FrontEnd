@@ -9,10 +9,6 @@ import assignment from "../../../../img/icon/assignment.svg";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
-import regularClass from "../../../../img/icon/regularClass.svg";
-import speakingClass from "../../../../img/icon/speakingClass.svg";
-import oneToOneClass from "../../../../img/icon/oneToOneClass.svg";
-import groupClass from "../../../../img/icon/groupClass.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 
@@ -81,44 +77,6 @@ const DSSidebar = () => {
       },
     },
     {
-      name: "Regular Class",
-      icon: <img src={regularClass} alt="Regular Class" />,
-      link: "/regularClasses",
-      state: {
-        studentId: studentId,
-      },
-    },
-    {
-      name: "Speaking Practice",
-      icon: <img src={speakingClass} alt="Speaking Class" />,
-      link: "/speakingSolving",
-      state: {
-        studentId: studentId,
-        solvingClassBook: solvingClassBook[0],
-        count: count,
-      },
-    },
-    {
-      name: "Group Doubt Solving",
-      icon: <img src={groupClass} alt="Group Class" />,
-      link: "/groupDoubtSolving",
-      state: {
-        studentId: studentId,
-        solvingClassBook: solvingClassBook[0],
-        count: count,
-      },
-    },
-    {
-      name: "One To One Doubt Solving",
-      icon: <img src={oneToOneClass} alt="One To One Class" />,
-      link: "/doubtSolving",
-      state: {
-        studentId: studentId,
-        solvingClassBook: solvingClassBook[0],
-        count: count,
-      },
-    },
-    {
       name: "Settings",
       icon: <img src={settings} alt="Settings" />,
       link: "/studentSettings",
@@ -156,16 +114,6 @@ const DSSidebar = () => {
           const studentMT = studentPackage?.student_mock;
           const studentPT = studentPackage?.student_pt;
           const studentFLT = studentPackage?.student_flt;
-          const studentSP = studentPackage?.Live_class_enroll?.filter(
-            ({ liveclasstype }) => liveclasstype.name === "Speaking-Practice"
-          )?.length;
-          const studentOTOS = studentPackage?.Live_class_enroll?.filter(
-            ({ liveclasstype }) =>
-              liveclasstype.name === "One-To-One-Doubt-Solving"
-          )?.length;
-          const studentGDS = studentPackage?.Live_class_enroll?.filter(
-            ({ liveclasstype }) => liveclasstype.name === "Group-Doubt Solving"
-          )?.length;
 
           setCount({
             practice_test_count:
@@ -174,13 +122,6 @@ const DSSidebar = () => {
               packageDetails?.practice_test_count - studentMT || "",
             full_length_test_count:
               packageDetails?.full_length_test_count - studentFLT || "",
-            speaking_practice_count:
-              packageDetails?.speaking_test_count - studentSP || "",
-            group_doubt_solving_count:
-              packageDetails?.group_doubt_solving_count - studentGDS || "",
-            one_to_one_doubt_solving_count:
-              packageDetails?.one_to_one_doubt_solving_count - studentOTOS ||
-              "",
           });
           localStorage.setItem("StudentID", studentPackage?.student_id);
           localStorage.setItem(
@@ -287,10 +228,7 @@ const DSSidebar = () => {
                     </div>
                     {item.name === "Practice Test" ||
                     item.name === "Mini Test" ||
-                    item.name === "Full Length Test" ||
-                    item.name === "Speaking Practice" ||
-                    item.name === "Group Doubt Solving" ||
-                    item.name === "One To One Doubt Solving" ? (
+                    item.name === "Full Length Test" ? (
                       <span className="dashboard__label">
                         {
                           count[

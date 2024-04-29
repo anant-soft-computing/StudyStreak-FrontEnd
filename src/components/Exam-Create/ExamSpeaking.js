@@ -6,15 +6,11 @@ import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import Tab from "../UI/Tab";
 
-const intialSpeakingField = {
-  no_of_questions: "",
+const initialSpeakingField = {
+  name: "",
   difficulty_level: "Easy",
-  exam_name: "",
-  block_type: "Mock Test",
   block_threshold: "",
-  passage: "",
-  exam_type: "Speaking",
-  answers: [],
+  questions: [{ question: "", question_number: "" }],
 };
 
 const initialSubmit = {
@@ -27,32 +23,19 @@ const reducerSpeaking = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const tabs = [
-  { name: "Questions Details" },
-  { name: "Block Details" },
-  { name: "Passage" },
-];
+const tabs = [{ name: "Block Details" }, { name: "Question" }];
 
 const ExamSpeaking = ({ category }) => {
   const [SpeakingData, dispatchSpeakingData] = useReducer(
     reducerSpeaking,
-    intialSpeakingField
+    initialSpeakingField
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const [activeTab, setActiveTab] = useState("Questions Details");
+  const [activeTab, setActiveTab] = useState("Block Details");
+  const navigate = useNavigate();
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-  };
-
-  const navigate = useNavigate();
-
-  const handlePassageChange = (event, editor) => {
-    const data = editor.getData();
-    dispatchSpeakingData({
-      type: "passage",
-      value: data,
-    });
   };
 
   const setFormError = (errMsg) => {
@@ -63,32 +46,49 @@ const ExamSpeaking = ({ category }) => {
     });
   };
 
+  const addQuestion = () => {
+    dispatchSpeakingData({
+      type: "questions",
+      value: [...SpeakingData.questions, { question: "", question_number: "" }],
+    });
+  };
+
+  const removeQuestion = (index) => {
+    const updatedQuestions = SpeakingData.questions.filter(
+      (_, i) => i !== index
+    );
+    dispatchSpeakingData({
+      type: "questions",
+      value: updatedQuestions,
+    });
+  };
+
+  const handleQuestionChange = (index, field, value) => {
+    const updatedQuestions = [...SpeakingData.questions];
+    updatedQuestions[index][field] = value;
+    dispatchSpeakingData({
+      type: "questions",
+      value: updatedQuestions,
+    });
+  };
+
   const validateForm = () => {
-    if (!SpeakingData.no_of_questions) {
-      setFormError("No of Question is Required");
-      return false;
-    }
     if (!SpeakingData.difficulty_level) {
       setFormError("Difficulty Level is Required");
       return false;
     }
-    if (!SpeakingData.exam_name) {
+    if (!SpeakingData.name) {
       setFormError("Block Name is Required");
       return false;
     }
-    if (!SpeakingData.block_type) {
-      setFormError("Block Type is Required");
+    if (
+      !SpeakingData.questions.every(
+        (question) => question.question && question.question_number
+      )
+    ) {
+      setFormError("All Questions must have both Question and Question Number");
       return false;
     }
-    if (!SpeakingData.block_threshold) {
-      setFormError("Block Threshold is Required");
-      return false;
-    }
-    if (!SpeakingData.passage) {
-      setFormError("Passage is Required");
-      return false;
-    }
-
     setFormStatus({
       isError: false,
       errMsg: null,
@@ -100,21 +100,8 @@ const ExamSpeaking = ({ category }) => {
   const submitSpeakingExam = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
-    const data = {
-      block_threshold: SpeakingData.block_threshold,
-      block_type: SpeakingData.block_type,
-      difficulty_level: SpeakingData.difficulty_level,
-      exam_name: SpeakingData.exam_name,
-      exam_type: SpeakingData.exam_type,
-      no_of_questions: SpeakingData.no_of_questions,
-      passage: SpeakingData.passage,
-      answers: SpeakingData.answers,
-      exam_category: category,
-    };
-
     try {
-      const response = await ajaxCall("/exam-blocks/", {
+      const response = await ajaxCall("/speaking-block/", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -123,10 +110,10 @@ const ExamSpeaking = ({ category }) => {
           }`,
         },
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify(SpeakingData),
       });
       if (response.status === 201) {
-        toast.success("Speaking Exam Create SuccessFully");
+        toast.success("Speaking Exam Create Successfully");
         navigate("/admin-exam");
       } else if (response.status === 400) {
         toast.error("Some Problem Occurred. Please try again.");
@@ -150,21 +137,21 @@ const ExamSpeaking = ({ category }) => {
       <div className="tab-content tab__content__wrapper aos-init aos-animate">
         <div
           className={`tab-pane fade ${
-            activeTab === "Questions Details" ? "show active" : ""
+            activeTab === "Block Details" ? "show active" : ""
           }`}
         >
           <div className="row">
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Number of Question</label>
+                  <label>Block Name</label>
                   <input
-                    type="number"
-                    placeholder="Number of Question"
-                    value={SpeakingData.no_of_questions}
+                    type="text"
+                    placeholder="Block Name"
+                    value={SpeakingData.name}
                     onChange={(e) =>
                       dispatchSpeakingData({
-                        type: "no_of_questions",
+                        type: "name",
                         value: e.target.value,
                       })
                     }
@@ -194,53 +181,6 @@ const ExamSpeaking = ({ category }) => {
                 </select>
               </div>
             </div>
-          </div>
-        </div>
-        <div
-          className={`tab-pane fade ${
-            activeTab === "Block Details" ? "show active" : ""
-          }`}
-        >
-          <div className="row">
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label>Block Name</label>
-                  <input
-                    type="text"
-                    placeholder="Block Name"
-                    value={SpeakingData.exam_name}
-                    onChange={(e) =>
-                      dispatchSpeakingData({
-                        type: "exam_name",
-                        value: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-              <div className="dashboard__select__heading">
-                <span>Block Type</span>
-              </div>
-              <div className="dashboard__selector">
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={SpeakingData.block_type}
-                  onChange={(e) =>
-                    dispatchSpeakingData({
-                      type: "block_type",
-                      value: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Mock Test">Mock Test</option>
-                  <option value="Assignments">Assignment</option>
-                </select>
-              </div>
-            </div>
             <div className="row">
               <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <div className="dashboard__form__wraper">
@@ -265,21 +205,78 @@ const ExamSpeaking = ({ category }) => {
         </div>
         <div
           className={`tab-pane fade ${
-            activeTab === "Passage" ? "show active" : ""
+            activeTab === "Question" ? "show active" : ""
           }`}
         >
           <div className="row">
-            <div className="col-xl-12 col-lg-6 col-md-6 col-12">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label>Passage</label>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data={SpeakingData.passage}
-                    onChange={handlePassageChange}
-                  />
+            {SpeakingData.questions.map((question, index) => (
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12" key={index}>
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label>Question Number</label>
+                    <input
+                      type="number"
+                      placeholder="Question Number"
+                      value={question.question_number}
+                      onChange={(e) =>
+                        handleQuestionChange(
+                          index,
+                          "question_number",
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
                 </div>
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label>Question</label>
+                    <CKEditor
+                      editor={ClassicEditor}
+                      data={question.question}
+                      onChange={(event, editor) => {
+                        handleQuestionChange(
+                          index,
+                          "question",
+                          editor.getData()
+                        );
+                      }}
+                    />
+                  </div>
+                </div>
+                {SpeakingData.questions.length > 1 && (
+                  <button
+                    className="dashboard__small__btn__2 flash-card__remove__btn"
+                    onClick={() => removeQuestion(index)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-trash-2"
+                    >
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      <line x1="10" y1="11" x2="10" y2="17"></line>
+                      <line x1="14" y1="11" x2="14" y2="17"></line>
+                    </svg>
+                  </button>
+                )}
               </div>
+            ))}
+            <div className="col-xl-12 mt-2">
+              <button
+                className="dashboard__small__btn__2"
+                onClick={addQuestion}
+              >
+                Add Question
+              </button>
             </div>
           </div>
           <div className="create__course__bottom__button text-center">

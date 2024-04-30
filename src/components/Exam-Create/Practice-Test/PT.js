@@ -94,12 +94,41 @@ const PT = ({ type }) => {
               ({ exam_type, block_type }) =>
                 exam_type === type && block_type === "Mock Test"
             ),
-            Speaking: data.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
-            ),
           };
           setExams(updatedExams);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [type]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/speaking-block/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          const { data } = response;
+          setExams((prev) => ({
+            ...prev,
+            Speaking: data,
+          }));
         } else {
           console.log("error");
         }
@@ -189,7 +218,7 @@ const PT = ({ type }) => {
     const selectedIds = selectedNodes.map((node) => node?.data?.id);
 
     const total = selectedNodes.reduce((total, node) => {
-      return total + (node.data.no_of_questions || 0);
+      return total + (node.data.no_of_questions || node.data.questions.length || 0);
     }, 0);
 
     setTotalQuestions(total);
@@ -200,38 +229,66 @@ const PT = ({ type }) => {
     });
   };
 
-  const gridOptions = (rowData, handleRowSelection) => ({
-    rowData,
-    onSelectionChanged: handleRowSelection,
-    columnDefs: [
+  const gridOptions = (rowData, handleRowSelection) => {
+    let columnDefs = [
       {
         headerCheckboxSelection: true,
         checkboxSelection: true,
         resizable: false,
         width: 110,
       },
-      { headerName: "Exam Name", field: "exam_name", filter: true },
-      { headerName: "Exam Type", field: "exam_type", filter: true },
+      {
+        headerName: "Exam Name",
+        field: "exam_name" || "name",
+        filter: true,
+        valueGetter: (params) => {
+          return params.data?.exam_name || params.data?.name;
+        },
+      },
+      {
+        headerName: "Exam Type",
+        field: "exam_type" || "Speaking",
+        filter: true,
+        valueGetter: (params) => {
+          return params.data?.exam_type || "Speaking";
+        },
+      },
       {
         headerName: "No. Of Questions",
-        field: "no_of_questions",
+        field: "no_of_questions" || "questions.length",
         filter: true,
+        valueGetter: (params) => {
+          return params.data?.no_of_questions || params.data?.questions.length;
+        },
       },
-      { headerName: "Block Type", field: "block_type", filter: true },
+      {
+        headerName: "Block Type",
+        field: "block_type" || "Mock Test",
+        filter: true,
+        valueGetter: (params) => {
+          return params.data?.block_type || "Mock Test";
+        },
+      },
       {
         headerName: "Difficulty Level",
         field: "difficulty_level",
         filter: true,
       },
-    ],
-    pagination: true,
-    paginationPageSize: 10,
-    domLayout: "autoHeight",
-    defaultColDef: {
-      sortable: true,
-      resizable: true,
-    },
-  });
+    ];
+
+    return {
+      rowData,
+      onSelectionChanged: handleRowSelection,
+      columnDefs,
+      pagination: true,
+      paginationPageSize: 10,
+      domLayout: "autoHeight",
+      defaultColDef: {
+        sortable: true,
+        resizable: true,
+      },
+    };
+  };
 
   return (
     <>
@@ -304,7 +361,7 @@ const PT = ({ type }) => {
               <div className="dashboard__form__input">
                 <div className="ag-theme-quartz">
                   <AgGridReact
-                    {...gridOptions(exams.Reading, handleRowSelection(type))}
+                    {...gridOptions(exams[type], handleRowSelection(type))}
                     rowSelection={rowSelection}
                   />
                 </div>

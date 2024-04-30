@@ -4,8 +4,15 @@ import Table from "../../../UI/Table";
 
 const ViewExam = () => {
   const [examList, setExamList] = useState([]);
+  const [speakingList, setSpeakingList] = useState([]);
   const [ptList, setPtList] = useState([]);
   const [fltList, setFltList] = useState([]);
+
+  const mtData = [...examList, ...speakingList];
+  const miniTestData = mtData.map((item, index) => ({
+    ...item,
+    no: index + 1,
+  }));
 
   const fetchData = async (url, filterFn, setData) => {
     try {
@@ -45,6 +52,7 @@ const ViewExam = () => {
       ({ block_type }) => block_type === "Mock Test",
       setExamList
     );
+    fetchData("/speaking-block/", () => true, setSpeakingList);
     fetchData("/moduleListView/", () => true, setPtList);
     fetchData("/get/flt/", () => true, setFltList);
   }, []);
@@ -57,28 +65,46 @@ const ViewExam = () => {
         </div>
       </div>
       <Table
-        rowData={examList}
+        rowData={miniTestData}
         columnDefs={[
           { headerName: "No.", field: "no", resizable: false, width: 68 },
           {
             headerName: "Exam Name",
-            field: "exam_name",
+            field: "exam_name" || "name",
             filter: true,
             width: 162,
+            valueGetter: (params) => {
+              return params.data?.exam_name || params.data?.name;
+            },
           },
           {
             headerName: "Exam Type",
-            field: "exam_type",
+            field: "exam_type" || "Speaking",
             filter: true,
             width: 162,
+            valueGetter: (params) => {
+              return params.data?.exam_type || "Speaking";
+            },
           },
           {
             headerName: "No. Of Questions",
-            field: "no_of_questions",
+            field: "no_of_questions" || "questions.length",
             filter: true,
             width: 162,
+            valueGetter: (params) => {
+              return (
+                params.data?.no_of_questions || params.data?.questions.length
+              );
+            },
           },
-          { headerName: "Block Type", field: "block_type", filter: true },
+          {
+            headerName: "Block Type",
+            field: "block_type" || "Mock Test",
+            filter: true,
+            valueGetter: (params) => {
+              return params.data?.block_type || "Mock Test";
+            },
+          },
           {
             headerName: "Difficulty Level",
             field: "difficulty_level",

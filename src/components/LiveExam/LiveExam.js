@@ -130,7 +130,7 @@ const LiveExam = () => {
     setNumberOfWord(words.length);
   };
 
-  const doAnswerSubmit = async () => {
+  const handleWritingSubmit = async () => {
     const answersArray = [];
 
     examAnswer[0].answers.forEach((answer, index) => {
@@ -188,7 +188,7 @@ const LiveExam = () => {
         student_exam: answersArray,
         user: userData?.userId,
         exam: parseInt(examId),
-        gpt_response: gptResponse,
+        AI_Assessment: gptResponse,
         band: bandValue,
       });
 
@@ -874,7 +874,7 @@ const LiveExam = () => {
                     ) {
                       handleRLSubmit();
                     } else if (examData?.exam_type === "Writing") {
-                      doAnswerSubmit();
+                      handleWritingSubmit();
                     }
                   }}
                 >

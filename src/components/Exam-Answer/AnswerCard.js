@@ -10,7 +10,7 @@ const AnswerCard = ({
   return (
     <div className="course__details__wraper">
       <ul className="answerContent">
-        {totalQuestions && (
+        {totalQuestions >= 0 && (
           <li className="text-dark">
             Total Question :
             <div className="scc__meta">
@@ -29,7 +29,7 @@ const AnswerCard = ({
           <li className="text-dark">
             Band Score :
             <div className="scc__meta">
-              <strong className="answerCount">{bandValue}</strong>
+              <strong className="answerCount">{bandValue || "-"}</strong>
             </div>
           </li>
         )}
@@ -51,7 +51,7 @@ const AnswerCard = ({
           <li className="text-dark">
             Band Score :
             <div className="scc__meta">
-              <strong className="answerCount">{bandValue}</strong>
+              <strong className="answerCount">{bandValue || "-"}</strong>
             </div>
           </li>
         )}

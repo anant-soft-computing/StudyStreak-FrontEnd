@@ -495,7 +495,7 @@ const PracticeLiveExam = () => {
         // fetch correct answers
         try {
           const response = await ajaxCall(
-            `/practice-answers/${fullPaper[0].IELTS.id}`,
+            `/practice-answers/${fullPaper[0].IELTS.id}/`,
             {
               headers: {
                 Accept: "application/json",
@@ -780,6 +780,7 @@ const PracticeLiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
+        practiceTestSubmit();
         navigate(`/eaxm-answere/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue: 0, examData },
         });

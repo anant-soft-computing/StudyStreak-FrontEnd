@@ -23,7 +23,7 @@ const Answer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/answerslistview/${examId}`,
+          `/answerslistview/${examId}/`,
           {
             headers: {
               Accept: "application/json",

@@ -4,9 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
-import readingBandValues from "../../utils/bandValues/ReadingBandValues";
-import listeningBandValues from "../../utils/bandValues/listeningBandValues";
-import SmallModal from "../UI/Modal";
 import { htmlToText } from "html-to-text";
 import SpeakingInstruction from "./Instruction/SpeakingInstruction";
 
@@ -21,18 +18,13 @@ const LiveSpeakingExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState({});
-  const [examAnswer, setExamAnswer] = useState([]);
   const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const synth = window.speechSynthesis;
   const [speaking, setSpeaking] = useState([initialSpeakingSingleQuesionState]);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
-  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
@@ -80,229 +72,6 @@ const LiveSpeakingExam = () => {
       }
     })();
   }, [examId]);
-
-  const examSubmit = async () => {
-    const data = {
-      student_id: studentId,
-      exam_id: parseInt(examId),
-      typetest: "Mock Test",
-    };
-    try {
-      const response = await ajaxCall(
-        "/student-mocktest-submit/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-        8000
-      );
-      if (response.status === 200) {
-        toast.success("Your Exam Submitted Successfully");
-      } else {
-        toast.error("You Have All Ready Submitted This Exam");
-      }
-    } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
-    }
-  };
-
-  const doAnswerSubmit = async () => {
-    const answersArray = [];
-
-    examAnswer[0].answers.forEach((answer, index) => {
-      answersArray.push({
-        question_number: index + 1,
-        answer_text: answer.answer,
-      });
-    });
-
-    // Call ChaGpt API for checking the answer
-    const gptBody = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content:
-            "Analyse The Package For IELTS Writing Task With Following Criteria TASK RESPONSE, COHERENCE AND COHESION, LEXICAL RESOURCE AND Grammatical Range and Accuracy and Give IELTS Bands To The Task",
-        },
-        {
-          role: "user",
-          content: `Questions: ${examData?.passage}`,
-        },
-        {
-          role: "user",
-          content: `Answers: ${examAnswer[0].answers[0].answer} `,
-        },
-        {
-          role: "user",
-          content:
-            "Give band explanation as #Explanation: exaplanationValue  and band as #Band:bandValue",
-        },
-      ],
-    };
-
-    try {
-      let gptResponse;
-      let bandValue;
-      try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-          },
-          body: JSON.stringify(gptBody),
-        });
-        const data = await res.json();
-        bandValue = data?.choices?.[0]?.message?.content
-          ?.split("#Band:")[1]
-          .split(" ")[1];
-        gptResponse = data?.choices?.[0]?.message?.content;
-      } catch (error) {}
-
-      const data = JSON.stringify({
-        student_exam: answersArray,
-        user: userData?.userId,
-        exam: parseInt(examId),
-        gpt_response: gptResponse,
-        band: bandValue,
-      });
-
-      const response = await ajaxCall(
-        `/studentanswerlistview/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-
-      if (response.status === 201) {
-        setTimerRunning(false);
-        examSubmit();
-        navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, timeTaken, bandValue, gptResponse, examData },
-        });
-      } else if (response.status === 400) {
-        toast.error("Please Submit Your Exam Answer");
-      } else {
-        toast.error("Some Problem Occurred. Please try again.");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const handleRLSubmit = async () => {
-    const answersArray = [];
-    let bandValue = 0;
-
-    examAnswer[0].answers.forEach((answer, index) => {
-      answersArray.push({
-        question_number: index + 1,
-        answer_text: answer.answer,
-      });
-    });
-
-    if (
-      examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Listening"
-    ) {
-      let totalCorrect = 0;
-      examAnswer[0]?.answers?.forEach((answer, index) => {
-        const correctAnswer = examData?.answers[index]?.answer_text.trim();
-        const studentAnswer = answer.answer.trim();
-
-        if (correctAnswer?.includes(" OR ")) {
-          const correctOptions = correctAnswer
-            .split(" OR ")
-            .map((option) => option.trim());
-          if (correctOptions.includes(studentAnswer)) {
-            totalCorrect++;
-          }
-        } else if (correctAnswer?.includes(" AND ")) {
-          const correctOptions = correctAnswer
-            .split(" AND ")
-            .map((option) => option.trim());
-          if (
-            correctOptions.every((option) => studentAnswer.includes(option))
-          ) {
-            totalCorrect++;
-          }
-        } else {
-          const correctAnswer = examData?.answers[index]?.answer_text;
-          if (answer.answer === correctAnswer) {
-            totalCorrect++;
-          }
-        }
-      });
-
-      if (examData?.exam_type === "Reading") {
-        bandValue = readingBandValues[totalCorrect];
-      } else if (examData?.exam_type === "Listening") {
-        bandValue = listeningBandValues[totalCorrect];
-      }
-    } else if (examData?.exam_type === "Speaking") {
-      bandValue = examAnswer[0]?.answers?.[0]?.answer
-        ?.split("#Band:")[1]
-        .split(" ")[1];
-    }
-
-    try {
-      const data = JSON.stringify({
-        student_exam: answersArray,
-        user: userData?.userId,
-        exam: parseInt(examId),
-        band: bandValue,
-      });
-
-      const response = await ajaxCall(
-        `/studentanswerlistview/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-
-      if (response.status === 201) {
-        setTimerRunning(false);
-        examSubmit();
-        navigate(`/eaxm-answere/${examData?.id}`, {
-          state: { examAnswer, timeTaken, bandValue, examData },
-        });
-      } else if (response.status === 400) {
-        toast.error("Please Submit Your Exam Answer");
-      } else {
-        toast.error("Some Problem Occurred. Please try again.");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  // Function to scroll to content
 
   useEffect(() => {
     if (recordedFilePath) {
@@ -365,25 +134,11 @@ const LiveSpeakingExam = () => {
     };
   }, []);
 
-  const reviewContent = () => (
-    <div className="card-container">
-      {examAnswer[0]?.answers.map((answer, index) => (
-        <div key={index} className="card answer__width">
-          <div className="card-body">
-            <h6 className="card-title">Q. {index + 1}</h6>
-            <h6 className="card-text">
-              Answer : <span className="text-success">{answer.answer}</span>
-            </h6>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-
   useEffect(() => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
-      navigate(`/studentDashboard`);
+      toast.success("Your Exam Submitted Successfully");
+      setTimeout(() => navigate(`/mockTest`), 3000);
     }
   }, [speaking]);
 
@@ -506,55 +261,6 @@ const LiveSpeakingExam = () => {
             <div className="lv-box-right">{recorderContainer}</div>
           </div>
         </div>
-        {isConfirmModalOpen && (
-          <SmallModal
-            size="md"
-            centered
-            isOpen={isConfirmModalOpen}
-            footer={
-              <div className="d-flex gap-2">
-                <button
-                  className="btn btn-success"
-                  onClick={() => {
-                    if (
-                      examData?.exam_type === "Reading" ||
-                      examData?.exam_type === "Listening" ||
-                      examData?.exam_type === "Speaking"
-                    ) {
-                      handleRLSubmit();
-                    } else if (examData?.exam_type === "Writing") {
-                      doAnswerSubmit();
-                    }
-                  }}
-                >
-                  Yes
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => setIsConfirmModalOpen(false)}
-                >
-                  No
-                </button>
-              </div>
-            }
-          >
-            <h5>Are You Sure You Want To Submit ?</h5>
-            {reviewContent()}
-          </SmallModal>
-        )}
-        {isModalOpen &&
-          (examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening") && (
-            <SmallModal
-              size="lg"
-              centered
-              title="Your Answers"
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-            >
-              {reviewContent()}
-            </SmallModal>
-          )}
       </div>
     </>
   );

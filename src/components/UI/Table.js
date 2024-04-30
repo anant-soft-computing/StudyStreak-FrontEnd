@@ -8,7 +8,7 @@ const Table = ({ rowData, columnDefs }) => {
     rowData,
     columnDefs,
     pagination: true,
-    paginationPageSize: 10,
+    paginationPageSize: 20,
     domLayout: "autoHeight",
     defaultColDef: {
       sortable: true,

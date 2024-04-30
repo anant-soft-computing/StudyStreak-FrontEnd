@@ -176,7 +176,7 @@ const FullLengthLiveExam = () => {
           if (correctAnswersAlready) return;
 
           const response = await ajaxCall(
-            `/practice-answers/${examData?.paperId}`,
+            `/practice-answers/${examData?.paperId}/`,
             {
               headers: {
                 Accept: "application/json",

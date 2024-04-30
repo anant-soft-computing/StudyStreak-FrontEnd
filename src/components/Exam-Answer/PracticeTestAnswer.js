@@ -19,7 +19,7 @@ const PracticeTestAnswer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/practice-answers/${fullPaper}`,
+          `/practice-answers/${fullPaper}/`,
           {
             headers: {
               Accept: "application/json",

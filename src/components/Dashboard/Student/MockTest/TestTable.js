@@ -22,7 +22,7 @@ const TestTable = ({ testData, givenTest, testType }) => {
 
   const testStatus = (params) => {
     const examId = params.data.id;
-    const isGiven = givenTest.find((test) => test.id === examId);
+    const isGiven = givenTest?.find((test) => test?.id === examId);
     if (isGiven) {
       return <button className="given-tag">Given</button>;
     } else {
@@ -41,18 +41,16 @@ const TestTable = ({ testData, givenTest, testType }) => {
       cellRenderer: takeTest,
       filter: true,
     },
-    { headerName: "Name", field: "exam_name", filter: true, width: 235 },
+    { headerName: "Name", field: "exam_name", filter: true },
     {
       headerName: "No. Of Questions",
       field: "no_of_questions",
       filter: true,
-      width: 235,
     },
     {
       headerName: "Difficulty Level",
       field: "difficulty_level",
       filter: true,
-      width: 245,
     },
 
     {

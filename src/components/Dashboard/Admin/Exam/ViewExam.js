@@ -72,7 +72,6 @@ const ViewExam = () => {
             headerName: "Exam Name",
             field: "exam_name" || "name",
             filter: true,
-            width: 162,
             valueGetter: (params) => {
               return params.data?.exam_name || params.data?.name;
             },
@@ -81,7 +80,6 @@ const ViewExam = () => {
             headerName: "Exam Type",
             field: "exam_type" || "Speaking",
             filter: true,
-            width: 162,
             valueGetter: (params) => {
               return params.data?.exam_type || "Speaking";
             },
@@ -90,7 +88,6 @@ const ViewExam = () => {
             headerName: "No. Of Questions",
             field: "no_of_questions" || "questions.length",
             filter: true,
-            width: 162,
             valueGetter: (params) => {
               return (
                 params.data?.no_of_questions || params.data?.questions.length
@@ -109,7 +106,6 @@ const ViewExam = () => {
             headerName: "Difficulty Level",
             field: "difficulty_level",
             filter: true,
-            width: 162,
           },
           {
             headerName: "Block Threshold",
@@ -139,25 +135,21 @@ const ViewExam = () => {
                 headerName: "Reading Set",
                 field: "Reading.length",
                 filter: true,
-                width: 162,
               },
               {
                 headerName: "Writing Set",
                 field: "Writing.length",
                 filter: true,
-                width: 162,
               },
               {
                 headerName: "Listening Set",
                 field: "Listening.length",
                 filter: true,
-                width: 162,
               },
               {
                 headerName: "Speaking Set",
                 field: "Speaking.length",
                 filter: true,
-                width: 162,
               },
             ]}
           />
@@ -183,25 +175,21 @@ const ViewExam = () => {
                 headerName: "Reading Set",
                 field: "reading_set.Reading.length",
                 filter: true,
-                width: 162,
               },
               {
                 headerName: "Writing Set",
                 field: "writing_set.Writing.length",
                 filter: true,
-                width: 162,
               },
               {
                 headerName: "Listening Set",
                 field: "listening_set.Listening.length",
                 filter: true,
-                width: 162,
               },
               {
                 headerName: "Speaking Set",
                 field: "speaking_set.Speaking.length",
                 filter: true,
-                width: 162,
               },
             ]}
           />

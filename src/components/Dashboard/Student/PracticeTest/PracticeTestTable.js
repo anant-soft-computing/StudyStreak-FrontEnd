@@ -17,7 +17,7 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
   const testButton = (params) => {
     const examId = params.data.id;
     const paperId = params.data.IELTS.id;
-    const isGiven = givenTest.find((test) => test.id === examId);
+    const isGiven = givenTest?.find((test) => test?.id === examId);
     if (isGiven) {
       return (
         <button
@@ -72,7 +72,6 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
             return "";
         }
       },
-      width: 155,
       filter: true,
     },
     {
@@ -92,7 +91,6 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
             return "";
         }
       },
-      width: 160,
       filter: true,
     },
     {

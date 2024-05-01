@@ -8,7 +8,6 @@ const columns = [
     field: "no",
     resizable: false,
     width: 76,
-    headerClass: "ag-grid-header",
   },
   { headerName: "Name", field: "batch_name", filter: true },
   { headerName: "Package", field: "add_package.package_name", filter: true },
@@ -16,20 +15,17 @@ const columns = [
     headerName: "Start Date",
     field: "batch_startdate",
     filter: true,
-    width: 160,
   },
-  { headerName: "End Date", field: "batch_enddate", filter: true, width: 160 },
+  { headerName: "End Date", field: "batch_enddate", filter: true },
   {
     headerName: "Start Time",
     field: "batch_start_timing",
     filter: true,
-    width: 160,
   },
   {
     headerName: "End Time",
     field: "batch_end_timing",
     filter: true,
-    width: 160,
   },
 ];
 

@@ -4,7 +4,7 @@ import moment from "moment";
 import Table from "../../../UI/Table";
 
 const columns = [
-  { headerName: "No.", field: "no", filter: true, resizable: false, width: 86 },
+  { headerName: "No.", field: "no", resizable: false, width: 86 },
   {
     headerName: "Batch",
     field: "select_batch.batch_name",
@@ -15,34 +15,29 @@ const columns = [
     headerName: "Meeting Name",
     field: "meeting_title",
     filter: true,
-    width: 150,
   },
   {
     headerName: "Start Date",
     field: "start_time",
     filter: true,
-    width: 120,
     valueFormatter: ({ value }) => moment(value).format("YYYY-MM-DD"),
   },
   {
     headerName: "Start Time",
     field: "start_time",
     filter: true,
-    width: 120,
     valueFormatter: ({ value }) => moment(value).format("HH:mm:ss"),
   },
   {
     headerName: "End Date",
     field: "end_time",
     filter: true,
-    width: 120,
     valueFormatter: ({ value }) => moment(value).format("YYYY-MM-DD"),
   },
   {
     headerName: "End Time",
     field: "end_time",
     filter: true,
-    width: 120,
     valueFormatter: ({ value }) => moment(value).format("HH:mm:ss"),
   },
 ];

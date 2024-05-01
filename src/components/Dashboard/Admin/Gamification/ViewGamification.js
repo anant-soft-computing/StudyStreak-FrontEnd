@@ -9,26 +9,22 @@ const columns = [
     headerName: "Exam Name",
     field: "exam_name",
     filter: true,
-    width: 162,
   },
   {
     headerName: "Exam Type",
     field: "exam_type",
     filter: true,
-    width: 120,
   },
   {
     headerName: "No. Of Questions",
     field: "no_of_questions",
     filter: true,
-    width: 162,
   },
-  { headerName: "Block Type", field: "block_type", filter: true, width: 120 },
+  { headerName: "Block Type", field: "block_type", filter: true },
   {
     headerName: "Difficulty Level",
     field: "difficulty_level",
     filter: true,
-    width: 162,
   },
   {
     headerName: "Block Threshold",

@@ -10,9 +10,8 @@ const columns = [
     headerName: "Course Delivery",
     field: "course_delivery",
     filter: true,
-    width: 160,
   },
-  { headerName: "Course Type", field: "course_type", filter: true, width: 130 },
+  { headerName: "Course Type", field: "course_type", filter: true },
   {
     headerName: "Enrollment Start Date",
     field: "EnrollmentStartDate",
@@ -27,22 +26,19 @@ const columns = [
     headerName: "Max Enrollment",
     field: "max_enrollments",
     filter: true,
-    width: 170,
   },
-  { headerName: "Category", field: "Category.name", filter: true, width: 110 },
-  { headerName: "Level", field: "Level.name", filter: true, width: 110 },
-  { headerName: "Language", field: "Language.name", filter: true, width: 120 },
+  { headerName: "Category", field: "Category.name", filter: true },
+  { headerName: "Level", field: "Level.name", filter: true },
+  { headerName: "Language", field: "Language.name", filter: true },
   {
     headerName: "SEO Meta Keyword",
     field: "SEO_Meta_Keywords",
     filter: true,
-    width: 180,
   },
   {
     headerName: "SEO Meta Keyword",
     field: "Meta_Description",
     filter: true,
-    width: 180,
   },
 ];
 

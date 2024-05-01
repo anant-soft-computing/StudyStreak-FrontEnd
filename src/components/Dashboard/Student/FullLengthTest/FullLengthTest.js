@@ -64,13 +64,11 @@ const FullLengthTest = () => {
           </button>
         );
       },
-      width: 365,
     },
     {
       headerName: "Name",
       field: "name",
       cellRenderer: (params) => <div>{params.data?.name}</div>,
-      width: 365,
     },
     {
       headerName: "Status",
@@ -88,7 +86,6 @@ const FullLengthTest = () => {
           );
         }
       },
-      width: 365,
     },
   ];
 

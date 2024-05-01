@@ -41,7 +41,7 @@ const HeroBanner = () => {
               </div>
               <div>
                 <button className="default__button" onClick={handleOnClick}>
-                  Free Mock Test
+                  Free Mini Test
                 </button>
               </div>
             </div>

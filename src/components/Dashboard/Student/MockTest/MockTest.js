@@ -15,10 +15,12 @@ const tabs = [
 ];
 
 const MockTest = () => {
-  const { count, givenTest } = useLocation().state || {};
+  const { count, givenTest, givenSpeakingTest } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [mockTestData, setMockTestData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
+
+  console.log("givenTest", givenTest);
 
   useEffect(() => {
     (async () => {
@@ -144,6 +146,7 @@ const MockTest = () => {
                               testData={speakingData}
                               givenTest={givenTest}
                               testType={"Speaking"}
+                              givenSpeakingTest={givenSpeakingTest}
                             />
                           )}
                         </div>

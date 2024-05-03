@@ -18,6 +18,7 @@ const DSSidebar = () => {
   const [givenMT, setGivenMT] = useState([]);
   const [givenPT, setGivenPT] = useState([]);
   const [givenFLT, setGivenFLT] = useState([]);
+  const [givenSpeaking, setGivenSpeaking] = useState([]);
   const [studentId, setStudentId] = useState();
   const [count, setCount] = useState({});
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -52,7 +53,11 @@ const DSSidebar = () => {
       name: "Mini Test",
       icon: <img src={assignment} alt="Mini Test" />,
       link: "/mockTest",
-      state: { count: count, givenTest: givenMT },
+      state: {
+        count: count,
+        givenTest: givenMT,
+        givenSpeakingTest: givenSpeaking,
+      },
     },
     {
       name: "Practice Test",
@@ -165,6 +170,7 @@ const DSSidebar = () => {
           setGivenMT(response?.data[0].student_mock);
           setGivenPT(response?.data[0].student_pt);
           setGivenFLT(response?.data[0].student_flt);
+          setGivenSpeaking(response?.data[0].student_speakingblock);
         } else {
           console.log("error");
         }

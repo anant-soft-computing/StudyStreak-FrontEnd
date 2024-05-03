@@ -22,6 +22,7 @@ const LiveSpeakingExam = () => {
   const [timerRunning, setTimerRunning] = useState(true);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const synth = window.speechSynthesis;
   const [speaking, setSpeaking] = useState([initialSpeakingSingleQuesionState]);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
@@ -39,6 +40,37 @@ const LiveSpeakingExam = () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
+
+  const examSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      speakingblock_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-speakingblock-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have All Ready Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -137,7 +169,7 @@ const LiveSpeakingExam = () => {
   useEffect(() => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
-      toast.success("Your Exam Submitted Successfully");
+      examSubmit();
       setTimeout(() => navigate(`/mockTest`), 3000);
     }
   }, [speaking]);

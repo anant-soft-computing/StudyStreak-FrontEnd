@@ -1,7 +1,7 @@
 import React from "react";
 import Table from "../../../UI/Table";
 
-const TestTable = ({ testData, givenTest, testType }) => {
+const TestTable = ({ testData, givenTest, givenSpeakingTest, testType }) => {
   const takeTest = (params) => {
     return (
       <button
@@ -22,7 +22,10 @@ const TestTable = ({ testData, givenTest, testType }) => {
 
   const testStatus = (params) => {
     const examId = params.data.id;
-    const isGiven = givenTest?.find((test) => test?.id === examId);
+    const isGiven =
+      testType === "Speaking"
+        ? givenSpeakingTest?.find((test) => test?.id === examId)
+        : givenTest?.find((test) => test?.id === examId);
     if (isGiven) {
       return <button className="given-tag">Given</button>;
     } else {

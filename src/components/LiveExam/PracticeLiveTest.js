@@ -42,6 +42,7 @@ const PracticeLiveExam = () => {
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const [numberOfWord, setNumberOfWord] = useState(0);
+  const [questionsNumber, setQuestionsNumber] = useState(1);
   let highlightedElement = null;
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
@@ -319,7 +320,7 @@ const PracticeLiveExam = () => {
     );
   };
 
-  const fetchHtmlContent = async (paperData, index) => {
+  const fetchHtmlContent = async (paperData, index, tempQuestions) => {
     const question = paperData?.question;
     let tempAnswer = {};
 
@@ -441,6 +442,13 @@ const PracticeLiveExam = () => {
       // Display questions for the first page initially
       questionPassage += `<div className="mainContainer">${$.html()}</div>`;
 
+      // Replace ♫ with unique symbols
+      let serialNumber = tempQuestions;
+      questionPassage = questionPassage.replaceAll(
+        "++",
+        () => `${serialNumber++}`
+      );
+
       const tempPaginationStructure = paginationsStrucutre.map((item) => {
         return {
           question_number: item,
@@ -475,15 +483,22 @@ const PracticeLiveExam = () => {
         );
         let tempHtmlContents = [];
         let tempExamAnswer = [];
+        let tempQuestions = 1;
         for (let paper of examDataList) {
           const index = examDataList.indexOf(paper);
-          const returnContent = await fetchHtmlContent(paper, index);
+          const returnContent = await fetchHtmlContent(
+            paper,
+            index,
+            tempQuestions
+          );
           tempHtmlContents.push(returnContent.questionPassage);
           const tempUniqueArr = {
             name: `section-${index + 1}`,
             ...returnContent.tempAnswer,
           };
           tempExamAnswer.push(tempUniqueArr);
+          tempQuestions =
+            tempExamAnswer.map((item) => [...item.data]).flat().length + 1;
         }
         setHtmlContents(tempHtmlContents);
         setExamAnswer(tempExamAnswer);

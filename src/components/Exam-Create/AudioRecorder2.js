@@ -39,6 +39,7 @@ const AudioRecorder = ({
 
         mediaRecorderRef.current.onstop = () => {
           const blob = new Blob(chunksRef.current, { type: "audio/mp3" });
+
           setAudioBlob(blob);
         };
 
@@ -58,7 +59,7 @@ const AudioRecorder = ({
       const formData = new FormData();
       formData.append("question_number", question_number);
       formData.append("extension", "mp3");
-      formData.append("answer_audio", audioBlob);
+      formData.append("answer_audio", audioBlob, "output.mp3");
       formData.append("user", user);
       formData.append("speaking_block", exam?.id);
 
@@ -101,9 +102,9 @@ const AudioRecorder = ({
       <h5 style={{ alignSelf: "center" }}>
         {(!enableRecording &&
           "Click on the Mic icon to Record your Response") ||
+          (completed && "Recording Completed") ||
           (isRecording && "Recording...") ||
-          (!isRecording && !audioBlob && "Click on Mic to Recording") ||
-          "Recording Completed"}
+          (!isRecording && !audioBlob && "Click on Mic to Recording")}
       </h5>
       <button
         disabled={!enableRecording}
@@ -112,24 +113,16 @@ const AudioRecorder = ({
       >
         {isRecording ? (
           <i className="icofont-stop audio_stop_icon"></i>
-        ) : (
+        ) : !completed ? (
           <i
             class={`icofont-mic audio-30  ${
               enableRecording && "audio_recorder_icon"
             }`}
             style={{ background: completed ? "green" : "" }}
           ></i>
-        )}
+        ) : null}
       </button>
-      {audioBlob && (
-        <div>
-          <h2>Recorded Audio</h2>
-          <audio controls>
-            <source src={URL.createObjectURL(audioBlob)} type="audio/mp3" />
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-      )}
+      {audioBlob && <audio controls src={URL.createObjectURL(audioBlob)} />}
     </div>
   );
 };

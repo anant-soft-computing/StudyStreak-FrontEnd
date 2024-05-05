@@ -8,7 +8,14 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
       if (Array.isArray(data?.IELTS[key])) {
         if (data?.IELTS[key].length > 0) {
-          window.open(`/practice-live-exam/IELTS/${key}/${data.id}`, "_blank");
+          window.open(
+            `${
+              testType === "Speaking"
+                ? "/practice-speaking-live-exam"
+                : "/practice-live-exam"
+            }/IELTS/${key}/${data.id}`,
+            "_blank"
+          );
         }
       }
     });
@@ -117,7 +124,7 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
       field: "Status",
       cellRenderer: (params) => {
         const examId = params.data.id;
-        const isGiven = givenTest.find((test) => test.id === examId);
+        const isGiven = givenTest?.find((test) => test.id === examId);
         if (isGiven) {
           return (
             <button className="given-tag" style={{ backgroundColor: "green" }}>

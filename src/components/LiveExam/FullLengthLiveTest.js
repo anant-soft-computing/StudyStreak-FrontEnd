@@ -3,7 +3,7 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder";
+import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
@@ -102,6 +102,18 @@ const FullLengthLiveExam = () => {
     }
   }, [timer]);
 
+  function generateRandomId(length) {
+    let characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let randomId = "";
+    for (let i = 0; i < length; i++) {
+      randomId += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return randomId;
+  }
+
   const sortPapers = (arr) => {
     return arr.sort((a, b) => {
       const tempExamName1Array = a.exam_name.split(" ");
@@ -148,7 +160,18 @@ const FullLengthLiveExam = () => {
           sortPapers(filteredData[0].writing_set.Writing).forEach((item) => {
             pappers.push({ ...item, paperId: filteredData[0].writing_set.id });
           });
-          sortPapers(filteredData[0].speaking_set.Speaking).forEach((item) => {
+          sortPapers(
+            filteredData[0].speaking_set.Speaking.map((item) => ({
+              ...item,
+              exam_name: item.name,
+              exam_type: "Speaking",
+              question: "",
+              questions: item?.questions?.map((item) => ({
+                ...item,
+                id: generateRandomId(10),
+              })),
+            }))
+          ).forEach((item) => {
             pappers.push({ ...item, paperId: filteredData[0].speaking_set.id });
           });
           filteredData[0].papers = pappers;
@@ -253,15 +276,24 @@ const FullLengthLiveExam = () => {
         }));
         let tempHtmlContents = [];
         let tempExamAnswer = [];
+        let tempQuestions = 1;
         for (let paper of examDataList) {
           const index = examDataList.indexOf(paper);
-          const returnContent = await fetchHtmlContent(paper, index);
+          const returnContent = await fetchHtmlContent(
+            paper,
+            index,
+            tempQuestions
+          );
           tempHtmlContents.push(returnContent?.questionPassage);
           const tempUniqueArr = {
             name: `section-${index + 1}`,
             ...returnContent?.tempAnswer,
           };
           tempExamAnswer.push(tempUniqueArr);
+          let totalLEngth = tempExamAnswer
+            .map((item) => [...item.data])
+            .flat().length;
+          tempQuestions = totalLEngth + 1;
         }
         setHtmlContents(tempHtmlContents);
         setExamAnswer(tempExamAnswer);
@@ -413,14 +445,11 @@ const FullLengthLiveExam = () => {
     );
   };
 
-  const fetchHtmlContent = async (paperData, index) => {
+  const fetchHtmlContent = async (paperData, index, tempQuestions) => {
     const question = paperData?.question;
     let tempAnswer = {};
 
-    if (
-      paperData?.exam_type === "Writing" ||
-      paperData?.exam_type === "Speaking"
-    ) {
+    if (paperData?.exam_type === "Writing") {
       tempAnswer = {
         exam_id: paperData?.id,
         data: [
@@ -448,6 +477,25 @@ const FullLengthLiveExam = () => {
         };
         setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       }
+      return new Promise((resolve) => {
+        resolve({ questionPassage: "", tempAnswer });
+      });
+    } else if (paperData?.exam_type === "Speaking") {
+      tempAnswer = {
+        exam_id: paperData?.id,
+        data: paperData.questions.map((element) => ({
+          status: 0,
+          answer_text: "",
+          id: element.id,
+        })),
+      };
+      const tempUniqueArr = {
+        name: `section-${index + 1}`,
+        paginationsIds: paperData.questions.map(
+          (element) => `speaking_${index}_${element.id}`
+        ),
+      };
+      setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       return new Promise((resolve) => {
         resolve({ questionPassage: "", tempAnswer });
       });
@@ -536,6 +584,13 @@ const FullLengthLiveExam = () => {
 
       // Display questions for the first page initially
       questionPassage += `<div className="mainContainer">${$.html()}</div>`;
+
+      // Replace ♫ with unique symbols
+      let serialNumber = tempQuestions;
+      questionPassage = questionPassage.replaceAll(
+        "++",
+        () => `${serialNumber++}`
+      );
 
       const tempPaginationStructure = paginationsStrucutre.map((item) => {
         return {
@@ -704,13 +759,14 @@ const FullLengthLiveExam = () => {
               band: bandValue,
               data: item.data,
             });
-          } else {
-            newAnswersArray.push({
-              exam_id: item.exam_id,
-              band: 0,
-              data: item.data,
-            });
           }
+          // else {
+          //   newAnswersArray.push({
+          //     exam_id: item.exam_id,
+          //     band: 0,
+          //     data: item.data,
+          //   });
+          // }
         })
       );
     } catch (error) {
@@ -773,9 +829,14 @@ const FullLengthLiveExam = () => {
 
   useEffect(() => {
     if (recordedFilePath) {
-      const tempExamAnswer = [...examAnswer];
-      tempExamAnswer[next].data[0].answer_text = recordedFilePath;
-      setExamAnswer(tempExamAnswer);
+      const { recorderIndex, filePath } = recordedFilePath;
+      const tempexamAnswer = [...examAnswer];
+      const tempSpeaking = tempexamAnswer[next].data;
+      const index = tempSpeaking.findIndex((item) => item.id === recorderIndex);
+      tempSpeaking[index].status = 2;
+      tempSpeaking[index].answer_text = filePath;
+      setExamAnswer(tempexamAnswer);
+      setRecordedFilePath(null);
     }
   }, [recordedFilePath]);
 
@@ -792,17 +853,35 @@ const FullLengthLiveExam = () => {
     return htmlToText(htmlContent);
   };
 
-  const speak = () => {
+  const speak = (speakingContent, id) => {
     const utterance = new SpeechSynthesisUtterance(
-      extractVisibleText(examData?.passage)
+      extractVisibleText(speakingContent)
     );
     synth.speak(utterance);
-    setSpeaking(1);
-    utterance.onstart = () => {
-      setSpeaking(1);
-    };
+    const tempExamAnswer = [...examAnswer];
+    const updatedSpeaking = tempExamAnswer[next].data.map((item, index) => {
+      const tempId = item.id;
+      if (tempId === id) {
+        return { ...item, status: 1 };
+      } else {
+        return item;
+      }
+    });
+    tempExamAnswer[next].data = updatedSpeaking;
+    setExamAnswer(tempExamAnswer);
+
     utterance.onend = () => {
-      setSpeaking(2);
+      const tempExamAnswer = [...examAnswer];
+      const updatedSpeaking = tempExamAnswer[next].data.map((item, index) => {
+        const tempId = item.id;
+        if (tempId === id) {
+          return { ...item, status: 2 };
+        } else {
+          return item;
+        }
+      });
+      tempExamAnswer[next].data = updatedSpeaking;
+      setExamAnswer(tempExamAnswer);
     };
   };
 
@@ -887,6 +966,30 @@ const FullLengthLiveExam = () => {
     });
   }, [uniqueIdArr, examAnswer, next]);
 
+  const recorderContainer = useMemo(() => {
+    if (examData?.exam_type !== "Speaking") return null;
+    if (Object.keys(examData).length > 0) {
+      return examData.questions.map((item, i) => {
+        const index = examAnswer[next].data.findIndex(
+          (element) => element.id === item.id
+        );
+        return (
+          <AudioRecorder
+            setRecordedFilePath={setRecordedFilePath}
+            next={next}
+            exam={examData}
+            enableRecording={examAnswer[next].data?.[index]?.status === 2}
+            completed={examAnswer[next].data?.[index]?.answer_text !== ""}
+            question_number={item.question_number}
+            user={userData.userId}
+            recorderIndex={item.id}
+          />
+        );
+      });
+    }
+    return;
+  }, [examAnswer, examData]);
+
   return instructionCompleted.showInstruction ? (
     <div className="test-instruction">
       {instructionCompleted.type.reading === 1 && (
@@ -959,18 +1062,74 @@ const FullLengthLiveExam = () => {
           )}
 
           {examData?.exam_type === "Speaking" && (
-            <div className="lv-left-container">
-              <button
-                className="lv-footer-button"
-                onClick={speak}
-                disabled={speaking === 1}
-                style={{
-                  opacity: speaking === 1 ? 0.5 : 1,
-                  cursor: speaking === 1 ? "not-allowed" : "pointer",
-                }}
-              >
-                {speaking ? "Replay" : "Start"}
-              </button>
+            // <div className="lv-left-container">
+            //   <button
+            //     className="lv-footer-button"
+            //     onClick={speak}
+            //     disabled={speaking === 1}
+            //     style={{
+            //       opacity: speaking === 1 ? 0.5 : 1,
+            //       cursor: speaking === 1 ? "not-allowed" : "pointer",
+            //     }}
+            //   >
+            //     {speaking ? "Replay" : "Start"}
+            //   </button>
+            // </div>
+            <div
+              className="lv-left-container"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-around",
+              }}
+            >
+              {Object.keys(examData).length > 0 &&
+                examData.questions.map((item, i) => {
+                  const speakingIndex = examAnswer[next].data.findIndex(
+                    (element) => element.id === item.id
+                  );
+                  return (
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        borderBottom: "grey 1px solid",
+                        paddingBottom: "20px",
+                        marginTop: "15px",
+                      }}
+                    >
+                      <div className="lv-speaking-question">
+                        <p> {i + 1} :</p>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: item.question,
+                          }}
+                        ></div>
+                      </div>
+                      <button
+                        className="lv-footer-button"
+                        onClick={() => speak(item.question, item.id)}
+                        disabled={
+                          examAnswer[next].data?.[speakingIndex]?.status === 1
+                        }
+                        style={{
+                          opacity:
+                            examAnswer[next].data?.[speakingIndex]?.status === 1
+                              ? 0.5
+                              : 1,
+                          cursor:
+                            examAnswer[next].data?.[speakingIndex]?.status === 1
+                              ? "not-allowed"
+                              : "pointer",
+                        }}
+                      >
+                        {examAnswer[next].data?.[speakingIndex]?.status === 2
+                          ? "Replay"
+                          : "Start"}
+                      </button>
+                    </div>
+                  );
+                })}
             </div>
           )}
 
@@ -1001,14 +1160,7 @@ const FullLengthLiveExam = () => {
                   <span>{numberOfWord} Words</span>
                 </div>
               )}
-              {examData?.exam_type === "Speaking" && (
-                <AudioRecorder
-                  setRecordedFilePath={setRecordedFilePath}
-                  next={next}
-                  exam_id={examData?.id}
-                  enableRecording={speaking === 2}
-                />
-              )}
+              {examData?.exam_type === "Speaking" && recorderContainer}
             </div>
           </div>
         </div>

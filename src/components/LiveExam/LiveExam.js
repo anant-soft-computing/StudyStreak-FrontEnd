@@ -478,7 +478,16 @@ const LiveExam = () => {
 
       const paginationsStrucutre = temp.flat();
 
-      const questionPassage = `<div className="mainContainer">${question}</div>`;
+      // Create questionPassage
+      let questionPassage = `<div className="mainContainer">${question}</div>`;
+
+      // Replace ♫ with unique symbols
+      let serialNumber = 1;
+      questionPassage = questionPassage.replaceAll(
+        "++",
+        () => `${serialNumber++}`
+      );
+
       setUniqueIdArr(paginationsStrucutre);
 
       const tempAnswer = paginationsStrucutre.map((item) => {
@@ -498,7 +507,7 @@ const LiveExam = () => {
         setExamAnswer(tempAnswerArr);
       }
 
-      return question;
+      return questionPassage;
     } else if (
       examData?.exam_type === "Listening" ||
       examData?.exam_type === "Reading"
@@ -582,8 +591,15 @@ const LiveExam = () => {
 
       paginationsStrucutre = paginationsStrucutre.flat();
 
-      // Display questions for the first page initially
+      // Create questionPassage
       questionPassage += `<div className="mainContainer">${$.html()}</div>`;
+
+      // Replace ♫ with unique symbols
+      let serialNumber = 1;
+      questionPassage = questionPassage.replaceAll(
+        "++",
+        () => `${serialNumber++}`
+      );
 
       const tempAnswer = paginationsStrucutre.map((item) => {
         return {

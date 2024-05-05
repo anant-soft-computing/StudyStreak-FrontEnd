@@ -74,6 +74,7 @@ import SpeakingInstruction from "./components/Dashboard/Student/SpeakingInstruct
 import Answer from "./components/Exam-Answer/Answer";
 import PracticeTestAnswer from "./components/Exam-Answer/PracticeTestAnswer";
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
+import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest";
 
 const App = () => {
   return (
@@ -151,10 +152,17 @@ const App = () => {
         <Route path="/Writing" element={<ExamWriting />} />
         <Route path="/Speaking" element={<ExamSpeaking />} />
         <Route path="/live-exam/:examId" element={<LiveExam />} />
-        <Route path="/live-speaking-exam/:examId" element={<LiveSpeakingExam />} />
+        <Route
+          path="/live-speaking-exam/:examId"
+          element={<LiveSpeakingExam />}
+        />
         <Route
           path="/practice-live-exam/:examType/:examForm/:examId"
           element={<PracticeLiveExam />}
+        />
+        <Route
+          path="/practice-speaking-live-exam/:examType/:examForm/:examId"
+          element={<PracticeSpeakingLiveExam />}
         />
         <Route
           path="/practice-live-writing-exam/:examType/:examForm/:examId"

@@ -62,7 +62,7 @@ const LiveSpeakingExam = () => {
         },
         8000
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have All Ready Submitted This Exam");

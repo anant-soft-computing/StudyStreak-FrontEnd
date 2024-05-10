@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import ajaxCall from "../../helpers/ajaxCall";
 import {
   speakingApiService,
   writingApiService,
@@ -8,7 +7,6 @@ import {
 const AudioRecorder = ({
   setRecordedFilePath,
   next,
-  exam_id,
   enableRecording = true,
   questions,
 }) => {

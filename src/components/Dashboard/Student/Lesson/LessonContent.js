@@ -7,14 +7,12 @@ import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import noteBook from "../../../../img/icon/notebook.svg";
 import FloatingNote from "./FloatingNote";
-import FlashCard from "../FlashCard/FlashCard";
 import Tab from "../../../UI/Tab";
 
 const tabs = [
   { name: "Attachment" },
   { name: "Assignment" },
   { name: "Quiz" },
-  { name: "Flash Card" },
 ];
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
@@ -131,15 +129,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                 >
                   <div className="row">
                     <Quiz activeLesson={activeLesson?.quiz_question_options} />
-                  </div>
-                </div>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Flash Card" ? "show active" : ""
-                  }`}
-                >
-                  <div className="row">
-                    <FlashCard courseId={courseId} />
                   </div>
                 </div>
               </div>

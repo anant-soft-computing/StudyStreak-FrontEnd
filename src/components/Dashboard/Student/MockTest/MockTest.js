@@ -20,8 +20,6 @@ const MockTest = () => {
   const [mockTestData, setMockTestData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
 
-  console.log("givenTest", givenTest);
-
   useEffect(() => {
     (async () => {
       try {
@@ -75,12 +73,14 @@ const MockTest = () => {
 
         if (response.status === 200) {
           const { data } = response;
-          const speakingDataFormat = data.map((item) => ({
-            ...item,
-            exam_name: item.name,
-            no_of_questions: item.questions.length,
-          }));
-          setSpeakingData(speakingDataFormat);
+          const speakingData = data
+            .filter((item) => item.block_threshold === 0)
+            .map((item) => ({
+              ...item,
+              exam_name: item.name,
+              no_of_questions: item.questions.length,
+            }));
+          setSpeakingData(speakingData);
         } else {
           console.log("error");
         }

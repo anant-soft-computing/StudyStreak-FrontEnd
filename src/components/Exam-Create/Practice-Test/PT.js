@@ -127,7 +127,7 @@ const PT = ({ type }) => {
           const { data } = response;
           setExams((prev) => ({
             ...prev,
-            Speaking: data,
+            Speaking: data.filter((item) => item.block_threshold === 1),
           }));
         } else {
           console.log("error");
@@ -218,7 +218,9 @@ const PT = ({ type }) => {
     const selectedIds = selectedNodes.map((node) => node?.data?.id);
 
     const total = selectedNodes.reduce((total, node) => {
-      return total + (node.data.no_of_questions || node.data.questions.length || 0);
+      return (
+        total + (node.data.no_of_questions || node.data.questions.length || 0)
+      );
     }, 0);
 
     setTotalQuestions(total);

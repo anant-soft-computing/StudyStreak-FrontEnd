@@ -9,6 +9,7 @@ import assignment from "../../../../img/icon/assignment.svg";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
+import flashcard from "../../../../img/icon/flashCard.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 
@@ -79,6 +80,14 @@ const DSSidebar = () => {
         studentId: studentId,
         solvingClassBook: solvingClassBook[0],
         count: count,
+      },
+    },
+    {
+      name: "Flash Card",
+      icon: <img src={flashcard} alt="Flash Card" />,
+      link: "/flashCard",
+      state: {
+        enrolledCourse: enrolledCourse,
       },
     },
     {

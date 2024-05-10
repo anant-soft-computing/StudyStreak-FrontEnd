@@ -36,10 +36,7 @@ import MockTest from "./components/Dashboard/Student/MockTest/MockTest";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import SLiveClass from "./components/Dashboard/Student/LiveClass/LiveClass";
-import RegularClass from "./components/Dashboard/Student/RegularClass/RegularClass";
-import SpeakingPractice from "./components/Dashboard/Student/SpeakingPractice/SpeakingPractice";
-import DoubtSolving from "./components/Dashboard/Student/1To1DoubtSolving/DoubtSolving";
-import GroupDoubtSolving from "./components/Dashboard/Student/GroupDoubtSolving/GroupDoubtSolving";
+import SFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
 import SSettings from "./components/Dashboard/Student/Setting/Settings";
 
 //-----------------> Admin <-----------------------------------------------------
@@ -123,10 +120,7 @@ const App = () => {
         <Route path="/practiceTest" element={<PracticeTest />} />
         <Route path="/fullLengthTest" element={<FullLengthTest />} />
         <Route path="/studentLiveClasses" element={<SLiveClass />} />
-        <Route path="/regularClasses" element={<RegularClass />} />
-        <Route path="/speakingSolving" element={<SpeakingPractice />} />
-        <Route path="/doubtSolving" element={<DoubtSolving />} />
-        <Route path="/groupDoubtSolving" element={<GroupDoubtSolving />} />
+        <Route path="/flashcard" element={<SFlashCard />} />
         <Route path="/studentSettings" element={<SSettings />} />
 
         <Route path="/courseDetail/:courseId" element={<CourseDetail />} />

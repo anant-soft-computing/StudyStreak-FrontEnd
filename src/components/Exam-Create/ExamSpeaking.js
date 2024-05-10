@@ -25,7 +25,7 @@ const reducerSpeaking = (state, action) => {
 
 const tabs = [{ name: "Block Details" }, { name: "Question" }];
 
-const ExamSpeaking = ({ category }) => {
+const ExamSpeaking = () => {
   const [SpeakingData, dispatchSpeakingData] = useReducer(
     reducerSpeaking,
     initialSpeakingField
@@ -186,9 +186,9 @@ const ExamSpeaking = ({ category }) => {
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">
                     <label>Block Threshold</label>
-                    <input
-                      type="number"
-                      placeholder="Block Threshold"
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
                       value={SpeakingData.block_threshold}
                       onChange={(e) =>
                         dispatchSpeakingData({
@@ -196,7 +196,10 @@ const ExamSpeaking = ({ category }) => {
                           value: e.target.value,
                         })
                       }
-                    />
+                    >
+                      <option value="0">Assignment</option>
+                      <option value="1">Mock Test</option>
+                    </select>
                   </div>
                 </div>
               </div>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
-
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import Tab from "../../../UI/Tab";
 import TestTable from "./TestTable";
+import MTAssessment from "../Assessment/MTAssessment/MTAssessment";
 
 const tabs = [
   { name: "Reading" },
@@ -21,10 +21,10 @@ const MockTest = () => {
   const [speakingData, setSpeakingData] = useState([]);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async (url, setData) => {
       try {
         const response = await ajaxCall(
-          "/exam-blocks/",
+          url,
           {
             headers: {
               Accept: "application/json",
@@ -40,62 +40,45 @@ const MockTest = () => {
 
         if (response.status === 200) {
           const { data } = response;
-          const mockTest = data?.filter(
-            ({ block_type }) => block_type === "Assignments"
-          );
-          setMockTestData(mockTest);
+          if (url === "/exam-blocks/") {
+            const mockTest = data?.filter(
+              ({ block_type }) => block_type === "Assignments"
+            );
+            setData(mockTest);
+          } else if (url === "/speaking-block/") {
+            const speakingData = data
+              .filter((item) => item.block_threshold === 0)
+              .map((item) => ({
+                ...item,
+                exam_name: item.name,
+                no_of_questions: item.questions.length,
+              }));
+            setData(speakingData);
+          }
         } else {
           console.log("error");
         }
       } catch (error) {
         console.error("error", error);
       }
-    })();
+    };
+
+    fetchData("/exam-blocks/", setMockTestData);
+    fetchData("/speaking-block/", setSpeakingData);
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/speaking-block/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-
-        if (response.status === 200) {
-          const { data } = response;
-          const speakingData = data
-            .filter((item) => item.block_threshold === 0)
-            .map((item) => ({
-              ...item,
-              exam_name: item.name,
-              no_of_questions: item.questions.length,
-            }));
-          setSpeakingData(speakingData);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.error("error", error);
-      }
-    })();
-  }, []);
+  const testByExamType = (examType) =>
+    mockTestData.filter(({ exam_type }) => exam_type === examType);
+  const givenWritingTest = testByExamType("Writing").filter((item) =>
+    givenTest?.some((index) => index.id === item.id)
+  );
+  const givenST = speakingData.filter((item) =>
+    givenSpeakingTest?.some((index) => index.id === item.id)
+  );
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-
-  const testByExamType = (examType) =>
-    mockTestData?.filter(({ exam_type }) => exam_type === examType);
 
   return (
     <div className="body__wrapper">
@@ -120,39 +103,33 @@ const MockTest = () => {
                           handleTabChange={handleTabChange}
                         />
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          {activeTab === "Reading" && (
-                            <TestTable
-                              testData={testByExamType("Reading")}
-                              givenTest={givenTest}
-                              testType={"Reading"}
-                            />
-                          )}
-                          {activeTab === "Writing" && (
-                            <TestTable
-                              testData={testByExamType("Writing")}
-                              givenTest={givenTest}
-                              testType={"Writing"}
-                            />
-                          )}
-                          {activeTab === "Listening" && (
-                            <TestTable
-                              testData={testByExamType("Listening")}
-                              givenTest={givenTest}
-                              testType={"Listening"}
-                            />
-                          )}
-                          {activeTab === "Speaking" && (
-                            <TestTable
-                              testData={speakingData}
-                              givenTest={givenTest}
-                              testType={"Speaking"}
-                              givenSpeakingTest={givenSpeakingTest}
-                            />
+                          {tabs.map(
+                            ({ name }) =>
+                              activeTab === name && (
+                                <TestTable
+                                  key={name}
+                                  testData={
+                                    name === "Speaking"
+                                      ? speakingData
+                                      : testByExamType(name)
+                                  }
+                                  givenTest={givenTest}
+                                  testType={name}
+                                  givenSpeakingTest={givenSpeakingTest}
+                                />
+                              )
                           )}
                         </div>
                       </div>
                     )}
                   </div>
+                  {(activeTab === "Writing" || activeTab === "Speaking") && (
+                    <MTAssessment
+                      testType={activeTab}
+                      givenWritingTest={givenWritingTest}
+                      givenSpeakingTest={givenST}
+                    />
+                  )}
                 </div>
               </div>
             </div>

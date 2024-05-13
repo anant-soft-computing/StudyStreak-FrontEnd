@@ -11,7 +11,11 @@ import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
 
-const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
+const tabs = [
+  { name: "Upcoming" },
+  { name: "Available Slot" },
+  { name: "Recoded Class" },
+];
 
 const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const navigate = useNavigate();
@@ -226,6 +230,19 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
                                   />
                                 </div>
                               </div>
+                              <div
+                                className={`tab-pane fade ${
+                                  activeTab === "Recoded Class"
+                                    ? "show active"
+                                    : ""
+                                }`}
+                              >
+                                <div className="row">
+                                  <h5 className="text-center text-danger">
+                                    Comming Soon....
+                                  </h5>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         )}
@@ -284,6 +301,17 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
                         bookCount={bookCount}
                         message=" No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
                       />
+                    </div>
+                  </div>
+                  <div
+                    className={`tab-pane fade ${
+                      activeTab === "Recoded Class" ? "show active" : ""
+                    }`}
+                  >
+                    <div className="row">
+                      <h5 className="text-center text-danger">
+                        Comming Soon....
+                      </h5>
                     </div>
                   </div>
                 </div>

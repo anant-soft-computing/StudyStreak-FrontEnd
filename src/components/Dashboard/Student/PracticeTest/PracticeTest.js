@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
-
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import Tab from "../../../UI/Tab";
 import PracticeTestTable from "./PracticeTestTable";
+import PTAssessment from "../Assessment/PTAssessment/PTAssessment";
 
 const tabs = [
   { name: "Reading" },
@@ -16,18 +16,16 @@ const tabs = [
 
 const PracticeTest = () => {
   const { count, givenTest } = useLocation().state || {};
-  const [readingData, setReadingData] = useState([]);
-  const [listeningData, setListeningData] = useState([]);
-  const [speakingData, setSpeakingData] = useState([]);
-  const [writingData, setWritingData] = useState([]);
+  const [testData, setTestData] = useState({
+    Reading: [],
+    Writing: [],
+    Listening: [],
+    Speaking: [],
+  });
   const [activeTab, setActiveTab] = useState("Reading");
 
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const response = await ajaxCall(
           `/createexamview/`,
@@ -45,26 +43,34 @@ const PracticeTest = () => {
         );
         if (response.status === 200) {
           const { data } = response;
-          setReadingData(
-            data?.filter(({ exam_type }) => exam_type === "Reading")
-          );
-          setSpeakingData(
-            data?.filter(({ exam_type }) => exam_type === "Speaking")
-          );
-          setWritingData(
-            data?.filter(({ exam_type }) => exam_type === "Writing")
-          );
-          setListeningData(
-            data?.filter(({ exam_type }) => exam_type === "Listening")
-          );
+          const filteredData = {
+            Reading: data.filter(({ exam_type }) => exam_type === "Reading"),
+            Writing: data.filter(({ exam_type }) => exam_type === "Writing"),
+            Listening: data.filter(
+              ({ exam_type }) => exam_type === "Listening"
+            ),
+            Speaking: data.filter(({ exam_type }) => exam_type === "Speaking"),
+          };
+          setTestData(filteredData);
         } else {
           console.log("error");
         }
       } catch (error) {
         console.error("error", error);
       }
-    })();
+    };
+
+    fetchData();
   }, []);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const givenTestOfType = (type) =>
+    testData[type].filter((item) =>
+      givenTest.some((index) => index.id === item.id)
+    );
 
   return (
     <div className="body__wrapper">
@@ -80,7 +86,7 @@ const PracticeTest = () => {
                       <h4>Practice Test</h4>
                     </div>
                     {count?.practice_test_count === "" ? (
-                      <BuyCourse message="No Practice Test Available , Please Buy a Course !!" />
+                      <BuyCourse message="No Practice Test Available, Please Buy a Course !!" />
                     ) : (
                       <div className="row">
                         <Tab
@@ -89,36 +95,20 @@ const PracticeTest = () => {
                           handleTabChange={handleTabChange}
                         />
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          {activeTab === "Reading" && (
-                            <PracticeTestTable
-                              testData={readingData}
-                              givenTest={givenTest}
-                              testType="Reading"
-                            />
-                          )}
-                          {activeTab === "Writing" && (
-                            <PracticeTestTable
-                              testData={writingData}
-                              givenTest={givenTest}
-                              testType="Writing"
-                            />
-                          )}
-                          {activeTab === "Listening" && (
-                            <PracticeTestTable
-                              testData={listeningData}
-                              givenTest={givenTest}
-                              testType="Listening"
-                            />
-                          )}
-                          {activeTab === "Speaking" && (
-                            <PracticeTestTable
-                              testData={speakingData}
-                              givenTest={givenTest}
-                              testType="Speaking"
-                            />
-                          )}
+                          <PracticeTestTable
+                            testData={testData[activeTab]}
+                            givenTest={givenTestOfType(activeTab)}
+                            testType={activeTab}
+                          />
                         </div>
                       </div>
+                    )}
+                    {(activeTab === "Writing" || activeTab === "Speaking") && (
+                      <PTAssessment
+                        testType={activeTab}
+                        givenWritingTest={givenTestOfType("Writing")}
+                        givenSpeakingTest={givenTestOfType("Speaking")}
+                      />
                     )}
                   </div>
                 </div>

@@ -4,12 +4,14 @@ import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import FlashCardModal from "./FlashCardModal";
+import Table from "../../../UI/Table";
 
 const FlashCard = () => {
   const { enrolledCourse } = useLocation().state || {};
   const [flashCardList, setFlashCardList] = useState([]);
   const [isFlipped, setIsFlipped] = useState({});
   const [modalShow, setModalShow] = useState(false);
+  const [flashCardItems, setFlashCardItems] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
   useEffect(() => {
@@ -56,6 +58,46 @@ const FlashCard = () => {
     setCurrentCardIndex(0);
   };
 
+  const handleViewCard = (data) => {
+    setModalShow(true);
+    setFlashCardItems(data?.flash_card_items);
+  };
+
+  const viewCard = (params) => {
+    const { data } = params;
+    return (
+      <button className="take-test" onClick={() => handleViewCard(data)}>
+        View Card
+      </button>
+    );
+  };
+
+  const columns = [
+    {
+      headerName: "View Card",
+      field: "button",
+      cellRenderer: viewCard,
+      width: 166,
+    },
+    { headerName: "Title", field: "title", filter: true, width: 250 },
+    {
+      headerName: "Course Name",
+      field: "course.Course_Title",
+      filter: true,
+    },
+    {
+      headerName: "Description",
+      field: "description",
+      filter: true,
+      width: 300,
+    },
+    {
+      headerName: "Priority",
+      field: "set_priority",
+      filter: true,
+    },
+  ];
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -69,70 +111,16 @@ const FlashCard = () => {
                     <div className="dashboard__section__title">
                       <h4>Flash Cards</h4>
                     </div>
-                    <div className="row">
-                      {flashCardList &&
-                        flashCardList.map(
-                          ({
-                            id,
-                            description,
-                            set_priority,
-                            course,
-                            flash_card_items,
-                          }) => (
-                            <div
-                              key={id}
-                              className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
-                              data-aos="fade-up"
-                            >
-                              <div
-                                className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
-                                onClick={() => setModalShow(true)}
-                              >
-                                <div className="gridarea__content">
-                                  <div className="gridarea__heading">
-                                    <h3>{course?.Course_Title}</h3>
-                                  </div>
-                                  <div className="zoom__meeting__id">
-                                    <p>
-                                      Description :{" "}
-                                      <span
-                                        style={{
-                                          color: "#01579b",
-                                          fontWeight: "700",
-                                        }}
-                                      >
-                                        {description}
-                                      </span>
-                                    </p>
-                                  </div>
-                                  <div className="zoom__meeting__id">
-                                    <p>
-                                      Priority :{" "}
-                                      <span
-                                        style={{
-                                          color: "#01579b",
-                                          fontWeight: "700",
-                                        }}
-                                      >
-                                        {set_priority}
-                                      </span>
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                              <FlashCardModal
-                                show={modalShow}
-                                onHide={handleCloseModal}
-                                flash_card_items={flash_card_items}
-                                isFlipped={isFlipped}
-                                setIsFlipped={setIsFlipped}
-                                currentCardIndex={currentCardIndex}
-                                setCurrentCardIndex={setCurrentCardIndex}
-                              />
-                            </div>
-                          )
-                        )}
-                    </div>
+                    <Table rowData={flashCardList} columnDefs={columns} />
+                    <FlashCardModal
+                      show={modalShow}
+                      onHide={handleCloseModal}
+                      flash_card_items={flashCardItems}
+                      isFlipped={isFlipped}
+                      setIsFlipped={setIsFlipped}
+                      currentCardIndex={currentCardIndex}
+                      setCurrentCardIndex={setCurrentCardIndex}
+                    />
                   </div>
                 </div>
               </div>

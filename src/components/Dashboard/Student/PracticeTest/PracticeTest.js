@@ -103,14 +103,14 @@ const PracticeTest = () => {
                         </div>
                       </div>
                     )}
-                    {(activeTab === "Writing" || activeTab === "Speaking") && (
-                      <PTAssessment
-                        testType={activeTab}
-                        givenWritingTest={givenTestOfType("Writing")}
-                        givenSpeakingTest={givenTestOfType("Speaking")}
-                      />
-                    )}
                   </div>
+                  {(activeTab === "Writing" || activeTab === "Speaking") && (
+                    <PTAssessment
+                      testType={activeTab}
+                      givenWritingTest={givenTestOfType("Writing")}
+                      givenSpeakingTest={givenTestOfType("Speaking")}
+                    />
+                  )}
                 </div>
               </div>
             </div>

@@ -128,7 +128,7 @@ const FullLengthLiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flt/?difficulty_level=Easy`,
+          "/get/flt/",
           {
             headers: {
               Accept: "application/json",

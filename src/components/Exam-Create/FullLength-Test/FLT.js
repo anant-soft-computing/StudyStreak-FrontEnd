@@ -77,7 +77,10 @@ const FLT = () => {
         );
 
         if (response.status === 200) {
-          const { data } = response;
+          const data = response?.data.filter(
+            ({ difficulty_level }) =>
+              difficulty_level === createFLT?.difficulty_level
+          );
           const updatedExams = {
             Reading: data.filter(({ Reading }) => Reading.length > 0),
             Writing: data.filter(({ Writing }) => Writing.length > 0),
@@ -92,7 +95,7 @@ const FLT = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [createFLT?.difficulty_level]);
 
   const validateForm = () => {
     if (!createFLT.name) {
@@ -288,57 +291,81 @@ const FLT = () => {
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>(1) Reading : </label>
-                  <div className="ag-theme-quartz">
-                    <AgGridReact
-                      {...gridOptions(
-                        exams.Reading,
-                        handleRowSelection("Reading"),
-                        "Reading"
-                      )}
-                    />
-                  </div>
+                  {exams.Reading?.length > 0 ? (
+                    <div className="ag-theme-quartz">
+                      <AgGridReact
+                        {...gridOptions(
+                          exams.Reading,
+                          handleRowSelection("Reading"),
+                          "Reading"
+                        )}
+                      />
+                    </div>
+                  ) : (
+                    <h5 className="text-center text-danger">
+                      {`No Reading Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                    </h5>
+                  )}
                 </div>
               </div>
               <div className="dashboard__form__wraper mt-4">
                 <div className="dashboard__form__input">
                   <label>(2) Writing : </label>
-                  <div className="ag-theme-quartz">
-                    <AgGridReact
-                      {...gridOptions(
-                        exams.Writing,
-                        handleRowSelection("Writing"),
-                        "Writing"
-                      )}
-                    />
-                  </div>
+                  {exams.Writing?.length > 0 ? (
+                    <div className="ag-theme-quartz">
+                      <AgGridReact
+                        {...gridOptions(
+                          exams.Writing,
+                          handleRowSelection("Writing"),
+                          "Writing"
+                        )}
+                      />
+                    </div>
+                  ) : (
+                    <h5 className="text-center text-danger">
+                      {`No Writing Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                    </h5>
+                  )}
                 </div>
               </div>
               <div className="dashboard__form__wraper mt-4">
                 <div className="dashboard__form__input">
                   <label>(3) Listening : </label>
-                  <div className="ag-theme-quartz">
-                    <AgGridReact
-                      {...gridOptions(
-                        exams.Listening,
-                        handleRowSelection("Listening"),
-                        "Listening"
-                      )}
-                    />
-                  </div>
+                  {exams.Listening?.length > 0 ? (
+                    <div className="ag-theme-quartz">
+                      <AgGridReact
+                        {...gridOptions(
+                          exams.Listening,
+                          handleRowSelection("Listening"),
+                          "Listening"
+                        )}
+                      />
+                    </div>
+                  ) : (
+                    <h5 className="text-center text-danger">
+                      {`No Listening Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                    </h5>
+                  )}
                 </div>
               </div>
               <div className="dashboard__form__wraper mt-4">
                 <div className="dashboard__form__input">
                   <label>(4) Speaking : </label>
-                  <div className="ag-theme-quartz">
-                    <AgGridReact
-                      {...gridOptions(
-                        exams.Speaking,
-                        handleRowSelection("Speaking"),
-                        "Speaking"
-                      )}
-                    />
-                  </div>
+                  {exams.Speaking?.length > 0 ? (
+                    <div className="ag-theme-quartz">
+                      <AgGridReact
+                        {...gridOptions(
+                          exams.Speaking,
+                          handleRowSelection("Speaking"),
+                          "Speaking"
+                        )}
+                      />
+                    </div>
+                  ) : (
+                    <h5 className="text-center text-danger">
+                      {`No Speaking Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                    </h5>
+                  )}
                 </div>
               </div>
             </div>

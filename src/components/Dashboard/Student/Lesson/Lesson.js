@@ -10,8 +10,6 @@ const Lesson = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
 
-  console.log("----courseId ---->",courseId)
-
   const [courseLessons, setCourseLessons] = useState([]);
   const [activeLesson, setActiveLesson] = useState({});
   const [activeIndex, setActiveIndex] = useState(0);

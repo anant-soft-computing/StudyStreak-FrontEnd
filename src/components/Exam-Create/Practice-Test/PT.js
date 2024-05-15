@@ -83,16 +83,22 @@ const PT = ({ type }) => {
           const { data } = response;
           const updatedExams = {
             Reading: data.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
+              ({ exam_type, block_type, difficulty_level }) =>
+                exam_type === type &&
+                block_type === "Mock Test" &&
+                difficulty_level === createPT.difficulty_level
             ),
             Writing: data.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
+              ({ exam_type, block_type, difficulty_level }) =>
+                exam_type === type &&
+                block_type === "Mock Test" &&
+                difficulty_level === createPT.difficulty_level
             ),
             Listening: data.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
+              ({ exam_type, block_type, difficulty_level }) =>
+                exam_type === type &&
+                block_type === "Mock Test" &&
+                difficulty_level === createPT.difficulty_level
             ),
           };
           setExams(updatedExams);
@@ -103,7 +109,7 @@ const PT = ({ type }) => {
         console.log("error", error);
       }
     })();
-  }, [type]);
+  }, [createPT.difficulty_level, type]);
 
   useEffect(() => {
     (async () => {
@@ -127,7 +133,11 @@ const PT = ({ type }) => {
           const { data } = response;
           setExams((prev) => ({
             ...prev,
-            Speaking: data.filter((item) => item.block_threshold === 1),
+            Speaking: data.filter(
+              ({ block_threshold, difficulty_level }) =>
+                block_threshold === 1 &&
+                difficulty_level === createPT.difficulty_level
+            ),
           }));
         } else {
           console.log("error");
@@ -136,7 +146,7 @@ const PT = ({ type }) => {
         console.log("error", error);
       }
     })();
-  }, [type]);
+  }, [createPT.difficulty_level, type]);
 
   const validateForm = () => {
     if (!createPT.Name) {
@@ -354,19 +364,25 @@ const PT = ({ type }) => {
           }`}
         >
           <div className="row">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Total No. of Questions : {totalQuestions}</label>
-              </div>
-            </div>
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <div className="ag-theme-quartz">
-                  <AgGridReact
-                    {...gridOptions(exams[type], handleRowSelection(type))}
-                    rowSelection={rowSelection}
-                  />
+            {exams[type]?.length > 0 && (
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Total No. of Questions : {totalQuestions}</label>
                 </div>
+              </div>
+            )}
+            <div className="dashboard__form__wraper">
+              <div className="dashboard__form__input">
+                {exams[type]?.length > 0 ? (
+                  <div className="ag-theme-quartz">
+                    <AgGridReact
+                      {...gridOptions(exams[type], handleRowSelection(type))}
+                      rowSelection={rowSelection}
+                    />
+                  </div>
+                ) : (
+                  <h5 className="text-center text-danger">{`No ${type} Exams Avaiable For Diffulty Level : ${createPT.difficulty_level} !!`}</h5>
+                )}
               </div>
             </div>
             <div className="create__course__bottom__button text-center mt-2">

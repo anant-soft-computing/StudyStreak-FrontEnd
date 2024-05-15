@@ -190,6 +190,7 @@ const LiveExam = () => {
         exam: parseInt(examId),
         AI_Assessment: gptResponse,
         band: bandValue,
+        exam_type: examData?.exam_type,
       });
 
       const response = await ajaxCall(
@@ -285,6 +286,7 @@ const LiveExam = () => {
         user: userData?.userId,
         exam: parseInt(examId),
         band: bandValue,
+        exam_type: examData?.exam_type,
       });
 
       const response = await ajaxCall(

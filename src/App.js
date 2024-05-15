@@ -72,6 +72,7 @@ import Answer from "./components/Exam-Answer/Answer";
 import PracticeTestAnswer from "./components/Exam-Answer/PracticeTestAnswer";
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
 import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest";
+import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
 
 const App = () => {
   return (
@@ -176,6 +177,10 @@ const App = () => {
           path="/eaxm-practice-test-answere/:examId"
           element={<PracticeTestAnswer />}
         />
+        <Route
+          path="/assessment/:examId"
+          element={<ViewMTAAssessment />}
+        ></Route>
         <Route path="/admin-exam/:examType" element={<Exam />} />
         <Route path="/admin-exam/:examType/:examForm" element={<Exam />} />
 

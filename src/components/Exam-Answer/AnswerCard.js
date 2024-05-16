@@ -29,7 +29,9 @@ const AnswerCard = ({
           <li className="text-dark">
             Band Score :
             <div className="scc__meta">
-              <strong className="answerCount">{bandValue || "-"}</strong>
+              <strong className="answerCount">
+                {bandValue === null ? 0 : bandValue}
+              </strong>
             </div>
           </li>
         )}
@@ -51,7 +53,9 @@ const AnswerCard = ({
           <li className="text-dark">
             Band Score :
             <div className="scc__meta">
-              <strong className="answerCount">{bandValue || "-"}</strong>
+              <strong className="answerCount">
+                {bandValue === null ? 0 : bandValue}
+              </strong>
             </div>
           </li>
         )}

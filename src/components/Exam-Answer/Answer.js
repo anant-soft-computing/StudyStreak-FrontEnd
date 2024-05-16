@@ -9,21 +9,21 @@ import CancelIcon from "../UI/CancelIcon";
 const Answer = () => {
   const { examId } = useParams();
   const [correctAnswer, setCorrectAnswer] = useState([]);
+  const [studentAnswers, setStudentAnswers] = useState([]);
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
+  const [examName, setExamName] = useState("");
+  const [examType, setExamType] = useState("");
+  const [gptResponse, setGPTResponse] = useState("");
+  const [band, setBand] = useState(0);
 
-  const examName = correctAnswer[0]?.exam?.exam_name;
-
-  const { examAnswer, timeTaken, bandValue, gptResponse, examData } =
-    useLocation()?.state || {};
-
-  const studentAnswers = examAnswer?.[0]?.answers;
+  const { timeTaken } = useLocation()?.state || {};
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/answerslistview/${examId}/`,
+          `/exam-block-answers/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -37,7 +37,12 @@ const Answer = () => {
           8000
         );
         if (response.status === 200) {
-          setCorrectAnswer(response.data);
+          setCorrectAnswer(response.data?.correct_answers);
+          setStudentAnswers(response.data?.student_answers);
+          setExamName(response.data?.exam_name);
+          setBand(response.data?.band);
+          setExamType(response.data?.exam_type);
+          setGPTResponse(response.data?.AI_Assessment);
         } else {
           console.log("error");
         }
@@ -51,8 +56,8 @@ const Answer = () => {
     let correct = 0;
     let incorrect = 0;
     studentAnswers?.forEach((item, index) => {
-      const correctAnswerText = correctAnswer[index]?.answer_text.trim();
-      const studentAnswerText = item.answer.trim();
+      const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
+      const studentAnswerText = item.answer_text?.trim();
 
       if (correctAnswerText?.includes(" OR ")) {
         const correctOptions = correctAnswerText
@@ -94,15 +99,15 @@ const Answer = () => {
             <div className="row">
               <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
-                  <h4 className="sidebar__title">Solution For : {examName}</h4>
+                  <h4 className="sidebar__title">Solution For: {examName}</h4>
                   <AnswerCard
                     totalQuestions={correctAnswer.length}
                     timeTaken={timeTaken}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}
-                    bandValue={bandValue}
+                    bandValue={band}
                   />
-                  {examData?.exam_type === "Writing" && (
+                  {examType === "Writing" && (
                     <div className="writing__exam">
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Assessment</h4>
@@ -110,8 +115,7 @@ const Answer = () => {
                       <div className="gptResponse">{gptResponse}</div>
                     </div>
                   )}
-                  {(examData?.exam_type === "Reading" ||
-                    examData?.exam_type === "Listening") && (
+                  {(examType === "Reading" || examType === "Listening") && (
                     <div className="writing__exam">
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Answer Table</h4>
@@ -153,7 +157,7 @@ const Answer = () => {
                                       <td className="text-dark">
                                         {studentAnswers?.length > 0 &&
                                           studentAnswers[index] &&
-                                          studentAnswers[index].answer}
+                                          studentAnswers[index].answer_text}
                                       </td>
                                       <td className="text-dark">
                                         {studentAnswers?.length > 0 &&
@@ -186,7 +190,7 @@ const Answer = () => {
                                               option.trim().toLowerCase()
                                             )
                                             .every((option) =>
-                                              studentAnswers[index]?.answer
+                                              studentAnswers[index]?.answer_text
                                                 .toLowerCase()
                                                 .includes(option)
                                             ) ? (
@@ -196,7 +200,7 @@ const Answer = () => {
                                           )
                                         ) : studentAnswers?.length > 0 &&
                                           studentAnswers[index] &&
-                                          studentAnswers[index].answer ===
+                                          studentAnswers[index].answer_text ===
                                             correctAnswer[index]
                                               ?.answer_text ? (
                                           <CheckIcon />

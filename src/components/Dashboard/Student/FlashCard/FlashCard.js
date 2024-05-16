@@ -5,16 +5,19 @@ import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import FlashCardModal from "./FlashCardModal";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const FlashCard = () => {
   const { enrolledCourse } = useLocation().state || {};
   const [flashCardList, setFlashCardList] = useState([]);
   const [isFlipped, setIsFlipped] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [modalShow, setModalShow] = useState(false);
   const [flashCardItems, setFlashCardItems] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -42,7 +45,7 @@ const FlashCard = () => {
             acc[curr.id] = false;
             return acc;
           }, {});
-
+          setIsLoading(false);
           setIsFlipped(initialFlipState);
         } else {
           console.log("error");
@@ -67,7 +70,7 @@ const FlashCard = () => {
     const { data } = params;
     return (
       <button className="take-test" onClick={() => handleViewCard(data)}>
-        View Card
+        Open Card
       </button>
     );
   };
@@ -111,7 +114,15 @@ const FlashCard = () => {
                     <div className="dashboard__section__title">
                       <h4>Flash Cards</h4>
                     </div>
-                    <Table rowData={flashCardList} columnDefs={columns} />
+                    {isLoading ? (
+                      <Loading text="Loading...." color="primary" />
+                    ) : flashCardList.length > 0 ? (
+                      <Table rowData={flashCardList} columnDefs={columns} />
+                    ) : (
+                      <h5 className="text-center text-danger">
+                        No FlashCard Available !!
+                      </h5>
+                    )}
                     <FlashCardModal
                       show={modalShow}
                       onHide={handleCloseModal}

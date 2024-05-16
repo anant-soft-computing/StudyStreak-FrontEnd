@@ -16,6 +16,7 @@ const tabs = [
 
 const PracticeTest = () => {
   const { count, givenTest } = useLocation().state || {};
+  const [isLoading, setIsLoading] = useState(true);
   const [testData, setTestData] = useState({
     Reading: [],
     Writing: [],
@@ -25,6 +26,7 @@ const PracticeTest = () => {
   const [activeTab, setActiveTab] = useState("Reading");
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
@@ -51,6 +53,7 @@ const PracticeTest = () => {
             ),
             Speaking: data.filter(({ exam_type }) => exam_type === "Speaking"),
           };
+          setIsLoading(false);
           setTestData(filteredData);
         } else {
           console.log("error");
@@ -59,7 +62,6 @@ const PracticeTest = () => {
         console.error("error", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -99,6 +101,7 @@ const PracticeTest = () => {
                             testData={testData[activeTab]}
                             givenTest={givenTestOfType(activeTab)}
                             testType={activeTab}
+                            isLoading={isLoading}
                           />
                         </div>
                       </div>

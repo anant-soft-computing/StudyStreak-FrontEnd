@@ -172,9 +172,9 @@ const App = () => {
           element={<GmatLiveMockTest />}
         />
         <Route path="/speaking-instruction" element={<SpeakingInstruction />} />
-        <Route path="/eaxm-answere/:examId" element={<Answer />} />
+        <Route path="/exam-answer/:examId" element={<Answer />} />
         <Route
-          path="/eaxm-practice-test-answere/:examId"
+          path="/exam-practice-test-answer/:examId"
           element={<PracticeTestAnswer />}
         />
         <Route

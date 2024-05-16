@@ -23,6 +23,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -99,6 +100,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const gPClass = [];
@@ -119,6 +121,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
             8000
           );
           if (response?.status === 200) {
+            setIsLoading(false);
             const groupDoubtData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
             );
@@ -209,6 +212,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
                                 <div className="row">
                                   <UpcomingClass
                                     joinNow={joinNow}
+                                    isLoading={isLoading}
                                     isWithin5Minutes={isWithin5Minutes}
                                     classes={groupSolvingClasses}
                                     message="No Upcomming Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
@@ -225,6 +229,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
                                 <div className="row">
                                   <ClassList
                                     classes={groupClasses}
+                                    isLoading={isLoading}
                                     bookCount={bookCount}
                                     message=" No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
                                   />

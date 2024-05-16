@@ -200,7 +200,7 @@ const GmatLiveMockTest = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         examSubmit();
-        navigate(`/eaxm-answere/${examData?.id}`, {
+        navigate(`/exam-answer/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue, gptResponse, examData },
         });
       } else if (response.status === 400) {
@@ -291,7 +291,7 @@ const GmatLiveMockTest = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         examSubmit();
-        navigate(`/eaxm-answere/${examData?.id}`, {
+        navigate(`/exam-answer/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue, examData },
         });
       } else if (response.status === 400) {

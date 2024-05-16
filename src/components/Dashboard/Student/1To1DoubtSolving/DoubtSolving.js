@@ -23,6 +23,7 @@ const DoubtSolving = () => {
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -99,6 +100,7 @@ const DoubtSolving = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const oToclass = [];
@@ -119,6 +121,7 @@ const DoubtSolving = () => {
             8000
           );
           if (response?.status === 200) {
+            setIsLoading(false);
             const oToclassData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
             );
@@ -209,6 +212,7 @@ const DoubtSolving = () => {
                                 <div className="row">
                                   <UpcomingClass
                                     joinNow={joinNow}
+                                    isLoading={isLoading}
                                     isWithin5Minutes={isWithin5Minutes}
                                     classes={oneToOneDoubtSolvingClasses}
                                     message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
@@ -226,6 +230,7 @@ const DoubtSolving = () => {
                                   <ClassList
                                     classes={oToclasses}
                                     bookCount={bookCount}
+                                    isLoading={isLoading}
                                     message="No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
                                   />
                                 </div>

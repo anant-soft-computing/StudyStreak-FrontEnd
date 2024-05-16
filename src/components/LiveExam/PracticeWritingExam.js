@@ -269,7 +269,7 @@ const PracticeLiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        navigate(`/eaxm-answere/${examData?.id}`, {
+        navigate(`/exam-answer/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue: 0, examData },
         });
       } else if (response.status === 400) {

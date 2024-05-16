@@ -37,7 +37,7 @@ const LiveClassList = ({ liveClasses, joinNow, isWithin5Minutes }) => {
     },
   ];
 
-  const rowData = liveClasses.map((classItem) => ({
+  const rowData = liveClasses?.map((classItem) => ({
     ...classItem,
     start_date: moment(classItem.start_time).format("DD MMM, YYYY"),
     start_time: moment(classItem.start_time).format("hh:mm A"),
@@ -45,12 +45,16 @@ const LiveClassList = ({ liveClasses, joinNow, isWithin5Minutes }) => {
     end_date: moment(classItem.end_time).format("DD MMM, YYYY"),
   }));
 
-  return liveClasses?.length > 0 ? (
-    <Table rowData={rowData} columnDefs={columns} />
-  ) : (
-    <h5 className="text-center text-danger">
-      No LiveClasses Available Today !! , Please Schedule Your Classes.
-    </h5>
+  return (
+    <>
+      {liveClasses?.length > 0 ? (
+        <Table rowData={rowData} columnDefs={columns} />
+      ) : (
+        <h5 className="text-center text-danger">
+          No LiveClasses Available Today !! , Please Schedule Your Classes.
+        </h5>
+      )}
+    </>
   );
 };
 

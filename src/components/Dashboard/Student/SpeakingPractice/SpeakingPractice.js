@@ -23,6 +23,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [selectedDateRange, setSelectedDateRange] = useState([
@@ -99,6 +100,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const speakingClass = [];
@@ -119,6 +121,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
             8000
           );
           if (response?.status === 200) {
+            setIsLoading(false);
             const speakingData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Speaking-Practice"
             );
@@ -209,6 +212,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                                 <div className="row">
                                   <UpcomingClass
                                     joinNow={joinNow}
+                                    isLoading={isLoading}
                                     isWithin5Minutes={isWithin5Minutes}
                                     classes={speackingClasses}
                                     message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
@@ -224,8 +228,9 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                               >
                                 <div className="row">
                                   <ClassList
-                                    classes={speakingPracticeClasses}
                                     bookCount={bookCount}
+                                    isLoading={isLoading}
+                                    classes={speakingPracticeClasses}
                                     message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
                                   />
                                 </div>

@@ -16319,6 +16319,11 @@ li {
   cursor: pointer;
 }
 
+.btn-primary {
+  background-color: var(--primaryColor) !important;
+  border-color: var(--primaryColor) !important;
+}
+
 /* cusotm shadow style */
 
 div.dashboard__inner,

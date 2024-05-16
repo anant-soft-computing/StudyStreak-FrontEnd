@@ -1,8 +1,14 @@
 import React from "react";
 import moment from "moment";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
-const RegularClassList = ({ regularClass, joinNow, isWithin5Minutes }) => {
+const RegularClassList = ({
+  isLoading,
+  regularClass,
+  joinNow,
+  isWithin5Minutes,
+}) => {
   const handleJoinNow = (params) => {
     const { zoom_meeting_id, start_time } = params.data;
     return (
@@ -38,12 +44,18 @@ const RegularClassList = ({ regularClass, joinNow, isWithin5Minutes }) => {
     end_date: moment(classItem.end_time).format("DD MMM, YYYY"),
   }));
 
-  return regularClass.length > 0 ? (
-    <Table rowData={rowData} columnDefs={columns} />
-  ) : (
-    <h5 className="text-center text-danger">
-      No Regular Classes Available Today !! , Please Schedule Your Classes.
-    </h5>
+  return (
+    <>
+      {isLoading ? (
+        <Loading text="Loading..." color="primary" />
+      ) : regularClass.length > 0 ? (
+        <Table rowData={rowData} columnDefs={columns} />
+      ) : (
+        <h5 className="text-center text-danger">
+          No Regular Classes Available Today !! , Please Schedule Your Classes.
+        </h5>
+      )}
+    </>
   );
 };
 

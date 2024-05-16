@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import CourseListItem from "./CourseListItem";
-import Loading from "../../components/UI/Loading";
 
 const Courses = () => {
   const [search, setSearch] = useState("");
   const [level, setLevel] = useState([]);
   const [category, setCategory] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
 
@@ -34,38 +31,10 @@ const Courses = () => {
     setSelectedLevel(selected ? "" : name);
   };
 
-  const getCategories = async () => {
-    setIsLoading(true);
+  const fetchData = async (url, setter) => {
     try {
       const response = await ajaxCall(
-        `/categoryview/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      setIsLoading(false);
-      if (response.status === 200) {
-        setCategory(response.data);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const getLevels = async () => {
-    try {
-      const response = await ajaxCall(
-        `/levelView/`,
+        url,
         {
           headers: {
             Accept: "application/json",
@@ -79,7 +48,7 @@ const Courses = () => {
         8000
       );
       if (response.status === 200) {
-        setLevel(response.data);
+        setter(response.data);
       } else {
         console.log("error");
       }
@@ -89,8 +58,8 @@ const Courses = () => {
   };
 
   useEffect(() => {
-    getCategories();
-    getLevels();
+    fetchData(`/categoryview/`, setCategory);
+    fetchData(`/levelView/`, setLevel);
   }, []);
 
   return (
@@ -174,41 +143,12 @@ const Courses = () => {
               <div className="col-xl-9 col-lg-9 col-md-8 col-12">
                 <div className="tab-content tab__content__wrapper with__sidebar__content">
                   <div>
-                    {isLoading ? (
-                      <Loading />
-                    ) : (
-                      <CourseListItem
-                        search={search}
-                        selectedCategory={selectedCategory}
-                        selectedLevel={selectedLevel}
-                      />
-                    )}
+                    <CourseListItem
+                      search={search}
+                      selectedCategory={selectedCategory}
+                      selectedLevel={selectedLevel}
+                    />
                   </div>
-                </div>
-                <div className="main__pagination__wrapper">
-                  <ul className="main__page__pagination">
-                    <li>
-                      <Link className="disable" to=" ">
-                        <i className="icofont-double-left"></i>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link className="active" to="">
-                        1
-                      </Link>
-                    </li>
-                    <li>
-                      <Link to="">2</Link>
-                    </li>
-                    <li>
-                      <Link to="">3</Link>
-                    </li>
-                    <li>
-                      <Link to="">
-                        <i className="icofont-double-right"></i>
-                      </Link>
-                    </li>
-                  </ul>
                 </div>
               </div>
             </div>

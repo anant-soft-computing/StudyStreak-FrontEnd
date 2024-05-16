@@ -17,10 +17,12 @@ const tabs = [
 const MockTest = () => {
   const { count, givenTest, givenSpeakingTest } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
+  const [isLoading, setIsLoading] = useState(true);
   const [mockTestData, setMockTestData] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchData = async (url, setData) => {
       try {
         const response = await ajaxCall(
@@ -44,6 +46,7 @@ const MockTest = () => {
             const mockTest = data?.filter(
               ({ block_type }) => block_type === "Assignments"
             );
+            setIsLoading(false);
             setData(mockTest);
           } else if (url === "/speaking-block/") {
             const speakingData = data
@@ -53,6 +56,7 @@ const MockTest = () => {
                 exam_name: item.name,
                 no_of_questions: item.questions.length,
               }));
+            setIsLoading(false);
             setData(speakingData);
           }
         } else {
@@ -116,6 +120,7 @@ const MockTest = () => {
                                   givenTest={givenTest}
                                   testType={name}
                                   givenSpeakingTest={givenSpeakingTest}
+                                  isLoading={isLoading}
                                 />
                               )
                           )}

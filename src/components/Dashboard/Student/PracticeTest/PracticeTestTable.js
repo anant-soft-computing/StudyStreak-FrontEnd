@@ -1,8 +1,9 @@
 import React from "react";
 import Table from "../../../UI/Table";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../../UI/Loading";
 
-const PracticeTestTable = ({ testData, givenTest, testType }) => {
+const PracticeTestTable = ({ testData, givenTest, testType, isLoading }) => {
   const navigate = useNavigate();
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
@@ -30,7 +31,7 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
         <button
           className="take-test"
           onClick={() =>
-            navigate(`/eaxm-practice-test-answere/${examId}`, {
+            navigate(`/exam-practice-test-answer/${examId}`, {
               state: { fullPaper: paperId, examForm: testType },
             })
           }
@@ -159,10 +160,12 @@ const PracticeTestTable = ({ testData, givenTest, testType }) => {
 
   return (
     <>
-      {testData.length === 0 ? (
-        <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
-      ) : (
+      {isLoading ? (
+        <Loading text="Loading...." color="primary" />
+      ) : testData.length > 0 ? (
         <Table rowData={rowData} columnDefs={columns} />
+      ) : (
+        <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
       )}
     </>
   );

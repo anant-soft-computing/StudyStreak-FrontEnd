@@ -9,6 +9,8 @@ const ViewMTAAssessment = () => {
   const [wAssData, setWAssData] = useState({});
   const [sAssData, setSASSData] = useState([]);
 
+  console.log("sAssData", sAssData);
+
   useEffect(() => {
     (async () => {
       try {
@@ -53,60 +55,26 @@ const ViewMTAAssessment = () => {
                     Assessment For : {wAssData?.exam_name} , Catogory :{" "}
                     {wAssData?.exam_catogery}
                   </h4>
-                  {examType === "Writing" && (
-                    <div>
-                      <h4 className="sidebar__title">
-                        Band : {wAssData?.band}
-                      </h4>
-                      <div className="writing__exam">
-                        <div className="dashboard__section__title">
-                          <h4 className="sidebar__title">AI Assessment</h4>
-                        </div>
-                        <div className="gptResponse">
-                          {wAssData?.AI_Assessment}
-                        </div>
+
+                  <div>
+                    <h4 className="sidebar__title">Band : {wAssData?.band}</h4>
+                    <div className="writing__exam">
+                      <div className="dashboard__section__title">
+                        <h4 className="sidebar__title">AI Assessment</h4>
                       </div>
-                      <div className="writing__exam">
-                        <div className="dashboard__section__title">
-                          <h4 className="sidebar__title">Tutor Assessment</h4>
-                        </div>
-                        <div className="gptResponse">
-                          {wAssData?.Tutor_Assessment}
-                        </div>
+                      <div className="gptResponse">
+                        {wAssData?.AI_Assessment}
                       </div>
                     </div>
-                  )}
-                  {examType === "Speaking" && (
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th>Question Number</th>
-                          <th>Question</th>
-                          <th>Answer Audio</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {sAssData.map((item, index) => (
-                          <tr key={index}>
-                            <td>{item.question_number}</td>
-                            <td
-                              dangerouslySetInnerHTML={{
-                                __html: item.question,
-                              }}
-                            />
-                            <td>
-                              <audio controls>
-                                <source
-                                  src={item.answer_audio}
-                                  type="audio/mpeg"
-                                />
-                              </audio>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  )}
+                    <div className="writing__exam">
+                      <div className="dashboard__section__title">
+                        <h4 className="sidebar__title">Tutor Assessment</h4>
+                      </div>
+                      <div className="gptResponse">
+                        {wAssData?.Tutor_Assessment}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
               <BandScoreCard />

@@ -11,6 +11,7 @@ const RegularClass = () => {
   const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [regularClass, setRegularClass] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
@@ -21,10 +22,10 @@ const RegularClass = () => {
   ]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const regularClassData = [];
-
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
@@ -42,6 +43,7 @@ const RegularClass = () => {
             8000
           );
           if (response?.status === 200) {
+            setIsLoading(false);
             const data = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Regular Class"
             );
@@ -106,6 +108,7 @@ const RegularClass = () => {
                           </h5>
                         </div>
                         <RegularClassList
+                          isLoading={isLoading}
                           regularClass={regularClasses()}
                           joinNow={joinNow}
                           isWithin5Minutes={isWithin5Minutes}

@@ -1,8 +1,9 @@
 import React from "react";
 import moment from "moment";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
-const ClassList = ({ classes, bookCount, message }) => {
+const ClassList = ({ classes, bookCount, isLoading, message }) => {
   const handleBook = (params) => {
     const { id, isPastDate } = params.data;
     return (
@@ -62,10 +63,12 @@ const ClassList = ({ classes, bookCount, message }) => {
 
   return (
     <>
-      {classes.length === 0 ? (
-        <h5 className="text-center text-danger">{message}</h5>
-      ) : (
+      {isLoading ? (
+        <Loading text="Loading..." color="primary" />
+      ) : classes.length > 0 ? (
         <Table rowData={rowData} columnDefs={columns} />
+      ) : (
+        <h5 className="text-center text-danger">{message}</h5>
       )}
     </>
   );

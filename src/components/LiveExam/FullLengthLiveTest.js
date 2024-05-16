@@ -803,7 +803,7 @@ const FullLengthLiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         practiceTestSubmit();
-        navigate(`/eaxm-practice-test-answere/${examId}`, {
+        navigate(`/exam-practice-test-answer/${examId}`, {
           state: { timeTaken, bandValue, examForm },
         });
       } else if (response.status === 400) {

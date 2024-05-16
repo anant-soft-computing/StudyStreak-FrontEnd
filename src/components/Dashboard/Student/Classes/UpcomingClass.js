@@ -1,8 +1,15 @@
 import React from "react";
 import moment from "moment";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
-const UpcomingClass = ({ joinNow, isWithin5Minutes, classes, message }) => {
+const UpcomingClass = ({
+  isLoading,
+  joinNow,
+  isWithin5Minutes,
+  classes,
+  message,
+}) => {
   const handleJoinNow = (params) => (
     <button
       className="take-test"
@@ -58,7 +65,9 @@ const UpcomingClass = ({ joinNow, isWithin5Minutes, classes, message }) => {
 
   return (
     <>
-      {classes.length > 0 ? (
+      {isLoading ? (
+        <Loading text="Loading..." color="primary" />
+      ) : classes.length > 0 ? (
         <Table rowData={rowData} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">{message}</h5>

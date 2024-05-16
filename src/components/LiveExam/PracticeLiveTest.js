@@ -658,7 +658,7 @@ const PracticeLiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         practiceTestSubmit();
-        navigate(`/eaxm-practice-test-answere/${examId}`, {
+        navigate(`/exam-practice-test-answer/${examId}`, {
           state: {
             timeTaken,
             bandValue,
@@ -796,7 +796,7 @@ const PracticeLiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         practiceTestSubmit();
-        navigate(`/eaxm-answere/${examData?.id}`, {
+        navigate(`/exam-answer/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue: 0, examData },
         });
       } else if (response.status === 400) {

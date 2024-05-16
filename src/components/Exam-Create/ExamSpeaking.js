@@ -9,7 +9,7 @@ import Tab from "../UI/Tab";
 const initialSpeakingField = {
   name: "",
   difficulty_level: "Easy",
-  block_threshold: "",
+  block_threshold: 0,
   questions: [{ question: "", question_number: "" }],
 };
 

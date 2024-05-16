@@ -1,23 +1,46 @@
 import React from "react";
 import Table from "../../../UI/Table";
+import { useNavigate } from "react-router-dom";
+import Loading from "../../../UI/Loading";
 
-const TestTable = ({ testData, givenTest, givenSpeakingTest, testType }) => {
+const TestTable = ({
+  testData,
+  givenTest,
+  givenSpeakingTest,
+  testType,
+  isLoading,
+}) => {
+  const navigate = useNavigate();
   const takeTest = (params) => {
-    return (
-      <button
-        className="take-test"
-        onClick={() =>
-          window.open(
-            `/${testType !== "Speaking" ? "live-exam" : "live-speaking-exam"}/${
-              params.data.id
-            }`,
-            "_blank"
-          )
-        }
-      >
-        Take Test
-      </button>
-    );
+    const examId = params.data.id;
+    const isGiven = givenTest?.find((test) => test?.id === examId);
+    if (isGiven) {
+      return (
+        <button
+          className="take-test"
+          onClick={() => navigate(`/exam-answer/${examId}`)}
+          style={{ backgroundColor: "green", border: "1px solid green" }}
+        >
+          Review Test
+        </button>
+      );
+    } else {
+      return (
+        <button
+          className="take-test"
+          onClick={() =>
+            window.open(
+              `/${
+                testType !== "Speaking" ? "live-exam" : "live-speaking-exam"
+              }/${params.data.id}`,
+              "_blank"
+            )
+          }
+        >
+          Take Test
+        </button>
+      );
+    }
   };
 
   const testStatus = (params) => {
@@ -27,7 +50,11 @@ const TestTable = ({ testData, givenTest, givenSpeakingTest, testType }) => {
         ? givenSpeakingTest?.find((test) => test?.id === examId)
         : givenTest?.find((test) => test?.id === examId);
     if (isGiven) {
-      return <button className="given-tag">Given</button>;
+      return (
+        <button className="given-tag" style={{ backgroundColor: "green" }}>
+          Given
+        </button>
+      );
     } else {
       return (
         <button className="given-tag" style={{ backgroundColor: "red" }}>
@@ -66,10 +93,12 @@ const TestTable = ({ testData, givenTest, givenSpeakingTest, testType }) => {
 
   return (
     <>
-      {testData.length === 0 ? (
-        <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
-      ) : (
+      {isLoading ? (
+        <Loading text="Loading..." color="primary" />
+      ) : testData.length > 0 ? (
         <Table rowData={testData} columnDefs={columns} />
+      ) : (
+        <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
       )}
     </>
   );

@@ -9,7 +9,7 @@ const intialReadingField = {
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
-  block_threshold: "",
+  block_threshold: 0,
   passage: "",
   passage_image: "",
   question: "",
@@ -26,11 +26,7 @@ const reducerReading = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const tabs = [
-  { name: "Questions Details" },
-  { name: "Block Details" },
-  { name: "Passage" },
-];
+const tabs = [{ name: "Details" }, { name: "Passage" }];
 
 const ExamReading = ({ category, examType }) => {
   const [readingData, dispatchReadingData] = useReducer(
@@ -38,7 +34,7 @@ const ExamReading = ({ category, examType }) => {
     intialReadingField
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const [activeTab, setActiveTab] = useState("Questions Details");
+  const [activeTab, setActiveTab] = useState("Details");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -46,7 +42,7 @@ const ExamReading = ({ category, examType }) => {
 
   const navigate = useNavigate();
 
-  const handlePassageChange = (event, editor) => {
+  const handlePassageChange = (editor) => {
     const data = editor.getData();
     dispatchReadingData({
       type: "passage",
@@ -67,20 +63,12 @@ const ExamReading = ({ category, examType }) => {
       setFormError("No of Question is Required");
       return false;
     }
-    if (!readingData.difficulty_level) {
-      setFormError("Difficulty Level is Required");
-      return false;
-    }
     if (!readingData.exam_name) {
       setFormError("Block Name is Required");
       return false;
     }
     if (!readingData.block_type) {
       setFormError("Block Type is Required");
-      return false;
-    }
-    if (!readingData.block_threshold) {
-      setFormError("Block Threshold is Required");
       return false;
     }
     setFormStatus({
@@ -106,10 +94,28 @@ const ExamReading = ({ category, examType }) => {
       <div className="tab-content tab__content__wrapper aos-init aos-animate">
         <div
           className={`tab-pane fade ${
-            activeTab === "Questions Details" ? "show active" : ""
+            activeTab === "Details" ? "show active" : ""
           }`}
         >
           <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Exam Name</label>
+                  <input
+                    type="text"
+                    placeholder="Block Name"
+                    value={readingData.exam_name}
+                    onChange={(e) =>
+                      dispatchReadingData({
+                        type: "exam_name",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
@@ -132,57 +138,9 @@ const ExamReading = ({ category, examType }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12 ">
-              <div className="dashboard__select__heading">
-                <span>Difficulty Level</span>
-              </div>
-              <div className="dashboard__selector">
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={readingData.difficulty_level}
-                  onChange={(e) =>
-                    dispatchReadingData({
-                      type: "difficulty_level",
-                      value: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Easy">Easy</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Hard">Hard</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className={`tab-pane fade ${
-            activeTab === "Block Details" ? "show active" : ""
-          }`}
-        >
-          <div className="row">
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label>Block Name</label>
-                  <input
-                    type="text"
-                    placeholder="Block Name"
-                    value={readingData.exam_name}
-                    onChange={(e) =>
-                      dispatchReadingData({
-                        type: "exam_name",
-                        value: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__select__heading">
-                <span>Block Type</span>
+                <span>Exam Type</span>
               </div>
               <div className="dashboard__selector">
                 <select
@@ -199,26 +157,6 @@ const ExamReading = ({ category, examType }) => {
                   <option value="Mock Test">Mock Test</option>
                   <option value="Assignments">Assignment</option>
                 </select>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                <div className="dashboard__form__wraper">
-                  <div className="dashboard__form__input">
-                    <label>Block Threshold</label>
-                    <input
-                      type="number"
-                      placeholder="Block Threshold"
-                      value={readingData.block_threshold}
-                      onChange={(e) =>
-                        dispatchReadingData({
-                          type: "block_threshold",
-                          value: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>

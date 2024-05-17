@@ -3,11 +3,14 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import CheckIcon from "../../../UI/CheckIcon";
 import CancelIcon from "../../../UI/CancelIcon";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const ViewPackages = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [packageList, setPackageList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -32,6 +35,7 @@ const ViewPackages = () => {
               no: index + 1,
             })
           );
+          setIsLoading(false);
           setPackageList(packageWithNumbers);
         } else {
           console.log("error");
@@ -127,6 +131,12 @@ const ViewPackages = () => {
     },
   ];
 
-  return <Table rowData={packageList} columnDefs={columns} />;
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : packageList.length > 0 ? (
+    <Table rowData={packageList} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">No Packages Available !!</h5>
+  );
 };
 export default ViewPackages;

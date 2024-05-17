@@ -11,16 +11,14 @@ import { setToLocalStorage } from "../../helpers/helperFunction";
 import ajaxCall from "../../helpers/ajaxCall";
 import Register from "./Register";
 
-const intialLoginData = {
+const initialLoginData = {
   username: "",
   password: "",
 };
 
 const reducerLogin = (state, action) => {
   if (action.type === "reset") {
-    return {
-      ...state,
-    };
+    return initialLoginData;
   }
   return { ...state, [action.type]: action.value };
 };
@@ -32,8 +30,9 @@ const initialSubmit = {
 };
 
 const Login = () => {
-  const [loginData, dispatchLogin] = useReducer(reducerLogin, intialLoginData);
+  const [loginData, dispatchLogin] = useReducer(reducerLogin, initialLoginData);
   const controller = useRef(null);
+  const [credentials, setCredentials] = useState(null);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState("login");
@@ -45,9 +44,7 @@ const Login = () => {
   const { checkAuth } = useCheckAuth();
 
   const resetReducerForm = () => {
-    dispatchLogin({
-      type: "reset",
-    });
+    dispatchLogin({ type: "reset" });
   };
 
   useEffect(() => {
@@ -61,6 +58,12 @@ const Login = () => {
   useEffect(() => {
     checkAuth();
   }, [authData, checkAuth]);
+
+  useEffect(() => {
+    if (credentials) {
+      doLogin();
+    }
+  }, [credentials]);
 
   const setFormError = (errMsg) => {
     setFormStatus({
@@ -89,15 +92,22 @@ const Login = () => {
 
   const doLogin = async (e) => {
     resetReducerForm();
-    e.preventDefault();
-    if (!validateForm()) return;
+    if (e) e.preventDefault();
+    if (!credentials && !validateForm()) return;
 
     setFormStatus({
       ...formStatus,
       isSubmitting: true,
     });
 
-    const data = JSON.stringify(loginData);
+    const data = credentials
+      ? {
+          email: credentials.email,
+          family_name: credentials.family_name,
+          given_name: credentials.given_name,
+          aud: credentials.aud,
+        }
+      : loginData;
 
     controller.current = new AbortController();
 
@@ -113,14 +123,14 @@ const Login = () => {
 
     try {
       const response = await ajaxCall(
-        "/login/",
+        credentials ? "/auth/google/" : "/login/",
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
           method: "POST",
-          body: data,
+          body: JSON.stringify(data),
           withCredentials: true,
           signal,
         },
@@ -332,22 +342,21 @@ const Login = () => {
                             </button>
                           </div>
                         </div>
-                      </form>
-                      <div className="login__social__option">
-                        <div className="google_login_logo">
-                          <GoogleLogin
-                            onSuccess={(credentialResponse) => {
-                              const decodedData = jwtDecode(
-                                credentialResponse.credential
-                              );
-                              console.log(decodedData);
-                            }}
-                            onError={() => {
-                              console.log("Login Failed");
-                            }}
-                          />
+                        <div className="login__social__option">
+                          <div className="google_login_logo">
+                            <GoogleLogin
+                              onSuccess={(credentialResponse) => {
+                                setCredentials(
+                                  jwtDecode(credentialResponse.credential)
+                                );
+                              }}
+                              onError={() => {
+                                toast.error("Login Failed");
+                              }}
+                            />
+                          </div>
                         </div>
-                      </div>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -359,7 +368,7 @@ const Login = () => {
                   <div className="col-xl-8 offset-md-2">
                     <div className="loginarea__wraper">
                       <div className="login__heading">
-                        <h5 className="login__title">Sing Up</h5>
+                        <h5 className="login__title">Sign Up</h5>
                         <p className="login__description">
                           Already have an account?{" "}
                           <Link to="/login" onClick={toggleForm}>

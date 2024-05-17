@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 110 },
@@ -12,9 +13,11 @@ const columns = [
 ];
 
 const ViewFlashCard = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [flashCardList, setFlashCardList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -38,6 +41,7 @@ const ViewFlashCard = () => {
               no: index + 1,
             })
           );
+          setIsLoading(false);
           setFlashCardList(flashCardWithNumbers);
         } else {
           console.log("error");
@@ -48,7 +52,13 @@ const ViewFlashCard = () => {
     })();
   }, []);
 
-  return <Table rowData={flashCardList} columnDefs={columns} />;
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : flashCardList.length > 0 ? (
+    <Table rowData={flashCardList} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">No Flash Cards Available !!</h5>
+  );
 };
 
 export default ViewFlashCard;

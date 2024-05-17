@@ -4,11 +4,14 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import CheckIcon from "../../../UI/CheckIcon";
 import CancelIcon from "../../../UI/CancelIcon";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const Student = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [studentList, setStudentList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -27,6 +30,7 @@ const Student = () => {
         );
 
         if (response?.status === 200) {
+          setIsLoading(false);
           const studentWithNumbers = response?.data?.map((student, index) => ({
             ...student,
             no: index + 1,
@@ -156,7 +160,15 @@ const Student = () => {
                       <h4>Student</h4>
                     </div>
                     <div className="row">
-                      <Table rowData={studentList} columnDefs={columns} />
+                      {isLoading ? (
+                        <Loading text="Loading..." color="primary" />
+                      ) : studentList.length > 0 ? (
+                        <Table rowData={studentList} columnDefs={columns} />
+                      ) : (
+                        <h5 className="text-center text-danger">
+                          No Students Available !!
+                        </h5>
+                      )}
                     </div>
                   </div>
                 </div>

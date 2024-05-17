@@ -23,7 +23,7 @@ const reducerSpeaking = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const tabs = [{ name: "Block Details" }, { name: "Question" }];
+const tabs = [{ name: "Details" }, { name: "Question" }];
 
 const ExamSpeaking = () => {
   const [SpeakingData, dispatchSpeakingData] = useReducer(
@@ -31,7 +31,7 @@ const ExamSpeaking = () => {
     initialSpeakingField
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const [activeTab, setActiveTab] = useState("Block Details");
+  const [activeTab, setActiveTab] = useState("Details");
   const navigate = useNavigate();
 
   const handleTabChange = (tab) => {
@@ -137,14 +137,14 @@ const ExamSpeaking = () => {
       <div className="tab-content tab__content__wrapper aos-init aos-animate">
         <div
           className={`tab-pane fade ${
-            activeTab === "Block Details" ? "show active" : ""
+            activeTab === "Details" ? "show active" : ""
           }`}
         >
           <div className="row">
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Block Name</label>
+                  <label>Exam Name</label>
                   <input
                     type="text"
                     placeholder="Block Name"
@@ -159,48 +159,24 @@ const ExamSpeaking = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12 ">
-              <div className="dashboard__select__heading">
-                <span>Difficulty Level</span>
-              </div>
-              <div className="dashboard__selector">
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={SpeakingData.difficulty_level}
-                  onChange={(e) =>
-                    dispatchSpeakingData({
-                      type: "difficulty_level",
-                      value: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Easy">Easy</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Hard">Hard</option>
-                </select>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                <div className="dashboard__form__wraper">
-                  <div className="dashboard__form__input">
-                    <label>Block Threshold</label>
-                    <select
-                      className="form-select"
-                      aria-label="Default select example"
-                      value={SpeakingData.block_threshold}
-                      onChange={(e) =>
-                        dispatchSpeakingData({
-                          type: "block_threshold",
-                          value: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="0">Assignment</option>
-                      <option value="1">Mock Test</option>
-                    </select>
-                  </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Exam Type</label>
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={SpeakingData.block_threshold}
+                    onChange={(e) =>
+                      dispatchSpeakingData({
+                        type: "block_threshold",
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="0">Assignment</option>
+                    <option value="1">Mock Test</option>
+                  </select>
                 </div>
               </div>
             </div>

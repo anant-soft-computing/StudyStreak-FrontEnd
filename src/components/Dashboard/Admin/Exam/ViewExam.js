@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const ViewExam = () => {
   const [examList, setExamList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [speakingList, setSpeakingList] = useState([]);
   const [ptList, setPtList] = useState([]);
   const [fltList, setFltList] = useState([]);
@@ -15,6 +17,7 @@ const ViewExam = () => {
   }));
 
   const fetchData = async (url, filterFn, setData) => {
+    setIsLoading(true);
     try {
       const response = await ajaxCall(
         url,
@@ -38,6 +41,7 @@ const ViewExam = () => {
           no: index + 1,
         }));
         setData(dataWithNumbers);
+        setIsLoading(false);
       } else {
         console.log("error");
       }
@@ -64,56 +68,62 @@ const ViewExam = () => {
           <label>(1) Mock Tests : </label>
         </div>
       </div>
-      <Table
-        rowData={miniTestData}
-        columnDefs={[
-          { headerName: "No.", field: "no", resizable: false, width: 68 },
-          {
-            headerName: "Exam Name",
-            field: "exam_name" || "name",
-            filter: true,
-            valueGetter: (params) => {
-              return params.data?.exam_name || params.data?.name;
+      {isLoading ? (
+        <Loading text="Loading..." color="primary" />
+      ) : miniTestData.length > 0 ? (
+        <Table
+          rowData={miniTestData}
+          columnDefs={[
+            { headerName: "No.", field: "no", resizable: false, width: 68 },
+            {
+              headerName: "Exam Name",
+              field: "exam_name" || "name",
+              filter: true,
+              valueGetter: (params) => {
+                return params.data?.exam_name || params.data?.name;
+              },
             },
-          },
-          {
-            headerName: "Exam Type",
-            field: "exam_type" || "Speaking",
-            filter: true,
-            valueGetter: (params) => {
-              return params.data?.exam_type || "Speaking";
+            {
+              headerName: "Exam Type",
+              field: "exam_type" || "Speaking",
+              filter: true,
+              valueGetter: (params) => {
+                return params.data?.exam_type || "Speaking";
+              },
             },
-          },
-          {
-            headerName: "No. Of Questions",
-            field: "no_of_questions" || "questions.length",
-            filter: true,
-            valueGetter: (params) => {
-              return (
-                params.data?.no_of_questions || params.data?.questions.length
-              );
+            {
+              headerName: "No. Of Questions",
+              field: "no_of_questions" || "questions.length",
+              filter: true,
+              valueGetter: (params) => {
+                return (
+                  params.data?.no_of_questions || params.data?.questions.length
+                );
+              },
             },
-          },
-          {
-            headerName: "Block Type",
-            field: "block_type" || "Mock Test",
-            filter: true,
-            valueGetter: (params) => {
-              return params.data?.block_type || "Mock Test";
+            {
+              headerName: "Block Type",
+              field: "block_type" || "Mock Test",
+              filter: true,
+              valueGetter: (params) => {
+                return params.data?.block_type || "Mock Test";
+              },
             },
-          },
-          {
-            headerName: "Difficulty Level",
-            field: "difficulty_level",
-            filter: true,
-          },
-          {
-            headerName: "Block Threshold",
-            field: "block_threshold",
-            filter: true,
-          },
-        ]}
-      />
+            {
+              headerName: "Difficulty Level",
+              field: "difficulty_level",
+              filter: true,
+            },
+            {
+              headerName: "Block Threshold",
+              field: "block_threshold",
+              filter: true,
+            },
+          ]}
+        />
+      ) : (
+        <h5 className="text-center text-danger">No Mini Test Available !!</h5>
+      )}
       <div>
         <div>
           <div className="dashboard__form__wraper mt-4">
@@ -121,78 +131,93 @@ const ViewExam = () => {
               <label>(2) Practice Tests : </label>
             </div>
           </div>
-          <Table
-            rowData={ptList}
-            columnDefs={[
-              { headerName: "No.", field: "no", resizable: false, width: 68 },
-              { headerName: "Exam Name", field: "Name", filter: true },
-              {
-                headerName: "Difficulty Level",
-                field: "difficulty_level",
-                filter: true,
-              },
-              {
-                headerName: "Reading Set",
-                field: "Reading.length",
-                filter: true,
-              },
-              {
-                headerName: "Writing Set",
-                field: "Writing.length",
-                filter: true,
-              },
-              {
-                headerName: "Listening Set",
-                field: "Listening.length",
-                filter: true,
-              },
-              {
-                headerName: "Speaking Set",
-                field: "Speaking.length",
-                filter: true,
-              },
-            ]}
-          />
+          {isLoading ? (
+            <Loading text="Loading..." color="primary" />
+          ) : ptList.length > 0 ? (
+            <Table
+              rowData={ptList}
+              columnDefs={[
+                { headerName: "No.", field: "no", resizable: false, width: 68 },
+                { headerName: "Exam Name", field: "Name", filter: true },
+                {
+                  headerName: "Difficulty Level",
+                  field: "difficulty_level",
+                  filter: true,
+                },
+                {
+                  headerName: "Reading Set",
+                  field: "Reading.length",
+                  filter: true,
+                },
+                {
+                  headerName: "Writing Set",
+                  field: "Writing.length",
+                  filter: true,
+                },
+                {
+                  headerName: "Listening Set",
+                  field: "Listening.length",
+                  filter: true,
+                },
+                {
+                  headerName: "Speaking Set",
+                  field: "Speaking.length",
+                  filter: true,
+                },
+              ]}
+            />
+          ) : (
+            <h5 className="text-center text-danger">
+              No Practice Test Available !!
+            </h5>
+          )}
         </div>
-
         <div>
           <div className="dashboard__form__wraper mt-4">
             <div className="dashboard__form__input">
               <label>(3) Full Length Tests : </label>
             </div>
           </div>
-          <Table
-            rowData={fltList}
-            columnDefs={[
-              { headerName: "No.", field: "no", resizable: false, width: 68 },
-              { headerName: "Exam Name", field: "name", filter: true },
-              {
-                headerName: "Exam Level",
-                field: "difficulty_level",
-                filter: true,
-              },
-              {
-                headerName: "Reading Set",
-                field: "reading_set.Reading.length",
-                filter: true,
-              },
-              {
-                headerName: "Writing Set",
-                field: "writing_set.Writing.length",
-                filter: true,
-              },
-              {
-                headerName: "Listening Set",
-                field: "listening_set.Listening.length",
-                filter: true,
-              },
-              {
-                headerName: "Speaking Set",
-                field: "speaking_set.Speaking.length",
-                filter: true,
-              },
-            ]}
-          />
+          {isLoading ? (
+            <Loading text="Loading..." color="primary" />
+          ) : fltList.length > 0 ? (
+            <Table
+              rowData={fltList}
+              columnDefs={[
+                { headerName: "No.", field: "no", resizable: false, width: 68 },
+                { headerName: "Exam Name", field: "name", filter: true },
+                {
+                  headerName: "Exam Level",
+                  field: "difficulty_level",
+                  filter: true,
+                },
+                {
+                  headerName: "Reading Set",
+                  field: "reading_set.Reading.length",
+                  filter: true,
+                },
+                {
+                  headerName: "Writing Set",
+                  field: "writing_set.Writing.length",
+                  filter: true,
+                },
+                {
+                  headerName: "Listening Set",
+                  field: "listening_set.Listening.length",
+                  filter: true,
+                },
+                {
+                  headerName: "Speaking Set",
+                  field: "speaking_set.Speaking.length",
+                  filter: true,
+                },
+              ]}
+            />
+          ) : (
+            <h5 className="text-center text-danger">
+              No Full Length Test Available !!
+            </h5>
+          )}
         </div>
       </div>
     </div>

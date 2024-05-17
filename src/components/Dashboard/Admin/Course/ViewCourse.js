@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 60 },
@@ -43,9 +44,11 @@ const columns = [
 ];
 
 const ViewCourse = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [courseList, setCouresList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -68,6 +71,7 @@ const ViewCourse = () => {
             ...course,
             no: index + 1,
           }));
+          setIsLoading(false);
           setCouresList(courseWithNumbers);
         } else {
           console.log("error");
@@ -78,7 +82,13 @@ const ViewCourse = () => {
     })();
   }, []);
 
-  return <Table rowData={courseList} columnDefs={columns} />;
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : courseList.length > 0 ? (
+    <Table rowData={courseList} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">No Course Available !!</h5>
+  );
 };
 
 export default ViewCourse;

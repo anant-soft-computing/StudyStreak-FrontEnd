@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 68 },
@@ -34,9 +35,11 @@ const columns = [
 ];
 
 const ViewGamification = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [gamificationList, setGimificationList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -61,6 +64,7 @@ const ViewGamification = () => {
               no: index + 1,
             })
           );
+          setIsLoading(false);
           setGimificationList(gamificationWithNumbers);
         } else {
           console.log("error");
@@ -71,7 +75,13 @@ const ViewGamification = () => {
     })();
   }, []);
 
-  return <Table rowData={gamificationList} columnDefs={columns} />;
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : gamificationList.length > 0 ? (
+    <Table rowData={gamificationList} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">No Gamification Available !!</h5>
+  );
 };
 
 export default ViewGamification;

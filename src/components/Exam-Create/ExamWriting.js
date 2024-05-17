@@ -27,11 +27,7 @@ const reducerWriting = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const tabs = [
-  { name: "Questions Details" },
-  { name: "Block Details" },
-  { name: "Passage" },
-];
+const tabs = [{ name: "Details" }, { name: "Passage" }];
 
 const ExamWriting = ({ category }) => {
   const [writingData, dispatchWritingData] = useReducer(
@@ -39,7 +35,7 @@ const ExamWriting = ({ category }) => {
     intialWritingField
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const [activeTab, setActiveTab] = useState("Questions Details");
+  const [activeTab, setActiveTab] = useState("Details");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -164,10 +160,28 @@ const ExamWriting = ({ category }) => {
       <div className="tab-content tab__content__wrapper aos-init aos-animate">
         <div
           className={`tab-pane fade ${
-            activeTab === "Questions Details" ? "show active" : ""
+            activeTab === "Details" ? "show active" : ""
           }`}
         >
           <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Exam Name</label>
+                  <input
+                    type="text"
+                    placeholder="Block Name"
+                    value={writingData.exam_name}
+                    onChange={(e) =>
+                      dispatchWritingData({
+                        type: "exam_name",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
@@ -186,57 +200,9 @@ const ExamWriting = ({ category }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12 ">
-              <div className="dashboard__select__heading">
-                <span>Difficulty Level</span>
-              </div>
-              <div className="dashboard__selector">
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={writingData.difficulty_level}
-                  onChange={(e) =>
-                    dispatchWritingData({
-                      type: "difficulty_level",
-                      value: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Easy">Easy</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Hard">Hard</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          className={`tab-pane fade ${
-            activeTab === "Block Details" ? "show active" : ""
-          }`}
-        >
-          <div className="row">
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label>Block Name</label>
-                  <input
-                    type="text"
-                    placeholder="Block Name"
-                    value={writingData.exam_name}
-                    onChange={(e) =>
-                      dispatchWritingData({
-                        type: "exam_name",
-                        value: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__select__heading">
-                <span>Block Type</span>
+                <span>Exam Type</span>
               </div>
               <div className="dashboard__selector">
                 <select
@@ -253,26 +219,6 @@ const ExamWriting = ({ category }) => {
                   <option value="Mock Test">Mock Test</option>
                   <option value="Assignments">Assignment</option>
                 </select>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                <div className="dashboard__form__wraper">
-                  <div className="dashboard__form__input">
-                    <label>Block Threshold</label>
-                    <input
-                      type="number"
-                      placeholder="Block Threshold"
-                      value={writingData.block_threshold}
-                      onChange={(e) =>
-                        dispatchWritingData({
-                          type: "block_threshold",
-                          value: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>

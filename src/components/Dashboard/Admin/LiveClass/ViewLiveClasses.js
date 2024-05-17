@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import moment from "moment";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 86 },
@@ -43,9 +44,11 @@ const columns = [
 ];
 
 const ViewLiveClasses = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [liveClassList, setLiveClassList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -70,6 +73,7 @@ const ViewLiveClasses = () => {
               no: index + 1,
             })
           );
+          setIsLoading(false);
           setLiveClassList(liveClassWithNumbers);
         } else {
           console.log("error");
@@ -80,6 +84,12 @@ const ViewLiveClasses = () => {
     })();
   }, []);
 
-  return <Table columnDefs={columns} rowData={liveClassList} />;
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : liveClassList.length > 0 ? (
+    <Table columnDefs={columns} rowData={liveClassList} />
+  ) : (
+    <h5 className="text-center text-danger">No Live Classes Available !!</h5>
+  );
 };
 export default ViewLiveClasses;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const columns = [
   { headerName: "No.", field: "no" },
@@ -8,9 +9,11 @@ const columns = [
 ];
 
 const ViewBadges = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [badgeList, setBadgeList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -33,6 +36,7 @@ const ViewBadges = () => {
             ...batch,
             no: index + 1,
           }));
+          setIsLoading(false);
           setBadgeList(badgesWithNumbers);
         } else {
           console.log("error");
@@ -43,7 +47,13 @@ const ViewBadges = () => {
     })();
   }, []);
 
-  return <Table rowData={badgeList} columnDefs={columns} />;
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : badgeList ? (
+    <Table rowData={badgeList} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">No Badges Available !!</h5>
+  );
 };
 
 export default ViewBadges;

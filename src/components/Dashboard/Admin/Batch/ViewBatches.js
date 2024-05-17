@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const columns = [
   {
@@ -30,9 +31,11 @@ const columns = [
 ];
 
 const ViewBatches = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [batchList, setBatchList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -55,6 +58,7 @@ const ViewBatches = () => {
             ...batch,
             no: index + 1,
           }));
+          setIsLoading(false);
           setBatchList(batchesWithNumbers);
         } else {
           console.log("error");
@@ -65,7 +69,13 @@ const ViewBatches = () => {
     })();
   }, []);
 
-  return <Table rowData={batchList} columnDefs={columns} />;
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : batchList.length > 0 ? (
+    <Table rowData={batchList} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">No Batches Available !!</h5>
+  );
 };
 
 export default ViewBatches;

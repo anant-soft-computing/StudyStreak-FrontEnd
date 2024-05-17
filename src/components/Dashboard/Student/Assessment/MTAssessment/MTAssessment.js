@@ -8,7 +8,6 @@ const MTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
       <button
         className="take-test"
         onClick={() =>
-          testType === "Writing" &&
           navigate(`/assessment/${params.data.id}`, {
             state: { examType: testType },
           })

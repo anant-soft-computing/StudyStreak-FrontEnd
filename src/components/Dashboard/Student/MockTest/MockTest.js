@@ -66,7 +66,6 @@ const MockTest = () => {
         console.error("error", error);
       }
     };
-
     fetchData("/exam-blocks/", setMockTestData);
     fetchData("/speaking-block/", setSpeakingData);
   }, []);

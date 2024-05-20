@@ -18,7 +18,7 @@ const LiveSpeakingExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState({});
-  const [timer, setTimer] = useState(0);
+  const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -30,16 +30,27 @@ const LiveSpeakingExam = () => {
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
   useEffect(() => {
+    setTimer(15 * 60);
+  }, [examId]);
+
+  useEffect(() => {
     let interval;
     if (timerRunning) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1);
+        setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     }
     return () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
+
+  useEffect(() => {
+    if (timer === 0) {
+      setTimerRunning(false);
+      toast.error("Time's up! Your exam has ended.");
+    }
+  }, [timer]);
 
   const examSubmit = async () => {
     const data = {
@@ -261,25 +272,29 @@ const LiveSpeakingExam = () => {
                   }}
                 >
                   <div className="lv-speaking-question">
-                    <p> {i + 1} :</p>
+                    <p> {i + 1} : </p>
                     <div
                       dangerouslySetInnerHTML={{
                         __html: item.question,
                       }}
                     ></div>
                   </div>
-                  <button
-                    className="lv-footer-button"
-                    onClick={() => speak(item.question, i)}
-                    disabled={speaking?.[i]?.status === 1}
-                    style={{
-                      opacity: speaking?.[i]?.status === 1 ? 0.5 : 1,
-                      cursor:
-                        speaking?.[i]?.status === 1 ? "not-allowed" : "pointer",
-                    }}
-                  >
-                    {speaking?.[i]?.status === 2 ? "Replay" : "Start"}
-                  </button>
+                  <div>
+                    <button
+                      className="lv-footer-button"
+                      onClick={() => speak(item.question, i)}
+                      disabled={speaking?.[i]?.status === 1}
+                      style={{
+                        opacity: speaking?.[i]?.status === 1 ? 0.5 : 1,
+                        cursor:
+                          speaking?.[i]?.status === 1
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {speaking?.[i]?.status === 2 ? "Replay" : "Start"}
+                    </button>
+                  </div>
                 </div>
               ))}
           </div>

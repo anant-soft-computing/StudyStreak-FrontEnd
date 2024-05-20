@@ -25,7 +25,7 @@ const reducerSpeaking = (state, action) => {
 
 const tabs = [{ name: "Details" }, { name: "Question" }];
 
-const ExamSpeaking = () => {
+const ExamSpeaking = ({ category }) => {
   const [SpeakingData, dispatchSpeakingData] = useReducer(
     reducerSpeaking,
     initialSpeakingField
@@ -78,7 +78,7 @@ const ExamSpeaking = () => {
       return false;
     }
     if (!SpeakingData.name) {
-      setFormError("Block Name is Required");
+      setFormError("Exam Name is Required");
       return false;
     }
     if (
@@ -100,6 +100,10 @@ const ExamSpeaking = () => {
   const submitSpeakingExam = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+    const data = {
+      ...SpeakingData,
+      exam_category: category,
+    };
     try {
       const response = await ajaxCall("/speaking-block/", {
         headers: {
@@ -110,7 +114,7 @@ const ExamSpeaking = () => {
           }`,
         },
         method: "POST",
-        body: JSON.stringify(SpeakingData),
+        body: JSON.stringify(data),
       });
       if (response.status === 201) {
         toast.success("Speaking Exam Create Successfully");
@@ -147,7 +151,7 @@ const ExamSpeaking = () => {
                   <label>Exam Name</label>
                   <input
                     type="text"
-                    placeholder="Block Name"
+                    placeholder="Exam Name"
                     value={SpeakingData.name}
                     onChange={(e) =>
                       dispatchSpeakingData({

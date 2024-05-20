@@ -22,33 +22,51 @@ const LiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
-  const [timer, setTimer] = useState(0);
+  const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [recordedFilePath, setRecordedFilePath] = useState("");
+  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const synth = window.speechSynthesis;
   const [speaking, setSpeaking] = useState(0);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   let highlightedElement = null;
-  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
+
+  useEffect(() => {
+    if (
+      examData?.exam_type === "Reading" ||
+      examData?.exam_type === "Writing"
+    ) {
+      setTimer(60 * 60);
+    } else if (examData?.exam_type === "Listening") {
+      setTimer(30 * 60);
+    }
+  }, [examData.exam_type, examId]);
 
   useEffect(() => {
     let interval;
     if (timerRunning) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1);
+        setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     }
     return () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
+
+  useEffect(() => {
+    if (timer === 0) {
+      setTimerRunning(false);
+      toast.error("Time's up! Your exam has ended.");
+    }
+  }, [timer]);
 
   useEffect(() => {
     (async () => {
@@ -338,11 +356,15 @@ const LiveExam = () => {
   };
 
   const renderAudio = (audio_file) => {
-    // Replace this with your actual implementation
     if (audio_file) {
       return (
         <div className="m-2">
-          <audio controls autoPlay controlsList="nodownload noplaybackrate">
+          <audio
+            controls
+            autoPlay
+            controlsList="nodownload noplaybackrate"
+            className="hidden-controls"
+          >
             <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>

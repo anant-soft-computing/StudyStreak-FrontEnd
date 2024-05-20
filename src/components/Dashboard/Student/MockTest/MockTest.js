@@ -18,15 +18,16 @@ const MockTest = () => {
   const { count, givenTest, givenSpeakingTest } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [isLoading, setIsLoading] = useState(true);
-  const [mockTestData, setMockTestData] = useState([]);
-  const [speakingData, setSpeakingData] = useState([]);
+  const [category, setCategory] = useState("IELTS");
+  const [allMockTestData, setAllMockTestData] = useState([]);
+  const [allSpeakingData, setAllSpeakingData] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    const fetchData = async (url, setData) => {
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await ajaxCall(
-          url,
+        const examBlocksResponse = await ajaxCall(
+          "/exam-blocks/",
           {
             headers: {
               Accept: "application/json",
@@ -39,36 +40,58 @@ const MockTest = () => {
           },
           8000
         );
-
-        if (response.status === 200) {
-          const { data } = response;
-          if (url === "/exam-blocks/") {
-            const mockTest = data?.filter(
-              ({ block_type }) => block_type === "Assignments"
-            );
-            setIsLoading(false);
-            setData(mockTest);
-          } else if (url === "/speaking-block/") {
-            const speakingData = data
-              .filter((item) => item.block_threshold === 0)
-              .map((item) => ({
-                ...item,
-                exam_name: item.name,
-                no_of_questions: item.questions.length,
-              }));
-            setIsLoading(false);
-            setData(speakingData);
-          }
+        if (examBlocksResponse.status === 200) {
+          setAllMockTestData(examBlocksResponse.data);
         } else {
-          console.log("error");
+          console.log("Error fetching exam blocks");
         }
+        const speakingBlocksResponse = await ajaxCall(
+          "/speaking-block/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (speakingBlocksResponse.status === 200) {
+          setAllSpeakingData(speakingBlocksResponse.data);
+        } else {
+          console.log("Error fetching speaking blocks");
+        }
+        setIsLoading(false);
       } catch (error) {
-        console.error("error", error);
+        console.error("Error", error);
+        setIsLoading(false);
       }
     };
-    fetchData("/exam-blocks/", setMockTestData);
-    fetchData("/speaking-block/", setSpeakingData);
+    fetchData();
   }, []);
+
+  const filterMockTestData = () =>
+    allMockTestData.filter(
+      ({ block_type, exam_category }) =>
+        block_type === "Assignments" && exam_category === category
+    );
+
+  const filterSpeakingData = () =>
+    allSpeakingData
+      .filter(
+        (item) => item.block_threshold === 0 && item.exam_category === category
+      )
+      .map((item) => ({
+        ...item,
+        exam_name: item.name,
+        no_of_questions: item.questions.length,
+      }));
+
+  const mockTestData = filterMockTestData();
+  const speakingData = filterSpeakingData();
 
   const testByExamType = (examType) =>
     mockTestData.filter(({ exam_type }) => exam_type === examType);
@@ -95,6 +118,32 @@ const MockTest = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Mini Test</h4>
+                      <div className="col-xl-2">
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>Category</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={category}
+                              onChange={(e) => setCategory(e.target.value)}
+                            >
+                              {[
+                                "IELTS",
+                                "TOFEL",
+                                "PTE",
+                                "DUOLINGO",
+                                "GRE",
+                                "GMAT",
+                              ].map((item) => (
+                                <option key={item} value={item}>
+                                  {item}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     {count?.mini_test_count === "" ? (
                       <BuyCourse message="No Mini Test Available, Please Buy a Course!" />

@@ -51,9 +51,8 @@ const exams = [
   },
   {
     name: "GENERAL",
-    subMenu: [],
     link: "/admin-exam/GENERAL",
-    isDisabled: true,
+    isDisabled: false,
   },
 ];
 
@@ -85,6 +84,13 @@ const Exam = () => {
           {
             name: "Verbal Reasoning",
             link: `/admin-exam/${screenContent?.examType}/Verbal-Reasoning`,
+          },
+        ]
+      : screenContent?.examType === "GENERAL"
+      ? [
+          {
+            name: "General",
+            link: `/admin-exam/${screenContent?.examType}/General`,
           },
         ]
       : [
@@ -235,8 +241,8 @@ const Exam = () => {
                                   "Integrated-Reasoning" ||
                                 screenContent.examForm ===
                                   "Quantitative-Reasoning" ||
-                                screenContent.examForm ===
-                                  "Verbal-Reasoning") && (
+                                screenContent.examForm === "Verbal-Reasoning" ||
+                                screenContent.examForm === "General") && (
                                 <ExamReading
                                   category={screenContent.examType}
                                   examType={screenContent.examForm}

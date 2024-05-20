@@ -71,7 +71,7 @@ const ExamListening = ({ category }) => {
       return false;
     }
     if (!listeningData.exam_name) {
-      setFormError("Block Name is Required");
+      setFormError("Exam Name is Required");
       return false;
     }
     if (!listeningData.block_type) {
@@ -115,7 +115,7 @@ const ExamListening = ({ category }) => {
                   <label>Exam Name</label>
                   <input
                     type="text"
-                    placeholder="Block Name"
+                    placeholder="Exam Name"
                     value={listeningData.exam_name}
                     onChange={(e) =>
                       dispatchListeningData({

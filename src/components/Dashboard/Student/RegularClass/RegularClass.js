@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
 import RegularClassList from "./RegularClassList";
-import { useLocation } from "react-router";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "Regular" }, { name: "Recoded Class" }];
 
 const RegularClass = () => {
-  const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [regularClass, setRegularClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("Regular");
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -20,6 +21,10 @@ const RegularClass = () => {
       key: "selection",
     },
   ]);
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -87,60 +92,49 @@ const RegularClass = () => {
 
   return (
     <>
-      {pathname === "/regularClasses" ? (
-        <div className="body__wrapper">
-          <div className="main_wrapper overflow-hidden">
-            <div className="dashboardarea sp_bottom_100">
-              <div className="dashboard">
-                <div className="container-fluid full__width__padding">
-                  <div className="row">
-                    <DSSidebar />
-                    <div className="col-xl-9 col-lg-9 col-md-12">
-                      <div className="dashboard__content__wraper common-background-color-across-app">
-                        <div className="dashboard__section__title">
-                          <h4>Regular Class</h4>
-                          <h5>
-                            Your Regular Class Schedule{" "}
-                            <i
-                              className="icofont-calendar one_to_one_icon"
-                              onClick={() => setIsModalOpen(true)}
-                            ></i>
-                          </h5>
-                        </div>
-                        <RegularClassList
-                          isLoading={isLoading}
-                          regularClass={regularClasses()}
-                          joinNow={joinNow}
-                          isWithin5Minutes={isWithin5Minutes}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+      <div>
+        <div className="live__class__schedule_header">
+          <h5>
+            Your Regular Class Schedule{" "}
+            <i
+              className="icofont-calendar one_to_one_icon"
+              onClick={() => setIsModalOpen(true)}
+            ></i>
+          </h5>
+        </div>
+        <div className="row">
+          <Tab
+            tabs={tabs}
+            activeTab={activeTab}
+            handleTabChange={handleTabChange}
+          />
+          <div className="tab-content tab__content__wrapper aos-init aos-animate">
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Regular" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <RegularClassList
+                  isLoading={isLoading}
+                  regularClass={regularClasses()}
+                  joinNow={joinNow}
+                  isWithin5Minutes={isWithin5Minutes}
+                />
+              </div>
+            </div>
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Recoded Class" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <h5 className="text-center text-danger">Comming Soon....</h5>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <div>
-          <div className="live__class__schedule_header">
-            <h5>
-              Your Regular Class Schedule{" "}
-              <i
-                className="icofont-calendar one_to_one_icon"
-                onClick={() => setIsModalOpen(true)}
-              ></i>
-            </h5>
-          </div>
-          <div>
-            <RegularClassList
-              regularClass={regularClasses()}
-              joinNow={joinNow}
-              isWithin5Minutes={isWithin5Minutes}
-            />
-          </div>
-        </div>
-      )}
+      </div>
       <SmallModal
         size="lg"
         centered

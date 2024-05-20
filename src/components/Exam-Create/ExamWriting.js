@@ -69,7 +69,7 @@ const ExamWriting = ({ category }) => {
       return false;
     }
     if (!writingData.exam_name) {
-      setFormError("Block Name is Required");
+      setFormError("Exam Name is Required");
       return false;
     }
     if (!writingData.block_type) {
@@ -170,7 +170,7 @@ const ExamWriting = ({ category }) => {
                   <label>Exam Name</label>
                   <input
                     type="text"
-                    placeholder="Block Name"
+                    placeholder="Exam Name"
                     value={writingData.exam_name}
                     onChange={(e) =>
                       dispatchWritingData({

@@ -42,7 +42,7 @@ const ExamReading = ({ category, examType }) => {
 
   const navigate = useNavigate();
 
-  const handlePassageChange = (editor) => {
+  const handlePassageChange = (event, editor) => {
     const data = editor.getData();
     dispatchReadingData({
       type: "passage",
@@ -64,7 +64,7 @@ const ExamReading = ({ category, examType }) => {
       return false;
     }
     if (!readingData.exam_name) {
-      setFormError("Block Name is Required");
+      setFormError("Exam Name is Required");
       return false;
     }
     if (!readingData.block_type) {
@@ -104,7 +104,7 @@ const ExamReading = ({ category, examType }) => {
                   <label>Exam Name</label>
                   <input
                     type="text"
-                    placeholder="Block Name"
+                    placeholder="Exam Name"
                     value={readingData.exam_name}
                     onChange={(e) =>
                       dispatchReadingData({

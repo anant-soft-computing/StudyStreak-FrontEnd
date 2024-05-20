@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
 import DateRange from "../../../UI/DateRangePicker";
@@ -19,7 +18,6 @@ const tabs = [
 
 const SpeakingPractice = ({ sepakingCount = "" }) => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
@@ -174,157 +172,72 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
 
   return (
     <>
-      {pathname === "/speakingSolving" ? (
-        <div className="body__wrapper">
-          <div className="main_wrapper overflow-hidden">
-            <div className="dashboardarea sp_bottom_100">
-              <div className="dashboard">
-                <div className="container-fluid full__width__padding">
+      <div>
+        <div className="live__class__schedule_header">
+          <h5>
+            Your Speaking Practice Class Schedule{" "}
+            <i
+              className="icofont-calendar one_to_one_icon"
+              onClick={() => setIsModalOpen(true)}
+            ></i>
+          </h5>
+        </div>
+        <div>
+          {speaking_practice_count === "" ? (
+            <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
+          ) : (
+            <div className="row">
+              <Tab
+                tabs={tabs}
+                activeTab={activeTab}
+                handleTabChange={handleTabChange}
+              />
+              <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Upcoming" ? "show active" : ""
+                  }`}
+                >
                   <div className="row">
-                    <DSSidebar />
-                    <div className="col-xl-9 col-lg-9 col-md-12">
-                      <div className="dashboard__content__wraper common-background-color-across-app">
-                        <div className="dashboard__section__title">
-                          <h4>Speaking Practice</h4>
-                          <h5>
-                            Your Speaking Practice Class Schedule{" "}
-                            <i
-                              className="icofont-calendar one_to_one_icon"
-                              onClick={() => setIsModalOpen(true)}
-                            ></i>
-                          </h5>
-                        </div>
-                        {speaking_practice_count === "" ? (
-                          <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
-                        ) : (
-                          <div className="row">
-                            <Tab
-                              tabs={tabs}
-                              activeTab={activeTab}
-                              handleTabChange={handleTabChange}
-                            />
-                            <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                              <div
-                                className={`tab-pane fade ${
-                                  activeTab === "Upcoming" ? "show active" : ""
-                                }`}
-                              >
-                                <div className="row">
-                                  <UpcomingClass
-                                    joinNow={joinNow}
-                                    isLoading={isLoading}
-                                    isWithin5Minutes={isWithin5Minutes}
-                                    classes={speackingClasses}
-                                    message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                className={`tab-pane fade ${
-                                  activeTab === "Available Slot"
-                                    ? "show active"
-                                    : ""
-                                }`}
-                              >
-                                <div className="row">
-                                  <ClassList
-                                    bookCount={bookCount}
-                                    isLoading={isLoading}
-                                    classes={speakingPracticeClasses}
-                                    message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
-                                  />
-                                </div>
-                              </div>
-                              <div
-                                className={`tab-pane fade ${
-                                  activeTab === "Recoded Class"
-                                    ? "show active"
-                                    : ""
-                                }`}
-                              >
-                                <div className="row">
-                                  <h5 className="text-center text-danger">
-                                    Comming Soon....
-                                  </h5>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                    <UpcomingClass
+                      joinNow={joinNow}
+                      sLoading={isLoading}
+                      isWithin5Minutes={isWithin5Minutes}
+                      classes={speackingClasses}
+                      message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                    />
+                  </div>
+                </div>
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Available Slot" ? "show active" : ""
+                  }`}
+                >
+                  <div className="row">
+                    <ClassList
+                      bookCount={bookCount}
+                      isLoading={isLoading}
+                      classes={speakingPracticeClasses}
+                      message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                    />
+                  </div>
+                </div>
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Recoded Class" ? "show active" : ""
+                  }`}
+                >
+                  <div className="row">
+                    <h5 className="text-center text-danger">
+                      Comming Soon....
+                    </h5>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
-      ) : (
-        <div>
-          <div className="live__class__schedule_header">
-            <h5>
-              Your Speaking Practice Class Schedule{" "}
-              <i
-                className="icofont-calendar one_to_one_icon"
-                onClick={() => setIsModalOpen(true)}
-              ></i>
-            </h5>
-          </div>
-          <div>
-            {speaking_practice_count === "" ? (
-              <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
-            ) : (
-              <div className="row">
-                <Tab
-                  tabs={tabs}
-                  activeTab={activeTab}
-                  handleTabChange={handleTabChange}
-                />
-                <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "Upcoming" ? "show active" : ""
-                    }`}
-                  >
-                    <div className="row">
-                      <UpcomingClass
-                        joinNow={joinNow}
-                        isWithin5Minutes={isWithin5Minutes}
-                        classes={speackingClasses}
-                        message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "Available Slot" ? "show active" : ""
-                    }`}
-                  >
-                    <div className="row">
-                      <ClassList
-                        classes={speakingPracticeClasses}
-                        bookCount={bookCount}
-                        message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
-                      />
-                    </div>
-                  </div>
-                  <div
-                    className={`tab-pane fade ${
-                      activeTab === "Recoded Class" ? "show active" : ""
-                    }`}
-                  >
-                    <div className="row">
-                      <h5 className="text-center text-danger">
-                        Comming Soon....
-                      </h5>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      </div>
       <SmallModal
         size="lg"
         centered

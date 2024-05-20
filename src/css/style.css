@@ -16668,3 +16668,14 @@ div.gridarea__wraper {
     margin-top: 70px !important;
   }
 }
+
+.hidden-controls {
+  width: 220px !important;
+}
+
+.hidden-controls::-webkit-media-controls-start-playback-button {
+  display: none !important;
+}
+.hidden-controls::-webkit-media-controls-timeline {
+  display: none !important;
+}

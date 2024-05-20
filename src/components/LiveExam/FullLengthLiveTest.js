@@ -79,7 +79,7 @@ const FullLengthLiveExam = () => {
     } else if (examData?.exam_type === "Speaking") {
       setTimer(15 * 60);
     }
-  }, [examId]);
+  }, [examData?.exam_type, examId]);
 
   useEffect(() => {
     let interval;
@@ -411,7 +411,12 @@ const FullLengthLiveExam = () => {
     if (audio_file && reRenderAudio) {
       return (
         <div>
-          <audio controls autoPlay controlsList="nodownload">
+          <audio
+            controls
+            autoPlay
+            controlsList="nodownload noplaybackrate"
+            className="hidden-controls"
+          >
             <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>

@@ -6,7 +6,10 @@ const Assignment = ({ activeLesson }) => {
   };
 
   const assignments = activeLesson?.filter(
-    (exam) => exam.block_type === "Assignments"
+    (exam) =>
+      exam.block_type === "Assignments" &&
+      exam.exam_type === "General" &&
+      exam.exam_category === "GENERAL"
   );
 
   return assignments && assignments.length > 0 ? (

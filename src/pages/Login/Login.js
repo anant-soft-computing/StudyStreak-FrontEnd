@@ -75,7 +75,7 @@ const Login = () => {
 
   const validateForm = () => {
     if (!loginData.username) {
-      setFormError("UserName is Required");
+      setFormError("User Name is Required");
       return false;
     }
     if (!loginData.password) {

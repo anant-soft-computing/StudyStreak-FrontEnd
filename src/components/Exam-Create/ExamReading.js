@@ -138,27 +138,29 @@ const ExamReading = ({ category, examType }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-              <div className="dashboard__select__heading">
-                <span>Exam Type</span>
+            {examType !== "General" && (
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                <div className="dashboard__select__heading">
+                  <span>Exam Type</span>
+                </div>
+                <div className="dashboard__selector">
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={readingData.block_type}
+                    onChange={(e) =>
+                      dispatchReadingData({
+                        type: "block_type",
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="Mock Test">Mock Test</option>
+                    <option value="Assignments">Assignment</option>
+                  </select>
+                </div>
               </div>
-              <div className="dashboard__selector">
-                <select
-                  className="form-select"
-                  aria-label="Default select example"
-                  value={readingData.block_type}
-                  onChange={(e) =>
-                    dispatchReadingData({
-                      type: "block_type",
-                      value: e.target.value,
-                    })
-                  }
-                >
-                  <option value="Mock Test">Mock Test</option>
-                  <option value="Assignments">Assignment</option>
-                </select>
-              </div>
-            </div>
+            )}
           </div>
         </div>
         <div

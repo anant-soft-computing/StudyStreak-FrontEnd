@@ -9,7 +9,6 @@ const intialListeningField = {
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
-  block_threshold: "",
   audio_file: "",
   passage: "",
   question: "",
@@ -76,10 +75,6 @@ const ExamListening = ({ category }) => {
     }
     if (!listeningData.block_type) {
       setFormError("Block Type is Required");
-      return false;
-    }
-    if (!listeningData.block_threshold) {
-      setFormError("Block Threshold is Required");
       return false;
     }
     setFormStatus({

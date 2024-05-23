@@ -9,7 +9,6 @@ const intialReadingField = {
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
-  block_threshold: 0,
   passage: "",
   passage_image: "",
   question: "",

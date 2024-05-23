@@ -11,7 +11,6 @@ const intialWritingField = {
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
-  block_threshold: "",
   passage: "",
   exam_type: "Writing",
   answers: [],
@@ -76,11 +75,6 @@ const ExamWriting = ({ category }) => {
       setFormError("Block Type is Required");
       return false;
     }
-    if (!writingData.block_threshold) {
-      setFormError("Block Threshold is Required");
-      return false;
-    }
-
     if (!writingData.passage) {
       setFormError("Passage is Required");
       return false;
@@ -111,7 +105,6 @@ const ExamWriting = ({ category }) => {
     ];
 
     const data = {
-      block_threshold: writingData.block_threshold,
       block_type: writingData.block_type,
       difficulty_level: writingData.difficulty_level,
       exam_name: writingData.exam_name,

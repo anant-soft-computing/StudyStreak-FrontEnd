@@ -9,6 +9,7 @@ const intialListeningField = {
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
+  block_threshold: 0,
   audio_file: "",
   passage: "",
   question: "",

@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
@@ -33,6 +34,7 @@ const CreateFlashCard = () => {
     initialFlashCardData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!flashCardData.course) {
@@ -100,9 +102,7 @@ const CreateFlashCard = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+            Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",
           body: JSON.stringify(flashCardData),

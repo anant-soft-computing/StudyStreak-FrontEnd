@@ -1,17 +1,15 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import logo from "../../img/logo/Logo.png";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
 
 const NavBar = () => {
-  const token = localStorage.getItem("loginInfo");
   const { logoutUser } = useCheckAuth();
-  const navigate = useNavigate();
+  const token = localStorage.getItem("loginInfo");
   const role = JSON.parse(localStorage.getItem("loginInfo"))?.user_role || "";
 
   const logout = (event) => {
     event.preventDefault();
-    navigate("/login");
     logoutUser();
   };
 

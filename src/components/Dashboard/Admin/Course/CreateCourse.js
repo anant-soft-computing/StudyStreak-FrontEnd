@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
@@ -75,6 +76,7 @@ const CreateCourse = () => {
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("Course Details");
+  const authData = useSelector((state) => state.authStore);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -215,13 +217,13 @@ const CreateCourse = () => {
       const response = await ajaxCall(
         "/courselistview/",
         {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData?.accessToken}`,
+          },
           method: "POST",
           body: formData,
-          headers: {
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
         },
         8000
       );

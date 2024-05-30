@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -28,6 +29,7 @@ const reducerBatch = (state, action) => {
 const CreateBatch = () => {
   const [batchData, dispatchBatch] = useReducer(reducerBatch, initialBatchData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const authData = useSelector((state) => state.authStore);
 
   const validateForm = () => {
     if (!batchData.add_package) {
@@ -86,9 +88,7 @@ const CreateBatch = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+            Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",
           body: JSON.stringify(batchData),

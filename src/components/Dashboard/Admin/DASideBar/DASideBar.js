@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 import dashBoard from "../../../../img/icon/dashboard.svg";
 import student from "../../../../img/icon/profile.svg";
@@ -17,7 +17,6 @@ import logOut from "../../../../img/icon/logout.svg";
 const DASideBar = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [showMobileNavBtn, setShowMobileNavBtn] = useState(true);
-  const navigate = useNavigate();
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
 
@@ -26,7 +25,6 @@ const DASideBar = () => {
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
-    navigate("/login");
   };
 
   const menuList = [

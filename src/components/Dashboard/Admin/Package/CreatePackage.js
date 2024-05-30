@@ -1,4 +1,5 @@
 import React, { useReducer, useState } from "react";
+import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
@@ -57,6 +58,7 @@ const CreatePackage = () => {
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("Package");
+  const authData = useSelector((state) => state.authStore);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -133,9 +135,7 @@ const CreatePackage = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+            Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",
           body: JSON.stringify(createPackageData),

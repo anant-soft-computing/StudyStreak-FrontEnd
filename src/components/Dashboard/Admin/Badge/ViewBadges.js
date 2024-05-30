@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
@@ -11,6 +12,7 @@ const columns = [
 const ViewBadges = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [badgeList, setBadgeList] = useState([]);
+  const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
     setIsLoading(true);
@@ -22,9 +24,7 @@ const ViewBadges = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+              Authorization: `Bearer ${authData?.accessToken}`,
             },
             method: "GET",
           },
@@ -45,7 +45,7 @@ const ViewBadges = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [authData?.accessToken]);
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />

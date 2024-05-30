@@ -25,7 +25,7 @@ const deleteFromLocalStorage = (key) => {
 
 const getRefreshToken = async (refreshToken) => {
   const response = await ajaxCall(
-    "token/refresh/",
+    "/token/refresh/",
     {
       Accept: "application/json",
       "Content-Type": "application/json",

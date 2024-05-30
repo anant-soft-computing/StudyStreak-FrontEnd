@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import DASideBar from "../DASideBar/DASideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import CheckIcon from "../../../UI/CheckIcon";
@@ -9,6 +10,7 @@ import Loading from "../../../UI/Loading";
 const Student = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [studentList, setStudentList] = useState([]);
+  const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
     setIsLoading(true);
@@ -20,9 +22,7 @@ const Student = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+              Authorization: `Bearer ${authData?.accessToken}`,
             },
             method: "GET",
           },
@@ -43,7 +43,7 @@ const Student = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [authData?.accessToken]);
 
   const renderItemAvailable = ({ value }) => {
     return value ? <CheckIcon /> : <CancelIcon />;

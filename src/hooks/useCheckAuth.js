@@ -1,23 +1,36 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   authenticateUser,
   deleteFromLocalStorage,
   getFromLocalStorage,
   setToLocalStorage,
-} from '../helpers/helperFunction';
-import { authAction } from '../store/authStore';
+} from "../helpers/helperFunction";
+import { authAction } from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 export function useCheckAuth() {
+  const navigate = useNavigate()
   const dispatch = useDispatch();
   const authData = useSelector((state) => state.authStore);
 
   const checkAuth = async () => {
     if (!authData.loggedIn) {
-      const localData = getFromLocalStorage('loginInfo', true);
+      const localData = getFromLocalStorage("loginInfo", true);
 
       if (localData === -1) {
         dispatch(
-          authAction.setAuthStatus({ loggedIn: false, authLoading: false })
+          authAction.setAuthStatus({
+            username: "",
+            authLoading: false,
+            loggedIn: false,
+            accessToken: null,
+            refreshToken: null,
+            userId: null,
+            user_type: null,
+            user_role: null,
+            timeOfLogin: null,
+            logInOperation: 0,
+          })
         );
       } else {
         const response = await authenticateUser(
@@ -27,9 +40,20 @@ export function useCheckAuth() {
 
         if (response === -1) {
           dispatch(
-            authAction.setAuthStatus({ loggedIn: false, authLoading: false })
+            authAction.setAuthStatus({
+              username: "",
+              authLoading: false,
+              loggedIn: false,
+              accessToken: null,
+              refreshToken: null,
+              userId: null,
+              user_type: null,
+              user_role: null,
+              timeOfLogin: null,
+              logInOperation: 0,
+            })
           );
-          deleteFromLocalStorage('loginInfo');
+          deleteFromLocalStorage("loginInfo");
         } else if (response === true) {
           const payload = {
             username: localData.username,
@@ -44,10 +68,21 @@ export function useCheckAuth() {
             logInOperation: 1,
           };
           dispatch(authAction.setAuthStatus(payload));
-          setToLocalStorage('loginInfo', payload, true);
+          setToLocalStorage("loginInfo", payload, true);
         } else if (!response?.data?.access) {
           dispatch(
-            authAction.setAuthStatus({ loggedIn: false, authLoading: false })
+            authAction.setAuthStatus({
+              username: "",
+              authLoading: false,
+              loggedIn: false,
+              accessToken: null,
+              refreshToken: null,
+              userId: null,
+              user_type: null,
+              user_role: null,
+              timeOfLogin: null,
+              logInOperation: 0,
+            })
           );
         } else {
           const localObj = {
@@ -59,7 +94,7 @@ export function useCheckAuth() {
             username: localData.username,
             user_role: localData.user_role,
           };
-          setToLocalStorage('loginInfo', localObj, true);
+          setToLocalStorage("loginInfo", localObj, true);
           dispatch(
             authAction.setAuthStatus({
               username: localData.username,
@@ -80,8 +115,22 @@ export function useCheckAuth() {
   };
 
   const logoutUser = () => {
-    dispatch(authAction.setAuthStatus({ loggedIn: false, authLoading: false }));
-    deleteFromLocalStorage('loginInfo');
+    dispatch(
+      authAction.setAuthStatus({
+        username: "",
+        authLoading: false,
+        loggedIn: false,
+        accessToken: null,
+        refreshToken: null,
+        userId: null,
+        user_type: null,
+        user_role: null,
+        timeOfLogin: null,
+        logInOperation: -1,
+      })
+    );
+    deleteFromLocalStorage("loginInfo");
+    navigate("/login");
   };
 
   return {

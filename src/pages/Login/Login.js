@@ -114,7 +114,7 @@ const Login = () => {
     const signal = controller.current.signal;
 
     const gotLate = setTimeout(() => {
-      console.log("------->");
+      toast.error("Taking longer then usual,Trying to reach server");
     }, 4000);
 
     const timeOutFunction = () => {
@@ -131,7 +131,6 @@ const Login = () => {
           },
           method: "POST",
           body: JSON.stringify(data),
-          withCredentials: true,
           signal,
         },
         8000,
@@ -141,10 +140,11 @@ const Login = () => {
       if (response.status === 200) {
         toast.success(response.data?.msg);
         handleLoginSuccess(response);
-        response.data.user_role === "admin"
-          ? navigate("/admin-dashboard")
-          : navigate("/studentDashboard");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if (
+        response.status === 400 ||
+        response.status === 404 ||
+        response.status === 500
+      ) {
         setFormStatus({
           isError: true,
           errMsg: response.data?.errors,
@@ -188,19 +188,23 @@ const Login = () => {
       () =>
         dispatch(
           authAction.setAuthStatus({
-            userName: "",
+            username: "",
             loggedIn: false,
             accessToken: null,
             refreshToken: null,
             userId: null,
             user_type: null,
+            user_role: null,
             timeOfLogin: null,
             logInOperation: -1,
           })
         ),
       1000 * 60 * 30
     );
-    navigate("/");
+    toast.success("Welcome To Study Streak");
+    response.data.user_role === "admin"
+      ? navigate("/admin-dashboard")
+      : navigate("/studentDashboard");
   };
 
   const toggleForm = () => {

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
@@ -9,6 +10,7 @@ const ViewExam = () => {
   const [speakingList, setSpeakingList] = useState([]);
   const [ptList, setPtList] = useState([]);
   const [fltList, setFltList] = useState([]);
+  const authData = useSelector((state) => state.authStore);
 
   const mtData = [...examList, ...speakingList];
   const miniTestData = mtData.map((item, index) => ({
@@ -25,9 +27,7 @@ const ViewExam = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+            Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "GET",
         },

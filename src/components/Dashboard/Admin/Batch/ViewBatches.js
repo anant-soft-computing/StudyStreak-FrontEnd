@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
@@ -33,6 +34,7 @@ const columns = [
 const ViewBatches = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [batchList, setBatchList] = useState([]);
+  const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
     setIsLoading(true);
@@ -44,9 +46,7 @@ const ViewBatches = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+              Authorization: `Bearer ${authData?.accessToken}`,
             },
             method: "GET",
           },
@@ -67,7 +67,7 @@ const ViewBatches = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [authData?.accessToken]);
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />

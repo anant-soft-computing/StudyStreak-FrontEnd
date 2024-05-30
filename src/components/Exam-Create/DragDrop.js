@@ -807,15 +807,19 @@ const DragDrop = () => {
     formData.append("exam_category", category);
 
     try {
-      const response = await ajaxCall("/exam-blocks/", {
-        headers: {
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-          }`,
+      const response = await ajaxCall(
+        "/exam-blocks/",
+        {
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: formData,
         },
-        method: "POST",
-        body: formData,
-      });
+        8000
+      );
       if (response.status === 201) {
         toast.success("Reading Exam Create SuccessFully");
         navigate("/admin-exam");
@@ -859,15 +863,19 @@ const DragDrop = () => {
     formData.append("question_structure", JSON.stringify(questionStructure));
     formData.append("exam_category", category);
     try {
-      const response = await ajaxCall("/exam-blocks/", {
-        method: "POST",
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-          }`,
+      const response = await ajaxCall(
+        "/exam-blocks/",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
         },
-      });
+        8000
+      );
       if (response.status === 201) {
         toast.success("Listening Exam Create SuccessFully");
         navigate("/admin-exam");

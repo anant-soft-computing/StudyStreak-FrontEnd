@@ -105,17 +105,21 @@ const ExamSpeaking = ({ category }) => {
       exam_category: category,
     };
     try {
-      const response = await ajaxCall("/speaking-block/", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-          }`,
+      const response = await ajaxCall(
+        "/speaking-block/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
         },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
+        8000
+      );
       if (response.status === 201) {
         toast.success("Speaking Exam Create Successfully");
         navigate("/admin-exam");

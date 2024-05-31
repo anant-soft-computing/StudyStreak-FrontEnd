@@ -75,7 +75,7 @@ const Login = () => {
 
   const validateForm = () => {
     if (!loginData.username) {
-      setFormError("UserName is Required");
+      setFormError("User Name is Required");
       return false;
     }
     if (!loginData.password) {
@@ -114,7 +114,7 @@ const Login = () => {
     const signal = controller.current.signal;
 
     const gotLate = setTimeout(() => {
-      toast.error("Taking longer then usual,Trying to reach server");
+      console.log("------->");
     }, 4000);
 
     const timeOutFunction = () => {
@@ -131,6 +131,7 @@ const Login = () => {
           },
           method: "POST",
           body: JSON.stringify(data),
+          withCredentials: true,
           signal,
         },
         8000,
@@ -140,11 +141,7 @@ const Login = () => {
       if (response.status === 200) {
         toast.success(response.data?.msg);
         handleLoginSuccess(response);
-      } else if (
-        response.status === 400 ||
-        response.status === 404 ||
-        response.status === 500
-      ) {
+      } else {
         setFormStatus({
           isError: true,
           errMsg: response.data?.errors,

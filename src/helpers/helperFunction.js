@@ -49,16 +49,10 @@ const getRefreshToken = async (refreshToken) => {
 
 async function authenticateUser(timeInMs, refreshToken) {
   const timeDiff = Date.now() - timeInMs;
-  if (
-    Math.round(timeDiff / 1000 / 60) >= 30 &&
-    Math.round(timeDiff / 1000 / 60 / 60) > 24
-  ) {
+  if (Math.round(timeDiff / 1000) >= 60) { // Experied after 1 minute
     deleteFromLocalStorage("loginInfo");
     return -1;
-  } else if (
-    Math.round(timeDiff / 1000 / 60) >= 30 &&
-    Math.floor(timeDiff / 1000 / 60 / 60) < 24
-  ) {
+  } else if (Math.round(timeDiff / 1000) >= 30) {  // Experied after 1 minute
     const response = await ajaxCall(
       "/token/refresh/",
       {
@@ -72,7 +66,7 @@ async function authenticateUser(timeInMs, refreshToken) {
       8000
     );
     return response;
-  } else if (Math.round(timeDiff / 1000 / 60) < 30) {
+  } else {
     return true;
   }
 }

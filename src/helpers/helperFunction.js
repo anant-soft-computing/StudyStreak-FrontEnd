@@ -1,3 +1,5 @@
+import store from "../store";
+import { authAction } from "../store/authStore";
 import ajaxCall from "./ajaxCall";
 
 Storage.prototype.setObject = (key, value) => {
@@ -49,10 +51,12 @@ const getRefreshToken = async (refreshToken) => {
 
 async function authenticateUser(timeInMs, refreshToken) {
   const timeDiff = Date.now() - timeInMs;
-  if (Math.round(timeDiff / 1000) >= 60) { // Experied after 1 minute
+  if (Math.round(timeDiff / 1000) >= 60) {
+    // Experied after 1 minute
     deleteFromLocalStorage("loginInfo");
     return -1;
-  } else if (Math.round(timeDiff / 1000) >= 30) {  // Experied after 1 minute
+  } else if (Math.round(timeDiff / 1000) >= 30) {
+    // Experied after 1 minute
     const response = await ajaxCall(
       "/token/refresh/",
       {
@@ -71,10 +75,54 @@ async function authenticateUser(timeInMs, refreshToken) {
   }
 }
 
+const getAndSetRefreshToken = async () => {
+  const { refreshToken, timeOfLogin, userId, user_role, user_type, username } =
+    getFromLocalStorage("loginInfo", true) || {};
+  if (refreshToken) {
+    const response = await fetch("https://studystreak.in/api/token/refresh/", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ refresh: refreshToken }),
+    });
+
+    console.log("response", response);
+    const data = await response.json();
+
+    console.log("data", data);
+    if (response?.status === 200 && data?.access) {
+      const localObj = {
+        //update access token and set existing dat as it is
+        user_type,
+        userId,
+        user_role,
+        timeOfLogin,
+        username,
+        refreshToken,
+        accessToken: data?.access,
+      };
+      console.log("update access token", localObj);
+      setToLocalStorage("loginInfo", localObj, true); //set data to local storage
+      //update data to the store
+      store.dispatch(
+        authAction.setRefreshTokenAuthStatus({
+          accessToken: data?.access,
+          // refreshToken: response.data?.token?.refresh,
+        })
+      );
+      return data?.access;
+    }
+  }
+  return "";
+};
+
 export {
   setToLocalStorage,
   getFromLocalStorage,
   deleteFromLocalStorage,
   getRefreshToken,
   authenticateUser,
+  getAndSetRefreshToken,
 };

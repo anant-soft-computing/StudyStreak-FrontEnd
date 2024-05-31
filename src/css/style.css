@@ -16334,12 +16334,12 @@ div.gridarea__wraper {
 
 .audio__recorder__btn {
   background-color: transparent;
-  padding: 20px;
+  padding: 14px;
   border: none;
   border-radius: 50%;
 }
 
-.audio-30{
+.audio-30 {
   font-size: 30px;
   color: black;
   padding: 20px;

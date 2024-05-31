@@ -138,7 +138,8 @@
   color: white;
 }
 
-.lv-footer-button:hover {
+.lv-footer-button:hover,
+.lv-speaking-button:hover {
   color: white;
 }
 
@@ -494,7 +495,7 @@
   cursor: pointer;
 }
 
-.lv-speaking-question{
+.lv-speaking-question {
   display: flex;
   flex-direction: row;
 }
@@ -529,4 +530,20 @@
   .lv-navbar {
     margin-top: 110px;
   }
+}
+
+.lv-speaking-button {
+  width: 120px;
+  margin-right: 5px;
+  margin-left: 5px;
+  background-color: #01579b;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  height: fit-content;
+  padding: 10px 0px;
+  margin-left: 10px;
+  margin-right: 40px;
 }

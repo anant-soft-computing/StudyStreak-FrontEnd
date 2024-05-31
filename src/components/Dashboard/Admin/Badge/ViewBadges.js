@@ -48,11 +48,11 @@ const ViewBadges = () => {
   }, [authData?.accessToken]);
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading text='Loading...' color='primary' />
   ) : badgeList ? (
     <Table rowData={badgeList} columnDefs={columns} />
   ) : (
-    <h5 className="text-center text-danger">No Badges Available !!</h5>
+    <h5 className='text-center text-danger'>No Badges Available !!</h5>
   );
 };
 

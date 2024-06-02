@@ -96,8 +96,10 @@ const AudioRecorder = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+
         // borderBottom: "grey 1px solid",
       }}
+      className='ly-mic-audio-container'
     >
       <button
         disabled={!enableRecording}
@@ -114,11 +116,14 @@ const AudioRecorder = ({
             class={`icofont-mic audio-30  ${
               enableRecording && "audio_recorder_icon"
             }`}
-            style={{ background: completed ? "green" : "" }}
+            style={{
+              background: completed ? "green" : "",
+              color: !enableRecording ? "grey" : "",
+            }}
           ></i>
         ) : null}
       </button>
-      <h6 style={{ alignSelf: "center" }}>
+      <h6 style={{ alignSelf: "center", textAlign: "center" }}>
         {(!enableRecording &&
           "Click on the Mic icon to Record your Response") ||
           (completed && "Recording Completed") ||

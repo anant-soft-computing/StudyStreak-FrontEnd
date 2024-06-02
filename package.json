@@ -25,6 +25,7 @@
     "react-bootstrap": "^2.9.1",
     "react-card-flip": "^1.2.2",
     "react-date-range": "^2.0.0-alpha.4",
+    "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
     "react-icofont": "^1.0.19",
     "react-player": "^2.14.1",

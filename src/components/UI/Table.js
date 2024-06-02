@@ -24,7 +24,7 @@ const Table = ({ rowData, columnDefs }) => {
   return (
     <div style={{ height: "100%", width: "100%" }}>
       <div
-        className="ag-theme-quartz"
+        className='ag-theme-quartz'
         style={{ height: "100%", width: "100%" }}
       >
         <AgGridReact {...gridOptions} />

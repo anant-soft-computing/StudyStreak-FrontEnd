@@ -82,7 +82,6 @@ const Lesson = () => {
       return;
     }
     getCourseLessons();
-    console.log("asdasdasdasd-*-*-*-*-*-*-*-*-*");
   }, [courseId, authData]);
 
   return (

@@ -88,10 +88,8 @@ const getAndSetRefreshToken = async () => {
       body: JSON.stringify({ refresh: refreshToken }),
     });
 
-    console.log("response", response);
     const data = await response.json();
 
-    console.log("data", data);
     if (response?.status === 200 && data?.access) {
       const localObj = {
         //update access token and set existing dat as it is
@@ -103,7 +101,6 @@ const getAndSetRefreshToken = async () => {
         refreshToken,
         accessToken: data?.access,
       };
-      console.log("update access token", localObj);
       setToLocalStorage("loginInfo", localObj, true); //set data to local storage
       //update data to the store
       store.dispatch(

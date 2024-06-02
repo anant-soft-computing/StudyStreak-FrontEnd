@@ -242,14 +242,7 @@ const PracticeSpeakingLiveExam = () => {
     </div>
   ) : (
     <>
-      <div
-        className='lv-navbar'
-        style={{
-          marginTop: "120px",
-          paddingTop: "12px",
-          paddingBottom: "12px",
-        }}
-      >
+      <div className='lv-navbar lv-navbar-responsive'>
         <div className='lv-navbar-title'>
           <h2>{examData?.exam_category}</h2>
           <div className='lv-userName'>{userData?.username}</div>
@@ -294,16 +287,7 @@ const PracticeSpeakingLiveExam = () => {
                   (element) => element.id === item.id
                 );
                 return (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      borderBottom: "grey 1px solid",
-                      padding: "8px",
-                      alignItems: "center",
-                      // marginTop: "15px",
-                    }}
-                  >
+                  <div className='lv-question-container'>
                     <div
                       className='lv-speaking-question'
                       style={{
@@ -317,24 +301,27 @@ const PracticeSpeakingLiveExam = () => {
                         }}
                       ></div>
                     </div>
-                    <button
-                      className='lv-speaking-button'
-                      onClick={() => speak(item.question, item.id)}
-                      disabled={speaking?.[speakingIndex]?.status === 1}
-                      style={{
-                        opacity:
-                          speaking?.[speakingIndex]?.status === 1 ? 0.5 : 1,
-                        cursor:
-                          speaking?.[speakingIndex]?.status === 1
-                            ? "not-allowed"
-                            : "pointer",
-                      }}
-                    >
-                      {speaking?.[speakingIndex]?.status === 2
-                        ? "Replay"
-                        : "Start"}
-                    </button>
-                    {recorderContainer(item, speakingIndex)}
+                    <div className='d-flex align-items-center lv-btn-mic-container'>
+                      <button
+                        className='lv-speaking-button'
+                        onClick={() => speak(item.question, item.id)}
+                        disabled={speaking?.[speakingIndex]?.status === 1}
+                        style={{
+                          opacity:
+                            speaking?.[speakingIndex]?.status === 1 ? 0.5 : 1,
+                          cursor:
+                            speaking?.[speakingIndex]?.status === 1
+                              ? "not-allowed"
+                              : "pointer",
+                        }}
+                      >
+                        {speaking?.[speakingIndex]?.status === 2
+                          ? "Replay"
+                          : "Start"}
+                      </button>
+                      <hr />
+                      {recorderContainer(item, speakingIndex)}
+                    </div>
                   </div>
                 );
               })}

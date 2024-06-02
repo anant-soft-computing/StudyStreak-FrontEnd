@@ -16,7 +16,7 @@ const tabs = [
   { name: "Recoded Class" },
 ];
 
-const GroupDoubtSolving = ({ doubtCount = "" }) => {
+const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
   const navigate = useNavigate();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
@@ -24,13 +24,13 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+  // const [selectedDateRange, setSelectedDateRange] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //     key: "selection",
+  //   },
+  // ]);
   const { group_doubt_solving_count } = count || doubtCount;
 
   const handleTabChange = (tab) => {
@@ -135,9 +135,9 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
     })();
   }, []);
 
-  const handleDateRangeChange = (ranges) => {
-    setSelectedDateRange([ranges.selection]);
-  };
+  // const handleDateRangeChange = (ranges) => {
+  //   setSelectedDateRange([ranges.selection]);
+  // };
 
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
@@ -153,7 +153,7 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
   const groupDoubtSolvingClasses = () => {
     return groupDoubtSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange[0];
+      const { startDate, endDate } = selectedDateRange?.[0];
       return (
         (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
         (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
@@ -173,33 +173,19 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
   return (
     <>
       <div>
-        <div
-          className='live__class__schedule_header'
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            paddingBottom: "16px",
-          }}
-        >
+        {/* <div className='live__class__schedule_header'>
           <DateRange
             selectedRange={selectedDateRange}
             onChange={handleDateRangeChange}
-          />
-          <button
-            className='default__button'
-            onClick={() => setIsModalOpen(false)}
-          >
-            Apply
-          </button>
-          {/* <h5>
+          /> */}
+        {/* <h5>
             Your Group Doubt Solving Class Schedule{" "}
             <i
               className='icofont-calendar one_to_one_icon'
               onClick={() => setIsModalOpen(true)}
             ></i>
           </h5> */}
-        </div>
+        {/* </div> */}
 
         <div>
           {group_doubt_solving_count === "" ? (
@@ -257,26 +243,6 @@ const GroupDoubtSolving = ({ doubtCount = "" }) => {
           )}
         </div>
       </div>
-      <SmallModal
-        size='lg'
-        centered
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title='Group Doubt Solving class schedule'
-        footer={
-          <button
-            className='default__button'
-            onClick={() => setIsModalOpen(false)}
-          >
-            Apply
-          </button>
-        }
-      >
-        <DateRange
-          selectedRange={selectedDateRange}
-          onChange={handleDateRangeChange}
-        />
-      </SmallModal>
     </>
   );
 };

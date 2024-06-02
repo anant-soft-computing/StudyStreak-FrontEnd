@@ -16,7 +16,7 @@ const tabs = [
   { name: "Recoded Class" },
 ];
 
-const DoubtSolving = () => {
+const DoubtSolving = ({ selectedDateRange }) => {
   const navigate = useNavigate();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
@@ -24,13 +24,13 @@ const DoubtSolving = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+  // const [selectedDateRange, setSelectedDateRange] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //     key: "selection",
+  //   },
+  // ]);
   const { one_to_one_doubt_solving_count } = count;
 
   const handleTabChange = (tab) => {
@@ -135,9 +135,9 @@ const DoubtSolving = () => {
     })();
   }, []);
 
-  const handleDateRangeChange = (ranges) => {
-    setSelectedDateRange([ranges.selection]);
-  };
+  // const handleDateRangeChange = (ranges) => {
+  //   setSelectedDateRange([ranges.selection]);
+  // };
 
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
@@ -153,7 +153,7 @@ const DoubtSolving = () => {
   const doubtSolvingClasses = () => {
     return doubtSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange[0];
+      const { startDate, endDate } = selectedDateRange?.[0];
       return (
         (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
         (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
@@ -173,38 +173,42 @@ const DoubtSolving = () => {
   return (
     <>
       <div>
-        <div className="live__class__schedule_header">
-          <h5>
+        {/* <div className='live__class__schedule_header'> */}
+        {/* <h5>
             Your One To One Doubt Solving Class Schedule{" "}
             <i
               className="icofont-calendar one_to_one_icon"
               onClick={() => setIsModalOpen(true)}
             ></i>
-          </h5>
-        </div>
+          </h5> */}
+        {/* <DateRange
+            selectedRange={selectedDateRange}
+            onChange={handleDateRangeChange}
+          />
+        </div> */}
         <div>
           {one_to_one_doubt_solving_count === "" ? (
-            <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
+            <BuyCourse message='No One To One Doubt Solving Class Available , Please Buy a Course !!' />
           ) : (
-            <div className="row">
+            <div className='row'>
               <Tab
                 tabs={tabs}
                 activeTab={activeTab}
                 handleTabChange={handleTabChange}
               />
-              <div className="tab-content tab__content__wrapper aos-init aos-animate">
+              <div className='tab-content tab__content__wrapper aos-init aos-animate'>
                 <div
                   className={`tab-pane fade ${
                     activeTab === "Upcoming" ? "show active" : ""
                   }`}
                 >
-                  <div className="row">
+                  <div className='row'>
                     <UpcomingClass
                       joinNow={joinNow}
                       isLoading={isLoading}
                       isWithin5Minutes={isWithin5Minutes}
                       classes={oneToOneDoubtSolvingClasses}
-                      message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                      message='No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes.'
                     />
                   </div>
                 </div>
@@ -213,12 +217,12 @@ const DoubtSolving = () => {
                     activeTab === "Available Slot" ? "show active" : ""
                   }`}
                 >
-                  <div className="row">
+                  <div className='row'>
                     <ClassList
                       bookCount={bookCount}
                       isLoading={isLoading}
                       classes={oToclasses}
-                      message=" No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                      message=' No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes.'
                     />
                   </div>
                 </div>
@@ -227,8 +231,8 @@ const DoubtSolving = () => {
                     activeTab === "Recoded Class" ? "show active" : ""
                   }`}
                 >
-                  <div className="row">
-                    <h5 className="text-center text-danger">
+                  <div className='row'>
+                    <h5 className='text-center text-danger'>
                       Comming Soon....
                     </h5>
                   </div>
@@ -238,7 +242,7 @@ const DoubtSolving = () => {
           )}
         </div>
       </div>
-      <SmallModal
+      {/* <SmallModal
         size="lg"
         centered
         isOpen={isModalOpen}
@@ -257,7 +261,7 @@ const DoubtSolving = () => {
           selectedRange={selectedDateRange}
           onChange={handleDateRangeChange}
         />
-      </SmallModal>
+      </SmallModal> */}
     </>
   );
 };

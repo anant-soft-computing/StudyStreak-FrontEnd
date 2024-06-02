@@ -85,12 +85,12 @@ const Lesson = () => {
   }, [courseId, authData]);
 
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="tution sp_bottom_100 sp_top_50">
-          <div className="container-fluid full__width__padding">
-            <div className="row">
-              <div className="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
+    <div className='body__wrapper'>
+      <div className='main_wrapper overflow-hidden'>
+        <div className='tution sp_bottom_100 sp_top_50'>
+          <div className='container-fluid full__width__padding'>
+            <div className='row'>
+              <div className='col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons'>
                 <LessonList
                   lessons={courseLessons}
                   activeIndex={activeIndex}
@@ -99,7 +99,7 @@ const Lesson = () => {
                   setActiveLesson={setActiveLesson}
                 />
               </div>
-              <div className="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
+              <div className='col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 course__videos'>
                 <LessonContent
                   activeLesson={activeLesson}
                   activeContentType={activeContentType}

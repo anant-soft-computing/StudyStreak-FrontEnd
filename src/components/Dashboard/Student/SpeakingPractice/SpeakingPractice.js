@@ -16,7 +16,7 @@ const tabs = [
   { name: "Recoded Class" },
 ];
 
-const SpeakingPractice = ({ sepakingCount = "" }) => {
+const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
   const navigate = useNavigate();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
@@ -24,13 +24,13 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+  // const [selectedDateRange, setSelectedDateRange] = useState([
+  //   {
+  //     startDate: new Date(),
+  //     endDate: new Date(),
+  //     key: "selection",
+  //   },
+  // ]);
   const { speaking_practice_count } = count || sepakingCount;
 
   const handleTabChange = (tab) => {
@@ -135,9 +135,9 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
     })();
   }, []);
 
-  const handleDateRangeChange = (ranges) => {
-    setSelectedDateRange([ranges.selection]);
-  };
+  // const handleDateRangeChange = (ranges) => {
+  //   setSelectedDateRange([ranges.selection]);
+  // };
 
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
@@ -153,7 +153,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
   const speakingClasses = () => {
     return speakingSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange[0];
+      const { startDate, endDate } = selectedDateRange?.[0];
       return (
         (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
         (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
@@ -173,38 +173,42 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
   return (
     <>
       <div>
-        <div className="live__class__schedule_header">
-          <h5>
+        {/* <div className='live__class__schedule_header'>
+          <DateRange
+            selectedRange={selectedDateRange}
+            onChange={handleDateRangeChange}
+          /> */}
+        {/* <h5>
             Your Speaking Practice Class Schedule{" "}
             <i
               className="icofont-calendar one_to_one_icon"
               onClick={() => setIsModalOpen(true)}
             ></i>
-          </h5>
-        </div>
+          </h5> */}
+        {/* </div> */}
         <div>
           {speaking_practice_count === "" ? (
-            <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
+            <BuyCourse message='No Speaking Practice Class Available, Please Buy a Course !!' />
           ) : (
-            <div className="row">
+            <div className='row'>
               <Tab
                 tabs={tabs}
                 activeTab={activeTab}
                 handleTabChange={handleTabChange}
               />
-              <div className="tab-content tab__content__wrapper aos-init aos-animate">
+              <div className='tab-content tab__content__wrapper aos-init aos-animate'>
                 <div
                   className={`tab-pane fade ${
                     activeTab === "Upcoming" ? "show active" : ""
                   }`}
                 >
-                  <div className="row">
+                  <div className='row'>
                     <UpcomingClass
                       joinNow={joinNow}
                       sLoading={isLoading}
                       isWithin5Minutes={isWithin5Minutes}
                       classes={speackingClasses}
-                      message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                      message='No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes.'
                     />
                   </div>
                 </div>
@@ -213,12 +217,12 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                     activeTab === "Available Slot" ? "show active" : ""
                   }`}
                 >
-                  <div className="row">
+                  <div className='row'>
                     <ClassList
                       bookCount={bookCount}
                       isLoading={isLoading}
                       classes={speakingPracticeClasses}
-                      message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                      message='No Speaking Practice Classes Available Today !! , Please Schedule Your Classes.'
                     />
                   </div>
                 </div>
@@ -227,8 +231,8 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
                     activeTab === "Recoded Class" ? "show active" : ""
                   }`}
                 >
-                  <div className="row">
-                    <h5 className="text-center text-danger">
+                  <div className='row'>
+                    <h5 className='text-center text-danger'>
                       Comming Soon....
                     </h5>
                   </div>
@@ -238,7 +242,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
           )}
         </div>
       </div>
-      <SmallModal
+      {/* <SmallModal
         size="lg"
         centered
         isOpen={isModalOpen}
@@ -257,7 +261,7 @@ const SpeakingPractice = ({ sepakingCount = "" }) => {
           selectedRange={selectedDateRange}
           onChange={handleDateRangeChange}
         />
-      </SmallModal>
+      </SmallModal> */}
     </>
   );
 };

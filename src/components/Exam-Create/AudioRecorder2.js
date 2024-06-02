@@ -94,34 +94,42 @@ const AudioRecorder = ({
     <div
       style={{
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "center",
-        borderBottom: "grey 1px solid",
+
+        // borderBottom: "grey 1px solid",
       }}
+      className='ly-mic-audio-container'
     >
-      <h5 style={{ alignSelf: "center" }}>
-        {(!enableRecording &&
-          "Click on the Mic icon to Record your Response") ||
-          (completed && "Recording Completed") ||
-          (isRecording && "Recording...") ||
-          (!isRecording && !audioBlob && "Click on Mic to Recording")}
-      </h5>
       <button
         disabled={!enableRecording}
-        className="audio__recorder__btn"
+        className='audio__recorder__btn'
         onClick={isRecording ? handleStopRecording : handleStartRecording}
+        style={{
+          cursor: enableRecording ? "pointer" : "not-allowed",
+        }}
       >
         {isRecording ? (
-          <i className="icofont-stop audio_stop_icon"></i>
+          <i className='icofont-stop audio_stop_icon'></i>
         ) : !completed ? (
           <i
             class={`icofont-mic audio-30  ${
               enableRecording && "audio_recorder_icon"
             }`}
-            style={{ background: completed ? "green" : "" }}
+            style={{
+              background: completed ? "green" : "",
+              color: !enableRecording ? "grey" : "",
+            }}
           ></i>
         ) : null}
       </button>
+      <h6 style={{ alignSelf: "center", textAlign: "center" }}>
+        {(!enableRecording &&
+          "Click on the Mic icon to Record your Response") ||
+          (completed && "Recording Completed") ||
+          (isRecording && "Recording...") ||
+          (!isRecording && !audioBlob && "Click on Mic to Recording")}
+      </h6>
       {audioBlob && <audio controls src={URL.createObjectURL(audioBlob)} />}
     </div>
   );

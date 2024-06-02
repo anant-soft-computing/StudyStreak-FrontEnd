@@ -21,7 +21,7 @@ const tabs = [
 
 const LiveClass = () => {
   const { solvingClassBook, count } = useLocation()?.state || {};
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Live");
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
@@ -38,7 +38,7 @@ const LiveClass = () => {
   const liveClasses = () => {
     return solvingClassBook?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange[0];
+      const { startDate, endDate } = selectedDateRange?.[0] || {};
       return (
         (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
         (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
@@ -47,7 +47,7 @@ const LiveClass = () => {
   };
 
   const handleDateRangeChange = (ranges) => {
-    setSelectedDateRange([ranges.selection]);
+    setSelectedDateRange(ranges.selection);
   };
 
   const joinNow = (zoom_meeting) => {
@@ -63,40 +63,67 @@ const LiveClass = () => {
 
   return (
     <>
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
+      <div className='body__wrapper'>
+        <div className='main_wrapper overflow-hidden'>
+          <div className='dashboardarea sp_bottom_100'>
+            <div className='dashboard'>
+              <div className='container-fluid full__width__padding'>
+                <div className='row'>
                   <DSSidebar />
-                  <div className="col-xl-9 col-lg-9 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>Upcoming Live Classes</h4>
+                  <div className='col-xl-9 col-lg-9 col-md-12'>
+                    <div className='dashboard__content__wraper common-background-color-across-app'>
+                      <div className='dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center'>
+                        <h4 className='flex-fill'>Upcoming Live Classes</h4>
+                        <div className='d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center'>
+                          <div className='dashboard__form__wraper'>
+                            <div className='dashboard__form__input'>
+                              <label>Select Upcoming Live Class</label>
+                              <select
+                                className='form-select'
+                                aria-label='Default select example'
+                                onChange={(e) =>
+                                  handleTabChange(e.target.value)
+                                }
+                                value={activeTab}
+                              >
+                                {[
+                                  "Live",
+                                  "Regular",
+                                  "Speaking Practice",
+                                  "Group Dobut",
+                                  "One TO One Doubt",
+                                ].map((item) => (
+                                  <option key={item} value={item}>
+                                    {item}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                          <div className='dashboard__form__wraper'>
+                            <div className='dashboard__form__input'>
+                              <label>Select Date Range</label>
+                              <DateRange
+                                selectedRange={selectedDateRange}
+                                onChange={handleDateRangeChange}
+                              />
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="row">
-                        <Tab
+                      <div className='row'>
+                        {/* <Tab
                           tabs={tabs}
                           activeTab={activeTab}
-                          handleTabChange={handleTabChange}
-                        />
-                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                          // handleTabChange={handleTabChange}
+                        /> */}
+                        <div className='tab-content tab__content__wrapper aos-init aos-animate'>
                           <div
                             className={`tab-pane fade ${
                               activeTab === "Live" ? "show active" : ""
                             }`}
                           >
-                            <div className="row">
-                              <div className="live__class__schedule_header">
-                                <h5>
-                                  Your Live Class Schedule{" "}
-                                  <i
-                                    className="icofont-calendar one_to_one_icon"
-                                    onClick={() => setIsModalOpen(true)}
-                                  ></i>
-                                </h5>
-                              </div>
+                            <div className='row'>
                               <LiveClassList
                                 liveClasses={liveClasses()}
                                 joinNow={joinNow}
@@ -109,8 +136,10 @@ const LiveClass = () => {
                               activeTab === "Regular" ? "show active" : ""
                             }`}
                           >
-                            <div className="row">
-                              <RegularClass />
+                            <div className='row'>
+                              <RegularClass
+                                selectedDateRange={selectedDateRange}
+                              />
                             </div>
                           </div>
                           <div
@@ -120,8 +149,11 @@ const LiveClass = () => {
                                 : ""
                             }`}
                           >
-                            <div className="row">
-                              <SpeakingPractice sepakingCount={count} />
+                            <div className='row'>
+                              <SpeakingPractice
+                                sepakingCount={count}
+                                selectedDateRange={selectedDateRange}
+                              />
                             </div>
                           </div>
                           <div
@@ -129,8 +161,11 @@ const LiveClass = () => {
                               activeTab === "Group Dobut" ? "show active" : ""
                             }`}
                           >
-                            <div className="row">
-                              <GroupDoubtSolving doubtCount={count} />
+                            <div className='row'>
+                              <GroupDoubtSolving
+                                doubtCount={count}
+                                selectedDateRange={selectedDateRange}
+                              />
                             </div>
                           </div>
                           <div
@@ -140,8 +175,11 @@ const LiveClass = () => {
                                 : ""
                             }`}
                           >
-                            <div className="row">
-                              <DoubtSolving doubtCount={count} />
+                            <div className='row'>
+                              <DoubtSolving
+                                doubtCount={count}
+                                selectedDateRange={selectedDateRange}
+                              />
                             </div>
                           </div>
                         </div>
@@ -154,7 +192,7 @@ const LiveClass = () => {
           </div>
         </div>
       </div>
-      <SmallModal
+      {/* <SmallModal
         size="lg"
         centered
         isOpen={isModalOpen}
@@ -173,7 +211,7 @@ const LiveClass = () => {
           selectedRange={selectedDateRange}
           onChange={handleDateRangeChange}
         />
-      </SmallModal>
+      </SmallModal> */}
     </>
   );
 };

@@ -82,7 +82,7 @@ const MockTest = () => {
   const filterSpeakingData = () =>
     allSpeakingData
       .filter(
-        (item) => item.block_threshold === 0 && item.exam_category === category
+        (item) => item.block_threshold === 0
       )
       .map((item) => ({
         ...item,

@@ -6,7 +6,14 @@ import Loading from "../../../UI/Loading";
 
 const columns = [
   { headerName: "No.", field: "no" },
-  { headerName: "Name", field: "badge_name", filter: true },
+  { headerName: "Name", field: "title", filter: true },
+  { headerName: "Description", field: "description", filter: true },
+  { headerName: "Points Required", field: "points_required", filter: true },
+  {
+    headerName: "Gamification Items",
+    field: "gamification_items.length",
+    filter: true,
+  },
 ];
 
 const ViewBadges = () => {
@@ -19,7 +26,7 @@ const ViewBadges = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/badges/`,
+          `/gamification/badges/`,
           {
             headers: {
               Accept: "application/json",
@@ -39,20 +46,20 @@ const ViewBadges = () => {
           setIsLoading(false);
           setBadgeList(badgesWithNumbers);
         } else {
-          console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, [authData?.accessToken]);
+  }, []);
 
   return isLoading ? (
-    <Loading text='Loading...' color='primary' />
+    <Loading text="Loading..." color="primary" />
   ) : badgeList ? (
     <Table rowData={badgeList} columnDefs={columns} />
   ) : (
-    <h5 className='text-center text-danger'>No Badges Available !!</h5>
+    <h5 className="text-center text-danger">No Badges Available !!</h5>
   );
 };
 

@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import SmallModal from "../../../UI/Modal";
-import DateRange from "../../../UI/DateRangePicker";
 import RegularClassList from "./RegularClassList";
 import Tab from "../../../UI/Tab";
 
@@ -12,15 +10,7 @@ const RegularClass = ({ selectedDateRange }) => {
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [regularClass, setRegularClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Regular");
-  // const [selectedDateRange, setSelectedDateRange] = useState([
-  //   {
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //     key: "selection",
-  //   },
-  // ]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -64,10 +54,6 @@ const RegularClass = ({ selectedDateRange }) => {
     })();
   }, []);
 
-  // const handleDateRangeChange = (ranges) => {
-  //   setSelectedDateRange([ranges.selection]);
-  // };
-
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
   };
@@ -93,19 +79,19 @@ const RegularClass = ({ selectedDateRange }) => {
   return (
     <>
       <div>
-        <div className='row'>
+        <div className="row">
           <Tab
             tabs={tabs}
             activeTab={activeTab}
             handleTabChange={handleTabChange}
           />
-          <div className='tab-content tab__content__wrapper aos-init aos-animate'>
+          <div className="tab-content tab__content__wrapper aos-init aos-animate">
             <div
               className={`tab-pane fade ${
                 activeTab === "Regular" ? "show active" : ""
               }`}
             >
-              <div className='row'>
+              <div className="row">
                 <RegularClassList
                   isLoading={isLoading}
                   regularClass={regularClasses()}
@@ -119,8 +105,8 @@ const RegularClass = ({ selectedDateRange }) => {
                 activeTab === "Recoded Class" ? "show active" : ""
               }`}
             >
-              <div className='row'>
-                <h5 className='text-center text-danger'>Coming Soon....</h5>
+              <div className="row">
+                <h5 className="text-center text-danger">Coming Soon....</h5>
               </div>
             </div>
           </div>

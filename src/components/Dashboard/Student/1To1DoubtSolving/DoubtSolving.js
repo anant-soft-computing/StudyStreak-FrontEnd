@@ -3,8 +3,6 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import SmallModal from "../../../UI/Modal";
-import DateRange from "../../../UI/DateRangePicker";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
@@ -22,15 +20,7 @@ const DoubtSolving = ({ selectedDateRange }) => {
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  // const [selectedDateRange, setSelectedDateRange] = useState([
-  //   {
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //     key: "selection",
-  //   },
-  // ]);
   const { one_to_one_doubt_solving_count } = count;
 
   const handleTabChange = (tab) => {
@@ -135,10 +125,6 @@ const DoubtSolving = ({ selectedDateRange }) => {
     })();
   }, []);
 
-  // const handleDateRangeChange = (ranges) => {
-  //   setSelectedDateRange([ranges.selection]);
-  // };
-
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
   };
@@ -171,98 +157,59 @@ const DoubtSolving = ({ selectedDateRange }) => {
   );
 
   return (
-    <>
-      <div>
-        {/* <div className='live__class__schedule_header'> */}
-        {/* <h5>
-            Your One To One Doubt Solving Class Schedule{" "}
-            <i
-              className="icofont-calendar one_to_one_icon"
-              onClick={() => setIsModalOpen(true)}
-            ></i>
-          </h5> */}
-        {/* <DateRange
-            selectedRange={selectedDateRange}
-            onChange={handleDateRangeChange}
+    <div>
+      {one_to_one_doubt_solving_count === "" ? (
+        <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
+      ) : (
+        <div className="row">
+          <Tab
+            tabs={tabs}
+            activeTab={activeTab}
+            handleTabChange={handleTabChange}
           />
-        </div> */}
-        <div>
-          {one_to_one_doubt_solving_count === "" ? (
-            <BuyCourse message='No One To One Doubt Solving Class Available , Please Buy a Course !!' />
-          ) : (
-            <div className='row'>
-              <Tab
-                tabs={tabs}
-                activeTab={activeTab}
-                handleTabChange={handleTabChange}
-              />
-              <div className='tab-content tab__content__wrapper aos-init aos-animate'>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Upcoming" ? "show active" : ""
-                  }`}
-                >
-                  <div className='row'>
-                    <UpcomingClass
-                      joinNow={joinNow}
-                      isLoading={isLoading}
-                      isWithin5Minutes={isWithin5Minutes}
-                      classes={oneToOneDoubtSolvingClasses}
-                      message='No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes.'
-                    />
-                  </div>
-                </div>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Available Slot" ? "show active" : ""
-                  }`}
-                >
-                  <div className='row'>
-                    <ClassList
-                      bookCount={bookCount}
-                      isLoading={isLoading}
-                      classes={oToclasses}
-                      message=' No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes.'
-                    />
-                  </div>
-                </div>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Recoded Class" ? "show active" : ""
-                  }`}
-                >
-                  <div className='row'>
-                    <h5 className='text-center text-danger'>
-                      Comming Soon....
-                    </h5>
-                  </div>
-                </div>
+          <div className="tab-content tab__content__wrapper aos-init aos-animate">
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Upcoming" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <UpcomingClass
+                  joinNow={joinNow}
+                  isLoading={isLoading}
+                  isWithin5Minutes={isWithin5Minutes}
+                  classes={oneToOneDoubtSolvingClasses}
+                  message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                />
               </div>
             </div>
-          )}
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Available Slot" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <ClassList
+                  bookCount={bookCount}
+                  isLoading={isLoading}
+                  classes={oToclasses}
+                  message=" No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                />
+              </div>
+            </div>
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Recoded Class" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <h5 className="text-center text-danger">Comming Soon....</h5>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      {/* <SmallModal
-        size="lg"
-        centered
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="One To One Doubt Solving class schedule"
-        footer={
-          <button
-            className="default__button"
-            onClick={() => setIsModalOpen(false)}
-          >
-            Apply
-          </button>
-        }
-      >
-        <DateRange
-          selectedRange={selectedDateRange}
-          onChange={handleDateRangeChange}
-        />
-      </SmallModal> */}
-    </>
+      )}
+    </div>
   );
 };
 

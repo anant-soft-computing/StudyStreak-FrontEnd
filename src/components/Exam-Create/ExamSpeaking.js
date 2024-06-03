@@ -26,6 +26,7 @@ const reducerSpeaking = (state, action) => {
 const tabs = [{ name: "Details" }, { name: "Question" }];
 
 const ExamSpeaking = ({ category }) => {
+  console.log("-----category------->", category);
   const [SpeakingData, dispatchSpeakingData] = useReducer(
     reducerSpeaking,
     initialSpeakingField
@@ -142,20 +143,20 @@ const ExamSpeaking = ({ category }) => {
         activeTab={activeTab}
         handleTabChange={handleTabChange}
       />
-      <div className='tab-content tab__content__wrapper aos-init aos-animate'>
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
         <div
           className={`tab-pane fade ${
             activeTab === "Details" ? "show active" : ""
           }`}
         >
-          <div className='row'>
-            <div className='col-xl-6 col-lg-6 col-md-6 col-12'>
-              <div className='dashboard__form__wraper'>
-                <div className='dashboard__form__input'>
+          <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
                   <label>Exam Name</label>
                   <input
-                    type='text'
-                    placeholder='Exam Name'
+                    type="text"
+                    placeholder="Exam Name"
                     value={SpeakingData.name}
                     onChange={(e) =>
                       dispatchSpeakingData({
@@ -167,13 +168,13 @@ const ExamSpeaking = ({ category }) => {
                 </div>
               </div>
             </div>
-            <div className='col-xl-6 col-lg-6 col-md-6 col-12'>
-              <div className='dashboard__form__wraper'>
-                <div className='dashboard__form__input'>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
                   <label>Exam Type</label>
                   <select
-                    className='form-select'
-                    aria-label='Default select example'
+                    className="form-select"
+                    aria-label="Default select example"
                     value={SpeakingData.block_threshold}
                     onChange={(e) =>
                       dispatchSpeakingData({
@@ -182,8 +183,8 @@ const ExamSpeaking = ({ category }) => {
                       })
                     }
                   >
-                    <option value='0'>Assignment</option>
-                    <option value='1'>Mock Test</option>
+                    <option value="0">Assignment</option>
+                    <option value="1">Mock Test</option>
                   </select>
                 </div>
               </div>
@@ -195,15 +196,15 @@ const ExamSpeaking = ({ category }) => {
             activeTab === "Question" ? "show active" : ""
           }`}
         >
-          <div className='row'>
+          <div className="row">
             {SpeakingData.questions.map((question, index) => (
-              <div className='col-xl-6 col-lg-6 col-md-6 col-12' key={index}>
-                <div className='dashboard__form__wraper'>
-                  <div className='dashboard__form__input'>
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12" key={index}>
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
                     <label>Question Number</label>
                     <input
-                      type='number'
-                      placeholder='Question Number'
+                      type="number"
+                      placeholder="Question Number"
                       value={question.question_number}
                       onChange={(e) =>
                         handleQuestionChange(
@@ -215,8 +216,8 @@ const ExamSpeaking = ({ category }) => {
                     />
                   </div>
                 </div>
-                <div className='dashboard__form__wraper'>
-                  <div className='dashboard__form__input'>
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
                     <label>Question</label>
                     <CKEditor
                       editor={ClassicEditor}
@@ -233,44 +234,44 @@ const ExamSpeaking = ({ category }) => {
                 </div>
                 {SpeakingData.questions.length > 1 && (
                   <button
-                    className='dashboard__small__btn__2 flash-card__remove__btn'
+                    className="dashboard__small__btn__2 flash-card__remove__btn"
                     onClick={() => removeQuestion(index)}
                   >
                     <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      width='24'
-                      height='24'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='2'
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      className='feather feather-trash-2'
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="feather feather-trash-2"
                     >
-                      <polyline points='3 6 5 6 21 6'></polyline>
-                      <path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'></path>
-                      <line x1='10' y1='11' x2='10' y2='17'></line>
-                      <line x1='14' y1='11' x2='14' y2='17'></line>
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      <line x1="10" y1="11" x2="10" y2="17"></line>
+                      <line x1="14" y1="11" x2="14" y2="17"></line>
                     </svg>
                   </button>
                 )}
               </div>
             ))}
-            <div className='col-xl-12 mt-2'>
+            <div className="col-xl-12 mt-2">
               <button
-                className='dashboard__small__btn__2'
+                className="dashboard__small__btn__2"
                 onClick={addQuestion}
               >
                 Add Question
               </button>
             </div>
           </div>
-          <div className='create__course__bottom__button text-center'>
+          <div className="create__course__bottom__button text-center">
             {formStatus.isError && (
-              <div className='text-danger mb-2'>{formStatus.errMsg}</div>
+              <div className="text-danger mb-2">{formStatus.errMsg}</div>
             )}
-            <button className='default__button' onClick={submitSpeakingExam}>
+            <button className="default__button" onClick={submitSpeakingExam}>
               Submit
             </button>
           </div>

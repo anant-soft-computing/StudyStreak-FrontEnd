@@ -92,7 +92,7 @@ const getAndSetRefreshToken = async () => {
 
     if (response?.status === 200 && data?.access) {
       const localObj = {
-        //update access token and set existing dat as it is
+        //update access token and set existing data as it is
         user_type,
         userId,
         user_role,
@@ -106,7 +106,6 @@ const getAndSetRefreshToken = async () => {
       store.dispatch(
         authAction.setRefreshTokenAuthStatus({
           accessToken: data?.access,
-          // refreshToken: response.data?.token?.refresh,
         })
       );
       return data?.access;

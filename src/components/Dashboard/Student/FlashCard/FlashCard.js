@@ -21,7 +21,7 @@ const FlashCard = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flashcard/`,
+          `/gamification/flashcard/`,
           {
             headers: {
               Accept: "application/json",
@@ -48,7 +48,7 @@ const FlashCard = () => {
           setIsLoading(false);
           setIsFlipped(initialFlipState);
         } else {
-          console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);

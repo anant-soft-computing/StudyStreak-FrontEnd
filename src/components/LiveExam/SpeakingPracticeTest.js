@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -20,7 +14,6 @@ const initialSpeakingSingleQuesionState = {
 };
 
 const PracticeSpeakingLiveExam = () => {
-  const containerRef = useRef(null);
   const navigate = useNavigate();
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
@@ -37,7 +30,6 @@ const PracticeSpeakingLiveExam = () => {
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  let highlightedElement = null;
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
@@ -234,47 +226,47 @@ const PracticeSpeakingLiveExam = () => {
   );
 
   return !instructionCompleted ? (
-    <div className='test-instruction'>
+    <div className="test-instruction">
       <SpeakingInstruction
-        testType='Practice'
+        testType="Practice"
         startTest={handleCompleteInstruciton}
       />
     </div>
   ) : (
     <>
-      <div className='lv-navbar lv-navbar-responsive'>
-        <div className='lv-navbar-title'>
+      <div className="lv-navbar lv-navbar-responsive">
+        <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
-          <div className='lv-userName'>{userData?.username}</div>
+          <div className="lv-userName">{userData?.username}</div>
           <div style={{ marginLeft: "10px" }}>/</div>
-          <div className='lv-userName'>{`${examData?.name}`}</div>
+          <div className="lv-userName">{`${examData?.name}`}</div>
         </div>
-        <span className='lv-navbar-title'>
-          Time Taken :<span className='lv-userName'>{timeTaken}</span>
+        <span className="lv-navbar-title">
+          Time Taken :<span className="lv-userName">{timeTaken}</span>
         </span>
-        <div className='lv-navbar-title-mobile'>
-          <div className='username-mobile'>
+        <div className="lv-navbar-title-mobile">
+          <div className="username-mobile">
             <h2>{examData?.exam_category}</h2>
-            <div className='mobile-breadcumb'>
-              <div className='lv-userName'>{userData?.username}</div>
+            <div className="mobile-breadcumb">
+              <div className="lv-userName">{userData?.username}</div>
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className='lv-userName'>{`${examData?.name}`}</div>
+              <div className="lv-userName">{`${examData?.name}`}</div>
             </div>
           </div>
-          <div className='lv-navbar-footer'>
+          <div className="lv-navbar-footer">
             <span>
-              Time Taken :<span className='lv-userName'>{timeTaken}</span>
+              Time Taken :<span className="lv-userName">{timeTaken}</span>
             </span>
           </div>
         </div>
       </div>
-      <div className='lv-container'>
+      <div className="lv-container">
         {/* Main Container */}
         {/* <div className='lv-main-container'> */}
         <div>
           {/* Left Container */}
           <div
-            className='lv-left-container'
+            className="lv-left-container"
             style={{
               display: "flex",
               flexDirection: "column",
@@ -287,8 +279,8 @@ const PracticeSpeakingLiveExam = () => {
                   (element) => element.id === item.id
                 );
                 return (
-                  <div className='lv-question-container'>
-                    <div className='lv-speaking-question'>
+                  <div className="lv-question-container">
+                    <div className="lv-speaking-question">
                       <p> {i + 1} :</p>
                       <div
                         dangerouslySetInnerHTML={{
@@ -296,9 +288,9 @@ const PracticeSpeakingLiveExam = () => {
                         }}
                       ></div>
                     </div>
-                    <div className='d-flex align-items-center lv-btn-mic-container'>
+                    <div className="d-flex align-items-center lv-btn-mic-container">
                       <button
-                        className='lv-speaking-button'
+                        className="lv-speaking-button"
                         onClick={() => speak(item.question, item.id)}
                         disabled={speaking?.[speakingIndex]?.status === 1}
                         style={{
@@ -321,21 +313,12 @@ const PracticeSpeakingLiveExam = () => {
                 );
               })}
           </div>
-
-          {/* Right Container */}
-          {/* <div
-            className='lv-right-container'
-            id='right-container'
-            ref={containerRef}
-          >
-            <div className='lv-box-right'>{recorderContainer}</div>
-          </div> */}
         </div>
-        <div className='d-flex justify-content-between mb-2'>
-          <div className='lv-question-pagination' />
-          <div className='lv-footer-btn'>
+        <div className="d-flex justify-content-between mb-2">
+          <div className="lv-question-pagination" />
+          <div className="lv-footer-btn">
             <button
-              className='lv-footer-button'
+              className="lv-footer-button"
               style={{
                 display: next === 0 ? "none" : "block",
               }}
@@ -346,7 +329,7 @@ const PracticeSpeakingLiveExam = () => {
               <span>Back</span>
             </button>
             <button
-              className='lv-footer-button'
+              className="lv-footer-button"
               style={{
                 display:
                   next === fullPaper?.[examType].Speaking?.length - 1

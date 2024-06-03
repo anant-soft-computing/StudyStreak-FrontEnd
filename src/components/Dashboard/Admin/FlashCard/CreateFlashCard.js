@@ -97,7 +97,7 @@ const CreateFlashCard = () => {
     if (!validateForm()) return;
     try {
       const response = await ajaxCall(
-        "/create/flashcard/",
+        "/gamification/flashcard/",
         {
           headers: {
             Accept: "application/json",

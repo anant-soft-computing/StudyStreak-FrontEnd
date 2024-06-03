@@ -23,7 +23,7 @@ const ViewFlashCard = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flashcard/`,
+          `/gamification/flashcard/`,
           {
             headers: {
               Accept: "application/json",
@@ -44,7 +44,7 @@ const ViewFlashCard = () => {
           setIsLoading(false);
           setFlashCardList(flashCardWithNumbers);
         } else {
-          console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);

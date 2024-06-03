@@ -1,8 +1,134 @@
-import React from "react";
+import React, { useReducer, useState } from "react";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import SelectionBox from "../../../UI/SelectionBox";
+import ajaxCall from "../../../../helpers/ajaxCall";
+
+const initialBadgeData = {
+  title: "",
+  description: "",
+  points_required: 0,
+  next_badge: 0,
+  gamification_items: [],
+  gamification_items_id: [],
+};
+
+const initialSubmit = {
+  isError: false,
+  errMsg: null,
+  isSubmitting: false,
+};
+
+const reducerBadge = (state, action) => {
+  if (action.type === "reset") {
+    return action.payload || initialBadgeData;
+  }
+  return { ...state, [action.type]: action.value };
+};
 
 const CreateBadge = () => {
+  const [badgeData, dispatchBadge] = useReducer(reducerBadge, initialBadgeData);
+  const [formStatus, setFormStatus] = useState(initialSubmit);
+  const authData = useSelector((state) => state.authStore);
+
+  const validateForm = () => {
+    if (!badgeData.title) {
+      setFormError("Badge Name is Required");
+      return false;
+    }
+    if (!badgeData.description) {
+      setFormError("Badge Description is Required");
+      return false;
+    }
+    if (!badgeData.points_required) {
+      setFormError("Points is Required");
+      return false;
+    }
+    if (!badgeData.gamification_items.length > 0) {
+      setFormError("Gamification Items is Required");
+      return false;
+    }
+    setFormStatus({
+      isError: false,
+      errMsg: null,
+      isSubmitting: false,
+    });
+    return true;
+  };
+
+  const resetReducerForm = () => {
+    dispatchBadge({ type: "reset" });
+  };
+
+  const setFormError = (errMsg) => {
+    setFormStatus({
+      isError: true,
+      errMsg,
+      isSubmitting: false,
+    });
+  };
+
+  const createBadge = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+    const data = {
+      title: badgeData.title,
+      description: badgeData.description,
+      points_required: badgeData.points_required,
+      next_badge: badgeData.next_badge,
+      gamification_items: badgeData.gamification_items.map((item) => {
+        return item.id;
+      }),
+    };
+    try {
+      const response = await ajaxCall(
+        "/gamification/badges/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData?.accessToken}`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        resetReducerForm();
+        toast.success("Badge Created Successfully");
+      } else if (response.status === 400 || response.status === 404) {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
+  const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
+    if (isSingle) {
+      dispatchBadge({
+        type: fieldName,
+        value: val,
+      });
+      dispatchBadge({
+        type: proFieldName,
+        value: +val[0]?.id,
+      });
+      return;
+    }
+    const newValIds = val.map((ids) => ids.id);
+    dispatchBadge({
+      type: fieldName,
+      value: val,
+    });
+    dispatchBadge({
+      type: proFieldName,
+      value: newValIds,
+    });
+  };
+
   return (
     <div className="row">
       <div className="col-xl-12">
@@ -11,7 +137,14 @@ const CreateBadge = () => {
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Badge Name</label>
-                <input type="text" placeholder="Badge Name" />
+                <input
+                  type="text"
+                  placeholder="Badge Name"
+                  value={badgeData.title}
+                  onChange={(e) =>
+                    dispatchBadge({ type: "title", value: e.target.value })
+                  }
+                />
               </div>
             </div>
           </div>
@@ -19,7 +152,17 @@ const CreateBadge = () => {
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Badge Points</label>
-                <input type="number" placeholder="Badge Points" />
+                <input
+                  type="number"
+                  placeholder="Badge Points"
+                  value={badgeData.points_required}
+                  onChange={(e) =>
+                    dispatchBadge({
+                      type: "points_required",
+                      value: e.target.value,
+                    })
+                  }
+                />
               </div>
             </div>
           </div>
@@ -28,7 +171,19 @@ const CreateBadge = () => {
               <span>Gamification</span>
             </div>
             <div className="dashboard__selector">
-              <SingleSelection />
+              <SelectionBox
+                value={badgeData.gamification_items}
+                onSelect={addedSelectVal.bind(
+                  null,
+                  "gamification_items",
+                  "gamification_items_id",
+                  false
+                )}
+                url="/gamification/"
+                name="title"
+                objKey={["title"]}
+                multiple={true}
+              />
             </div>
           </div>
           <div className="col-xl-6 mb-4">
@@ -36,20 +191,47 @@ const CreateBadge = () => {
               <span>Next Badge</span>
             </div>
             <div className="dashboard__selector">
-              <SelectionBox multiple={true} />
+              <SingleSelection
+                value={badgeData?.next_badge}
+                onChange={(val) => {
+                  dispatchBadge({
+                    type: "next_badge",
+                    value: val,
+                  });
+                }}
+                url="/gamification/badges/"
+                objKey={["title"]}
+              />
             </div>
           </div>
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Description</label>
-                <textarea type="text" placeholder="Description" />
+                <textarea
+                  type="text"
+                  placeholder="Description"
+                  value={badgeData.description}
+                  onChange={(e) =>
+                    dispatchBadge({
+                      type: "description",
+                      value: e.target.value,
+                    })
+                  }
+                />
               </div>
             </div>
           </div>
-          <div className="col-xl-12">
+          <div className="col-xl-12 text-center">
             <div className="dashboard__form__button">
-              <button className="default__button">Create Badge</button>
+              {formStatus.isError ? (
+                <div className="text-danger mb-2">{formStatus.errMsg}</div>
+              ) : (
+                <div className="text-success mb-2">{formStatus.errMsg}</div>
+              )}
+              <button className="default__button" onClick={createBadge}>
+                Create Badge
+              </button>
             </div>
           </div>
         </div>

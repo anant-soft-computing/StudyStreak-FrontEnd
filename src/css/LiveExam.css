@@ -504,6 +504,7 @@
 .lv-speaking-question {
   display: flex;
   flex-direction: row;
+  flex: 1;
 }
 
 .lv-box-right {

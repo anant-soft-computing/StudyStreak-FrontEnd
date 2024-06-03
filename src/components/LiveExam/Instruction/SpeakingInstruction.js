@@ -70,9 +70,8 @@ function SpeakingInstruction({ testType = "Practice", startTest }) {
           <img
             src={cpuJack}
             alt='Mic & Headphone Jack'
+            className='lv-instruction-image'
             style={{
-              minWidth: "280px",
-              maxWidth: "700px",
               borderRadius: "6px",
               border: "none",
             }}

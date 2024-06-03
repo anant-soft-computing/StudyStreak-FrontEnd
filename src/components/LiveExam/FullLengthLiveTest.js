@@ -1103,15 +1103,7 @@ const FullLengthLiveExam = () => {
                     (element) => element.id === item.id
                   );
                   return (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        borderBottom: "grey 1px solid",
-                        paddingBottom: "20px",
-                        marginTop: "15px",
-                      }}
-                    >
+                    <div className='lv-question-container'>
                       <div className='lv-speaking-question'>
                         <p> {i + 1} :</p>
                         <div

@@ -16719,3 +16719,14 @@ div.gridarea__wraper {
   background-color: #fff;
   text-align: left;
 }
+
+.lv-instruction-image {
+  min-width: 280px;
+  max-width: 700px;
+}
+@media screen and (max-width: 768px) {
+  .lv-instruction-image {
+    min-width: 100px;
+    max-width: 100%;
+  }
+}

@@ -8,7 +8,7 @@ const PointHistory = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/pointhistory/`,
+          `/gamification/points/`,
           {
             headers: {
               Accept: "application/json",

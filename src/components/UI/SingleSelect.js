@@ -28,14 +28,14 @@ const SingleSelection = (props) => {
 
     const allObj = response?.data?.map((option) => {
       let name = "";
-      props.objKey?.forEach((key, index, arr) => {
+      props.objKey?.forEach((key, index) => {
         if (index !== 0) name += " - ";
         name += option[key] ? option[key] : "NA";
       });
       if (props.needSlug) {
         return { value: option.slug, name };
       }
-      return { value: option.id, name };
+      return { value: option.id || option.object_id, name };
     });
     setOptions(allObj);
     setIsLoading(false);

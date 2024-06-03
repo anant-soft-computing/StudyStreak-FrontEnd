@@ -358,14 +358,14 @@ const LiveExam = () => {
   const renderAudio = (audio_file) => {
     if (audio_file) {
       return (
-        <div className='m-2'>
+        <div className="m-2">
           <audio
             controls
             autoPlay
-            controlsList='nodownload noplaybackrate'
-            className='hidden-controls'
+            controlsList="nodownload noplaybackrate"
+            className="hidden-controls"
           >
-            <source src={audio_file} type='audio/mpeg' />
+            <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>
       );
@@ -379,11 +379,11 @@ const LiveExam = () => {
     return (
       <>
         {image && (
-          <div className='text-center'>
+          <div className="text-center">
             <img
-              className='mb-2'
+              className="mb-2"
               src={image}
-              alt='Study Streak'
+              alt="Study Streak"
               height={250}
               width={250}
             />
@@ -691,13 +691,13 @@ const LiveExam = () => {
   }, []);
 
   const reviewContent = () => (
-    <div className='card-container'>
+    <div className="card-container">
       {examAnswer[0]?.answers.map((answer, index) => (
-        <div key={index} className='card answer__width'>
-          <div className='card-body'>
-            <h6 className='card-title'>Q. {index + 1}</h6>
-            <h6 className='card-text'>
-              Answer : <span className='text-success'>{answer.answer}</span>
+        <div key={index} className="card answer__width">
+          <div className="card-body">
+            <h6 className="card-title">Q. {index + 1}</h6>
+            <h6 className="card-text">
+              Answer : <span className="text-success">{answer.answer}</span>
             </h6>
           </div>
         </div>
@@ -706,60 +706,60 @@ const LiveExam = () => {
   );
 
   return !instructionCompleted ? (
-    <div className='test-instruction'>
+    <div className="test-instruction">
       {examData.exam_type === "Reading" && (
         <ReadingInstruction
-          testType='Mini'
+          testType="Mini"
           startTest={handleCompleteInstruciton}
         />
       )}
       {examData.exam_type === "Listening" && (
         <ListeningInstruction
-          testType='Mini'
+          testType="Mini"
           startTest={handleCompleteInstruciton}
         />
       )}
       {examData.exam_type === "Writing" && (
         <WritingInstruction
-          testType='Mini'
+          testType="Mini"
           startTest={handleCompleteInstruciton}
         />
       )}
       {examData.exam_type === "Speaking" && (
         <SpeakingInstruction
-          testType='Mini'
+          testType="Mini"
           startTest={handleCompleteInstruciton}
         />
       )}
     </div>
   ) : (
     <>
-      <div className='lv-navbar lv-navbar-responsive'>
-        <div className='lv-navbar-title'>
+      <div className="lv-navbar lv-navbar-responsive">
+        <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
-          <div className='lv-userName'>{userData?.username}</div>
+          <div className="lv-userName">{userData?.username}</div>
           <div style={{ marginLeft: "10px" }}>/</div>
-          <div className='lv-userName'>{`${examData?.exam_name}`}</div>
+          <div className="lv-userName">{`${examData?.exam_name}`}</div>
         </div>
-        <span className='lv-navbar-title'>
+        <span className="lv-navbar-title">
           Time Taken :
-          <span className='lv-userName'>
+          <span className="lv-userName">
             {Math.floor(timer / 60)} : {timer % 60}
           </span>
         </span>
-        <div className='lv-navbar-title-mobile'>
-          <div className='username-mobile'>
+        <div className="lv-navbar-title-mobile">
+          <div className="username-mobile">
             <h2>{examData?.exam_category}</h2>
-            <div className='mobile-breadcumb'>
-              <div className='lv-userName'>{userData?.username}</div>
+            <div className="mobile-breadcumb">
+              <div className="lv-userName">{userData?.username}</div>
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className='lv-userName'>{`${examData?.exam_name}`}</div>
+              <div className="lv-userName">{`${examData?.exam_name}`}</div>
             </div>
           </div>
-          <div className='lv-navbar-footer'>
+          <div className="lv-navbar-footer">
             <span>
               Time Taken :
-              <span className='lv-userName'>
+              <span className="lv-userName">
                 {Math.floor(timer / 60)} : {timer % 60}
               </span>
             </span>
@@ -767,21 +767,21 @@ const LiveExam = () => {
         </div>
       </div>
 
-      <div className='lv-container'>
+      <div className="lv-container">
         {/* Main Container */}
         {renderAudio(examData?.audio_file)}
-        <div className='lv-main-container'>
+        <div className="lv-main-container">
           {/* Left Container */}
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening" ||
             examData?.exam_type === "Writing") && (
-            <div className='lv-left-container'>
+            <div className="lv-left-container">
               {displayLeftContainer(examData?.passage, examData?.passage_image)}
             </div>
           )}
           {examData?.exam_type === "Speaking" && (
             <div
-              className='lv-left-container'
+              className="lv-left-container"
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -799,9 +799,9 @@ const LiveExam = () => {
                   }}
                 >
                   <h4>Listen {i + 1} passage</h4>
-                  <div className='d-flex align-items-center lv-btn-mic-container'>
+                  <div className="d-flex align-items-center lv-btn-mic-container">
                     <button
-                      className='lv-footer-button lv-speaking-button'
+                      className="lv-footer-button lv-speaking-button"
                       onClick={speak}
                       disabled={speaking === 1}
                       style={{
@@ -827,11 +827,11 @@ const LiveExam = () => {
 
           {/* Right Container */}
           <div
-            className='lv-right-container'
-            id='right-container'
+            className="lv-right-container"
+            id="right-container"
             ref={containerRef}
           >
-            <div className='lv-box-right'>
+            <div className="lv-box-right">
               {/* Replace the following with your actual content */}
               {(examData?.exam_type === "Reading" ||
                 examData?.exam_type === "Listening") && (
@@ -844,9 +844,9 @@ const LiveExam = () => {
               {examData?.exam_type === "Writing" &&
                 uniqueIdArr?.map((item, index) => {
                   return (
-                    <div className='lv-textarea' key={index}>
+                    <div className="lv-textarea" key={index}>
                       <textarea
-                        className='writing__textarea'
+                        className="writing__textarea"
                         id={item}
                         value={examAnswer[0]?.answers[0]?.answer || ""}
                         onChange={(e) => handleWritingAnswer(e, 0)}
@@ -868,9 +868,9 @@ const LiveExam = () => {
             </div>
           </div>
         </div>
-        <div className='d-flex justify-content-center justify-content-md-between align-items-center mb-3 mt-2 flex-column flex-md-row'>
-          <div className='lv-question-pagination  justify-content-center d-flex justify-content-md-between align-items-center pb-1 w-100 mb-2 mb-md-0'>
-            <div className='lv-section-pagination'>
+        <div className="d-flex justify-content-center justify-content-md-between align-items-center mb-3 mt-2 flex-column flex-md-row">
+          <div className="lv-question-pagination  justify-content-center d-flex justify-content-md-between align-items-center pb-1 w-100 mb-2 mb-md-0">
+            <div className="lv-section-pagination">
               {uniqueIdArr?.map((item, index) => {
                 return (
                   <div
@@ -889,18 +889,18 @@ const LiveExam = () => {
               })}
             </div>
           </div>
-          <div className='lv-footer-btn'>
+          <div className="lv-footer-btn">
             {(examData?.exam_type === "Reading" ||
               examData?.exam_type === "Listening") && (
               <button
-                className='lv-footer-button review_size'
+                className="lv-footer-button review_size"
                 onClick={() => setIsModalOpen(true)}
               >
                 Review
               </button>
             )}
             <button
-              className='lv-footer-button'
+              className="lv-footer-button"
               onClick={() => setIsConfirmModalOpen(true)}
             >
               Submit
@@ -909,13 +909,13 @@ const LiveExam = () => {
         </div>
         {isConfirmModalOpen && (
           <SmallModal
-            size='md'
+            size="md"
             centered
             isOpen={isConfirmModalOpen}
             footer={
-              <div className='d-flex gap-2'>
+              <div className="d-flex gap-2">
                 <button
-                  className='btn btn-success'
+                  className="btn btn-success"
                   onClick={() => {
                     if (
                       examData?.exam_type === "Reading" ||
@@ -931,7 +931,7 @@ const LiveExam = () => {
                   Yes
                 </button>
                 <button
-                  className='btn btn-danger'
+                  className="btn btn-danger"
                   onClick={() => setIsConfirmModalOpen(false)}
                 >
                   No
@@ -947,9 +947,9 @@ const LiveExam = () => {
           (examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening") && (
             <SmallModal
-              size='lg'
+              size="lg"
               centered
-              title='Your Answers'
+              title="Your Answers"
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
             >

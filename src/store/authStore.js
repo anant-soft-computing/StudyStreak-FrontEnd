@@ -40,7 +40,6 @@ const authStore = createSlice({
       if (state.loggedIn) {
         state.authLoading = false;
         state.accessToken = action.payload.accessToken;
-        // state.refreshToken = action.payload.refreshToken;
       } else {
         state.authLoading = false;
         state.loggedIn = false;

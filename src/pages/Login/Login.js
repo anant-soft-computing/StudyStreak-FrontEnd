@@ -213,14 +213,14 @@ const Login = () => {
   }
 
   return (
-    <div className='body__wrapper'>
-      <div className='main_wrapper overflow-hidden'>
-        <div className='loginarea sp_top_100 sp_bottom_100'>
-          <div className='container'>
-            <div className='row'>
-              <div className='col-xl-8 col-md-8 offset-md-2'>
-                <ul className='nav tab__button__wrap text-center'>
-                  <li className='nav-item'>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="loginarea sp_top_100 sp_bottom_100">
+          <div className="container">
+            <div className="row">
+              <div className="col-xl-8 col-md-8 offset-md-2">
+                <ul className="nav tab__button__wrap text-center">
+                  <li className="nav-item">
                     <button
                       className={`single__tab__link ${
                         activeTab === "login"
@@ -228,12 +228,12 @@ const Login = () => {
                           : ""
                       }`}
                       onClick={() => setActiveTab("login")}
-                      type='button'
+                      type="button"
                     >
                       Login
                     </button>
                   </li>
-                  <li className='nav-item'>
+                  <li className="nav-item">
                     <button
                       className={`single__tab__link ${
                         activeTab === "signup"
@@ -241,37 +241,37 @@ const Login = () => {
                           : ""
                       }`}
                       onClick={() => setActiveTab("signup")}
-                      type='button'
+                      type="button"
                     >
                       Sign up
                     </button>
                   </li>
                 </ul>
               </div>
-              <div className='tab-content tab__content__wrapper'>
+              <div className="tab-content tab__content__wrapper">
                 <div
                   className={`tab-pane fade ${
                     activeTab === "login" ? "active show" : ""
                   }`}
                 >
-                  <div className='col-xl-8 col-md-8 offset-md-2'>
-                    <div className='loginarea__wraper'>
-                      <div className='login__heading'>
-                        <h5 className='login__title'>Login</h5>
-                        <p className='login__description'>
+                  <div className="col-xl-8 col-md-8 offset-md-2">
+                    <div className="loginarea__wraper">
+                      <div className="login__heading">
+                        <h5 className="login__title">Login</h5>
+                        <p className="login__description">
                           Don't have an account yet?{" "}
-                          <Link to='/login' onClick={toggleForm}>
+                          <Link to="/login" onClick={toggleForm}>
                             Sign up for free
                           </Link>
                         </p>
                       </div>
-                      <form method='POST' onSubmit={doLogin}>
-                        <div className='login__form'>
-                          <label className='form__label'>Username</label>
+                      <form method="POST" onSubmit={doLogin}>
+                        <div className="login__form">
+                          <label className="form__label">Username</label>
                           <input
-                            className='common__login__input'
-                            type='text'
-                            placeholder='Username or Email'
+                            className="common__login__input"
+                            type="text"
+                            placeholder="Username or Email"
                             value={loginData.username}
                             onChange={(e) =>
                               dispatchLogin({
@@ -281,14 +281,14 @@ const Login = () => {
                             }
                           />
                         </div>
-                        <div className='login__form'>
-                          <label className='form__label'>Password</label>
-                          <div className='password-input-container'>
+                        <div className="login__form">
+                          <label className="form__label">Password</label>
+                          <div className="password-input-container">
                             <input
-                              className='common__login__input'
+                              className="common__login__input"
                               type={showPassword ? "text" : "password"}
-                              name='password'
-                              placeholder='Password'
+                              name="password"
+                              placeholder="Password"
                               value={loginData.password}
                               onChange={(e) =>
                                 dispatchLogin({
@@ -305,36 +305,36 @@ const Login = () => {
                             ></i>
                           </div>
                         </div>
-                        <div className='login__form d-flex justify-content-between flex-wrap gap-2'>
-                          <div className='form__check'>
-                            <input type='checkbox' />
+                        <div className="login__form d-flex justify-content-between flex-wrap gap-2">
+                          <div className="form__check">
+                            <input type="checkbox" />
                             <label>Remember me</label>
                           </div>
-                          <div className='text-end login__form__link'>
-                            <Link to='/forgot-password'>
+                          <div className="text-end login__form__link">
+                            <Link to="/forgot-password">
                               Forgot your password?
                             </Link>
                           </div>
                         </div>
-                        <div className='login__button'>
+                        <div className="login__button">
                           {formStatus.isError && (
-                            <div className='text-danger d-flex justify-content-center mb-2'>
+                            <div className="text-danger d-flex justify-content-center mb-2">
                               {formStatus.errMsg}
                             </div>
                           )}
-                          <div className='d-flex justify-content-center'>
+                          <div className="d-flex justify-content-center">
                             <button
-                              className='default__button'
+                              className="default__button"
                               disabled={formStatus?.isSubmitting}
                             >
                               {formStatus.isSubmitting && (
                                 <Spinner
-                                  animation='border'
-                                  role='status'
-                                  size='sm'
-                                  className='me-2'
+                                  animation="border"
+                                  role="status"
+                                  size="sm"
+                                  className="me-2"
                                 >
-                                  <span className='visually-hidden'>
+                                  <span className="visually-hidden">
                                     Loading...
                                   </span>
                                 </Spinner>
@@ -343,8 +343,8 @@ const Login = () => {
                             </button>
                           </div>
                         </div>
-                        <div className='login__social__option'>
-                          <div className='google_login_logo'>
+                        <div className="login__social__option">
+                          <div className="google_login_logo">
                             <GoogleLogin
                               onSuccess={(credentialResponse) => {
                                 setCredentials(
@@ -366,13 +366,13 @@ const Login = () => {
                     activeTab === "signup" ? "active show" : ""
                   }`}
                 >
-                  <div className='col-xl-8 offset-md-2'>
-                    <div className='loginarea__wraper'>
-                      <div className='login__heading'>
-                        <h5 className='login__title'>Sign Up</h5>
-                        <p className='login__description'>
+                  <div className="col-xl-8 offset-md-2">
+                    <div className="loginarea__wraper">
+                      <div className="login__heading">
+                        <h5 className="login__title">Sign Up</h5>
+                        <p className="login__description">
                           Already have an account?{" "}
-                          <Link to='/login' onClick={toggleForm}>
+                          <Link to="/login" onClick={toggleForm}>
                             Login
                           </Link>
                         </p>

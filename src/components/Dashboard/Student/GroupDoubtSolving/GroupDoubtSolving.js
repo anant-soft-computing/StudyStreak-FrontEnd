@@ -3,8 +3,6 @@ import moment from "moment";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import SmallModal from "../../../UI/Modal";
-import DateRange from "../../../UI/DateRangePicker";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
@@ -22,15 +20,7 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  // const [selectedDateRange, setSelectedDateRange] = useState([
-  //   {
-  //     startDate: new Date(),
-  //     endDate: new Date(),
-  //     key: "selection",
-  //   },
-  // ]);
   const { group_doubt_solving_count } = count || doubtCount;
 
   const handleTabChange = (tab) => {
@@ -135,10 +125,6 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
     })();
   }, []);
 
-  // const handleDateRangeChange = (ranges) => {
-  //   setSelectedDateRange([ranges.selection]);
-  // };
-
   const joinNow = (zoom_meeting) => {
     window.open(zoom_meeting, "__blank");
   };
@@ -171,79 +157,59 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
   );
 
   return (
-    <>
-      <div>
-        {/* <div className='live__class__schedule_header'>
-          <DateRange
-            selectedRange={selectedDateRange}
-            onChange={handleDateRangeChange}
-          /> */}
-        {/* <h5>
-            Your Group Doubt Solving Class Schedule{" "}
-            <i
-              className='icofont-calendar one_to_one_icon'
-              onClick={() => setIsModalOpen(true)}
-            ></i>
-          </h5> */}
-        {/* </div> */}
-
-        <div>
-          {group_doubt_solving_count === "" ? (
-            <BuyCourse message='No Group Doubt Solving Class Available , Please Buy a Course !!' />
-          ) : (
-            <div className='row'>
-              <Tab
-                tabs={tabs}
-                activeTab={activeTab}
-                handleTabChange={handleTabChange}
-              />
-              <div className='tab-content tab__content__wrapper aos-init aos-animate'>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Upcoming" ? "show active" : ""
-                  }`}
-                >
-                  <div className='row'>
-                    <UpcomingClass
-                      joinNow={joinNow}
-                      isLoading={isLoading}
-                      isWithin5Minutes={isWithin5Minutes}
-                      classes={groupSolvingClasses}
-                      message='No Upcomming Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes.'
-                    />
-                  </div>
-                </div>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Available Slot" ? "show active" : ""
-                  }`}
-                >
-                  <div className='row'>
-                    <ClassList
-                      bookCount={bookCount}
-                      isLoading={isLoading}
-                      classes={groupClasses}
-                      message=' No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes.'
-                    />
-                  </div>
-                </div>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Recoded Class" ? "show active" : ""
-                  }`}
-                >
-                  <div className='row'>
-                    <h5 className='text-center text-danger'>
-                      Comming Soon....
-                    </h5>
-                  </div>
-                </div>
+    <div>
+      {group_doubt_solving_count === "" ? (
+        <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
+      ) : (
+        <div className="row">
+          <Tab
+            tabs={tabs}
+            activeTab={activeTab}
+            handleTabChange={handleTabChange}
+          />
+          <div className="tab-content tab__content__wrapper aos-init aos-animate">
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Upcoming" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <UpcomingClass
+                  joinNow={joinNow}
+                  isLoading={isLoading}
+                  isWithin5Minutes={isWithin5Minutes}
+                  classes={groupSolvingClasses}
+                  message="No Upcomming Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                />
               </div>
             </div>
-          )}
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Available Slot" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <ClassList
+                  bookCount={bookCount}
+                  isLoading={isLoading}
+                  classes={groupClasses}
+                  message=" No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                />
+              </div>
+            </div>
+            <div
+              className={`tab-pane fade ${
+                activeTab === "Recoded Class" ? "show active" : ""
+              }`}
+            >
+              <div className="row">
+                <h5 className="text-center text-danger">Comming Soon....</h5>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 

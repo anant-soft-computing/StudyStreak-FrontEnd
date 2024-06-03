@@ -29,7 +29,7 @@ const SelectionBox = (props) => {
 
     const allObj = response.data?.map((option) => {
       let name = "";
-      props.objKey.forEach((key, index, arr) => {
+      props.objKey.forEach((key, index) => {
         if (index !== 0) name += " - ";
         name += option[key];
       });

@@ -15,11 +15,11 @@ const ProtectedRoute = ({ element: Element }) => {
   }, [authData, dispatch]);
 
   if (authData.authLoading) {
-    return <Loading color='primary' text='Loading ...' />;
+    return <Loading color="primary" text="Loading ..." />;
   }
 
   if (!authData.loggedIn) {
-    return <Navigate to='/login' />;
+    return <Navigate to="/login" />;
   }
   return <Element />;
 };

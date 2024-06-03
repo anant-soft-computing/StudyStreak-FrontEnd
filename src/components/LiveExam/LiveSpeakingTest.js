@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -185,12 +191,9 @@ const LiveSpeakingExam = () => {
     }
   }, [speaking]);
 
-  const recorderContainer = useMemo(() => {
-    if (
-      Object.keys(examData).length > 0 &&
-      speaking.length === examData.questions.length
-    ) {
-      return examData.questions.map((item, i) => (
+  const recorderContainer = useCallback(
+    (item, i) => {
+      return (
         <AudioRecorder
           setRecordedFilePath={setRecordedFilePath}
           next={0}
@@ -201,46 +204,46 @@ const LiveSpeakingExam = () => {
           user={userData.userId}
           recorderIndex={i}
         />
-      ));
-    }
-    return;
-  }, [speaking, examData]);
+      );
+    },
+    [speaking, examData, userData]
+  );
 
   return !instructionCompleted ? (
-    <div className="test-instruction">
+    <div className='test-instruction'>
       <SpeakingInstruction
-        testType="Mini"
+        testType='Mini'
         startTest={handleCompleteInstruciton}
       />
     </div>
   ) : (
     <>
-      <div className="lv-navbar">
-        <div className="lv-navbar-title">
+      <div className='lv-navbar lv-navbar-responsive'>
+        <div className='lv-navbar-title'>
           <h2>{examData?.exam_category}</h2>
-          <div className="lv-userName">{userData?.username}</div>
+          <div className='lv-userName'>{userData?.username}</div>
           <div style={{ marginLeft: "10px" }}>/</div>
-          <div className="lv-userName">{`${examData?.name}`}</div>
+          <div className='lv-userName'>{`${examData?.name}`}</div>
         </div>
-        <span className="lv-navbar-title">
+        <span className='lv-navbar-title'>
           Time Taken :
-          <span className="lv-userName">
+          <span className='lv-userName'>
             {Math.floor(timer / 60)} : {timer % 60}
           </span>
         </span>
-        <div className="lv-navbar-title-mobile">
-          <div className="username-mobile">
+        <div className='lv-navbar-title-mobile'>
+          <div className='username-mobile'>
             <h2>{examData?.exam_category}</h2>
-            <div className="mobile-breadcumb">
-              <div className="lv-userName">{userData?.username}</div>
+            <div className='mobile-breadcumb'>
+              <div className='lv-userName'>{userData?.username}</div>
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className="lv-userName">{`${examData?.name}`}</div>
+              <div className='lv-userName'>{`${examData?.name}`}</div>
             </div>
           </div>
-          <div className="lv-navbar-footer">
+          <div className='lv-navbar-footer'>
             <span>
               Time Taken :
-              <span className="lv-userName">
+              <span className='lv-userName'>
                 {Math.floor(timer / 60)} : {timer % 60}
               </span>
             </span>
@@ -248,30 +251,22 @@ const LiveSpeakingExam = () => {
         </div>
       </div>
 
-      <div className="lv-container">
+      <div className='lv-container'>
         {/* Main Container */}
-        <div className="lv-main-container">
+        <div className='lv-main-container' style={{ maxHeight: "max-content" }}>
           {/* Left Container */}
           <div
-            className="lv-left-container"
+            className='lv-left-container'
             style={{
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-around",
+              // justifyContent: "space-around",
             }}
           >
             {Object.keys(examData).length > 0 &&
               examData.questions.map((item, i) => (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    borderBottom: "grey 1px solid",
-                    paddingBottom: "20px",
-                    marginTop: "15px",
-                  }}
-                >
-                  <div className="lv-speaking-question">
+                <div className='lv-question-container'>
+                  <div className='lv-speaking-question'>
                     <p> {i + 1} : </p>
                     <div
                       dangerouslySetInnerHTML={{
@@ -279,9 +274,9 @@ const LiveSpeakingExam = () => {
                       }}
                     ></div>
                   </div>
-                  <div>
+                  <div className='d-flex align-items-center lv-btn-mic-container'>
                     <button
-                      className="lv-footer-button"
+                      className='lv-footer-button lv-speaking-button'
                       onClick={() => speak(item.question, i)}
                       disabled={speaking?.[i]?.status === 1}
                       style={{
@@ -294,19 +289,22 @@ const LiveSpeakingExam = () => {
                     >
                       {speaking?.[i]?.status === 2 ? "Replay" : "Start"}
                     </button>
+                    <hr />
+
+                    {recorderContainer(item, i)}
                   </div>
                 </div>
               ))}
           </div>
 
           {/* Right Container */}
-          <div
-            className="lv-right-container"
-            id="right-container"
+          {/* <div
+            className='lv-right-container'
+            id='right-container'
             ref={containerRef}
           >
-            <div className="lv-box-right">{recorderContainer}</div>
-          </div>
+            <div className='lv-box-right'>{recorderContainer}</div>
+          </div> */}
         </div>
       </div>
     </>

@@ -288,12 +288,7 @@ const PracticeSpeakingLiveExam = () => {
                 );
                 return (
                   <div className='lv-question-container'>
-                    <div
-                      className='lv-speaking-question'
-                      style={{
-                        flex: 1,
-                      }}
-                    >
+                    <div className='lv-speaking-question'>
                       <p> {i + 1} :</p>
                       <div
                         dangerouslySetInnerHTML={{

@@ -180,8 +180,8 @@ const CreateBadge = () => {
                   false
                 )}
                 url="/gamification/"
-                name="title"
-                objKey={["title"]}
+                name="name"
+                objKey={["name"]}
                 multiple={true}
               />
             </div>

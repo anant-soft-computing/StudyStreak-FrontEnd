@@ -1,27 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
-const commonColumns = [
-  { headerName: "No.", field: "no", resizable: false, width: 68 },
-  { headerName: "Model", field: "model", filter: true, width: 180 },
-];
-
 const specificColumns = {
-  flashcard: [
-    { headerName: "Title", field: "title", filter: true },
+  FlashCard: [
+    { headerName: "No.", field: "no", resizable: false, width: 110 },
+    { headerName: "Name", field: "title", filter: true },
     { headerName: "Description", field: "description", filter: true },
-    { headerName: "Set Priority", field: "set_priority", filter: true },
-    {
-      headerName: "Flash Card Items",
-      field: "flash_card_items.length",
-      filter: true,
-    },
+    { headerName: "Priority", field: "set_priority", filter: true },
+    { headerName: "Course", field: "course.Course_Title", filter: true },
+    { headerName: "Items", field: "flash_card_items.length", filter: true },
   ],
-  lesson: [
-    { headerName: "Lesson Title", field: "Lesson_Title", filter: true },
+  Lesson: [
+    { headerName: "Lesson Title", field: "name", filter: true },
     {
       headerName: "Description",
       field: "Lesson_Description",
@@ -38,7 +32,7 @@ const specificColumns = {
       filter: true,
     },
   ],
-  course: [
+  Course: [
     { headerName: "No.", field: "no", resizable: false, width: 60 },
     { headerName: "Course Title", field: "Course_Title", filter: true },
     {
@@ -67,6 +61,9 @@ const specificColumns = {
       field: "max_enrollments",
       filter: true,
     },
+    { headerName: "Category", field: "Category.name", filter: true },
+    { headerName: "Level", field: "Level.name", filter: true },
+    { headerName: "Language", field: "Language.name", filter: true },
     {
       headerName: "SEO Meta Keyword",
       field: "SEO_Meta_Keywords",
@@ -78,73 +75,208 @@ const specificColumns = {
       filter: true,
     },
   ],
-  exam: [
+  Exam: [
+    { headerName: "No.", field: "no", resizable: false, width: 68 },
     { headerName: "Exam Name", field: "exam_name", filter: true },
     { headerName: "Exam Type", field: "exam_type", filter: true },
-  ],
-  fulllengthtest: [
-    { headerName: "Name", field: "name", filter: true },
+    { headerName: "No. Of Questions", field: "no_of_questions", filter: true },
+    { headerName: "Block Type", field: "block_type", filter: true },
     { headerName: "Difficulty Level", field: "difficulty_level", filter: true },
+    { headerName: "Block Threshold", field: "block_threshold", filter: true },
+  ],
+  FullLengthTest: [
+    { headerName: "No.", field: "no", resizable: false, width: 68 },
+    { headerName: "Exam Name", field: "name", filter: true },
+    { headerName: "Exam Level", field: "difficulty_level", filter: true },
+    {
+      headerName: "Reading Set",
+      field: "reading_set.Reading.length",
+      filter: true,
+    },
+    {
+      headerName: "Writing Set",
+      field: "writing_set.Writing.length",
+      filter: true,
+    },
+    {
+      headerName: "Listening Set",
+      field: "listening_set.Listening.length",
+      filter: true,
+    },
+    {
+      headerName: "Speaking Set",
+      field: "speaking_set.Speaking.length",
+      filter: true,
+    },
   ],
   module: [
-    { headerName: "Name", field: "Name", filter: true },
-    {
-      headerName: "Difficulty Level",
-      field: "difficulty_level",
-      filter: true,
-    },
-    {
-      headerName: "Practice Test Type",
-      field: "practice_test_type",
-      filter: true,
-    },
+    { headerName: "No.", field: "no", resizable: false, width: 68 },
+    { headerName: "Exam Name", field: "Name", filter: true },
+    { headerName: "Difficulty Level", field: "difficulty_level", filter: true },
+    { headerName: "Reading Set", field: "Reading.length", filter: true },
+    { headerName: "Writing Set", field: "Writing.length", filter: true },
+    { headerName: "Listening Set", field: "Listening.length", filter: true },
+    { headerName: "Speaking Set", field: "Speaking.length", filter: true },
   ],
-  liveclass: [],
+  Live_Class: [
+    { headerName: "Meeting Title", field: "meeting_title" },
+    {
+      headerName: "Start Date",
+      field: "start_date",
+      valueGetter: (params) => {
+        return moment(params.data.start_time).format("DD MMM, YYYY");
+      },
+    },
+    {
+      headerName: "Start Time",
+      field: "start_time",
+      valueGetter: (params) => {
+        return moment(params.data.start_time).format("hh:mm A");
+      },
+    },
+    {
+      headerName: "End Date",
+      field: "end_date",
+      valueGetter: (params) => {
+        return moment(params.data.end_time).format("DD MMM, YYYY");
+      },
+    },
+    {
+      headerName: "End Time",
+      field: "end_time",
+      valueGetter: (params) => {
+        return moment(params.data.end_time).format("hh:mm A");
+      },
+    },
+    { headerName: "Description", field: "meeting_description" },
+    { headerName: "Batch Name", field: "select_batch.batch_name" },
+  ],
 };
 
 const ViewGamification = ({ content }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [dataList, setDataList] = useState([]);
   const [gamificationList, setGamificationList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
-  useEffect(() => {
+  const fetchData = async (url, setter) => {
     setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/gamification/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
-            },
-            method: "GET",
+    try {
+      const response = await ajaxCall(
+        url,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData?.accessToken}`,
           },
-          8000
-        );
-        if (response?.status === 200) {
-          setIsLoading(false);
-          setGamificationList(response?.data || []);
-        } else {
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.log("error", error);
+          method: "GET",
+        },
+        8000
+      );
+      if (response?.status === 200) {
+        setter(response?.data);
       }
-    })();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(`/gamification/`, setGamificationList);
   }, [authData?.accessToken]);
 
-  const filteredList = gamificationList
-    .filter((item) => item.model === content)
-    .map((item, index) => ({ ...item, no: index + 1 }));
+  useEffect(() => {
+    const endpoints = {
+      FlashCard: `/gamification/flashcard/`,
+      Lesson: `/liveclass_list_view/`,
+      Course: `/courselistview/`,
+      Exam: `/exam-blocks/`,
+      FullLengthTest: `/get/flt/`,
+      module: `/moduleListView/`,
+      Live_Class: `/liveclass_list_view/`,
+    };
 
-  const columns = [...commonColumns, ...(specificColumns[content] || [])];
+    if (content && endpoints[content]) {
+      fetchData(endpoints[content], setDataList);
+    }
+  }, [authData?.accessToken, content]);
+
+  const filteredDataList = () => {
+    switch (content) {
+      case "FlashCard":
+        return dataList
+          .filter((item) =>
+            gamificationList.some(
+              (i) => i.name === item.title && i.model === content
+            )
+          )
+          .map((item, index) => ({ ...item, no: index + 1 }));
+      case "Lesson":
+        return dataList
+          .filter((item) =>
+            gamificationList.some(
+              (i) => i.name === item.Lesson_Title && i.model === content
+            )
+          )
+          .map((item, index) => ({ ...item, no: index + 1 }));
+      case "Course":
+        return dataList
+          .filter((item) =>
+            gamificationList.some(
+              (i) => i.name === item.Course_Title && i.model === content
+            )
+          )
+          .map((item, index) => ({ ...item, no: index + 1 }));
+      case "Exam":
+        return dataList
+          .filter((item) =>
+            gamificationList.some(
+              (i) =>
+                i.name === `${item.exam_name}-${item.exam_type}` &&
+                i.model === content
+            )
+          )
+          .map((item, index) => ({ ...item, no: index + 1 }));
+      case "FullLengthTest":
+        return dataList
+          .filter((item) =>
+            gamificationList.some(
+              (i) => i.name === item.name && i.model === content
+            )
+          )
+          .map((item, index) => ({ ...item, no: index + 1 }));
+      case "module":
+        return dataList
+          .filter((item) =>
+            gamificationList.some(
+              (i) => i.name === item.Name && i.model === content
+            )
+          )
+          .map((item, index) => ({ ...item, no: index + 1 }));
+      case "Live_Class":
+        return dataList
+          .filter((item) =>
+            gamificationList.some(
+              (i) => i.name === item.meeting_title && i.model === content
+            )
+          )
+          .map((item, index) => ({ ...item, no: index + 1 }));
+      default:
+        return gamificationList
+          .filter((item) => item.model === content)
+          .map((item, index) => ({ ...item, no: index + 1 }));
+    }
+  };
+
+  const columns = [...(specificColumns[content] || [])];
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />
-  ) : filteredList.length > 0 ? (
-    <Table rowData={filteredList} columnDefs={columns} />
+  ) : filteredDataList().length > 0 ? (
+    <Table rowData={filteredDataList()} columnDefs={columns} />
   ) : (
     <h5 className="text-center text-danger">No Gamification Available !!</h5>
   );

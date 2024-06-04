@@ -7,18 +7,18 @@ import Tab from "../../../UI/Tab";
 const tabs = [{ name: "View Gamification" }, { name: "Create Gamification" }];
 
 const options = [
-  { value: "flashcard", label: "Flash Card" },
-  { value: "lesson", label: "Lesson" },
-  { value: "course", label: "Course" },
-  { value: "exam", label: "Mock Test" },
-  { value: "fulllengthtest", label: "Full Length Test" },
+  { value: "FlashCard", label: "Flash Card" },
+  { value: "Lesson", label: "Lesson" },
+  { value: "Course", label: "Course" },
+  { value: "Exam", label: "Mock Test" },
+  { value: "FullLengthTest", label: "Full Length Test" },
   { value: "module", label: "Practice Test" },
-  { value: "liveclass", label: "Live Class" },
+  { value: "Live_Class", label: "Live Class" },
 ];
 
 const Gamification = () => {
   const [activeTab, setActiveTab] = useState("View Gamification");
-  const [content, setContent] = useState("flashcard");
+  const [content, setContent] = useState("FlashCard");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

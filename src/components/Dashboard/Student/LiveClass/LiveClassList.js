@@ -1,14 +1,19 @@
 import React from "react";
 import moment from "moment";
 import Table from "../../../UI/Table";
+import { toast } from "react-toastify";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const LiveClassList = ({ liveClasses, joinNow, isWithin5Minutes }) => {
   const handleJoinNow = (params) => {
-    const { zoom_meeting_id, start_time } = params.data;
+    const { zoom_meeting_id, start_time, id } = params.data;
     return (
       <button
         className="take-test"
-        onClick={() => joinNow(zoom_meeting_id)}
+        onClick={() => {
+          joinNow(zoom_meeting_id);
+          gamificationSubmit(id);
+        }}
         disabled={!isWithin5Minutes(start_time)}
       >
         Join Now
@@ -17,6 +22,37 @@ const LiveClassList = ({ liveClasses, joinNow, isWithin5Minutes }) => {
   };
 
   const handleBook = () => <button className="given-tag">Booked</button>;
+
+  const gamificationSubmit = async (classID) => {
+    const data = {
+      model: "Live Class",
+      object_id: classID,
+    };
+    try {
+      const response = await ajaxCall(
+        "/gamification/points/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const columns = [
     {

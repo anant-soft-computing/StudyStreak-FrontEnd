@@ -9,6 +9,7 @@ import Loading from "../../../UI/Loading";
 
 const FlashCard = () => {
   const { enrolledCourse } = useLocation().state || {};
+  const [cardID, setCardID] = useState(0);
   const [flashCardList, setFlashCardList] = useState([]);
   const [isFlipped, setIsFlipped] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -63,6 +64,7 @@ const FlashCard = () => {
 
   const handleViewCard = (data) => {
     setModalShow(true);
+    setCardID(data?.id);
     setFlashCardItems(data?.flash_card_items);
   };
 
@@ -126,6 +128,7 @@ const FlashCard = () => {
                     <FlashCardModal
                       show={modalShow}
                       onHide={handleCloseModal}
+                      cardID={cardID}
                       flash_card_items={flashCardItems}
                       isFlipped={isFlipped}
                       setIsFlipped={setIsFlipped}

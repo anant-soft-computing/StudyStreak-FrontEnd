@@ -128,12 +128,44 @@ const LiveExam = () => {
         8000
       );
       if (response.status === 200) {
+        gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have All Ready Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
+  const gamificationSubmit = async () => {
+    const data = {
+      model: "Exam Block",
+      object_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/gamification/points/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -407,7 +439,7 @@ const LiveExam = () => {
     let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
 
     // is this a multipleTypeQuestions
-    const isMultiQuestions = examAnswer[next].answers.filter(
+    const isMultiQuestions = examAnswer[next]?.answers?.filter(
       (item) => item.questionId === id
     );
 
@@ -855,16 +887,6 @@ const LiveExam = () => {
                     </div>
                   );
                 })}
-              {/* {examData?.exam_type === "Speaking" && */}
-              {/* {["", "", ""].map((item, i) => (
-                <AudioRecorder
-                  setRecordedFilePath={setRecordedFilePath}
-                  next={0}
-                  exam_id={examData?.id}
-                  enableRecording={speaking === 2}
-                  questions={examData?.passage}
-                />
-              ))} */}
             </div>
           </div>
         </div>

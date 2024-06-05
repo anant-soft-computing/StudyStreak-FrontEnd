@@ -626,7 +626,7 @@ const FullLengthLiveExam = () => {
     }
   };
 
-  const practiceTestSubmit = async () => {
+  const fullLengthTestSubmit = async () => {
     const data = {
       student_id: studentId,
       flt_id: parseInt(examId),
@@ -648,12 +648,44 @@ const FullLengthLiveExam = () => {
         8000
       );
       if (response.status === 200) {
+        gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have All Ready Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
+  const gamificationSubmit = async () => {
+    const data = {
+      model: "Full Length Test",
+      object_id: parseInt(fullLengthId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/gamification/points/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
@@ -771,13 +803,6 @@ const FullLengthLiveExam = () => {
               data: item.data,
             });
           }
-          // else {
-          //   newAnswersArray.push({
-          //     exam_id: item.exam_id,
-          //     band: 0,
-          //     data: item.data,
-          //   });
-          // }
         })
       );
     } catch (error) {
@@ -813,10 +838,8 @@ const FullLengthLiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        practiceTestSubmit();
-        navigate(`/exam-practice-test-answer/${examId}`, {
-          state: { timeTaken, bandValue, examForm },
-        });
+        fullLengthTestSubmit();
+        navigate("/fullLengthTest");
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -981,10 +1004,6 @@ const FullLengthLiveExam = () => {
     (item, index) => {
       if (examData?.exam_type !== "Speaking") return null;
       if (Object.keys(examData).length > 0) {
-        // return examData.questions.map((item, i) => {
-        //   const index = examAnswer[next].data.findIndex(
-        //     (element) => element.id === item.id
-        //   );
         return (
           <AudioRecorder
             setRecordedFilePath={setRecordedFilePath}
@@ -997,7 +1016,6 @@ const FullLengthLiveExam = () => {
             recorderIndex={item.id}
           />
         );
-        // });
       }
       return;
     },

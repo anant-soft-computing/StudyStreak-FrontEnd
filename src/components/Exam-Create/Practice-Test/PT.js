@@ -4,6 +4,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../helpers/ajaxCall";
+import Loading from "../../UI/Loading";
 
 const intialPT = {
   Name: "",
@@ -35,6 +36,7 @@ const PT = ({ type }) => {
     Listening: [],
     Speaking: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [createPT, dispatchPT] = useReducer(reducerPT, intialPT);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [totalQuestions, setTotalQuestions] = useState(0);
@@ -54,6 +56,7 @@ const PT = ({ type }) => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -87,6 +90,7 @@ const PT = ({ type }) => {
                 exam_type === type && block_type === "Mock Test"
             ),
           };
+          setIsLoading(false);
           setExams(updatedExams);
         } else {
           console.log("error");
@@ -98,6 +102,7 @@ const PT = ({ type }) => {
   }, [type]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -117,6 +122,7 @@ const PT = ({ type }) => {
 
         if (response.status === 200) {
           const { data } = response;
+          setIsLoading(false);
           setExams((prev) => ({
             ...prev,
             Speaking: data.filter(
@@ -310,7 +316,9 @@ const PT = ({ type }) => {
       )}
       <div className="dashboard__form__wraper">
         <div className="dashboard__form__input">
-          {exams[type]?.length > 0 ? (
+          {isLoading ? (
+            <Loading text="...Loading" color="primary" />
+          ) : exams[type]?.length > 0 ? (
             <div className="ag-theme-quartz">
               <AgGridReact
                 {...gridOptions(exams[type], handleRowSelection(type))}

@@ -1,10 +1,34 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
+
+const columns = [
+  {
+    headerName: "No.",
+    field: "no",
+    resizable: false,
+    width: 86,
+  },
+  { headerName: "First Name", field: "first_name", filter: true },
+  { headerName: "Last Name", field: "last_name", filter: true },
+  {
+    headerName: "Batch Name",
+    field: "select batch",
+    filter: true,
+    valueGetter: (params) => {
+      return params.data.select_batch.map((item) => item).join(", ");
+    },
+    width: 630,
+  },
+];
 
 const LeaderBoard = ({ batchId }) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [studentList, setStudentList] = useState([]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const studentData = [];
@@ -31,6 +55,7 @@ const LeaderBoard = ({ batchId }) => {
           }));
           studentData.push(...students);
         }
+        setIsLoading(false);
         setStudentList(studentData);
       } catch (error) {
         console.log("error", error);
@@ -42,35 +67,13 @@ const LeaderBoard = ({ batchId }) => {
     <div>
       <div className="col-xl-12">
         <div className="dashboard__table table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th>No.</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Batch Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {studentList.map(
-                ({ no, first_name, last_name, select_batch }, index) => (
-                  <tr
-                    key={index}
-                    className={`${
-                      index % 2 === 0 ? "" : "dashboard__table__row"
-                    }`}
-                  >
-                    <th>
-                      <div>{no}.</div>
-                    </th>
-                    <td>{first_name}</td>
-                    <td>{last_name}</td>
-                    <td>{select_batch.map((item) => item).join(", ")}</td>
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
+          {isLoading ? (
+            <Loading text="Loading..." color="primary" />
+          ) : studentList.length > 0 ? (
+            <Table rowData={studentList} columnDefs={columns} />
+          ) : (
+            <h5 className="text-center text-danger">No Students Found !!</h5>
+          )}
         </div>
       </div>
     </div>

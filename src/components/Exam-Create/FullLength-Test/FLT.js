@@ -4,6 +4,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { toast } from "react-toastify";
+import Loading from "../../UI/Loading";
 
 const intialFLTData = {
   name: "",
@@ -33,6 +34,7 @@ const FLT = () => {
     Listening: [],
     Speaking: [],
   });
+  const [isLoading, setIsLoading] = useState(true);
   const [createFLT, dispatchFLT] = useReducer(reducerFLT, intialFLTData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
 
@@ -51,6 +53,7 @@ const FLT = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -75,6 +78,7 @@ const FLT = () => {
             Listening: data.filter(({ Listening }) => Listening.length > 0),
             Speaking: data.filter(({ Speaking }) => Speaking.length > 0),
           };
+          setIsLoading(false);
           setExams(updatedExams);
         } else {
           console.log("error");
@@ -238,7 +242,9 @@ const FLT = () => {
           <div className="dashboard__form__wraper">
             <div className="dashboard__form__input">
               <label>(1) Reading : </label>
-              {exams.Reading?.length > 0 ? (
+              {isLoading ? (
+                <Loading text="...Loading" color="primary" />
+              ) : exams.Reading?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
                     {...gridOptions(
@@ -258,7 +264,9 @@ const FLT = () => {
           <div className="dashboard__form__wraper mt-4">
             <div className="dashboard__form__input">
               <label>(2) Writing : </label>
-              {exams.Writing?.length > 0 ? (
+              {isLoading ? (
+                <Loading text="...Loading" color="primary" />
+              ) : exams.Writing?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
                     {...gridOptions(
@@ -278,7 +286,9 @@ const FLT = () => {
           <div className="dashboard__form__wraper mt-4">
             <div className="dashboard__form__input">
               <label>(3) Listening : </label>
-              {exams.Listening?.length > 0 ? (
+              {isLoading ? (
+                <Loading text="...Loading" color="primary" />
+              ) : exams.Listening?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
                     {...gridOptions(
@@ -298,7 +308,9 @@ const FLT = () => {
           <div className="dashboard__form__wraper mt-4">
             <div className="dashboard__form__input">
               <label>(4) Speaking : </label>
-              {exams.Speaking?.length > 0 ? (
+              {isLoading ? (
+                <Loading text="...Loading" color="primary" />
+              ) : exams.Speaking?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
                     {...gridOptions(

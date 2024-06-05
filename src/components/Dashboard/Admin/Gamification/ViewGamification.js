@@ -191,7 +191,7 @@ const ViewGamification = ({ content }) => {
   useEffect(() => {
     const endpoints = {
       FlashCard: `/gamification/flashcard/`,
-      Lesson: `/liveclass_list_view/`,
+      Lesson: `/lessonview/`,
       Course: `/courselistview/`,
       Exam: `/exam-blocks/`,
       FullLengthTest: `/get/flt/`,

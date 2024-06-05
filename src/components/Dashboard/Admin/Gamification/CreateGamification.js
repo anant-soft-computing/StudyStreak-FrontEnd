@@ -27,9 +27,9 @@ const options = [
   "Flash Card",
   "Lesson",
   "Course",
-  "Exam",
+  "Exam Block",
   "Full Length Test",
-  "Mock Test",
+  "Practice Test",
   "Live Class",
 ];
 

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { toast } from "react-toastify";
 import CardFlip from "react-card-flip";
 import SmallModal from "../../../UI/Modal";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const FlashCardModal = ({
   show,
   onHide,
+  cardID,
   flash_card_items,
   isFlipped,
   setIsFlipped,
@@ -28,6 +31,47 @@ const FlashCardModal = ({
     );
   };
 
+  const handleFlipClick = () => {
+    handleClick(currentCardIndex);
+  };
+
+  const gamificationSubmit = async (cardID) => {
+    const data = {
+      model: "Flash Card",
+      object_id: cardID,
+    };
+    try {
+      const response = await ajaxCall(
+        "/gamification/points/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentCardIndex === flash_card_items?.length - 1) {
+      gamificationSubmit(cardID);
+    }
+  }, [currentCardIndex, flash_card_items, cardID]);
+
   return (
     <SmallModal
       size="md"
@@ -42,6 +86,9 @@ const FlashCardModal = ({
             onClick={handlePreviousClick}
           >
             Previous
+          </button>
+          <button className="default__button" onClick={handleFlipClick}>
+            Flip
           </button>
           <button
             disabled={flash_card_items?.length - 1 === currentCardIndex}

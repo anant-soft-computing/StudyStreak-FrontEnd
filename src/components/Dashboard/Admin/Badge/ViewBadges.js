@@ -52,11 +52,11 @@ const ViewBadges = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [authData?.accessToken]);
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />
-  ) : badgeList ? (
+  ) : badgeList.length > 0 ? (
     <Table rowData={badgeList} columnDefs={columns} />
   ) : (
     <h5 className="text-center text-danger">No Badges Available !!</h5>

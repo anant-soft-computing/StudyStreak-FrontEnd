@@ -20,6 +20,7 @@ const PracticeLiveExam = () => {
   const [next, setNext] = useState(0);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const PracticeLiveExam = () => {
     } else if (examData?.exam_type === "Speaking") {
       setTimer(15 * 60);
     }
-  }, [examId]);
+  }, [examData?.exam_type, examId]);
 
   useEffect(() => {
     let interval;
@@ -110,15 +111,6 @@ const PracticeLiveExam = () => {
     );
   };
 
-  const renderTime = useMemo(
-    () => (
-      <span>
-        Time Left :<span className="lv-userName">{timeTaken}</span>
-      </span>
-    ),
-    [timer]
-  );
-
   useEffect(() => {
     if (examData) {
       const temp = [...examAnswer];
@@ -148,6 +140,69 @@ const PracticeLiveExam = () => {
     // Count the number of words
     const words = answer_text.split(" ");
     setNumberOfWord(words.length);
+  };
+
+  const practiceTestSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        gamificationSubmit();
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have All Ready Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
+  const gamificationSubmit = async () => {
+    const data = {
+      model: "Practice Test",
+      object_id: parseInt(fullPaper[0].IELTS.id),
+    };
+    try {
+      const response = await ajaxCall(
+        "/gamification/points/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const handleWritingSubmit = async () => {
@@ -269,6 +324,7 @@ const PracticeLiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
+        practiceTestSubmit();
         navigate(`/exam-answer/${examData?.id}`, {
           state: { examAnswer, timeTaken, bandValue: 0, examData },
         });

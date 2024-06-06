@@ -39,7 +39,7 @@ const Badge = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreateBadge />
+                            <CreateBadge setActiveTab={setActiveTab} />
                           </div>
                         </div>
                         <div

@@ -28,7 +28,6 @@ const Student = () => {
           },
           8000
         );
-
         if (response?.status === 200) {
           setIsLoading(false);
           const studentWithNumbers = response?.data?.map((student, index) => ({
@@ -37,10 +36,12 @@ const Student = () => {
           }));
           setStudentList(studentWithNumbers);
         } else {
-          console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [authData?.accessToken]);

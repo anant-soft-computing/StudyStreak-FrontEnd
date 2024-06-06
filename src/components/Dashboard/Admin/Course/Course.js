@@ -39,7 +39,7 @@ const Course = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreateCourse />
+                            <CreateCourse setMainTab={setActiveTab} />
                           </div>
                         </div>
                         <div

@@ -41,7 +41,7 @@ const FlashCard = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreateFlashCard />
+                            <CreateFlashCard setActiveTab={setActiveTab} />
                           </div>
                         </div>
                         <div

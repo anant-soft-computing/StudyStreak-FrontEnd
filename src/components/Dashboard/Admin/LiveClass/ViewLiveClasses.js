@@ -65,7 +65,6 @@ const ViewLiveClasses = () => {
           },
           8000
         );
-
         if (response?.status === 200) {
           const liveClassWithNumbers = response?.data?.map(
             (liveClass, index) => ({
@@ -76,10 +75,12 @@ const ViewLiveClasses = () => {
           setIsLoading(false);
           setLiveClassList(liveClassWithNumbers);
         } else {
-          console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [authData?.accessToken]);

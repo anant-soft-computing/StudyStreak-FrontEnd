@@ -4,82 +4,70 @@ import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import SelectionBox from "../../../UI/SelectionBox";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import Loading from "../../../UI/Loading";
 
 const initialBadgeData = {
   title: "",
   description: "",
   points_required: 0,
-  next_badge: 0,
+  next_badge: "",
   gamification_items: [],
   gamification_items_id: [],
 };
 
-const initialSubmit = {
-  isError: false,
-  errMsg: null,
-  isSubmitting: false,
-};
+const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
 
 const reducerBadge = (state, action) => {
-  if (action.type === "reset") {
-    return action.payload || initialBadgeData;
+  switch (action.type) {
+    case "reset":
+      return action.payload || initialBadgeData;
+    default:
+      return { ...state, [action.type]: action.value };
   }
-  return { ...state, [action.type]: action.value };
 };
 
-const CreateBadge = () => {
+const validateForm = (badgeData, setFormError) => {
+  if (!badgeData.title) {
+    setFormError("Badge Name is Required");
+    return false;
+  }
+  if (!badgeData.description) {
+    setFormError("Badge Description is Required");
+    return false;
+  }
+  if (!badgeData.points_required) {
+    setFormError("Points is Required");
+    return false;
+  }
+  if (!badgeData.gamification_items.length > 0) {
+    setFormError("Gamification Items is Required");
+    return false;
+  }
+  return true;
+};
+
+const CreateBadge = ({ setActiveTab }) => {
   const [badgeData, dispatchBadge] = useReducer(reducerBadge, initialBadgeData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
 
-  const validateForm = () => {
-    if (!badgeData.title) {
-      setFormError("Badge Name is Required");
-      return false;
-    }
-    if (!badgeData.description) {
-      setFormError("Badge Description is Required");
-      return false;
-    }
-    if (!badgeData.points_required) {
-      setFormError("Points is Required");
-      return false;
-    }
-    if (!badgeData.gamification_items.length > 0) {
-      setFormError("Gamification Items is Required");
-      return false;
-    }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
-    return true;
-  };
-
   const resetReducerForm = () => {
     dispatchBadge({ type: "reset" });
   };
-
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const createBadge = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(badgeData, setFormError)) return;
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     const data = {
       title: badgeData.title,
       description: badgeData.description,
       points_required: badgeData.points_required,
       next_badge: badgeData.next_badge,
-      gamification_items: badgeData.gamification_items.map((item) => {
-        return item.id;
-      }),
+      gamification_items: badgeData.gamification_items.map((item) => item.id),
     };
     try {
       const response = await ajaxCall(
@@ -97,36 +85,31 @@ const CreateBadge = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        setActiveTab("View Badge");
         toast.success("Badge Created Successfully");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
 
   const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
     if (isSingle) {
-      dispatchBadge({
-        type: fieldName,
-        value: val,
-      });
-      dispatchBadge({
-        type: proFieldName,
-        value: +val[0]?.id,
-      });
+      dispatchBadge({ type: fieldName, value: val });
+      dispatchBadge({ type: proFieldName, value: +val[0]?.id });
       return;
     }
     const newValIds = val.map((ids) => ids.id);
-    dispatchBadge({
-      type: fieldName,
-      value: val,
-    });
-    dispatchBadge({
-      type: proFieldName,
-      value: newValIds,
-    });
+    dispatchBadge({ type: fieldName, value: val });
+    dispatchBadge({ type: proFieldName, value: newValIds });
   };
 
   return (
@@ -223,15 +206,21 @@ const CreateBadge = () => {
             </div>
           </div>
           <div className="col-xl-12 text-center">
-            <div className="dashboard__form__button">
-              {formStatus.isError ? (
+            <div className="dashboard__form__button text-center mt-4">
+              {formStatus.isError && (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
-              ) : (
-                <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
-              <button className="default__button" onClick={createBadge}>
-                Create Badge
-              </button>
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Badge..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createBadge}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Badge
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -37,7 +37,6 @@ const ViewBadges = () => {
           },
           8000
         );
-
         if (response?.status === 200) {
           const badgesWithNumbers = response?.data?.map((batch, index) => ({
             ...batch,
@@ -50,6 +49,8 @@ const ViewBadges = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [authData?.accessToken]);

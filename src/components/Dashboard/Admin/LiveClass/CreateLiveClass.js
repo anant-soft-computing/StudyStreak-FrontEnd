@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
+import Loading from "../../../UI/Loading";
 
 const initialLiveClassData = {
   select_batch: "",
@@ -15,11 +16,7 @@ const initialLiveClassData = {
   registration_limit: 0,
 };
 
-const initialSubmit = {
-  isError: false,
-  errMsg: null,
-  isSubmitting: false,
-};
+const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
 
 const reducerCreateLiveClass = (state, action) => {
   if (action.type === "reset") {
@@ -28,46 +25,41 @@ const reducerCreateLiveClass = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const CreateLiveClass = () => {
+const validateForm = (createLiveClassData, setFormError) => {
+  if (!createLiveClassData.select_batch) {
+    setFormError("Batch is Required");
+    return false;
+  }
+  if (!createLiveClassData.liveclasstype) {
+    setFormError("Live Class Type is Required");
+    return false;
+  }
+  if (!createLiveClassData.meeting_title) {
+    setFormError("Meeting Title is Required");
+    return false;
+  }
+  if (!createLiveClassData.meeting_description) {
+    setFormError("Meeting Description Required");
+    return false;
+  }
+  if (!createLiveClassData.start_time) {
+    setFormError("Start Date & Time is Required");
+    return false;
+  }
+  if (!createLiveClassData.end_time) {
+    setFormError("End Date & Time is Required");
+    return false;
+  }
+  return true;
+};
+
+const CreateLiveClass = ({ setActiveTab }) => {
   const [createLiveClassData, dispatchCreateLiveClass] = useReducer(
     reducerCreateLiveClass,
     initialLiveClassData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
-
-  const validateForm = () => {
-    if (!createLiveClassData.select_batch) {
-      setFormError("Batch is Required");
-      return false;
-    }
-    if (!createLiveClassData.liveclasstype) {
-      setFormError("Live Class Type is Required");
-      return false;
-    }
-    if (!createLiveClassData.meeting_title) {
-      setFormError("Meeting Title is Required");
-      return false;
-    }
-    if (!createLiveClassData.meeting_description) {
-      setFormError("Meeting Description Required");
-      return false;
-    }
-    if (!createLiveClassData.start_time) {
-      setFormError("Start Date & Time is Required");
-      return false;
-    }
-    if (!createLiveClassData.end_time) {
-      setFormError("End Date & Time is Required");
-      return false;
-    }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
-    return true;
-  };
 
   const resetReducerForm = () => {
     dispatchCreateLiveClass({
@@ -76,16 +68,13 @@ const CreateLiveClass = () => {
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const createLiveClass = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(createLiveClassData, setFormError)) return;
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const response = await ajaxCall(
         "/liveclass_create_view/",
@@ -102,12 +91,19 @@ const CreateLiveClass = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        setActiveTab("View LiveClass");
         toast.success("Live Class Created Successfully");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
 
@@ -249,15 +245,23 @@ const CreateLiveClass = () => {
             </div>
           </div>
           <div className="col-xl-12">
-            <div className="dashboard__form__button">
+            <div className="dashboard__form__button text-center mt-4">
               {formStatus.isError ? (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               ) : (
                 <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
-              <button className="default__button" onClick={createLiveClass}>
-                Create Live Class
-              </button>
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Live Class..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createLiveClass}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Live Class
+                </button>
+              )}
             </div>
           </div>
         </div>

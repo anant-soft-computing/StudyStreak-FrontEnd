@@ -12,7 +12,7 @@ const options = [
   { value: "Course", label: "Course" },
   { value: "Exam", label: "Mock Test" },
   { value: "FullLengthTest", label: "Full Length Test" },
-  { value: "module", label: "Practice Test" },
+  { value: "module", label: "Practice Test" },  
   { value: "Live_Class", label: "Live Class" },
 ];
 
@@ -76,7 +76,7 @@ const Gamification = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreateGamification />
+                            <CreateGamification setActiveTab={setActiveTab} />
                           </div>
                         </div>
                         <div

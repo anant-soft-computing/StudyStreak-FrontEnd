@@ -64,14 +64,14 @@ const DASideBar = () => {
       link: "/admin-batch",
     },
     {
-      name: "Badges",
-      icon: <img src={badges} alt="Badges" />,
-      link: "/admin-badges",
-    },
-    {
       name: "Flash Card",
       icon: <img src={flashCard} alt="Flash Card" />,
       link: "/admin-flashCard",
+    },
+    {
+      name: "Badges",
+      icon: <img src={badges} alt="Badges" />,
+      link: "/admin-badges",
     },
     {
       name: "Gamification",

@@ -33,7 +33,6 @@ const ViewExam = () => {
         },
         8000
       );
-
       if (response.status === 200) {
         const filteredData = response.data.filter(filterFn);
         const dataWithNumbers = filteredData.map((item, index) => ({

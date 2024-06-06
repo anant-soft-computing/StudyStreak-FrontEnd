@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
+import Loading from "../../../UI/Loading";
 
 const initialFlashCardData = {
   course: "",
@@ -12,10 +13,26 @@ const initialFlashCardData = {
   flash_card_items: [{ front: "", back: "" }],
 };
 
-const initialSubmit = {
-  isError: false,
-  errMsg: null,
-  isSubmitting: false,
+const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
+
+const validateForm = (flashCardData, setFormError) => {
+  if (!flashCardData.course) {
+    setFormError("Course is Required");
+    return false;
+  }
+  if (!flashCardData.title) {
+    setFormError("Name is Required");
+    return false;
+  }
+  if (!flashCardData.description) {
+    setFormError("Description is Required");
+    return false;
+  }
+  if (!flashCardData.set_priority) {
+    setFormError("Proiority is Required");
+    return false;
+  }
+  return true;
 };
 
 const reducerFlashCard = (state, action) => {
@@ -28,38 +45,13 @@ const reducerFlashCard = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const CreateFlashCard = () => {
+const CreateFlashCard = ({ setActiveTab }) => {
   const [flashCardData, dispatchFlashCardData] = useReducer(
     reducerFlashCard,
     initialFlashCardData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
-
-  const validateForm = () => {
-    if (!flashCardData.course) {
-      setFormError("Course is Required");
-      return false;
-    }
-    if (!flashCardData.title) {
-      setFormError("Name is Required");
-      return false;
-    }
-    if (!flashCardData.description) {
-      setFormError("Description is Required");
-      return false;
-    }
-    if (!flashCardData.set_priority) {
-      setFormError("Proiority is Required");
-      return false;
-    }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
-    return true;
-  };
 
   const resetReducerForm = () => {
     dispatchFlashCardData({
@@ -68,11 +60,7 @@ const CreateFlashCard = () => {
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const addContent = () => {
@@ -94,7 +82,8 @@ const CreateFlashCard = () => {
 
   const createFlashCard = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(flashCardData, setFormError)) return;
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const response = await ajaxCall(
         "/gamification/flashcard/",
@@ -111,12 +100,19 @@ const CreateFlashCard = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        setActiveTab("View FlashCard");
         toast.success("Flash Card Created Successfully");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
 
@@ -255,23 +251,7 @@ const CreateFlashCard = () => {
                           className="dashboard__small__btn__2 flash-card__remove__btn"
                           onClick={() => removeContent(index)}
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-trash-2"
-                          >
-                            <polyline points="3 6 5 6 21 6"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                            <line x1="10" y1="11" x2="10" y2="17"></line>
-                            <line x1="14" y1="11" x2="14" y2="17"></line>
-                          </svg>
+                          <i className="icofont-ui-delete" />
                         </button>
                       )}
                     </div>
@@ -286,15 +266,23 @@ const CreateFlashCard = () => {
             </button>
           </div>
           <div className="col-xl-12">
-            <div className="dashboard__form__button">
+            <div className="dashboard__form__button text-center mt-4">
               {formStatus.isError ? (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               ) : (
                 <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
-              <button className="default__button" onClick={createFlashCard}>
-                Create Flash Card
-              </button>
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating FlashCard..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createFlashCard}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Flash Card
+                </button>
+              )}
             </div>
           </div>
         </div>

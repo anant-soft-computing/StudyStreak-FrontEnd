@@ -57,6 +57,21 @@ const PopulerArea = () => {
                       <Link to="/course-detail">Instant Result</Link>
                     </h3>
                   </div>
+                  <div className="service__small__img">
+                    <svg
+                      className="icon__hover__img"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M16.5961 10.265L19 1.33069L10.0022 3.73285L1 6.1306L7.59393 12.6627L14.1879 19.1992L16.5961 10.265Z"
+                        stroke="#FFB31F"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </div>
                 </div>
                 <div className="single__service">
                   <div className="service__img">

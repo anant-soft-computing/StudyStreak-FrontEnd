@@ -237,23 +237,7 @@ const ExamSpeaking = ({ category }) => {
                     className="dashboard__small__btn__2 flash-card__remove__btn"
                     onClick={() => removeQuestion(index)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="feather feather-trash-2"
-                    >
-                      <polyline points="3 6 5 6 21 6"></polyline>
-                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                      <line x1="10" y1="11" x2="10" y2="17"></line>
-                      <line x1="14" y1="11" x2="14" y2="17"></line>
-                    </svg>
+                    <i className="icofont-ui-delete" />
                   </button>
                 )}
               </div>
@@ -267,7 +251,7 @@ const ExamSpeaking = ({ category }) => {
               </button>
             </div>
           </div>
-          <div className="create__course__bottom__button text-center">
+          <div className="create__course__bottom__button text-center mt-4">
             {formStatus.isError && (
               <div className="text-danger mb-2">{formStatus.errMsg}</div>
             )}

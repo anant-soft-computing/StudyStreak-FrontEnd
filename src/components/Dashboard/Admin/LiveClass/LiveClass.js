@@ -41,7 +41,7 @@ const LiveClass = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreateLiveClass />
+                            <CreateLiveClass setActiveTab={setActiveTab} />
                           </div>
                         </div>
                         <div

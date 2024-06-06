@@ -27,7 +27,6 @@ const ViewPackages = () => {
           },
           8000
         );
-
         if (response?.status === 200) {
           const packageWithNumbers = response?.data?.map(
             (packageItem, index) => ({
@@ -38,10 +37,12 @@ const ViewPackages = () => {
           setIsLoading(false);
           setPackageList(packageWithNumbers);
         } else {
-          console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [authData?.accessToken]);

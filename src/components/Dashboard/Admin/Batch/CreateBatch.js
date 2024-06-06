@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
 import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import Loading from "../../../UI/Loading";
 
 const initialBatchData = {
   add_package: "",
@@ -13,74 +14,62 @@ const initialBatchData = {
   batch_end_timing: "",
 };
 
-const initialSubmit = {
-  isError: false,
-  errMsg: null,
-  isSubmitting: false,
-};
+const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
 
 const reducerBatch = (state, action) => {
-  if (action.type === "reset") {
-    return action.payload || initialBatchData;
+  switch (action.type) {
+    case "reset":
+      return action.payload || initialBatchData;
+    default:
+      return { ...state, [action.type]: action.value };
   }
-  return { ...state, [action.type]: action.value };
 };
 
-const CreateBatch = () => {
+const validateForm = (batchData, setFormError) => {
+  if (!batchData.add_package) {
+    setFormError("Package is Required");
+    return false;
+  }
+  if (!batchData.batch_name) {
+    setFormError("Batch Name is Required");
+    return false;
+  }
+  if (!batchData.batch_startdate) {
+    setFormError("Start Date is Required");
+    return false;
+  }
+  if (!batchData.batch_enddate) {
+    setFormError("End Date is Required");
+    return false;
+  }
+  if (!batchData.batch_start_timing) {
+    setFormError("Start Time is Required");
+    return false;
+  }
+  if (!batchData.batch_end_timing) {
+    setFormError("End Time is Required");
+    return false;
+  }
+  return true;
+};
+
+const CreateBatch = ({setActiveTab}) => {
   const [batchData, dispatchBatch] = useReducer(reducerBatch, initialBatchData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
 
-  const validateForm = () => {
-    if (!batchData.add_package) {
-      setFormError("Package is Required");
-      return false;
-    }
-    if (!batchData.batch_name) {
-      setFormError("Batch Name is Required");
-      return false;
-    }
-    if (!batchData.batch_startdate) {
-      setFormError("Start Date is Required");
-      return false;
-    }
-    if (!batchData.batch_enddate) {
-      setFormError("End Date is Required");
-      return false;
-    }
-    if (!batchData.batch_start_timing) {
-      setFormError("Start Time is Required");
-      return false;
-    }
-    if (!batchData.batch_end_timing) {
-      setFormError("End Time is Required");
-      return false;
-    }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
-    return true;
-  };
-
   const resetReducerForm = () => {
-    dispatchBatch({
-      type: "reset",
-    });
+    dispatchBatch({ type: "reset" });
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const createBatch = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(batchData, setFormError)) return;
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const response = await ajaxCall(
         "/create-batch/",
@@ -97,12 +86,19 @@ const CreateBatch = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        setActiveTab("View Batch");
         toast.success("Batch Created Successfully");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
 
@@ -215,15 +211,23 @@ const CreateBatch = () => {
             </div>
           </div>
           <div className="col-xl-12">
-            <div className="dashboard__form__button">
+            <div className="dashboard__form__button text-center mt-4">
               {formStatus.isError ? (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               ) : (
                 <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
-              <button className="default__button" onClick={createBatch}>
-                Create Batch
-              </button>
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Batch..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createBatch}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Batch
+                </button>
+              )}
             </div>
           </div>
         </div>

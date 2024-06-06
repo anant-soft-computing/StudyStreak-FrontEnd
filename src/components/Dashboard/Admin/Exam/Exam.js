@@ -116,17 +116,9 @@ const Exam = () => {
     const examType = location.pathname.split("/")[2];
     const examForm = location.pathname.split("/")[3];
     if (!examType && !examForm) {
-      setScreenContent({
-        exam: "Exam",
-        examType: "",
-        examForm: "",
-      });
+      setScreenContent({ exam: "Exam", examType: "", examForm: "" });
     } else if (examType && !examForm) {
-      setScreenContent({
-        exam: "Exam",
-        examType: examType,
-        examForm: "",
-      });
+      setScreenContent({ exam: "Exam", examType: examType, examForm: "" });
     } else if (examType && examForm) {
       setScreenContent({
         exam: "Exam",

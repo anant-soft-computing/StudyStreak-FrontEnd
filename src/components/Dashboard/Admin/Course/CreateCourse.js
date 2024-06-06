@@ -5,6 +5,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
 import SelectionBox from "../../../UI/SelectionBox";
 import Tab from "../../../UI/Tab";
+import Loading from "../../../UI/Loading";
 
 const initialCourseData = {
   Course_Title: "",
@@ -55,11 +56,7 @@ const reducerCreateCourse = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const initialSubmit = {
-  isError: false,
-  errMsg: null,
-  isSubmitting: false,
-};
+const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
 
 const tabs = [
   { name: "Course Details" },
@@ -69,7 +66,67 @@ const tabs = [
   { name: "Lessons" },
 ];
 
-const CreateCourse = () => {
+const validateForm = (createCourseData, setFormError) => {
+  if (!createCourseData.Course_Title) {
+    setFormError("Course Title is Required");
+    return false;
+  }
+  if (!createCourseData.Short_Description) {
+    setFormError("Short Description is Required");
+    return false;
+  }
+  if (!createCourseData.Description) {
+    setFormError("Description is Required");
+    return false;
+  }
+  if (!createCourseData.Category) {
+    setFormError("Category is Required");
+    return false;
+  }
+  if (!createCourseData.Level) {
+    setFormError("Level is Required");
+    return false;
+  }
+  if (!createCourseData.Language) {
+    setFormError("Language is Required");
+    return false;
+  }
+  if (!createCourseData.EnrollmentStartDate) {
+    setFormError("Enrollment Start Date is Required");
+    return false;
+  }
+  if (!createCourseData.EnrollmentEndDate) {
+    setFormError("Enrollment End Date is Required");
+    return false;
+  }
+  if (!createCourseData.primary_instructor) {
+    setFormError("Primary Instructor is Required");
+    return false;
+  }
+  if (!createCourseData.tutor) {
+    setFormError("Tutor is Required");
+    return false;
+  }
+  if (!createCourseData.max_enrollments) {
+    setFormError("Max Enrollments is Required");
+    return false;
+  }
+  if (!createCourseData.Course_Thumbnail) {
+    setFormError("Course Thumbnail is Required");
+    return false;
+  }
+  if (!createCourseData.SEO_Meta_Keywords) {
+    setFormError("SEO Meta Keywords URL is Required");
+    return false;
+  }
+  if (!createCourseData.Meta_Description) {
+    setFormError("Meta Description is Required");
+    return false;
+  }
+  return true;
+};
+
+const CreateCourse = ({ setMainTab }) => {
   const [createCourseData, dispatchCreateCourse] = useReducer(
     reducerCreateCourse,
     initialCourseData
@@ -89,84 +146,15 @@ const CreateCourse = () => {
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
-  };
-
-  const validateForm = () => {
-    if (!createCourseData.Course_Title) {
-      setFormError("Course Title is Required");
-      return false;
-    }
-    if (!createCourseData.Short_Description) {
-      setFormError("Short Description is Required");
-      return false;
-    }
-    if (!createCourseData.Description) {
-      setFormError("Description is Required");
-      return false;
-    }
-    if (!createCourseData.Category) {
-      setFormError("Category is Required");
-      return false;
-    }
-    if (!createCourseData.Level) {
-      setFormError("Level is Required");
-      return false;
-    }
-    if (!createCourseData.Language) {
-      setFormError("Language is Required");
-      return false;
-    }
-    if (!createCourseData.EnrollmentStartDate) {
-      setFormError("Enrollment Start Date is Required");
-      return false;
-    }
-    if (!createCourseData.EnrollmentEndDate) {
-      setFormError("Enrollment End Date is Required");
-      return false;
-    }
-    if (!createCourseData.primary_instructor) {
-      setFormError("Primary Instructor is Required");
-      return false;
-    }
-    if (!createCourseData.tutor) {
-      setFormError("Tutor is Required");
-      return false;
-    }
-    if (!createCourseData.max_enrollments) {
-      setFormError("Max Enrollments is Required");
-      return false;
-    }
-    if (!createCourseData.Course_Thumbnail) {
-      setFormError("Course Thumbnail is Required");
-      return false;
-    }
-    if (!createCourseData.SEO_Meta_Keywords) {
-      setFormError("SEO Meta Keywords URL is Required");
-      return false;
-    }
-    if (!createCourseData.Meta_Description) {
-      setFormError("Meta Description is Required");
-      return false;
-    }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
-    return true;
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const createCourse = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(createCourseData, setFormError)) return;
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const formData = new FormData();
-
       formData.append("Course_Title", createCourseData.Course_Title);
       formData.append("course_identifier", createCourseData.course_identifier);
       formData.append("Short_Description", createCourseData.Short_Description);
@@ -229,8 +217,9 @@ const CreateCourse = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        setMainTab("View Course");
         toast.success("Course Created Successfully");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
@@ -239,6 +228,8 @@ const CreateCourse = () => {
         errMsg: "Some Problem Occurred. Please try again.",
         isSubmitting: false,
       });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
 
@@ -774,15 +765,23 @@ const CreateCourse = () => {
                 />
               </div>
             </div>
-            <div className="create__course__bottom__button text-center mt-2">
+            <div className="create__course__bottom__button text-center mt-4">
               {formStatus.isError ? (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               ) : (
                 <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
-              <button className="default__button" onClick={createCourse}>
-                Create Course
-              </button>
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Course..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createCourse}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Course
+                </button>
+              )}
             </div>
           </div>
         </div>

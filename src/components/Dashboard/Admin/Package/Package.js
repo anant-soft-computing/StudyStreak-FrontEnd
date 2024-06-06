@@ -4,7 +4,7 @@ import CreatePackage from "./CreatePackage";
 import ViewPackages from "./ViewPackages";
 
 const Package = () => {
-  const [activeTab, setActiveTab] = useState("viewPackage");
+  const [activeTab, setActiveTab] = useState("View Package");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -33,9 +33,9 @@ const Package = () => {
                           <li className="nav-item" role="presentation">
                             <button
                               className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "viewPackage" ? "active" : ""
+                                activeTab === "View Package" ? "active" : ""
                               }`}
-                              onClick={() => handleTabChange("viewPackage")}
+                              onClick={() => handleTabChange("View Package")}
                             >
                               View Package
                             </button>
@@ -59,12 +59,12 @@ const Package = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreatePackage />
+                            <CreatePackage setMainTab={setActiveTab} />
                           </div>
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "viewPackage" ? "show active" : ""
+                            activeTab === "View Package" ? "show active" : ""
                           }`}
                         >
                           <div className="row">

@@ -4,6 +4,7 @@ import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 import Tab from "../../../UI/Tab";
+import Loading from "../../../UI/Loading";
 
 const initialPackageData = {
   package_name: "",
@@ -30,11 +31,7 @@ const initialPackageData = {
   one_to_one_doubt_solving_count: 0,
 };
 
-const initialSubmit = {
-  isError: false,
-  errMsg: null,
-  isSubmitting: false,
-};
+const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
 
 const reducerCreatePackage = (state, action) => {
   if (action.type === "reset") {
@@ -51,7 +48,45 @@ const tabs = [
   { name: "Doubt Solving" },
 ];
 
-const CreatePackage = () => {
+const validateForm = (createPackageData, setFormError) => {
+  if (!createPackageData.PackageType) {
+    setFormError("Package Type is Required");
+    return false;
+  }
+  if (!createPackageData.select_course) {
+    setFormError("Course is Required");
+    return false;
+  }
+  if (!createPackageData.coupon_code) {
+    setFormError("Coupon code is Required");
+    return false;
+  }
+  if (!createPackageData.full_length_test_count) {
+    setFormError("Full length test count is Required");
+    return false;
+  }
+  if (!createPackageData.practice_test_count) {
+    setFormError("Practice test count is Required");
+    return false;
+  }
+  if (!createPackageData.speaking_test_count) {
+    setFormError("Speaking test count is Required");
+    return false;
+  }
+
+  if (!createPackageData.group_doubt_solving_count) {
+    setFormError("Group doubt solving count is Required");
+    return false;
+  }
+
+  if (!createPackageData.one_to_one_doubt_solving_count) {
+    setFormError("One to one doubt solving count is Required");
+    return false;
+  }
+  return true;
+};
+
+const CreatePackage = ({ setMainTab }) => {
   const [createPackageData, dispatchCreatePackage] = useReducer(
     reducerCreatePackage,
     initialPackageData
@@ -64,70 +99,19 @@ const CreatePackage = () => {
     setActiveTab(tab);
   };
 
-  const validateForm = () => {
-    if (!createPackageData.PackageType) {
-      setFormError("Package Type is Required");
-      return false;
-    }
-    if (!createPackageData.select_course) {
-      setFormError("Course is Required");
-      return false;
-    }
-    if (!createPackageData.coupon_code) {
-      setFormError("Coupon code is Required");
-      return false;
-    }
-    if (!createPackageData.full_length_test_count) {
-      setFormError("Full length test count is Required");
-      return false;
-    }
-    if (!createPackageData.practice_test_count) {
-      setFormError("Practice test count is Required");
-      return false;
-    }
-    if (!createPackageData.speaking_test_count) {
-      setFormError("Speaking test count is Required");
-      return false;
-    }
-
-    if (!createPackageData.group_doubt_solving_count) {
-      setFormError("Group doubt solving count is Required");
-      return false;
-    }
-
-    if (!createPackageData.one_to_one_doubt_solving_count) {
-      setFormError("One to one doubt solving count is Required");
-      return false;
-    }
-
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
-    return true;
-  };
-
   const resetReducerForm = () => {
     dispatchCreatePackage({ type: "reset" });
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const createPackage = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(createPackageData, setFormError)) return;
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const response = await ajaxCall(
         "/packagecreateview/",
@@ -144,12 +128,19 @@ const CreatePackage = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        setMainTab("View Package");
         toast.success("Package Created Successfully");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
 
@@ -555,15 +546,23 @@ const CreatePackage = () => {
               </div>
             </div>
           </div>
-          <div className="create__course__bottom__button text-center">
+          <div className="create__course__bottom__button text-center mt-4">
             {formStatus.isError ? (
               <div className="text-danger mb-2">{formStatus.errMsg}</div>
             ) : (
               <div className="text-success mb-2">{formStatus.errMsg}</div>
             )}
-            <button className="default__button" onClick={createPackage}>
-              Create Package
-            </button>
+            {formStatus.isSubmitting ? (
+              <Loading color="primary" text="Creating Package..." />
+            ) : (
+              <button
+                className="default__button"
+                onClick={createPackage}
+                disabled={formStatus.isSubmitting}
+              >
+                Create Package
+              </button>
+            )}
           </div>
         </div>
       </div>

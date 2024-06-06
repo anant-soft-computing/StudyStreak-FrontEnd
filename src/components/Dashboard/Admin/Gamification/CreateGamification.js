@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
+import Loading from "../../../UI/Loading";
 
 const initialGamificationData = {
   model: "Flash Card",
@@ -10,11 +11,7 @@ const initialGamificationData = {
   points: 0,
 };
 
-const initialSubmit = {
-  isError: false,
-  errMsg: null,
-  isSubmitting: false,
-};
+const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
 
 const reducerGamification = (state, action) => {
   if (action.type === "reset") {
@@ -33,7 +30,19 @@ const options = [
   "Live Class",
 ];
 
-const CreateGamification = () => {
+const validateForm = (gamificationData, setFormError) => {
+  if (!gamificationData.model) {
+    setFormError("Content Type is Required");
+    return false;
+  }
+  if (!gamificationData.points) {
+    setFormError("Points is Required");
+    return false;
+  }
+  return true;
+};
+
+const CreateGamification = ({setActiveTab}) => {
   const [gamificationData, dispatchGamification] = useReducer(
     reducerGamification,
     initialGamificationData
@@ -41,34 +50,18 @@ const CreateGamification = () => {
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
 
-  const validateForm = () => {
-    if (!gamificationData.model) {
-      setFormError("Content Type is Required");
-      return false;
-    }
-    if (!gamificationData.points) {
-      setFormError("Points is Required");
-      return false;
-    }
-    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
-    return true;
-  };
-
   const resetReducerForm = () => {
     dispatchGamification({ type: "reset" });
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const createGamification = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm(gamificationData, setFormError)) return;
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const response = await ajaxCall(
         "/gamification/",
@@ -85,12 +78,19 @@ const CreateGamification = () => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        setActiveTab("View Gamification");
         toast.success("Gamification Created Successfully");
-      } else if (response.status === 400 || response.status === 404) {
+      } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      setFormStatus({
+        isError: true,
+        errMsg: "Some Problem Occurred. Please try again.",
+        isSubmitting: false,
+      });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
   return (
@@ -158,15 +158,23 @@ const CreateGamification = () => {
             </div>
           </div>
           <div className="col-xl-12 text-center">
-            <div className="dashboard__form__button">
+            <div className="dashboard__form__button text-center mt-4">
               {formStatus.isError ? (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               ) : (
                 <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
-              <button className="default__button" onClick={createGamification}>
-                Create Gamification
-              </button>
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Gamification..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createGamification}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Gamification
+                </button>
+              )}
             </div>
           </div>
         </div>

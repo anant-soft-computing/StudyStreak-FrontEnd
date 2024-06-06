@@ -39,7 +39,7 @@ const Batch = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreateBatch />
+                            <CreateBatch setActiveTab={setActiveTab} />
                           </div>
                         </div>
                         <div

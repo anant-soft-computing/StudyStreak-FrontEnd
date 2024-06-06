@@ -317,7 +317,7 @@ const PT = ({ type }) => {
       <div className="dashboard__form__wraper">
         <div className="dashboard__form__input">
           {isLoading ? (
-            <Loading text="...Loading" color="primary" />
+            <Loading text="Loading..." color="primary" />
           ) : exams[type]?.length > 0 ? (
             <div className="ag-theme-quartz">
               <AgGridReact

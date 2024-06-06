@@ -6,7 +6,7 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
 const specificColumns = {
-  FlashCard: [
+  "Flash Card": [
     { headerName: "No.", field: "no", resizable: false, width: 110 },
     { headerName: "Name", field: "title", filter: true },
     { headerName: "Description", field: "description", filter: true },
@@ -75,7 +75,7 @@ const specificColumns = {
       filter: true,
     },
   ],
-  Exam: [
+  "Exam Block": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
     { headerName: "Exam Name", field: "exam_name", filter: true },
     { headerName: "Exam Type", field: "exam_type", filter: true },
@@ -84,7 +84,7 @@ const specificColumns = {
     { headerName: "Difficulty Level", field: "difficulty_level", filter: true },
     { headerName: "Block Threshold", field: "block_threshold", filter: true },
   ],
-  FullLengthTest: [
+  "Full Length Test": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
     { headerName: "Exam Name", field: "name", filter: true },
     { headerName: "Exam Level", field: "difficulty_level", filter: true },
@@ -109,7 +109,7 @@ const specificColumns = {
       filter: true,
     },
   ],
-  module: [
+  "Practice Test": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
     { headerName: "Exam Name", field: "Name", filter: true },
     { headerName: "Difficulty Level", field: "difficulty_level", filter: true },
@@ -118,7 +118,7 @@ const specificColumns = {
     { headerName: "Listening Set", field: "Listening.length", filter: true },
     { headerName: "Speaking Set", field: "Speaking.length", filter: true },
   ],
-  Live_Class: [
+  "Live Class": [
     { headerName: "Meeting Title", field: "meeting_title" },
     {
       headerName: "Start Date",
@@ -190,13 +190,13 @@ const ViewGamification = ({ content }) => {
 
   useEffect(() => {
     const endpoints = {
-      FlashCard: `/gamification/flashcard/`,
+      "Flash Card": `/gamification/flashcard/`,
       Lesson: `/lessonview/`,
       Course: `/courselistview/`,
-      Exam: `/exam-blocks/`,
-      FullLengthTest: `/get/flt/`,
-      module: `/moduleListView/`,
-      Live_Class: `/liveclass_list_view/`,
+      "Exam Block": `/exam-blocks/`,
+      "Full Length Test": `/get/flt/`,
+      "Practice Test": `/moduleListView/`,
+      "Live Class": `/liveclass_list_view/`,
     };
 
     if (content && endpoints[content]) {
@@ -206,7 +206,7 @@ const ViewGamification = ({ content }) => {
 
   const filteredDataList = () => {
     switch (content) {
-      case "FlashCard":
+      case "Flash Card":
         return dataList
           .filter((item) =>
             gamificationList.some(
@@ -230,7 +230,7 @@ const ViewGamification = ({ content }) => {
             )
           )
           .map((item, index) => ({ ...item, no: index + 1 }));
-      case "Exam":
+      case "Exam Block":
         return dataList
           .filter((item) =>
             gamificationList.some(
@@ -240,7 +240,7 @@ const ViewGamification = ({ content }) => {
             )
           )
           .map((item, index) => ({ ...item, no: index + 1 }));
-      case "FullLengthTest":
+      case "Full Length Test":
         return dataList
           .filter((item) =>
             gamificationList.some(
@@ -248,7 +248,7 @@ const ViewGamification = ({ content }) => {
             )
           )
           .map((item, index) => ({ ...item, no: index + 1 }));
-      case "module":
+      case "Practice Test":
         return dataList
           .filter((item) =>
             gamificationList.some(
@@ -256,7 +256,7 @@ const ViewGamification = ({ content }) => {
             )
           )
           .map((item, index) => ({ ...item, no: index + 1 }));
-      case "Live_Class":
+      case "Live Class":
         return dataList
           .filter((item) =>
             gamificationList.some(
@@ -265,9 +265,7 @@ const ViewGamification = ({ content }) => {
           )
           .map((item, index) => ({ ...item, no: index + 1 }));
       default:
-        return gamificationList
-          .filter((item) => item.model === content)
-          .map((item, index) => ({ ...item, no: index + 1 }));
+        return [];
     }
   };
 

@@ -243,7 +243,7 @@ const FLT = () => {
             <div className="dashboard__form__input">
               <label>(1) Reading : </label>
               {isLoading ? (
-                <Loading text="...Loading" color="primary" />
+                <Loading text="Loading..." color="primary" />
               ) : exams.Reading?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
@@ -265,7 +265,7 @@ const FLT = () => {
             <div className="dashboard__form__input">
               <label>(2) Writing : </label>
               {isLoading ? (
-                <Loading text="...Loading" color="primary" />
+                <Loading text="Loading..." color="primary" />
               ) : exams.Writing?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
@@ -287,7 +287,7 @@ const FLT = () => {
             <div className="dashboard__form__input">
               <label>(3) Listening : </label>
               {isLoading ? (
-                <Loading text="...Loading" color="primary" />
+                <Loading text="Loading..." color="primary" />
               ) : exams.Listening?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
@@ -309,7 +309,7 @@ const FLT = () => {
             <div className="dashboard__form__input">
               <label>(4) Speaking : </label>
               {isLoading ? (
-                <Loading text="...Loading" color="primary" />
+                <Loading text="Loading..." color="primary" />
               ) : exams.Speaking?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact

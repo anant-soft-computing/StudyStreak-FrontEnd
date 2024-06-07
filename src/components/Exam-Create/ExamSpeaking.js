@@ -26,7 +26,6 @@ const reducerSpeaking = (state, action) => {
 const tabs = [{ name: "Details" }, { name: "Question" }];
 
 const ExamSpeaking = ({ category }) => {
-  console.log("-----category------->", category);
   const [SpeakingData, dispatchSpeakingData] = useReducer(
     reducerSpeaking,
     initialSpeakingField

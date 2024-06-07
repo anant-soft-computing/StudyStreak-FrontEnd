@@ -108,16 +108,6 @@ const ViewExam = () => {
                 return params.data?.block_type || "Mock Test";
               },
             },
-            {
-              headerName: "Difficulty Level",
-              field: "difficulty_level",
-              filter: true,
-            },
-            {
-              headerName: "Block Threshold",
-              field: "block_threshold",
-              filter: true,
-            },
           ]}
         />
       ) : (
@@ -138,11 +128,6 @@ const ViewExam = () => {
               columnDefs={[
                 { headerName: "No.", field: "no", resizable: false, width: 68 },
                 { headerName: "Exam Name", field: "Name", filter: true },
-                {
-                  headerName: "Difficulty Level",
-                  field: "difficulty_level",
-                  filter: true,
-                },
                 {
                   headerName: "Reading Set",
                   field: "Reading.length",
@@ -185,11 +170,6 @@ const ViewExam = () => {
               columnDefs={[
                 { headerName: "No.", field: "no", resizable: false, width: 68 },
                 { headerName: "Exam Name", field: "name", filter: true },
-                {
-                  headerName: "Exam Level",
-                  field: "difficulty_level",
-                  filter: true,
-                },
                 {
                   headerName: "Reading Set",
                   field: "reading_set.Reading.length",

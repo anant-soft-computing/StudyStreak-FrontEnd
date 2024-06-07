@@ -54,17 +54,6 @@ const RegularClass = ({ selectedDateRange }) => {
     })();
   }, []);
 
-  const joinNow = (zoom_meeting) => {
-    window.open(zoom_meeting, "__blank");
-  };
-
-  const isWithin5Minutes = (startTime) => {
-    const currentTime = moment();
-    const classStartTime = moment(startTime);
-    const difference = classStartTime.diff(currentTime, "milliseconds");
-    return difference >= 0 && difference <= 5 * 60 * 1000;
-  };
-
   const regularClasses = () => {
     return regularClass.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
@@ -95,8 +84,6 @@ const RegularClass = ({ selectedDateRange }) => {
                 <RegularClassList
                   isLoading={isLoading}
                   regularClass={regularClasses()}
-                  joinNow={joinNow}
-                  isWithin5Minutes={isWithin5Minutes}
                 />
               </div>
             </div>

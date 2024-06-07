@@ -326,7 +326,7 @@ const PT = ({ type }) => {
               />
             </div>
           ) : (
-            <h5 className="text-center text-danger">{`No ${type} Exams Avaiable For Diffulty Level : ${createPT.difficulty_level} !!`}</h5>
+            <h5 className="text-center text-danger">{`No ${type} Exams Avaiable !!`}</h5>
           )}
         </div>
       </div>

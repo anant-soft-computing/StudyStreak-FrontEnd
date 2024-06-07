@@ -67,11 +67,6 @@ const FullLengthTest = () => {
       filter: true,
     },
     {
-      headerName: "Difficulty Level",
-      field: "difficulty_level",
-      filter: true,
-    },
-    {
       headerName: "Reading Set",
       field: "reading_set.Reading.length",
       filter: true,

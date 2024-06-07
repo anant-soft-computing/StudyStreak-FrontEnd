@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import BandScoreCard from "./BandScoreCard";
 import AnswerCard from "./AnswerCard";
@@ -16,8 +16,6 @@ const Answer = () => {
   const [examType, setExamType] = useState("");
   const [gptResponse, setGPTResponse] = useState("");
   const [band, setBand] = useState(0);
-
-  const { timeTaken } = useLocation()?.state || {};
 
   useEffect(() => {
     (async () => {
@@ -102,7 +100,6 @@ const Answer = () => {
                   <h4 className="sidebar__title">Solution For: {examName}</h4>
                   <AnswerCard
                     totalQuestions={correctAnswer.length}
-                    timeTaken={timeTaken}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}
                     bandValue={band}

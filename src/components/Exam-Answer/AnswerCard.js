@@ -2,7 +2,6 @@ import React from "react";
 
 const AnswerCard = ({
   totalQuestions,
-  timeTaken,
   correctCount,
   incorrectCount,
   bandValue,
@@ -18,23 +17,14 @@ const AnswerCard = ({
             </div>
           </li>
         )}
-        {timeTaken ? (
-          <li className="text-dark">
-            Time Taken :
-            <div className="scc__meta">
-              <strong className="answerCount">{timeTaken}</strong>
-            </div>
-          </li>
-        ) : (
-          <li className="text-dark">
-            Band Score :
-            <div className="scc__meta">
-              <strong className="answerCount">
-                {bandValue === null ? 0 : bandValue}
-              </strong>
-            </div>
-          </li>
-        )}
+        <li className="text-dark">
+          Band Score :
+          <div className="scc__meta">
+            <strong className="answerCount">
+              {bandValue === null ? 0 : bandValue}
+            </strong>
+          </div>
+        </li>
       </ul>
       <ul className="answerContent">
         <li className="text-dark">
@@ -49,16 +39,6 @@ const AnswerCard = ({
             <strong className="answerCount">{incorrectCount}</strong>
           </div>
         </li>
-        {timeTaken && (
-          <li className="text-dark">
-            Band Score :
-            <div className="scc__meta">
-              <strong className="answerCount">
-                {bandValue === null ? 0 : bandValue}
-              </strong>
-            </div>
-          </li>
-        )}
       </ul>
     </div>
   );

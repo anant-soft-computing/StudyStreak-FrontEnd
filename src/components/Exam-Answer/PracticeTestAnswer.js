@@ -5,13 +5,15 @@ import BandScoreCard from "./BandScoreCard";
 import AnswerCard from "./AnswerCard";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
+import readingBandValues from "../../utils/bandValues/ReadingBandValues";
+import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 
 const PracticeTestAnswer = () => {
   const [examName, setExamName] = useState("");
+  const [band, setBand] = useState(0);
   const [studentAnswer, setStudentAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
-  const { timeTaken, bandValue, examForm, fullPaper } =
-    useLocation()?.state || {};
+  const { bandValue, examForm, fullPaper } = useLocation()?.state || {};
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
 
@@ -77,6 +79,11 @@ const PracticeTestAnswer = () => {
               incorrect++;
             }
           });
+          if (examForm === "Reading") {
+            setBand(readingBandValues[correct * 3]);
+          } else if (examForm === "Listening") {
+            setBand(listeningBandValues[correct * 4]);
+          }
           setCorrectCount(correct);
           setIncorrectCount(incorrect);
         } else {
@@ -99,10 +106,9 @@ const PracticeTestAnswer = () => {
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
                   <AnswerCard
                     totalQuestions={correctAnswers.length}
-                    timeTaken={timeTaken}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}
-                    bandValue={bandValue}
+                    bandValue={bandValue || band}
                   />
                   <div style={{ marginTop: "50px" }}>
                     <div className="dashboard__section__title">

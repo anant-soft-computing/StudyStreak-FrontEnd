@@ -125,17 +125,6 @@ const DoubtSolving = ({ selectedDateRange }) => {
     })();
   }, []);
 
-  const joinNow = (zoom_meeting) => {
-    window.open(zoom_meeting, "__blank");
-  };
-
-  const isWithin5Minutes = (startTime) => {
-    const currentTime = moment();
-    const classStartTime = moment(startTime);
-    const difference = classStartTime.diff(currentTime, "milliseconds");
-    return difference >= 0 && difference <= 5 * 60 * 1000;
-  };
-
   const doubtSolvingClasses = () => {
     return doubtSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
@@ -175,9 +164,7 @@ const DoubtSolving = ({ selectedDateRange }) => {
             >
               <div className="row">
                 <UpcomingClass
-                  joinNow={joinNow}
                   isLoading={isLoading}
-                  isWithin5Minutes={isWithin5Minutes}
                   classes={oneToOneDoubtSolvingClasses}
                   message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
                 />

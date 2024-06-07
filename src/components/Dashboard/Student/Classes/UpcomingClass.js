@@ -1,19 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const UpcomingClass = ({
-  isLoading,
-  joinNow,
-  isWithin5Minutes,
-  classes,
-  message,
-}) => {
+const UpcomingClass = ({ isLoading, classes, message }) => {
+  const [currentTime, setCurrentTime] = useState(moment());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(moment());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const joinNow = (zoom_meeting) => {
+    window.open(zoom_meeting, "__blank");
+  };
+
+
   const handleJoinNow = (params) => {
     const { zoom_meeting_id, start_time, id } = params.data;
+    const now = currentTime;
+    const todayDate = now.format("YYYY-MM-DD");
+    const classStartTime = moment(
+      `${todayDate} ${start_time}`,
+      "YYYY-MM-DD hh:mm A"
+    );
+    const timeDifference = classStartTime.diff(now, "minutes");
+    const isButtonEnabled = timeDifference <= 5 && timeDifference >= 0;
+
     return (
       <button
         className="take-test"
@@ -21,7 +38,7 @@ const UpcomingClass = ({
           joinNow(zoom_meeting_id);
           gamificationSubmit(id);
         }}
-        disabled={!isWithin5Minutes(start_time)}
+        disabled={!isButtonEnabled}
       >
         Join Now
       </button>
@@ -66,12 +83,12 @@ const UpcomingClass = ({
       headerName: "Join Now",
       cellRenderer: handleJoinNow,
     },
-    { headerName: "Date", field: "date" },
-    { headerName: "Time", field: "time" },
     { headerName: "Meeting Title", field: "meeting_title" },
-    { headerName: "Batch Name", field: "batch_name" },
     { headerName: "Description", field: "meeting_description" },
     { headerName: "Start Time", field: "start_time" },
+    { headerName: "Date", field: "date" },
+    { headerName: "Time", field: "time" },
+    { headerName: "Batch Name", field: "batch_name" },
     {
       headerName: "Status",
       field: "status",

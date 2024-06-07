@@ -182,11 +182,6 @@ const FLT = () => {
         width: 200,
       },
       { headerName: "Exam Name", field: "Name", filter: true },
-      {
-        headerName: "Difficulty Level",
-        field: "difficulty_level",
-        filter: true,
-      },
       type === "Reading" && {
         headerName: "Reading Set",
         field: "Reading.length",
@@ -256,7 +251,7 @@ const FLT = () => {
                 </div>
               ) : (
                 <h5 className="text-center text-danger">
-                  {`No Reading Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                  No Reading Exam Available !!
                 </h5>
               )}
             </div>
@@ -278,7 +273,7 @@ const FLT = () => {
                 </div>
               ) : (
                 <h5 className="text-center text-danger">
-                  {`No Writing Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                  No Writing Exam Available !!
                 </h5>
               )}
             </div>
@@ -300,7 +295,7 @@ const FLT = () => {
                 </div>
               ) : (
                 <h5 className="text-center text-danger">
-                  {`No Listening Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                  No Listening Exam Available !!
                 </h5>
               )}
             </div>
@@ -322,7 +317,7 @@ const FLT = () => {
                 </div>
               ) : (
                 <h5 className="text-center text-danger">
-                  {`No Speaking Exam Available For Difficulty Level : ${createFLT.difficulty_level} !!`}
+                  No Speaking Exam Available !!
                 </h5>
               )}
             </div>

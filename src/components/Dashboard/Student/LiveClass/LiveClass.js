@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import moment from "moment";
 import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import LiveClassList from "./LiveClassList";
 import DateRange from "../../../UI/DateRangePicker";
 import RegularClass from "../RegularClass/RegularClass";
 import SpeakingPractice from "../SpeakingPractice/SpeakingPractice";
@@ -10,8 +8,8 @@ import GroupDoubtSolving from "../GroupDoubtSolving/GroupDoubtSolving";
 import DoubtSolving from "../1To1DoubtSolving/DoubtSolving";
 
 const LiveClass = () => {
-  const { solvingClassBook, count } = useLocation()?.state || {};
-  const [activeTab, setActiveTab] = useState("Live");
+  const { count } = useLocation()?.state || {};
+  const [activeTab, setActiveTab] = useState("Regular");
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -24,30 +22,8 @@ const LiveClass = () => {
     setActiveTab(tab);
   };
 
-  const liveClasses = () => {
-    return solvingClassBook?.filter(({ start_time }) => {
-      const classDate = moment(start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange?.[0] || {};
-      return (
-        (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
-        (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
-      );
-    });
-  };
-
   const handleDateRangeChange = (ranges) => {
     setSelectedDateRange(ranges.selection);
-  };
-
-  const joinNow = (zoom_meeting) => {
-    window.open(zoom_meeting, "__blank");
-  };
-
-  const isWithin5Minutes = (startTime) => {
-    const currentTime = moment();
-    const classStartTime = moment(startTime);
-    const difference = classStartTime.diff(currentTime, "milliseconds");
-    return difference >= 0 && difference <= 5 * 60 * 1000;
   };
 
   return (
@@ -76,7 +52,6 @@ const LiveClass = () => {
                                 value={activeTab}
                               >
                                 {[
-                                  "Live",
                                   "Regular",
                                   "Speaking Practice",
                                   "Group Dobut",
@@ -102,19 +77,6 @@ const LiveClass = () => {
                       </div>
                       <div className="row">
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Live" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <LiveClassList
-                                liveClasses={liveClasses()}
-                                joinNow={joinNow}
-                                isWithin5Minutes={isWithin5Minutes}
-                              />
-                            </div>
-                          </div>
                           <div
                             className={`tab-pane fade ${
                               activeTab === "Regular" ? "show active" : ""

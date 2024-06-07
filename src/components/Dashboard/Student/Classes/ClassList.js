@@ -22,12 +22,12 @@ const ClassList = ({ classes, bookCount, isLoading, message }) => {
       headerName: "Book Slot",
       cellRenderer: handleBook,
     },
-    { headerName: "Date", field: "date" },
-    { headerName: "Time", field: "time" },
     { headerName: "Meeting Title", field: "title" },
-    { headerName: "Batch Name", field: "batchName" },
     { headerName: "Description", field: "description" },
     { headerName: "Starting Time", field: "startingTime" },
+    { headerName: "Date", field: "date" },
+    { headerName: "Time", field: "time" },
+    { headerName: "Batch Name", field: "batchName" },
   ];
 
   const rowData = classes.map(

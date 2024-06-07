@@ -148,29 +148,33 @@ const Exam = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Exam</h4>
-                      <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                          {screenContent.exam && (
-                            <li className="breadcrumb-item">
-                              <Link to="/admin-exam">{screenContent.exam}</Link>
-                            </li>
-                          )}
-                          {screenContent.examType && (
-                            <li className="breadcrumb-item">
-                              <Link
-                                to={`/admin-exam/${screenContent.examType}`}
-                              >
-                                {screenContent.examType}
-                              </Link>
-                            </li>
-                          )}
-                          {screenContent.examForm && (
-                            <li className="breadcrumb-item">
-                              {screenContent.examForm}
-                            </li>
-                          )}
-                        </ol>
-                      </nav>
+                      {activeTab !== "Create FLT" && (
+                        <nav aria-label="breadcrumb">
+                          <ol className="breadcrumb">
+                            {screenContent.exam && (
+                              <li className="breadcrumb-item">
+                                <Link to="/admin-exam">
+                                  {screenContent.exam}
+                                </Link>
+                              </li>
+                            )}
+                            {screenContent.examType && (
+                              <li className="breadcrumb-item">
+                                <Link
+                                  to={`/admin-exam/${screenContent.examType}`}
+                                >
+                                  {screenContent.examType}
+                                </Link>
+                              </li>
+                            )}
+                            {screenContent.examForm && (
+                              <li className="breadcrumb-item">
+                                {screenContent.examForm}
+                              </li>
+                            )}
+                          </ol>
+                        </nav>
+                      )}
                     </div>
                     <div className="row">
                       <Tab

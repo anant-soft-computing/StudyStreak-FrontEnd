@@ -49,6 +49,9 @@ const LeaderBoard = ({ batchId }) => {
             },
             8000
           );
+          if (response.data.message === "No Students are available") {
+            continue;
+          }
           const students = response.data.students.map((student) => ({
             ...student,
             no: ++totalCount,

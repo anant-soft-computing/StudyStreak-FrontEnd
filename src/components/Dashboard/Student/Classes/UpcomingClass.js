@@ -15,13 +15,13 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const joinNow = (zoom_meeting) => {
-    window.open(zoom_meeting, "__blank");
+  const joinNow = (url) => {
+    window.open(url, "__blank");
   };
 
 
   const handleJoinNow = (params) => {
-    const { zoom_meeting_id, start_time, id } = params.data;
+    const { join_url, start_time, id } = params.data;
     const now = currentTime;
     const todayDate = now.format("YYYY-MM-DD");
     const classStartTime = moment(
@@ -35,10 +35,11 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       <button
         className="take-test"
         onClick={() => {
-          joinNow(zoom_meeting_id);
+          joinNow(join_url);
           gamificationSubmit(id);
         }}
         disabled={!isButtonEnabled}
+        style={{ opacity: isButtonEnabled ? 1 : 0.5 }}
       >
         Join Now
       </button>
@@ -103,7 +104,7 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       end_time,
       meeting_title,
       meeting_description,
-      zoom_meeting_id,
+      join_url,
       select_batch,
     }) => ({
       id,
@@ -114,7 +115,7 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       meeting_title,
       batch_name: select_batch?.batch_name,
       meeting_description,
-      zoom_meeting_id,
+      join_url,
       start_time: moment(start_time).format("hh:mm A"),
     })
   );

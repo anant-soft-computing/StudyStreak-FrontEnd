@@ -14,8 +14,8 @@ const Dashboard = () => {
     batchIds?.includes(item?.id)
   );
 
-  const joinNow = (zoom_meeting) => {
-    window.open(zoom_meeting, "__blank");
+  const joinNow = (url) => {
+    window.open(url, "__blank");
   };
 
   const isWithin5Minutes = (startTime) => {
@@ -140,12 +140,12 @@ const Dashboard = () => {
                               </p>
                             </div>
                           )}
-                          {latestLiveClass?.[0]?.zoom_meeting_id && (
+                          {latestLiveClass?.[0]?.join_url && (
                             <div className="d-flex justify-content-center">
                               <button
                                 className="default__button mb-2"
                                 onClick={() =>
-                                  joinNow(latestLiveClass?.[0]?.zoom_meeting_id)
+                                  joinNow(latestLiveClass?.[0]?.join_url)
                                 }
                                 disabled={
                                   !isWithin5Minutes(

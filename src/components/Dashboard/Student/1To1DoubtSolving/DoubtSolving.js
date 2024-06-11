@@ -7,6 +7,7 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
+import RecorededClass from "../Classes/RecorededClass";
 
 const tabs = [
   { name: "Upcoming" },
@@ -17,6 +18,7 @@ const tabs = [
 const DoubtSolving = ({ selectedDateRange }) => {
   const navigate = useNavigate();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const [uuid, setUuid] = useState([]);
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +94,7 @@ const DoubtSolving = ({ selectedDateRange }) => {
     (async () => {
       try {
         const oToclass = [];
+        const uuidData = [];
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
@@ -113,11 +116,14 @@ const DoubtSolving = ({ selectedDateRange }) => {
             const oToclassData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
             );
+            const id = response?.data.map((item) => item?.other_fields?.id);
+            uuidData.push(...id);
             oToclass.push(...oToclassData);
           } else {
             console.log("error");
           }
         }
+        setUuid(uuidData);
         setDoubtSolvingClass(oToclass);
       } catch (error) {
         console.log("error", error);
@@ -190,7 +196,10 @@ const DoubtSolving = ({ selectedDateRange }) => {
               }`}
             >
               <div className="row">
-                <h5 className="text-center text-danger">Comming Soon....</h5>
+                <RecorededClass
+                  uuid={uuid}
+                  classes={oneToOneDoubtSolvingClasses}
+                />
               </div>
             </div>
           </div>

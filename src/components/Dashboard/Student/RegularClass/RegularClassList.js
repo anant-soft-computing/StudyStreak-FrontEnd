@@ -6,21 +6,22 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const RegularClassList = ({ isLoading, regularClass }) => {
+  
   const [currentTime, setCurrentTime] = useState(moment());
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(moment());
-    }, 60000); 
+    }, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  const joinNow = (zoom_meeting) => {
-    window.open(zoom_meeting, "__blank");
+  const joinNow = (url) => {
+    window.open(url, "__blank");
   };
 
   const handleJoinNow = (params) => {
-    const { zoom_meeting_id, start_time, id } = params.data;
+    const { join_url, start_time, id } = params.data;
     const now = currentTime;
     const todayDate = now.format("YYYY-MM-DD");
     const classStartTime = moment(
@@ -34,10 +35,11 @@ const RegularClassList = ({ isLoading, regularClass }) => {
       <button
         className="take-test"
         onClick={() => {
-          joinNow(zoom_meeting_id);
+          joinNow(join_url);
           gamificationSubmit(id);
         }}
         disabled={!isButtonEnabled}
+        style={{ opacity: isButtonEnabled ? 1 : 0.5 }}
       >
         Join Now
       </button>

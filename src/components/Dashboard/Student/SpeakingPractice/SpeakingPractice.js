@@ -7,6 +7,7 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
+import RecorededClass from "../Classes/RecorededClass";
 
 const tabs = [
   { name: "Upcoming" },
@@ -17,6 +18,7 @@ const tabs = [
 const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
   const navigate = useNavigate();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const [uuid, setUuid] = useState([]);
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,9 +41,8 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
           },
           method: "POST",
           body: data,
@@ -67,9 +68,8 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
           },
           method: "POST",
         },
@@ -92,6 +92,7 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
     (async () => {
       try {
         const speakingClass = [];
+        const uuidData = [];
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
@@ -100,9 +101,8 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
               },
               method: "GET",
             },
@@ -113,11 +113,14 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
             const speakingData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Speaking-Practice"
             );
+            const id = response?.data.map((item) => item?.other_fields?.id);
+            uuidData.push(...id);
             speakingClass.push(...speakingData);
           } else {
             console.log("error");
           }
         }
+        setUuid(uuidData);
         setSpeakingSolvingClass(speakingClass);
       } catch (error) {
         console.log("error", error);
@@ -158,9 +161,8 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
           />
           <div className="tab-content tab__content__wrapper aos-init aos-animate">
             <div
-              className={`tab-pane fade ${
-                activeTab === "Upcoming" ? "show active" : ""
-              }`}
+              className={`tab-pane fade ${activeTab === "Upcoming" ? "show active" : ""
+                }`}
             >
               <div className="row">
                 <UpcomingClass
@@ -171,9 +173,8 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
               </div>
             </div>
             <div
-              className={`tab-pane fade ${
-                activeTab === "Available Slot" ? "show active" : ""
-              }`}
+              className={`tab-pane fade ${activeTab === "Available Slot" ? "show active" : ""
+                }`}
             >
               <div className="row">
                 <ClassList
@@ -185,12 +186,11 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
               </div>
             </div>
             <div
-              className={`tab-pane fade ${
-                activeTab === "Recoded Class" ? "show active" : ""
-              }`}
+              className={`tab-pane fade ${activeTab === "Recoded Class" ? "show active" : ""
+                }`}
             >
               <div className="row">
-                <h5 className="text-center text-danger">Comming Soon....</h5>
+                <RecorededClass uuid={uuid} classes={speackingClasses} />
               </div>
             </div>
           </div>

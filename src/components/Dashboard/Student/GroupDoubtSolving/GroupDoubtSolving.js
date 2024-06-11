@@ -7,6 +7,7 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
+import RecorededClass from "../Classes/RecorededClass";
 
 const tabs = [
   { name: "Upcoming" },
@@ -17,6 +18,7 @@ const tabs = [
 const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
   const navigate = useNavigate();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const [uuid, setUuid] = useState([]);
   const { studentId, solvingClassBook, count } = useLocation()?.state || {};
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -92,6 +94,7 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
     (async () => {
       try {
         const gPClass = [];
+        const uuidData = [];
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
@@ -113,11 +116,14 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
             const groupDoubtData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
             );
+            const id = response?.data.map((item) => item?.other_fields?.id);
+            uuidData.push(...id);
             gPClass.push(...groupDoubtData);
           } else {
             console.log("error");
           }
         }
+        setUuid(uuidData);
         setGroupDoubtSolvingClass(gPClass);
       } catch (error) {
         console.log("error", error);
@@ -190,7 +196,7 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
               }`}
             >
               <div className="row">
-                <h5 className="text-center text-danger">Comming Soon....</h5>
+                <RecorededClass uuid={uuid} classes={groupSolvingClasses} />
               </div>
             </div>
           </div>

@@ -3,11 +3,13 @@ import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import RegularClassList from "./RegularClassList";
 import Tab from "../../../UI/Tab";
+import RecorededClass from "../Classes/RecorededClass";
 
 const tabs = [{ name: "Regular" }, { name: "Recoded Class" }];
 
 const RegularClass = ({ selectedDateRange }) => {
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const [uuid, setUuid] = useState([]);
   const [regularClass, setRegularClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Regular");
@@ -21,6 +23,7 @@ const RegularClass = ({ selectedDateRange }) => {
     (async () => {
       try {
         const regularClassData = [];
+        const uuidData = [];
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
@@ -39,14 +42,17 @@ const RegularClass = ({ selectedDateRange }) => {
           );
           if (response?.status === 200) {
             setIsLoading(false);
-            const data = response?.data?.filter(
+            const classData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Regular Class"
             );
-            regularClassData.push(...data);
+            const id = response?.data.map((item) => item?.other_fields?.id);
+            uuidData.push(...id);
+            regularClassData.push(...classData);
           } else {
             console.log("error");
           }
         }
+        setUuid(uuidData);
         setRegularClass(regularClassData);
       } catch (error) {
         console.log("error", error);
@@ -93,7 +99,7 @@ const RegularClass = ({ selectedDateRange }) => {
               }`}
             >
               <div className="row">
-                <h5 className="text-center text-danger">Coming Soon....</h5>
+                <RecorededClass uuid={uuid} classes={regularClasses()} />
               </div>
             </div>
           </div>

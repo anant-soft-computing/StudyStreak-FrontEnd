@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Reading = ({ readingData, givenTest }) => {
   const handleClick = (id) => {
-    window.open(`/live-exam/${id}`, "_blank");
+    window.open(`/live-exam/Reading/${id}`, "_blank");
   };
 
   return (
@@ -19,7 +19,7 @@ const Reading = ({ readingData, givenTest }) => {
                 <div className="gridarea__content">
                   <div className="gridarea__heading mt-3">
                     <h3 className="text-center">
-                      <Link to={`/live-exam/${id}`} target="_blank">
+                      <Link to={`/live-exam/Reading/${id}`} target="_blank">
                         {exam_name}
                       </Link>
                     </h3>
@@ -50,7 +50,9 @@ const Reading = ({ readingData, givenTest }) => {
           )
         )
       ) : (
-        <div className="text-center text-danger">No Reading Test Available !!</div>
+        <div className="text-center text-danger">
+          No Reading Test Available !!
+        </div>
       )}
     </div>
   );

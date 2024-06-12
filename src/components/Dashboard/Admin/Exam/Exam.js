@@ -372,7 +372,7 @@ const Exam = () => {
                             activeTab === "View Exam" ? "show active" : ""
                           }`}
                         >
-                          <ViewExam key={activeTab} />
+                          <ViewExam key={activeTab} activeTab={activeTab} />
                         </div>
                       </div>
                     </div>

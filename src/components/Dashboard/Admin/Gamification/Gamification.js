@@ -12,7 +12,7 @@ const options = [
   { value: "Course", label: "Course" },
   { value: "Exam Block", label: "Mock Test" },
   { value: "Full Length Test", label: "Full Length Test" },
-  { value: "Practice Test", label: "Practice Test" },  
+  { value: "Practice Test", label: "Practice Test" },
   { value: "Live Class", label: "Live Class" },
 ];
 
@@ -87,7 +87,11 @@ const Gamification = () => {
                           }`}
                         >
                           <div className="row">
-                            <ViewGamification key={activeTab} content={content} />
+                            <ViewGamification
+                              key={activeTab}
+                              content={content}
+                              activeTab={activeTab}
+                            />
                           </div>
                         </div>
                       </div>

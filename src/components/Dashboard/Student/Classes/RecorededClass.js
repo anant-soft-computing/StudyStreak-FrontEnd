@@ -3,7 +3,7 @@ import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const RecorededClass = ({ uuid, classes }) => {
+const RecorededClass = ({ uuid, classes, activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [recordClass, setRecordClass] = useState([]);
 
@@ -29,42 +29,44 @@ const RecorededClass = ({ uuid, classes }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      try {
-        const data = [];
-        for (let i = 0; i < uuid.length; i++) {
-          const id = uuid[i];
-          const response = await ajaxCall(
-            `/liveclass/recording/?meeting_uuid=${id}`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+    if (activeTab === "Recoded Class") {
+      (async () => {
+        setIsLoading(true);
+        try {
+          const data = [];
+          for (let i = 0; i < uuid.length; i++) {
+            const id = uuid[i];
+            const response = await ajaxCall(
+              `/liveclass/recording/?meeting_uuid=${id}`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (
-            response?.data &&
-            response.data !==
-              '{"code":3301,"message":"This recording does not exist."}'
-          ) {
-            data.push(response.data);
+              8000
+            );
+            if (
+              response?.data &&
+              response.data !==
+                '{"code":3301,"message":"This recording does not exist."}'
+            ) {
+              data.push(response.data);
+            }
           }
+          setRecordClass(data);
+        } catch (error) {
+          console.error("Error fetching recorded classes:", error);
+        } finally {
+          setIsLoading(false);
         }
-        setRecordClass(data);
-      } catch (error) {
-        console.error("Error fetching recorded classes:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [uuid]);
+      })();
+    }
+  }, [activeTab, uuid]);
 
   const columns = [
     { headerName: "View", cellRenderer: handleView },

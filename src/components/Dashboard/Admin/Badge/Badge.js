@@ -48,7 +48,7 @@ const Badge = () => {
                           }`}
                         >
                           <div className="row">
-                            <ViewBadges key={activeTab} />
+                            <ViewBadges key={activeTab} activeTab={activeTab} />
                           </div>
                         </div>
                       </div>

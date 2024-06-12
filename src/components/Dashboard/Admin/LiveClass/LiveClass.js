@@ -50,7 +50,10 @@ const LiveClass = () => {
                           }`}
                         >
                           <div className="row">
-                            <ViewLiveClasses key={activeTab} />
+                            <ViewLiveClasses
+                              key={activeTab}
+                              activeTab={activeTab}
+                            />
                           </div>
                         </div>
                       </div>

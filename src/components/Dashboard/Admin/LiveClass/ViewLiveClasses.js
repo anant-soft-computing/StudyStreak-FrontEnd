@@ -44,46 +44,48 @@ const columns = [
   },
 ];
 
-const ViewLiveClasses = () => {
+const ViewLiveClasses = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [liveClassList, setLiveClassList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/liveclass_list_view/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
+    if (activeTab === "View LiveClass") {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const response = await ajaxCall(
+            `/liveclass_list_view/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authData?.accessToken}`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const liveClassWithNumbers = response?.data?.map(
-            (liveClass, index) => ({
-              ...liveClass,
-              no: index + 1,
-            })
+            8000
           );
-          setIsLoading(false);
-          setLiveClassList(liveClassWithNumbers);
-        } else {
+          if (response?.status === 200) {
+            const liveClassWithNumbers = response?.data?.map(
+              (liveClass, index) => ({
+                ...liveClass,
+                no: index + 1,
+              })
+            );
+            setIsLoading(false);
+            setLiveClassList(liveClassWithNumbers);
+          } else {
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.log("error", error);
+        } finally {
           setIsLoading(false);
         }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [authData?.accessToken]);
+      })();
+    }
+  }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />

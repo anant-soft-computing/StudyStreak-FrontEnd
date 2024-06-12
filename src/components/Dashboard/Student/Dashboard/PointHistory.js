@@ -101,7 +101,7 @@ const endpoints = {
   "Flash Card": `/gamification/flashcard/`,
   Lesson: `/lessonview/`,
   Course: `/courselistview/`,
-  "Exam Block": `/exam-blocks/`,
+  "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type`,
   "Full Length Test": `/get/flt/`,
   "Practice Test": `/moduleListView/`,
   "Live Class": `/liveclass_list_view/`,

@@ -50,7 +50,10 @@ const FlashCard = () => {
                           }`}
                         >
                           <div className="row">
-                            <ViewFlashCard key={activeTab} />
+                            <ViewFlashCard
+                              key={activeTab}
+                              activeTab={activeTab}
+                            />
                           </div>
                         </div>
                       </div>

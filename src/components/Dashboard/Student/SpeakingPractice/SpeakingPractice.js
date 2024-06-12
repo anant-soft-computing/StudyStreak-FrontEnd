@@ -41,8 +41,9 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "POST",
           body: data,
@@ -68,8 +69,9 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "POST",
         },
@@ -101,8 +103,9 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
               },
               method: "GET",
             },
@@ -132,6 +135,9 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
     return speakingSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange?.[0];
+      if (startDate && !endDate) {
+        return classDate === moment(startDate).format("YYYY-MM-DD");
+      }
       return (
         (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
         (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
@@ -161,8 +167,9 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
           />
           <div className="tab-content tab__content__wrapper aos-init aos-animate">
             <div
-              className={`tab-pane fade ${activeTab === "Upcoming" ? "show active" : ""
-                }`}
+              className={`tab-pane fade ${
+                activeTab === "Upcoming" ? "show active" : ""
+              }`}
             >
               <div className="row">
                 <UpcomingClass
@@ -173,8 +180,9 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
               </div>
             </div>
             <div
-              className={`tab-pane fade ${activeTab === "Available Slot" ? "show active" : ""
-                }`}
+              className={`tab-pane fade ${
+                activeTab === "Available Slot" ? "show active" : ""
+              }`}
             >
               <div className="row">
                 <ClassList
@@ -186,11 +194,16 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
               </div>
             </div>
             <div
-              className={`tab-pane fade ${activeTab === "Recoded Class" ? "show active" : ""
-                }`}
+              className={`tab-pane fade ${
+                activeTab === "Recoded Class" ? "show active" : ""
+              }`}
             >
               <div className="row">
-                <RecorededClass uuid={uuid} classes={speackingClasses} />
+                <RecorededClass
+                  uuid={uuid}
+                  classes={speackingClasses}
+                  activeTab={activeTab}
+                />
               </div>
             </div>
           </div>

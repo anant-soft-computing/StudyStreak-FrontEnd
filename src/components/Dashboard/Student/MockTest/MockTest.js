@@ -26,43 +26,57 @@ const MockTest = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        const examBlocksResponse = await ajaxCall(
-          "/exam-blocks/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+        if (activeTab === "Speaking") {
+          const speakingBlocksResponse = await ajaxCall(
+            "/speaking-block/",
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (examBlocksResponse.status === 200) {
-          setAllMockTestData(examBlocksResponse.data);
+            8000
+          );
+          if (speakingBlocksResponse.status === 200) {
+            const allSpeakingData = speakingBlocksResponse.data
+              .filter((item) => item.block_threshold === 0)
+              .map((item) => ({
+                ...item,
+                exam_name: item.name,
+                no_of_questions: item.questions.length,
+              }));
+            setAllSpeakingData(allSpeakingData);
+          } else {
+            console.log("Error fetching speaking blocks");
+          }
         } else {
-          console.log("Error fetching exam blocks");
-        }
-        const speakingBlocksResponse = await ajaxCall(
-          "/speaking-block/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+          const examBlocksResponse = await ajaxCall(
+            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${activeTab}`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (speakingBlocksResponse.status === 200) {
-          setAllSpeakingData(speakingBlocksResponse.data);
-        } else {
-          console.log("Error fetching speaking blocks");
+            8000
+          );
+          if (examBlocksResponse.status === 200) {
+            const mockTestData = examBlocksResponse.data.filter(
+              ({ block_type, exam_category }) =>
+                block_type === "Assignments" && exam_category === category
+            );
+            setAllMockTestData(mockTestData);
+          } else {
+            console.log("Error fetching exam blocks");
+          }
         }
         setIsLoading(false);
       } catch (error) {
@@ -71,34 +85,14 @@ const MockTest = () => {
       }
     };
     fetchData();
-  }, []);
-
-  const filterMockTestData = () =>
-    allMockTestData.filter(
-      ({ block_type, exam_category }) =>
-        block_type === "Assignments" && exam_category === category
-    );
-
-  const filterSpeakingData = () =>
-    allSpeakingData
-      .filter(
-        (item) => item.block_threshold === 0
-      )
-      .map((item) => ({
-        ...item,
-        exam_name: item.name,
-        no_of_questions: item.questions.length,
-      }));
-
-  const mockTestData = filterMockTestData();
-  const speakingData = filterSpeakingData();
+  }, [activeTab, category]);
 
   const testByExamType = (examType) =>
-    mockTestData.filter(({ exam_type }) => exam_type === examType);
+    allMockTestData.filter(({ exam_type }) => exam_type === examType);
   const givenWritingTest = testByExamType("Writing").filter((item) =>
     givenTest?.some((index) => index.id === item.id)
   );
-  const givenST = speakingData.filter((item) =>
+  const givenST = allSpeakingData.filter((item) =>
     givenSpeakingTest?.some((index) => index.id === item.id)
   );
 
@@ -162,7 +156,7 @@ const MockTest = () => {
                                   key={name}
                                   testData={
                                     name === "Speaking"
-                                      ? speakingData
+                                      ? allSpeakingData
                                       : testByExamType(name)
                                   }
                                   givenTest={givenTest}

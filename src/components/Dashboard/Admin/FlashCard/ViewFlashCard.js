@@ -13,46 +13,48 @@ const columns = [
   { headerName: "Items", field: "flash_card_items.length", filter: true },
 ];
 
-const ViewFlashCard = () => {
+const ViewFlashCard = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [flashCardList, setFlashCardList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/gamification/flashcard/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
+    if (activeTab === "View FlashCard") {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const response = await ajaxCall(
+            `/gamification/flashcard/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authData?.accessToken}`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const flashCardWithNumbers = response?.data?.map(
-            (flashCard, index) => ({
-              ...flashCard,
-              no: index + 1,
-            })
+            8000
           );
-          setIsLoading(false);
-          setFlashCardList(flashCardWithNumbers);
-        } else {
+          if (response?.status === 200) {
+            const flashCardWithNumbers = response?.data?.map(
+              (flashCard, index) => ({
+                ...flashCard,
+                no: index + 1,
+              })
+            );
+            setIsLoading(false);
+            setFlashCardList(flashCardWithNumbers);
+          } else {
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.log("error", error);
+        } finally {
           setIsLoading(false);
         }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [authData?.accessToken]);
+      })();
+    }
+  }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />

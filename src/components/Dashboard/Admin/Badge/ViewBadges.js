@@ -16,44 +16,46 @@ const columns = [
   },
 ];
 
-const ViewBadges = () => {
+const ViewBadges = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [badgeList, setBadgeList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/gamification/badges/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
+    if (activeTab === "View Badge") {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const response = await ajaxCall(
+            `/gamification/badges/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authData?.accessToken}`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const badgesWithNumbers = response?.data?.map((batch, index) => ({
-            ...batch,
-            no: index + 1,
-          }));
-          setIsLoading(false);
-          setBadgeList(badgesWithNumbers);
-        } else {
+            8000
+          );
+          if (response?.status === 200) {
+            const badgesWithNumbers = response?.data?.map((batch, index) => ({
+              ...batch,
+              no: index + 1,
+            }));
+            setIsLoading(false);
+            setBadgeList(badgesWithNumbers);
+          } else {
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.log("error", error);
+        } finally {
           setIsLoading(false);
         }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [authData?.accessToken]);
+      })();
+    }
+  }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />

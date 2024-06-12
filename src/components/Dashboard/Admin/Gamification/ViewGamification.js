@@ -95,7 +95,7 @@ const specificColumns = {
   ],
 };
 
-const ViewGamification = ({ content }) => {
+const ViewGamification = ({ content, activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [dataList, setDataList] = useState([]);
   const [gamificationList, setGamificationList] = useState([]);
@@ -127,24 +127,26 @@ const ViewGamification = ({ content }) => {
   };
 
   useEffect(() => {
-    fetchData(`/gamification/`, setGamificationList);
-  }, [authData?.accessToken]);
+    if (activeTab === "View Gamification") {
+      fetchData(`/gamification/`, setGamificationList);
+    }
+  }, [activeTab, authData.accessToken]);
 
   useEffect(() => {
     const endpoints = {
       "Flash Card": `/gamification/flashcard/`,
       Lesson: `/lessonview/`,
       Course: `/courselistview/`,
-      "Exam Block": `/exam-blocks/`,
+      "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,block_type`,
       "Full Length Test": `/get/flt/`,
       "Practice Test": `/moduleListView/`,
       "Live Class": `/liveclass_list_view/`,
     };
 
-    if (content && endpoints[content]) {
+    if (content && endpoints[content] && activeTab === "View Gamification") {
       fetchData(endpoints[content], setDataList);
     }
-  }, [authData?.accessToken, content]);
+  }, [activeTab, authData.accessToken, content]);
 
   const filteredDataList = () => {
     switch (content) {

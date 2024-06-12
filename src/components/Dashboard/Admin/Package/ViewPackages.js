@@ -6,46 +6,48 @@ import CancelIcon from "../../../UI/CancelIcon";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
-const ViewPackages = () => {
+const ViewPackages = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [packageList, setPackageList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/packagelistview/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
+    if (activeTab === "View Package") {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const response = await ajaxCall(
+            `/packagelistview/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authData?.accessToken}`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const packageWithNumbers = response?.data?.map(
-            (packageItem, index) => ({
-              ...packageItem,
-              no: index + 1,
-            })
+            8000
           );
-          setIsLoading(false);
-          setPackageList(packageWithNumbers);
-        } else {
+          if (response?.status === 200) {
+            const packageWithNumbers = response?.data?.map(
+              (packageItem, index) => ({
+                ...packageItem,
+                no: index + 1,
+              })
+            );
+            setIsLoading(false);
+            setPackageList(packageWithNumbers);
+          } else {
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.log("error", error);
+        } finally {
           setIsLoading(false);
         }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [authData?.accessToken]);
+      })();
+    }
+  }, [authData?.accessToken, activeTab]);
 
   const renderItemAvailable = ({ value }) => {
     return value ? <CheckIcon /> : <CancelIcon />;

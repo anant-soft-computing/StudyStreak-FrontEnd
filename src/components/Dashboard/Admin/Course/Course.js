@@ -48,7 +48,7 @@ const Course = () => {
                           }`}
                         >
                           <div className="row">
-                            <ViewCourse key={activeTab} />
+                            <ViewCourse key={activeTab} activeTab={activeTab} />
                           </div>
                         </div>
                       </div>

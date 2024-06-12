@@ -65,7 +65,6 @@ import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import PracticeWritingExam from "./components/LiveExam/PracticeWritingExam";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
-import SpeakingInstruction from "./components/Dashboard/Student/SpeakingInstruction/SpeakingInstruction";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -146,9 +145,9 @@ const App = () => {
         <Route path="/Listening" element={<ExamListening />} />
         <Route path="/Writing" element={<ExamWriting />} />
         <Route path="/Speaking" element={<ExamSpeaking />} />
-        <Route path="/live-exam/:examId" element={<LiveExam />} />
+        <Route path="/live-exam/:examType/:examId" element={<LiveExam />} />
         <Route
-          path="/live-speaking-exam/:examId"
+          path="/live-speaking-exam/:examType/:examId"
           element={<LiveSpeakingExam />}
         />
         <Route
@@ -171,7 +170,6 @@ const App = () => {
           path="/gmat-live-mock-test/:examId"
           element={<GmatLiveMockTest />}
         />
-        <Route path="/speaking-instruction" element={<SpeakingInstruction />} />
         <Route path="/exam-answer/:examId" element={<Answer />} />
         <Route
           path="/exam-practice-test-answer/:examId"

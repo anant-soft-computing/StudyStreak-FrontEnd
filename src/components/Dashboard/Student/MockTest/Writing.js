@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Writing = ({ writingData, givenTest }) => {
   const handleClick = (id) => {
-    window.open(`/live-exam/${id}`, "_blank");
+    window.open(`/live-exam/Writing/${id}`, "_blank");
   };
 
   return (
@@ -20,7 +20,7 @@ const Writing = ({ writingData, givenTest }) => {
                   <div className="gridarea__heading mt-3">
                     <h3 className="text-center">
                       <Link
-                        to={`/live-exam/${writingData?.id}`}
+                        to={`/live-exam/Writing/${writingData?.id}`}
                         target="_blank"
                       >
                         {exam_name}

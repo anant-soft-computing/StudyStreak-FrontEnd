@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Assignment = ({ activeLesson }) => {
   const handleClick = (id) => {
-    window.open(`/live-exam/${id}`, "_blank");
+    window.open(`/live-exam/General/${id}`, "_blank");
   };
 
   const assignments = activeLesson?.filter(

@@ -48,7 +48,10 @@ const Batch = () => {
                           }`}
                         >
                           <div className="row">
-                            <ViewBatches key={activeTab} />
+                            <ViewBatches
+                              key={activeTab}
+                              activeTab={activeTab}
+                            />
                           </div>
                         </div>
                       </div>

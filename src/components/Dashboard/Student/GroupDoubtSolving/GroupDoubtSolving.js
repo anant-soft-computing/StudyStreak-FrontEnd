@@ -135,6 +135,9 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
     return groupDoubtSolvingClass?.filter(({ start_time }) => {
       const classDate = moment(start_time).format("YYYY-MM-DD");
       const { startDate, endDate } = selectedDateRange?.[0];
+      if (startDate && !endDate) {
+        return classDate === moment(startDate).format("YYYY-MM-DD");
+      }
       return (
         (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
         (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
@@ -196,7 +199,11 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
               }`}
             >
               <div className="row">
-                <RecorededClass uuid={uuid} classes={groupSolvingClasses} />
+                <RecorededClass
+                  uuid={uuid}
+                  classes={groupSolvingClasses}
+                  activeTab={activeTab}
+                />
               </div>
             </div>
           </div>

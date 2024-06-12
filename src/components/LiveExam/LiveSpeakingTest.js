@@ -15,7 +15,7 @@ const initialSpeakingSingleQuesionState = {
 
 const LiveSpeakingExam = () => {
   const navigate = useNavigate();
-  const examId = useLocation()?.pathname?.split("/")?.[2];
+  const examId = useLocation()?.pathname?.split("/")?.[3];
   const [examData, setExamData] = useState({});
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);

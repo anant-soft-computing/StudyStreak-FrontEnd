@@ -32,7 +32,7 @@ const TestTable = ({
             window.open(
               `/${
                 testType !== "Speaking" ? "live-exam" : "live-speaking-exam"
-              }/${params.data.id}`,
+              }/${testType}/${params.data.id}`,
               "_blank"
             )
           }
@@ -77,12 +77,6 @@ const TestTable = ({
       field: "no_of_questions",
       filter: true,
     },
-    {
-      headerName: "Difficulty Level",
-      field: "difficulty_level",
-      filter: true,
-    },
-
     {
       headerName: "Status",
       field: "status",

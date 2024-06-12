@@ -31,44 +31,46 @@ const columns = [
   },
 ];
 
-const ViewBatches = () => {
+const ViewBatches = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [batchList, setBatchList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/batchview/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
+    if (activeTab === "View Batch") {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const response = await ajaxCall(
+            `/batchview/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${authData?.accessToken}`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const batchesWithNumbers = response?.data?.map((batch, index) => ({
-            ...batch,
-            no: index + 1,
-          }));
-          setIsLoading(false);
-          setBatchList(batchesWithNumbers);
-        } else {
+            8000
+          );
+          if (response?.status === 200) {
+            const batchesWithNumbers = response?.data?.map((batch, index) => ({
+              ...batch,
+              no: index + 1,
+            }));
+            setIsLoading(false);
+            setBatchList(batchesWithNumbers);
+          } else {
+            setIsLoading(false);
+          }
+        } catch (error) {
+          console.log("error", error);
+        } finally {
           setIsLoading(false);
         }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, [authData?.accessToken]);
+      })();
+    }
+  }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import DASideBar from "../DASideBar/DASideBar";
 import CreatePackage from "./CreatePackage";
 import ViewPackages from "./ViewPackages";
+import Tab from "../../../UI/Tab";
+
+const tabs = [{ name: "View Package" }, { name: "Create Package" }];
 
 const Package = () => {
   const [activeTab, setActiveTab] = useState("View Package");
@@ -24,38 +27,15 @@ const Package = () => {
                       <h4>Package</h4>
                     </div>
                     <div className="row">
-                      <div className="col-xl-12 aos-init aos-animate">
-                        <ul
-                          className="nav  about__button__wrap dashboard__button__wrap"
-                          id="myTab"
-                          role="tablist"
-                        >
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "View Package" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("View Package")}
-                            >
-                              View Package
-                            </button>
-                          </li>
-                          <li className="nav-item" role="presentation">
-                            <button
-                              className={`single__tab__link common-background-color-across-app ${
-                                activeTab === "createPackage" ? "active" : ""
-                              }`}
-                              onClick={() => handleTabChange("createPackage")}
-                            >
-                              Create Package
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "createPackage" ? "show active" : ""
+                            activeTab === "Create Package" ? "show active" : ""
                           }`}
                         >
                           <div className="row">
@@ -68,7 +48,10 @@ const Package = () => {
                           }`}
                         >
                           <div className="row">
-                            <ViewPackages key={activeTab} />
+                            <ViewPackages
+                              key={activeTab}
+                              activeTab={activeTab}
+                            />
                           </div>
                         </div>
                       </div>

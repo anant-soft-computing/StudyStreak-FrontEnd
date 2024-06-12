@@ -17,7 +17,8 @@ const Cheerio = require("cheerio");
 const LiveExam = () => {
   const containerRef = useRef(null);
   const navigate = useNavigate();
-  const examId = useLocation()?.pathname?.split("/")?.[2];
+  const examId = useLocation()?.pathname?.split("/")?.[3];
+  const examType = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
   const [linkAnswer, setLinkAnswer] = useState(false);
@@ -72,7 +73,7 @@ const LiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/exam-blocks/`,
+          `/exam-blocks/?exam_type=${examType}`,
           {
             headers: {
               Accept: "application/json",

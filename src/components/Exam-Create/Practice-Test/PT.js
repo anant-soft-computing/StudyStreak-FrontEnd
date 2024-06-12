@@ -61,7 +61,7 @@ const PT = ({ type }) => {
       try {
         const [examResponse, speakingResponse] = await Promise.all([
           ajaxCall(
-            "/exam-blocks/",
+            `/exam-blocks/?fields=id,exam_name,exam_type,block_type,no_of_questions&exam_type=${type}`,
             {
               headers: {
                 Accept: "application/json",
@@ -249,7 +249,7 @@ const PT = ({ type }) => {
         field: "no_of_questions" || "questions.length",
         filter: true,
         valueGetter: (params) => {
-          return params.data?.no_of_questions || params.data?.questions.length;
+          return params.data?.no_of_questions || params.data?.questions?.length;
         },
       },
       {

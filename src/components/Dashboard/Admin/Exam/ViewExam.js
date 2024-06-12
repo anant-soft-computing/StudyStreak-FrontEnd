@@ -4,7 +4,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
-const ViewExam = () => {
+const ViewExam = ({ activeTab }) => {
   const [examList, setExamList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [speakingList, setSpeakingList] = useState([]);
@@ -50,15 +50,17 @@ const ViewExam = () => {
   };
 
   useEffect(() => {
-    fetchData(
-      "/exam-blocks/",
-      ({ block_type }) => block_type === "Mock Test",
-      setExamList
-    );
-    fetchData("/speaking-block/", () => true, setSpeakingList);
-    fetchData("/moduleListView/", () => true, setPtList);
-    fetchData("/get/flt/", () => true, setFltList);
-  }, []);
+    if (activeTab === "View Exam") {
+      fetchData(
+        "/exam-blocks/?fields=id,exam_name,exam_type,no_of_questions,block_type",
+        ({ block_type }) => block_type === "Mock Test",
+        setExamList
+      );
+      fetchData("/speaking-block/", () => true, setSpeakingList);
+      fetchData("/moduleListView/", () => true, setPtList);
+      fetchData("/get/flt/", () => true, setFltList);
+    }
+  }, [activeTab]);
 
   return (
     <div>

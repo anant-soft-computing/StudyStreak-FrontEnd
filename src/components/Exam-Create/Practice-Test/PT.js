@@ -56,86 +56,75 @@ const PT = ({ type }) => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
+    const fetchExams = async () => {
+      setIsLoading(true);
       try {
-        const response = await ajaxCall(
-          "/exam-blocks/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+        const [examResponse, speakingResponse] = await Promise.all([
+          ajaxCall(
+            "/exam-blocks/",
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
+            8000
+          ),
+          ajaxCall(
+            "/speaking-block/",
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
+            },
+            8000
+          ),
+        ]);
 
-        if (response.status === 200) {
-          const { data } = response;
+        if (examResponse.status === 200 && speakingResponse.status === 200) {
+          const { data: examData } = examResponse;
+          const { data: speakingData } = speakingResponse;
+
           const updatedExams = {
-            Reading: data.filter(
+            Reading: examData.filter(
               ({ exam_type, block_type }) =>
                 exam_type === type && block_type === "Mock Test"
             ),
-            Writing: data.filter(
+            Writing: examData.filter(
               ({ exam_type, block_type }) =>
                 exam_type === type && block_type === "Mock Test"
             ),
-            Listening: data.filter(
+            Listening: examData.filter(
               ({ exam_type, block_type }) =>
                 exam_type === type && block_type === "Mock Test"
             ),
-          };
-          setIsLoading(false);
-          setExams(updatedExams);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, [type]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/speaking-block/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-
-        if (response.status === 200) {
-          const { data } = response;
-          setIsLoading(false);
-          setExams((prev) => ({
-            ...prev,
-            Speaking: data.filter(
+            Speaking: speakingData.filter(
               ({ block_threshold }) => block_threshold === 1
             ),
-          }));
+          };
+
+          setExams(updatedExams);
+          setIsLoading(false);
         } else {
           console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);
+        setIsLoading(false);
       }
-    })();
+    };
+
+    fetchExams();
   }, [type]);
 
   const validateForm = () => {

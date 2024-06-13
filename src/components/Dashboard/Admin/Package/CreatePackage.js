@@ -547,10 +547,8 @@ const CreatePackage = ({ setMainTab }) => {
             </div>
           </div>
           <div className="create__course__bottom__button text-center mt-4">
-            {formStatus.isError ? (
+            {formStatus.isError && (
               <div className="text-danger mb-2">{formStatus.errMsg}</div>
-            ) : (
-              <div className="text-success mb-2">{formStatus.errMsg}</div>
             )}
             {formStatus.isSubmitting ? (
               <Loading color="primary" text="Creating Package..." />

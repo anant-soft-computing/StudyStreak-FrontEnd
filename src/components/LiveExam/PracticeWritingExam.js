@@ -61,7 +61,7 @@ const PracticeLiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/`,
+          `/createexamview/?exam_type=${examForm}`,
           {
             headers: {
               Accept: "application/json",

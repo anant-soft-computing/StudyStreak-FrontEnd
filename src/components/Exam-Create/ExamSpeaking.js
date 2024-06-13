@@ -39,11 +39,7 @@ const ExamSpeaking = ({ category }) => {
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const addQuestion = () => {
@@ -57,19 +53,13 @@ const ExamSpeaking = ({ category }) => {
     const updatedQuestions = SpeakingData.questions.filter(
       (_, i) => i !== index
     );
-    dispatchSpeakingData({
-      type: "questions",
-      value: updatedQuestions,
-    });
+    dispatchSpeakingData({ type: "questions", value: updatedQuestions });
   };
 
   const handleQuestionChange = (index, field, value) => {
     const updatedQuestions = [...SpeakingData.questions];
     updatedQuestions[index][field] = value;
-    dispatchSpeakingData({
-      type: "questions",
-      value: updatedQuestions,
-    });
+    dispatchSpeakingData({ type: "questions", value: updatedQuestions });
   };
 
   const validateForm = () => {
@@ -89,11 +79,7 @@ const ExamSpeaking = ({ category }) => {
       setFormError("All Questions must have both Question and Question Number");
       return false;
     }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     return true;
   };
 

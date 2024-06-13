@@ -6,10 +6,11 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../helpers/ajaxCall";
 import Loading from "../../UI/Loading";
 
-const intialPT = {
+const initialPT = {
   Name: "",
   difficulty_level: "Easy",
   exam_test: "Practice",
+  practice_test_type: "",
   Reading: [],
   Writing: [],
   Listening: [],
@@ -24,12 +25,12 @@ const initialSubmit = {
 
 const reducerPT = (state, action) => {
   if (action.type === "reset") {
-    return action.payload || intialPT;
+    return action.payload || initialPT;
   }
   return { ...state, [action.type]: action.value };
 };
 
-const PT = ({ type }) => {
+const PT = ({ activeTab, type }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -37,22 +38,16 @@ const PT = ({ type }) => {
     Speaking: [],
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [createPT, dispatchPT] = useReducer(reducerPT, intialPT);
+  const [createPT, dispatchPT] = useReducer(reducerPT, initialPT);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [totalQuestions, setTotalQuestions] = useState(0);
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const resetReducerForm = () => {
-    dispatchPT({
-      type: "reset",
-    });
+    dispatchPT({ type: "reset" });
   };
 
   useEffect(() => {
@@ -115,44 +110,35 @@ const PT = ({ type }) => {
           setExams(updatedExams);
           setIsLoading(false);
         } else {
-          console.log("error");
+          console.log("Error: Failed to fetch data");
           setIsLoading(false);
         }
       } catch (error) {
-        console.log("error", error);
+        console.log("Error:", error);
         setIsLoading(false);
       }
     };
 
-    fetchExams();
-  }, [type]);
+    if (activeTab === "Create PT") {
+      fetchExams();
+    }
+  }, [activeTab, type]);
 
   const validateForm = () => {
     if (!createPT.Name) {
       setFormError("Name is Required");
       return false;
     }
-    if (type === "Reading" && !createPT.Reading.length > 0) {
-      setFormError("Please Choose at least one Reading Exam");
+    if (
+      (type === "Reading" && createPT.Reading.length === 0) ||
+      (type === "Writing" && createPT.Writing.length === 0) ||
+      (type === "Listening" && createPT.Listening.length === 0) ||
+      (type === "Speaking" && createPT.Speaking.length === 0)
+    ) {
+      setFormError(`Please Choose at least one ${type} Exam`);
       return false;
     }
-    if (type === "Writing" && !createPT.Writing.length > 0) {
-      setFormError("Please Choose at least one Writing Exam");
-      return false;
-    }
-    if (type === "Listening" && !createPT.Listening.length > 0) {
-      setFormError("Please Choose at least one Listening Exam");
-      return false;
-    }
-    if (type === "Speaking" && !createPT.Speaking.length > 0) {
-      setFormError("Please Choose at least one Speaking Exam");
-      return false;
-    }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     return true;
   };
 
@@ -163,6 +149,7 @@ const PT = ({ type }) => {
       const data = {
         Name: createPT.Name,
         exam_test: createPT.exam_test,
+        practice_test_type: type,
         Reading: createPT.Reading,
         Writing: createPT.Writing,
         Listening: createPT.Listening,
@@ -205,19 +192,13 @@ const PT = ({ type }) => {
   const handleRowSelection = (type) => (event) => {
     const selectedNodes = event.api?.getSelectedNodes();
     const selectedIds = selectedNodes.map((node) => node?.data?.id);
-
     const total = selectedNodes.reduce((total, node) => {
       return (
         total + (node.data.no_of_questions || node.data.questions.length || 0)
       );
     }, 0);
-
     setTotalQuestions(total);
-
-    dispatchPT({
-      type,
-      value: selectedIds,
-    });
+    dispatchPT({ type, value: selectedIds });
   };
 
   const gridOptions = (rowData, handleRowSelection) => {
@@ -287,10 +268,7 @@ const PT = ({ type }) => {
               placeholder="Name"
               value={createPT.Name}
               onChange={(e) =>
-                dispatchPT({
-                  type: "Name",
-                  value: e.target.value,
-                })
+                dispatchPT({ type: "Name", value: e.target.value })
               }
             />
           </div>
@@ -320,10 +298,8 @@ const PT = ({ type }) => {
         </div>
       </div>
       <div className="create__course__bottom__button text-center mt-2">
-        {formStatus.isError ? (
+        {formStatus.isError && (
           <div className="text-danger mb-2">{formStatus.errMsg}</div>
-        ) : (
-          <div className="text-success mb-2">{formStatus.errMsg}</div>
         )}
         <button className="default__button" onClick={createPTest}>
           Create PT

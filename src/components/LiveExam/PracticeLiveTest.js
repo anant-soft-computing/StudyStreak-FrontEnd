@@ -46,6 +46,10 @@ const PracticeLiveExam = () => {
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
+  console.log("-----examForm------>", examForm);
+
+  console.log("---fullPaper---->",fullPaper)
+
   useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||
@@ -82,7 +86,7 @@ const PracticeLiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/`,
+          `/createexamview/?exam_type=${examForm}`,
           {
             headers: {
               Accept: "application/json",
@@ -116,7 +120,7 @@ const PracticeLiveExam = () => {
             }
             return 0;
           });
-
+console.log("-----filteredData------>",filteredData)
           setFullPaper(filteredData);
         } else {
           console.log("error");
@@ -129,6 +133,7 @@ const PracticeLiveExam = () => {
 
   useEffect(() => {
     if (fullPaper?.length !== 0) {
+      console.log("fullPaper*******", fullPaper?.[0][examType][examForm]);
       const examBlockWithNumbers = fullPaper?.[0][examType][examForm]?.map(
         (examBlock, index) => ({
           ...examBlock,
@@ -136,6 +141,7 @@ const PracticeLiveExam = () => {
         })
       );
       setReRenderAudio(true);
+      console.log("-------    examBlockWithNumbers", examBlockWithNumbers);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);

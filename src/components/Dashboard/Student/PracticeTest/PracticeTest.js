@@ -30,7 +30,7 @@ const PracticeTest = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/`,
+          `/createexamview/?exam_type=${activeTab}`,
           {
             headers: {
               Accept: "application/json",
@@ -63,7 +63,7 @@ const PracticeTest = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [activeTab]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

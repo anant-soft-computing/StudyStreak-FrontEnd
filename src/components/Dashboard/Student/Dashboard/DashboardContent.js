@@ -24,16 +24,18 @@ const DashboardContent = ({ batchData }) => {
         />
         <div className="tab-content tab__content__wrapper aos-init aos-animate">
           <div
-            className={`tab-pane fade ${activeTab === "Leader Board" ? "show active" : ""
-              }`}
+            className={`tab-pane fade ${
+              activeTab === "Leader Board" ? "show active" : ""
+            }`}
           >
             <div className="row">
-              <LeaderBoard batchId={batchId} />
+              <LeaderBoard batchId={batchId} activeTab={activeTab} />
             </div>
           </div>
           <div
-            className={`tab-pane fade ${activeTab === "Point History" ? "show active" : ""
-              }`}
+            className={`tab-pane fade ${
+              activeTab === "Point History" ? "show active" : ""
+            }`}
           >
             <div className="row">
               <PointHistory />

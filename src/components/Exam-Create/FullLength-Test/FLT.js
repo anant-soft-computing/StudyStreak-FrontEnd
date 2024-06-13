@@ -27,7 +27,7 @@ const reducerFLT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const FLT = () => {
+const FLT = ({ activeTab }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -39,82 +39,68 @@ const FLT = () => {
   const [formStatus, setFormStatus] = useState(initialSubmit);
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const resetReducerForm = () => {
-    dispatchFLT({
-      type: "reset",
-    });
+    dispatchFLT({ type: "reset" });
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/moduleListView/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+    if (activeTab === "Create FLT") {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const response = await ajaxCall(
+            "/moduleListView/",
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          const { data } = response;
-          const updatedExams = {
-            Reading: data.filter(({ Reading }) => Reading.length > 0),
-            Writing: data.filter(({ Writing }) => Writing.length > 0),
-            Listening: data.filter(({ Listening }) => Listening.length > 0),
-            Speaking: data.filter(({ Speaking }) => Speaking.length > 0),
-          };
-          setIsLoading(false);
-          setExams(updatedExams);
-        } else {
-          console.log("error");
+            8000
+          );
+          if (response.status === 200) {
+            const { data } = response;
+            const updatedExams = {
+              Reading: data.filter(({ Reading }) => Reading.length > 0),
+              Writing: data.filter(({ Writing }) => Writing.length > 0),
+              Listening: data.filter(({ Listening }) => Listening.length > 0),
+              Speaking: data.filter(({ Speaking }) => Speaking.length > 0),
+            };
+            setIsLoading(false);
+            setExams(updatedExams);
+          } else {
+            console.log("error");
+          }
+        } catch (error) {
+          console.log("error", error);
         }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, []);
+      })();
+    }
+  }, [activeTab]);
 
   const validateForm = () => {
-    if (!createFLT.name) {
-      setFormError("Name is Required");
-      return false;
+    const requiredFields = [
+      { field: "name", message: "Name is Required" },
+      { field: "Reading", message: "Please Choose a Reading Practice Test" },
+      { field: "Writing", message: "Please Choose a Writing Practice Test" },
+      { field: "Listening", message: "Please Choose a Listening Practice Test" },
+      { field: "Speaking", message: "Please Choose a Speaking Practice Test" }
+    ];
+    for (const fieldData of requiredFields) {
+      const field = fieldData.field;
+      if (!createFLT[field]) {
+        setFormError(fieldData.message);
+        return false;
+      }
     }
-    if (!createFLT.Reading) {
-      setFormError("Please Choose a Reading Practice Test");
-      return false;
-    }
-    if (!createFLT.Writing) {
-      setFormError("Please Choose a Writing Practice Test");
-      return false;
-    }
-    if (!createFLT.Listening) {
-      setFormError("Please Choose a Listening Practice Test");
-      return false;
-    }
-    if (!createFLT.Speaking) {
-      setFormError("Please Choose a Speaking Practice Test");
-      return false;
-    }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     return true;
   };
 
@@ -164,11 +150,7 @@ const FLT = () => {
   const handleRowSelection = (type) => (event) => {
     const selectedNode = event.api?.getSelectedNodes()[0];
     const selectedId = selectedNode?.data?.id;
-
-    dispatchFLT({
-      type,
-      value: selectedId,
-    });
+    dispatchFLT({ type, value: selectedId });
   };
 
   const gridOptions = (rowData, handleRowSelection, type) => ({
@@ -224,10 +206,7 @@ const FLT = () => {
                 placeholder="Name"
                 value={createFLT.name}
                 onChange={(e) =>
-                  dispatchFLT({
-                    type: "name",
-                    value: e.target.value,
-                  })
+                  dispatchFLT({ type: "name", value: e.target.value })
                 }
               />
             </div>
@@ -325,10 +304,8 @@ const FLT = () => {
         </div>
       </div>
       <div className="create__course__bottom__button text-center">
-        {formStatus.isError ? (
+        {formStatus.isError && (
           <div className="text-danger mb-2">{formStatus.errMsg}</div>
-        ) : (
-          <div className="text-success mb-2">{formStatus.errMsg}</div>
         )}
         <button className="default__button" onClick={createFullLengthTest}>
           Create FLT

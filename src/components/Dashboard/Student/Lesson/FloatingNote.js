@@ -165,11 +165,7 @@ const FloatingNote = ({ setIsFloatingNotes, lessonId, lessonName }) => {
         className="mt-2"
       />
       <div className="button-container-for-floating-notes">
-        <div
-          className={
-            formStatus.isError ? "text-danger mb-2" : "text-success mb-2"
-          }
-        >
+        <div className={formStatus.isError && "text-danger mb-2"}>
           {formStatus.errMsg}
         </div>
         <div className="d-flex justify-content-between">

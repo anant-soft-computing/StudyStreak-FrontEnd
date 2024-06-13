@@ -173,12 +173,8 @@ const ContactUs = () => {
                         </div>
                       </div>
                       <div className="blog__details__button">
-                        {formStatus.isError ? (
+                        {formStatus.isError && (
                           <div className="text-danger mb-2">
-                            {formStatus.errMsg}
-                          </div>
-                        ) : (
-                          <div className="text-success mb-2">
                             {formStatus.errMsg}
                           </div>
                         )}

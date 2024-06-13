@@ -44,18 +44,11 @@ const ExamReading = ({ category, examType }) => {
 
   const handlePassageChange = (event, editor) => {
     const data = editor.getData();
-    dispatchReadingData({
-      type: "passage",
-      value: data,
-    });
+    dispatchReadingData({ type: "passage", value: data });
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const validateForm = () => {
@@ -71,11 +64,7 @@ const ExamReading = ({ category, examType }) => {
       setFormError("Block Type is Required");
       return false;
     }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     return true;
   };
 

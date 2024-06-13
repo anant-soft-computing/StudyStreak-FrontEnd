@@ -45,18 +45,11 @@ const ExamWriting = ({ category }) => {
 
   const handlePassageChange = (event, editor) => {
     const data = editor.getData();
-    dispatchWritingData({
-      type: "passage",
-      value: data,
-    });
+    dispatchWritingData({ type: "passage", value: data });
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const validateForm = () => {
@@ -80,31 +73,20 @@ const ExamWriting = ({ category }) => {
       setFormError("Passage is Required");
       return false;
     }
-
     if (!writingData.answers) {
       setFormError("Answers is Required");
       return false;
     }
-
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     return true;
   };
 
   const submitWritingExam = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-
     const witingQuestionStrucutre = [
-      {
-        type: "Textarea",
-        numberOfQuestions: 1,
-      },
+      { type: "Textarea", numberOfQuestions: 1 },
     ];
-
     const data = {
       block_type: writingData.block_type,
       difficulty_level: writingData.difficulty_level,

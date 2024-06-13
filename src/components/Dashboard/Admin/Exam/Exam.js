@@ -311,25 +311,25 @@ const Exam = () => {
                             {(screenContent.examType &&
                               screenContent.examForm === "Reading" && (
                                 <PT
-                                  name={screenContent.examType}
+                                  activeTab={activeTab}
                                   type={screenContent.examForm}
                                 />
                               )) ||
                               (screenContent.examForm === "Writing" && (
                                 <PT
-                                  name={screenContent.examType}
+                                  activeTab={activeTab}
                                   type={screenContent.examForm}
                                 />
                               )) ||
                               (screenContent.examForm === "Listening" && (
                                 <PT
-                                  name={screenContent.examType}
+                                  activeTab={activeTab}
                                   type={screenContent.examForm}
                                 />
                               )) ||
                               (screenContent.examForm === "Speaking" && (
                                 <PT
-                                  name={screenContent.examType}
+                                  activeTab={activeTab}
                                   type={screenContent.examForm}
                                 />
                               ))}
@@ -364,7 +364,9 @@ const Exam = () => {
                                   </div>
                                 </div>
                               ))}
-                            {screenContent.examType && <FLT />}
+                            {screenContent.examType && (
+                              <FLT activeTab={activeTab} />
+                            )}
                           </div>
                         </div>
                         <div

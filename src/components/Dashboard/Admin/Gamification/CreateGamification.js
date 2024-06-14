@@ -80,7 +80,11 @@ const CreateGamification = ({ setActiveTab }) => {
         resetReducerForm();
         setActiveTab("View Gamification");
         toast.success("Gamification Created Successfully");
-      } else if ([400, 404].includes(response.status)) {
+      } else if (response.status === 400) {
+        toast.error(
+          `This ${gamificationData.model} already exists.`
+        );
+      } else {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {

@@ -101,24 +101,24 @@ const MockTest = () => {
   };
 
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="dashboardarea sp_bottom_100">
-          <div className="dashboard">
-            <div className="container-fluid full__width__padding">
-              <div className="row">
+    <div className='body__wrapper'>
+      <div className='main_wrapper overflow-hidden'>
+        <div className='dashboardarea sp_bottom_100'>
+          <div className='dashboard'>
+            <div className='container-fluid full__width__padding'>
+              <div className='row'>
                 <DSSidebar />
-                <div className="col-xl-9 col-lg-9 col-md-12">
-                  <div className="dashboard__content__wraper common-background-color-across-app">
-                    <div className="dashboard__section__title">
+                <div className='col-xl-12 col-lg-12 col-md-12'>
+                  <div className='dashboard__content__wraper common-background-color-across-app'>
+                    <div className='dashboard__section__title'>
                       <h4>Mini Test</h4>
-                      <div className="col-xl-2">
-                        <div className="dashboard__form__wraper">
-                          <div className="dashboard__form__input">
+                      <div className='col-xl-2'>
+                        <div className='dashboard__form__wraper'>
+                          <div className='dashboard__form__input'>
                             <label>Category</label>
                             <select
-                              className="form-select"
-                              aria-label="Default select example"
+                              className='form-select'
+                              aria-label='Default select example'
                               value={category}
                               onChange={(e) => setCategory(e.target.value)}
                             >
@@ -140,15 +140,15 @@ const MockTest = () => {
                       </div>
                     </div>
                     {count?.mini_test_count === "" ? (
-                      <BuyCourse message="No Mini Test Available, Please Buy a Course!" />
+                      <BuyCourse message='No Mini Test Available, Please Buy a Course!' />
                     ) : (
-                      <div className="row">
+                      <div className='row'>
                         <Tab
                           tabs={tabs}
                           activeTab={activeTab}
                           handleTabChange={handleTabChange}
                         />
-                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                        <div className='tab-content tab__content__wrapper aos-init aos-animate'>
                           {tabs.map(
                             ({ name }) =>
                               activeTab === name && (

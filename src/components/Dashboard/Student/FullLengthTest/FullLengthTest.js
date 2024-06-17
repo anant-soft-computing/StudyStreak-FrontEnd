@@ -53,7 +53,7 @@ const FullLengthTest = () => {
       cellRenderer: (params) => {
         return (
           <button
-            className="take-test"
+            className='take-test'
             onClick={() => handleFullLengthTest(params.data.id)}
           >
             Take Test
@@ -94,13 +94,13 @@ const FullLengthTest = () => {
         const isGiven = givenTest.find((test) => test.id === examId);
         if (isGiven) {
           return (
-            <button className="given-tag" style={{ backgroundColor: "green" }}>
+            <button className='given-tag' style={{ backgroundColor: "green" }}>
               Given
             </button>
           );
         } else {
           return (
-            <button className="given-tag" style={{ backgroundColor: "red" }}>
+            <button className='given-tag' style={{ backgroundColor: "red" }}>
               Not Given
             </button>
           );
@@ -110,29 +110,29 @@ const FullLengthTest = () => {
   ];
 
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="dashboardarea sp_bottom_100">
-          <div className="dashboard">
-            <div className="container-fluid full__width__padding">
-              <div className="row">
+    <div className='body__wrapper'>
+      <div className='main_wrapper overflow-hidden'>
+        <div className='dashboardarea sp_bottom_100'>
+          <div className='dashboard'>
+            <div className='container-fluid full__width__padding'>
+              <div className='row'>
                 <DSSidebar />
-                <div className="col-xl-9 col-lg-9 col-md-12">
-                  <div className="dashboard__content__wraper common-background-color-across-app">
-                    <div className="dashboard__section__title">
+                <div className='col-xl-12 col-lg-12 col-md-12'>
+                  <div className='dashboard__content__wraper common-background-color-across-app'>
+                    <div className='dashboard__section__title'>
                       <h4>Full Length Test</h4>
                     </div>
                     {full_length_test_count === "" ? (
-                      <BuyCourse message="No Full Length Test Available, Please Buy a Course!" />
+                      <BuyCourse message='No Full Length Test Available, Please Buy a Course!' />
                     ) : isLoading ? (
-                      <Loading text="Loading..." color="primary" />
+                      <Loading text='Loading...' color='primary' />
                     ) : fullLengthTestData.length > 0 ? (
                       <Table
                         rowData={fullLengthTestData}
                         columnDefs={columns}
                       />
                     ) : (
-                      <h5 className="text-center text-danger">
+                      <h5 className='text-center text-danger'>
                         No Tests Available !!
                       </h5>
                     )}

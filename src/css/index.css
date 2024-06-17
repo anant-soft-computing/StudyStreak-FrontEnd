@@ -396,6 +396,7 @@ body {
 
 .body__wrapper {
   margin-top: 110px;
+  min-height: calc(100vh - 260px);
 }
 
 .live__class__schedule_header {

@@ -61,10 +61,10 @@ const specificColumns = {
   "Practice Test": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
     { headerName: "Exam Name", field: "Name", filter: true },
-    { headerName: "Reading Set", field: "Reading.length", filter: true },
-    { headerName: "Writing Set", field: "Writing.length", filter: true },
-    { headerName: "Listening Set", field: "Listening.length", filter: true },
-    { headerName: "Speaking Set", field: "Speaking.length", filter: true },
+    { headerName: "Reading Set", field: "reading_count", filter: true },
+    { headerName: "Writing Set", field: "writing_count", filter: true },
+    { headerName: "Listening Set", field: "listening_count", filter: true },
+    { headerName: "Speaking Set", field: "speaking_count", filter: true },
     { headerName: "Points", field: "points", filter: true },
   ],
   "Live Class": [

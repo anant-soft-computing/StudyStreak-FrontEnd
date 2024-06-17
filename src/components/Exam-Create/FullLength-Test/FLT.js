@@ -68,10 +68,26 @@ const FLT = ({ activeTab }) => {
           if (response.status === 200) {
             const { data } = response;
             const updatedExams = {
-              Reading: data.filter(({ Reading }) => Reading.length > 0),
-              Writing: data.filter(({ Writing }) => Writing.length > 0),
-              Listening: data.filter(({ Listening }) => Listening.length > 0),
-              Speaking: data.filter(({ Speaking }) => Speaking.length > 0),
+              Reading: data
+                .filter(
+                  ({ practice_test_type }) => practice_test_type === "Reading"
+                )
+                .map((item, index) => ({ ...item, no: index + 1 })),
+              Writing: data
+                .filter(
+                  ({ practice_test_type }) => practice_test_type === "Writing"
+                )
+                .map((item, index) => ({ ...item, no: index + 1 })),
+              Listening: data
+                .filter(
+                  ({ practice_test_type }) => practice_test_type === "Listening"
+                )
+                .map((item, index) => ({ ...item, no: index + 1 })),
+              Speaking: data
+                .filter(
+                  ({ practice_test_type }) => practice_test_type === "Speaking"
+                )
+                .map((item, index) => ({ ...item, no: index + 1 })),
             };
             setIsLoading(false);
             setExams(updatedExams);
@@ -90,8 +106,11 @@ const FLT = ({ activeTab }) => {
       { field: "name", message: "Name is Required" },
       { field: "Reading", message: "Please Choose a Reading Practice Test" },
       { field: "Writing", message: "Please Choose a Writing Practice Test" },
-      { field: "Listening", message: "Please Choose a Listening Practice Test" },
-      { field: "Speaking", message: "Please Choose a Speaking Practice Test" }
+      {
+        field: "Listening",
+        message: "Please Choose a Listening Practice Test",
+      },
+      { field: "Speaking", message: "Please Choose a Speaking Practice Test" },
     ];
     for (const fieldData of requiredFields) {
       const field = fieldData.field;
@@ -157,31 +176,32 @@ const FLT = ({ activeTab }) => {
     rowData,
     onSelectionChanged: handleRowSelection,
     columnDefs: [
+      { headerName: "No.", field: "no", resizable: false, width: 68 },
       {
         headerCheckboxSelection: true,
         checkboxSelection: true,
         resizable: false,
-        width: 200,
+        width: 50,
       },
       { headerName: "Exam Name", field: "Name", filter: true },
       type === "Reading" && {
         headerName: "Reading Set",
-        field: "Reading.length",
+        field: "reading_count",
         filter: true,
       },
       type === "Writing" && {
         headerName: "Writing Set",
-        field: "Writing.length",
+        field: "writing_count",
         filter: true,
       },
       type === "Listening" && {
         headerName: "Listening Set",
-        field: "Listening.length",
+        field: "listening_count",
         filter: true,
       },
       type === "Speaking" && {
         headerName: "Speaking Set",
-        field: "Speaking.length",
+        field: "speaking_count",
         filter: true,
       },
     ].filter(Boolean),
@@ -303,7 +323,7 @@ const FLT = ({ activeTab }) => {
           </div>
         </div>
       </div>
-      <div className="create__course__bottom__button text-center">
+      <div className="create__course__bottom__button text-center mt-3">
         {formStatus.isError && (
           <div className="text-danger mb-2">{formStatus.errMsg}</div>
         )}

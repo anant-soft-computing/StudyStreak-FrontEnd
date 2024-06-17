@@ -297,7 +297,7 @@ const PT = ({ activeTab, type }) => {
           )}
         </div>
       </div>
-      <div className="create__course__bottom__button text-center mt-2">
+      <div className="create__course__bottom__button text-center mt-3">
         {formStatus.isError && (
           <div className="text-danger mb-2">{formStatus.errMsg}</div>
         )}

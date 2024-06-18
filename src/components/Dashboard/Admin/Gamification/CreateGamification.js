@@ -42,7 +42,7 @@ const validateForm = (gamificationData, setFormError) => {
   return true;
 };
 
-const CreateGamification = ({setActiveTab}) => {
+const CreateGamification = ({ setActiveTab }) => {
   const [gamificationData, dispatchGamification] = useReducer(
     reducerGamification,
     initialGamificationData
@@ -80,7 +80,11 @@ const CreateGamification = ({setActiveTab}) => {
         resetReducerForm();
         setActiveTab("View Gamification");
         toast.success("Gamification Created Successfully");
-      } else if ([400, 404].includes(response.status)) {
+      } else if (response.status === 400) {
+        toast.error(
+          `This ${gamificationData.model} already exists.`
+        );
+      } else {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
@@ -159,10 +163,8 @@ const CreateGamification = ({setActiveTab}) => {
           </div>
           <div className="col-xl-12 text-center">
             <div className="dashboard__form__button text-center mt-4">
-              {formStatus.isError ? (
+              {formStatus.isError && (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
-              ) : (
-                <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
                 <Loading color="primary" text="Creating Gamification..." />

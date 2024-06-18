@@ -10,7 +10,6 @@ const FullLengthTest = () => {
   const { count, givenTest } = useLocation().state || {};
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { full_length_test_count } = count;
 
   useEffect(() => {
     setIsLoading(true);
@@ -91,7 +90,7 @@ const FullLengthTest = () => {
       field: "Status",
       cellRenderer: (params) => {
         const examId = params.data.id;
-        const isGiven = givenTest.find((test) => test.id === examId);
+        const isGiven = givenTest?.find((test) => test.id === examId);
         if (isGiven) {
           return (
             <button className='given-tag' style={{ backgroundColor: "green" }}>
@@ -122,7 +121,7 @@ const FullLengthTest = () => {
                     <div className='dashboard__section__title'>
                       <h4>Full Length Test</h4>
                     </div>
-                    {full_length_test_count === "" ? (
+                    {count?.full_length_test_count === "" ? (
                       <BuyCourse message='No Full Length Test Available, Please Buy a Course!' />
                     ) : isLoading ? (
                       <Loading text='Loading...' color='primary' />

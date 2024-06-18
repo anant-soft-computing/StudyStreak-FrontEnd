@@ -26,10 +26,7 @@ const listeningReducer = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const tabs = [
-  { name: "Details" },
-  { name: "Instruction & Audio" },
-];
+const tabs = [{ name: "Details" }, { name: "Instruction & Audio" }];
 
 const ExamListening = ({ category }) => {
   const [listeningData, dispatchListeningData] = useReducer(
@@ -47,18 +44,11 @@ const ExamListening = ({ category }) => {
 
   const handlePassageChange = (event, editor) => {
     const data = editor.getData();
-    dispatchListeningData({
-      type: "passage",
-      value: data,
-    });
+    dispatchListeningData({ type: "passage", value: data });
   };
 
   const setFormError = (errMsg) => {
-    setFormStatus({
-      isError: true,
-      errMsg,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const validateForm = () => {
@@ -78,11 +68,7 @@ const ExamListening = ({ category }) => {
       setFormError("Block Type is Required");
       return false;
     }
-    setFormStatus({
-      isError: false,
-      errMsg: null,
-      isSubmitting: false,
-    });
+    setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     return true;
   };
 

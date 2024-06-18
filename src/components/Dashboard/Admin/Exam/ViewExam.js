@@ -132,22 +132,22 @@ const ViewExam = ({ activeTab }) => {
                 { headerName: "Exam Name", field: "Name", filter: true },
                 {
                   headerName: "Reading Set",
-                  field: "Reading.length",
+                  field: "reading_count",
                   filter: true,
                 },
                 {
                   headerName: "Writing Set",
-                  field: "Writing.length",
+                  field: "writing_count",
                   filter: true,
                 },
                 {
                   headerName: "Listening Set",
-                  field: "Listening.length",
+                  field: "listening_count",
                   filter: true,
                 },
                 {
                   headerName: "Speaking Set",
-                  field: "Speaking.length",
+                  field: "speaking_count",
                   filter: true,
                 },
               ]}

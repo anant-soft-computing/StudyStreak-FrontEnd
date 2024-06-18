@@ -10,6 +10,7 @@ const specificColumns = {
     { headerName: "No.", field: "no", resizable: false, width: 110 },
     { headerName: "Name", field: "title", filter: true },
     { headerName: "Description", field: "description", filter: true },
+    { headerName: "Points", field: "points", filter: true },
   ],
   Lesson: [
     { headerName: "Lesson Title", field: "name", filter: true },
@@ -18,16 +19,19 @@ const specificColumns = {
       field: "Lesson_Description",
       filter: true,
     },
+    { headerName: "Points", field: "points", filter: true },
   ],
   Course: [
     { headerName: "No.", field: "no", resizable: false, width: 60 },
     { headerName: "Course Title", field: "Course_Title", filter: true },
+    { headerName: "Points", field: "points", filter: true },
   ],
   "Exam Block": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
     { headerName: "Exam Name", field: "exam_name", filter: true },
     { headerName: "Exam Type", field: "exam_type", filter: true },
     { headerName: "Block Type", field: "block_type", filter: true },
+    { headerName: "Points", field: "points", filter: true },
   ],
   "Full Length Test": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
@@ -52,14 +56,16 @@ const specificColumns = {
       field: "speaking_set.Speaking.length",
       filter: true,
     },
+    { headerName: "Points", field: "points", filter: true },
   ],
   "Practice Test": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
     { headerName: "Exam Name", field: "Name", filter: true },
-    { headerName: "Reading Set", field: "Reading.length", filter: true },
-    { headerName: "Writing Set", field: "Writing.length", filter: true },
-    { headerName: "Listening Set", field: "Listening.length", filter: true },
-    { headerName: "Speaking Set", field: "Speaking.length", filter: true },
+    { headerName: "Reading Set", field: "reading_count", filter: true },
+    { headerName: "Writing Set", field: "writing_count", filter: true },
+    { headerName: "Listening Set", field: "listening_count", filter: true },
+    { headerName: "Speaking Set", field: "speaking_count", filter: true },
+    { headerName: "Points", field: "points", filter: true },
   ],
   "Live Class": [
     { headerName: "Meeting Title", field: "meeting_title" },
@@ -92,6 +98,7 @@ const specificColumns = {
       },
     },
     { headerName: "Description", field: "meeting_description" },
+    { headerName: "Points", field: "points", filter: true },
   ],
 };
 
@@ -157,7 +164,14 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.title && i.model === content
             )
           )
-          .map((item, index) => ({ ...item, no: index + 1 }));
+          .map((item, index) => ({
+            ...item,
+            no: index + 1,
+            points:
+              gamificationList.find(
+                (i) => i.name === item.title && i.model === content
+              )?.points || 0,
+          }));
       case "Lesson":
         return dataList
           .filter((item) =>
@@ -165,7 +179,14 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.Lesson_Title && i.model === content
             )
           )
-          .map((item, index) => ({ ...item, no: index + 1 }));
+          .map((item, index) => ({
+            ...item,
+            no: index + 1,
+            points:
+              gamificationList.find(
+                (i) => i.name === item.Lesson_Title && i.model === content
+              )?.points || 0,
+          }));
       case "Course":
         return dataList
           .filter((item) =>
@@ -173,7 +194,14 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.Course_Title && i.model === content
             )
           )
-          .map((item, index) => ({ ...item, no: index + 1 }));
+          .map((item, index) => ({
+            ...item,
+            no: index + 1,
+            points:
+              gamificationList.find(
+                (i) => i.name === item.Course_Title && i.model === content
+              )?.points || 0,
+          }));
       case "Exam Block":
         return dataList
           .filter((item) =>
@@ -183,7 +211,16 @@ const ViewGamification = ({ content, activeTab }) => {
                 i.model === content
             )
           )
-          .map((item, index) => ({ ...item, no: index + 1 }));
+          .map((item, index) => ({
+            ...item,
+            no: index + 1,
+            points:
+              gamificationList.find(
+                (i) =>
+                  i.name === `${item.exam_name}-${item.exam_type}` &&
+                  i.model === content
+              )?.points || 0,
+          }));
       case "Full Length Test":
         return dataList
           .filter((item) =>
@@ -191,7 +228,14 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.name && i.model === content
             )
           )
-          .map((item, index) => ({ ...item, no: index + 1 }));
+          .map((item, index) => ({
+            ...item,
+            no: index + 1,
+            points:
+              gamificationList.find(
+                (i) => i.name === item.name && i.model === content
+              )?.points || 0,
+          }));
       case "Practice Test":
         return dataList
           .filter((item) =>
@@ -199,7 +243,14 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.Name && i.model === content
             )
           )
-          .map((item, index) => ({ ...item, no: index + 1 }));
+          .map((item, index) => ({
+            ...item,
+            no: index + 1,
+            points:
+              gamificationList.find(
+                (i) => i.name === item.Name && i.model === content
+              )?.points || 0,
+          }));
       case "Live Class":
         return dataList
           .filter((item) =>
@@ -207,7 +258,14 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.meeting_title && i.model === content
             )
           )
-          .map((item, index) => ({ ...item, no: index + 1 }));
+          .map((item, index) => ({
+            ...item,
+            no: index + 1,
+            points:
+              gamificationList.find(
+                (i) => i.name === item.meeting_title && i.model === content
+              )?.points || 0,
+          }));
       default:
         return [];
     }

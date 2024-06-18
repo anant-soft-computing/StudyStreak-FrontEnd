@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import SingleSelection from "../../../UI/SingleSelect";
@@ -49,14 +49,45 @@ const validateForm = (badgeData, setFormError) => {
 const CreateBadge = ({ setActiveTab }) => {
   const [badgeData, dispatchBadge] = useReducer(reducerBadge, initialBadgeData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [gItems, setGItems] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
     dispatchBadge({ type: "reset" });
   };
+
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
+
+  useEffect(() => {
+    const fetchGItems = async () => {
+      try {
+        const response = await ajaxCall(
+          `/gamification/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setGItems(response.data);
+        } else {
+          console.log("Error fetching gamification items");
+        }
+      } catch (error) {
+        console.error("Error fetching gamification items:", error);
+      }
+    };
+    if (authData?.accessToken) {
+      fetchGItems();
+    }
+  }, [authData?.accessToken]);
 
   const createBadge = async (e) => {
     e.preventDefault();
@@ -101,15 +132,19 @@ const CreateBadge = ({ setActiveTab }) => {
     }
   };
 
-  const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
-    if (isSingle) {
-      dispatchBadge({ type: fieldName, value: val });
-      dispatchBadge({ type: proFieldName, value: +val[0]?.id });
-      return;
-    }
-    const newValIds = val.map((ids) => ids.id);
-    dispatchBadge({ type: fieldName, value: val });
-    dispatchBadge({ type: proFieldName, value: newValIds });
+  const addedSelectVal = (field, proField, isSingle, val) => {
+    let totalPoints = 0;
+    val.forEach((selectedItem) => {
+      const items = gItems.find(
+        (item) => item.id === selectedItem.id
+      );
+      if (items) {
+        totalPoints += items.points;
+      }
+    });
+    dispatchBadge({ type: field, value: val });
+    dispatchBadge({ type: proField, value: val.map((item) => item.id) });
+    dispatchBadge({ type: "points_required", value: totalPoints });
   };
 
   return (

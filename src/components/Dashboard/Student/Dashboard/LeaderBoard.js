@@ -23,48 +23,50 @@ const columns = [
   },
 ];
 
-const LeaderBoard = ({ batchId }) => {
+const LeaderBoard = ({ batchId, activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [studentList, setStudentList] = useState([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const studentData = [];
-        for (let i = 0; i < batchId.length; i++) {
-          let totalCount = 0;
-          const id = batchId[i];
-          const response = await ajaxCall(
-            `/batchidwisestudentgetview/${id}/`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+    if (activeTab === "Leader Board") {
+      setIsLoading(true);
+      (async () => {
+        try {
+          const studentData = [];
+          for (let i = 0; i < batchId.length; i++) {
+            let totalCount = 0;
+            const id = batchId[i];
+            const response = await ajaxCall(
+              `/batchidwisestudentgetview/${id}/`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response.data.message === "No Students are available") {
-            continue;
+              8000
+            );
+            if (response.data.message === "No Students are available") {
+              continue;
+            }
+            const students = response.data.students.map((student) => ({
+              ...student,
+              no: ++totalCount,
+            }));
+            studentData.push(...students);
           }
-          const students = response.data.students.map((student) => ({
-            ...student,
-            no: ++totalCount,
-          }));
-          studentData.push(...students);
+          setIsLoading(false);
+          setStudentList(studentData);
+        } catch (error) {
+          console.log("error", error);
         }
-        setIsLoading(false);
-        setStudentList(studentData);
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, [batchId]);
+      })();
+    }
+  }, [activeTab, batchId]);
 
   return (
     <div>

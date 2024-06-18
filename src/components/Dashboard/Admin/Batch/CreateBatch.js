@@ -53,7 +53,7 @@ const validateForm = (batchData, setFormError) => {
   return true;
 };
 
-const CreateBatch = ({setActiveTab}) => {
+const CreateBatch = ({ setActiveTab }) => {
   const [batchData, dispatchBatch] = useReducer(reducerBatch, initialBatchData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
@@ -212,10 +212,8 @@ const CreateBatch = ({setActiveTab}) => {
           </div>
           <div className="col-xl-12">
             <div className="dashboard__form__button text-center mt-4">
-              {formStatus.isError ? (
+              {formStatus.isError && (
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
-              ) : (
-                <div className="text-success mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
                 <Loading color="primary" text="Creating Batch..." />

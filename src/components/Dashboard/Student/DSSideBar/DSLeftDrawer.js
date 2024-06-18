@@ -12,7 +12,7 @@ import liveClass from "../../../../img/icon/liveClass.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -268,37 +268,14 @@ const DSLeftDrawer = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar
-        position='fixed'
-        // open={open}
-        // sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        {/* <Toolbar
-          sx={{
-            bgcolor: "transparent",
-            // display: "flex",
-            // flexDirection: "column",
-            // flex: 1,
-          }}
-        > */}
+      <AppBar position='fixed'>
         <div className='fixing-navbar-at-top-side'>
           <TopBar />
-          <NavBar handleDrawerToggle={handleDrawerToggle} />
+          <NavBar handleDrawerToggle={handleDrawerToggle} showNavBar={true} />
         </div>
-        {/* </Toolbar> */}
       </AppBar>
       <Drawer
         variant='permanent'
-        sx={
-          {
-            // width: drawerWidth,
-            // flexShrink: 0,
-            // [`& .MuiDrawer-paper`]: {
-            //   width: drawerWidth,
-            //   boxSizing: "border-box",
-            // },
-          }
-        }
         open={open}
         PaperProps={{
           sx: {
@@ -306,40 +283,8 @@ const DSLeftDrawer = () => {
           },
         }}
       >
-        {/* <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>{"Close"}</IconButton>
-          <div className='col-xl-2 col-lg-2 col-md-6'>
-            <div className='headerarea__left'>
-              <div className='headerarea__left__logo'>
-                <Link to='/'>
-                  <img className='logoSize' src={logo} alt='logo' />
-                </Link>
-              </div>
-            </div>
-          </div>
-
-           <div className='dashboard__nav__title'>
-            <h6>Welcome, {userData?.username}</h6>
-            {showMobileNavBtn && (
-              <button
-                className='mobile-aside-button'
-                onClick={handleMobileMenu}
-              >
-                <i className='icofont-navigation-menu'></i>
-              </button>
-            )}
-          </div>
-        </DrawerHeader> */}
-        {/* <Toolbar /> */}
         <Box sx={{ overflow: "auto", mt: 14 }}>
           <List>
-            {/* <div
-        className='col-xl-3 col-lg-3 col-md-12'
-        style={{
-          marginTop: !showMobileNavBtn ? "0px" : "70px",
-        }}
-      > */}
-
             {menuList.map((item, index) => (
               <ListItem
                 key={`${item.name}-${index}`}
@@ -410,10 +355,6 @@ const DSLeftDrawer = () => {
                     )}
                   </ListItemButton>
                 </Link>
-                {/* <ListItemText
-                  primary={item.name}
-                  sx={{ opacity: open ? 1 : 0 }}
-                /> */}
               </ListItem>
             ))}
           </List>

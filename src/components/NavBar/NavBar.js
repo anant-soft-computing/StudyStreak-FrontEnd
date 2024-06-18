@@ -6,7 +6,7 @@ import { useCheckAuth } from "../../hooks/useCheckAuth";
 import DSSidebar from "../Dashboard/Student/DSSideBar/DSSideBar";
 import { IconButton } from "@mui/material";
 
-const NavBar = ({ handleDrawerToggle }) => {
+const NavBar = ({ handleDrawerToggle, showNavBar }) => {
   const { logoutUser } = useCheckAuth();
   const token = localStorage.getItem("loginInfo");
   const role = JSON.parse(localStorage.getItem("loginInfo"))?.user_role || "";
@@ -24,7 +24,7 @@ const NavBar = ({ handleDrawerToggle }) => {
             <div className='col-xl-2 col-lg-2 col-md-6'>
               <div className='headerarea__left'>
                 <div className='headerarea__left__logo d-flex justify-content-center align-items-center'>
-                  {token && (
+                  {showNavBar && token && (
                     <div className='headerarea__left'>
                       <IconButton
                         // color='inherit'

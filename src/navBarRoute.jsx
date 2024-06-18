@@ -45,7 +45,7 @@ export default function NavBarRoute({ isProtected }) {
         <>
           <div className='fixing-navbar-at-top-side'>
             <TopBar />
-            <NavBar />
+            <NavBar showNavBar={false} />
             <MobileTopBar />
           </div>
           <Box mt='70px'>

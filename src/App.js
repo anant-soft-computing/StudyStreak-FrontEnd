@@ -3,10 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import TopBar from "./components/TopBar/TopBar";
-import MobileTopBar from "./components/TopBar/MobileTopBar";
-import NavBar from "./components/NavBar/NavBar";
-import Footer from "./components/Footer/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Checkout from "./components/Checkout/Checkout";
 import CourseDetail from "./components/CourseDetail/CourseDetail";
@@ -72,7 +68,8 @@ import PracticeTestAnswer from "./components/Exam-Answer/PracticeTestAnswer";
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
 import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest";
 import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
-import NavBarRoute from "./navBarRoute";
+import StudentNavBarRoute from "./layout/studentNavBarRoute";
+import AdminNavBarRoute from "./layout/adminNavBarRoute";
 
 const App = () => {
   return (
@@ -90,7 +87,26 @@ const App = () => {
         className='toast-container'
       />
       <Routes>
-        <Route element={<NavBarRoute isProtected={true} />}>
+        <Route element={<AdminNavBarRoute />}>
+          <Route
+            path='/admin-dashboard'
+            element={<ProtectedRoute element={ADashboard} />}
+          />
+          <Route path='/admin-student' element={<Student />} />
+          <Route path='/admin-package' element={<Package />} />
+          <Route path='/admin-course' element={<Course />} />
+          <Route path='/admin-exam' element={<Exam />} />
+          <Route path='/admin-liveClass' element={<LiveClass />} />
+          <Route path='/admin-batch' element={<Batch />} />
+          <Route path='/admin-badges' element={<Badge />} />
+          <Route path='/admin-flashCard' element={<FlashCard />} />
+          <Route path='/admin-gamification' element={<Gamification />} />
+          <Route path='/admin-profile' element={<AProfile />} />
+          <Route path='/admin-exam/:examType' element={<Exam />} />
+          <Route path='/admin-exam/:examType/:examForm' element={<Exam />} />
+        </Route>
+
+        <Route element={<StudentNavBarRoute isProtected={true} />}>
           <Route
             path='/studentDashboard'
             element={<ProtectedRoute element={SDashboard} />}
@@ -107,21 +123,6 @@ const App = () => {
           <Route path='/studentSettings' element={<SSettings />} />
 
           <Route path='/courseDetail/:courseId' element={<CourseDetail />} />
-
-          <Route
-            path='/admin-dashboard'
-            element={<ProtectedRoute element={ADashboard} />}
-          />
-          <Route path='/admin-student' element={<Student />} />
-          <Route path='/admin-package' element={<Package />} />
-          <Route path='/admin-course' element={<Course />} />
-          <Route path='/admin-exam' element={<Exam />} />
-          <Route path='/admin-liveClass' element={<LiveClass />} />
-          <Route path='/admin-batch' element={<Batch />} />
-          <Route path='/admin-badges' element={<Badge />} />
-          <Route path='/admin-flashCard' element={<FlashCard />} />
-          <Route path='/admin-gamification' element={<Gamification />} />
-          <Route path='/admin-profile' element={<AProfile />} />
 
           <Route path='/exam-create' element={<DragDrop />} />
           <Route path='/Reading' element={<ExamReading />} />
@@ -147,13 +148,11 @@ const App = () => {
             path='/assessment/:examId'
             element={<ViewMTAAssessment />}
           ></Route>
-          <Route path='/admin-exam/:examType' element={<Exam />} />
-          <Route path='/admin-exam/:examType/:examForm' element={<Exam />} />
 
           <Route path='/checkout' element={<Checkout />} />
         </Route>
 
-        <Route element={<NavBarRoute isProtected={false} />}>
+        <Route element={<StudentNavBarRoute isProtected={false} />}>
           <Route path='/' element={<Main />} />
           <Route path='/login' element={<Login />} />
           <Route

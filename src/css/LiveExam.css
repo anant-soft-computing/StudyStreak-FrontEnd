@@ -7,7 +7,7 @@
   align-items: center;
   border-top: 1px solid #01579b;
   border-bottom: 1px solid #01579b;
-  margin-top: 132px;
+  /* margin-top: 132px; */
   position: fixed;
   top: 0;
   left: 0;
@@ -64,7 +64,7 @@
 }
 
 .lv-container {
-  margin-top: 200px;
+  padding-top: 100px;
 }
 
 .lv-scrollable-content {
@@ -103,7 +103,7 @@
   display: flex;
   margin-left: 10px;
   overflow-x: auto;
-  height: 50px;
+  height: 52px;
 }
 
 .lv-completed-questions {
@@ -433,7 +433,7 @@
 }
 /* Instruction css */
 .instruction-card {
-  margin-top: 140px;
+  /* margin-top: 140px; */
   border: 1px solid grey;
   padding: 15px;
   display: flex;
@@ -516,11 +516,11 @@
 
 @media (max-width: 978px) {
   .lv-navbar {
-    margin-top: 81px !important;
+    /* margin-top: 81px !important; */
     flex-direction: column;
   }
   .lv-container {
-    margin-top: 180px;
+    padding-top: 130px;
   }
   .lv-navbar-title {
     display: none;
@@ -535,7 +535,7 @@
 
 @media (min-width: 1500px) {
   .lv-navbar {
-    margin-top: 110px;
+    /* margin-top: 110px; */
   }
 }
 

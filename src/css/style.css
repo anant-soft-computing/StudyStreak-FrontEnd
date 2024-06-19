@@ -16690,7 +16690,7 @@ div.gridarea__wraper {
 }
 
 .lv-navbar-responsive {
-  margin-top: 112px !important;
+  /* margin-top: 112px !important; */
   padding: 10px;
   z-index: 1;
 }
@@ -16703,7 +16703,7 @@ div.gridarea__wraper {
 
 @media (min-width: 992px) and (max-width: 1199px) {
   .lv-navbar-responsive {
-    margin-top: 133px !important;
+    /* margin-top: 133px !important; */
     padding: 10px;
   }
 }

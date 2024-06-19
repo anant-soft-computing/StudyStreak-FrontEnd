@@ -12,8 +12,78 @@ import liveClass from "../../../../img/icon/liveClass.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
+import { styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import MuiDrawer from "@mui/material/Drawer";
+import MuiAppBar from "@mui/material/AppBar";
+import List from "@mui/material/List";
+import CssBaseline from "@mui/material/CssBaseline";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import NavBar from "../../../NavBar/NavBar";
+import TopBar from "../../../TopBar/TopBar";
 
-const DSSidebar = () => {
+const drawerWidth = 250;
+
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
+}));
+
+const DSLeftDrawer = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [solvingClassBook, setSolvingClassBook] = useState([]);
   const [givenMT, setGivenMT] = useState([]);
@@ -22,11 +92,15 @@ const DSSidebar = () => {
   const [givenSpeaking, setGivenSpeaking] = useState([]);
   const [studentId, setStudentId] = useState();
   const [count, setCount] = useState({});
-  const [openMobileMenu, setOpenMobileMenu] = useState(false);
-  const [showMobileNavBtn, setShowMobileNavBtn] = useState(true);
-  const userData = JSON.parse(localStorage.getItem("loginInfo"));
+
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
+
+  const [open, setOpen] = React.useState(true);
+
+  const handleDrawerToggle = () => {
+    setOpen(!open);
+  };
 
   const menuList = [
     {
@@ -100,8 +174,6 @@ const DSSidebar = () => {
       link: "/login",
     },
   ];
-
-  const handleMobileMenu = () => setOpenMobileMenu(!openMobileMenu);
 
   useEffect(() => {
     (async () => {
@@ -188,81 +260,108 @@ const DSSidebar = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    // set openmobileMenu to true for screen width less than 768px
-    if (window.innerWidth > 990) {
-      setOpenMobileMenu(true);
-      setShowMobileNavBtn(false);
-    }
-  }, []);
-
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
   };
 
   return (
-    <>
-      <div
-        className='col-xl-3 col-lg-3 col-md-12'
-        style={{
-          marginTop: !showMobileNavBtn ? "0px" : "70px",
-          display: showMobileNavBtn ? "block" : "none",
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
+      <AppBar position='fixed'>
+        <div className='fixing-navbar-at-top-side'>
+          <TopBar />
+          <NavBar handleDrawerToggle={handleDrawerToggle} showNavBar={true} />
+        </div>
+      </AppBar>
+      <Drawer
+        variant='permanent'
+        open={open}
+        PaperProps={{
+          sx: {
+            backgroundColor: "#ebf2f5",
+          },
         }}
       >
-        <div className='dashboard__inner sticky-top common-background-color-across-app'>
-          <div className='dashboard__nav__title'>
-            <h6>Welcome, {userData?.username}</h6>
-            {showMobileNavBtn && (
-              <button
-                className='mobile-aside-button'
-                onClick={handleMobileMenu}
+        <Box sx={{ overflow: "auto", mt: 14 }}>
+          <List>
+            {menuList.map((item, index) => (
+              <ListItem
+                key={`${item.name}-${index}`}
+                disablePadding
+                sx={{
+                  display: "block",
+                  borderBottom: "1px solid",
+                  borderColor: "#d3d3d3",
+                }}
               >
-                <i className='icofont-navigation-menu'></i>
-              </button>
-            )}
-          </div>
-          <div className={`dashboard__nav ${openMobileMenu && "active"}`}>
-            <ul>
-              {menuList.map((item, index) => (
-                <li key={index}>
-                  <Link
-                    className={
-                      location === item.link
-                        ? "active admin__menu"
-                        : "admin__menu"
-                    }
-                    to={item.link}
-                    onClick={item.name === "Logout" ? logout : () => {}}
-                    state={item?.state}
+                <Link
+                  className={
+                    location === item.link
+                      ? "active admin__menu"
+                      : "admin__menu"
+                  }
+                  to={item.link}
+                  onClick={item.name === "Logout" ? logout : () => {}}
+                  state={item?.state}
+                  style={{
+                    textDecoration: "none",
+                    color: location === item.link ? "#01579b" : "#000",
+                  }}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 50,
+                      justifyContent: open ? "initial" : "center",
+                      px: 4,
+                    }}
                   >
-                    <div className='admin__menu__icon'>{item.icon}</div>
-                    <div className='side-navbar-rexr-color-common admin__menu__title'>
-                      {item.name}
-                    </div>
-                    {item.name === "Practice Test" ||
-                    item.name === "Mini Test" ||
-                    item.name === "Full Length Test" ? (
-                      <span className='dashboard__label'>
-                        {
-                          count[
-                            item.name.replace(/ /g, "_").toLowerCase() +
-                              "_count"
-                          ]
-                        }
-                      </span>
-                    ) : (
-                      ""
+                    <ListItemIcon
+                      className='admin__menu__icon'
+                      sx={{
+                        minWidth: 0,
+                        display: "flex",
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      {item.icon}
+                    </ListItemIcon>
+                    {open && (
+                      <>
+                        <ListItemText
+                          className='side-navbar-rexr-color-common admin__menu__title'
+                          primary={item.name}
+                        />
+                        {/* <div className='side-navbar-rexr-color-common admin__menu__title'>
+                          {item.name}
+                        </div> */}
+                        {item.name === "Practice Test" ||
+                        item.name === "Mini Test" ||
+                        item.name === "Full Length Test" ? (
+                          <span className='dashboard__label'>
+                            {
+                              count[
+                                item.name.replace(/ /g, "_").toLowerCase() +
+                                  "_count"
+                              ]
+                            }
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </>
                     )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    </>
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Drawer>
+    </Box>
   );
 };
 
-export default DSSidebar;
+export default DSLeftDrawer;

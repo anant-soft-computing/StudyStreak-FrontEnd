@@ -2,7 +2,7 @@ import React from "react";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const DateRange = ({ selectedRange, onChange }) => {
+const DateRange = ({ selectedRange, onChange, ...rest }) => {
   return (
     <ReactDatePicker
       selectsRange={true}
@@ -17,6 +17,7 @@ const DateRange = ({ selectedRange, onChange }) => {
         onChange(selectedRange);
       }}
       isClearable={false}
+      {...rest}
     />
   );
 };

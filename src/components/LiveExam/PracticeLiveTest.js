@@ -292,10 +292,10 @@ console.log("-----filteredData------>",filteredData)
           <audio
             controls
             autoPlay
-            controlsList="nodownload noplaybackrate"
-            className="hidden-controls"
+            controlsList='nodownload noplaybackrate'
+            className='hidden-controls'
           >
-            <source src={audio_file} type="audio/mpeg" />
+            <source src={audio_file} type='audio/mpeg' />
           </audio>
         </div>
       );
@@ -309,11 +309,11 @@ console.log("-----filteredData------>",filteredData)
     return (
       <>
         {image && (
-          <div className="text-center">
+          <div className='text-center'>
             <img
-              className="mb-2"
+              className='mb-2'
               src={image}
-              alt="Study Streak"
+              alt='Study Streak'
               height={250}
               width={250}
             />
@@ -856,14 +856,14 @@ console.log("-----filteredData------>",filteredData)
     examAnswer.map((test, index) => (
       <div key={index}>
         <h4>Test : {index + 1}</h4>
-        <div className="card-container">
+        <div className='card-container'>
           {test.data.map((answer, idx) => (
-            <div key={idx} className="card answer__width">
-              <div className="card-body">
-                <h6 className="card-title">Q. {idx + 1}</h6>
-                <h6 className="card-text">
+            <div key={idx} className='card answer__width'>
+              <div className='card-body'>
+                <h6 className='card-title'>Q. {idx + 1}</h6>
+                <h6 className='card-text'>
                   Answer :{" "}
-                  <span className="text-success">{answer.answer_text}</span>
+                  <span className='text-success'>{answer.answer_text}</span>
                 </h6>
               </div>
             </div>
@@ -879,10 +879,10 @@ console.log("-----filteredData------>",filteredData)
     let tempQuestionNumber = 0;
     return uniqueIdArr?.map((item, sectionIndex) => {
       return (
-        <div className="lv-section" key={sectionIndex}>
+        <div className='lv-section' key={sectionIndex}>
           {/* Section name */}
           <button
-            className="lv-footer-section"
+            className='lv-footer-section'
             onClick={() => setNext(sectionIndex)}
           >
             {item.name}
@@ -929,76 +929,76 @@ console.log("-----filteredData------>",filteredData)
   };
 
   return !instructionCompleted ? (
-    <div className="test-instruction">
+    <div className='test-instruction'>
       {examData?.exam_type === "Reading" && (
         <ReadingInstruction
-          testType="Practice"
+          testType='Practice'
           startTest={handleCompleteInstruciton}
         />
       )}
       {examData?.exam_type === "Listening" && (
         <ListeningInstruction
-          testType="Practice"
+          testType='Practice'
           startTest={handleCompleteInstruciton}
         />
       )}
       {examData?.exam_type === "Writing" && (
         <WritingInstruction
-          testType="Practice"
+          testType='Practice'
           startTest={handleCompleteInstruciton}
         />
       )}
       {examData?.exam_type === "Speaking" && (
         <SpeakingInstruction
-          testType="Practice"
+          testType='Practice'
           startTest={handleCompleteInstruciton}
         />
       )}
     </div>
   ) : (
     <>
-      <div className="lv-navbar lv-navbar-responsive">
-        <div className="lv-navbar-title">
+      <div className='lv-navbar lv-navbar-responsive'>
+        <div className='lv-navbar-title'>
           <h2>{examData?.exam_category}</h2>
-          <div className="lv-userName">{userData?.username}</div>
+          <div className='lv-userName'>{userData?.username}</div>
           <div style={{ marginLeft: "10px" }}>/</div>
-          <div className="lv-userName">{`${examData?.exam_name}`}</div>
+          <div className='lv-userName'>{`${examData?.exam_name}`}</div>
         </div>
-        <span className="lv-navbar-title">
-          Time Taken :<span className="lv-userName">{timeTaken}</span>
+        <span className='lv-navbar-title'>
+          Time Taken :<span className='lv-userName'>{timeTaken}</span>
         </span>
-        <div className="lv-navbar-title-mobile">
-          <div className="username-mobile">
+        <div className='lv-navbar-title-mobile'>
+          <div className='username-mobile'>
             <h2>{examData?.exam_category}</h2>
-            <div className="mobile-breadcumb">
-              <div className="lv-userName">{userData?.username}</div>
+            <div className='mobile-breadcumb'>
+              <div className='lv-userName'>{userData?.username}</div>
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className="lv-userName">{`${examData?.exam_name}`}</div>
+              <div className='lv-userName'>{`${examData?.exam_name}`}</div>
             </div>
           </div>
-          <div className="lv-navbar-footer">
+          <div className='lv-navbar-footer'>
             <span>
-              Time Taken :<span className="lv-userName">{timeTaken}</span>
+              Time Taken :<span className='lv-userName'>{timeTaken}</span>
             </span>
           </div>
         </div>
       </div>
-      <div className="lv-container">
+      <div className='lv-container'>
         {/* Main Container */}
         {renderAudio(examData?.audio_file)}
-        <div className="lv-main-container">
+        <div className='lv-main-container'>
           {/* Left Container */}
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening" ||
             examData?.exam_type === "Writing") && (
-            <div className="lv-left-container">
+            <div className='lv-left-container'>
               {displayLeftContainer(examData?.passage, examData?.passage_image)}
             </div>
           )}
           {examData?.exam_type === "Speaking" && (
-            <div className="lv-left-container">
+            <div className='lv-left-container'>
               <button
-                className="lv-footer-button"
+                className='lv-footer-button'
                 onClick={speak}
                 disabled={speaking === 1}
                 style={{
@@ -1013,11 +1013,11 @@ console.log("-----filteredData------>",filteredData)
 
           {/* Right Container */}
           <div
-            className="lv-right-container"
-            id="right-container"
+            className='lv-right-container'
+            id='right-container'
             ref={containerRef}
           >
-            <div className="lv-box-right">
+            <div className='lv-box-right'>
               {/* Replace the following with your actual content */}
               {(examData?.exam_type === "Reading" ||
                 examData?.exam_type === "Listening") && (
@@ -1028,10 +1028,10 @@ console.log("-----filteredData------>",filteredData)
                 />
               )}
               {examData?.exam_type === "Writing" && (
-                <div className="lv-textarea">
+                <div className='lv-textarea'>
                   <textarea
                     id={`textarea_${next}`}
-                    className="writing__textarea"
+                    className='writing__textarea'
                     value={examAnswer[next]?.data[0]?.answer_text || ""}
                     onChange={(e) => handleWritingAnswer(e, next)}
                   />
@@ -1049,22 +1049,22 @@ console.log("-----filteredData------>",filteredData)
             </div>
           </div>
         </div>
-        <div className="d-flex justify-content-between align-items-center mb-3 mt-2 flex-column flex-md-row">
-          <div className="lv-question-pagination d-flex justify-content-between align-items-center pb-1 w-100 mb-2 mb-md-0">
-            <div className="lv-section-pagination">{renderPagination}</div>
+        <div className='d-flex justify-content-between align-items-center mb-3 mt-2 flex-column flex-md-row'>
+          <div className='lv-question-pagination d-flex justify-content-between align-items-center pb-1 w-100 mb-2 mb-md-0'>
+            <div className='lv-section-pagination'>{renderPagination}</div>
           </div>
-          <div className="lv-footer-btn pb-1">
+          <div className='lv-footer-btn pb-1'>
             {(examData?.exam_type === "Reading" ||
               examData?.exam_type === "Listening") && (
               <button
-                className="lv-footer-button review_size"
+                className='lv-footer-button review_size'
                 onClick={() => setIsModalOpen(true)}
               >
                 Review
               </button>
             )}
             <button
-              className="lv-footer-button"
+              className='lv-footer-button'
               style={{
                 display: next === 0 ? "none" : "block",
               }}
@@ -1076,7 +1076,7 @@ console.log("-----filteredData------>",filteredData)
               <span>Back</span>
             </button>
             <button
-              className="lv-footer-button"
+              className='lv-footer-button'
               style={{
                 display:
                   next ===
@@ -1093,7 +1093,7 @@ console.log("-----filteredData------>",filteredData)
               <span>&#10152;</span>
             </button>
             <button
-              className="lv-footer-button"
+              className='lv-footer-button'
               style={{
                 display:
                   next !==
@@ -1110,13 +1110,13 @@ console.log("-----filteredData------>",filteredData)
         </div>
         {isConfirmModalOpen && (
           <SmallModal
-            size="md"
+            size='md'
             centered
             isOpen={isConfirmModalOpen}
             footer={
-              <div className="d-flex gap-2">
+              <div className='d-flex gap-2'>
                 <button
-                  className="btn btn-success"
+                  className='btn btn-success'
                   onClick={() => {
                     if (
                       examData?.exam_type === "Reading" ||
@@ -1132,7 +1132,7 @@ console.log("-----filteredData------>",filteredData)
                   Yes
                 </button>
                 <button
-                  className="btn btn-danger"
+                  className='btn btn-danger'
                   onClick={() => setIsConfirmModalOpen(false)}
                 >
                   No
@@ -1148,9 +1148,9 @@ console.log("-----filteredData------>",filteredData)
           (examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening") && (
             <SmallModal
-              size="lg"
+              size='lg'
               centered
-              title="Your Answers"
+              title='Your Answers'
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
             >

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import logo from "../../img/logo/Logo.png";
 import menuIcon from "../../img/icon/icon-menu.svg";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
-import DSSidebar from "../Dashboard/Student/DSSideBar/DSSideBar";
 import { IconButton } from "@mui/material";
 
 const NavBar = ({ handleDrawerToggle, showNavBar }) => {
@@ -27,7 +26,6 @@ const NavBar = ({ handleDrawerToggle, showNavBar }) => {
                   {showNavBar && token && (
                     <div className='headerarea__left'>
                       <IconButton
-                        // color='inherit'
                         aria-label='open drawer'
                         onClick={handleDrawerToggle}
                         edge='start'
@@ -49,16 +47,6 @@ const NavBar = ({ handleDrawerToggle, showNavBar }) => {
                 </div>
               </div>
             </div>
-
-            {/* <div className='col-xl-2 col-lg-2 col-md-6'>
-              <div className='headerarea__left'>
-                <div className='headerarea__left__logo'>
-                  <Link to='/'>
-                    <img className='logoSize' src={logo} alt='logo' />
-                  </Link>
-                </div>
-              </div>
-            </div> */}
             <div className='col-xl-7 col-lg-7 main_menu_wrap'>
               <div className='headerarea__main__menu'>
                 <nav>

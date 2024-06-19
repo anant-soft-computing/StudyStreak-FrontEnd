@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import TopBar from "../components/TopBar/TopBar";
 import NavBar from "../components/NavBar/NavBar";
 import MobileTopBar from "../components/TopBar/MobileTopBar";
-import Footer from "../components/Footer/Footer";
 import { Box } from "@mui/material";
 import DSLeftDrawer from "../components/Dashboard/Student/DSSideBar/DSLeftDrawer";
 
@@ -38,7 +37,6 @@ export default function StudentNavBarRoute({ isProtected }) {
           </Box>
           <Box width='100%'>
             <Outlet />
-            <Footer />
           </Box>
         </Box>
       ) : (
@@ -50,7 +48,6 @@ export default function StudentNavBarRoute({ isProtected }) {
           </div>
           <Box mt='70px'>
             <Outlet />
-            <Footer />
           </Box>
         </>
       )}

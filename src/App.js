@@ -87,7 +87,7 @@ const App = () => {
         className='toast-container'
       />
       <Routes>
-        <Route element={<AdminNavBarRoute />}>
+        <Route element={<AdminNavBarRoute isProtected={true} />}>
           <Route
             path='/admin-dashboard'
             element={<ProtectedRoute element={ADashboard} />}

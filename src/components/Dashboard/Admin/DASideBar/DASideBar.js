@@ -103,7 +103,8 @@ const DASideBar = () => {
       <div
         className="col-xl-3 col-lg-3 col-md-12"
         style={{
-          marginTop: showMobileNavBtn ? "70px" : 0,
+          marginTop: !showMobileNavBtn ? "0px" : "70px",
+          display: showMobileNavBtn ? "block" : "none",
         }}
       >
         <div className="dashboard__inner sticky-top common-background-color-across-app">

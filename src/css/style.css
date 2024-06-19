@@ -272,6 +272,13 @@ li {
   padding: 0 30px;
 }
 
+@media screen and (max-width: 768px) {
+  .container-fluid.full__width__padding {
+    margin-top: 112px;
+    padding: 0 30px;
+  }
+}
+
 @media (min-width: 1500px) and (max-width: 1920px) {
   .container-fluid.full__width__padding {
     padding: 0 150px;
@@ -3128,7 +3135,6 @@ Hero Banner Area
 
 .herobannerarea.herobannerarea__2 {
   background: var(--lightGrey11);
-  margin-top: 112px;
 }
 
 @media (min-width: 992px) and (max-width: 1365px) {

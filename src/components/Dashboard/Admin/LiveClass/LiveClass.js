@@ -21,7 +21,7 @@ const LiveClass = () => {
             <div className="container-fluid full__width__padding">
               <div className="row">
                 <DASideBar />
-                <div className="col-xl-9 col-lg-9 col-md-12">
+                <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>LiveClass</h4>

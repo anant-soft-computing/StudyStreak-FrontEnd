@@ -1,5 +1,4 @@
 import AboutSection from "../../components/Landing/AboutSection";
-import Scrollar from "../../components/Landing/Scrollar";
 import BrandSection from "../../components/Landing/BrandSection";
 import CounterArea from "../../components/Landing/CounterArea";
 import HeroBanner from "../../components/Landing/HeroBanner";
@@ -14,7 +13,6 @@ const Main = () => {
       <MobileTopBar />
       <HeroBanner />
       <BrandSection />
-      <Scrollar />
       <Path />
       <CounterArea />
       <PopulerArea />

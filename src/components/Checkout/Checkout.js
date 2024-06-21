@@ -164,7 +164,7 @@ const Checkout = () => {
       key: process.env.REACT_APP_RAZORPAY_KEY_ID,
       amount: amount.toString(),
       currency: currency,
-      name: `${userDetails?.user.first_name} ${userDetails?.user.last_name}`,
+      name: `${userDetails?.user?.first_name} ${userDetails?.user?.last_name}`,
       description: "Test Transaction",
       image: { logo },
       order_id: order_id,
@@ -202,8 +202,8 @@ const Checkout = () => {
       },
       prefill: {
         name: userData?.username,
-        email: userDetails?.user.email,
-        contact: userDetails?.user.phone_no,
+        email: userDetails?.user?.email,
+        contact: userDetails?.phone_no,
       },
       notes: {
         address: "Razorpay Corporate Office",
@@ -235,7 +235,7 @@ const Checkout = () => {
           8000
         );
         if (response.status === 200) {
-          setUserDetails(response.data[0]);
+          setUserDetails(response.data);
         } else {
           console.log("error");
         }

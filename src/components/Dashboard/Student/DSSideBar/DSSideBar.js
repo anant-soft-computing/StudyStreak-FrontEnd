@@ -175,10 +175,10 @@ const DSSidebar = () => {
           8000
         );
         if (response.status === 200) {
-          setGivenMT(response?.data[0].student_mock);
-          setGivenPT(response?.data[0].student_pt);
-          setGivenFLT(response?.data[0].student_flt);
-          setGivenSpeaking(response?.data[0].student_speakingblock);
+          setGivenMT(response?.data[0]?.student_mock);
+          setGivenPT(response?.data[0]?.student_pt);
+          setGivenFLT(response?.data[0]?.student_flt);
+          setGivenSpeaking(response?.data[0]?.student_speakingblock);
         } else {
           console.log("error");
         }

@@ -57,15 +57,15 @@ const Student = () => {
       resizable: false,
       width: 75,
     },
-    { headerName: "User Name", field: "user.username", filter: true },
+    { headerName: "User Name", field: "username", filter: true },
     {
       headerName: "First Name",
-      field: "user.first_name",
+      field: "first_name",
       filter: true,
     },
     {
       headerName: "Last Name",
-      field: "user.last_name",
+      field: "last_name",
       filter: true,
     },
     {
@@ -84,19 +84,19 @@ const Student = () => {
     },
     {
       headerName: "City",
-      field: "city.name",
+      field: "city_name",
     },
     {
       headerName: "State",
-      field: "state.name",
+      field: "state_name",
     },
     {
       headerName: "Country",
-      field: "country.name",
+      field: "country_name",
     },
     {
       headerName: "Country Interested In",
-      field: "country_interested_in.name",
+      field: "country_interested_in",
     },
     {
       headerName: "Reference By",

@@ -71,7 +71,7 @@ const PracticeTest = () => {
 
   const givenTestOfType = (type) =>
     testData[type].filter((item) =>
-      givenTest.some((index) => index.id === item.id)
+      givenTest?.some((index) => index.id === item.id)
     );
 
   return (

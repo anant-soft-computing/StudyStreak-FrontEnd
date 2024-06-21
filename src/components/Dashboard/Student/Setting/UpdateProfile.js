@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const UpdateProfile = () => {
   const [profileData, setProfileData] = useState();
-  const [userId, setUserId] = useState({});
+  const [userId, setUserId] = useState(0);
   const navigate = useNavigate();
 
   const getStudentId = async () => {
@@ -25,7 +25,7 @@ const UpdateProfile = () => {
         8000
       );
       if (response.status === 200) {
-        setUserId(response?.data[0]);
+        setUserId(response?.data?.id);
       } else {
         console.log("error");
       }
@@ -63,7 +63,7 @@ const UpdateProfile = () => {
       }
 
       const response = await ajaxCall(
-        `/studentretupddelview/${userId?.id}/`,
+        `/studentretupddelview/${userId}/`,
         {
           headers: {
             Accept: "application/json",
@@ -90,7 +90,7 @@ const UpdateProfile = () => {
   const getProfileData = async () => {
     try {
       const response = await ajaxCall(
-        `/studentretupddelview/${userId?.id}/`,
+        `/studentretupddelview/${userId}/`,
         {
           headers: {
             Accept: "application/json",
@@ -118,10 +118,10 @@ const UpdateProfile = () => {
   }, []);
 
   useEffect(() => {
-    if (userId?.id) {
+    if (userId) {
       getProfileData();
     }
-  }, [userId?.id]);
+  }, [userId]);
 
   return (
     <div className="row">

@@ -15,7 +15,7 @@ const tabs = [
 ];
 
 const PracticeTest = () => {
-  const { count, givenTest } = useLocation().state || {};
+  const { count } = useLocation().state || {};
   const [isLoading, setIsLoading] = useState(true);
   const [testData, setTestData] = useState({
     Reading: [],
@@ -23,7 +23,36 @@ const PracticeTest = () => {
     Listening: [],
     Speaking: [],
   });
+  const [givenTest, setGivenTest] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/student-stats/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setGivenTest(response?.data?.student_pt);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -71,7 +100,7 @@ const PracticeTest = () => {
 
   const givenTestOfType = (type) =>
     testData[type].filter((item) =>
-      givenTest?.some((index) => index.id === item.id)
+      givenTest?.some((index) => index === item.id)
     );
 
   return (

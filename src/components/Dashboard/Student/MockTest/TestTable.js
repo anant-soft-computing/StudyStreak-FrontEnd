@@ -13,7 +13,7 @@ const TestTable = ({
   const navigate = useNavigate();
   const takeTest = (params) => {
     const examId = params.data.id;
-    const isGiven = givenTest?.find((test) => test?.id === examId);
+    const isGiven = givenTest?.find((test) => test === examId);
     if (isGiven) {
       return (
         <button
@@ -47,8 +47,8 @@ const TestTable = ({
     const examId = params.data.id;
     const isGiven =
       testType === "Speaking"
-        ? givenSpeakingTest?.find((test) => test?.id === examId)
-        : givenTest?.find((test) => test?.id === examId);
+        ? givenSpeakingTest?.find((test) => test === examId)
+        : givenTest?.find((test) => test === examId);
     if (isGiven) {
       return (
         <button className="given-tag" style={{ backgroundColor: "green" }}>

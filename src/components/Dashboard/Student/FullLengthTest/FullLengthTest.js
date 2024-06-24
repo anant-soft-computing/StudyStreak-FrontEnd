@@ -70,8 +70,12 @@ const FullLengthTest = () => {
     })();
   }, []);
 
-  const handleFullLengthTest = (id) => {
-    window.open(`/fulllength-live-exam/${id}`, "_blank");
+  const handleFullLengthTest = (examId) => {
+    window.open(`/fulllength-live-exam/${examId}`, "_blank");
+  };
+
+  const reviewFulllengthTest = (examId) => {
+    window.open(`/exam-fulllength-answer/${examId}`, "_blank");
   };
 
   const columns = [
@@ -79,6 +83,19 @@ const FullLengthTest = () => {
       headerName: "Take Test",
       field: "button",
       cellRenderer: (params) => {
+        const examId = params.data.id;
+        const isGiven = givenTest?.find((test) => test === examId);
+        if (isGiven) {
+          return (
+            <button
+              className="take-test"
+              onClick={() => reviewFulllengthTest(params.data.id)}
+              style={{ backgroundColor: "green", border: "1px solid green" }}
+            >
+              Review Test
+            </button>
+          );
+        }
         return (
           <button
             className="take-test"

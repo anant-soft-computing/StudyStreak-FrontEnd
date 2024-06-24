@@ -21,10 +21,17 @@ const AnswerCard = ({
           Band Score :
           <div className="scc__meta">
             <strong className="answerCount">
-              {bandValue === null ? 0 : bandValue}
+              {bandValue == null ? 0 : bandValue}
             </strong>
           </div>
         </li>
+        {bandValue == 0 && (
+          <li className="text-danger">
+            <div className="scc__meta">
+              (This Exam Is Not Eligible For A Band Score)
+            </div>
+          </li>
+        )}
       </ul>
       <ul className="answerContent">
         <li className="text-dark">

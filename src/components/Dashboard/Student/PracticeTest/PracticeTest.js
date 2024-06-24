@@ -52,7 +52,7 @@ const PracticeTest = () => {
         console.log("error:", error);
       }
     })();
-  }, []);
+  }, [activeTab]);
 
   useEffect(() => {
     setIsLoading(true);

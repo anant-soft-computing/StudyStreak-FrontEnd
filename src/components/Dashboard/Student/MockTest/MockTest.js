@@ -51,7 +51,7 @@ const MockTest = () => {
         console.log("error:", error);
       }
     })();
-  }, []);
+  }, [activeTab]);
 
   useEffect(() => {
     const fetchData = async () => {

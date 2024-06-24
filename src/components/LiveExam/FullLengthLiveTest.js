@@ -479,12 +479,14 @@ const FullLengthLiveExam = () => {
         const tempUniqueArr = {
           name: `section-${index + 1}`,
           paginationsIds: [`textarea_${index}_1`],
+          examType: paperData?.exam_type,
         };
         setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       } else {
         const tempUniqueArr = {
           name: `section-${index + 1}`,
           paginationsIds: [`speaking_${index}_1`],
+          examType: paperData?.exam_type,
         };
         setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       }
@@ -505,6 +507,7 @@ const FullLengthLiveExam = () => {
         paginationsIds: paperData.questions.map(
           (element) => `speaking_${index}_${element.id}`
         ),
+        examType: paperData?.exam_type,
       };
       setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       return new Promise((resolve) => {
@@ -618,6 +621,7 @@ const FullLengthLiveExam = () => {
       const tempUniqueArr = {
         name: `section-${index + 1}`,
         paginationsIds: paginationsStrucutre,
+        examType: paperData?.exam_type,
       };
       setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       return new Promise((resolve) => {
@@ -961,8 +965,15 @@ const FullLengthLiveExam = () => {
     }
     let tempQuestionNumber = 0;
     return uniqueIdArr?.map((item, sectionIndex) => {
+      if (item.examType !== examData.exam_type) {
+        item?.paginationsIds?.map(() => {
+          tempQuestionNumber = tempQuestionNumber + 1;
+        });
+        return null;
+      }
+
       return (
-        <div className='lv-section' key={sectionIndex}>
+        <div className='lv-section' key={item.name + sectionIndex}>
           {/* Section name */}
           <button
             className='lv-footer-section'
@@ -989,7 +1000,7 @@ const FullLengthLiveExam = () => {
                     scrollToContent(pagination, sectionIndex);
                   }, 100);
                 }}
-                key={paginationIndex}
+                key={pagination + paginationIndex}
               >
                 {tempQuestionNumber}
               </div>
@@ -998,7 +1009,7 @@ const FullLengthLiveExam = () => {
         </div>
       );
     });
-  }, [uniqueIdArr, examAnswer, next]);
+  }, [uniqueIdArr, examAnswer, next, examData]);
 
   const recorderContainer = useCallback(
     (item, index) => {

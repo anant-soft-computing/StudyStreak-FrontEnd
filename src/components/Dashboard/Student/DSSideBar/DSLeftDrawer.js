@@ -86,10 +86,6 @@ const Drawer = styled(MuiDrawer, {
 const DSLeftDrawer = () => {
   const [enrolledCourse, setEnrolledCourse] = useState([]);
   const [solvingClassBook, setSolvingClassBook] = useState([]);
-  const [givenMT, setGivenMT] = useState([]);
-  const [givenPT, setGivenPT] = useState([]);
-  const [givenFLT, setGivenFLT] = useState([]);
-  const [givenSpeaking, setGivenSpeaking] = useState([]);
   const [studentId, setStudentId] = useState();
   const [count, setCount] = useState({});
 
@@ -105,7 +101,7 @@ const DSLeftDrawer = () => {
   const menuList = [
     {
       name: "Dashboard",
-      icon: <img src={dashBoard} alt='Dashboard' />,
+      icon: <img src={dashBoard} alt="Dashboard" />,
       link: "/studentDashboard/",
       state: {
         solvingClassBook: solvingClassBook[0],
@@ -113,41 +109,39 @@ const DSLeftDrawer = () => {
     },
     {
       name: "My Profile",
-      icon: <img src={profile} alt='Profile' />,
+      icon: <img src={profile} alt="Profile" />,
       link: "/studentProfile",
     },
     {
       name: "My Course",
-      icon: <img src={myCourse} alt='My Course' />,
+      icon: <img src={myCourse} alt="My Course" />,
 
       link: "/studentMyCourse",
       state: { enrolledCourse: enrolledCourse },
     },
     {
       name: "Mini Test",
-      icon: <img src={assignment} alt='Mini Test' />,
+      icon: <img src={assignment} alt="Mini Test" />,
       link: "/mockTest",
       state: {
         count: count,
-        givenTest: givenMT,
-        givenSpeakingTest: givenSpeaking,
       },
     },
     {
       name: "Practice Test",
-      icon: <img src={practiceTest} alt='Practice Test' />,
+      icon: <img src={practiceTest} alt="Practice Test" />,
       link: "/practiceTest",
-      state: { count: count, givenTest: givenPT },
+      state: { count: count },
     },
     {
       name: "Full Length Test",
-      icon: <img src={fullLengthTest} alt='Full Length Test' />,
+      icon: <img src={fullLengthTest} alt="Full Length Test" />,
       link: "/fullLengthTest",
-      state: { count: count, givenTest: givenFLT },
+      state: { count: count },
     },
     {
       name: "Live Classes",
-      icon: <img src={liveClass} alt='Live Classes' />,
+      icon: <img src={liveClass} alt="Live Classes" />,
       link: "/studentLiveClasses",
       state: {
         studentId: studentId,
@@ -157,7 +151,7 @@ const DSLeftDrawer = () => {
     },
     {
       name: "Flash Card",
-      icon: <img src={flashcard} alt='Flash Card' />,
+      icon: <img src={flashcard} alt="Flash Card" />,
       link: "/flashCard",
       state: {
         enrolledCourse: enrolledCourse,
@@ -165,12 +159,12 @@ const DSLeftDrawer = () => {
     },
     {
       name: "Settings",
-      icon: <img src={settings} alt='Settings' />,
+      icon: <img src={settings} alt="Settings" />,
       link: "/studentSettings",
     },
     {
       name: "Logout",
-      icon: <img src={logOut} alt='Logout' />,
+      icon: <img src={logOut} alt="Logout" />,
       link: "/login",
     },
   ];
@@ -229,37 +223,6 @@ const DSLeftDrawer = () => {
     })();
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/studentview/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setGivenMT(response?.data[0]?.student_mock);
-          setGivenPT(response?.data[0]?.student_pt);
-          setGivenFLT(response?.data[0]?.student_flt);
-          setGivenSpeaking(response?.data[0]?.student_speakingblock);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, []);
-
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
@@ -268,14 +231,14 @@ const DSLeftDrawer = () => {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <AppBar position='fixed'>
-        <div className='fixing-navbar-at-top-side'>
+      <AppBar position="fixed">
+        <div className="fixing-navbar-at-top-side">
           <TopBar />
           <NavBar handleDrawerToggle={handleDrawerToggle} showNavBar={true} />
         </div>
       </AppBar>
       <Drawer
-        variant='permanent'
+        variant="permanent"
         open={open}
         PaperProps={{
           sx: {
@@ -317,7 +280,7 @@ const DSLeftDrawer = () => {
                     }}
                   >
                     <ListItemIcon
-                      className='admin__menu__icon'
+                      className="admin__menu__icon"
                       sx={{
                         minWidth: 0,
                         display: "flex",
@@ -331,16 +294,13 @@ const DSLeftDrawer = () => {
                     {open && (
                       <>
                         <ListItemText
-                          className='side-navbar-rexr-color-common admin__menu__title'
+                          className="side-navbar-rexr-color-common admin__menu__title"
                           primary={item.name}
                         />
-                        {/* <div className='side-navbar-rexr-color-common admin__menu__title'>
-                          {item.name}
-                        </div> */}
                         {item.name === "Practice Test" ||
                         item.name === "Mini Test" ||
                         item.name === "Full Length Test" ? (
-                          <span className='dashboard__label'>
+                          <span className="dashboard__label">
                             {
                               count[
                                 item.name.replace(/ /g, "_").toLowerCase() +

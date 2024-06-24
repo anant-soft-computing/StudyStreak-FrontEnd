@@ -15,12 +15,43 @@ const tabs = [
 ];
 
 const MockTest = () => {
-  const { count, givenTest, givenSpeakingTest } = useLocation().state || {};
+  const { count } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState("IELTS");
+  const [givenTest, setGivenTest] = useState([]);
+  const [givenSpeakingTest, setGivenSpeakingTest] = useState([]);
   const [allMockTestData, setAllMockTestData] = useState([]);
   const [allSpeakingData, setAllSpeakingData] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/student-stats/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setGivenTest(response?.data?.student_mock);
+          setGivenSpeakingTest(response?.data?.student_speakingblock);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,10 +121,10 @@ const MockTest = () => {
   const testByExamType = (examType) =>
     allMockTestData.filter(({ exam_type }) => exam_type === examType);
   const givenWritingTest = testByExamType("Writing").filter((item) =>
-    givenTest?.some((index) => index.id === item.id)
+    givenTest?.some((index) => index === item.id)
   );
   const givenST = allSpeakingData.filter((item) =>
-    givenSpeakingTest?.some((index) => index.id === item.id)
+    givenSpeakingTest?.some((index) => index === item.id)
   );
 
   const handleTabChange = (tab) => {
@@ -101,24 +132,24 @@ const MockTest = () => {
   };
 
   return (
-    <div className='body__wrapper'>
-      <div className='main_wrapper overflow-hidden'>
-        <div className='dashboardarea sp_bottom_100'>
-          <div className='dashboard'>
-            <div className='container-fluid full__width__padding'>
-              <div className='row'>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="dashboardarea sp_bottom_100">
+          <div className="dashboard">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
                 <DSSidebar />
-                <div className='col-xl-12 col-lg-12 col-md-12'>
-                  <div className='dashboard__content__wraper common-background-color-across-app'>
-                    <div className='dashboard__section__title'>
+                <div className="col-xl-12 col-lg-12 col-md-12">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
+                    <div className="dashboard__section__title">
                       <h4>Mini Test</h4>
-                      <div className='col-xl-2'>
-                        <div className='dashboard__form__wraper'>
-                          <div className='dashboard__form__input'>
+                      <div className="col-xl-2">
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
                             <label>Category</label>
                             <select
-                              className='form-select'
-                              aria-label='Default select example'
+                              className="form-select"
+                              aria-label="Default select example"
                               value={category}
                               onChange={(e) => setCategory(e.target.value)}
                             >
@@ -140,15 +171,15 @@ const MockTest = () => {
                       </div>
                     </div>
                     {count?.mini_test_count === "" ? (
-                      <BuyCourse message='No Mini Test Available, Please Buy a Course!' />
+                      <BuyCourse message="No Mini Test Available, Please Buy a Course!" />
                     ) : (
-                      <div className='row'>
+                      <div className="row">
                         <Tab
                           tabs={tabs}
                           activeTab={activeTab}
                           handleTabChange={handleTabChange}
                         />
-                        <div className='tab-content tab__content__wrapper aos-init aos-animate'>
+                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
                           {tabs.map(
                             ({ name }) =>
                               activeTab === name && (

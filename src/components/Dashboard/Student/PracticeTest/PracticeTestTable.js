@@ -125,7 +125,7 @@ const PracticeTestTable = ({ testData, givenTest, testType, isLoading }) => {
       field: "Status",
       cellRenderer: (params) => {
         const examId = params.data.id;
-        const isGiven = givenTest?.find((test) => test.id === examId);
+        const isGiven = givenTest?.find((test) => test?.id === examId);
         if (isGiven) {
           return (
             <button className="given-tag" style={{ backgroundColor: "green" }}>

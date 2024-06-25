@@ -80,9 +80,9 @@ const PracticeTestAnswer = () => {
             }
           });
           if (examForm === "Reading") {
-            setBand(readingBandValues[correct * 3]);
+            setBand(readingBandValues[correct]);
           } else if (examForm === "Listening") {
-            setBand(listeningBandValues[correct * 4]);
+            setBand(listeningBandValues[correct]);
           }
           setCorrectCount(correct);
           setIncorrectCount(incorrect);

@@ -8,7 +8,7 @@ const AdditionalResources = ({ courseId, courseName }) => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/additional-resources/${courseId}`,
+          `/additional-resources/${courseId}/`,
           {
             headers: {
               Accept: "application/json",

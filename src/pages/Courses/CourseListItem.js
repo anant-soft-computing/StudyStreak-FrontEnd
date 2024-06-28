@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
@@ -32,10 +33,12 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
             response?.data?.student_packages?.map(({ course }) => course)
           );
         } else {
-          console.log("error");
+          setIsLoading(false);
         }
       } catch (error) {
-        console.log("error", error);
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -65,10 +68,14 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
             response.data?.filter(({ course_type }) => course_type === "PUBLIC")
           );
         } else {
-          console.log("error");
+          setIsLoading(false);
+          toast.error("Some Problem Occurred. Please try again.");
         }
       } catch (error) {
-        console.log("error", error);
+        setIsLoading(false);
+        toast.error("Some Problem Occurred. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [search, selectedCategory, selectedLevel]);

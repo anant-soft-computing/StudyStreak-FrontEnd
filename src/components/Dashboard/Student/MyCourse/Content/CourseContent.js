@@ -1,7 +1,7 @@
 import React from "react";
 import AdditionalResources from "./AdditionalResources";
 import Material from "./Material";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import DSSidebar from "../../DSSideBar/DSSideBar";
 import Tab from "../../../../UI/Tab";
 
@@ -9,12 +9,6 @@ const tabs = [{ name: "Downloads" }];
 
 const CourseContent = () => {
   const { courseId } = useParams();
-  const { state: { enrolledCourse } = {} } = useLocation();
-
-  const { Course_Title } = enrolledCourse.find(
-    ({ id }) => id === parseInt(courseId)
-  );
-
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -25,9 +19,6 @@ const CourseContent = () => {
                 <DSSidebar />
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
-                    <div className="dashboard__section__title">
-                      <h4>{Course_Title}</h4>
-                    </div>
                     <div className="row">
                       <Tab tabs={tabs} activeTab="Downloads" />
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
@@ -36,14 +27,8 @@ const CourseContent = () => {
                           role="tabpanel"
                           aria-labelledby="projects__one"
                         >
-                          <Material
-                            courseId={courseId}
-                            courseName={Course_Title}
-                          />
-                          <AdditionalResources
-                            courseId={courseId}
-                            courseName={Course_Title}
-                          />
+                          <Material courseId={courseId} />
+                          <AdditionalResources courseId={courseId} />
                         </div>
                       </div>
                     </div>

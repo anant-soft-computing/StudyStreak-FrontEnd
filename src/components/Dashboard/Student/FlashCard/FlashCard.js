@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../../../css/custom.css";
-import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import FlashCardModal from "./FlashCardModal";
@@ -8,7 +7,6 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
 const FlashCard = () => {
-  const { enrolledCourse } = useLocation().state || {};
   const [cardID, setCardID] = useState(0);
   const [flashCardList, setFlashCardList] = useState([]);
   const [isFlipped, setIsFlipped] = useState({});
@@ -16,6 +14,7 @@ const FlashCard = () => {
   const [modalShow, setModalShow] = useState(false);
   const [flashCardItems, setFlashCardItems] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   useEffect(() => {
     setIsLoading(true);
@@ -38,7 +37,7 @@ const FlashCard = () => {
         if (response?.status === 200) {
           setFlashCardList(
             response?.data.filter((item) =>
-              enrolledCourse?.some((course) => course?.id === item.course?.id)
+              courseIds?.some((data) => data.id === item.course.id)
             )
           );
 
@@ -55,7 +54,7 @@ const FlashCard = () => {
         console.log("error", error);
       }
     })();
-  }, [enrolledCourse]);
+  }, []);
 
   const handleCloseModal = () => {
     setModalShow(false);
@@ -71,7 +70,7 @@ const FlashCard = () => {
   const viewCard = (params) => {
     const { data } = params;
     return (
-      <button className='take-test' onClick={() => handleViewCard(data)}>
+      <button className="take-test" onClick={() => handleViewCard(data)}>
         Open Card
       </button>
     );
@@ -104,24 +103,24 @@ const FlashCard = () => {
   ];
 
   return (
-    <div className='body__wrapper'>
-      <div className='main_wrapper overflow-hidden'>
-        <div className='dashboardarea sp_bottom_100'>
-          <div className='dashboard'>
-            <div className='container-fluid full__width__padding'>
-              <div className='row'>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="dashboardarea sp_bottom_100">
+          <div className="dashboard">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
                 <DSSidebar />
-                <div className='col-xl-12 col-lg-12 col-md-12'>
-                  <div className='dashboard__content__wraper common-background-color-across-app'>
-                    <div className='dashboard__section__title'>
+                <div className="col-xl-12 col-lg-12 col-md-12">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
+                    <div className="dashboard__section__title">
                       <h4>Flash Cards</h4>
                     </div>
                     {isLoading ? (
-                      <Loading text='Loading....' color='primary' />
+                      <Loading text="Loading...." color="primary" />
                     ) : flashCardList.length > 0 ? (
                       <Table rowData={flashCardList} columnDefs={columns} />
                     ) : (
-                      <h5 className='text-center text-danger'>
+                      <h5 className="text-center text-danger">
                         No FlashCard Available !!
                       </h5>
                     )}

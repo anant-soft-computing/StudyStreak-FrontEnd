@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../../helpers/ajaxCall";
+import Table from "../../../../UI/Table";
 
-const Material = ({ courseId, courseName }) => {
+const Material = ({ courseId }) => {
   const [courseMaterial, setCourseMaterial] = useState([]);
-  
+
+  const doDownload = (params) => {
+    return (
+      <button className="take-test" onClick={() => window.open(params.value)}>
+        <i className="icofont-download" /> Download
+      </button>
+    );
+  };
+
   useEffect(() => {
     (async () => {
       try {
@@ -22,7 +31,13 @@ const Material = ({ courseId, courseName }) => {
           8000
         );
         if (response.status === 200) {
-          setCourseMaterial(response?.data?.data);
+          const materialWithNumbers = response?.data?.data?.map(
+            (item, index) => ({
+              ...item,
+              no: index + 1,
+            })
+          );
+          setCourseMaterial(materialWithNumbers);
         } else {
           console.log("error");
         }
@@ -32,6 +47,16 @@ const Material = ({ courseId, courseName }) => {
     })();
   }, [courseId]);
 
+  const columns = [
+    { headerName: "No.", field: "no" },
+    { headerName: "Name", field: "material_name", filter: true },
+    {
+      headerName: "Download",
+      field: "course_material",
+      cellRenderer: doDownload,
+    },
+  ];
+
   return (
     <div className="col-xl-12 col-lg-9 col-md-12">
       <div className="dashboard__content__wraper common-background-color-across-app">
@@ -39,54 +64,7 @@ const Material = ({ courseId, courseName }) => {
           <h4>Course Material</h4>
         </div>
         <div className="row">
-          <div className="col-xl-12">
-            <div className="dashboard__table table-responsive">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {courseMaterial?.map(
-                    ({ id, material_name, course_material }, index) => (
-                      <tr
-                        key={id}
-                        className={`${
-                          index % 2 === 0 ? "" : "dashboard__table__row"
-                        }`}
-                      >
-                        <th>
-                          <span>{material_name}</span>
-                          <p className="mt-2">
-                            Course : <span>{courseName}</span>
-                          </p>
-                        </th>
-                        <td></td>
-                        <td></td>
-                        <td className="download">
-                          <div className="dashboard__button__group">
-                            <a
-                              className="dashboard__small__btn__2"
-                              href={course_material}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <i className="icofont-download" />
-                              Download
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Table rowData={courseMaterial} columnDefs={columns} />
         </div>
       </div>
     </div>

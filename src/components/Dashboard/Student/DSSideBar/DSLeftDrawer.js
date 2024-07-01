@@ -84,28 +84,20 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const DSLeftDrawer = () => {
-  const [enrolledCourse, setEnrolledCourse] = useState([]);
-  const [solvingClassBook, setSolvingClassBook] = useState([]);
-  const [studentId, setStudentId] = useState();
-  const [count, setCount] = useState({});
-
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
 
-  const [open, setOpen] = React.useState(true);
-
-  const handleDrawerToggle = () => {
-    setOpen(!open);
-  };
+  const [open, setOpen] = useState(true);
+  const [solvingClassBook, setSolvingClassBook] = useState([]);
+  const [studentId, setStudentId] = useState();
+  const [count, setCount] = useState({});
 
   const menuList = [
     {
       name: "Dashboard",
       icon: <img src={dashBoard} alt="Dashboard" />,
       link: "/studentDashboard/",
-      state: {
-        solvingClassBook: solvingClassBook[0],
-      },
+      state: { solvingClassBook: solvingClassBook[0] },
     },
     {
       name: "My Profile",
@@ -115,17 +107,13 @@ const DSLeftDrawer = () => {
     {
       name: "My Course",
       icon: <img src={myCourse} alt="My Course" />,
-
       link: "/studentMyCourse",
-      state: { enrolledCourse: enrolledCourse },
     },
     {
       name: "Mini Test",
       icon: <img src={assignment} alt="Mini Test" />,
       link: "/mockTest",
-      state: {
-        count: count,
-      },
+      state: { count: count },
     },
     {
       name: "Practice Test",
@@ -153,9 +141,6 @@ const DSLeftDrawer = () => {
       name: "Flash Card",
       icon: <img src={flashcard} alt="Flash Card" />,
       link: "/flashCard",
-      state: {
-        enrolledCourse: enrolledCourse,
-      },
     },
     {
       name: "Settings",
@@ -194,6 +179,9 @@ const DSLeftDrawer = () => {
           const studentPT = studentPackage?.student_pt;
           const studentFLT = studentPackage?.student_flt;
 
+          const batchIds = data?.student_packages.map((item) => item.batch_id);
+          const courses = data.student_packages?.map(({ course }) => course);
+
           setCount({
             practice_test_count:
               packageDetails?.practice_test_count - studentPT || "",
@@ -203,12 +191,9 @@ const DSLeftDrawer = () => {
               packageDetails?.full_length_test_count - studentFLT || "",
           });
           localStorage.setItem("StudentID", studentPackage?.student_id);
-          localStorage.setItem(
-            "BatchIds",
-            JSON.stringify(data?.student_packages.map((item) => item.batch_id))
-          );
+          localStorage.setItem("BatchIds", JSON.stringify(batchIds));
+          localStorage.setItem("courses", JSON.stringify(courses));
           setStudentId(studentPackage?.student_id);
-          setEnrolledCourse(data.student_packages?.map(({ course }) => course));
           setSolvingClassBook(
             data.student_packages?.map(
               ({ Live_class_enroll }) => Live_class_enroll
@@ -234,7 +219,7 @@ const DSLeftDrawer = () => {
       <AppBar position="fixed">
         <div className="fixing-navbar-at-top-side">
           <TopBar />
-          <NavBar handleDrawerToggle={handleDrawerToggle} showNavBar={true} />
+          <NavBar handleDrawerToggle={() => setOpen(!open)} showNavBar={true} />
         </div>
       </AppBar>
       <Drawer

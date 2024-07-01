@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../../helpers/ajaxCall";
+import Table from "../../../../UI/Table";
 
-const AdditionalResources = ({ courseId, courseName }) => {
+const AdditionalResources = ({ courseId }) => {
   const [additionalResource, setAdditionalResource] = useState([]);
+
+  const doDownload = (params) => {
+    return (
+      <button className="take-test" onClick={() => window.open(params.value)}>
+        <i className="icofont-download" /> Download
+      </button>
+    );
+  };
 
   useEffect(() => {
     (async () => {
@@ -22,7 +31,11 @@ const AdditionalResources = ({ courseId, courseName }) => {
           8000
         );
         if (response.status === 200) {
-          setAdditionalResource(response?.data?.data);
+          const aRWithNumbers = response?.data?.data?.map((item, index) => ({
+            ...item,
+            no: index + 1,
+          }));
+          setAdditionalResource(aRWithNumbers);
         } else {
           console.log("error");
         }
@@ -32,6 +45,16 @@ const AdditionalResources = ({ courseId, courseName }) => {
     })();
   }, [courseId]);
 
+  const columns = [
+    { headerName: "No.", field: "no" },
+    { headerName: "Name", field: "info", filter: true },
+    {
+      headerName: "Download",
+      field: "course_files",
+      cellRenderer: doDownload,
+    },
+  ];
+
   return (
     <div className="col-xl-12 col-lg-9 col-md-12">
       <div className="dashboard__content__wraper common-background-color-across-app">
@@ -39,54 +62,7 @@ const AdditionalResources = ({ courseId, courseName }) => {
           <h4>Additional Resources</h4>
         </div>
         <div className="row">
-          <div className="col-xl-12">
-            <div className="dashboard__table table-responsive">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {additionalResource?.map(
-                    ({ id, info, course_files }, index) => (
-                      <tr
-                        key={id}
-                        className={`${
-                          index % 2 === 0 ? "" : "dashboard__table__row"
-                        }`}
-                      >
-                        <th>
-                          <span>{info}</span>
-                          <p className="mt-2">
-                            Course : <span>{courseName}</span>
-                          </p>
-                        </th>
-                        <td></td>
-                        <td></td>
-                        <td className="download">
-                          <div className="dashboard__button__group">
-                            <a
-                              className="dashboard__small__btn__2"
-                              href={course_files}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <i className="icofont-download" />
-                              Download
-                            </a>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Table rowData={additionalResource} columnDefs={columns} />
         </div>
       </div>
     </div>

@@ -5,12 +5,10 @@ import HeroBanner from "../../components/Landing/HeroBanner";
 import Path from "../../components/Landing/Path";
 import PopulerArea from "../../components/Landing/PopularArea";
 import RegisterSection from "../../components/Landing/RegisterSection";
-import MobileTopBar from "../../components/TopBar/MobileTopBar";
 
 const Main = () => {
   return (
     <div className="main_wrapper overflow-hidden">
-      <MobileTopBar />
       <HeroBanner />
       <BrandSection />
       <Path />

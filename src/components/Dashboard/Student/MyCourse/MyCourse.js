@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { useSelector } from "react-redux";
+import Loading from "../../../UI/Loading";
 
 const MyCourse = () => {
   const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
-  const { state: { enrolledCourse } = {} } = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
   const authData = useSelector((state) => state.authStore);
+  const courseIds = JSON.parse(localStorage.getItem("courses"));
+
+  const courses = courseList.filter((item) =>
+    courseIds.some((data) => data.id === item.id)
+  );
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -27,13 +34,15 @@ const MyCourse = () => {
           8000
         );
         if (response.status === 200) {
+          setIsLoading(false);
           setCourseList(response?.data);
         } else {
+          setIsLoading(false);
           console.log("error");
         }
       } catch (error) {
+        setIsLoading(false);
         console.log("error", error);
-      } finally {
       }
     })();
   }, [authData?.accessToken]);
@@ -52,8 +61,10 @@ const MyCourse = () => {
                       <h4>Courses</h4>
                     </div>
                     <div className="row">
-                      {enrolledCourse?.length > 0 ? (
-                        enrolledCourse?.map((course) => (
+                      {isLoading ? (
+                        <Loading text="Loading..." color="primary" />
+                      ) : courses?.length > 0 ? (
+                        courses?.map((course) => (
                           <div
                             key={course?.id}
                             className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
@@ -70,9 +81,7 @@ const MyCourse = () => {
                                 <div
                                   className="course__pointer"
                                   onClick={() =>
-                                    navigate(`/course/${course?.id}`, {
-                                      state: { enrolledCourse },
-                                    })
+                                    navigate(`/course/${course?.id}`)
                                   }
                                 >
                                   <div className="gridarea__heading">

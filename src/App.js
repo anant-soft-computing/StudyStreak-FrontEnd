@@ -23,7 +23,7 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 //-----------------------> Student <----------------------------------------------
 
-import SDashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
+import SDashboard from "./components/Dashboard/Student/Dashboard/SDashboard";
 import SProfile from "./components/Dashboard/Student/Profile";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
@@ -69,8 +69,8 @@ import FullLengthTestAnswer from "./components/Exam-Answer/FullLengthTestAnswer"
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
 import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest";
 import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
-import StudentNavBarRoute from "./layout/studentNavBarRoute";
-import AdminNavBarRoute from "./layout/adminNavBarRoute";
+import StudentNavBarRoute from "./layout/StudentNavBarRoute";
+import AdminNavBarRoute from "./layout/AdminNavBarRoute";
 
 const App = () => {
   return (

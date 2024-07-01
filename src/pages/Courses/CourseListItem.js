@@ -7,41 +7,7 @@ import Loading from "../../components/UI/Loading";
 const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   const [courseList, setCouresList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [enrolledCourse, setEnrolledCourse] = useState([]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/userwisepackagewithcourseid/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setIsLoading(false);
-          setEnrolledCourse(
-            response?.data?.student_packages?.map(({ course }) => course)
-          );
-        } else {
-          setIsLoading(false);
-        }
-      } catch (error) {
-        setIsLoading(false);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
+  const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   useEffect(() => {
     setIsLoading(true);
@@ -93,7 +59,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                 key={course.id}
               >
                 <div className="gridarea__wraper gridarea__wraper__2 tagMain">
-                  {enrolledCourse?.some((item) => item?.id === course.id) && (
+                  {courseIds?.some((item) => item?.id === course.id) && (
                     <span className="tag tag__color">Enrolled</span>
                   )}
                   <div className="gridarea__img">

@@ -16736,3 +16736,7 @@ div.gridarea__wraper {
     max-width: 100%;
   }
 }
+
+.card-background {
+  border: 1px solid #01579b;
+}

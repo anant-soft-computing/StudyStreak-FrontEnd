@@ -3,9 +3,9 @@ import TopBar from "../components/TopBar/TopBar";
 import NavBar from "../components/NavBar/NavBar";
 import MobileTopBar from "../components/TopBar/MobileTopBar";
 import { Box } from "@mui/material";
-import DSLeftDrawer from "../components/Dashboard/Student/DSSideBar/DSLeftDrawer";
+import DALeftDrawer from "../components/Dashboard/Admin/DASideBar/DALeftDrawer";
 
-export default function StudentNavBarRoute({ isProtected }) {
+const AdminNavBarRoute = ({ isProtected }) => {
   return (
     <>
       {isProtected ? (
@@ -23,10 +23,10 @@ export default function StudentNavBarRoute({ isProtected }) {
               },
             })}
           >
-            <DSLeftDrawer />
+            <DALeftDrawer />
           </Box>
           <Box
-            className='fixing-navbar-at-top-side'
+            className="fixing-navbar-at-top-side"
             sx={(theme) => ({
               [theme.breakpoints.up(991)]: {
                 display: "none",
@@ -35,22 +35,24 @@ export default function StudentNavBarRoute({ isProtected }) {
           >
             <MobileTopBar />
           </Box>
-          <Box width='100%'>
+          <Box width="100%">
             <Outlet />
           </Box>
         </Box>
       ) : (
         <>
-          <div className='fixing-navbar-at-top-side'>
+          <div className="fixing-navbar-at-top-side">
             <TopBar />
             <NavBar showNavBar={false} />
             <MobileTopBar />
           </div>
-          <Box mt='70px'>
+          <Box mt="70px">
             <Outlet />
           </Box>
         </>
       )}
     </>
   );
-}
+};
+
+export default AdminNavBarRoute;

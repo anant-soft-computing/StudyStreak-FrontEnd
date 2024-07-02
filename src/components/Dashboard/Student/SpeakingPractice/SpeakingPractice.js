@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
@@ -15,15 +15,16 @@ const tabs = [
   { name: "Recoded Class" },
 ];
 
-const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
+const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
   const navigate = useNavigate();
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [uuid, setUuid] = useState([]);
-  const { studentId, solvingClassBook, count } = useLocation()?.state || {};
-  const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  const { speaking_practice_count } = count || sepakingCount;
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
+
+  console.log("count", count);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -112,20 +113,22 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
             8000
           );
           if (response?.status === 200) {
-            setIsLoading(false);
             const speakingData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Speaking-Practice"
             );
             const id = response?.data.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             speakingClass.push(...speakingData);
+            setIsLoading(false);
           } else {
             console.log("error");
+            setIsLoading(false);
           }
         }
         setUuid(uuidData);
         setSpeakingSolvingClass(speakingClass);
       } catch (error) {
+        setIsLoading(false);
         console.log("error", error);
       }
     })();
@@ -156,7 +159,7 @@ const SpeakingPractice = ({ sepakingCount = "", selectedDateRange }) => {
 
   return (
     <div>
-      {speaking_practice_count === "" ? (
+      {count === 0 ? (
         <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
       ) : (
         <div className="row">

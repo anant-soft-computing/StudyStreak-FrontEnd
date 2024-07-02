@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import lessons from "../../../../img/icon/assignment.svg";
 import practice from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
@@ -9,46 +9,22 @@ import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
 import freeMiniTest from "../../../../img/icon/gamification.svg";
 import { Link } from "react-router-dom";
+import UpcomingLiveClass from "./UpCommingLiveClass/UpCommingLiveClass";
+import LeaderBoard from "./LeaderBoard/LeaderBoard";
+import NextLesson from "./NextLesson/NextLesson";
+import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const cardList = [
-  { name: "Lessons", icon: lessons },
+  { name: "Lessons", icon: lessons, link: "/studentMyCourse" },
   { name: "Practice Test", icon: practice, link: "/practiceTest" },
   { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
-  { name: "Counselling", icon: counselling },
+  { name: "Counselling", icon: counselling, link: "/studentLiveClasses" },
   { name: "Live Class", icon: liveClass, link: "/studentLiveClasses" },
   { name: "Tutor Support", icon: counselling },
   { name: "Webinar", icon: webinar },
   { name: "Progress", icon: progress },
   { name: "Software Support", icon: support },
-];
-
-const tableData = [
-  {
-    id: 1,
-    name: "Amish Patel",
-    score: "1240 pts",
-  },
-  {
-    id: 2,
-    name: "Rohini Chaudhary",
-    score: "1100 pts",
-  },
-  {
-    id: 3,
-    name: "Sweety Gill",
-    score: "879 pts",
-  },
-
-  {
-    id: 4,
-    name: "Amiraj Solanki",
-    score: "800 pts",
-  },
-  {
-    id: 5,
-    name: "Krina Patel",
-    score: "432 pts",
-  },
 ];
 
 const ScoreCard = ({ title, score }) => (
@@ -120,83 +96,43 @@ const MiniTestCard = () => (
   </div>
 );
 
-const Leaderboard = () => (
-  <div className="dashboard__inner card-background">
-    <div className="dashboard__nav__title">
-      <h6>Leaderboard</h6>
-    </div>
-    <hr />
-    <div className="dashboard__table table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Name</th>
-            <th>Points</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tableData.map(({ id, name, score }, index) => (
-            <tr
-              key={id}
-              className={index % 2 === 0 ? "" : "dashboard__table__row"}
-            >
-              <th>{id}</th>
-              <td>{name}</td>
-              <td>{score}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-);
-
-const UpcomingLiveClass = () => (
-  <div className="dashboard__inner mt-4 card-background">
-    <div className="dashboard__nav__title">
-      <h6>Upcoming Live Class</h6>
-    </div>
-    <hr />
-    <div>Writing Task 1 - Letter Writing</div>
-    <div>Tomorrow, 06:00 PM</div>
-  </div>
-);
-
-const NextLesson = () => (
-  <div className="dashboard__inner mt-4 card-background">
-    <div className="dashboard__nav__title">
-      <h6>Next Lesson Due</h6>
-    </div>
-    <hr />
-    <div>Writing Task 2 - Essay Writing</div>
-    <div className="d-flex justify-content-between align-items-center">
-      <div>Lesson No. 7</div>
-      <Link to="" className="text-decoration-none">
-        <div>View Lesson {">>"}</div>
-      </Link>
-    </div>
-  </div>
-);
-
-const SpeakingSlots = () => (
-  <div className="dashboard__inner mt-4 card-background">
-    <div className="dashboard__nav__title">
-      <h6>Speaking Slots</h6>
-    </div>
-    <hr />
-    <div>Speaking Part II with Anand Sir</div>
-    <div className="d-flex justify-content-between align-items-center">
-      <div>May 24, 7:00 pm</div>
-      <Link to="" className="text-decoration-none">
-        <div>View all slots {">>"}</div>
-      </Link>
-    </div>
-  </div>
-);
-
 const SDashboard = () => {
+  const [upcommingClass, setUpcommingClass] = useState([]);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/userwisepackagewithcourseid/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const { data } = response;
+          setUpcommingClass(
+            data.student_packages?.map(
+              ({ Live_class_enroll }) => Live_class_enroll
+            )[0]
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -211,11 +147,11 @@ const SDashboard = () => {
                   <div className="online__course__wrap mt-0">
                     <div className="row instructor__slider__active row__custom__class">
                       <ScoreCard
-                        title="Your Latest Practice Band Score"
+                        title="Your Latest Mini Test Band Score"
                         score="Speaking 6.5"
                       />
                       <ScoreCard
-                        title="Your Latest Full Mock Band Score"
+                        title="Your Latest Full Length Test Band Score"
                         score="Overall 7.0"
                       />
                     </div>
@@ -229,10 +165,10 @@ const SDashboard = () => {
                 </div>
               </div>
               <div className="col-xl-4 col-lg-4">
-                <Leaderboard />
-                <UpcomingLiveClass />
+                <LeaderBoard />
+                <UpcomingLiveClass upcommingClass={upcommingClass} />
                 <NextLesson />
-                <SpeakingSlots />
+                <SpeakingSlots speakingSlots={upcommingClass} />
               </div>
             </div>
           </div>

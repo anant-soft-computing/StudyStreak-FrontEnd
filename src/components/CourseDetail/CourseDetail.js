@@ -15,7 +15,7 @@ const CourseDetail = () => {
   const authData = useSelector((state) => state.authStore);
 
   const [batchData, setBatchData] = useState([]);
-  const [courseDetail, setCouresDetail] = useState();
+  const [courseDetail, setCourseDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
   const [showBatchSelection, setShowBatchSelection] = useState(false);
 
@@ -26,7 +26,7 @@ const CourseDetail = () => {
 
   useEffect(() => {
     checkAuth();
-  }, [authData]);
+  }, [authData, checkAuth]);
 
   useEffect(() => {
     (async () => {
@@ -52,7 +52,7 @@ const CourseDetail = () => {
         );
         if (response.status === 200) {
           const section = [];
-          response.data?.lessons?.map((lesson) => {
+          response.data?.lessons?.forEach((lesson) => {
             const isSessionExist = section.find(
               (item) => item.id === lesson?.section.id
             );
@@ -64,14 +64,14 @@ const CourseDetail = () => {
             ...response.data,
             section,
           };
-          section.map((sectionItem) => {
+          section.forEach((sectionItem) => {
             const lessons = response.data?.lessons?.filter(
               (lesson) => lesson?.section.id === sectionItem.id
             );
             sectionItem.lessons = lessons;
           });
-
-          setCouresDetail(updatedData);
+  
+          setCourseDetail(updatedData);
         } else {
           console.log("error");
         }

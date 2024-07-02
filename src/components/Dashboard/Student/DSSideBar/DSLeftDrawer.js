@@ -88,16 +88,13 @@ const DSLeftDrawer = () => {
   const { logoutUser } = useCheckAuth();
 
   const [open, setOpen] = useState(true);
-  const [solvingClassBook, setSolvingClassBook] = useState([]);
-  const [studentId, setStudentId] = useState();
   const [count, setCount] = useState({});
 
   const menuList = [
     {
       name: "Dashboard",
       icon: <img src={dashBoard} alt="Dashboard" />,
-      link: "/studentDashboard/",
-      state: { solvingClassBook: solvingClassBook[0] },
+      link: "/studentDashboard",
     },
     {
       name: "My Profile",
@@ -131,11 +128,6 @@ const DSLeftDrawer = () => {
       name: "Live Classes",
       icon: <img src={liveClass} alt="Live Classes" />,
       link: "/studentLiveClasses",
-      state: {
-        studentId: studentId,
-        solvingClassBook: solvingClassBook[0],
-        count: count,
-      },
     },
     {
       name: "Flash Card",
@@ -193,12 +185,6 @@ const DSLeftDrawer = () => {
           localStorage.setItem("StudentID", studentPackage?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
           localStorage.setItem("courses", JSON.stringify(courses));
-          setStudentId(studentPackage?.student_id);
-          setSolvingClassBook(
-            data.student_packages?.map(
-              ({ Live_class_enroll }) => Live_class_enroll
-            )
-          );
         } else {
           console.log("error");
         }

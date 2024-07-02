@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
@@ -15,15 +15,14 @@ const tabs = [
   { name: "Recoded Class" },
 ];
 
-const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
+const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
   const navigate = useNavigate();
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [uuid, setUuid] = useState([]);
-  const { studentId, solvingClassBook, count } = useLocation()?.state || {};
-  const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  const { group_doubt_solving_count } = count || doubtCount;
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -112,20 +111,22 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
             8000
           );
           if (response?.status === 200) {
-            setIsLoading(false);
             const groupDoubtData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
             );
             const id = response?.data.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             gPClass.push(...groupDoubtData);
+            setIsLoading(false);
           } else {
+            setIsLoading(false);
             console.log("error");
           }
         }
         setUuid(uuidData);
         setGroupDoubtSolvingClass(gPClass);
       } catch (error) {
+        setIsLoading(false);
         console.log("error", error);
       }
     })();
@@ -156,7 +157,7 @@ const GroupDoubtSolving = ({ doubtCount = "", selectedDateRange }) => {
 
   return (
     <div>
-      {group_doubt_solving_count === "" ? (
+      {count === 0 ? (
         <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
       ) : (
         <div className="row">

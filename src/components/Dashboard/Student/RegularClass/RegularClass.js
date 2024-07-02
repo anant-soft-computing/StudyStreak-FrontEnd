@@ -41,20 +41,22 @@ const RegularClass = ({ selectedDateRange }) => {
             8000
           );
           if (response?.status === 200) {
-            setIsLoading(false);
             const classData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Regular Class"
             );
             const id = response?.data.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             regularClassData.push(...classData);
+            setIsLoading(false);
           } else {
             console.log("error");
+            setIsLoading(false);
           }
         }
         setUuid(uuidData);
         setRegularClass(regularClassData);
       } catch (error) {
+        setIsLoading(false);
         console.log("error", error);
       }
     })();

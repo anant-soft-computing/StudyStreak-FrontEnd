@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
@@ -15,15 +15,14 @@ const tabs = [
   { name: "Recoded Class" },
 ];
 
-const DoubtSolving = ({ selectedDateRange }) => {
+const DoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
   const navigate = useNavigate();
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [uuid, setUuid] = useState([]);
-  const { studentId, solvingClassBook, count } = useLocation()?.state || {};
-  const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  const { one_to_one_doubt_solving_count } = count;
+  const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -120,12 +119,14 @@ const DoubtSolving = ({ selectedDateRange }) => {
             uuidData.push(...id);
             oToclass.push(...oToclassData);
           } else {
+            setIsLoading(false);
             console.log("error");
           }
         }
         setUuid(uuidData);
         setDoubtSolvingClass(oToclass);
       } catch (error) {
+        setIsLoading(false);
         console.log("error", error);
       }
     })();
@@ -156,7 +157,7 @@ const DoubtSolving = ({ selectedDateRange }) => {
 
   return (
     <div>
-      {one_to_one_doubt_solving_count === "" ? (
+      {count === 0 ? (
         <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
       ) : (
         <div className="row">

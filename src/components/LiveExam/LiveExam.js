@@ -391,7 +391,7 @@ const LiveExam = () => {
           <audio
             controls
             autoPlay
-            controlsList="nodownload noplaybackrate"
+            controlsList="nodownload noplaybackrate noplay"
             className="hidden-controls"
           >
             <source src={audio_file} type="audio/mpeg" />
@@ -802,7 +802,6 @@ const LiveExam = () => {
         <div className="lv-main-container">
           {/* Left Container */}
           {(examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening" ||
             examData?.exam_type === "Writing") && (
             <div className="lv-left-container">
               {displayLeftContainer(examData?.passage, examData?.passage_image)}

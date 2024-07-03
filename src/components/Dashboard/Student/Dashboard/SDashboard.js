@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from "react";
-import lessons from "../../../../img/icon/assignment.svg";
+import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
 import practice from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
-import liveClass from "../../../../img/icon/liveClass.svg";
+import regularClass from "../../../../img/icon/liveClass.svg";
 import counselling from "../../../../img/icon/users.svg";
 import progress from "../../../../img/icon/progress.svg";
 import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
-import freeMiniTest from "../../../../img/icon/gamification.svg";
+import recordedClasses from "../../../../img/icon/gamification.svg";
 import { Link } from "react-router-dom";
 import UpcomingLiveClass from "./UpCommingLiveClass/UpCommingLiveClass";
-import LeaderBoard from "./LeaderBoard/LeaderBoard";
+import NoticeBoard from "./NoticeBoard/NoticeBoard";
 import NextLesson from "./NextLesson/NextLesson";
 import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const cardList = [
-  { name: "Lessons", icon: lessons, link: "/studentMyCourse" },
+  {
+    name: "Book Speaking Slot",
+    icon: bookSpeakingSlot,
+    link: "/studentLiveClasses",
+  },
   { name: "Practice Test", icon: practice, link: "/practiceTest" },
   { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
   { name: "Counselling", icon: counselling, link: "/studentLiveClasses" },
-  { name: "Live Class", icon: liveClass, link: "/studentLiveClasses" },
-  { name: "Tutor Support", icon: counselling },
-  { name: "Webinar", icon: webinar },
+  { name: "Regular Classes", icon: regularClass, link: "/studentLiveClasses" },
+  { name: "Tutor Support", icon: counselling, link: "/studentLiveClasses" },
+  { name: "Webinar", icon: webinar, link: "/studentLiveClasses" },
   { name: "Progress", icon: progress },
   { name: "Software Support", icon: support },
 ];
@@ -80,15 +84,15 @@ const MiniTestCard = () => (
   <div className="col-xl-12 column__custom__class">
     <div className="gridarea__wraper text-center card-background">
       <div className="gridarea__content p-2 m-2">
-        <Link to="/mockTest" className="text-decoration-none">
+        <Link to="/studentLiveClasses" className="text-decoration-none">
           <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
             <img
-              src={freeMiniTest}
-              alt="Free Mini Test"
+              src={recordedClasses}
+              alt="Recorded Classes"
               height={35}
               width={35}
             />
-            <h2 className="mt-2">Free Mini Test</h2>
+            <h2 className="mt-2">Recorded Classes</h2>
           </div>
         </Link>
       </div>
@@ -165,7 +169,7 @@ const SDashboard = () => {
                 </div>
               </div>
               <div className="col-xl-4 col-lg-4">
-                <LeaderBoard />
+                <NoticeBoard />
                 <UpcomingLiveClass upcommingClass={upcommingClass} />
                 <NextLesson />
                 <SpeakingSlots speakingSlots={upcommingClass} />

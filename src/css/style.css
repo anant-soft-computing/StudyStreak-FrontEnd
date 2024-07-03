@@ -16681,14 +16681,17 @@ div.gridarea__wraper {
 }
 
 .hidden-controls {
-  width: 220px !important;
+  width: 165px;
 }
 
 .hidden-controls::-webkit-media-controls-start-playback-button {
-  display: none !important;
+  display: none;
 }
 .hidden-controls::-webkit-media-controls-timeline {
-  display: none !important;
+  display: none;
+}
+.hidden-controls::-webkit-media-controls-play-button {
+  display: none;
 }
 
 .ly-mic-audio-container {

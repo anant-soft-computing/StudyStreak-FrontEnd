@@ -46,10 +46,6 @@ const PracticeLiveExam = () => {
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
-  console.log("-----examForm------>", examForm);
-
-  console.log("---fullPaper---->",fullPaper)
-
   useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||
@@ -120,7 +116,6 @@ const PracticeLiveExam = () => {
             }
             return 0;
           });
-console.log("-----filteredData------>",filteredData)
           setFullPaper(filteredData);
         } else {
           console.log("error");
@@ -133,7 +128,6 @@ console.log("-----filteredData------>",filteredData)
 
   useEffect(() => {
     if (fullPaper?.length !== 0) {
-      console.log("fullPaper*******", fullPaper?.[0][examType][examForm]);
       const examBlockWithNumbers = fullPaper?.[0][examType][examForm]?.map(
         (examBlock, index) => ({
           ...examBlock,
@@ -141,7 +135,6 @@ console.log("-----filteredData------>",filteredData)
         })
       );
       setReRenderAudio(true);
-      console.log("-------    examBlockWithNumbers", examBlockWithNumbers);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
@@ -292,7 +285,7 @@ console.log("-----filteredData------>",filteredData)
           <audio
             controls
             autoPlay
-            controlsList='nodownload noplaybackrate'
+            controlsList='nodownload noplaybackrate noplay'
             className='hidden-controls'
           >
             <source src={audio_file} type='audio/mpeg' />
@@ -989,7 +982,6 @@ console.log("-----filteredData------>",filteredData)
         <div className='lv-main-container'>
           {/* Left Container */}
           {(examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening" ||
             examData?.exam_type === "Writing") && (
             <div className='lv-left-container'>
               {displayLeftContainer(examData?.passage, examData?.passage_image)}

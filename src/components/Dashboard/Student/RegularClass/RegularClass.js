@@ -3,9 +3,9 @@ import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import RegularClassList from "./RegularClassList";
 import Tab from "../../../UI/Tab";
-import RecorededClass from "../Classes/RecorededClass";
+import RecordedClass from "../Classes/RecordedClass";
 
-const tabs = [{ name: "Regular" }, { name: "Recoded Class" }];
+const tabs = [{ name: "Regular" }, { name: "Recorded Class" }];
 
 const RegularClass = ({ selectedDateRange }) => {
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
@@ -100,11 +100,11 @@ const RegularClass = ({ selectedDateRange }) => {
             </div>
             <div
               className={`tab-pane fade ${
-                activeTab === "Recoded Class" ? "show active" : ""
+                activeTab === "Recorded Class" ? "show active" : ""
               }`}
             >
               <div className="row">
-                <RecorededClass
+                <RecordedClass
                   uuid={uuid}
                   classes={regularClasses()}
                   activeTab={activeTab}

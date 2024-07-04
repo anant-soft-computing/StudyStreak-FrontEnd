@@ -24,8 +24,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import NavBar from "../../../NavBar/NavBar";
 import TopBar from "../../../TopBar/TopBar";
+import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
 
-const drawerWidth = 250;
+const drawerWidth = 280;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -290,6 +291,7 @@ const DSLeftDrawer = () => {
             ))}
           </List>
         </Box>
+        {open && <NoticeBoard />}
       </Drawer>
     </Box>
   );

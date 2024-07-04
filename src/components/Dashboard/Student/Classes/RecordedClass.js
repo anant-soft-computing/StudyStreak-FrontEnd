@@ -3,7 +3,7 @@ import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const RecorededClass = ({ uuid, classes, activeTab }) => {
+const RecordedClass = ({ uuid, classes, activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [recordClass, setRecordClass] = useState([]);
 
@@ -88,4 +88,4 @@ const RecorededClass = ({ uuid, classes, activeTab }) => {
   );
 };
 
-export default RecorededClass;
+export default RecordedClass;

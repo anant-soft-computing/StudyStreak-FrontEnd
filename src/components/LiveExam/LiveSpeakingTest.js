@@ -51,11 +51,37 @@ const LiveSpeakingExam = () => {
     }
   }, [timer]);
 
+  const examLastSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            exam_block: examId,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Exam Submitted");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const examSubmit = async () => {
-    const data = {
-      student_id: studentId,
-      speakingblock_id: parseInt(examId),
-    };
     try {
       const response = await ajaxCall(
         "/student-speakingblock-submit/",
@@ -68,11 +94,15 @@ const LiveSpeakingExam = () => {
             }`,
           },
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            student_id: studentId,
+            speakingblock_id: parseInt(examId),
+          }),
         },
         8000
       );
       if (response.status === 201) {
+        examLastSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have All Ready Submitted This Exam");

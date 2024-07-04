@@ -29,7 +29,6 @@ const LiveExam = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [recordedFilePath, setRecordedFilePath] = useState("");
-  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const synth = window.speechSynthesis;
@@ -104,7 +103,67 @@ const LiveExam = () => {
         console.log("error", error);
       }
     })();
-  }, [examId]);
+  }, [examId, examType]);
+
+  const examLastSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            exam_block: examId,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Exam Submitted");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const gamificationSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/gamification/points/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            model: "Exam Block",
+            object_id: parseInt(examId),
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   const examSubmit = async () => {
     const data = {
@@ -129,6 +188,7 @@ const LiveExam = () => {
         8000
       );
       if (response.status === 200) {
+        examLastSubmit();
         gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
@@ -136,37 +196,6 @@ const LiveExam = () => {
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
-    }
-  };
-
-  const gamificationSubmit = async () => {
-    const data = {
-      model: "Exam Block",
-      object_id: parseInt(examId),
-    };
-    try {
-      const response = await ajaxCall(
-        "/gamification/points/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        toast.success("Points Updated Successfully");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
     }
   };
 
@@ -927,7 +956,7 @@ const LiveExam = () => {
         </div>
         {isConfirmModalOpen && (
           <SmallModal
-            size="md"
+            size="lg"
             centered
             isOpen={isConfirmModalOpen}
             footer={

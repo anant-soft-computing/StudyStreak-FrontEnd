@@ -5,12 +5,14 @@ import Loading from "../../../UI/Loading";
 
 const ClassList = ({ classes, bookCount, isLoading, message }) => {
   const handleBook = (params) => {
+    // Class Start Date is Greater than Current Date than it's worked
     const { id, isPastDate } = params.data;
     return (
       <button
         className="take-test"
         onClick={() => bookCount(id)}
         disabled={isPastDate}
+        style={{ opacity: isPastDate ? 0.5 : 1 }}
       >
         Book Slot
       </button>

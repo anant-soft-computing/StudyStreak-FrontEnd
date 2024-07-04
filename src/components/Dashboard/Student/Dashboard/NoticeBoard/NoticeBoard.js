@@ -1,37 +1,70 @@
-import React from "react";
-
-const notices = [
-  { text: "USA webinar tomorrow at 7 pm Register." },
-  {
-    text: "Free Speaking Competition for all Canada aspirants in Pune View more details.",
-  },
-  { text: "Classes cancelled as Holiday on May 1st - Labour Day." },
-  { text: "Submit your interest for becoming a tutor with us." },
-];
+import React, { useEffect, useState } from "react";
+import ajaxCall from "../../../../../helpers/ajaxCall";
+import { Box, List, ListItem, Typography } from "@mui/material";
 
 const NoticeBoard = () => {
+  const [noticeData, setNoticeData] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/noticeboard/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setNoticeData(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
   return (
-    <div className="dashboard__inner card-background">
-      <div className="dashboard__nav__title">
-        <h6>Notice Board</h6>
-      </div>
-      <hr />
-      <div className="course__list__wraper">
-        <div className="aboutarea__list__2 blog__details__list__2">
-          {notices.map((notice, index) => (
-            <ul key={index} className="list-unstyled">
-              <li
-                style={{ padding: "8px" }}
-                className={index % 2 === 0 ? "dashboard__table__row" : ""}
+    noticeData.length > 0 && (
+      <Box overflow="auto" p={1}>
+        <Box
+          sx={{
+            p: 2,
+            border: "1px solid #01579b",
+            backgroundColor: "white",
+          }}
+        >
+          <Typography sx={{ color: "#01579b", fontWeight: 700 }} variant="h6">
+            Notice board
+          </Typography>
+          <List>
+            {noticeData?.map((notice, index) => (
+              <ListItem
+                key={index}
+                sx={{
+                  ml: 2,
+                  display: "list-item",
+                  listStyleType: "disc",
+                  whiteSpace: "normal",
+                  wordBreak: "break-word",
+                }}
               >
-                <span>{index + 1}.</span>&nbsp;
-                <span>{notice.text}</span>
-              </li>
-            </ul>
-          ))}
-        </div>
-      </div>
-    </div>
+                <Typography fontSize={12}>{notice?.notice}</Typography>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Box>
+    )
   );
 };
 

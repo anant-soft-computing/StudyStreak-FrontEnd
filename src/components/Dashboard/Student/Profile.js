@@ -36,9 +36,11 @@ const Profile = () => {
           setIsLoading(false);
           setProfileData(response?.data);
         } else {
+          setIsLoading(false);
           console.log("error");
         }
       } catch (error) {
+        setIsLoading(false);
         console.log("error:", error);
       }
     })();

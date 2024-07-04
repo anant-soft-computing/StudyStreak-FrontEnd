@@ -85,9 +85,11 @@ const PracticeTest = () => {
           setIsLoading(false);
           setTestData(filteredData);
         } else {
+          setIsLoading(false);
           console.log("error");
         }
       } catch (error) {
+        setIsLoading(false);
         console.error("error", error);
       }
     };

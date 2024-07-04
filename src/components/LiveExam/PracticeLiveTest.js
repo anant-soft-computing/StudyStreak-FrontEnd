@@ -553,14 +553,10 @@ const PracticeLiveExam = () => {
     })();
   }, [fullPaper]);
 
-  const practiceTestSubmit = async () => {
-    const data = {
-      student_id: studentId,
-      pt_id: parseInt(examId),
-    };
+  const examLatestSubmit = async () => {
     try {
       const response = await ajaxCall(
-        "/student-pt-submit/",
+        "/test-submission/",
         {
           headers: {
             Accept: "application/json",
@@ -570,18 +566,20 @@ const PracticeLiveExam = () => {
             }`,
           },
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            student: studentId,
+            practise_set: fullPaper[0].IELTS.id,
+          }),
         },
         8000
       );
-      if (response.status === 200) {
-        gamificationSubmit();
-        toast.success("Your Exam Submitted Successfully");
+      if (response.status === 201) {
+        console.log("Lastest Practice Exam Submitted");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        console.log("error");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      console.log("error", error);
     }
   };
 
@@ -613,6 +611,39 @@ const PracticeLiveExam = () => {
       }
     } catch (error) {
       console.log("error", error);
+    }
+  };
+
+  const practiceTestSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        examLatestSubmit();
+        gamificationSubmit();
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have All Ready Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
     }
   };
 
@@ -1102,7 +1133,7 @@ const PracticeLiveExam = () => {
         </div>
         {isConfirmModalOpen && (
           <SmallModal
-            size='md'
+            size="lg"
             centered
             isOpen={isConfirmModalOpen}
             footer={

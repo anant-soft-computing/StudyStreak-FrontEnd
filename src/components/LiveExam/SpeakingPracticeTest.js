@@ -30,6 +30,7 @@ const PracticeSpeakingLiveExam = () => {
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
@@ -69,6 +70,68 @@ const PracticeSpeakingLiveExam = () => {
     }
     return randomId;
   }
+
+  const examLatestSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            practise_set: fullPaper[0].IELTS.id,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Practice Exam Submitted");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const practiceTestSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        examLatestSubmit();
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have All Ready Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -203,6 +266,7 @@ const PracticeSpeakingLiveExam = () => {
   useEffect(() => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
+      practiceTestSubmit();
       setTimeout(() => navigate(`/practiceTest`), 3000);
     }
   }, [speaking]);

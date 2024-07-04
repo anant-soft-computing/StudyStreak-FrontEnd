@@ -1254,7 +1254,7 @@ const FullLengthLiveExam = () => {
         </div>
         {isConfirmModalOpen && (
           <SmallModal
-            size='md'
+            size='lg'
             centered
             isOpen={isConfirmModalOpen}
             footer={

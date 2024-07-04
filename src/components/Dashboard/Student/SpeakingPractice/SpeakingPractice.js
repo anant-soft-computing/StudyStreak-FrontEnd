@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import RecorededClass from "../Classes/RecorededClass";
+import RecordedClass from "../Classes/RecordedClass";
 
 const tabs = [
   { name: "Upcoming" },
   { name: "Available Slot" },
-  { name: "Recoded Class" },
+  { name: "Recorded Class" },
 ];
 
 const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
-  const navigate = useNavigate();
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
-
-  console.log("count", count);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -53,7 +49,6 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
       );
       if (response.status === 200) {
         toast.success("Slot Booked Successfully");
-        navigate("/studentLiveClasses");
       } else if (response.status === 400) {
         toast.error(response?.data?.Message);
       }
@@ -198,11 +193,11 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
             </div>
             <div
               className={`tab-pane fade ${
-                activeTab === "Recoded Class" ? "show active" : ""
+                activeTab === "Recorded Class" ? "show active" : ""
               }`}
             >
               <div className="row">
-                <RecorededClass
+                <RecordedClass
                   uuid={uuid}
                   classes={speackingClasses}
                   activeTab={activeTab}

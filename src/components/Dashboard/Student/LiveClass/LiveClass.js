@@ -19,7 +19,6 @@ const LiveClass = () => {
     },
   ]);
 
-  console.log("--count---111-->",count)
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

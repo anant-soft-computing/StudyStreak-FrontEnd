@@ -33,6 +33,7 @@ const cardList = [
 ];
 
 const SDashboard = () => {
+  const [studentID, setStudentID] = useState(0);
   const [upcommingClass, setUpcommingClass] = useState([]);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
@@ -55,6 +56,7 @@ const SDashboard = () => {
         );
         if (response.status === 200) {
           const { data } = response;
+          setStudentID(data.student_packages[0].student_id);
           setUpcommingClass(
             data.student_packages?.map(
               ({ Live_class_enroll }) => Live_class_enroll
@@ -144,7 +146,7 @@ const SDashboard = () => {
                 </div>
               </div>
               <div className="col-xl-4 col-lg-4">
-                <LeaderBoard />
+                <LeaderBoard studentID={studentID} />
                 <UpcomingLiveClass upcommingClass={upcommingClass} />
                 <NextLesson />
                 <SpeakingSlots speakingSlots={upcommingClass} />

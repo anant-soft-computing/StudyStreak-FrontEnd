@@ -5,19 +5,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import LessonList from "./LessonList";
 import LessonContent from "./LessonContent";
+import Loading from "../../../UI/Loading";
 
 const Lesson = () => {
-  const { courseId } = useParams();
   const navigate = useNavigate();
-
-  const [courseLessons, setCourseLessons] = useState([]);
-  const [activeLesson, setActiveLesson] = useState({});
+  const { courseId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [activeLesson, setActiveLesson] = useState({});
+  const [courseLessons, setCourseLessons] = useState([]);
   const [activeContentType, setActiveContentType] = useState("video");
 
   const authData = useSelector((state) => state.authStore);
 
   const getCourseLessons = async () => {
+    setIsLoading(true);
     try {
       const response = await ajaxCall(
         `/courseretupddelview/${courseId}/`,
@@ -53,13 +55,15 @@ const Lesson = () => {
         });
 
         const tempCourse = [{ ...response?.data, section: tempSessions }];
-
+        setIsLoading(false);
         setCourseLessons(tempCourse);
         setActiveLesson(tempCourse[0]);
       } else {
+        setIsLoading(false);
         console.log("error");
       }
     } catch (error) {
+      setIsLoading(false);
       console.log("error", error);
     }
   };
@@ -82,7 +86,7 @@ const Lesson = () => {
       return;
     }
     getCourseLessons();
-  }, [courseId, authData]);
+  }, [courseId]);
 
   return (
     <div className="body__wrapper">
@@ -90,21 +94,27 @@ const Lesson = () => {
         <div className="tution sp_bottom_100 sp_top_50">
           <div className="container-fluid full__width__padding">
             <div className="row">
-              <div className="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
-                <LessonList
-                  lessons={courseLessons}
-                  activeIndex={activeIndex}
-                  setActiveIndex={setActiveIndex}
-                  handleContentChange={setActiveContentType}
-                  setActiveLesson={setActiveLesson}
-                />
-              </div>
-              <div className="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
-                <LessonContent
-                  activeLesson={activeLesson}
-                  activeContentType={activeContentType}
-                />
-              </div>
+              {isLoading ? (
+                <Loading text="Loading..." color="primary" />
+              ) : (
+                <>
+                  <div className="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
+                    <LessonList
+                      lessons={courseLessons}
+                      activeIndex={activeIndex}
+                      setActiveIndex={setActiveIndex}
+                      handleContentChange={setActiveContentType}
+                      setActiveLesson={setActiveLesson}
+                    />
+                  </div>
+                  <div className="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
+                    <LessonContent
+                      activeLesson={activeLesson}
+                      activeContentType={activeContentType}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

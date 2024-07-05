@@ -47,6 +47,7 @@ import Batch from "./components/Dashboard/Admin/Batch/Batch";
 import Badge from "./components/Dashboard/Admin/Badge/Badge";
 import FlashCard from "./components/Dashboard/Admin/FlashCard/FlashCard";
 import Gamification from "./components/Dashboard/Admin/Gamification/Gamification";
+import Notice from "./components/Dashboard/Admin/Notice/Notice";
 import AProfile from "./components/Dashboard/Admin/Profile";
 
 //------------------------> Exam <------------------------------------------
@@ -57,6 +58,7 @@ import ExamWriting from "./components/Exam-Create/ExamWriting";
 import ExamListening from "./components/Exam-Create/ExamListening";
 import ExamSpeaking from "./components/Exam-Create/ExamSpeaking";
 import LiveExam from "./components/LiveExam/LiveExam";
+import LiveAssignment from "./components/LiveAssignment/LiveAssignment";
 import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import PracticeWritingExam from "./components/LiveExam/PracticeWritingExam";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
@@ -67,6 +69,7 @@ import Answer from "./components/Exam-Answer/Answer";
 import PracticeTestAnswer from "./components/Exam-Answer/PracticeTestAnswer";
 import FullLengthTestAnswer from "./components/Exam-Answer/FullLengthTestAnswer";
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
+import LiveAssignmentAnswer from "./components/LiveAssignment/LiveAssignmentAnswer";
 import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest";
 import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
 import StudentNavBarRoute from "./layout/StudentNavBarRoute";
@@ -97,6 +100,7 @@ const App = () => {
           <Route path="/admin-badges" element={<Badge />} />
           <Route path="/admin-flashCard" element={<FlashCard />} />
           <Route path="/admin-gamification" element={<Gamification />} />
+          <Route path="/admin-notice" element={<Notice />} />
           <Route path="/admin-profile" element={<AProfile />} />
           <Route path="/admin-exam/:examType" element={<Exam />} />
           <Route path="/admin-exam/:examType/:examForm" element={<Exam />} />
@@ -135,6 +139,10 @@ const App = () => {
             path="/gmat-live-mock-test/:examId"
             element={<GmatLiveMockTest />}
           />
+          <Route
+            path="/live-assignment-answer/:examId"
+            element={<LiveAssignmentAnswer />}
+          />
           <Route path="/exam-answer/:examId" element={<Answer />} />
           <Route
             path="/exam-practice-test-answer/:examId"
@@ -171,6 +179,11 @@ const App = () => {
 
           <Route path="*" element={<ErrorPage />} />
         </Route>
+
+        <Route
+          path="/assignment/:examType/:examId"
+          element={<LiveAssignment />}
+        ></Route>
 
         <Route
           path="/fulllength-live-exam/:examId"

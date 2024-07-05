@@ -13,6 +13,7 @@ import gamification from "../../../../img/icon/gamification.svg";
 import flashCard from "../../../../img/icon/flashCard.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
+import notice from "../../../../img/icon/notice.svg"
 
 const DASideBar = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -77,6 +78,11 @@ const DASideBar = () => {
       name: "Gamification",
       icon: <img src={gamification} alt="Gamification" />,
       link: "/admin-gamification",
+    },
+    {
+      name: "Notice",
+      icon: <img src={notice} alt="Notice" />,
+      link: "/admin-notice",
     },
     {
       name: "Settings",

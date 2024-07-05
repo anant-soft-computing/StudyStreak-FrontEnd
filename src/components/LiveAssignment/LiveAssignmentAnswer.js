@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
-import BandScoreCard from "./BandScoreCard";
-import AnswerCard from "./AnswerCard";
+import AnswerCard from "../Exam-Answer/AnswerCard";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
+import BandScoreCard from "../Exam-Answer/BandScoreCard";
 
-const Answer = () => {
+const LiveAssignmentAnswer = () => {
   const { examId } = useParams();
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
@@ -14,7 +14,6 @@ const Answer = () => {
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [examName, setExamName] = useState("");
   const [examType, setExamType] = useState("");
-  const [gptResponse, setGPTResponse] = useState("");
   const [band, setBand] = useState(0);
 
   useEffect(() => {
@@ -40,7 +39,6 @@ const Answer = () => {
           setExamName(response.data?.exam_name);
           setBand(response.data?.band);
           setExamType(response.data?.exam_type);
-          setGPTResponse(response.data?.AI_Assessment);
         } else {
           console.log("error");
         }
@@ -105,15 +103,7 @@ const Answer = () => {
                     bandValue={band}
                     examType={examType}
                   />
-                  {examType === "Writing" && (
-                    <div className="writing__exam">
-                      <div className="dashboard__section__title">
-                        <h4 className="sidebar__title">Assessment</h4>
-                      </div>
-                      <div className="gptResponse">{gptResponse}</div>
-                    </div>
-                  )}
-                  {(examType === "Reading" || examType === "Listening") && (
+                  {examType === "General" && (
                     <div className="writing__exam">
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Answer Table</h4>
@@ -227,4 +217,4 @@ const Answer = () => {
   );
 };
 
-export default Answer;
+export default LiveAssignmentAnswer;

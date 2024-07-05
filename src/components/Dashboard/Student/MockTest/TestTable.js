@@ -13,12 +13,21 @@ const TestTable = ({
   const navigate = useNavigate();
   const takeTest = (params) => {
     const examId = params.data.id;
-    const isGiven = givenTest?.find((test) => test === examId);
+    const isGiven =
+      testType === "Speaking"
+        ? givenSpeakingTest?.find((test) => test === examId)
+        : givenTest?.find((test) => test === examId);
     if (isGiven) {
       return (
         <button
           className="take-test"
-          onClick={() => navigate(`/exam-answer/${examId}`)}
+          onClick={() =>
+            testType === "Speaking" || testType === "Writing"
+              ? navigate(`/assessment/${examId}`, {
+                  state: { examType: testType },
+                })
+              : navigate(`/exam-answer/${examId}`)
+          }
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >
           Review Test

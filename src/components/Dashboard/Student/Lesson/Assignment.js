@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Assignment = ({ activeLesson }) => {
   const handleClick = (id) => {
-    window.open(`/live-exam/General/${id}`, "_blank");
+    window.open(`/assignment/General/${id}`, "_blank");
   };
 
   const assignments = activeLesson?.filter(
@@ -28,16 +28,6 @@ const Assignment = ({ activeLesson }) => {
                       {exam.exam_name}
                     </Link>
                   </h3>
-                </div>
-                <div className="zoom__meeting__id">
-                  <p>
-                    Questions : <span>{exam.no_of_questions}</span>
-                  </p>
-                </div>
-                <div className="zoom__meeting__id">
-                  <p>
-                    Difficulty Level : <span>{exam.difficulty_level}</span>
-                  </p>
                 </div>
               </div>
               <div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const LeaderBoard = () => {
+const LeaderBoard = ({ studentID }) => {
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
@@ -49,13 +49,14 @@ const LeaderBoard = () => {
           </thead>
           <tbody>
             {tableData?.map((item, index) => {
-              const { id, student_name, total_points } = item;
+              const { id, student_name, total_points, student_id } = item;
               const rowClass = index % 2 === 0 ? "" : "dashboard__table__row";
+              const textClass = studentID === student_id ? "text-success" : "";
               return (
                 <tr key={id} className={rowClass}>
-                  <td>{index + 1}.</td>
-                  <td>{student_name}</td>
-                  <td>{total_points} pts</td>
+                  <td className={textClass}>{index + 1}.</td>
+                  <td className={textClass}>{student_name}</td>
+                  <td className={textClass}>{total_points} pts</td>
                 </tr>
               );
             })}

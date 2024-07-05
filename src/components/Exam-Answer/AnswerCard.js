@@ -5,6 +5,7 @@ const AnswerCard = ({
   correctCount,
   incorrectCount,
   bandValue,
+  examType,
 }) => {
   return (
     <div className="course__details__wraper">
@@ -25,7 +26,7 @@ const AnswerCard = ({
             </strong>
           </div>
         </li>
-        {bandValue == 0 && (
+        {bandValue == 0 && examType !== "General" && (
           <li className="text-danger">
             <div className="scc__meta">
               (This Exam Is Not Eligible For A Band Score)

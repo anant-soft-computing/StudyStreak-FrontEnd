@@ -31,9 +31,13 @@ const PracticeTestTable = ({ testData, givenTest, testType, isLoading }) => {
         <button
           className="take-test"
           onClick={() =>
-            navigate(`/exam-practice-test-answer/${examId}`, {
-              state: { fullPaper: paperId, examForm: testType },
-            })
+            testType === "Writing" || testType === "Speaking"
+              ? navigate(`/practice-assessment/${paperId}`, {
+                  state: { examType: testType },
+                })
+              : navigate(`/exam-practice-test-answer/${examId}`, {
+                  state: { fullPaper: paperId, examForm: testType },
+                })
           }
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >

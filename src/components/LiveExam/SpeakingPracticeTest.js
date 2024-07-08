@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -31,6 +31,8 @@ const PracticeSpeakingLiveExam = () => {
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const containerRef = useRef(null);
+  let highlightedElement = null;
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
@@ -40,13 +42,11 @@ const PracticeSpeakingLiveExam = () => {
 
   useEffect(() => {
     let interval;
-
     if (timerRunning) {
       interval = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
     }
-
     return () => {
       clearInterval(interval);
     };
@@ -86,7 +86,7 @@ const PracticeSpeakingLiveExam = () => {
           method: "POST",
           body: JSON.stringify({
             student: studentId,
-            practise_set: fullPaper[0].IELTS.id,
+            practise_set: fullPaper?.IELTS?.id,
           }),
         },
         8000
@@ -283,11 +283,26 @@ const PracticeSpeakingLiveExam = () => {
           question_number={item.question_number}
           user={userData.userId}
           recorderIndex={item.id}
+          practice={fullPaper?.IELTS?.id}
         />
       );
     },
     [speaking, examData, userData, next]
   );
+
+  const scrollToQuestion = (index) => {
+    if (containerRef.current) {
+      const questionElement = containerRef.current.children[index];
+      if (questionElement) {
+        if (highlightedElement) {
+          highlightedElement.style.backgroundColor = ""; // Reset the background color of the previously highlighted element
+        }
+        questionElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        questionElement.style.backgroundColor = "#ffffcc"; // Set a light background color to highlight the current element
+        highlightedElement = questionElement; // Update the highlighted element
+      }
+    }
+  };
 
   return !instructionCompleted ? (
     <div className="test-instruction">
@@ -325,61 +340,70 @@ const PracticeSpeakingLiveExam = () => {
         </div>
       </div>
       <div className="lv-container">
-        {/* Main Container */}
-        {/* <div className='lv-main-container'> */}
-        <div>
-          {/* Left Container */}
-          <div
-            className="lv-left-container"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-around",
-            }}
-          >
+        <div
+          ref={containerRef}
+          className="lv-left-container"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-around",
+          }}
+        >
+          {Object.keys(examData).length > 0 &&
+            examData.questions.map((item, i) => {
+              const speakingIndex = speaking.findIndex(
+                (element) => element.id === item.id
+              );
+              return (
+                <div className="lv-question-container" key={item.id}>
+                  <div className="lv-speaking-question">
+                    <p> {i + 1} : </p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.question,
+                      }}
+                    ></div>
+                  </div>
+                  <div className="d-flex align-items-center lv-btn-mic-container">
+                    <button
+                      className="lv-speaking-button"
+                      onClick={() => speak(item.question, item.id)}
+                      disabled={speaking?.[speakingIndex]?.status === 1}
+                      style={{
+                        opacity:
+                          speaking?.[speakingIndex]?.status === 1 ? 0.5 : 1,
+                        cursor:
+                          speaking?.[speakingIndex]?.status === 1
+                            ? "not-allowed"
+                            : "pointer",
+                      }}
+                    >
+                      {speaking?.[speakingIndex]?.status === 2
+                        ? "Replay"
+                        : "Start"}
+                    </button>
+                    <hr />
+                    {recorderContainer(item, speakingIndex)}
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+        <div className="d-flex justify-content-between align-items-center p-2">
+          <div className="lv-section-pagination">
             {Object.keys(examData).length > 0 &&
-              examData.questions.map((item, i) => {
-                const speakingIndex = speaking.findIndex(
-                  (element) => element.id === item.id
-                );
+              examData.questions.map((_, index) => {
                 return (
-                  <div className="lv-question-container">
-                    <div className="lv-speaking-question">
-                      <p> {i + 1} :</p>
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: item.question,
-                        }}
-                      ></div>
-                    </div>
-                    <div className="d-flex align-items-center lv-btn-mic-container">
-                      <button
-                        className="lv-speaking-button"
-                        onClick={() => speak(item.question, item.id)}
-                        disabled={speaking?.[speakingIndex]?.status === 1}
-                        style={{
-                          opacity:
-                            speaking?.[speakingIndex]?.status === 1 ? 0.5 : 1,
-                          cursor:
-                            speaking?.[speakingIndex]?.status === 1
-                              ? "not-allowed"
-                              : "pointer",
-                        }}
-                      >
-                        {speaking?.[speakingIndex]?.status === 2
-                          ? "Replay"
-                          : "Start"}
-                      </button>
-                      <hr />
-                      {recorderContainer(item, speakingIndex)}
-                    </div>
+                  <div
+                    className="lv-footer-item"
+                    onClick={() => scrollToQuestion(index)}
+                    key={index}
+                  >
+                    {index + 1}
                   </div>
                 );
               })}
           </div>
-        </div>
-        <div className="d-flex justify-content-between mb-2">
-          <div className="lv-question-pagination" />
           <div className="lv-footer-btn">
             <button
               className="lv-footer-button"

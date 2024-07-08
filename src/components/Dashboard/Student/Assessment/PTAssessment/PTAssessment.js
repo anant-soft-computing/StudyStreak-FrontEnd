@@ -1,9 +1,23 @@
 import React from "react";
 import Table from "../../../../UI/Table";
+import { useNavigate } from "react-router-dom";
 
 const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
-  const viewAssessment = () => {
-    return <button className="take-test">View</button>;
+  const navigate = useNavigate();
+  const viewAssessment = (params) => {
+    const paperId = params.data.IELTS.id
+    return (
+      <button
+        className="take-test"
+        onClick={() =>
+          navigate(`/practice-assessment/${paperId}`, {
+            state: { examType: testType },
+          })
+        }
+      >
+        View
+      </button>
+    );
   };
 
   const columns = [

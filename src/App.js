@@ -74,6 +74,7 @@ import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest
 import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
 import StudentNavBarRoute from "./layout/StudentNavBarRoute";
 import AdminNavBarRoute from "./layout/AdminNavBarRoute";
+import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
 
 const App = () => {
   return (
@@ -134,7 +135,6 @@ const App = () => {
             path="/practice-live-writing-exam/:examType/:examForm/:examId"
             element={<PracticeWritingExam />}
           />
-
           <Route
             path="/gmat-live-mock-test/:examId"
             element={<GmatLiveMockTest />}
@@ -151,8 +151,11 @@ const App = () => {
           <Route
             path="/assessment/:examId"
             element={<ViewMTAAssessment />}
-          ></Route>
-
+          />
+          <Route
+            path="/practice-assessment/:examId"
+            element={<ViewPTAssessment />}
+          />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
 

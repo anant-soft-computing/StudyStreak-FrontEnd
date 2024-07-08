@@ -112,7 +112,7 @@ const DoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
             const oToclassData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
             );
-            const id = response?.data.map((item) => item?.other_fields?.id);
+            const id = oToclassData?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             oToclass.push(...oToclassData);
           } else {

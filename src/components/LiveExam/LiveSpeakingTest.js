@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -25,6 +25,8 @@ const LiveSpeakingExam = () => {
   const synth = window.speechSynthesis;
   const [speaking, setSpeaking] = useState([initialSpeakingSingleQuesionState]);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
+  const containerRef = useRef(null);
+  let highlightedElement = null;
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
@@ -214,6 +216,20 @@ const LiveSpeakingExam = () => {
     }
   }, [speaking]);
 
+  const scrollToQuestion = (index) => {
+    if (containerRef.current) {
+      const questionElement = containerRef.current.children[index];
+      if (questionElement) {
+        if (highlightedElement) {
+          highlightedElement.style.backgroundColor = "";
+        }
+        questionElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        questionElement.style.backgroundColor = "#ffffcc";
+        highlightedElement = questionElement;
+      }
+    }
+  };
+
   const recorderContainer = useCallback(
     (item, i) => {
       return (
@@ -279,15 +295,17 @@ const LiveSpeakingExam = () => {
         <div className="lv-main-container" style={{ maxHeight: "max-content" }}>
           {/* Left Container */}
           <div
+            ref={containerRef}
             className="lv-left-container"
             style={{
               display: "flex",
               flexDirection: "column",
+              justifyContent: "space-around",
             }}
           >
             {Object.keys(examData).length > 0 &&
               examData.questions.map((item, i) => (
-                <div className="lv-question-container">
+                <div className="lv-question-container" key={item?.id}>
                   <div className="lv-speaking-question">
                     <p> {i + 1} : </p>
                     <div
@@ -316,6 +334,21 @@ const LiveSpeakingExam = () => {
                   </div>
                 </div>
               ))}
+          </div>
+        </div>
+        <div className="lv-question-pagination  justify-content-center d-flex justify-content-md-between align-items-center">
+          <div className="lv-section-pagination">
+            {examData?.questions?.map((_, index) => {
+              return (
+                <div
+                  className="lv-footer-item"
+                  onClick={() => scrollToQuestion(index)}
+                  key={index}
+                >
+                  {index + 1}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

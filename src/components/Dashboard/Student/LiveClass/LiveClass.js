@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import DateRange from "../../../UI/DateRangePicker";
 import RegularClass from "../RegularClass/RegularClass";
@@ -8,9 +9,14 @@ import DoubtSolving from "../1To1DoubtSolving/DoubtSolving";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const LiveClass = () => {
+  const location = useLocation();
   const [count, setCount] = useState({});
   const [solvingClassBook, setSolvingClassBook] = useState([]);
-  const [activeTab, setActiveTab] = useState("Regular");
+  const [activeTab, setActiveTab] = useState(
+    location?.state?.activeTab === "Speaking Practice"
+      ? "Speaking Practice"
+      : "Regular"
+  );
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -172,9 +178,9 @@ const LiveClass = () => {
                           >
                             <div className="row">
                               <DoubtSolving
-                               solvingClassBook={solvingClassBook}
-                               selectedDateRange={selectedDateRange}
-                               count={count?.one_to_one_doubt_solving_count}
+                                solvingClassBook={solvingClassBook}
+                                selectedDateRange={selectedDateRange}
+                                count={count?.one_to_one_doubt_solving_count}
                               />
                             </div>
                           </div>

@@ -4,15 +4,23 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import RegularClassList from "./RegularClassList";
 import Tab from "../../../UI/Tab";
 import RecordedClass from "../Classes/RecordedClass";
+import { useLocation } from "react-router-dom";
 
 const tabs = [{ name: "Regular" }, { name: "Recorded Class" }];
 
 const RegularClass = ({ selectedDateRange }) => {
+  const location = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [uuid, setUuid] = useState([]);
   const [regularClass, setRegularClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Regular");
+  const [activeTab, setActiveTab] = useState(
+    location?.state?.activeTab === "Recorded Class"
+      ? "Recorded Class"
+      : "Regular"
+  );
+
+  console.log("----uuid---->", uuid);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -44,12 +52,12 @@ const RegularClass = ({ selectedDateRange }) => {
             const classData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Regular Class"
             );
-            const id = response?.data.map((item) => item?.other_fields?.id);
+
+            const id = classData?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             regularClassData.push(...classData);
             setIsLoading(false);
           } else {
-            console.log("error");
             setIsLoading(false);
           }
         }
@@ -57,7 +65,8 @@ const RegularClass = ({ selectedDateRange }) => {
         setRegularClass(regularClassData);
       } catch (error) {
         setIsLoading(false);
-        console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -107,7 +116,7 @@ const RegularClass = ({ selectedDateRange }) => {
                 <RecordedClass
                   uuid={uuid}
                   classes={regularClasses()}
-                  activeTab={activeTab}
+                  activeTab="Recorded Class"
                 />
               </div>
             </div>

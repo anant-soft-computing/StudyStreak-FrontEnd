@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
@@ -15,9 +16,10 @@ const tabs = [
 ];
 
 const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
+  const location = useLocation();
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Upcoming");
+  const [activeTab, setActiveTab] = useState(location?.state?.activeTab === "Speaking Practice" ? "Available Slot" : "Upcoming");
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
@@ -111,7 +113,7 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
             const speakingData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Speaking-Practice"
             );
-            const id = response?.data.map((item) => item?.other_fields?.id);
+            const id = speakingData?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             speakingClass.push(...speakingData);
             setIsLoading(false);

@@ -29,7 +29,7 @@ const RecordedClass = ({ uuid, classes, activeTab }) => {
   };
 
   useEffect(() => {
-    if (activeTab === "Recoded Class") {
+    if (activeTab === "Recorded Class") {
       (async () => {
         setIsLoading(true);
         try {
@@ -58,8 +58,10 @@ const RecordedClass = ({ uuid, classes, activeTab }) => {
               data.push(response.data);
             }
           }
+          setIsLoading(false);
           setRecordClass(data);
         } catch (error) {
+          setIsLoading(false);
           console.error("Error fetching recorded classes:", error);
         } finally {
           setIsLoading(false);

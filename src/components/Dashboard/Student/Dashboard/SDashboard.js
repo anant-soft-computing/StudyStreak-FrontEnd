@@ -21,6 +21,9 @@ const cardList = [
     name: "Book Speaking Slot",
     icon: bookSpeakingSlot,
     link: "/studentLiveClasses",
+    state: {
+      activeTab: "Speaking Practice",
+    },
   },
   { name: "Practice Test", icon: practice, link: "/practiceTest" },
   { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
@@ -88,7 +91,7 @@ const SDashboard = () => {
                     </div>
                   </div>
                   <div className="row">
-                    {cardList.map(({ name, icon, link }) => (
+                    {cardList.map(({ name, icon, link, state }) => (
                       <div className="col-xl-4 column__custom__class">
                         <div className="gridarea__wraper text-center card-background">
                           <div
@@ -96,7 +99,11 @@ const SDashboard = () => {
                             style={{ cursor: link ? "pointer" : "default" }}
                           >
                             {link ? (
-                              <Link to={link} className="text-decoration-none">
+                              <Link
+                                to={link}
+                                className="text-decoration-none"
+                                state={state}
+                              >
                                 <div className="gridarea__heading">
                                   <img
                                     src={icon}
@@ -128,6 +135,7 @@ const SDashboard = () => {
                           <Link
                             to="/studentLiveClasses"
                             className="text-decoration-none"
+                            state={{ activeTab: "Recorded Class" }}
                           >
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
                               <img

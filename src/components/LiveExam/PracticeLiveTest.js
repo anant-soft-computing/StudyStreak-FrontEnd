@@ -22,6 +22,7 @@ const PracticeLiveExam = () => {
   const examId = useLocation()?.pathname?.split("/")?.[4];
   const synth = window.speechSynthesis;
   const [examData, setExamData] = useState([]);
+  const [examBlock, setExamBlock] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
@@ -135,6 +136,7 @@ const PracticeLiveExam = () => {
         })
       );
       setReRenderAudio(true);
+      setExamBlock(examBlockWithNumbers);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
@@ -768,6 +770,10 @@ const PracticeLiveExam = () => {
         answersArray.map(async (item) => {
           let gptResponse;
           let bandValue;
+
+          const examItem = examBlock.find(exam => exam.id === item.exam_id);
+          const passage = examItem ? examItem.passage : "Passage not found";
+
           const gptBody = {
             model: "gpt-3.5-turbo",
             messages: [
@@ -778,7 +784,7 @@ const PracticeLiveExam = () => {
               },
               {
                 role: "user",
-                content: `Questions: ${item.question}`,
+                content: `Questions: ${passage}`,
               },
               {
                 role: "user",

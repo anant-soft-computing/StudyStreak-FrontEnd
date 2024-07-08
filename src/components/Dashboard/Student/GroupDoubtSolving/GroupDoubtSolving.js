@@ -111,7 +111,7 @@ const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
             const groupDoubtData = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
             );
-            const id = response?.data.map((item) => item?.other_fields?.id);
+            const id = groupDoubtData?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             gPClass.push(...groupDoubtData);
             setIsLoading(false);

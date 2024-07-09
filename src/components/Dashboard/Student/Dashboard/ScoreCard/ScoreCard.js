@@ -32,7 +32,7 @@ const ScoreCard = () => {
       }
     })();
   }, []);
-  
+
   return (
     <>
       <div className="col-xl-6 column__custom__class">
@@ -48,7 +48,15 @@ const ScoreCard = () => {
             </div>
             <div className="gridarea__bottom">
               <div className="gridarea__small__content">
-                <Link to={`/exam-answer/${miniTestData?.exam_block}`}>
+                <Link
+                  to={
+                    miniTestData.exam_type === "Writing" ||
+                    miniTestData.exam_type === "Speaking"
+                      ? `/assessment/${miniTestData?.exam_block}`
+                      : `/exam-answer/${miniTestData?.exam_block}`
+                  }
+                  state={{ examType: miniTestData?.exam_type }}
+                >
                   <h6>View Full Report {">>"}</h6>
                 </Link>
               </div>

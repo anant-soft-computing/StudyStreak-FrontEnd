@@ -4,18 +4,6 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Tab from "../UI/Tab";
 
-const intialReadingField = {
-  no_of_questions: "10",
-  difficulty_level: "Easy",
-  exam_name: "",
-  block_type: "Mock Test",
-  block_threshold: 0,
-  passage: "",
-  passage_image: "",
-  question: "",
-  exam_type: "",
-};
-
 const initialSubmit = {
   isError: false,
   errMsg: null,
@@ -29,18 +17,24 @@ const reducerReading = (state, action) => {
 const tabs = [{ name: "Details" }, { name: "Passage" }];
 
 const ExamReading = ({ category, examType }) => {
-  const [readingData, dispatchReadingData] = useReducer(
-    reducerReading,
-    intialReadingField
-  );
+  const navigate = useNavigate();
+  const [readingData, dispatchReadingData] = useReducer(reducerReading, {
+    no_of_questions: "10",
+    difficulty_level: "Easy",
+    exam_name: "",
+    block_type: examType === "General" ? "Assignments" : "Mock Test",
+    block_threshold: 0,
+    passage: "",
+    passage_image: "",
+    question: "",
+    exam_type: "",
+  });
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("Details");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
-
-  const navigate = useNavigate();
 
   const handlePassageChange = (event, editor) => {
     const data = editor.getData();

@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import "../../css/LiveExam.css";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
@@ -35,7 +35,6 @@ const FullLengthLiveExam = () => {
   const containerRef = useRef(null);
   const { examId } = useParams();
   const navigate = useNavigate();
-  const examForm = useLocation()?.pathname?.split("/")?.[3];
   const [examData, setExamData] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
   const [reRenderAudio, setReRenderAudio] = useState(false);
@@ -55,6 +54,7 @@ const FullLengthLiveExam = () => {
   const [instructionCompleted, setInstructionCompleted] = useState(
     intialInstructionState
   );
+  const [showThankyou, setShowThankyou] = useState(false);
 
   const synth = window.speechSynthesis;
   const [recordedFilePath, setRecordedFilePath] = useState("");
@@ -72,6 +72,7 @@ const FullLengthLiveExam = () => {
         [instruction]: 2,
       },
     }));
+    setShowThankyou(true);
   };
 
   useEffect(() => {
@@ -420,10 +421,10 @@ const FullLengthLiveExam = () => {
           <audio
             controls
             autoPlay
-            controlsList='nodownload noplaybackrate noplay'
-            className='hidden-controls'
+            controlsList="nodownload noplaybackrate noplay"
+            className="hidden-controls"
           >
-            <source src={audio_file} type='audio/mpeg' />
+            <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>
       );
@@ -437,11 +438,11 @@ const FullLengthLiveExam = () => {
     return (
       <>
         {image && (
-          <div className='text-center'>
+          <div className="text-center">
             <img
-              className='mb-2'
+              className="mb-2"
               src={image}
-              alt='Study Streak'
+              alt="Study Streak"
               height={250}
               width={250}
             />
@@ -943,14 +944,14 @@ const FullLengthLiveExam = () => {
     examAnswer.map((test, index) => (
       <div key={index}>
         <h4>Test : {index + 1}</h4>
-        <div className='card-container'>
+        <div className="card-container">
           {test.data.map((answer, idx) => (
-            <div key={idx} className='card answer__width'>
-              <div className='card-body'>
-                <h6 className='card-title'>Q. {idx + 1}</h6>
-                <h6 className='card-text'>
+            <div key={idx} className="card answer__width">
+              <div className="card-body">
+                <h6 className="card-title">Q. {idx + 1}</h6>
+                <h6 className="card-text">
                   Answer :{" "}
-                  <span className='text-success'>{answer.answer_text}</span>
+                  <span className="text-success">{answer.answer_text}</span>
                 </h6>
               </div>
             </div>
@@ -971,12 +972,11 @@ const FullLengthLiveExam = () => {
         });
         return null;
       }
-
       return (
-        <div className='lv-section' key={item.name + sectionIndex}>
+        <div className="lv-section" key={item.name + sectionIndex}>
           {/* Section name */}
           <button
-            className='lv-footer-section'
+            className="lv-footer-section"
             onClick={() => setNext(sectionIndex)}
           >
             {item.name}
@@ -1034,75 +1034,97 @@ const FullLengthLiveExam = () => {
   );
 
   return instructionCompleted.showInstruction ? (
-    <div className='test-instruction'>
+    <div className="test-instruction">
       {instructionCompleted.type.reading === 1 && (
-        <ReadingInstruction
-          testType='Full Length'
-          startTest={handleInstruction}
-        />
+        <>
+          <SmallModal
+            isOpen={showThankyou}
+            onClose={() => setShowThankyou(false)}
+          >
+            Thank You For Complete Test
+          </SmallModal>
+          <ReadingInstruction
+            testType="Full Length"
+            startTest={handleInstruction}
+          />
+        </>
       )}
       {instructionCompleted.type.writing === 1 && (
-        <WritingInstruction
-          testType='Full Length'
-          startTest={handleInstruction}
-        />
+        <>
+          <SmallModal
+            isOpen={showThankyou}
+            onClose={() => setShowThankyou(false)}
+          >
+            Thank You For Complete Test
+          </SmallModal>
+          <WritingInstruction
+            testType="Full Length"
+            startTest={handleInstruction}
+          />
+        </>
       )}
       {instructionCompleted.type.listening === 1 && (
         <ListeningInstruction
-          testType='Full Length'
+          testType="Full Length"
           startTest={handleInstruction}
         />
       )}
       {instructionCompleted.type.speaking === 1 && (
-        <SpeakingInstruction
-          testType='Full Length'
-          startTest={handleInstruction}
-        />
+        <>
+          <SmallModal
+            isOpen={showThankyou}
+            onClose={() => setShowThankyou(false)}
+          >
+            Thank You For Complete Test
+          </SmallModal>
+          <SpeakingInstruction
+            testType="Full Length"
+            startTest={handleInstruction}
+          />
+        </>
       )}
     </div>
   ) : (
     <>
       {/* Navbar */}
-      <div className='lv-navbar lv-navbar-responsive'>
-        <div className='lv-navbar-title'>
+      <div className="lv-navbar lv-navbar-responsive">
+        <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
-          <div className='lv-userName'>{userData?.username}</div>
+          <div className="lv-userName">{userData?.username}</div>
           <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-          <div className='lv-userName'>{`${examData?.exam_name}`}</div>
+          <div className="lv-userName">{`${examData?.exam_name}`}</div>
         </div>
-        <span className='lv-navbar-title'>
-          Time Taken :<span className='lv-userName'>{timeTaken}</span>
+        <span className="lv-navbar-title">
+          Time Taken :<span className="lv-userName">{timeTaken}</span>
         </span>
-        <div className='lv-navbar-title-mobile'>
-          <div className='username-mobile'>
+        <div className="lv-navbar-title-mobile">
+          <div className="username-mobile">
             <h2>{examData?.exam_category}</h2>
-            <div className='mobile-breadcumb'>
-              <div className='lv-userName'>{userData?.username}</div>
+            <div className="mobile-breadcumb">
+              <div className="lv-userName">{userData?.username}</div>
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className='lv-userName'>{`${examData?.exam_name}`}</div>
+              <div className="lv-userName">{`${examData?.exam_name}`}</div>
             </div>
           </div>
-          <div className='lv-navbar-footer'>
+          <div className="lv-navbar-footer">
             <span>
-              Time Taken :<span className='lv-userName'>{timeTaken}</span>
+              Time Taken :<span className="lv-userName">{timeTaken}</span>
             </span>
           </div>
         </div>
       </div>
-
-      <div className='lv-container'>
+      <div className="lv-container">
         {/* Main Container */}
         {examData?.exam_type === "Listening" &&
           renderAudio(examData?.audio_file)}
-        <div className='lv-main-container'>
+        <div className="lv-main-container">
           {/* Left Container */}
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Writing") && (
-            <div className='lv-left-container'>
+            <div className="lv-left-container">
               {displayLeftContainer(examData?.passage, examData?.passage_image)}
             </div>
           )}
-
           {examData?.exam_type === "Speaking" && (
             // <div className="lv-left-container">
             //   <button
@@ -1118,7 +1140,7 @@ const FullLengthLiveExam = () => {
             //   </button>
             // </div>
             <div
-              className='lv-left-container'
+              className="lv-left-container"
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -1131,8 +1153,8 @@ const FullLengthLiveExam = () => {
                     (element) => element.id === item.id
                   );
                   return (
-                    <div className='lv-question-container'>
-                      <div className='lv-speaking-question'>
+                    <div className="lv-question-container">
+                      <div className="lv-speaking-question">
                         <p> {i + 1} :</p>
                         <div
                           dangerouslySetInnerHTML={{
@@ -1140,9 +1162,9 @@ const FullLengthLiveExam = () => {
                           }}
                         ></div>
                       </div>
-                      <div className='d-flex align-items-center lv-btn-mic-container'>
+                      <div className="d-flex align-items-center lv-btn-mic-container">
                         <button
-                          className='lv-footer-button lv-speaking-button'
+                          className="lv-footer-button lv-speaking-button"
                           onClick={() => speak(item.question, item.id)}
                           disabled={
                             examAnswer[next].data?.[speakingIndex]?.status === 1
@@ -1179,11 +1201,11 @@ const FullLengthLiveExam = () => {
             examData?.exam_type === "Listening" ||
             examData?.exam_type === "Writing") && (
             <div
-              className='lv-right-container'
-              id='right-container'
+              className="lv-right-container"
+              id="right-container"
               ref={containerRef}
             >
-              <div className='lv-box-right'>
+              <div className="lv-box-right">
                 {/* Replace the following with your actual content */}
                 {(examData?.exam_type === "Reading" ||
                   examData?.exam_type === "Listening") && (
@@ -1194,10 +1216,10 @@ const FullLengthLiveExam = () => {
                   />
                 )}
                 {examData?.exam_type === "Writing" && (
-                  <div className='lv-textarea'>
+                  <div className="lv-textarea">
                     <textarea
                       id={`textarea_${next}`}
-                      className='writing__textarea'
+                      className="writing__textarea"
                       value={examAnswer[next]?.data?.[0]?.answer_text || ""}
                       onChange={(e) => handleWritingAnswer(e, next)}
                     />
@@ -1209,22 +1231,22 @@ const FullLengthLiveExam = () => {
             </div>
           )}
         </div>
-        <div className='d-flex justify-content-between align-items-center mb-3 mt-2 flex-column flex-md-row'>
-          <div className='lv-question-pagination d-flex justify-content-between align-items-center pb-1 w-100 mb-2 mb-md-0'>
-            <div className='lv-section-pagination'>{renderPagination}</div>
+        <div className="d-flex justify-content-between align-items-center mb-3 mt-2 flex-column flex-md-row">
+          <div className="lv-question-pagination d-flex justify-content-between align-items-center pb-1 w-100 mb-2 mb-md-0">
+            <div className="lv-section-pagination">{renderPagination}</div>
           </div>
-          <div className='lv-footer-btn pb-1'>
+          <div className="lv-footer-btn pb-1">
             {(examData?.exam_type === "Reading" ||
               examData?.exam_type === "Listening") && (
               <button
-                className='lv-footer-button review_size'
+                className="lv-footer-button review_size"
                 onClick={() => setIsModalOpen(true)}
               >
                 Reviews
               </button>
             )}
             <button
-              className='lv-footer-button'
+              className="lv-footer-button"
               style={{
                 display: next === 0 ? "none" : "block",
               }}
@@ -1233,7 +1255,7 @@ const FullLengthLiveExam = () => {
               <span>Back</span>
             </button>
             <button
-              className='lv-footer-button'
+              className="lv-footer-button"
               style={{
                 display: fullPaper.length === next + 1 ? "none" : "block",
               }}
@@ -1242,7 +1264,7 @@ const FullLengthLiveExam = () => {
               <span>&#10152;</span>
             </button>
             <button
-              className='lv-footer-button'
+              className="lv-footer-button"
               style={{
                 display: next !== (fullPaper.length > 0 ? "none" : "block"),
               }}
@@ -1254,16 +1276,16 @@ const FullLengthLiveExam = () => {
         </div>
         {isConfirmModalOpen && (
           <SmallModal
-            size='lg'
+            size="lg"
             centered
             isOpen={isConfirmModalOpen}
             footer={
-              <div className='d-flex gap-2'>
-                <button className='btn btn-success' onClick={handleRLSubmit}>
+              <div className="d-flex gap-2">
+                <button className="btn btn-success" onClick={handleRLSubmit}>
                   Yes
                 </button>
                 <button
-                  className='btn btn-danger'
+                  className="btn btn-danger"
                   onClick={() => setIsConfirmModalOpen(false)}
                 >
                   No
@@ -1279,9 +1301,9 @@ const FullLengthLiveExam = () => {
           (examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening") && (
             <SmallModal
-              size='lg'
+              size="lg"
               centered
-              title='Your Answers'
+              title="Your Answers"
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
             >

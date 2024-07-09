@@ -274,7 +274,6 @@ li {
 
 @media screen and (max-width: 768px) {
   .container-fluid.full__width__padding {
-    margin-top: 112px;
     padding: 0 30px;
   }
 }

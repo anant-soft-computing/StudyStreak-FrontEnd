@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 import dashBoard from "../../../../img/icon/dashboard.svg";
@@ -88,14 +88,8 @@ const Drawer = styled(MuiDrawer, {
 const DALeftDrawer = () => {
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
-
-  const [open, setOpen] = React.useState(true);
-
-  const handleDrawerToggle = () => {
-    setOpen(!open);
-  };
-
-
+  const [open, setOpen] = useState(true);
+  
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
@@ -176,7 +170,7 @@ const DALeftDrawer = () => {
         <AppBar position="fixed">
           <div className="fixing-navbar-at-top-side">
             <TopBar />
-            <NavBar handleDrawerToggle={handleDrawerToggle} showNavBar={true} />
+            <NavBar handleDrawerToggle={() => setOpen(!open)} showNavBar={true} />
           </div>
         </AppBar>
         <Drawer

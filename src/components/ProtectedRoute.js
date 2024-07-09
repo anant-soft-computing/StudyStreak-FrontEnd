@@ -12,13 +12,13 @@ const ProtectedRoute = ({ element: Element }) => {
 
   useEffect(() => {
     checkAuth();
-  }, [authData, dispatch]);
+  }, [authData, checkAuth, dispatch]);
 
-  if (authData.authLoading) {
+  if (authData?.authLoading) {
     return <Loading color="primary" text="Loading ..." />;
   }
 
-  if (!authData.loggedIn) {
+  if (!authData?.loggedIn) {
     return <Navigate to="/login" />;
   }
   return <Element />;

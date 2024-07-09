@@ -126,11 +126,18 @@ const DSSidebar = () => {
   }, []);
 
   useEffect(() => {
-    // set openmobileMenu to true for screen width less than 768px
-    if (window.innerWidth > 990) {
-      setOpenMobileMenu(true);
-      setShowMobileNavBtn(false);
-    }
+    const handleResize = () => {
+      if (window.innerWidth > 990) {
+        setOpenMobileMenu(true);
+        setShowMobileNavBtn(false);
+      } else {
+        setOpenMobileMenu(false);
+        setShowMobileNavBtn(true);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const logout = (event) => {
@@ -143,7 +150,7 @@ const DSSidebar = () => {
       <div
         className="col-xl-3 col-lg-3 col-md-12"
         style={{
-          marginTop: !showMobileNavBtn ? "0px" : "70px",
+          marginTop: "70px",
           display: showMobileNavBtn ? "block" : "none",
         }}
       >

@@ -7,16 +7,30 @@ import SpeakingPractice from "../SpeakingPractice/SpeakingPractice";
 import GroupDoubtSolving from "../GroupDoubtSolving/GroupDoubtSolving";
 import DoubtSolving from "../1To1DoubtSolving/DoubtSolving";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import Webinar from "../Webinar/Webinar";
+import TutorSupport from "../TutorSpport/TutorSupport";
+import Counselling from "../Counselling/Counselling";
+
+const liveClasses = [
+  "Regular",
+  "Speaking Practice",
+  "Group Dobut",
+  "One TO One Doubt",
+  "Tutor Support",
+  "Webinar",
+  "Counselling",
+];
 
 const LiveClass = () => {
   const location = useLocation();
   const [count, setCount] = useState({});
   const [solvingClassBook, setSolvingClassBook] = useState([]);
-  const [activeTab, setActiveTab] = useState(
-    location?.state?.activeTab === "Speaking Practice"
-      ? "Speaking Practice"
-      : "Regular"
-  );
+
+  const [activeTab, setActiveTab] = useState(() => {
+    const tab = location?.state?.activeTab;
+    return liveClasses.includes(tab) ? tab : "Regular";
+  });
+
   const [selectedDateRange, setSelectedDateRange] = useState([
     {
       startDate: new Date(),
@@ -24,7 +38,6 @@ const LiveClass = () => {
       key: "selection",
     },
   ]);
-
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -76,6 +89,45 @@ const LiveClass = () => {
     })();
   }, []);
 
+  const renderTab = () => {
+    switch (activeTab) {
+      case "Regular":
+        return <RegularClass selectedDateRange={selectedDateRange} />;
+      case "Speaking Practice":
+        return (
+          <SpeakingPractice
+            count={count.speaking_test_count}
+            solvingClassBook={solvingClassBook}
+            selectedDateRange={selectedDateRange}
+          />
+        );
+      case "Group Dobut":
+        return (
+          <GroupDoubtSolving
+            count={count.group_doubt_solving_count}
+            solvingClassBook={solvingClassBook}
+            selectedDateRange={selectedDateRange}
+          />
+        );
+      case "One TO One Doubt":
+        return (
+          <DoubtSolving
+            count={count.one_to_one_doubt_solving_count}
+            solvingClassBook={solvingClassBook}
+            selectedDateRange={selectedDateRange}
+          />
+        );
+      case "Tutor Support":
+        return <TutorSupport />;
+      case "Webinar":
+        return <Webinar />;
+      case "Counselling":
+        return <Counselling />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
       <div className="body__wrapper">
@@ -113,12 +165,7 @@ const LiveClass = () => {
                                 }
                                 value={activeTab}
                               >
-                                {[
-                                  "Regular",
-                                  "Speaking Practice",
-                                  "Group Dobut",
-                                  "One TO One Doubt",
-                                ].map((item) => (
+                                {liveClasses.map((item) => (
                                   <option key={item} value={item}>
                                     {item}
                                   </option>
@@ -130,60 +177,7 @@ const LiveClass = () => {
                       </div>
                       <div className="row">
                         <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Regular" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <RegularClass
-                                selectedDateRange={selectedDateRange}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Speaking Practice"
-                                ? "show active"
-                                : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <SpeakingPractice
-                                count={count?.speaking_test_count}
-                                solvingClassBook={solvingClassBook}
-                                selectedDateRange={selectedDateRange}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "Group Dobut" ? "show active" : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <GroupDoubtSolving
-                                count={count?.group_doubt_solving_count}
-                                solvingClassBook={solvingClassBook}
-                                selectedDateRange={selectedDateRange}
-                              />
-                            </div>
-                          </div>
-                          <div
-                            className={`tab-pane fade ${
-                              activeTab === "One TO One Doubt"
-                                ? "show active"
-                                : ""
-                            }`}
-                          >
-                            <div className="row">
-                              <DoubtSolving
-                                solvingClassBook={solvingClassBook}
-                                selectedDateRange={selectedDateRange}
-                                count={count?.one_to_one_doubt_solving_count}
-                              />
-                            </div>
-                          </div>
+                          {renderTab()}
                         </div>
                       </div>
                     </div>

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
 import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
 import practice from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
@@ -8,13 +10,14 @@ import progress from "../../../../img/icon/progress.svg";
 import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
 import recordedClasses from "../../../../img/icon/gamification.svg";
-import { Link } from "react-router-dom";
+import Loading from "../../../UI/Loading";
 import UpcomingLiveClass from "./UpCommingLiveClass/UpCommingLiveClass";
 import LeaderBoard from "./LeaderBoard/LeaderBoard";
 import NextLesson from "./NextLesson/NextLesson";
 import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import ScoreCard from "./ScoreCard/ScoreCard";
+import DSSidebar from "../DSSideBar/DSSideBar";
 
 const cardList = [
   {
@@ -27,20 +30,80 @@ const cardList = [
   },
   { name: "Practice Test", icon: practice, link: "/practiceTest" },
   { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
-  { name: "Counselling", icon: counselling, link: "/studentLiveClasses" },
-  { name: "Regular Classes", icon: regularClass, link: "/studentLiveClasses" },
-  { name: "Tutor Support", icon: counselling, link: "/studentLiveClasses" },
-  { name: "Webinar", icon: webinar, link: "/studentLiveClasses" },
+  {
+    name: "Counselling",
+    icon: counselling,
+    link: "/studentLiveClasses",
+    state: { activeTab: "Counselling" },
+  },
+  {
+    name: "Regular Classes",
+    icon: regularClass,
+    link: "/studentLiveClasses",
+  },
+  {
+    name: "Tutor Support",
+    icon: counselling,
+    link: "/studentLiveClasses",
+    state: { activeTab: "Tutor Support" },
+  },
+  {
+    name: "Webinar",
+    icon: webinar,
+    link: "/studentLiveClasses",
+    state: { activeTab: "Webinar" },
+  },
   { name: "Progress", icon: progress },
   { name: "Software Support", icon: support },
 ];
 
 const SDashboard = () => {
   const [studentID, setStudentID] = useState(0);
+  const [batchData, setBatchData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [upcommingClass, setUpcommingClass] = useState([]);
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
+  const studentBatch = batchData?.filter((item) =>
+    batchIds?.includes(item?.id)
+  );
+
   useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/batchview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setIsLoading(false);
+          setBatchData(response?.data);
+        } else {
+          setIsLoading(false);
+          console.log("error");
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -58,6 +121,7 @@ const SDashboard = () => {
           8000
         );
         if (response.status === 200) {
+          setIsLoading(false);
           const { data } = response;
           setStudentID(data.student_packages[0].student_id);
           setUpcommingClass(
@@ -66,25 +130,41 @@ const SDashboard = () => {
             )[0]
           );
         } else {
+          setIsLoading(false);
           console.log("error");
         }
       } catch (error) {
+        setIsLoading(false);
         console.log("error", error);
       }
     })();
   }, []);
 
-  return (
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
         <div className="blogarea__2 sp_top_100 sp_bottom_100">
           <div className="container">
             <div className="row">
+              <DSSidebar />
               <div className="col-xl-8 col-lg-8">
                 <div className="blog__details__content__wraper">
                   <div className="course__details__heading">
                     <h3>Welcome, {userData?.username}</h3>
                   </div>
+                  <h5>
+                    {studentBatch.map((batch) => (
+                      <span key={batch.id}>
+                        {batch.batch_name} :{" "}
+                        {moment(batch.batch_start_timing, "HH:mm:ss").format(
+                          "hh:mm A"
+                        )}{" "}
+                        |{" "}
+                      </span>
+                    ))}
+                  </h5>
                   <div className="online__course__wrap mt-0">
                     <div className="row instructor__slider__active row__custom__class">
                       <ScoreCard />

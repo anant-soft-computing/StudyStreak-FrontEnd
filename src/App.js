@@ -148,10 +148,7 @@ const App = () => {
             path="/exam-practice-test-answer/:examId"
             element={<PracticeTestAnswer />}
           />
-          <Route
-            path="/assessment/:examId"
-            element={<ViewMTAAssessment />}
-          />
+          <Route path="/assessment/:examId" element={<ViewMTAAssessment />} />
           <Route
             path="/practice-assessment/:examId"
             element={<ViewPTAssessment />}

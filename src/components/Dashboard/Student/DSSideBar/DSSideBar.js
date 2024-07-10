@@ -21,6 +21,11 @@ const DSSidebar = () => {
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
 
+  const logout = (event) => {
+    event.preventDefault();
+    logoutUser();
+  };
+
   const menuList = [
     {
       name: "Dashboard",
@@ -139,11 +144,6 @@ const DSSidebar = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  const logout = (event) => {
-    event.preventDefault();
-    logoutUser();
-  };
 
   return (
     <>

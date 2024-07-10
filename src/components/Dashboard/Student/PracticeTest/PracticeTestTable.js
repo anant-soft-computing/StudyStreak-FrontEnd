@@ -98,7 +98,7 @@ const PracticeTestTable = ({ testData, givenTest, testType, isLoading }) => {
           case "Listening":
             return "40";
           case "Speaking":
-            return "-";
+            return "9 to 12";
           default:
             return "";
         }

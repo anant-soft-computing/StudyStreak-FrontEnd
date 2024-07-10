@@ -98,13 +98,18 @@ const Answer = () => {
               <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For: {examName}</h4>
-                  <AnswerCard
-                    totalQuestions={correctAnswer.length}
-                    correctCount={correctCount}
-                    incorrectCount={incorrectCount}
-                    bandValue={band}
-                    examType={examType}
-                  />
+                  {examType === "Writing" && (
+                    <h4 className="sidebar__title">Band : {band}</h4>
+                  )}
+                  {examType !== "Writing" && (
+                    <AnswerCard
+                      totalQuestions={correctAnswer.length}
+                      correctCount={correctCount}
+                      incorrectCount={incorrectCount}
+                      bandValue={band}
+                      examType={examType}
+                    />
+                  )}
                   {examType === "Writing" && (
                     <div className="writing__exam">
                       <div className="dashboard__section__title">

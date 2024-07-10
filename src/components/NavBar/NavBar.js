@@ -6,7 +6,11 @@ import menuIcon from "../../img/icon/icon-menu.svg";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
 import { IconButton } from "@mui/material";
 
-const NavBar = ({ handleDrawerToggle, showNavBar }) => {
+const NavBar = ({
+  showNavBar,
+  handleMouseEnter,
+  handleMouseLeave,
+}) => {
   const { logoutUser } = useCheckAuth();
   const authData = useSelector((state) => state.authStore);
 
@@ -27,7 +31,8 @@ const NavBar = ({ handleDrawerToggle, showNavBar }) => {
                     <div className="headerarea__left">
                       <IconButton
                         aria-label="open drawer"
-                        onClick={handleDrawerToggle}
+                        onMouseEnter={handleMouseEnter}
+                        onMouseLeave={handleMouseLeave}
                         edge="start"
                         sx={{
                           marginRight: 2,

@@ -88,8 +88,24 @@ const DSLeftDrawer = () => {
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [count, setCount] = useState({});
+  const [, setHovered] = useState(false);
+
+  const logout = (event) => {
+    event.preventDefault();
+    logoutUser();
+  };
+
+  const handleMouseEnter = () => {
+    setHovered(true);
+    if (!open) setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+    if (open) setOpen(false);
+  };
 
   const menuList = [
     {
@@ -195,18 +211,17 @@ const DSLeftDrawer = () => {
     })();
   }, []);
 
-  const logout = (event) => {
-    event.preventDefault();
-    logoutUser();
-  };
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed">
         <div className="fixing-navbar-at-top-side">
           <TopBar />
-          <NavBar handleDrawerToggle={() => setOpen(!open)} showNavBar={true} />
+          <NavBar
+            showNavBar={true}
+            handleMouseEnter={handleMouseEnter}
+            handleMouseLeave={handleMouseLeave}
+          />
         </div>
       </AppBar>
       <Drawer
@@ -217,6 +232,8 @@ const DSLeftDrawer = () => {
             backgroundColor: "#ebf2f5",
           },
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <Box sx={{ overflow: "auto", mt: 14 }}>
           <List>

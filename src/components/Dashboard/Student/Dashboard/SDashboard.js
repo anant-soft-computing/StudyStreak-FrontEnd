@@ -18,6 +18,7 @@ import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import ScoreCard from "./ScoreCard/ScoreCard";
 import DSSidebar from "../DSSideBar/DSSideBar";
+import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
 
 const cardList = [
   {
@@ -58,6 +59,7 @@ const cardList = [
 ];
 
 const SDashboard = () => {
+  const [count, setCount] = useState(0);
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -123,6 +125,7 @@ const SDashboard = () => {
         if (response.status === 200) {
           setIsLoading(false);
           const { data } = response;
+          setCount(data?.batch_package_count);
           setStudentID(data.student_packages[0].student_id);
           setUpcommingClass(
             data.student_packages?.map(
@@ -142,6 +145,8 @@ const SDashboard = () => {
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />
+  ) : count === 0 ? (
+    <UnPaidDashboard />
   ) : (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">

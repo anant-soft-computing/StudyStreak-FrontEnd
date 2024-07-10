@@ -11,9 +11,9 @@ import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 const PracticeTestAnswer = () => {
   const [examName, setExamName] = useState("");
   const [band, setBand] = useState(0);
-  const [studentAnswer, setStudentAnswer] = useState([]);
-  const [correctAnswers, setCorrectAnswers] = useState([]);
-  const { bandValue, examForm, fullPaper } = useLocation()?.state || {};
+  const [correctAnswer, setCorrectAnswer] = useState([]);
+  const [studentAnswers, setStudentAnswers] = useState([]);
+  const { examForm, fullPaper } = useLocation()?.state || {};
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
 
@@ -37,7 +37,7 @@ const PracticeTestAnswer = () => {
         if (response.status === 200) {
           setExamName(response?.data?.name);
           let studentAnswers;
-          let correctAnswers = [];
+          let correctAnswer = [];
           if (examForm === "Reading") {
             studentAnswers = response.data?.student_answers.Reading?.reduce(
               (acc, curr) => {
@@ -45,7 +45,7 @@ const PracticeTestAnswer = () => {
               },
               []
             );
-            correctAnswers.push(
+            correctAnswer.push(
               ...response.data?.correct_answers.Reading?.reduce((acc, curr) => {
                 return acc.concat(curr.answers);
               }, [])
@@ -58,7 +58,7 @@ const PracticeTestAnswer = () => {
               []
             );
 
-            correctAnswers.push(
+            correctAnswer.push(
               ...response.data?.correct_answers.Listening?.reduce(
                 (acc, curr) => {
                   return acc.concat(curr.answers);
@@ -67,16 +67,43 @@ const PracticeTestAnswer = () => {
               )
             );
           }
-          setStudentAnswer(studentAnswers);
-          setCorrectAnswers(correctAnswers);
+          setStudentAnswers(studentAnswers);
+          setCorrectAnswer(correctAnswer);
 
           let correct = 0;
           let incorrect = 0;
-          studentAnswers?.forEach((studentAns, index) => {
-            if (studentAns.answer_text === correctAnswers[index].answer_text) {
-              correct++;
+          studentAnswers?.forEach((item, index) => {
+            const correctAnswerText =
+              correctAnswer[index]?.answer_text?.trim();
+            const studentAnswerText = item.answer_text?.trim();
+            if (correctAnswerText?.includes(" OR ")) {
+              const correctOptions = correctAnswerText
+                .split(" OR ")
+                .map((option) => option.trim());
+              if (correctOptions?.includes(studentAnswerText)) {
+                correct++;
+              } else {
+                incorrect++;
+              }
+            } else if (correctAnswerText?.includes(" AND ")) {
+              const correctOptions = correctAnswerText
+                .split(" AND ")
+                .map((option) => option.trim());
+              if (
+                correctOptions.every((option) =>
+                  studentAnswerText?.includes(option)
+                )
+              ) {
+                correct++;
+              } else {
+                incorrect++;
+              }
             } else {
-              incorrect++;
+              if (correctAnswerText === studentAnswerText) {
+                correct++;
+              } else {
+                incorrect++;
+              }
             }
           });
           if (examForm === "Reading") {
@@ -105,10 +132,10 @@ const PracticeTestAnswer = () => {
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
                   <AnswerCard
-                    totalQuestions={correctAnswers.length}
+                    totalQuestions={correctAnswer.length}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}
-                    bandValue={bandValue || band}
+                    bandValue={band}
                   />
                   <div style={{ marginTop: "50px" }}>
                     <div className="dashboard__section__title">
@@ -127,7 +154,7 @@ const PracticeTestAnswer = () => {
                               </tr>
                             </thead>
                             <tbody>
-                              {studentAnswer?.map(
+                              {correctAnswer.map(
                                 (
                                   { id, question_number, answer_text },
                                   index
@@ -140,25 +167,62 @@ const PracticeTestAnswer = () => {
                                         : "dashboard__table__row"
                                     }`}
                                   >
-                                    <td className="text-dark">{index + 1}.</td>
                                     <td className="text-dark">
-                                      {correctAnswers?.[index]?.answer_text}
+                                      {question_number}.
                                     </td>
-                                    <td
-                                      className={`text-dark ${
-                                        answer_text ===
-                                        correctAnswers?.[index]?.answer_text
-                                          ? "correct-answer"
-                                          : "incorrect-answer"
-                                      }`}
-                                    >
+                                    <td className="text-dark">
                                       <div className="dashboard__table__star">
                                         {answer_text}
                                       </div>
                                     </td>
-                                    <td>
-                                      {answer_text ===
-                                      correctAnswers?.[index]?.answer_text ? (
+                                    <td className="text-dark">
+                                      {studentAnswers.length > 0 &&
+                                        studentAnswers[index] &&
+                                        studentAnswers[index].answer_text}
+                                    </td>
+                                    <td className="text-dark">
+                                      {studentAnswers.length > 0 &&
+                                      studentAnswers[index] &&
+                                      correctAnswer[
+                                        index
+                                      ]?.answer_text.includes(" OR ") ? (
+                                        correctAnswer[index]?.answer_text
+                                          .split(" OR ")
+                                          .map((option) =>
+                                            option?.trim()?.toLowerCase()
+                                          )
+                                          .includes(
+                                            studentAnswers[
+                                              index
+                                            ]?.answer_text?.toLowerCase()
+                                          ) ? (
+                                          <CheckIcon />
+                                        ) : (
+                                          <CancelIcon />
+                                        )
+                                      ) : studentAnswers.length > 0 &&
+                                        studentAnswers[index] &&
+                                        correctAnswer[
+                                          index
+                                        ]?.answer_text.includes(" AND ") ? (
+                                        correctAnswer[index]?.answer_text
+                                          .split(" AND ")
+                                          .map((option) =>
+                                            option?.trim()?.toLowerCase()
+                                          )
+                                          .every((option) =>
+                                            studentAnswers[index]?.answer_text
+                                              ?.toLowerCase()
+                                              ?.includes(option)
+                                          ) ? (
+                                          <CheckIcon />
+                                        ) : (
+                                          <CancelIcon />
+                                        )
+                                      ) : studentAnswers.length > 0 &&
+                                        studentAnswers[index] &&
+                                        studentAnswers[index].answer_text ===
+                                          correctAnswer[index]?.answer_text ? (
                                         <CheckIcon />
                                       ) : (
                                         <CancelIcon />

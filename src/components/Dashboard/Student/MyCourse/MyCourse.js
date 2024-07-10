@@ -14,7 +14,7 @@ const MyCourse = () => {
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   const courses = courseList.filter((item) =>
-    courseIds.some((data) => data.id === item.id)
+    courseIds?.some((data) => data?.id === item?.id)
   );
 
   useEffect(() => {

@@ -9,10 +9,10 @@ const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 86 },
   {
     headerName: "Batch",
-    field: "select_batch.batch_name",
+    field: "select_batch",
     filter: true,
   },
-  { headerName: "Live Class Type", field: "liveclasstype.name", filter: true },
+  { headerName: "Live Class Type", field: "liveclasstype", filter: true },
   {
     headerName: "Meeting Name",
     field: "meeting_title",

@@ -13,15 +13,13 @@ import gamification from "../../../../img/icon/gamification.svg";
 import flashCard from "../../../../img/icon/flashCard.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
-import notice from "../../../../img/icon/notice.svg"
+import notice from "../../../../img/icon/notice.svg";
 
 const DASideBar = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [showMobileNavBtn, setShowMobileNavBtn] = useState(true);
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
-
-  const handleMobileMenu = () => setOpenMobileMenu(!openMobileMenu);
 
   const logout = (event) => {
     event.preventDefault();
@@ -97,11 +95,18 @@ const DASideBar = () => {
   ];
 
   useEffect(() => {
-    // set openmobileMenu to true for screen width less than 768px
-    if (window.innerWidth > 990) {
-      setOpenMobileMenu(true);
-      setShowMobileNavBtn(false);
-    }
+    const handleResize = () => {
+      if (window.innerWidth > 990) {
+        setOpenMobileMenu(true);
+        setShowMobileNavBtn(false);
+      } else {
+        setOpenMobileMenu(false);
+        setShowMobileNavBtn(true);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -109,7 +114,7 @@ const DASideBar = () => {
       <div
         className="col-xl-3 col-lg-3 col-md-12"
         style={{
-          marginTop: !showMobileNavBtn ? "0px" : "70px",
+          marginTop: "70px",
           display: showMobileNavBtn ? "block" : "none",
         }}
       >
@@ -119,7 +124,7 @@ const DASideBar = () => {
             {showMobileNavBtn && (
               <button
                 className="mobile-aside-button"
-                onClick={handleMobileMenu}
+                onClick={() => setOpenMobileMenu(!openMobileMenu)}
               >
                 <i className="icofont-navigation-menu"></i>
               </button>

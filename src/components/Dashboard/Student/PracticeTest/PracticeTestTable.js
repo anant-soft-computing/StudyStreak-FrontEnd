@@ -148,7 +148,17 @@ const PracticeTestTable = ({ testData, givenTest, testType, isLoading }) => {
     },
   ];
 
-  const rowData = testData.map((data) => ({
+  const sortedData = testData.sort((a, b) => {
+    const getNumber = (name) => {
+      const match = name.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+    const nameA = getNumber(a.IELTS.Name);
+    const nameB = getNumber(b.IELTS.Name);
+    return nameA - nameB;
+  });
+
+  const rowData = sortedData.map((data) => ({
     ...data,
     sections:
       testType === "Speaking" ? "3" : testType === "Listening" ? "4" : "3",

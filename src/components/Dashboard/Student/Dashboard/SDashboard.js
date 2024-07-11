@@ -150,45 +150,57 @@ const SDashboard = () => {
   ) : (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
-        <div className="blogarea__2 sp_top_100 sp_bottom_100">
-          <div className="container">
-            <div className="row">
-              <DSSidebar />
-              <div className="col-xl-8 col-lg-8">
-                <div className="blog__details__content__wraper">
-                  <div className="course__details__heading">
-                    <h3>Welcome, {userData?.username}</h3>
-                  </div>
-                  <h5>
-                    {studentBatch.map((batch) => (
-                      <span key={batch.id}>
-                        {batch.batch_name} :{" "}
-                        {moment(batch.batch_start_timing, "HH:mm:ss").format(
-                          "hh:mm A"
-                        )}{" "}
-                        |{" "}
-                      </span>
-                    ))}
-                  </h5>
-                  <div className="online__course__wrap mt-0">
-                    <div className="row instructor__slider__active row__custom__class">
-                      <ScoreCard />
+        <div className="dashboardarea sp_bottom_100">
+          <div className="dashboard">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
+                <DSSidebar />
+                <div className="col-xl-8 col-lg-8">
+                  <div className="blog__details__content__wraper">
+                    <div className="course__details__heading">
+                      <h3>Welcome, {userData?.username}</h3>
                     </div>
-                  </div>
-                  <div className="row">
-                    {cardList.map(({ name, icon, link, state }) => (
-                      <div className="col-xl-4 column__custom__class">
-                        <div className="gridarea__wraper text-center card-background">
-                          <div
-                            className="gridarea__content p-2 m-2"
-                            style={{ cursor: link ? "pointer" : "default" }}
-                          >
-                            {link ? (
-                              <Link
-                                to={link}
-                                className="text-decoration-none"
-                                state={state}
-                              >
+                    <h5>
+                      {studentBatch.map((batch) => (
+                        <span key={batch.id}>
+                          {batch.batch_name} :{" "}
+                          {moment(batch.batch_start_timing, "HH:mm:ss").format(
+                            "hh:mm A"
+                          )}{" "}
+                          |{" "}
+                        </span>
+                      ))}
+                    </h5>
+                    <div className="online__course__wrap mt-0">
+                      <div className="row instructor__slider__active row__custom__class">
+                        <ScoreCard />
+                      </div>
+                    </div>
+                    <div className="row">
+                      {cardList.map(({ name, icon, link, state }) => (
+                        <div className="col-xl-4 column__custom__class">
+                          <div className="gridarea__wraper text-center card-background">
+                            <div
+                              className="gridarea__content p-2 m-2"
+                              style={{ cursor: link ? "pointer" : "default" }}
+                            >
+                              {link ? (
+                                <Link
+                                  to={link}
+                                  className="text-decoration-none"
+                                  state={state}
+                                >
+                                  <div className="gridarea__heading">
+                                    <img
+                                      src={icon}
+                                      alt={name}
+                                      height={50}
+                                      width={50}
+                                    />
+                                    <h3 className="mt-2">{name}</h3>
+                                  </div>
+                                </Link>
+                              ) : (
                                 <div className="gridarea__heading">
                                   <img
                                     src={icon}
@@ -198,51 +210,41 @@ const SDashboard = () => {
                                   />
                                   <h3 className="mt-2">{name}</h3>
                                 </div>
-                              </Link>
-                            ) : (
-                              <div className="gridarea__heading">
-                                <img
-                                  src={icon}
-                                  alt={name}
-                                  height={50}
-                                  width={50}
-                                />
-                                <h3 className="mt-2">{name}</h3>
-                              </div>
-                            )}
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
-                    <div className="col-xl-12 column__custom__class">
-                      <div className="gridarea__wraper text-center card-background">
-                        <div className="gridarea__content p-2 m-2">
-                          <Link
-                            to="/studentLiveClasses"
-                            className="text-decoration-none"
-                            state={{ activeTab: "Recorded Class" }}
-                          >
-                            <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                              <img
-                                src={recordedClasses}
-                                alt="Recorded Classes"
-                                height={35}
-                                width={35}
-                              />
-                              <h2 className="mt-2">Recorded Classes</h2>
-                            </div>
-                          </Link>
+                      ))}
+                      <div className="col-xl-12 column__custom__class">
+                        <div className="gridarea__wraper text-center card-background">
+                          <div className="gridarea__content p-2 m-2">
+                            <Link
+                              to="/studentLiveClasses"
+                              className="text-decoration-none"
+                              state={{ activeTab: "Recorded Class" }}
+                            >
+                              <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                <img
+                                  src={recordedClasses}
+                                  alt="Recorded Classes"
+                                  height={35}
+                                  width={35}
+                                />
+                                <h2 className="mt-2">Recorded Classes</h2>
+                              </div>
+                            </Link>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-xl-4 col-lg-4">
-                <LeaderBoard studentID={studentID} />
-                <UpcomingLiveClass upcommingClass={upcommingClass} />
-                <NextLesson />
-                <SpeakingSlots speakingSlots={upcommingClass} />
+                <div className="col-xl-4 col-lg-4">
+                  <LeaderBoard studentID={studentID} />
+                  <UpcomingLiveClass upcommingClass={upcommingClass} />
+                  <NextLesson />
+                  <SpeakingSlots speakingSlots={upcommingClass} />
+                </div>
               </div>
             </div>
           </div>

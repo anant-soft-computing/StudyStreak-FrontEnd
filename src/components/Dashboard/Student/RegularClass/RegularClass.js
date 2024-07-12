@@ -20,8 +20,6 @@ const RegularClass = ({ selectedDateRange }) => {
       : "Regular"
   );
 
-  console.log("----uuid---->", uuid);
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };

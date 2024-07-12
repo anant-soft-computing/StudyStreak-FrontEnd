@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -49,6 +50,12 @@ const MyCourse = () => {
     })();
   }, [authData?.accessToken]);
 
+  const getDaysRemaining = (endDate) => {
+    const end = moment(endDate);
+    const today = moment();
+    return end.diff(today, "days");
+  };
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -61,6 +68,21 @@ const MyCourse = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Courses</h4>
+                      <h5 className="text-danger">
+                        {courses?.length > 0 &&
+                          courses.map((course) => {
+                            const daysRemaining = getDaysRemaining(
+                              course.EnrollmentEndDate
+                            );
+                            return (
+                              <span key={course?.id}>
+                                {" "}
+                                {course.Course_Title} : {daysRemaining} days Left
+                                |
+                              </span>
+                            );
+                          })}
+                      </h5>
                     </div>
                     <div className="row">
                       {isLoading ? (
@@ -123,7 +145,7 @@ const MyCourse = () => {
                           </div>
                         ))
                       ) : (
-                        <BuyCourse message="No Courses Available , Please Buy a Course !!" />
+                        <BuyCourse message="No Courses Available, Please Buy a Course !!" />
                       )}
                     </div>
                   </div>

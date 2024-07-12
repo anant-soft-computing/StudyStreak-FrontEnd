@@ -2,6 +2,13 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
+import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
+import practice from "../../../../img/icon/practiceTest.svg";
+import regularClass from "../../../../img/icon/liveClass.svg";
+import counselling from "../../../../img/icon/users.svg";
+import progress from "../../../../img/icon/progress.svg";
+import webinar from "../../../../img/icon/webinar.svg";
+import support from "../../../../img/icon/support.svg";
 import DSSidebar from "../DSSideBar/DSSideBar";
 
 const tableData = [
@@ -26,7 +33,24 @@ const tableData = [
     score: "4.0",
   },
 ];
-
+const cardList = [
+  {
+    name: "Book Speaking Slot",
+    icon: bookSpeakingSlot,
+    link: "/studentLiveClasses",
+    state: {
+      activeTab: "Speaking Practice",
+    },
+  },
+  { name: "Practice Test", icon: practice, link: "/practiceTest" },
+  { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
+  { name: "Counselling", icon: counselling, link: "/studentLiveClasses" },
+  { name: "Regular Classes", icon: regularClass, link: "/studentLiveClasses" },
+  { name: "Tutor Support", icon: counselling, link: "/studentLiveClasses" },
+  { name: "Webinar", icon: webinar, link: "/studentLiveClasses" },
+  { name: "Progress", icon: progress },
+  { name: "Software Support", icon: support },
+];
 const UnPaidDashboard = () => {
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -42,57 +66,102 @@ const UnPaidDashboard = () => {
                   <div className="course__details__heading">
                     <h3>Welcome, {userData?.username}</h3>
                   </div>
-                  <div className="col-xl-12 d-flex justify-content-center align-items-center">
-                    <div className="gridarea__wraper text-center card-background transparent-background">
-                      <div className="gridarea__content p-2 m-2">
-                        <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                          <h3 className="mt-2">
-                            You Have Not purchased Any Package. <br />
-                            Click below to view available plans
-                          </h3>
+                  <div className="relative-container ">
+                    <div className="row p-3">
+                      {cardList.map(({ name, icon, link, state }) => (
+                        <div className="col-xl-4 column__custom__class">
+                          <div className="gridarea__wraper text-center card-background">
+                            <div
+                              className="gridarea__content p-2 m-2"
+                              style={{ cursor: link ? "pointer" : "default" }}
+                            >
+                              {link ? (
+                                <Link
+                                  to={link}
+                                  className="text-decoration-none"
+                                  state={state}
+                                >
+                                  <div className="gridarea__heading">
+                                    <img
+                                      src={icon}
+                                      alt={name}
+                                      height={50}
+                                      width={50}
+                                    />
+                                    <h3 className="mt-2">{name}</h3>
+                                  </div>
+                                </Link>
+                              ) : (
+                                <div className="gridarea__heading">
+                                  <img
+                                    src={icon}
+                                    alt={name}
+                                    height={50}
+                                    width={50}
+                                  />
+                                  <h3 className="mt-2">{name}</h3>
+                                </div>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                        <button
-                          className="default__button"
-                          onClick={() => navigate("/courses")}
+                      ))}
+                    </div>
+                    <div className="overlay-container d-flex flex-column justify-content-center">
+                      <div className="col-xl-12 d-flex justify-content-center align-items-center">
+                        <div className="gridarea__wraper text-center card-background">
+                          <div className="gridarea__content p-2 m-2">
+                            <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                              <h3 className="mt-2">
+                                You Have Not purchased Any Package. <br />
+                                Click below to view available plans
+                              </h3>
+                            </div>
+                            <button
+                              className="default__button"
+                              onClick={() => navigate("/courses")}
+                            >
+                              View Plans
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-xl-12 d-flex justify-content-center align-items-center">
+                        <div className="gridarea__wraper text-center card-background">
+                          <div className="gridarea__content p-2 m-2">
+                            <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                              <img
+                                src={practiceTest}
+                                alt="Recorded Classes"
+                                height={35}
+                                width={35}
+                              />
+                              <h5 className="mt-2">
+                                Take A free Diagnostic Test <br />
+                                With This Test,You can Determine Which Kind of
+                                Course and Package and You need for your
+                                Preparation
+                              </h5>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-xl-12 d-flex justify-content-center align-items-center">
+                        <div
+                          className="gridarea__wraper text-center card-background"
+                          style={{ width: "1000px" }}
                         >
-                          View Plans
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xl-12 d-flex justify-content-center align-items-center">
-                    <div className="gridarea__wraper text-center card-background transparent-background">
-                      <div className="gridarea__content p-2 m-2">
-                        <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                          <img
-                            src={practiceTest}
-                            alt="Recorded Classes"
-                            height={35}
-                            width={35}
-                          />
-                          <h5 className="mt-2">
-                            Take A free Diagnostic Test <br />
-                            With This Test,You can Determine Which Kind of
-                            Course and Package and You need for your Preparation
-                          </h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-xl-12 d-flex justify-content-center align-items-center">
-                    <div
-                      className="gridarea__wraper text-center card-background transparent-background"
-                      style={{ width: "1000px" }}
-                    >
-                      <div className="gridarea__content p-4 m-2">
-                        <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                          <img
-                            src={fullLengthTest}
-                            alt="Recorded Classes"
-                            height={35}
-                            width={35}
-                          />
-                          <h2 className="mt-2">Free Mini Test</h2>
+                          <div className="gridarea__content p-4 m-2">
+                            <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                              <img
+                                src={fullLengthTest}
+                                alt="Recorded Classes"
+                                height={35}
+                                width={35}
+                              />
+                              <h2 className="mt-2">Free Mini Test</h2>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>

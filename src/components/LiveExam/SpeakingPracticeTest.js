@@ -21,6 +21,7 @@ const PracticeSpeakingLiveExam = () => {
   const synth = window.speechSynthesis;
   const [examData, setExamData] = useState([]);
   const [timer, setTimer] = useState(3600);
+  const [voices, setVoices] = useState([]);
   const [timerRunning, setTimerRunning] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
@@ -204,6 +205,17 @@ const PracticeSpeakingLiveExam = () => {
     }
   }, [fullPaper, next]);
 
+  useEffect(() => {
+    const fetchVoices = () => {
+      const availableVoices = synth.getVoices();
+      setVoices(availableVoices);
+    };
+
+    // Fetch voices when they are loaded
+    synth.onvoiceschanged = fetchVoices;
+    fetchVoices();
+  }, [synth]);
+
   const extractVisibleText = (htmlContent) => {
     return htmlToText(htmlContent);
   };
@@ -212,6 +224,19 @@ const PracticeSpeakingLiveExam = () => {
     const utterance = new SpeechSynthesisUtterance(
       extractVisibleText(speakingContent)
     );
+    utterance.rate = 0.9;
+    // Select an Indian voice
+    const indianVoice = voices.find(
+      (voice) =>
+        voice.lang === "hi-IN" ||
+        voice.name.toLowerCase().includes("Hindi") ||
+        voice.name.toLowerCase().includes("Indian")
+    );
+
+    if (indianVoice) {
+      utterance.voice = indianVoice;
+    }
+    
     synth.speak(utterance);
     const updatedSpeaking = speaking.map((item, index) => {
       const tempId = item.id;
@@ -356,15 +381,8 @@ const PracticeSpeakingLiveExam = () => {
               );
               return (
                 <div className="lv-question-container" key={item.id}>
-                  <div className="lv-speaking-question">
-                    <p> {i + 1} : </p>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.question,
-                      }}
-                    ></div>
-                  </div>
                   <div className="d-flex align-items-center lv-btn-mic-container">
+                    {i + 1} :
                     <button
                       className="lv-speaking-button"
                       onClick={() => speak(item.question, item.id)}

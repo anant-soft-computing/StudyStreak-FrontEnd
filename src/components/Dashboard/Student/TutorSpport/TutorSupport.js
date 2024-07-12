@@ -1,9 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import TuotorSupportList from "./TuotorSupportList";
 
 const TutorSupport = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [tutorSupportClass, setTutorSupportClass] = useState([]);
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const tutorSupportClassData = [];
+        for (let i = 0; i < batchIds.length; i++) {
+          const batchId = batchIds[i];
+          const response = await ajaxCall(
+            `/liveclass_listwithid_view/${batchId}/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
+            },
+            8000
+          );
+          if (response?.status === 200) {
+            const classData = response?.data?.filter(
+              (item) => item?.liveclasstype?.name === "Tutor Support"
+            );
+            tutorSupportClassData.push(...classData);
+            setIsLoading(false);
+          } else {
+            setIsLoading(false);
+          }
+        }
+        setTutorSupportClass(tutorSupportClassData);
+      } catch (error) {
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
   return (
-    <div>
-      <h5 className="text-center text-danger">Comming Soon !!</h5>
+    <div className="row">
+      <TuotorSupportList
+        isLoading={isLoading}
+        tutorSupportClass={tutorSupportClass}
+      />
     </div>
   );
 };

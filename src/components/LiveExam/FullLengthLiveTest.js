@@ -42,6 +42,7 @@ const FullLengthLiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [timer, setTimer] = useState(3600);
+  const [voices, setVoices] = useState([]);
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -888,6 +889,17 @@ const FullLengthLiveExam = () => {
     setNext(next + 1);
   };
 
+  useEffect(() => {
+    const fetchVoices = () => {
+      const availableVoices = synth.getVoices();
+      setVoices(availableVoices);
+    };
+
+    // Fetch voices when they are loaded
+    synth.onvoiceschanged = fetchVoices;
+    fetchVoices();
+  }, [synth]);
+
   const extractVisibleText = (htmlContent) => {
     return htmlToText(htmlContent);
   };
@@ -896,6 +908,19 @@ const FullLengthLiveExam = () => {
     const utterance = new SpeechSynthesisUtterance(
       extractVisibleText(speakingContent)
     );
+    utterance.rate = 0.9;
+    // Select an Indian voice
+    const indianVoice = voices.find(
+      (voice) =>
+        voice.lang === "hi-IN" ||
+        voice.name.toLowerCase().includes("Hindi") ||
+        voice.name.toLowerCase().includes("Indian")
+    );
+
+    if (indianVoice) {
+      utterance.voice = indianVoice;
+    }
+
     synth.speak(utterance);
     const tempExamAnswer = [...examAnswer];
     const updatedSpeaking = tempExamAnswer[next].data.map((item, index) => {
@@ -1126,19 +1151,6 @@ const FullLengthLiveExam = () => {
             </div>
           )}
           {examData?.exam_type === "Speaking" && (
-            // <div className="lv-left-container">
-            //   <button
-            //     className="lv-footer-button"
-            //     onClick={speak}
-            //     disabled={speaking === 1}
-            //     style={{
-            //       opacity: speaking === 1 ? 0.5 : 1,
-            //       cursor: speaking === 1 ? "not-allowed" : "pointer",
-            //     }}
-            //   >
-            //     {speaking ? "Replay" : "Start"}
-            //   </button>
-            // </div>
             <div
               className="lv-left-container"
               style={{
@@ -1154,15 +1166,8 @@ const FullLengthLiveExam = () => {
                   );
                   return (
                     <div className="lv-question-container">
-                      <div className="lv-speaking-question">
-                        <p> {i + 1} :</p>
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: item.question,
-                          }}
-                        ></div>
-                      </div>
                       <div className="d-flex align-items-center lv-btn-mic-container">
+                        {i + 1} :
                         <button
                           className="lv-footer-button lv-speaking-button"
                           onClick={() => speak(item.question, item.id)}
@@ -1187,7 +1192,6 @@ const FullLengthLiveExam = () => {
                             : "Start"}
                         </button>
                         <hr />
-
                         {recorderContainer(item, speakingIndex)}
                       </div>
                     </div>

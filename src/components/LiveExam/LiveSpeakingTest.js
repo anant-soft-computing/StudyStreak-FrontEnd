@@ -18,6 +18,7 @@ const LiveSpeakingExam = () => {
   const examId = useLocation()?.pathname?.split("/")?.[3];
   const [examData, setExamData] = useState({});
   const [timer, setTimer] = useState(3600);
+  const [voices, setVoices] = useState([]);
   const [timerRunning, setTimerRunning] = useState(true);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -162,10 +163,35 @@ const LiveSpeakingExam = () => {
     return htmlToText(htmlContent);
   };
 
+  useEffect(() => {
+    const fetchVoices = () => {
+      const availableVoices = synth.getVoices();
+      setVoices(availableVoices);
+    };
+
+    // Fetch voices when they are loaded
+    synth.onvoiceschanged = fetchVoices;
+    fetchVoices();
+  }, [synth]);
+
+  
   const speak = (speakingContent, i) => {
     const utterance = new SpeechSynthesisUtterance(
       extractVisibleText(speakingContent)
     );
+    utterance.rate = 0.9;
+    // Select an Indian voice
+    const indianVoice = voices.find(
+      (voice) =>
+        voice.lang === "hi-IN" ||
+        voice.name.toLowerCase().includes("Hindi") ||
+        voice.name.toLowerCase().includes("Indian")
+    );
+
+    if (indianVoice) {
+      utterance.voice = indianVoice;
+    }
+
     synth.speak(utterance);
     const updatedSpeaking = speaking.map((item, index) => {
       if (index === i) {
@@ -212,7 +238,7 @@ const LiveSpeakingExam = () => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
       examSubmit();
-      setTimeout(() => navigate(`/mockTest`), 3000);
+      setTimeout(() => navigate("/mockTest"), 3000);
     }
   }, [speaking]);
 
@@ -262,7 +288,7 @@ const LiveSpeakingExam = () => {
           <h2>{examData?.exam_category}</h2>
           <div className="lv-userName">{userData?.username}</div>
           <div style={{ marginLeft: "10px" }}>/</div>
-          <div className="lv-userName">{`${examData?.name}`}</div>
+          <div className="lv-userName">{examData?.name}</div>
         </div>
         <span className="lv-navbar-title">
           Time Taken :
@@ -276,7 +302,7 @@ const LiveSpeakingExam = () => {
             <div className="mobile-breadcumb">
               <div className="lv-userName">{userData?.username}</div>
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className="lv-userName">{`${examData?.name}`}</div>
+              <div className="lv-userName">{examData?.name}</div>
             </div>
           </div>
           <div className="lv-navbar-footer">
@@ -306,15 +332,8 @@ const LiveSpeakingExam = () => {
             {Object.keys(examData).length > 0 &&
               examData.questions.map((item, i) => (
                 <div className="lv-question-container" key={item?.id}>
-                  <div className="lv-speaking-question">
-                    <p> {i + 1} : </p>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.question,
-                      }}
-                    ></div>
-                  </div>
                   <div className="d-flex align-items-center lv-btn-mic-container">
+                  {i + 1} :
                     <button
                       className="lv-footer-button lv-speaking-button"
                       onClick={() => speak(item.question, i)}
@@ -336,7 +355,7 @@ const LiveSpeakingExam = () => {
               ))}
           </div>
         </div>
-        <div className="lv-question-pagination  justify-content-center d-flex justify-content-md-between align-items-center">
+        <div className="lv-question-pagination justify-content-center d-flex justify-content-md-between align-items-center">
           <div className="lv-section-pagination">
             {examData?.questions?.map((_, index) => {
               return (

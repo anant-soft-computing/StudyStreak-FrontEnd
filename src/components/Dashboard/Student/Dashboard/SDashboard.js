@@ -161,7 +161,7 @@ const SDashboard = () => {
                       <h3>Welcome, {userData?.username}</h3>
                     </div>
                     <h5>
-                      {studentBatch.map((batch) => (
+                      Batch Name :- {studentBatch.map((batch) => (
                         <span key={batch.id}>
                           {batch.batch_name} :{" "}
                           {moment(batch.batch_start_timing, "HH:mm:ss").format(

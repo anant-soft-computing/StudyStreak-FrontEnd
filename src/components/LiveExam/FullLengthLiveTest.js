@@ -990,49 +990,50 @@ const FullLengthLiveExam = () => {
       return null;
     }
     let tempQuestionNumber = 0;
-    return uniqueIdArr
-      ?.filter((item) => item?.examType === examData?.exam_type)
-      ?.map((item, sectionIndex) => {
-        // if (item.examType !== examData.exam_type) {
-        //   return null;
-        // }
-        return (
-          <div className='lv-section' key={item.name + sectionIndex}>
-            {/* Section name */}
-            <button
-              className='lv-footer-section'
-              onClick={() => setNext(sectionIndex)}
-            >
-              {`section-${sectionIndex + 1}`}
-            </button>
-            {/* Section pagination */}
-            {item.paginationsIds?.map((pagination, paginationIndex) => {
-              tempQuestionNumber = tempQuestionNumber + 1;
-              return (
-                <div
-                  className={`lv-footer-item ${
-                    examAnswer[sectionIndex] &&
-                    examAnswer[sectionIndex].data.length > 0 &&
-                    examAnswer[sectionIndex].data[paginationIndex]
-                      ?.answer_text !== ""
-                      ? "lv-completed-questions"
-                      : ""
-                  }`}
-                  onClick={() => {
-                    if (next !== sectionIndex) setNext(sectionIndex);
-                    setTimeout(() => {
-                      scrollToContent(pagination, sectionIndex);
-                    }, 100);
-                  }}
-                  key={pagination + paginationIndex}
-                >
-                  {tempQuestionNumber}
-                </div>
-              );
-            })}
-          </div>
-        );
-      });
+    let tempSectionNumber = 0;
+    return uniqueIdArr?.map((item, sectionIndex) => {
+      if (item.examType !== examData.exam_type) {
+        return null;
+      }
+      tempSectionNumber++;
+      return (
+        <div className='lv-section' key={item.name + sectionIndex}>
+          {/* Section name */}
+          <button
+            className='lv-footer-section'
+            onClick={() => setNext(sectionIndex)}
+          >
+            {/* {item.name} */}
+            {`section-${tempSectionNumber}`}
+          </button>
+          {/* Section pagination */}
+          {item.paginationsIds?.map((pagination, paginationIndex) => {
+            tempQuestionNumber = tempQuestionNumber + 1;
+            return (
+              <div
+                className={`lv-footer-item ${
+                  examAnswer[sectionIndex] &&
+                  examAnswer[sectionIndex].data.length > 0 &&
+                  examAnswer[sectionIndex].data[paginationIndex].answer_text !==
+                    ""
+                    ? "lv-completed-questions"
+                    : ""
+                }`}
+                onClick={() => {
+                  if (next !== sectionIndex) setNext(sectionIndex);
+                  setTimeout(() => {
+                    scrollToContent(pagination, sectionIndex);
+                  }, 100);
+                }}
+                key={pagination + paginationIndex}
+              >
+                {tempQuestionNumber}
+              </div>
+            );
+          })}
+        </div>
+      );
+    });
   }, [uniqueIdArr, examAnswer, next, examData]);
 
   const recorderContainer = useCallback(

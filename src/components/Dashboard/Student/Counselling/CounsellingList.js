@@ -1,9 +1,9 @@
+import moment from "moment";
 import React, { useEffect, useState } from "react";
 import Loading from "../../../UI/Loading";
-import moment from "moment";
 import Table from "../../../UI/Table";
 
-const TuotorSupportList = ({ isLoading, tutorSupportClass }) => {
+const CounsellingList = ({ isLoading, counselling }) => {
   const [currentTime, setCurrentTime] = useState(moment());
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const TuotorSupportList = ({ isLoading, tutorSupportClass }) => {
     { headerName: "Batch Name", field: "select_batch.batch_name" },
   ];
 
-  const rowData = tutorSupportClass.map((classItem) => ({
+  const rowData = counselling.map((classItem) => ({
     ...classItem,
     start_date: moment(classItem.start_time).format("DD MMM, YYYY"),
     start_time: moment(classItem.start_time).format("hh:mm A"),
@@ -62,14 +62,13 @@ const TuotorSupportList = ({ isLoading, tutorSupportClass }) => {
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />
-  ) : tutorSupportClass.length > 0 ? (
+  ) : counselling.length > 0 ? (
     <Table rowData={rowData} columnDefs={columns} />
   ) : (
     <h5 className="text-center text-danger">
-      No Tuotor Support Classes Available Today !! , Please Schedule Your
-      Classes.
+      No Counselling Available Today !! , Please Schedule Your Classes.
     </h5>
   );
 };
 
-export default TuotorSupportList;
+export default CounsellingList;

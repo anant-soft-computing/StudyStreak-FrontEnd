@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import TuotorSupportList from "./TuotorSupportList";
 
-const TutorSupport = () => {
+const TutorSupport = ({ selectedDateRange }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [tutorSupportClass, setTutorSupportClass] = useState([]);
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
@@ -29,10 +30,10 @@ const TutorSupport = () => {
             8000
           );
           if (response?.status === 200) {
-            const classData = response?.data?.filter(
+            const data = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Tutor Support"
             );
-            tutorSupportClassData.push(...classData);
+            tutorSupportClassData.push(...data);
             setIsLoading(false);
           } else {
             setIsLoading(false);
@@ -47,11 +48,25 @@ const TutorSupport = () => {
     })();
   }, []);
 
+  const tutorData = () => {
+    return tutorSupportClass.filter((item) => {
+      const classDate = moment(item.start_time).format("YYYY-MM-DD");
+      const { startDate, endDate } = selectedDateRange?.[0];
+      if (startDate && !endDate) {
+        return classDate === moment(startDate).format("YYYY-MM-DD");
+      }
+      return (
+        (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
+        (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
+      );
+    });
+  };
+
   return (
     <div className="row">
       <TuotorSupportList
         isLoading={isLoading}
-        tutorSupportClass={tutorSupportClass}
+        tutorSupportClass={tutorData()}
       />
     </div>
   );

@@ -75,18 +75,14 @@ const RecordedClass = ({ uuid, classes, activeTab }) => {
     { headerName: "Name", field: "topic" },
     { headerName: "Password", field: "password" },
   ];
-  return (
-    <div>
-      {isLoading ? (
-        <Loading text="Loading..." color="primary" />
-      ) : recordData.length > 0 ? (
-        <Table rowData={recordData} columnDefs={columns} />
-      ) : (
-        <h5 className="text-center text-danger">
-          No Recorded Classes Available !!
-        </h5>
-      )}
-    </div>
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : recordData.length > 0 ? (
+    <Table rowData={recordData} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">
+      No Recorded Classes Available !!
+    </h5>
   );
 };
 

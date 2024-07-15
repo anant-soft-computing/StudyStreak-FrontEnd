@@ -15,11 +15,6 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const joinNow = (url) => {
-    window.open(url, "__blank");
-  };
-
-
   const handleJoinNow = (params) => {
     const { join_url, start_time, id } = params.data;
     const now = currentTime;
@@ -35,7 +30,7 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       <button
         className="take-test"
         onClick={() => {
-          joinNow(join_url);
+          window.open(join_url, "__blank");
           gamificationSubmit(id);
         }}
         disabled={!isButtonEnabled}
@@ -120,16 +115,12 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     })
   );
 
-  return (
-    <>
-      {isLoading ? (
-        <Loading text="Loading..." color="primary" />
-      ) : classes.length > 0 ? (
-        <Table rowData={rowData} columnDefs={columns} />
-      ) : (
-        <h5 className="text-center text-danger">{message}</h5>
-      )}
-    </>
+  return isLoading ? (
+    <Loading text="Loading..." color="primary" />
+  ) : classes.length > 0 ? (
+    <Table rowData={rowData} columnDefs={columns} />
+  ) : (
+    <h5 className="text-center text-danger">{message}</h5>
   );
 };
 

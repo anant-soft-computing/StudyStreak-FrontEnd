@@ -13,7 +13,6 @@ import recordedClasses from "../../../../img/icon/gamification.svg";
 import Loading from "../../../UI/Loading";
 import UpcomingLiveClass from "./UpCommingLiveClass/UpCommingLiveClass";
 import LeaderBoard from "./LeaderBoard/LeaderBoard";
-import NextLesson from "./NextLesson/NextLesson";
 import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import ScoreCard from "./ScoreCard/ScoreCard";
@@ -55,7 +54,7 @@ const cardList = [
     state: { activeTab: "Webinar" },
   },
   { name: "Progress", icon: progress },
-  { name: "Software Support", icon: support },
+  { name: "Resource Link", icon: support },
 ];
 
 const SDashboard = () => {
@@ -242,7 +241,6 @@ const SDashboard = () => {
                 <div className="col-xl-4 col-lg-4">
                   <LeaderBoard studentID={studentID} />
                   <UpcomingLiveClass upcommingClass={upcommingClass} />
-                  <NextLesson />
                   <SpeakingSlots speakingSlots={upcommingClass} />
                 </div>
               </div>

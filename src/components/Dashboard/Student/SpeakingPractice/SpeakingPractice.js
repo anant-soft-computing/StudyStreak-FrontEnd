@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
 import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
@@ -19,72 +18,16 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
   const location = useLocation();
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState(location?.state?.activeTab === "Speaking Practice" ? "Available Slot" : "Upcoming");
+  const [activeTab, setActiveTab] = useState(
+    location?.state?.activeTab === "Speaking Practice"
+      ? "Available Slot"
+      : "Upcoming"
+  );
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-  };
-
-  const handleEnrollNow = async (Id) => {
-    const data = JSON.stringify({
-      live_class_id: Id,
-      student_id: studentId,
-    });
-    try {
-      const response = await ajaxCall(
-        `/enroll-students-in-live-class/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-      if (response.status === 200) {
-        toast.success("Slot Booked Successfully");
-      } else if (response.status === 400) {
-        toast.error(response?.data?.Message);
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const bookCount = async (Id) => {
-    try {
-      const response = await ajaxCall(
-        `/add-bookslot/${Id}/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        handleEnrollNow(Id);
-      } else if (response.status === 400) {
-        toast.error(response.data.message);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
   };
 
   useEffect(() => {
@@ -186,7 +129,6 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
             >
               <div className="row">
                 <ClassList
-                  bookCount={bookCount}
                   isLoading={isLoading}
                   classes={speakingPracticeClasses}
                   message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."

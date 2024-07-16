@@ -31,7 +31,7 @@ const Counselling = ({ selectedDateRange }) => {
           );
           if (response?.status === 200) {
             const data = response?.data?.filter(
-              (item) => item?.liveclasstype?.name === "Webinar"
+              (item) => item?.liveclasstype?.name === "Counselling"
             );
             counsellingData.push(...data);
             setIsLoading(false);

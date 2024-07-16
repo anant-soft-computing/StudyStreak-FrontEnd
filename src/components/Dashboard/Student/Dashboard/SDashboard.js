@@ -54,7 +54,7 @@ const cardList = [
     state: { activeTab: "Webinar" },
   },
   { name: "Progress", icon: progress },
-  { name: "Resource Link", icon: support },
+  { name: "Resource Link", icon: support, link: "/resourceLink" },
 ];
 
 const SDashboard = () => {
@@ -160,7 +160,8 @@ const SDashboard = () => {
                       <h3>Welcome, {userData?.username}</h3>
                     </div>
                     <h5>
-                      Batch Name :- {studentBatch.map((batch) => (
+                      Batch Name :-{" "}
+                      {studentBatch.map((batch) => (
                         <span key={batch.id}>
                           {batch.batch_name} :{" "}
                           {moment(batch.batch_start_timing, "HH:mm:ss").format(

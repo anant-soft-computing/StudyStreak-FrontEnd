@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
 import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
@@ -10,6 +10,11 @@ import progress from "../../../../img/icon/progress.svg";
 import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
 import DSSidebar from "../DSSideBar/DSSideBar";
+import DemoClass from "./DemoClass/DemoClass";
+import Webinar from "./Webinar/Webinar";
+import MasterClass from "./MasterClass/MasterClass";
+import { useSelector } from "react-redux";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const tableData = [
   {
@@ -33,27 +38,69 @@ const tableData = [
     score: "4.0",
   },
 ];
+
 const cardList = [
-  {
-    name: "Book Speaking Slot",
-    icon: bookSpeakingSlot,
-    link: "/studentLiveClasses",
-    state: {
-      activeTab: "Speaking Practice",
-    },
-  },
-  { name: "Practice Test", icon: practice, link: "/practiceTest" },
-  { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
-  { name: "Counselling", icon: counselling, link: "/studentLiveClasses" },
-  { name: "Regular Classes", icon: regularClass, link: "/studentLiveClasses" },
-  { name: "Tutor Support", icon: counselling, link: "/studentLiveClasses" },
-  { name: "Webinar", icon: webinar, link: "/studentLiveClasses" },
+  { name: "Book Speaking Slot", icon: bookSpeakingSlot },
+  { name: "Practice Test", icon: practice },
+  { name: "Full Length Test", icon: fullLengthTest },
+  { name: "Counselling", icon: counselling },
+  { name: "Regular Classes", icon: regularClass },
+  { name: "Tutor Support", icon: counselling },
+  { name: "Webinar", icon: webinar },
   { name: "Progress", icon: progress },
   { name: "Software Support", icon: support },
 ];
+
 const UnPaidDashboard = () => {
   const navigate = useNavigate();
+
+  const [webinar, setWebinar] = useState([]);
+  const [demoClass, setDemoClass] = useState({});
+  const [masterClass, setMasterClass] = useState({});
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const authData = useSelector((state) => state.authStore);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/liveclass_list_view/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setMasterClass(
+            response?.data?.filter(
+              ({ liveclasstype }) => liveclasstype === "Master"
+            )[0]
+          );
+          setWebinar(
+            response?.data?.filter(
+              ({ liveclasstype }) => liveclasstype === "Webinar"
+            )[0]
+          );
+          setDemoClass(
+            response?.data?.filter(
+              ({ liveclasstype }) => liveclasstype === "Demo"
+            )[0]
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [authData?.accessToken]);
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -68,40 +115,22 @@ const UnPaidDashboard = () => {
                   </div>
                   <div className="relative-container ">
                     <div className="row p-3">
-                      {cardList.map(({ name, icon, link, state }) => (
+                      {cardList.map(({ name, icon, link }) => (
                         <div className="col-xl-4 column__custom__class">
                           <div className="gridarea__wraper text-center card-background">
                             <div
                               className="gridarea__content p-2 m-2"
                               style={{ cursor: link ? "pointer" : "default" }}
                             >
-                              {link ? (
-                                <Link
-                                  to={link}
-                                  className="text-decoration-none"
-                                  state={state}
-                                >
-                                  <div className="gridarea__heading">
-                                    <img
-                                      src={icon}
-                                      alt={name}
-                                      height={50}
-                                      width={50}
-                                    />
-                                    <h3 className="mt-2">{name}</h3>
-                                  </div>
-                                </Link>
-                              ) : (
-                                <div className="gridarea__heading">
-                                  <img
-                                    src={icon}
-                                    alt={name}
-                                    height={50}
-                                    width={50}
-                                  />
-                                  <h3 className="mt-2">{name}</h3>
-                                </div>
-                              )}
+                              <div className="gridarea__heading">
+                                <img
+                                  src={icon}
+                                  alt={name}
+                                  height={50}
+                                  width={50}
+                                />
+                                <h3 className="mt-2">{name}</h3>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -193,40 +222,9 @@ const UnPaidDashboard = () => {
                     </table>
                   </div>
                 </div>
-                <div className="dashboard__inner mt-4 card-background">
-                  <div className="dashboard__nav__title">
-                    <h6>Join an IELTS Masterclass</h6>
-                  </div>
-                  <hr />
-                  <div>Get 8.0 band in 2 Hours - attend th..</div>
-                  <div>Tommorow, 6:00 PM</div>
-                </div>
-                <div className="dashboard__inner mt-4 card-background">
-                  <div className="dashboard__nav__title">
-                    <h6>IELTS Orientation</h6>
-                  </div>
-                  <hr />
-                  <div>Start your IELTS journey with basics</div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div>Reading</div>
-                    <Link to="" className="text-decoration-none">
-                      <div>Join now {">>"}</div>
-                    </Link>
-                  </div>
-                </div>
-                <div className="dashboard__inner mt-4 card-background">
-                  <div className="dashboard__nav__title">
-                    <h6>Free Demo Class</h6>
-                  </div>
-                  <hr />
-                  <div>Writing Part 1 - Demo Class</div>
-                  <div className="d-flex justify-content-between align-items-center">
-                    <div>May 24, 7:00 PM</div>
-                    <Link className="text-decoration-none">
-                      <div>View all demos {">>"}</div>
-                    </Link>
-                  </div>
-                </div>
+                <MasterClass masterClass={masterClass} />
+                <Webinar webinar={webinar} />
+                <DemoClass demoClass={demoClass} />
               </div>
             </div>
           </div>

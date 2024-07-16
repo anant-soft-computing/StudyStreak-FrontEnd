@@ -38,7 +38,6 @@ const LiveClass = () => {
       key: "selection",
     },
   ]);
-  const [dateStates, setDateStates] = useState({}); // State to manage date states
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -81,15 +80,6 @@ const LiveClass = () => {
               ({ Live_class_enroll }) => Live_class_enroll
             )[0]
           );
-
-          // Example logic to determine date states
-          const states = {
-            "2024-07-15": "available",
-            "2024-07-16": "full",
-            "2024-07-17": "not-available",
-            "2024-07-18": "selected",
-          };
-          setDateStates(states);
         } else {
           console.log("error");
         }
@@ -128,11 +118,11 @@ const LiveClass = () => {
           />
         );
       case "Tutor Support":
-        return <TutorSupport />;
+        return <TutorSupport selectedDateRange={selectedDateRange} />;
       case "Webinar":
-        return <Webinar />;
+        return <Webinar selectedDateRange={selectedDateRange} />;
       case "Counselling":
-        return <Counselling />;
+        return <Counselling selectedDateRange={selectedDateRange} />;
       default:
         return null;
     }
@@ -155,27 +145,8 @@ const LiveClass = () => {
                       <DateRange
                         selectedRange={selectedDateRange}
                         onChange={handleDateRangeChange}
-                        dateStates={dateStates}
                         inline
                       />
-                    </div>
-                    <div className="slot-box">
-                      <div className="text-center">
-                        <div className="slot-selected"></div>
-                        <div className="mt-1">Selected</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="slot-not-available"></div>
-                        <div className="mt-1">Not Available</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="slot-full"></div>
-                        <div className="mt-1">Full</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="slot-available"></div>
-                        <div className="mt-1">Available</div>
-                      </div>
                     </div>
                   </div>
                   <div className="col">

@@ -10,6 +10,7 @@ import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
+import resourceLink from "../../../../img/icon/support.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import { styled } from "@mui/material/styles";
@@ -150,6 +151,13 @@ const DSLeftDrawer = () => {
       name: "Flash Card",
       icon: <img src={flashcard} alt="Flash Card" />,
       link: "/flashCard",
+    },
+    {
+      name: "Resource Link",
+      icon: (
+        <img src={resourceLink} alt="Resource Link" height={20} width={20} />
+      ),
+      link: "/resourceLink",
     },
     {
       name: "Settings",

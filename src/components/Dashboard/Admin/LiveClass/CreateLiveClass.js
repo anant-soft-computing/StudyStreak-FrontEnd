@@ -26,10 +26,6 @@ const reducerCreateLiveClass = (state, action) => {
 };
 
 const validateForm = (createLiveClassData, setFormError) => {
-  if (!createLiveClassData.select_batch) {
-    setFormError("Batch is Required");
-    return false;
-  }
   if (!createLiveClassData.liveclasstype) {
     setFormError("Live Class Type is Required");
     return false;

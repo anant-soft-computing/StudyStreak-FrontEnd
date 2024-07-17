@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import TuotorSupportList from "./TuotorSupportList";
+import List from "../Classes/List";
 
 const TutorSupport = ({ selectedDateRange }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -63,12 +63,11 @@ const TutorSupport = ({ selectedDateRange }) => {
   };
 
   return (
-    <div className="row">
-      <TuotorSupportList
-        isLoading={isLoading}
-        tutorSupportClass={tutorData()}
-      />
-    </div>
+    <List
+      isLoading={isLoading}
+      classes={tutorData()}
+      message=" No Tuotor Support Classes Available Today !! , Please Schedule Your Classes."
+    />
   );
 };
 

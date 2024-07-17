@@ -5,19 +5,20 @@ import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 
-const initialResourceLinkData = {
+const initialResourceData = {
   student: "",
   batch: "",
   course: "",
-  resources: [{ document: "", description: "" }],
+  documents: [""],
+  descriptions: [""],
 };
 
 const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
 
-const reducerCreateResourceLink = (state, action) => {
+const reducerCreateResource = (state, action) => {
   switch (action.type) {
     case "reset":
-      return action.payload || initialResourceLinkData;
+      return action.payload || initialResourceData;
     default:
       return { ...state, [action.type]: action.value };
   }
@@ -25,8 +26,8 @@ const reducerCreateResourceLink = (state, action) => {
 
 const CreateResourceLink = ({ setActiveTab }) => {
   const [createRLData, dispatchCreateRL] = useReducer(
-    reducerCreateResourceLink,
-    initialResourceLinkData
+    reducerCreateResource,
+    initialResourceData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
@@ -37,16 +38,29 @@ const CreateResourceLink = ({ setActiveTab }) => {
 
   const addContent = () => {
     dispatchCreateRL({
-      type: "resources",
-      value: [...createRLData.resources, { description: "", document: "" }],
+      type: "documents",
+      value: [...createRLData.documents, ""],
+    });
+    dispatchCreateRL({
+      type: "descriptions",
+      value: [...createRLData.descriptions, ""],
     });
   };
 
   const removeContent = (index) => {
-    const updatedItems = createRLData.resources.filter((_, i) => i !== index);
+    const updatedDocuments = createRLData.documents.filter(
+      (_, i) => i !== index
+    );
+    const updatedDescriptions = createRLData.descriptions.filter(
+      (_, i) => i !== index
+    );
     dispatchCreateRL({
-      type: "resources",
-      value: updatedItems,
+      type: "documents",
+      value: updatedDocuments,
+    });
+    dispatchCreateRL({
+      type: "descriptions",
+      value: updatedDescriptions,
     });
   };
 
@@ -60,13 +74,13 @@ const CreateResourceLink = ({ setActiveTab }) => {
       formData.append("batch", createRLData.batch);
       formData.append("course", createRLData.course);
 
-      createRLData.resources.forEach((resource, index) => {
-        formData.append(
-          `resources[${index}][description]`,
-          resource.description
-        );
-        formData.append(`resources[${index}][document]`, resource.document);
+      createRLData.documents.forEach((document, index) => {
+        formData.append(`documents[${index}]`, document);
       });
+      createRLData.descriptions.forEach((description, index) => {
+        formData.append(`descriptions[${index}]`, description);
+      });
+
       const response = await ajaxCall(
         "/resources/",
         {
@@ -80,7 +94,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
       );
       if (response.status === 201) {
         resetReducerForm();
-        setActiveTab("View Resource Link");
+        setActiveTab("View Resources");
         toast.success("Resource Link Created Successfully");
       } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
@@ -155,25 +169,24 @@ const CreateResourceLink = ({ setActiveTab }) => {
             </div>
           </div>
         </div>
-        {createRLData.resources.map((item, index) => (
+        {createRLData.documents.map((_, index) => (
           <div className="row mt-4" key={index}>
             <div className="col-xl-6">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label htmlFor={`description-${index}`}>Description</label>
+                  <label htmlFor={`documents-${index}`}>Document</label>
                   <div className="d-flex align-items-center">
                     <input
-                      id={`description-${index}`}
-                      type="text"
+                      id={`documents-${index}`}
+                      type="file"
                       className="form-control"
-                      placeholder="Description of Resource Link"
-                      value={item.description}
                       onChange={(e) => {
-                        const updatedItems = [...createRLData.resources];
-                        updatedItems[index].description = e.target.value;
+                        const file = e.target.files[0];
+                        const updatedDocuments = [...createRLData.documents];
+                        updatedDocuments[index] = file;
                         dispatchCreateRL({
-                          type: "resources",
-                          value: updatedItems,
+                          type: "documents",
+                          value: updatedDocuments,
                         });
                       }}
                     />
@@ -184,23 +197,26 @@ const CreateResourceLink = ({ setActiveTab }) => {
             <div className="col-xl-6">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label htmlFor={`document-${index}`}>Document</label>
+                  <label htmlFor={`descriptions-${index}`}>Description</label>
                   <div className="d-flex align-items-center">
                     <input
-                      id={`document-${index}`}
-                      type="file"
+                      id={`descriptions-${index}`}
+                      type="text"
                       className="form-control"
+                      placeholder="Description of Resource Link"
+                      value={createRLData.descriptions[index]}
                       onChange={(e) => {
-                        const file = e.target.files[0];
-                        const updatedItems = [...createRLData.resources];
-                        updatedItems[index].document = file;
+                        const updatedDescriptions = [
+                          ...createRLData.descriptions,
+                        ];
+                        updatedDescriptions[index] = e.target.value;
                         dispatchCreateRL({
-                          type: "resources",
-                          value: updatedItems,
+                          type: "descriptions",
+                          value: updatedDescriptions,
                         });
                       }}
                     />
-                    {createRLData.resources.length > 1 && (
+                    {createRLData.documents.length > 1 && (
                       <button
                         className="dashboard__small__btn__2 flash-card__remove__btn"
                         onClick={() => removeContent(index)}
@@ -233,7 +249,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
                 onClick={createRL}
                 disabled={formStatus.isSubmitting}
               >
-                Create Resource Link
+                Create Resources
               </button>
             )}
           </div>

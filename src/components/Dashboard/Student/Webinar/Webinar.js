@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import WebinarList from "./WebinarList";
+import List from "../Classes/List";
 import moment from "moment";
 
 const Webinar = ({ selectedDateRange }) => {
@@ -63,9 +63,11 @@ const Webinar = ({ selectedDateRange }) => {
   };
 
   return (
-    <div className="row">
-      <WebinarList isLoading={isLoading} webinar={webinarData()} />
-    </div>
+    <List
+      isLoading={isLoading}
+      classes={webinarData()}
+      message="No Webinar Available Today !! , Please Schedule Your Webinar."
+    />
   );
 };
 

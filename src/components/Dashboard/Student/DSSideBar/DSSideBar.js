@@ -10,7 +10,8 @@ import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
-import resourceLink from "../../../../img/icon/support.svg";
+import resources from "../../../../img/icon/support.svg";
+import webinars from "../../../../img/icon/webinar.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 
@@ -72,11 +73,16 @@ const DSSidebar = () => {
       link: "/flashCard",
     },
     {
-      name: "Resource Link",
+      name: "Webinars",
+      icon: <img src={webinars} alt="Webinars" height={20} width={20} />,
+      link: "/webinars",
+    },
+    {
+      name: "Resources",
       icon: (
-        <img src={resourceLink} alt="Resource Link" height={20} width={20} />
+        <img src={resources} alt="Resources" height={20} width={20} />
       ),
-      link: "/resourceLink",
+      link: "/resources",
     },
     {
       name: "Settings",

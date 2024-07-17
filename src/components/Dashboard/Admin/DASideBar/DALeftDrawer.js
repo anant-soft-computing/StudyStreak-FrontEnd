@@ -164,11 +164,11 @@ const DALeftDrawer = () => {
       link: "/admin-notice",
     },
     {
-      name: "Resource Link",
+      name: "Resources",
       icon: (
-        <img src={resourceLink} alt="Resource Link" height={20} width={20} />
+        <img src={resourceLink} alt="Resources" height={20} width={20} />
       ),
-      link: "/admin-resourceLink",
+      link: "/admin-resources",
     },
     {
       name: "Settings",

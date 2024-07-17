@@ -85,18 +85,14 @@ const RegularClassList = ({ isLoading, regularClass }) => {
     { headerName: "Meeting Title", field: "meeting_title" },
     { headerName: "Description", field: "meeting_description" },
     { headerName: "Start Date", field: "start_date" },
-    { headerName: "Start Time", field: "start_time" },
     { headerName: "End Date", field: "end_date" },
-    { headerName: "End Time", field: "end_time" },
     { headerName: "Batch Name", field: "select_batch.batch_name" },
   ];
 
-  const rowData = regularClass.map((classItem) => ({
-    ...classItem,
-    start_date: moment(classItem.start_time).format("DD MMM, YYYY"),
-    start_time: moment(classItem.start_time).format("hh:mm A"),
-    end_time: moment(classItem.end_time).format("hh:mm A"),
-    end_date: moment(classItem.end_time).format("DD MMM, YYYY"),
+  const rowData = regularClass.map((item) => ({
+    ...item,
+    start_date: moment(item.start_time).format("lll"),
+    end_date: moment(item.end_time).format("lll"),
   }));
 
   return (

@@ -84,7 +84,9 @@ const UnPaidDashboard = () => {
           );
           setWebinar(
             response?.data?.filter(
-              ({ liveclasstype }) => liveclasstype === "Webinar"
+              ({ liveclasstype, meeting_title }) =>
+                liveclasstype === "Webinar" &&
+                meeting_title.startsWith("Introduction")
             )[0]
           );
           setDemoClass(

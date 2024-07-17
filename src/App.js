@@ -33,8 +33,9 @@ import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTe
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import SLiveClass from "./components/Dashboard/Student/LiveClass/LiveClass";
 import SFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
+import AllWebinar from "./components/Dashboard/Student/Webinar/AllWebinar";
 import SSettings from "./components/Dashboard/Student/Setting/Settings";
-import SResourceLink from "./components/Dashboard/Student/ResourceLink/ResourceLink";
+import SResources from "./components/Dashboard/Student/Resources/Resources";
 
 //-----------------> Admin <-----------------------------------------------------
 
@@ -50,7 +51,7 @@ import FlashCard from "./components/Dashboard/Admin/FlashCard/FlashCard";
 import Gamification from "./components/Dashboard/Admin/Gamification/Gamification";
 import Notice from "./components/Dashboard/Admin/Notice/Notice";
 import AProfile from "./components/Dashboard/Admin/Profile";
-import ResourceLink from "./components/Dashboard/Admin/ResourceLink/ResourceLink";
+import Resources from "./components/Dashboard/Admin/Resources/Resources";
 
 //------------------------> Exam <------------------------------------------
 
@@ -104,7 +105,7 @@ const App = () => {
           <Route path="/admin-flashCard" element={<FlashCard />} />
           <Route path="/admin-gamification" element={<Gamification />} />
           <Route path="/admin-notice" element={<Notice />} />
-          <Route path="/admin-resourceLink" element={<ResourceLink />} />
+          <Route path="/admin-resources" element={<Resources />} />
           <Route path="/admin-profile" element={<AProfile />} />
           <Route path="/admin-exam/:examType" element={<Exam />} />
           <Route path="/admin-exam/:examType/:examForm" element={<Exam />} />
@@ -124,7 +125,8 @@ const App = () => {
           <Route path="/fullLengthTest" element={<FullLengthTest />} />
           <Route path="/studentLiveClasses" element={<SLiveClass />} />
           <Route path="/flashcard" element={<SFlashCard />} />
-          <Route path="/resourceLink" element={<SResourceLink />} />
+          <Route path="/webinars" element={<AllWebinar />} />
+          <Route path="/resources" element={<SResources />} />
           <Route path="/studentSettings" element={<SSettings />} />
 
           <Route path="/courseDetail/:courseId" element={<CourseDetail />} />

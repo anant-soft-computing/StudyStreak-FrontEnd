@@ -54,7 +54,7 @@ const cardList = [
     state: { activeTab: "Webinar" },
   },
   { name: "Progress", icon: progress },
-  { name: "Resource Link", icon: support, link: "/resourceLink" },
+  { name: "Resources", icon: support, link: "/resources" },
 ];
 
 const SDashboard = () => {

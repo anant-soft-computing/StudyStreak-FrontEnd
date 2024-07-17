@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import CounsellingList from "./CounsellingList";
+import List from "../Classes/List";
 import moment from "moment";
 
 const Counselling = ({ selectedDateRange }) => {
@@ -63,9 +63,11 @@ const Counselling = ({ selectedDateRange }) => {
   };
 
   return (
-    <div className="row">
-      <CounsellingList isLoading={isLoading} counselling={counsellingData()} />
-    </div>
+    <List
+      isLoading={isLoading}
+      classes={counsellingData()}
+      message="No Counselling Available Today !! , Please Schedule Your Classes."
+    />
   );
 };
 

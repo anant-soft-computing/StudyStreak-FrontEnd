@@ -84,9 +84,9 @@ const DASideBar = () => {
       link: "/admin-notice",
     },
     {
-      name: "Resource Link",
-      icon: <img src={resource} alt="Resource Link" height={20} width={20} />,
-      link: "/admin-resourceLink",
+      name: "Resources",
+      icon: <img src={resource} alt="Resources" height={20} width={20} />,
+      link: "/admin-resources",
     },
     {
       name: "Settings",

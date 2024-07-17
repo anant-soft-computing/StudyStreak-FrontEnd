@@ -73,28 +73,14 @@ const specificColumns = {
       headerName: "Start Date",
       field: "start_date",
       valueGetter: (params) => {
-        return moment(params.data.start_time).format("DD MMM, YYYY");
-      },
-    },
-    {
-      headerName: "Start Time",
-      field: "start_time",
-      valueGetter: (params) => {
-        return moment(params.data.start_time).format("hh:mm A");
+        return moment(params.data.start_time).format("lll");
       },
     },
     {
       headerName: "End Date",
       field: "end_date",
       valueGetter: (params) => {
-        return moment(params.data.end_time).format("DD MMM, YYYY");
-      },
-    },
-    {
-      headerName: "End Time",
-      field: "end_time",
-      valueGetter: (params) => {
-        return moment(params.data.end_time).format("hh:mm A");
+        return moment(params.data.end_time).format("lll");
       },
     },
     { headerName: "Description", field: "meeting_description" },

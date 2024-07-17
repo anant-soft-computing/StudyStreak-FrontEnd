@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import DASideBar from "../DASideBar/DASideBar";
 import Tab from "../../../UI/Tab";
-import CreateResourceLink from "./CreateResourceLink";
-import ViewResourceLink from "./ViewResourceLink";
+import CreateResources from "./CreateResources";
+import ViewResources from "./ViewResources";
 
-const tabs = [{ name: "View Resource Link" }, { name: "Create Resource Link" }];
+const tabs = [{ name: "View Resources" }, { name: "Create Resources" }];
 
-const ResourceLink = () => {
-  const [activeTab, setActiveTab] = useState("View Resource Link");
+const Resources = () => {
+  const [activeTab, setActiveTab] = useState("View Resources");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -24,7 +24,7 @@ const ResourceLink = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <h4>Resource Link</h4>
+                      <h4>Resources</h4>
                     </div>
                     <div className="row">
                       <Tab
@@ -35,24 +35,24 @@ const ResourceLink = () => {
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "Create Resource Link"
+                            activeTab === "Create Resources"
                               ? "show active"
                               : ""
                           }`}
                         >
                           <div className="row">
-                            <CreateResourceLink setActiveTab={setActiveTab} />
+                            <CreateResources setActiveTab={setActiveTab} />
                           </div>
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "View Resource Link"
+                            activeTab === "View Resources"
                               ? "show active"
                               : ""
                           }`}
                         >
                           <div className="row">
-                            <ViewResourceLink
+                            <ViewResources
                               key={activeTab}
                               activeTab={activeTab}
                             />
@@ -71,4 +71,4 @@ const ResourceLink = () => {
   );
 };
 
-export default ResourceLink;
+export default Resources;

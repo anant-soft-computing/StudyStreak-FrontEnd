@@ -9,7 +9,7 @@ const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 86 },
   {
     headerName: "Batch",
-    field: "select_batch",
+    field: "select_batch.batch_name",
     filter: true,
   },
   { headerName: "Live Class Type", field: "liveclasstype", filter: true },
@@ -22,25 +22,13 @@ const columns = [
     headerName: "Start Date",
     field: "start_time",
     filter: true,
-    valueFormatter: ({ value }) => moment(value).format("YYYY-MM-DD"),
-  },
-  {
-    headerName: "Start Time",
-    field: "start_time",
-    filter: true,
-    valueFormatter: ({ value }) => moment(value).format("HH:mm:ss"),
+    valueFormatter: ({ value }) => moment(value).format("lll"),
   },
   {
     headerName: "End Date",
     field: "end_time",
     filter: true,
-    valueFormatter: ({ value }) => moment(value).format("YYYY-MM-DD"),
-  },
-  {
-    headerName: "End Time",
-    field: "end_time",
-    filter: true,
-    valueFormatter: ({ value }) => moment(value).format("HH:mm:ss"),
+    valueFormatter: ({ value }) => moment(value).format("lll"),
   },
 ];
 

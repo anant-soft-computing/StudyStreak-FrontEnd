@@ -890,8 +890,8 @@ const PracticeLiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         practiceTestSubmit();
-        navigate(`/exam-answer/${examData?.id}`, {
-          state: { examAnswer, bandValue: 0, examData },
+        navigate(`/exam-practice-test-answer/${examId}`, {
+          state: { examForm, fullPaper: fullPaper[0].IELTS.id },
         });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

@@ -57,8 +57,11 @@ const ViewPTAssessment = () => {
                         </div>
                         {assessment?.Writing?.map((item, index) => {
                           return (
-                            <div key={index} className="gptResponse">
-                              ({index + 1}). {item?.ai_assessment}
+                            <div>
+                              <div key={index} className="gptResponse">
+                                ({index + 1}). {item?.ai_assessment}
+                              </div>
+                              <br />
                             </div>
                           );
                         })}
@@ -69,8 +72,11 @@ const ViewPTAssessment = () => {
                         </div>
                         {assessment?.Writing?.map((item, index) => {
                           return (
-                            <div key={index} className="gptResponse">
-                              ({index + 1}). {item?.tutor_assessment}
+                            <div>
+                              <div key={index} className="gptResponse">
+                                ({index + 1}). {item?.tutor_assessment}
+                              </div>
+                              <br />
                             </div>
                           );
                         })}

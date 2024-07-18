@@ -74,10 +74,6 @@ const FullLengthTest = () => {
     window.open(`/fulllength-live-exam/${examId}`, "_blank");
   };
 
-  const reviewFulllengthTest = (examId) => {
-    window.open(`/exam-fulllength-answer/${examId}`, "_blank");
-  };
-
   const columns = [
     {
       headerName: "Take Test",
@@ -89,7 +85,6 @@ const FullLengthTest = () => {
           return (
             <button
               className="take-test"
-              onClick={() => reviewFulllengthTest(params.data.id)}
               style={{ backgroundColor: "green", border: "1px solid green" }}
             >
               Review Test

@@ -77,13 +77,12 @@ const ViewResources = ({ activeTab }) => {
             const resourcesWithNumbers = response.data.flatMap((item, index) =>
               item.documents.map((document, docIndex) => ({
                 no: `${index + 1}. (${docIndex + 1}).`,
-                batch: item.batch?.batch_name,
-                student:
-                  item.student?.user?.first_name +
-                  " " +
-                  item.student?.user?.last_name,
-                course: item.course?.Course_Title,
-                description: document.description,
+                batch: item.batch?.batch_name || "-",
+                student: `${item.student?.user?.first_name || "-"} ${
+                  item.student?.user?.last_name || "-"
+                }`,
+                course: item.course?.Course_Title || "-",
+                description: document.description || "-",
                 document: document.document,
               }))
             );

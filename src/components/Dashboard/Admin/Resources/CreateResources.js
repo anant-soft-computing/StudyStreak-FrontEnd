@@ -4,6 +4,7 @@ import Loading from "../../../UI/Loading";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
+import SelectionBox from "../../../UI/SelectionBox";
 
 const initialResourceData = {
   student: "",
@@ -30,6 +31,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
     initialResourceData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [activeButton, setActiveButton] = useState("student");
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
@@ -111,151 +113,177 @@ const CreateResourceLink = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-xl-12">
-        <div className="row">
-          <div className="col-xl-6 mb-4">
-            <div className="dashboard__select__heading">
-              <span>Student</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createRLData?.student}
-                onChange={(val) => {
-                  dispatchCreateRL({
-                    type: "student",
-                    value: val,
-                  });
-                }}
-                url="/student-list/"
-                objKey={["full_name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6 mb-4">
-            <div className="dashboard__select__heading">
-              <span>Batch</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createRLData?.batch}
-                onChange={(val) => {
-                  dispatchCreateRL({
-                    type: "batch",
-                    value: val,
-                  });
-                }}
-                url="/batchview/"
-                objKey={["batch_name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Course</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createRLData?.course}
-                onChange={(val) => {
-                  dispatchCreateRL({
-                    type: "course",
-                    value: val,
-                  });
-                }}
-                url="/courselistforpackage/"
-                objKey={["Course_Title"]}
-              />
-            </div>
-          </div>
-        </div>
-        {createRLData.documents.map((_, index) => (
-          <div className="row mt-4" key={index}>
-            <div className="col-xl-6">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label htmlFor={`documents-${index}`}>Document</label>
-                  <div className="d-flex align-items-center">
-                    <input
-                      id={`documents-${index}`}
-                      type="file"
-                      className="form-control"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        const updatedDocuments = [...createRLData.documents];
-                        updatedDocuments[index] = file;
-                        dispatchCreateRL({
-                          type: "documents",
-                          value: updatedDocuments,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-6">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label htmlFor={`descriptions-${index}`}>Description</label>
-                  <div className="d-flex align-items-center">
-                    <input
-                      id={`descriptions-${index}`}
-                      type="text"
-                      className="form-control"
-                      placeholder="Description of Resource Link"
-                      value={createRLData.descriptions[index]}
-                      onChange={(e) => {
-                        const updatedDescriptions = [
-                          ...createRLData.descriptions,
-                        ];
-                        updatedDescriptions[index] = e.target.value;
-                        dispatchCreateRL({
-                          type: "descriptions",
-                          value: updatedDescriptions,
-                        });
-                      }}
-                    />
-                    {createRLData.documents.length > 1 && (
-                      <button
-                        className="dashboard__small__btn__2 flash-card__remove__btn"
-                        onClick={() => removeContent(index)}
-                      >
-                        <i className="icofont-ui-delete" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
+    <>
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <button
+          className={`default__button ${
+            activeButton === "student" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("student")}
+        >
+          Student
+        </button>
+        <button
+          className={`default__button ${
+            activeButton === "course" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("course")}
+        >
+          Course
+        </button>
+        <button
+          className={`default__button ${
+            activeButton === "batch" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("batch")}
+        >
+          Batch
+        </button>
+      </div>
+      <div className="row">
         <div className="col-xl-12">
-          <button className="dashboard__small__btn__2" onClick={addContent}>
-            + Description & Document
-          </button>
-        </div>
+          <div className="row">
+            {(activeButton === "student" || activeButton === "course") && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Course</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    url="/courselistforpackage/"
+                    name="Course_Title"
+                    objKey={["Course_Title"]}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            {(activeButton === "student" ||
+              activeButton === "course" ||
+              activeButton === "batch") && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Batch</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    url="/batchview/"
+                    name="batch_name"
+                    objKey={["batch_name"]}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            {activeButton === "student" && (
+              <div className="col-xl-6 mt-3">
+                <div className="dashboard__select__heading">
+                  <span>Student</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SingleSelection
+                    value={createRLData?.student}
+                    onChange={(val) => {
+                      dispatchCreateRL({
+                        type: "student",
+                        value: val,
+                      });
+                    }}
+                    url="/student-list/"
+                    objKey={["full_name"]}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          {createRLData.documents.map((_, index) => (
+            <div className="row mt-4" key={index}>
+              <div className="col-xl-6">
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label htmlFor={`documents-${index}`}>Document</label>
+                    <div className="d-flex align-items-center">
+                      <input
+                        id={`documents-${index}`}
+                        type="file"
+                        className="form-control"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          const updatedDocuments = [...createRLData.documents];
+                          updatedDocuments[index] = file;
+                          dispatchCreateRL({
+                            type: "documents",
+                            value: updatedDocuments,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-6">
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label htmlFor={`descriptions-${index}`}>Description</label>
+                    <div className="d-flex align-items-center">
+                      <input
+                        id={`descriptions-${index}`}
+                        type="text"
+                        className="form-control"
+                        placeholder="Description of Resource Link"
+                        value={createRLData.descriptions[index]}
+                        onChange={(e) => {
+                          const updatedDescriptions = [
+                            ...createRLData.descriptions,
+                          ];
+                          updatedDescriptions[index] = e.target.value;
+                          dispatchCreateRL({
+                            type: "descriptions",
+                            value: updatedDescriptions,
+                          });
+                        }}
+                      />
+                      {createRLData.documents.length > 1 && (
+                        <button
+                          className="dashboard__small__btn__2 flash-card__remove__btn"
+                          onClick={() => removeContent(index)}
+                        >
+                          <i className="icofont-ui-delete" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+          <div className="col-xl-12">
+            <button className="dashboard__small__btn__2" onClick={addContent}>
+              + Description & Document
+            </button>
+          </div>
 
-        <div className="col-xl-12 text-center">
-          <div className="dashboard__form__button text-center mt-4">
-            {formStatus.isError && (
-              <div className="text-danger mb-2">{formStatus.errMsg}</div>
-            )}
-            {formStatus.isSubmitting ? (
-              <Loading color="primary" text="Creating Resource Link..." />
-            ) : (
-              <button
-                className="default__button"
-                onClick={createRL}
-                disabled={formStatus.isSubmitting}
-              >
-                Create Resources
-              </button>
-            )}
+          <div className="col-xl-12 text-center">
+            <div className="dashboard__form__button text-center mt-4">
+              {formStatus.isError && (
+                <div className="text-danger mb-2">{formStatus.errMsg}</div>
+              )}
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Resource Link..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createRL}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Resources
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

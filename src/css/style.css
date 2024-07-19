@@ -16757,10 +16757,19 @@ div.gridarea__wraper {
   z-index: 1;
   border-radius: 10px;
   padding: 12px;
-  background: transparent; 
-  backdrop-filter: blur(5px); 
+  background: transparent;
+  backdrop-filter: blur(5px);
 }
 
 .gridarea__wraper {
   margin-top: 20px;
+}
+
+.select-search-container {
+  --select-search-background: #f0f0f0;
+  --select-search-border: #01579b;
+  --select-search-selected: #89b4fa;
+  --select-search-text: #000000;
+  --select-search-subtle-text: #a6adc8;
+  --select-search-highlight: #01579b36;
 }

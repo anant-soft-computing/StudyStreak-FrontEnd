@@ -78,6 +78,7 @@ import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAsses
 import StudentNavBarRoute from "./layout/StudentNavBarRoute";
 import AdminNavBarRoute from "./layout/AdminNavBarRoute";
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
+import PracticeTestReport from "./components/Report/PracticeTestReport";
 
 const App = () => {
   return (
@@ -154,11 +155,16 @@ const App = () => {
             path="/exam-practice-test-answer/:examId"
             element={<PracticeTestAnswer />}
           />
+          <Route
+            path="/exam-fulllength-answer/:examId"
+            element={<FullLengthTestAnswer />}
+          />
           <Route path="/assessment/:examId" element={<ViewMTAAssessment />} />
           <Route
             path="/practice-assessment/:examId"
             element={<ViewPTAssessment />}
           />
+          <Route path="/praticeTest-report" element={<PracticeTestReport />} />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
 
@@ -185,19 +191,13 @@ const App = () => {
 
           <Route path="*" element={<ErrorPage />} />
         </Route>
-
         <Route
           path="/assignment/:examType/:examId"
           element={<LiveAssignment />}
-        ></Route>
-
+        />
         <Route
           path="/fulllength-live-exam/:examId"
           element={<FullLengthLiveExam />}
-        />
-        <Route
-          path="/exam-fulllength-answer/:examId"
-          element={<FullLengthTestAnswer />}
         />
         <Route path="/live-exam/:examType/:examId" element={<LiveExam />} />
         <Route

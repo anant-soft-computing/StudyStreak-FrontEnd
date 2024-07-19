@@ -109,6 +109,24 @@ const CreateLiveClass = ({ setActiveTab }) => {
         <div className="row">
           <div className="col-xl-6">
             <div className="dashboard__select__heading">
+              <span>Course</span>
+            </div>
+            <div className="dashboard__selector">
+              <SingleSelection
+                value={createLiveClass?.select_course}
+                onChange={(val) => {
+                  dispatchCreateLiveClass({
+                    type: "select_course",
+                    value: val,
+                  });
+                }}
+                url="/courselistforpackage/"
+                objKey={["Course_Title"]}
+              />
+            </div>
+          </div>
+          <div className="col-xl-6">
+            <div className="dashboard__select__heading">
               <span>Batch</span>
             </div>
             <div className="dashboard__selector">
@@ -125,7 +143,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
               />
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 mt-3">
             <div className="dashboard__select__heading">
               <span>Live Class Type</span>
             </div>

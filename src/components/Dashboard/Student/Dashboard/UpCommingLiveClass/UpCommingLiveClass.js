@@ -1,15 +1,18 @@
 import React from "react";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const UpcomingLiveClass = ({ upcommingClass }) => {
   const getUpcomingMeeting = (meetings) => {
-    const now = new Date();
+    const now = moment();
     const sortedMeetings = meetings?.sort(
-      (a, b) => new Date(a.start_time) - new Date(b.start_time)
+      (a, b) => moment(a.start_time) - moment(b.start_time)
     );
-    return (
-      sortedMeetings?.find((meeting) => new Date(meeting.start_time) > now) || null
-    );
+    const upcomingMeeting =
+      sortedMeetings?.find((meeting) =>
+        moment(meeting?.start_time).isAfter(now)
+      ) || null;
+    return upcomingMeeting;
   };
 
   const upcomingMeeting = getUpcomingMeeting(upcommingClass);
@@ -22,8 +25,17 @@ const UpcomingLiveClass = ({ upcommingClass }) => {
       <hr />
       {upcomingMeeting ? (
         <>
-          <div>{upcomingMeeting.meeting_title}</div>
-          <div>{moment(upcomingMeeting.start_time).format("llll")}</div>
+          <div>{upcomingMeeting?.meeting_title}</div>
+          <div className="d-flex justify-content-between align-items-center">
+            <div>{moment(upcomingMeeting?.start_time).format("llll")}</div>
+            <Link
+              to={upcomingMeeting?.join_url}
+              target="_blank"
+              className="text-decoration-none"
+            >
+              <div>Join now {">>"}</div>
+            </Link>
+          </div>
         </>
       ) : (
         <div className="text-center text-danger">No Upcoming Live Class !!</div>

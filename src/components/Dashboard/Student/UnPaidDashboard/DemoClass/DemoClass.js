@@ -12,7 +12,11 @@ const DemoClass = ({ demoClass }) => {
       <div>{demoClass?.meeting_title}</div>
       <div className="d-flex justify-content-between align-items-center">
         <div>{moment(demoClass?.start_time).format("lll")}</div>
-        <Link to={demoClass?.join_url} className="text-decoration-none">
+        <Link
+          to={demoClass?.join_url}
+          target="_blank"
+          className="text-decoration-none"
+        >
           <div>Join now {">>"}</div>
         </Link>
       </div>

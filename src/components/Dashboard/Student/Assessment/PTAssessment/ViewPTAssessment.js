@@ -105,7 +105,7 @@ const ViewPTAssessment = () => {
                               index % 2 === 0 ? "" : "dashboard__table__row"
                             }`}
                           >
-                            <td>{index + 1}</td>
+                            <td>{index + 1}.</td>
                             <td>
                               <audio controls>
                                 <source

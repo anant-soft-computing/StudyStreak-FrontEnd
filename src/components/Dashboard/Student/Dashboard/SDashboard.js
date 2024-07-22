@@ -18,6 +18,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import ScoreCard from "./ScoreCard/ScoreCard";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
+import NextLesson from "./NextLesson/NextLesson";
 
 const cardList = [
   {
@@ -62,6 +63,7 @@ const SDashboard = () => {
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [upcomingSS, setUpcomingSS] = useState([]);
   const [upcommingClass, setUpcommingClass] = useState([]);
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -126,11 +128,6 @@ const SDashboard = () => {
           const { data } = response;
           setCount(data?.batch_package_count);
           setStudentID(data.student_packages[0].student_id);
-          setUpcommingClass(
-            data.student_packages?.map(
-              ({ Live_class_enroll }) => Live_class_enroll
-            )[0]
-          );
         } else {
           setIsLoading(false);
           console.log("error");
@@ -138,6 +135,54 @@ const SDashboard = () => {
       } catch (error) {
         setIsLoading(false);
         console.log("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const regularClassData = [];
+        const speakingClassData = [];
+        for (let i = 0; i < batchIds.length; i++) {
+          const batchId = batchIds[i];
+          const response = await ajaxCall(
+            `/liveclass_listwithid_view/${batchId}/`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
+            },
+            8000
+          );
+          if (response?.status === 200) {
+            regularClassData.push(
+              ...response?.data?.filter(
+                (item) => item?.liveclasstype?.name === "Regular Class"
+              )
+            );
+            speakingClassData.push(
+              ...response?.data?.filter(
+                (item) => item?.liveclasstype?.name === "Speaking-Practice"
+              )
+            );
+            setIsLoading(false);
+            setUpcomingSS(speakingClassData);
+            setUpcommingClass(regularClassData);
+          } else {
+            setIsLoading(false);
+          }
+        }
+      } catch (error) {
+        setIsLoading(false);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -177,8 +222,11 @@ const SDashboard = () => {
                       </div>
                     </div>
                     <div className="row">
-                      {cardList.map(({ name, icon, link, state }) => (
-                        <div className="col-xl-4 column__custom__class">
+                      {cardList.map(({ name, icon, link, state }, index) => (
+                        <div
+                          key={index}
+                          className="col-xl-4 column__custom__class"
+                        >
                           <div className="gridarea__wraper text-center card-background">
                             <div
                               className="gridarea__content p-2 m-2"
@@ -242,7 +290,8 @@ const SDashboard = () => {
                 <div className="col-xl-4 col-lg-4">
                   <LeaderBoard studentID={studentID} />
                   <UpcomingLiveClass upcommingClass={upcommingClass} />
-                  <SpeakingSlots speakingSlots={upcommingClass} />
+                  <NextLesson />
+                  <SpeakingSlots upcomingSS={upcomingSS} />
                 </div>
               </div>
             </div>

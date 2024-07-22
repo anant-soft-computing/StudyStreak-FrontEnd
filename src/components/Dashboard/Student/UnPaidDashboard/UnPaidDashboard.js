@@ -117,8 +117,11 @@ const UnPaidDashboard = () => {
                   </div>
                   <div className="relative-container ">
                     <div className="row p-3">
-                      {cardList.map(({ name, icon, link }) => (
-                        <div className="col-xl-4 column__custom__class">
+                      {cardList.map(({ name, icon, link }, index) => (
+                        <div
+                          key={index}
+                          className="col-xl-4 column__custom__class"
+                        >
                           <div className="gridarea__wraper text-center card-background">
                             <div
                               className="gridarea__content p-2 m-2"

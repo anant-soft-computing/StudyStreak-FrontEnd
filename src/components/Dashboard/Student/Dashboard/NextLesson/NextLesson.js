@@ -25,6 +25,7 @@ const NextLesson = () => {
         if (response?.status === 200) {
           setLessonData(response?.data);
         } else {
+          setLessonData(0);
           console.log("error");
         }
       } catch (error) {
@@ -39,7 +40,7 @@ const NextLesson = () => {
         <h6>Next Lesson Due</h6>
       </div>
       <hr />
-      {lessonData ? (
+      {lessonData  ? (
         <>
           <div>{lessonData?.lesson?.Lesson_Title}</div>
           <div className="d-flex justify-content-between align-items-center">

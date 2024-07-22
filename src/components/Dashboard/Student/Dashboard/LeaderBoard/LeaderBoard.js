@@ -49,11 +49,11 @@ const LeaderBoard = ({ studentID }) => {
           </thead>
           <tbody>
             {tableData?.map((item, index) => {
-              const { id, student_name, total_points, student_id } = item;
+              const { student_name, total_points, student_id } = item;
               const rowClass = index % 2 === 0 ? "" : "dashboard__table__row";
               const textClass = studentID === student_id ? "text-success" : "";
               return (
-                <tr key={id} className={rowClass}>
+                <tr key={index} className={rowClass}>
                   <td className={textClass}>{index + 1}.</td>
                   <td className={textClass}>{student_name}</td>
                   <td className={textClass}>{total_points} pts</td>

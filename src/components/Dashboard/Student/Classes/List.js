@@ -13,16 +13,13 @@ const List = ({ isLoading, classes, message }) => {
     return () => clearInterval(interval);
   }, []);
 
+   // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
     const { join_url, start_time } = params.data;
     const now = currentTime;
-    const todayDate = now.format("YYYY-MM-DD");
-    const classStartTime = moment(
-      `${todayDate} ${start_time}`,
-      "YYYY-MM-DD hh:mm A"
-    );
+    const classStartTime = moment(start_time)
     const timeDifference = classStartTime.diff(now, "minutes");
-    const isButtonEnabled = timeDifference <= 5 && timeDifference >= 0;
+    const isButtonEnabled = timeDifference <= 5 && timeDifference >= -5;
 
     return (
       <button

@@ -58,26 +58,26 @@ const TestReport = ({ reportData, testType, isLoading }) => {
   }));
 
   return (
-    <>
+    <div>
       {isLoading ? (
         <Loading text="Loading...." color="primary" />
       ) : reportData.length > 0 ? (
-        <>
-          <div style={{ width: "540px" }}>
+        <div className="d-flex flex-wrap gap-5">
+          <div>
             <Table rowData={rowData} columnDefs={columns} />
           </div>
-          {reportParams &&  (
+          {reportParams && (
             <Report
               examId={reportParams?.examId}
               paperId={reportParams?.paperId}
               testType={reportParams?.testType}
             />
           )}
-        </>
+        </div>
       ) : (
         <h5 className="text-center text-danger">{`No ${testType} Report Available !!`}</h5>
       )}
-    </>
+    </div>
   );
 };
 

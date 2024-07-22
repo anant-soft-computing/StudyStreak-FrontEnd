@@ -101,7 +101,7 @@ const ScoreCard = () => {
               </div>
             ) : (
               <h6 className="text-center text-danger">
-                Not Given Any Full Length Test !!
+                Not Given Any Latest Full Length Test !!
               </h6>
             )}
           </div>

@@ -36,12 +36,12 @@ const FlashCard = () => {
         );
         if (response?.status === 200) {
           setFlashCardList(
-            response?.data.filter((item) =>
-              courseIds?.some((data) => data.id === item.course.id)
+            response?.data?.filter((item) =>
+              courseIds?.some((data) => data?.id === item?.course?.id)
             )
           );
 
-          const initialFlipState = response.data.reduce((acc, curr) => {
+          const initialFlipState = response?.data?.reduce((acc, curr) => {
             acc[curr.id] = false;
             return acc;
           }, {});

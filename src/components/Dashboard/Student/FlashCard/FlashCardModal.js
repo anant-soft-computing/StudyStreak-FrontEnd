@@ -74,7 +74,7 @@ const FlashCardModal = ({
 
   return (
     <SmallModal
-      size="md"
+      size="lg"
       centered
       isOpen={show}
       onClose={onHide}

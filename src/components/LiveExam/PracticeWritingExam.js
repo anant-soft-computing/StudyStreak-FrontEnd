@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -447,7 +447,7 @@ const PracticeLiveExam = () => {
         </div>
         {isModalOpen && (
           <SmallModal
-            size="md"
+            size="lg"
             centered
             isOpen={isModalOpen}
             footer={

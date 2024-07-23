@@ -28,7 +28,11 @@ const SpeakingSlots = ({ upcomingSS }) => {
           <div>{upcomingSSClass?.meeting_title}</div>
           <div className="d-flex justify-content-between align-items-center">
             <div>{moment(upcomingSSClass?.start_time).format("llll")}</div>
-            <Link to="/studentLiveClasses" className="text-decoration-none">
+            <Link
+              to={"/studentLiveClasses"}
+              state={{ activeTab: "Speaking Practice" }}
+              className="text-decoration-none"
+            >
               <div>View all slots {">>"}</div>
             </Link>
           </div>

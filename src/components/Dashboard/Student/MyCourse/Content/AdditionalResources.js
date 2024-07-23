@@ -56,15 +56,11 @@ const AdditionalResources = ({ courseId }) => {
   ];
 
   return (
-    <div className="col-xl-12 col-lg-9 col-md-12">
-      <div className="dashboard__content__wraper common-background-color-across-app">
-        <div className="dashboard__section__title ">
-          <h4>Additional Resources</h4>
-        </div>
-        <div className="row">
-          <Table rowData={additionalResource} columnDefs={columns} />
-        </div>
+    <div>
+      <div className="dashboard__section__title">
+        <h4>Additional Resources</h4>
       </div>
+      <Table rowData={additionalResource} columnDefs={columns} />
     </div>
   );
 };

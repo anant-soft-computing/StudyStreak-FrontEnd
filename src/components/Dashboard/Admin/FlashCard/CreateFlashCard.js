@@ -1,6 +1,6 @@
 import React, { useReducer, useState } from "react";
 import { useSelector } from "react-redux";
-import SingleSelection from "../../../UI/SingleSelect";
+import SelectionBox from "../../../UI/SelectionBox";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 import Loading from "../../../UI/Loading";
@@ -125,16 +125,11 @@ const CreateFlashCard = ({ setActiveTab }) => {
               <span>Course</span>
             </div>
             <div className="dashboard__selector">
-              <SingleSelection
-                value={flashCardData?.course}
-                onChange={(val) => {
-                  dispatchFlashCardData({
-                    type: "course",
-                    value: val,
-                  });
-                }}
+              <SelectionBox
                 url="/courselistforpackage/"
+                name="Course_Title"
                 objKey={["Course_Title"]}
+                multiple={true}
               />
             </div>
           </div>

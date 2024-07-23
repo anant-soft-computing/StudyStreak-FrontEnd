@@ -176,30 +176,6 @@ const LiveAssignment = () => {
     }
   };
 
-  const displayLeftContainer = (passage, image) => {
-    // Replace this with your actual implementation
-    return (
-      <>
-        {image && (
-          <div className="text-center">
-            <img
-              className="mb-2"
-              src={image}
-              alt="Study Streak"
-              height={250}
-              width={250}
-            />
-          </div>
-        )}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: passage,
-          }}
-        ></div>
-      </>
-    );
-  };
-
   const handleAnswerLinking = useCallback((e, questionId, next) => {
     const { value, id, name, checked } = e.target;
 
@@ -455,12 +431,6 @@ const LiveAssignment = () => {
       <div className="lv-container">
         {/* Main Container */}
         <div className="lv-main-container">
-          {/* Left Container */}
-          {examData?.exam_type === "General" && (
-            <div className="lv-left-container">
-              {displayLeftContainer(examData?.passage, examData?.passage_image)}
-            </div>
-          )}
           {/* Right Container */}
           <div
             className="lv-right-container"

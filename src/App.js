@@ -184,10 +184,7 @@ const App = () => {
             path="/terms-of-service"
             element={<ProtectedRoute element={TermsAndService} />}
           />
-          <Route
-            path="/courses"
-            element={<ProtectedRoute element={Courses} />}
-          />
+          <Route path="/courses" element={<Courses />} />
 
           <Route path="*" element={<ErrorPage />} />
         </Route>

@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import Table from "../../../UI/Table";
 
 const Assignment = ({ activeLesson }) => {
-  const handleClick = (id) => {
-    window.open(`/assignment/General/${id}`, "_blank");
-  };
+  const navigate = useNavigate();
 
   const assignments = activeLesson?.filter(
     (exam) =>
@@ -12,41 +11,33 @@ const Assignment = ({ activeLesson }) => {
       exam.exam_category === "GENERAL"
   );
 
+  const viewAssignment = (params) => {
+    return (
+      <button
+        className="take-test"
+        onClick={() => navigate(`/assignment/General/${params.data.id}`)}
+      >
+        View
+      </button>
+    );
+  };
+
+  const columns = [
+    {
+      headerName: "View Assignment",
+      field: "button",
+      cellRenderer: viewAssignment,
+      filter: true,
+      width: 260,
+    },
+    { headerName: "Name", field: "exam_name", filter: true, width: 350 },
+    { headerName: "No Of Questions", field: "no_of_questions", filter: true, width: 280 },
+  ];
+
   return assignments && assignments.length > 0 ? (
-    <>
-      <div className="lesson__content__wrap">
-        <h3>Assignment</h3>
-      </div>
-      <div className="row">
-        {assignments.map((exam, index) => (
-          <div className="col-lg-4 col-md-6 col-12 card__title" key={index}>
-            <div className="gridarea__wraper gridarea__wraper__2 zoom__meeting__grid global-neomorphism-card-styling d-flex flex-column justify-content-between">
-              <div className="gridarea__content">
-                <div className="gridarea__heading">
-                  <h3 className="text-center">
-                    <Link to={`/live-exam/${exam.id}`} target="_blank">
-                      {exam.exam_name}
-                    </Link>
-                  </h3>
-                </div>
-              </div>
-              <div>
-                <div className="d-flex justify-content-center">
-                  <button
-                    className="default__button mb-2"
-                    onClick={() => handleClick(exam.id)}
-                  >
-                    Take Test
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </>
+    <Table rowData={assignments} columnDefs={columns} />
   ) : (
-    <h5 className="text-danger">Assignment Not Found !!</h5>
+    <h5 className="text-center text-danger">Assignment Not Found !!</h5>
   );
 };
 

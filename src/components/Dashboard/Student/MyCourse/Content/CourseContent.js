@@ -23,7 +23,7 @@ const CourseContent = () => {
                       <Tab tabs={tabs} activeTab="Downloads" />
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
-                          className="tab-pane fade active show"
+                          className="tab-pane fade active show d-flex flex-wrap gap-4 align-items-center"
                           role="tabpanel"
                           aria-labelledby="projects__one"
                         >

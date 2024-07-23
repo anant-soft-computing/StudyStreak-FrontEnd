@@ -173,12 +173,12 @@ const SDashboard = () => {
               )
             );
             setIsLoading(false);
-            setUpcomingSS(speakingClassData);
-            setUpcommingClass(regularClassData);
           } else {
             setIsLoading(false);
           }
         }
+        setUpcomingSS(speakingClassData);
+        setUpcommingClass(regularClassData);
       } catch (error) {
         setIsLoading(false);
       } finally {

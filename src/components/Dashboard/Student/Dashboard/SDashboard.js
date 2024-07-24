@@ -63,85 +63,75 @@ const SDashboard = () => {
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [courseList, setCourseList] = useState([]);
   const [upcomingSS, setUpcomingSS] = useState([]);
   const [upcommingClass, setUpcommingClass] = useState([]);
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON.parse(localStorage.getItem("courses"));
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
   const studentBatch = batchData?.filter((item) =>
     batchIds?.includes(item?.id)
   );
 
-  useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/batchview/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
+  const courses = courseList.filter((item) =>
+    courseIds?.some((data) => data?.id === item?.id)
+  );
 
-        if (response?.status === 200) {
-          setIsLoading(false);
-          setBatchData(response?.data);
-        } else {
-          setIsLoading(false);
-          console.log("error");
-        }
-      } catch (error) {
-        setIsLoading(false);
-        console.log("error", error);
+  const getDaysRemaining = (endDate) => {
+    const end = moment(endDate);
+    const today = moment();
+    return end.diff(today, "days");
+  };
+
+  const fetchData = async (url, dataes) => {
+    setIsLoading(true);
+    try {
+      const response = await ajaxCall(
+        url,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+
+      if (response?.status === 200) {
+        dataes(response?.data);
+      } else {
+        console.log("error");
       }
-    })();
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData("/batchview/", setBatchData);
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/userwisepackagewithcourseid/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setIsLoading(false);
-          const { data } = response;
-          setCount(data?.batch_package_count);
-          setStudentID(data.student_packages[0].student_id);
-        } else {
-          setIsLoading(false);
-          console.log("error");
-        }
-      } catch (error) {
-        setIsLoading(false);
-        console.log("error", error);
-      }
-    })();
+    fetchData("/courselistview/", setCourseList);
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
+    fetchData("/userwisepackagewithcourseid/", (data) => {
+      setCount(data?.batch_package_count);
+      setStudentID(data?.student_packages[0]?.student_id);
+    });
+  }, []);
+
+  useEffect(() => {
+    const fetchBatchData = async () => {
+      setIsLoading(true);
       try {
         const regularClassData = [];
         const speakingClassData = [];
@@ -172,19 +162,20 @@ const SDashboard = () => {
                 (item) => item?.liveclasstype?.name === "Speaking-Practice"
               )
             );
-            setIsLoading(false);
           } else {
-            setIsLoading(false);
+            console.log("error");
           }
         }
         setUpcomingSS(speakingClassData);
         setUpcommingClass(regularClassData);
       } catch (error) {
-        setIsLoading(false);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }
-    })();
+    };
+
+    fetchBatchData();
   }, []);
 
   return isLoading ? (
@@ -205,7 +196,7 @@ const SDashboard = () => {
                       <h3>Welcome, {userData?.username}</h3>
                     </div>
                     <h5>
-                      Batch Name :-{" "}
+                      Batch :{" "}
                       {studentBatch.map((batch) => (
                         <span key={batch.id}>
                           {batch.batch_name} :{" "}
@@ -288,6 +279,21 @@ const SDashboard = () => {
                   </div>
                 </div>
                 <div className="col-xl-4 col-lg-4">
+                  <h5>
+                    Course :
+                    {courses?.length > 0 &&
+                      courses.map((course) => {
+                        const daysRemaining = getDaysRemaining(
+                          course.EnrollmentEndDate
+                        );
+                        return (
+                          <span key={course?.id} className="text-danger">
+                            {" "}
+                            {course.Course_Title} : {daysRemaining} days Left |
+                          </span>
+                        );
+                      })}
+                  </h5>
                   <LeaderBoard studentID={studentID} />
                   <UpcomingLiveClass upcommingClass={upcommingClass} />
                   <NextLesson />

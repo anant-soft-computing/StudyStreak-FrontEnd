@@ -2,16 +2,27 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import List from "../Classes/List";
 import moment from "moment";
+import { Tab } from "bootstrap";
+import RecordedClass from "../Classes/RecordedClass";
+
+const tabs = [{ name: "Counselling" }, { name: "Recorded Class" }];
 
 const Counselling = ({ selectedDateRange }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("Counselling");
+  const [uuid, setUuid] = useState([]);
   const [counselling, setCounselling] = useState([]);
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   useEffect(() => {
     setIsLoading(true);
     (async () => {
       try {
+        const uuidData = [];
         const counsellingData = [];
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
@@ -33,15 +44,20 @@ const Counselling = ({ selectedDateRange }) => {
             const data = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Counselling"
             );
+            const id = data?.map((item) => item?.other_fields?.id);
+            uuidData.push(...id);
             counsellingData.push(...data);
             setIsLoading(false);
           } else {
+            console.log("error");
             setIsLoading(false);
           }
         }
+        setUuid(uuidData);
         setCounselling(counsellingData);
       } catch (error) {
         setIsLoading(false);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }
@@ -63,11 +79,41 @@ const Counselling = ({ selectedDateRange }) => {
   };
 
   return (
-    <List
-      isLoading={isLoading}
-      classes={counsellingData()}
-      message="No Counselling Available Today !! , Please Schedule Your Classes."
-    />
+    <div className="row">
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Counselling" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <List
+              isLoading={isLoading}
+              classes={counsellingData()}
+              message="No Counselling Available Today !! , Please Schedule Your Classes."
+            />
+          </div>
+        </div>
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Recorded Class" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <RecordedClass
+              uuid={uuid}
+              classes={counsellingData()}
+              activeTab={activeTab}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 import Loading from "../../../UI/Loading";
 
 const initialFlashCardData = {
-  course: "",
+  course: [],
+  courseIds: [],
   title: "",
   description: "",
-  set_priority: "",
   flash_card_items: [{ front: "", back: "" }],
 };
 
@@ -26,10 +26,6 @@ const validateForm = (flashCardData, setFormError) => {
   }
   if (!flashCardData.description) {
     setFormError("Description is Required");
-    return false;
-  }
-  if (!flashCardData.set_priority) {
-    setFormError("Proiority is Required");
     return false;
   }
   return true;
@@ -84,6 +80,12 @@ const CreateFlashCard = ({ setActiveTab }) => {
     e.preventDefault();
     if (!validateForm(flashCardData, setFormError)) return;
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
+    const data = {
+      course: flashCardData.course.map((item) => item.id),
+      title: flashCardData.title,
+      description: flashCardData.description,
+      flash_card_items: flashCardData.flash_card_items,
+    };
     try {
       const response = await ajaxCall(
         "/gamification/flashcard/",
@@ -94,7 +96,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
             Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",
-          body: JSON.stringify(flashCardData),
+          body: JSON.stringify(data),
         },
         8000
       );
@@ -116,6 +118,14 @@ const CreateFlashCard = ({ setActiveTab }) => {
     }
   };
 
+  const addedSelectVal = (field, proField, isSingle, val) => {
+    dispatchFlashCardData({ type: field, value: val });
+    dispatchFlashCardData({
+      type: proField,
+      value: val.map((item) => item.id),
+    });
+  };
+
   return (
     <div className="row">
       <div className="col-xl-12">
@@ -126,6 +136,13 @@ const CreateFlashCard = ({ setActiveTab }) => {
             </div>
             <div className="dashboard__selector">
               <SelectionBox
+                value={flashCardData.course}
+                onSelect={addedSelectVal.bind(
+                  null,
+                  "course",
+                  "courseIds",
+                  false
+                )}
                 url="/courselistforpackage/"
                 name="Course_Title"
                 objKey={["Course_Title"]}
@@ -154,24 +171,6 @@ const CreateFlashCard = ({ setActiveTab }) => {
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label>Priority</label>
-                <input
-                  type="number"
-                  placeholder="Flash Card Priority"
-                  value={flashCardData?.set_priority}
-                  onChange={(e) =>
-                    dispatchFlashCardData({
-                      type: "set_priority",
-                      value: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
                 <label>Description</label>
                 <input
                   type="text"
@@ -187,74 +186,76 @@ const CreateFlashCard = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          {flashCardData.flash_card_items.map((item, index) => (
-            <>
-              <div className="col-xl-6" key={index}>
-                <div className="dashboard__form__wraper">
-                  <div className="dashboard__form__input">
-                    <label htmlFor={`front-${index}`}>Front</label>
-                    <div className="d-flex align-items-center">
-                      <textarea
-                        id={`front-${index}`}
-                        cols="30"
-                        rows="5"
-                        type="text"
-                        className="form-control"
-                        placeholder="Front of Flash Card"
-                        value={item.front}
-                        onChange={(e) => {
-                          const updatedItems = [
-                            ...flashCardData.flash_card_items,
-                          ];
-                          updatedItems[index].front = e.target.value;
-                          dispatchFlashCardData({
-                            type: "flash_card_items",
-                            value: updatedItems,
-                          });
-                        }}
-                      />
+          <div className="row">
+            {flashCardData.flash_card_items.map((item, index) => (
+              <>
+                <div className="col-xl-6" key={index}>
+                  <div className="dashboard__form__wraper">
+                    <div className="dashboard__form__input">
+                      <label htmlFor={`front-${index}`}>Front</label>
+                      <div className="d-flex align-items-center">
+                        <textarea
+                          id={`front-${index}`}
+                          cols="30"
+                          rows="5"
+                          type="text"
+                          className="form-control"
+                          placeholder="Front of Flash Card"
+                          value={item.front}
+                          onChange={(e) => {
+                            const updatedItems = [
+                              ...flashCardData.flash_card_items,
+                            ];
+                            updatedItems[index].front = e.target.value;
+                            dispatchFlashCardData({
+                              type: "flash_card_items",
+                              value: updatedItems,
+                            });
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="col-xl-6" key={index}>
-                <div className="dashboard__form__wraper">
-                  <div className="dashboard__form__input">
-                    <label htmlFor={`back-${index}`}>Back</label>
-                    <div className="d-flex align-items-center">
-                      <textarea
-                        id={`back-${index}`}
-                        cols="30"
-                        rows="5"
-                        type="text"
-                        className="form-control"
-                        placeholder="Back of Flash Card"
-                        value={item.back}
-                        onChange={(e) => {
-                          const updatedItems = [
-                            ...flashCardData.flash_card_items,
-                          ];
-                          updatedItems[index].back = e.target.value;
-                          dispatchFlashCardData({
-                            type: "flash_card_items",
-                            value: updatedItems,
-                          });
-                        }}
-                      />
-                      {flashCardData.flash_card_items.length > 1 && (
-                        <button
-                          className="dashboard__small__btn__2 flash-card__remove__btn"
-                          onClick={() => removeContent(index)}
-                        >
-                          <i className="icofont-ui-delete" />
-                        </button>
-                      )}
+                <div className="col-xl-6" key={index}>
+                  <div className="dashboard__form__wraper">
+                    <div className="dashboard__form__input">
+                      <label htmlFor={`back-${index}`}>Back</label>
+                      <div className="d-flex align-items-center">
+                        <textarea
+                          id={`back-${index}`}
+                          cols="30"
+                          rows="5"
+                          type="text"
+                          className="form-control"
+                          placeholder="Back of Flash Card"
+                          value={item.back}
+                          onChange={(e) => {
+                            const updatedItems = [
+                              ...flashCardData.flash_card_items,
+                            ];
+                            updatedItems[index].back = e.target.value;
+                            dispatchFlashCardData({
+                              type: "flash_card_items",
+                              value: updatedItems,
+                            });
+                          }}
+                        />
+                        {flashCardData.flash_card_items.length > 1 && (
+                          <button
+                            className="dashboard__small__btn__2 flash-card__remove__btn"
+                            onClick={() => removeContent(index)}
+                          >
+                            <i className="icofont-ui-delete" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </>
-          ))}
+              </>
+            ))}
+          </div>
           <div className="col-xl-12">
             <button className="dashboard__small__btn__2" onClick={addContent}>
               + Front & Back

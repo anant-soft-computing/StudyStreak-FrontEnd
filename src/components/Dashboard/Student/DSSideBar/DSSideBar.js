@@ -14,6 +14,7 @@ import resources from "../../../../img/icon/support.svg";
 import webinars from "../../../../img/icon/webinar.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
+import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
 
 const DSSidebar = () => {
   const [count, setCount] = useState({});
@@ -79,9 +80,7 @@ const DSSidebar = () => {
     },
     {
       name: "Resources",
-      icon: (
-        <img src={resources} alt="Resources" height={20} width={20} />
-      ),
+      icon: <img src={resources} alt="Resources" height={20} width={20} />,
       link: "/resources",
     },
     {
@@ -216,6 +215,7 @@ const DSSidebar = () => {
                 </li>
               ))}
             </ul>
+            <NoticeBoard />
           </div>
         </div>
       </div>

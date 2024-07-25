@@ -4,12 +4,12 @@ import Loading from "../../../UI/Loading";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
-import SelectionBox from "../../../UI/SelectionBox";
 
 const initialResourceData = {
   student: "",
   batch: "",
   course: "",
+  link: "",
   documents: [""],
   descriptions: [""],
 };
@@ -75,6 +75,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
       formData.append("student", createRLData.student);
       formData.append("batch", createRLData.batch);
       formData.append("course", createRLData.course);
+      formData.append("link", createRLData.link);
 
       createRLData.documents.forEach((document, index) => {
         formData.append(`documents[${index}]`, document);
@@ -143,40 +144,8 @@ const CreateResourceLink = ({ setActiveTab }) => {
       <div className="row">
         <div className="col-xl-12">
           <div className="row">
-            {(activeButton === "student" || activeButton === "course") && (
-              <div className="col-xl-6">
-                <div className="dashboard__select__heading">
-                  <span>Course</span>
-                </div>
-                <div className="dashboard__selector">
-                  <SelectionBox
-                    url="/courselistforpackage/"
-                    name="Course_Title"
-                    objKey={["Course_Title"]}
-                    multiple={true}
-                  />
-                </div>
-              </div>
-            )}
-            {(activeButton === "student" ||
-              activeButton === "course" ||
-              activeButton === "batch") && (
-              <div className="col-xl-6">
-                <div className="dashboard__select__heading">
-                  <span>Batch</span>
-                </div>
-                <div className="dashboard__selector">
-                  <SelectionBox
-                    url="/batchview/"
-                    name="batch_name"
-                    objKey={["batch_name"]}
-                    multiple={true}
-                  />
-                </div>
-              </div>
-            )}
             {activeButton === "student" && (
-              <div className="col-xl-6 mt-3">
+              <div className="col-xl-6">
                 <div className="dashboard__select__heading">
                   <span>Student</span>
                 </div>
@@ -195,9 +164,67 @@ const CreateResourceLink = ({ setActiveTab }) => {
                 </div>
               </div>
             )}
+            {activeButton === "course" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Course</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SingleSelection
+                    value={createRLData?.course}
+                    onChange={(val) => {
+                      dispatchCreateRL({
+                        type: "course",
+                        value: val,
+                      });
+                    }}
+                    url="/courselistforpackage/"
+                    objKey={["Course_Title"]}
+                  />
+                </div>
+              </div>
+            )}
+            {activeButton === "batch" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Batch</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SingleSelection
+                    value={createRLData?.batch}
+                    onChange={(val) => {
+                      dispatchCreateRL({
+                        type: "batch",
+                        value: val,
+                      });
+                    }}
+                    url="/batchview/"
+                    objKey={["batch_name"]}
+                  />
+                </div>
+              </div>
+            )}
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Link</label>
+                  <input
+                    type="text"
+                    placeholder="Link"
+                    value={createRLData?.link}
+                    onChange={(e) => {
+                      dispatchCreateRL({
+                        type: "link",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           {createRLData.documents.map((_, index) => (
-            <div className="row mt-4" key={index}>
+            <div className="row" key={index}>
               <div className="col-xl-6">
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">

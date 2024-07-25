@@ -8,10 +8,18 @@ const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
 
-  const doDownload = (params) => {
+  const doDocument = (params) => {
     return (
       <button className="take-test" onClick={() => window.open(params.value)}>
         <i className="icofont-download" /> Download
+      </button>
+    );
+  };
+
+  const doVideoAndLink = (params) => {
+    return (
+      <button className="take-test" onClick={() => window.open(params.value)}>
+        View
       </button>
     );
   };
@@ -48,10 +56,17 @@ const Resources = () => {
       filter: true,
     },
     {
-      headerName: "Download",
+      headerName: "Video / Link",
+      field: "link",
+      resizable: true,
+      filter: true,
+      cellRenderer: doVideoAndLink,
+    },
+    {
+      headerName: "Documents",
       field: "document",
       resizable: true,
-      cellRenderer: doDownload,
+      cellRenderer: doDocument,
     },
   ];
 
@@ -84,6 +99,7 @@ const Resources = () => {
               course: item.course?.Course_Title || "-",
               description: document.description || "-",
               document: document.document,
+              link: item.link || "-",
             }))
           );
           setIsLoading(false);

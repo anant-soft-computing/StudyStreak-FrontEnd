@@ -6,6 +6,7 @@ import ajaxCall from "../../../../../helpers/ajaxCall";
 const ViewPTAssessment = () => {
   const { examId } = useParams();
   const { examType } = useLocation().state || {};
+  const [band, setBand] = useState(0);
   const [examName, setExamName] = useState("");
   const [assessment, setAssessment] = useState([]);
 
@@ -27,6 +28,12 @@ const ViewPTAssessment = () => {
           8000
         );
         if (response.status === 200) {
+          const studentAnswers = response?.data?.student_answers[examType];
+          const totalBand = studentAnswers?.reduce(
+            (sum, item) => sum + parseFloat(item.band),
+            0
+          );
+          setBand(totalBand / studentAnswers?.length);
           setExamName(response?.data?.name);
           setAssessment(response?.data?.student_answers);
         } else {
@@ -36,7 +43,7 @@ const ViewPTAssessment = () => {
         console.log("error", error);
       }
     })();
-  }, [examId]);
+  }, [examId, examType]);
 
   return (
     <div className="body__wrapper">
@@ -49,6 +56,7 @@ const ViewPTAssessment = () => {
                   <h4 className="sidebar__title">
                     Assessment For : {examName}
                   </h4>
+                  <h4 className="sidebar__title">Band : {band}</h4>
                   {examType === "Writing" && (
                     <div>
                       <div className="writing__exam">

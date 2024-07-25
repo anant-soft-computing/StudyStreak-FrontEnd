@@ -8,8 +8,6 @@ const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 110 },
   { headerName: "Name", field: "title", filter: true },
   { headerName: "Description", field: "description", filter: true },
-  { headerName: "Priority", field: "set_priority", filter: true },
-  { headerName: "Course", field: "course.Course_Title", filter: true },
   { headerName: "Items", field: "flash_card_items.length", filter: true },
 ];
 

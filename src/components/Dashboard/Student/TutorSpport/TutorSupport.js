@@ -2,16 +2,27 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import List from "../Classes/List";
+import Tab from "../../../UI/Tab";
+import RecordedClass from "../Classes/RecordedClass";
+
+const tabs = [{ name: "Tutor Support" }, { name: "Recorded Class" }];
 
 const TutorSupport = ({ selectedDateRange }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("Tutor Support");
+  const [uuid, setUuid] = useState([]);
   const [tutorSupportClass, setTutorSupportClass] = useState([]);
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
 
   useEffect(() => {
     setIsLoading(true);
     (async () => {
       try {
+        const uuidData = [];
         const tutorSupportClassData = [];
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
@@ -33,15 +44,20 @@ const TutorSupport = ({ selectedDateRange }) => {
             const data = response?.data?.filter(
               (item) => item?.liveclasstype?.name === "Tutor Support"
             );
+            const id = data?.map((item) => item?.other_fields?.id);
+            uuidData.push(...id);
             tutorSupportClassData.push(...data);
             setIsLoading(false);
           } else {
+            console.log("error");
             setIsLoading(false);
           }
         }
+        setUuid(uuidData);
         setTutorSupportClass(tutorSupportClassData);
       } catch (error) {
         setIsLoading(false);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }
@@ -63,11 +79,41 @@ const TutorSupport = ({ selectedDateRange }) => {
   };
 
   return (
-    <List
-      isLoading={isLoading}
-      classes={tutorData()}
-      message=" No Tuotor Support Classes Available Today !! , Please Schedule Your Classes."
-    />
+    <div className="row">
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Tutor Support" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <List
+              isLoading={isLoading}
+              classes={tutorData()}
+              message="No Tuotor Support Classes Available Today !! , Please Schedule Your Classes."
+            />
+          </div>
+        </div>
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Recorded Class" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <RecordedClass
+              uuid={uuid}
+              classes={tutorData()}
+              activeTab={activeTab}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

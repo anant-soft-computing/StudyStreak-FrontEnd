@@ -37,7 +37,13 @@ const PracticeTestAnswer = () => {
         );
         if (response.status === 200) {
           if (examForm === "Writing") {
-            setWritingAnswers(response?.data?.student_answers?.Writing);
+            const studentAnswers = response?.data?.student_answers?.Writing;
+            const totalBand = studentAnswers?.reduce(
+              (sum, item) => sum + parseFloat(item.band),
+              0
+            );
+            setBand(totalBand / studentAnswers?.length);
+            setWritingAnswers(studentAnswers);
           }
           setExamName(response?.data?.name);
           let studentAnswers;
@@ -77,8 +83,7 @@ const PracticeTestAnswer = () => {
           let correct = 0;
           let incorrect = 0;
           studentAnswers?.forEach((item, index) => {
-            const correctAnswerText =
-              correctAnswer[index]?.answer_text?.trim();
+            const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
             const studentAnswerText = item.answer_text?.trim();
             if (correctAnswerText?.includes(" OR ")) {
               const correctOptions = correctAnswerText
@@ -135,6 +140,9 @@ const PracticeTestAnswer = () => {
               <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
+                  {examForm === "Writing" && (
+                    <h4 className="sidebar__title">Band : {band}</h4>
+                  )}
                   {examForm !== "Writing" && (
                     <AnswerCard
                       totalQuestions={correctAnswer.length}

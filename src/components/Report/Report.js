@@ -12,7 +12,7 @@ const Report = ({ paperId, testType }) => {
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
   const [writingAnswers, setWritingAnswers] = useState([]);
-  const [assessment, setAssessment] = useState([]);
+  const [speakingAnswers, setSpeakingAnswers] = useState([]);
 
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
@@ -36,10 +36,22 @@ const Report = ({ paperId, testType }) => {
         );
         if (response.status === 200) {
           if (testType === "Speaking") {
-            setAssessment(response?.data?.student_answers);
+            const studentAnswers = response?.data?.student_answers?.Speaking;
+            const totalBand = studentAnswers?.reduce(
+              (sum, item) => sum + parseFloat(item.band),
+              0
+            );
+            setBand(totalBand / studentAnswers?.length);
+            setSpeakingAnswers(studentAnswers);
           }
           if (testType === "Writing") {
-            setWritingAnswers(response?.data?.student_answers?.Writing);
+            const studentAnswers = response?.data?.student_answers?.Writing;
+            const totalBand = studentAnswers?.reduce(
+              (sum, item) => sum + parseFloat(item.band),
+              0
+            );
+            setBand(totalBand / studentAnswers?.length);
+            setWritingAnswers(studentAnswers);
           }
           setExamName(response?.data?.name);
           let studentAnswers;
@@ -134,6 +146,9 @@ const Report = ({ paperId, testType }) => {
     <div className="col-xl-7 col-lg-7 AnswerCard">
       <div className="blog__details__content__wraper">
         <h4 className="sidebar__title">Solution For : {examName}</h4>
+        {(testType === "Writing" || testType === "Speaking") && (
+          <h4 className="sidebar__title">Band : {band}</h4>
+        )}
         {(testType === "Reading" || testType === "Listening") && (
           <AnswerCard
             totalQuestions={correctAnswer?.length}
@@ -268,7 +283,7 @@ const Report = ({ paperId, testType }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {assessment?.Speaking?.map((item, index) => (
+                  {speakingAnswers?.map((item, index) => (
                     <tr
                       key={index}
                       className={`${

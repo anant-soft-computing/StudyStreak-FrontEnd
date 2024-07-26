@@ -225,6 +225,7 @@ const CreatePackage = ({ setMainTab }) => {
                       value: val,
                     });
                   }}
+                  isSearch={true}
                   url="/packagetypeview/"
                   objKey={["name"]}
                 />
@@ -243,6 +244,7 @@ const CreatePackage = ({ setMainTab }) => {
                       value: val,
                     });
                   }}
+                  isSearch={true}
                   url="/courselistforpackage/"
                   objKey={["Course_Title"]}
                 />
@@ -261,6 +263,7 @@ const CreatePackage = ({ setMainTab }) => {
                       value: val,
                     });
                   }}
+                  isSearch={true}
                   url="/cuponlistview/"
                   objKey={["cupon_name"]}
                 />

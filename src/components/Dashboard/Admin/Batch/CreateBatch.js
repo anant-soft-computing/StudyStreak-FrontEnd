@@ -119,6 +119,7 @@ const CreateBatch = ({ setActiveTab }) => {
                     value: val,
                   });
                 }}
+                isSearch={true}
                 url="/packagelistview/"
                 objKey={["package_name"]}
               />

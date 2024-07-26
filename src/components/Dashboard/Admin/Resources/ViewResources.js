@@ -17,18 +17,20 @@ const ViewResources = ({ activeTab }) => {
     );
   };
 
+  const doVideoAndLink = (params) => {
+    return (
+      <button className="take-test" onClick={() => window.open(params.value)}>
+        View
+      </button>
+    );
+  };
+
   const columns = [
     {
       headerName: "No.",
       field: "no",
       resizable: false,
       width: 76,
-    },
-    {
-      headerName: "Batch",
-      field: "batch",
-      resizable: true,
-      filter: true,
     },
     {
       headerName: "Student",
@@ -43,10 +45,23 @@ const ViewResources = ({ activeTab }) => {
       filter: true,
     },
     {
+      headerName: "Batch",
+      field: "batch",
+      resizable: true,
+      filter: true,
+    },
+    {
       headerName: "Description",
       field: "description",
       resizable: true,
       filter: true,
+    },
+    {
+      headerName: "Video / Link",
+      field: "link",
+      resizable: true,
+      filter: true,
+      cellRenderer: doVideoAndLink,
     },
     {
       headerName: "Download",
@@ -74,22 +89,34 @@ const ViewResources = ({ activeTab }) => {
             8000
           );
           if (response?.status === 200) {
-            const resourcesWithNumbers = response.data.flatMap((item, index) =>
-              item.documents.map((document, docIndex) => ({
+            const resourcesWithNumbers = response?.data?.flatMap((item, index) =>
+              item?.documents?.map((document, docIndex) => ({
                 no: `${index + 1}. (${docIndex + 1}).`,
-                batch: item.batch?.batch_name || "-",
-                student: `${item.student?.user?.first_name || "-"} ${
-                  item.student?.user?.last_name || "-"
-                }`,
-                course: item.course?.Course_Title || "-",
-                description: document.description || "-",
-                document: document.document,
+                batch:
+                  item?.batch?.length > 0
+                    ? item?.batch?.map((batch) => batch?.batch_name).join(", ")
+                    : "-",
+                student:
+                  item?.student?.length > 0
+                    ? item?.student
+                        .map(
+                          (student) =>
+                            `${student?.user?.first_name} ${student?.user?.last_name}`
+                        )
+                        .join(", ")
+                    : "-",
+                course:
+                  item?.course?.length > 0
+                    ? item?.course
+                        .map((course) => course?.Course_Title)
+                        .join(", ")
+                    : "-",
+                description: document?.description || "-",
+                document: document?.document,
+                link: item?.link || "-",
               }))
             );
-            setIsLoading(false);
             setResourceList(resourcesWithNumbers);
-          } else {
-            setIsLoading(false);
           }
         } catch (error) {
           console.log("error", error);

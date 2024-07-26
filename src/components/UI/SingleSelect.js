@@ -71,10 +71,12 @@ const SingleSelection = (props) => {
 
   return (
     <SelectSearch
+      disabled={props?.disabled}
       options={options}
       value={props.value}
       onChange={props.onChange}
       name={props.name}
+      search={props.isSearch}
       placeholder={placeholder}
     />
   );

@@ -200,6 +200,7 @@ const CreateBadge = ({ setActiveTab }) => {
                 url="/gamification/"
                 name="name"
                 objKey={["name"]}
+                isSearch={true}
                 multiple={true}
               />
             </div>
@@ -217,6 +218,7 @@ const CreateBadge = ({ setActiveTab }) => {
                     value: val,
                   });
                 }}
+                isSearch={true}
                 url="/gamification/badges/"
                 objKey={["title"]}
               />

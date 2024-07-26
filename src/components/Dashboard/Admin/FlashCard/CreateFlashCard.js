@@ -146,6 +146,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
                 url="/courselistforpackage/"
                 name="Course_Title"
                 objKey={["Course_Title"]}
+                isSearch={true}
                 multiple={true}
               />
             </div>

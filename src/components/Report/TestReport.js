@@ -1,30 +1,148 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Loading from "../UI/Loading";
 import Table from "../UI/Table";
 import Report from "./Report";
+import listeningBandValues from "../../utils/bandValues/listeningBandValues";
+import readingBandValues from "../../utils/bandValues/ReadingBandValues";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const TestReport = ({ reportData, testType, isLoading }) => {
   const [reportParams, setReportParams] = useState(null);
+  const [rowsData, setRowsData] = useState([]);
 
-  const viewReport = (params) => {
-    const examId = params.data.id;
-    const paperId = params.data.IELTS.id;
+  useEffect(() => {
+    const initialData = reportData.map((data, index) => ({
+      paperId: data.IELTS.id,
+      no: index + 1,
+      Name: data.IELTS.Name,
+      correct: 0,
+      incorrect: 0,
+      band: 0,
+    }));
+    setRowsData(initialData);
+  }, [reportData]);
 
-    return (
-      <button
-        className="take-test"
-        onClick={() =>
-          setReportParams({
-            examId: examId,
-            paperId: paperId,
-            testType: testType,
-          })
+  const fetchData = async (paperId) => {
+    try {
+      const response = await ajaxCall(
+        `/practice-answers/${paperId}/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        let studentAnswers,
+          correctAnswer = [];
+        let correct = 0,
+          incorrect = 0,
+          band = 0;
+
+        if (testType === "Speaking" || testType === "Writing") {
+          const answersKey = testType === "Speaking" ? "Speaking" : "Writing";
+          studentAnswers = response?.data?.student_answers?.[answersKey];
+          const totalBand = studentAnswers?.reduce(
+            (sum, item) => sum + parseFloat(item.band),
+            0
+          );
+          band = totalBand / studentAnswers?.length;
+        } else {
+          if (testType === "Reading") {
+            studentAnswers = response?.data?.student_answers?.Reading?.reduce(
+              (acc, curr) => acc?.concat(curr.answers),
+              []
+            );
+            correctAnswer = response.data?.correct_answers?.Reading?.reduce(
+              (acc, curr) => acc?.concat(curr.answers),
+              []
+            );
+          } else if (testType === "Listening") {
+            studentAnswers = response.data?.student_answers?.Listening?.reduce(
+              (acc, curr) => acc?.concat(curr.answers),
+              []
+            );
+            correctAnswer = response.data?.correct_answers?.Listening?.reduce(
+              (acc, curr) => acc?.concat(curr.answers),
+              []
+            );
+          }
+
+          studentAnswers?.forEach((item, index) => {
+            const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
+            const studentAnswerText = item?.answer_text?.trim();
+            if (correctAnswerText?.includes(" OR ")) {
+              const correctOptions = correctAnswerText
+                ?.split(" OR ")
+                ?.map((option) => option?.trim());
+              if (correctOptions?.includes(studentAnswerText)) {
+                correct++;
+              } else {
+                incorrect++;
+              }
+            } else if (correctAnswerText?.includes(" AND ")) {
+              const correctOptions = correctAnswerText
+                ?.split(" AND ")
+                ?.map((option) => option?.trim());
+              if (
+                correctOptions?.every((option) =>
+                  studentAnswerText?.includes(option)
+                )
+              ) {
+                correct++;
+              } else {
+                incorrect++;
+              }
+            } else {
+              if (correctAnswerText === studentAnswerText) {
+                correct++;
+              } else {
+                incorrect++;
+              }
+            }
+          });
+          band =
+            testType === "Reading"
+              ? readingBandValues[correct]
+              : listeningBandValues[correct];
         }
-        style={{ backgroundColor: "green", border: "1px solid green" }}
-      >
-        View Report
-      </button>
-    );
+        return { paperId, correct, incorrect, band };
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const viewReport = async (params) => {
+    const paperId = params?.data?.paperId;
+    const result = await fetchData(paperId);
+
+    if (result) {
+      setRowsData((prev) =>
+        prev?.map((row) =>
+          row?.paperId === paperId
+            ? {
+                ...row,
+                correct: result?.correct,
+                incorrect: result?.incorrect,
+                band: result?.band,
+              }
+            : row
+        )
+      );
+      setReportParams({
+        paperId: paperId,
+        testType: testType,
+      });
+    }
   };
 
   const columns = [
@@ -41,39 +159,72 @@ const TestReport = ({ reportData, testType, isLoading }) => {
       headerName: "Name",
       field: "Name",
       cellRenderer: (params) => {
-        return <div>{params.data.IELTS?.Name}</div>;
+        return <div>{params.data.Name}</div>;
       },
       filter: true,
     },
     {
+      headerName: "Correct",
+      field: "correct",
+      cellRenderer: (params) => {
+        return (
+          <div style={{ color: "green", fontWeight: "bold" }}>
+            {params.data.correct}
+          </div>
+        );
+      },
+    },
+    {
+      headerName: "Incorrect",
+      field: "incorrect",
+      cellRenderer: (params) => {
+        return (
+          <div style={{ color: "red", fontWeight: "bold" }}>
+            {params.data.incorrect}
+          </div>
+        );
+      },
+    },
+    {
+      headerName: "Band",
+      field: "band",
+      cellRenderer: (params) => {
+        return (
+          <div style={{ color: "#01579b", fontWeight: "bold" }}>
+            {params.data.band}
+          </div>
+        );
+      },
+    },
+    {
       headerName: "View Report",
       field: "button",
-      cellRenderer: viewReport,
+      cellRenderer: (params) => (
+        <button
+          className="take-test"
+          onClick={() => viewReport(params)}
+          style={{ backgroundColor: "green", border: "1px solid green" }}
+        >
+          View Report
+        </button>
+      ),
     },
   ];
-
-  const rowData = reportData?.map((data, index) => ({
-    ...data,
-    no: index + 1,
-  }));
 
   return (
     <div>
       {isLoading ? (
         <Loading text="Loading...." color="primary" />
       ) : reportData.length > 0 ? (
-        <div className="d-flex flex-wrap gap-5">
-          <div>
-            <Table rowData={rowData} columnDefs={columns} />
-          </div>
+        <>
+          <Table rowData={rowsData} columnDefs={columns} />
           {reportParams && (
             <Report
-              examId={reportParams?.examId}
               paperId={reportParams?.paperId}
               testType={reportParams?.testType}
             />
           )}
-        </div>
+        </>
       ) : (
         <h5 className="text-center text-danger">{`No ${testType} Report Available !!`}</h5>
       )}

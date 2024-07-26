@@ -138,6 +138,7 @@ const CreateGamification = ({ setActiveTab }) => {
                     value: val,
                   });
                 }}
+                isSearch={true}
                 url={`/gamification/objects/?model=${gamificationData.model}`}
                 objKey={["rep_name"]}
               />

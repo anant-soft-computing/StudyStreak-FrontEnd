@@ -7,6 +7,11 @@ import Table from "../../../UI/Table";
 const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON.parse(localStorage.getItem("courses"))?.map(
+    (item) => item?.id
+  );
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const doDocument = (params) => {
     return (
@@ -32,12 +37,6 @@ const Resources = () => {
       width: 76,
     },
     {
-      headerName: "Batch",
-      field: "batch",
-      resizable: true,
-      filter: true,
-    },
-    {
       headerName: "Student",
       field: "student",
       resizable: true,
@@ -46,6 +45,12 @@ const Resources = () => {
     {
       headerName: "Course",
       field: "course",
+      resizable: true,
+      filter: true,
+    },
+    {
+      headerName: "Batch",
+      field: "batch",
       resizable: true,
       filter: true,
     },
@@ -88,24 +93,41 @@ const Resources = () => {
           },
           8000
         );
+
         if (response?.status === 200) {
-          const resourcesWithNumbers = response.data.flatMap((item, index) =>
-            item.documents.map((document, docIndex) => ({
-              no: `${index + 1}. (${docIndex + 1}).`,
-              batch: item.batch?.batch_name || "-",
-              student: `${item.student?.user?.first_name || "-"} ${
-                item.student?.user?.last_name || "-"
-              }`,
-              course: item.course?.Course_Title || "-",
-              description: document.description || "-",
-              document: document.document,
-              link: item.link || "-",
-            }))
+          const filteredResources = response?.data?.filter((item) => {
+            const student = item?.student?.some((s) => s?.id === studentId);
+            const batch = item?.batch?.some((b) => batchIds?.includes(b?.id));
+            const course = item?.course?.some((c) => courseIds?.includes(c?.id));
+            return student || batch || course;
+          });
+
+          const resourcesWithNumbers = filteredResources.flatMap(
+            (item, index) =>
+              item?.documents?.map((document, docIndex) => ({
+                no: `${index + 1}. (${docIndex + 1}).`,
+                student: item?.student?.some((s) => s?.id === studentId)
+                  ? `${
+                      item?.student.find((s) => s?.id === studentId)?.user
+                        .first_name
+                    } ${
+                      item?.student.find((s) => s.id === studentId)?.user
+                        .last_name
+                    }`
+                  : "-",
+                batch:
+                  item?.batch
+                    ?.filter((b) => batchIds?.includes(b?.id))
+                    ?.map((b) => b?.batch_name)
+                    ?.join(", ") || "-",
+                course:
+                  item?.course?.map((c) => c?.Course_Title)?.join(", ") || "-",
+                description: document?.description || "-",
+                document: document?.document,
+                link: item?.link || "-",
+              }))
           );
-          setIsLoading(false);
           setResourceList(resourcesWithNumbers);
-        } else {
-          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);

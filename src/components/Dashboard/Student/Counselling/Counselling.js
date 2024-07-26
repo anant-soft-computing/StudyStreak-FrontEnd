@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import List from "../Classes/List";
 import moment from "moment";
-import { Tab } from "bootstrap";
+import Tab from "../../../UI/Tab";
 import RecordedClass from "../Classes/RecordedClass";
 
 const tabs = [{ name: "Counselling" }, { name: "Recorded Class" }];

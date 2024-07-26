@@ -135,7 +135,7 @@ const SDashboard = () => {
       try {
         const regularClassData = [];
         const speakingClassData = [];
-        for (let i = 0; i < batchIds.length; i++) {
+        for (let i = 0; i < batchIds?.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
             `/liveclass_listwithid_view/${batchId}/`,

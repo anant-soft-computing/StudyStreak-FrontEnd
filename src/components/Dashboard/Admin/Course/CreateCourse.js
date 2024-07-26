@@ -355,6 +355,7 @@ const CreateCourse = ({ setMainTab }) => {
                       value: val,
                     });
                   }}
+                  isSearch={true}
                   url="/categoryview/"
                   objKey={["name"]}
                 />
@@ -373,6 +374,7 @@ const CreateCourse = ({ setMainTab }) => {
                       value: val,
                     });
                   }}
+                  isSearch={true}
                   url="/levelView/"
                   objKey={["name"]}
                 />
@@ -391,6 +393,7 @@ const CreateCourse = ({ setMainTab }) => {
                       value: val,
                     });
                   }}
+                  isSearch={true}
                   url="/languageview/"
                   objKey={["name"]}
                 />
@@ -412,6 +415,7 @@ const CreateCourse = ({ setMainTab }) => {
                   url="/tutorcourses/"
                   name="username"
                   objKey={["username"]}
+                  isSearch={true}
                   multiple={true}
                 />
               </div>
@@ -539,6 +543,7 @@ const CreateCourse = ({ setMainTab }) => {
                       value: val,
                     });
                   }}
+                  isSearch={true}
                   url="/instructorcourses/"
                   objKey={["username"]}
                 />
@@ -609,6 +614,7 @@ const CreateCourse = ({ setMainTab }) => {
                   url="/requirementsview/"
                   name="description"
                   objKey={["description"]}
+                  isSearch={true}
                   multiple={true}
                 />
               </div>
@@ -629,6 +635,7 @@ const CreateCourse = ({ setMainTab }) => {
                   url="/outcomesview/"
                   name="description"
                   objKey={["description"]}
+                  isSearch={true}
                   multiple={true}
                 />
               </div>
@@ -761,6 +768,7 @@ const CreateCourse = ({ setMainTab }) => {
                   url="/lessonview/"
                   name="Lesson_Title"
                   objKey={["Lesson_Title"]}
+                  isSearch={true}
                   multiple={true}
                 />
               </div>

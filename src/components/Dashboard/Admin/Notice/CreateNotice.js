@@ -86,6 +86,7 @@ const CreateNotice = ({ setActiveTab }) => {
                     value: val,
                   });
                 }}
+                isSearch={true}
                 url="/student-list/"
                 objKey={["full_name"]}
               />
@@ -104,6 +105,7 @@ const CreateNotice = ({ setActiveTab }) => {
                     value: val,
                   });
                 }}
+                isSearch={true}
                 url="/batchview/"
                 objKey={["batch_name"]}
               />
@@ -122,6 +124,7 @@ const CreateNotice = ({ setActiveTab }) => {
                     value: val,
                   });
                 }}
+                isSearch={true}
                 url="/courselistforpackage/"
                 objKey={["Course_Title"]}
               />

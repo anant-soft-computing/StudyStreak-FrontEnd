@@ -1,14 +1,17 @@
 import React, { useReducer, useState } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../../../UI/Loading";
-import SingleSelection from "../../../UI/SingleSelect";
+import SelectionBox from "../../../UI/SelectionBox";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 
 const initialResourceData = {
-  student: "",
-  batch: "",
-  course: "",
+  student: [],
+  studentId: [],
+  batch: [],
+  batchId: [],
+  course: [],
+  courseId: [],
   link: "",
   documents: [""],
   descriptions: [""],
@@ -66,15 +69,45 @@ const CreateResourceLink = ({ setActiveTab }) => {
     });
   };
 
+  const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
+    if (isSingle) {
+      dispatchCreateRL({
+        type: fieldName,
+        value: val,
+      });
+      dispatchCreateRL({
+        type: proFieldName,
+        value: +val[0]?.id,
+      });
+      return;
+    }
+    const newValIds = val.map((ids) => ids.id);
+    dispatchCreateRL({
+      type: fieldName,
+      value: val,
+    });
+    dispatchCreateRL({
+      type: proFieldName,
+      value: newValIds,
+    });
+  };
+
   const createRL = async (e) => {
     e.preventDefault();
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const formData = new FormData();
 
-      formData.append("student", createRLData.student);
-      formData.append("batch", createRLData.batch);
-      formData.append("course", createRLData.course);
+      createRLData.studentId.forEach((id) => {
+        formData.append(`student`, id);
+      });
+      createRLData.courseId.forEach((id) => {
+        formData.append(`course`, id);
+      });
+      createRLData.batchId.forEach((id) => {
+        formData.append(`batch`, id);
+      });
+
       formData.append("link", createRLData.link);
 
       createRLData.documents.forEach((document, index) => {
@@ -150,16 +183,19 @@ const CreateResourceLink = ({ setActiveTab }) => {
                   <span>Student</span>
                 </div>
                 <div className="dashboard__selector">
-                  <SingleSelection
+                  <SelectionBox
                     value={createRLData?.student}
-                    onChange={(val) => {
-                      dispatchCreateRL({
-                        type: "student",
-                        value: val,
-                      });
-                    }}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "student",
+                      "studentId",
+                      false
+                    )}
                     url="/student-list/"
+                    name="full_name"
                     objKey={["full_name"]}
+                    isSearch={true}
+                    multiple={true}
                   />
                 </div>
               </div>
@@ -170,16 +206,19 @@ const CreateResourceLink = ({ setActiveTab }) => {
                   <span>Course</span>
                 </div>
                 <div className="dashboard__selector">
-                  <SingleSelection
+                  <SelectionBox
                     value={createRLData?.course}
-                    onChange={(val) => {
-                      dispatchCreateRL({
-                        type: "course",
-                        value: val,
-                      });
-                    }}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "course",
+                      "courseId",
+                      false
+                    )}
                     url="/courselistforpackage/"
+                    name="Course_Title"
                     objKey={["Course_Title"]}
+                    isSearch={true}
+                    multiple={true}
                   />
                 </div>
               </div>
@@ -190,16 +229,19 @@ const CreateResourceLink = ({ setActiveTab }) => {
                   <span>Batch</span>
                 </div>
                 <div className="dashboard__selector">
-                  <SingleSelection
+                  <SelectionBox
                     value={createRLData?.batch}
-                    onChange={(val) => {
-                      dispatchCreateRL({
-                        type: "batch",
-                        value: val,
-                      });
-                    }}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "batch",
+                      "batchId",
+                      false
+                    )}
                     url="/batchview/"
+                    name="batch_name"
                     objKey={["batch_name"]}
+                    isSearch={true}
+                    multiple={true}
                   />
                 </div>
               </div>

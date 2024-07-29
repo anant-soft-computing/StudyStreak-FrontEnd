@@ -15,9 +15,9 @@ const TestReport = ({ reportData, testType, isLoading }) => {
       paperId: data.IELTS.id,
       no: index + 1,
       Name: data.IELTS.Name,
-      correct: 0,
-      incorrect: 0,
-      band: 0,
+      correct: "-",
+      incorrect: "-",
+      band: "-",
     }));
     setRowsData(initialData);
   }, [reportData]);
@@ -39,7 +39,7 @@ const TestReport = ({ reportData, testType, isLoading }) => {
         8000
       );
       if (response.status === 200) {
-        let studentAnswers,
+        let studentAnswers = [],
           correctAnswer = [];
         let correct = 0,
           incorrect = 0,
@@ -54,24 +54,44 @@ const TestReport = ({ reportData, testType, isLoading }) => {
           );
           band = totalBand / studentAnswers?.length;
         } else {
-          if (testType === "Reading") {
-            studentAnswers = response?.data?.student_answers?.Reading?.reduce(
-              (acc, curr) => acc?.concat(curr.answers),
-              []
-            );
-            correctAnswer = response.data?.correct_answers?.Reading?.reduce(
-              (acc, curr) => acc?.concat(curr.answers),
-              []
-            );
-          } else if (testType === "Listening") {
-            studentAnswers = response.data?.student_answers?.Listening?.reduce(
-              (acc, curr) => acc?.concat(curr.answers),
-              []
-            );
-            correctAnswer = response.data?.correct_answers?.Listening?.reduce(
-              (acc, curr) => acc?.concat(curr.answers),
-              []
-            );
+          if (
+            testType === "Reading" &&
+            response.data?.student_answers?.Reading &&
+            response.data?.correct_answers?.Reading
+          ) {
+            response?.data?.student_answers?.Reading?.forEach((block) => {
+              studentAnswers = studentAnswers.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+            response.data?.correct_answers?.Reading?.forEach((block) => {
+              correctAnswer = correctAnswer.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+          } else if (
+            testType === "Listening" &&
+            response.data?.student_answers?.Listening &&
+            response.data?.correct_answers?.Listening
+          ) {
+            response?.data?.student_answers?.Listening?.forEach((block) => {
+              studentAnswers = studentAnswers.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+            response.data?.correct_answers?.Listening?.forEach((block) => {
+              correctAnswer = correctAnswer.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
           }
 
           studentAnswers?.forEach((item, index) => {

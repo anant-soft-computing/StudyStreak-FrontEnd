@@ -85,11 +85,17 @@ const ScoreCard = () => {
 
     const handleReadingOrListening = (data, type) => {
       const studentAnswers = data.student_answers[type].reduce(
-        (acc, curr) => acc.concat(curr.answers),
+        (acc, curr) =>
+          acc.concat(
+            curr.answers.sort((a, b) => a.question_number - b.question_number)
+          ),
         []
       );
       const correctAnswer = data.correct_answers[type].reduce(
-        (acc, curr) => acc.concat(curr.answers),
+        (acc, curr) =>
+          acc.concat(
+            curr.answers.sort((a, b) => a.question_number - b.question_number)
+          ),
         []
       );
 

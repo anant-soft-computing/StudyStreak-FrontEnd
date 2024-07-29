@@ -46,42 +46,57 @@ const PracticeTestAnswer = () => {
             setWritingAnswers(studentAnswers);
           }
           setExamName(response?.data?.name);
-          let studentAnswers;
-          let correctAnswer = [];
-          if (examForm === "Reading") {
-            studentAnswers = response.data?.student_answers.Reading?.reduce(
-              (acc, curr) => {
-                return acc.concat(curr.answers);
-              },
-              []
-            );
-            correctAnswer.push(
-              ...response.data?.correct_answers.Reading?.reduce((acc, curr) => {
-                return acc.concat(curr.answers);
-              }, [])
-            );
-          } else if (examForm === "Listening") {
-            studentAnswers = response.data?.student_answers.Listening?.reduce(
-              (acc, curr) => {
-                return acc.concat(curr.answers);
-              },
-              []
-            );
 
-            correctAnswer.push(
-              ...response.data?.correct_answers.Listening?.reduce(
-                (acc, curr) => {
-                  return acc.concat(curr.answers);
-                },
-                []
-              )
-            );
+          let studentAnswers = [];
+          let correctAnswer = [];
+
+          if (
+            examForm === "Reading" &&
+            response.data?.student_answers?.Reading &&
+            response.data?.correct_answers?.Reading
+          ) {
+            response.data.student_answers.Reading.forEach((block) => {
+              studentAnswers = studentAnswers.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+
+            response.data.correct_answers.Reading.forEach((block) => {
+              correctAnswer = correctAnswer.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+          } else if (
+            examForm === "Listening" &&
+            response.data?.student_answers?.Listening &&
+            response.data?.correct_answers?.Listening
+          ) {
+            response.data.student_answers.Listening.forEach((block) => {
+              studentAnswers = studentAnswers.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+
+            response.data.correct_answers.Listening.forEach((block) => {
+              correctAnswer = correctAnswer.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
           }
           setStudentAnswers(studentAnswers);
           setCorrectAnswer(correctAnswer);
 
           let correct = 0;
           let incorrect = 0;
+
           studentAnswers?.forEach((item, index) => {
             const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
             const studentAnswerText = item.answer_text?.trim();
@@ -115,11 +130,13 @@ const PracticeTestAnswer = () => {
               }
             }
           });
+
           if (examForm === "Reading") {
             setBand(readingBandValues[correct]);
           } else if (examForm === "Listening") {
             setBand(listeningBandValues[correct]);
           }
+
           setCorrectCount(correct);
           setIncorrectCount(incorrect);
         } else {
@@ -187,10 +204,7 @@ const PracticeTestAnswer = () => {
                               </thead>
                               <tbody>
                                 {correctAnswer.map(
-                                  (
-                                    { id, question_number, answer_text },
-                                    index
-                                  ) => (
+                                  ({ id, answer_text }, index) => (
                                     <tr
                                       key={id}
                                       className={`${
@@ -200,7 +214,7 @@ const PracticeTestAnswer = () => {
                                       }`}
                                     >
                                       <td className="text-dark">
-                                        {question_number}.
+                                        {index + 1}.
                                       </td>
                                       <td className="text-dark">
                                         <div className="dashboard__table__star">
@@ -208,12 +222,12 @@ const PracticeTestAnswer = () => {
                                         </div>
                                       </td>
                                       <td className="text-dark">
-                                        {studentAnswers.length > 0 &&
+                                        {studentAnswers?.length > 0 &&
                                           studentAnswers[index] &&
                                           studentAnswers[index].answer_text}
                                       </td>
                                       <td className="text-dark">
-                                        {studentAnswers.length > 0 &&
+                                        {studentAnswers?.length > 0 &&
                                         studentAnswers[index] &&
                                         correctAnswer[
                                           index
@@ -232,7 +246,7 @@ const PracticeTestAnswer = () => {
                                           ) : (
                                             <CancelIcon />
                                           )
-                                        ) : studentAnswers.length > 0 &&
+                                        ) : studentAnswers?.length > 0 &&
                                           studentAnswers[index] &&
                                           correctAnswer[
                                             index
@@ -251,7 +265,7 @@ const PracticeTestAnswer = () => {
                                           ) : (
                                             <CancelIcon />
                                           )
-                                        ) : studentAnswers.length > 0 &&
+                                        ) : studentAnswers?.length > 0 &&
                                           studentAnswers[index] &&
                                           studentAnswers[index].answer_text ===
                                             correctAnswer[index]

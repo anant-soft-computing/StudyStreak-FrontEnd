@@ -122,10 +122,7 @@ const LiveAssignmentAnswer = () => {
                               </thead>
                               <tbody>
                                 {correctAnswer.map(
-                                  (
-                                    { id, question_number, answer_text },
-                                    index
-                                  ) => (
+                                  ({ id, answer_text }, index) => (
                                     <tr
                                       key={id}
                                       className={`${
@@ -135,7 +132,7 @@ const LiveAssignmentAnswer = () => {
                                       }`}
                                     >
                                       <td className="text-dark">
-                                        {question_number}.
+                                        {index + 1}.
                                       </td>
                                       <td className="text-dark">
                                         <div className="dashboard__table__star">
@@ -161,7 +158,7 @@ const LiveAssignmentAnswer = () => {
                                             .includes(
                                               studentAnswers[
                                                 index
-                                              ]?.answer.toLowerCase()
+                                              ]?.answer_text.toLowerCase()
                                             ) ? (
                                             <CheckIcon />
                                           ) : (

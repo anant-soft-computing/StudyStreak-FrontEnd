@@ -137,10 +137,7 @@ const Answer = () => {
                               </thead>
                               <tbody>
                                 {correctAnswer.map(
-                                  (
-                                    { id, question_number, answer_text },
-                                    index
-                                  ) => (
+                                  ({ id, answer_text }, index) => (
                                     <tr
                                       key={id}
                                       className={`${
@@ -150,7 +147,7 @@ const Answer = () => {
                                       }`}
                                     >
                                       <td className="text-dark">
-                                        {question_number}.
+                                        {index + 1}.
                                       </td>
                                       <td className="text-dark">
                                         <div className="dashboard__table__star">
@@ -171,12 +168,12 @@ const Answer = () => {
                                           correctAnswer[index]?.answer_text
                                             .split(" OR ")
                                             .map((option) =>
-                                              option.trim().toLowerCase()
+                                              option?.trim()?.toLowerCase()
                                             )
                                             .includes(
                                               studentAnswers[
                                                 index
-                                              ]?.answer.toLowerCase()
+                                              ]?.answer_text?.toLowerCase()
                                             ) ? (
                                             <CheckIcon />
                                           ) : (
@@ -190,11 +187,11 @@ const Answer = () => {
                                           correctAnswer[index]?.answer_text
                                             .split(" AND ")
                                             .map((option) =>
-                                              option.trim().toLowerCase()
+                                              option.trim()?.toLowerCase()
                                             )
                                             .every((option) =>
                                               studentAnswers[index]?.answer_text
-                                                .toLowerCase()
+                                                ?.toLowerCase()
                                                 .includes(option)
                                             ) ? (
                                             <CheckIcon />

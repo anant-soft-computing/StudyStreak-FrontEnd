@@ -33,6 +33,25 @@ const NoticeBoard = () => {
     })();
   }, []);
 
+  const checkLink = (text) => {
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    return text.split(urlPattern).map((item, index) =>
+      urlPattern.test(item) ? (
+        <a
+          href={item}
+          target="_blank"
+          rel="noopener noreferrer"
+          key={index}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          [link]
+        </a>
+      ) : (
+        item
+      )
+    );
+  };
+
   return (
     noticeData.length > 0 && (
       <Box overflow="auto" p={1}>
@@ -58,7 +77,9 @@ const NoticeBoard = () => {
                   wordBreak: "break-word",
                 }}
               >
-                <Typography fontSize={12}>{notice?.notice}</Typography>
+                <Typography fontSize={12}>
+                  {checkLink(notice?.notice)}
+                </Typography>
               </ListItem>
             ))}
           </List>

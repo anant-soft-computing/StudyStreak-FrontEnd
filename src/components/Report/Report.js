@@ -37,38 +37,50 @@ const Report = ({ paperId, testType }) => {
             setWritingAnswers(studentAnswers);
           }
           setExamName(response?.data?.name);
-          let studentAnswers;
+
+          let studentAnswers = [];
           let correctAnswer = [];
-          if (testType === "Reading") {
-            studentAnswers = response?.data?.student_answers.Reading?.reduce(
-              (acc, curr) => {
-                return acc?.concat(curr.answers);
-              },
-              []
-            );
-            correctAnswer.push(
-              ...response.data?.correct_answers?.Reading?.reduce(
-                (acc, curr) => {
-                  return acc?.concat(curr.answers);
-                },
-                []
-              )
-            );
-          } else if (testType === "Listening") {
-            studentAnswers = response.data?.student_answers?.Listening?.reduce(
-              (acc, curr) => {
-                return acc?.concat(curr.answers);
-              },
-              []
-            );
-            correctAnswer.push(
-              ...response.data?.correct_answers?.Listening?.reduce(
-                (acc, curr) => {
-                  return acc?.concat(curr.answers);
-                },
-                []
-              )
-            );
+
+          if (
+            testType === "Reading" &&
+            response.data?.student_answers?.Reading &&
+            response.data?.correct_answers?.Reading
+          ) {
+            response.data.student_answers.Reading.forEach((block) => {
+              studentAnswers = studentAnswers.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+
+            response.data.correct_answers.Reading.forEach((block) => {
+              correctAnswer = correctAnswer.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+          } else if (
+            testType === "Listening" &&
+            response.data?.student_answers?.Listening &&
+            response.data?.correct_answers?.Listening
+          ) {
+            response.data.student_answers.Listening.forEach((block) => {
+              studentAnswers = studentAnswers.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
+
+            response.data.correct_answers.Listening.forEach((block) => {
+              correctAnswer = correctAnswer.concat(
+                block.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              );
+            });
           }
           setStudentAnswers(studentAnswers);
           setCorrectAnswer(correctAnswer);
@@ -83,7 +95,7 @@ const Report = ({ paperId, testType }) => {
 
   return (
     <div className="row mt-4">
-      <div className="col-xl-8 col-lg-8 AnswerCard">
+      <div className="col-xl-12 col-lg-12 AnswerCard">
         <div className="blog__details__content__wraper">
           <h4 className="sidebar__title">Solution For : {examName}</h4>
           {testType === "Writing" && (
@@ -121,77 +133,74 @@ const Report = ({ paperId, testType }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {" "}
-                        {correctAnswer?.map(
-                          ({ id, question_number, answer_text }, index) => (
-                            <tr
-                              key={id}
-                              className={`${
-                                index % 2 === 0 ? "" : "dashboard__table__row"
-                              }`}
-                            >
-                              <td className="text-dark">{question_number}.</td>
-                              <td className="text-dark">
-                                <div className="dashboard__table__star">
-                                  {answer_text}
-                                </div>
-                              </td>
-                              <td className="text-dark">
-                                {studentAnswers?.length > 0 &&
-                                  studentAnswers[index] &&
-                                  studentAnswers[index]?.answer_text}
-                              </td>
-                              <td className="text-dark">
-                                {studentAnswers?.length > 0 &&
+                        {correctAnswer?.map(({ id, answer_text }, index) => (
+                          <tr
+                            key={id}
+                            className={`${
+                              index % 2 === 0 ? "" : "dashboard__table__row"
+                            }`}
+                          >
+                            <td className="text-dark">{index + 1}.</td>
+                            <td className="text-dark">
+                              <div className="dashboard__table__star">
+                                {answer_text}
+                              </div>
+                            </td>
+                            <td className="text-dark">
+                              {studentAnswers?.length > 0 &&
                                 studentAnswers[index] &&
-                                correctAnswer[index]?.answer_text?.includes(
-                                  " OR "
-                                ) ? (
-                                  correctAnswer[index]?.answer_text
-                                    ?.split(" OR ")
-                                    ?.map((option) =>
-                                      option?.trim()?.toLowerCase()
-                                    )
-                                    ?.includes(
-                                      studentAnswers[
-                                        index
-                                      ]?.answer_text?.toLowerCase()
-                                    ) ? (
-                                    <CheckIcon />
-                                  ) : (
-                                    <CancelIcon />
+                                studentAnswers[index]?.answer_text}
+                            </td>
+                            <td className="text-dark">
+                              {studentAnswers?.length > 0 &&
+                              studentAnswers[index] &&
+                              correctAnswer[index]?.answer_text?.includes(
+                                " OR "
+                              ) ? (
+                                correctAnswer[index]?.answer_text
+                                  ?.split(" OR ")
+                                  ?.map((option) =>
+                                    option?.trim()?.toLowerCase()
                                   )
-                                ) : studentAnswers?.length > 0 &&
-                                  studentAnswers[index] &&
-                                  correctAnswer[index]?.answer_text?.includes(
-                                    " AND "
+                                  ?.includes(
+                                    studentAnswers[
+                                      index
+                                    ]?.answer_text?.toLowerCase()
                                   ) ? (
-                                  correctAnswer[index]?.answer_text
-                                    ?.split(" AND ")
-                                    ?.map((option) =>
-                                      option?.trim()?.toLowerCase()
-                                    )
-                                    ?.every((option) =>
-                                      studentAnswers[index]?.answer_text
-                                        ?.toLowerCase()
-                                        ?.includes(option)
-                                    ) ? (
-                                    <CheckIcon />
-                                  ) : (
-                                    <CancelIcon />
-                                  )
-                                ) : studentAnswers?.length > 0 &&
-                                  studentAnswers[index] &&
-                                  studentAnswers[index]?.answer_text ===
-                                    correctAnswer[index]?.answer_text ? (
                                   <CheckIcon />
                                 ) : (
                                   <CancelIcon />
-                                )}
-                              </td>
-                            </tr>
-                          )
-                        )}
+                                )
+                              ) : studentAnswers?.length > 0 &&
+                                studentAnswers[index] &&
+                                correctAnswer[index]?.answer_text?.includes(
+                                  " AND "
+                                ) ? (
+                                correctAnswer[index]?.answer_text
+                                  ?.split(" AND ")
+                                  ?.map((option) =>
+                                    option?.trim()?.toLowerCase()
+                                  )
+                                  ?.every((option) =>
+                                    studentAnswers[index]?.answer_text
+                                      ?.toLowerCase()
+                                      ?.includes(option)
+                                  ) ? (
+                                  <CheckIcon />
+                                ) : (
+                                  <CancelIcon />
+                                )
+                              ) : studentAnswers?.length > 0 &&
+                                studentAnswers[index] &&
+                                studentAnswers[index]?.answer_text ===
+                                  correctAnswer[index]?.answer_text ? (
+                                <CheckIcon />
+                              ) : (
+                                <CancelIcon />
+                              )}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>

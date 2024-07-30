@@ -19,16 +19,14 @@ const Table = ({ rowData, columnDefs }) => {
       sortable: true,
       resizable: true,
     },
+    onGridReady: (params) => {
+      params.api.sizeColumnsToFit();
+    },
   };
 
   return (
-    <div style={{ height: "100%", width: "100%" }}>
-      <div
-        className="ag-theme-quartz"
-        style={{ height: "100%", width: "100%" }}
-      >
-        <AgGridReact {...gridOptions} />
-      </div>
+    <div className="ag-theme-quartz">
+      <AgGridReact {...gridOptions} />
     </div>
   );
 };

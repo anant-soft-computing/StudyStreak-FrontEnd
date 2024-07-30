@@ -25,9 +25,7 @@ const cardList = [
     name: "Book Speaking Slot",
     icon: bookSpeakingSlot,
     link: "/studentLiveClasses",
-    state: {
-      activeTab: "Speaking Practice",
-    },
+    state: { activeTab: "Speaking Practice" },
   },
   { name: "Practice Test", icon: practice, link: "/practiceTest" },
   { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
@@ -85,7 +83,6 @@ const SDashboard = () => {
   };
 
   const fetchData = async (url, dataes) => {
-    setIsLoading(true);
     try {
       const response = await ajaxCall(
         url,
@@ -109,24 +106,24 @@ const SDashboard = () => {
       }
     } catch (error) {
       console.log("error", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData("/batchview/", setBatchData);
-  }, []);
+    const fetchAllData = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        fetchData("/batchview/", setBatchData),
+        fetchData("/courselistview/", setCourseList),
+        fetchData("/userwisepackagewithcourseid/", (data) => {
+          setCount(data?.batch_package_count);
+          setStudentID(data?.student_packages[0]?.student_id);
+        }),
+      ]);
+      setIsLoading(false);
+    };
 
-  useEffect(() => {
-    fetchData("/courselistview/", setCourseList);
-  }, []);
-
-  useEffect(() => {
-    fetchData("/userwisepackagewithcourseid/", (data) => {
-      setCount(data?.batch_package_count);
-      setStudentID(data?.student_packages[0]?.student_id);
-    });
+    fetchAllData();
   }, []);
 
   useEffect(() => {
@@ -178,133 +175,145 @@ const SDashboard = () => {
     fetchBatchData();
   }, []);
 
-  return isLoading ? (
-    <Loading text="Loading..." color="primary" />
-  ) : count === 0 ? (
-    <UnPaidDashboard />
-  ) : (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="dashboardarea sp_bottom_100">
-          <div className="dashboard">
-            <div className="container-fluid full__width__padding">
-              <div className="row">
-                <DSSidebar />
-                <div className="col-xl-8 col-lg-8">
-                  <div className="blog__details__content__wraper">
-                    <div className="course__details__heading">
-                      <h3>Welcome, {userData?.username}</h3>
-                    </div>
-                    <h5>
-                      Batch :{" "}
-                      {studentBatch.map((batch) => (
-                        <span key={batch.id}>
-                          {batch.batch_name} :{" "}
-                          {moment(batch.batch_start_timing, "HH:mm:ss").format(
-                            "hh:mm A"
-                          )}{" "}
-                          |{" "}
-                        </span>
-                      ))}
-                    </h5>
-                    <div className="online__course__wrap mt-0">
-                      <div className="row instructor__slider__active row__custom__class">
-                        <ScoreCard />
-                      </div>
-                    </div>
-                    <div className="row">
-                      {cardList.map(({ name, icon, link, state }, index) => (
-                        <div
-                          key={index}
-                          className="col-xl-4 column__custom__class"
-                        >
-                          <div className="gridarea__wraper text-center card-background">
-                            <div
-                              className="gridarea__content p-2 m-2"
-                              style={{ cursor: link ? "pointer" : "default" }}
-                            >
-                              {link ? (
+  if (isLoading) {
+    return <Loading text="Loading..." color="primary" />;
+  }
+
+  return (
+    <>
+      {count !== 0 ? (
+        <div className="body__wrapper">
+          <div className="main_wrapper overflow-hidden">
+            <div className="dashboardarea sp_bottom_100">
+              <div className="dashboard">
+                <div className="container-fluid full__width__padding">
+                  <div className="row">
+                    <DSSidebar />
+                    <div className="col-xl-8 col-lg-8">
+                      <div className="blog__details__content__wraper">
+                        <div className="course__details__heading">
+                          <h3>Welcome, {userData?.username}</h3>
+                        </div>
+                        <h5>
+                          Batch :{" "}
+                          {studentBatch.map((batch) => (
+                            <span key={batch.id}>
+                              {batch.batch_name} :{" "}
+                              {moment(
+                                batch.batch_start_timing,
+                                "HH:mm:ss"
+                              ).format("hh:mm A")}{" "}
+                              |{" "}
+                            </span>
+                          ))}
+                        </h5>
+                        <div className="online__course__wrap mt-0">
+                          <div className="row instructor__slider__active row__custom__class">
+                            <ScoreCard />
+                          </div>
+                        </div>
+                        <div className="row">
+                          {cardList.map(
+                            ({ name, icon, link, state }, index) => (
+                              <div
+                                key={index}
+                                className="col-xl-4 column__custom__class"
+                              >
+                                <div className="gridarea__wraper text-center card-background">
+                                  <div
+                                    className="gridarea__content p-2 m-2"
+                                    style={{
+                                      cursor: link ? "pointer" : "default",
+                                    }}
+                                  >
+                                    {link ? (
+                                      <Link
+                                        to={link}
+                                        className="text-decoration-none"
+                                        state={state}
+                                      >
+                                        <div className="gridarea__heading">
+                                          <img
+                                            src={icon}
+                                            alt={name}
+                                            height={50}
+                                            width={50}
+                                          />
+                                          <h3 className="mt-2">{name}</h3>
+                                        </div>
+                                      </Link>
+                                    ) : (
+                                      <div className="gridarea__heading">
+                                        <img
+                                          src={icon}
+                                          alt={name}
+                                          height={50}
+                                          width={50}
+                                        />
+                                        <h3 className="mt-2">{name}</h3>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          )}
+                          <div className="col-xl-12 column__custom__class">
+                            <div className="gridarea__wraper text-center card-background">
+                              <div className="gridarea__content p-2 m-2">
                                 <Link
-                                  to={link}
+                                  to="/studentLiveClasses"
                                   className="text-decoration-none"
-                                  state={state}
+                                  state={{ activeTab: "Recorded Class" }}
                                 >
-                                  <div className="gridarea__heading">
+                                  <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
                                     <img
-                                      src={icon}
-                                      alt={name}
-                                      height={50}
-                                      width={50}
+                                      src={recordedClasses}
+                                      alt="Recorded Classes"
+                                      height={35}
+                                      width={35}
                                     />
-                                    <h3 className="mt-2">{name}</h3>
+                                    <h2 className="mt-2">Recorded Classes</h2>
                                   </div>
                                 </Link>
-                              ) : (
-                                <div className="gridarea__heading">
-                                  <img
-                                    src={icon}
-                                    alt={name}
-                                    height={50}
-                                    width={50}
-                                  />
-                                  <h3 className="mt-2">{name}</h3>
-                                </div>
-                              )}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      ))}
-                      <div className="col-xl-12 column__custom__class">
-                        <div className="gridarea__wraper text-center card-background">
-                          <div className="gridarea__content p-2 m-2">
-                            <Link
-                              to="/studentLiveClasses"
-                              className="text-decoration-none"
-                              state={{ activeTab: "Recorded Class" }}
-                            >
-                              <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                <img
-                                  src={recordedClasses}
-                                  alt="Recorded Classes"
-                                  height={35}
-                                  width={35}
-                                />
-                                <h2 className="mt-2">Recorded Classes</h2>
-                              </div>
-                            </Link>
-                          </div>
-                        </div>
                       </div>
                     </div>
+                    <div className="col-xl-4 col-lg-4">
+                      <h5>
+                        Course :
+                        {courses?.length > 0 &&
+                          courses.map((course) => {
+                            const daysRemaining = getDaysRemaining(
+                              course.EnrollmentEndDate
+                            );
+                            return (
+                              <span key={course?.id} className="text-danger">
+                                {" "}
+                                {course.Course_Title} : {daysRemaining} days
+                                Left |
+                              </span>
+                            );
+                          })}
+                      </h5>
+                      <LeaderBoard studentID={studentID} />
+                      <UpcomingLiveClass upcommingClass={upcommingClass} />
+                      <NextLesson />
+                      <SpeakingSlots upcomingSS={upcomingSS} />
+                    </div>
                   </div>
-                </div>
-                <div className="col-xl-4 col-lg-4">
-                  <h5>
-                    Course :
-                    {courses?.length > 0 &&
-                      courses.map((course) => {
-                        const daysRemaining = getDaysRemaining(
-                          course.EnrollmentEndDate
-                        );
-                        return (
-                          <span key={course?.id} className="text-danger">
-                            {" "}
-                            {course.Course_Title} : {daysRemaining} days Left |
-                          </span>
-                        );
-                      })}
-                  </h5>
-                  <LeaderBoard studentID={studentID} />
-                  <UpcomingLiveClass upcommingClass={upcommingClass} />
-                  <NextLesson />
-                  <SpeakingSlots upcomingSS={upcomingSS} />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <UnPaidDashboard />
+      )}
+    </>
   );
 };
 

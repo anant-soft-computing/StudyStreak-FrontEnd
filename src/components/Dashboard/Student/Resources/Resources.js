@@ -14,18 +14,22 @@ const Resources = () => {
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const doDocument = (params) => {
-    return (
+    return params.value !== "-" ? (
       <button className="take-test" onClick={() => window.open(params.value)}>
         <i className="icofont-download" /> Download
       </button>
+    ) : (
+      "-"
     );
   };
 
   const doVideoAndLink = (params) => {
-    return (
+    return params.value !== "-" ? (
       <button className="take-test" onClick={() => window.open(params.value)}>
         View
       </button>
+    ) : (
+      "-"
     );
   };
 
@@ -98,7 +102,9 @@ const Resources = () => {
           const filteredResources = response?.data?.filter((item) => {
             const student = item?.student?.some((s) => s?.id === studentId);
             const batch = item?.batch?.some((b) => batchIds?.includes(b?.id));
-            const course = item?.course?.some((c) => courseIds?.includes(c?.id));
+            const course = item?.course?.some((c) =>
+              courseIds?.includes(c?.id)
+            );
             return student || batch || course;
           });
 
@@ -123,7 +129,7 @@ const Resources = () => {
                 course:
                   item?.course?.map((c) => c?.Course_Title)?.join(", ") || "-",
                 description: document?.description || "-",
-                document: document?.document,
+                document: document?.document || "-",
                 link: item?.link || "-",
               }))
           );

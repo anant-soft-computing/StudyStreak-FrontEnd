@@ -15,6 +15,7 @@ const TestReport = ({ reportData, testType, isLoading }) => {
       paperId: data.IELTS.id,
       no: index + 1,
       Name: data.IELTS.Name,
+      skip: "-",
       correct: "-",
       incorrect: "-",
       band: "-",
@@ -41,7 +42,8 @@ const TestReport = ({ reportData, testType, isLoading }) => {
       if (response.status === 200) {
         let studentAnswers = [],
           correctAnswer = [];
-        let correct = 0,
+        let skip = 0,
+          correct = 0,
           incorrect = 0,
           band = 0;
 
@@ -97,7 +99,10 @@ const TestReport = ({ reportData, testType, isLoading }) => {
           studentAnswers?.forEach((item, index) => {
             const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
             const studentAnswerText = item?.answer_text?.trim();
-            if (correctAnswerText?.includes(" OR ")) {
+
+            if (!studentAnswerText) {
+              skip++;
+            } else if (correctAnswerText?.includes(" OR ")) {
               const correctOptions = correctAnswerText
                 ?.split(" OR ")
                 ?.map((option) => option?.trim());
@@ -132,7 +137,7 @@ const TestReport = ({ reportData, testType, isLoading }) => {
               ? readingBandValues[correct]
               : listeningBandValues[correct];
         }
-        return { paperId, correct, incorrect, band };
+        return { paperId, skip, correct, incorrect, band };
       } else {
         console.log("error");
       }
@@ -151,6 +156,7 @@ const TestReport = ({ reportData, testType, isLoading }) => {
           row?.paperId === paperId
             ? {
                 ...row,
+                skip: result?.skip,
                 correct: result?.correct,
                 incorrect: result?.incorrect,
                 band: result?.band,
@@ -201,6 +207,17 @@ const TestReport = ({ reportData, testType, isLoading }) => {
         return (
           <div style={{ color: "red", fontWeight: "bold" }}>
             {params.data.incorrect}
+          </div>
+        );
+      },
+    },
+    {
+      headerName: "Skip",
+      field: "skip",
+      cellRenderer: (params) => {
+        return (
+          <div style={{ color: "darkmagenta", fontWeight: "bold" }}>
+            {params.data.skip}
           </div>
         );
       },

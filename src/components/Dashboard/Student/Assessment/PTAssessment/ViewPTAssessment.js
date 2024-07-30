@@ -59,36 +59,55 @@ const ViewPTAssessment = () => {
                   <h4 className="sidebar__title">Band : {band}</h4>
                   {examType === "Writing" && (
                     <div>
-                      <div className="writing__exam">
-                        <div className="dashboard__section__title">
-                          <h4 className="sidebar__title">AI Assessment</h4>
+                      {assessment?.Writing?.some(
+                        (item) => item?.ai_assessment
+                      ) ? (
+                        <div className="writing__exam">
+                          <div className="dashboard__section__title">
+                            <h4 className="sidebar__title">AI Assessment</h4>
+                          </div>
+                          {assessment?.Writing.map(
+                            (item, index) =>
+                              item?.ai_assessment && (
+                                <div>
+                                  <div key={index} className="gptResponse">
+                                    ({index + 1}). {item.ai_assessment}
+                                  </div>
+                                  <br />
+                                </div>
+                              )
+                          )}
                         </div>
-                        {assessment?.Writing?.map((item, index) => {
-                          return (
-                            <div>
-                              <div key={index} className="gptResponse">
-                                ({index + 1}). {item?.ai_assessment}
-                              </div>
-                              <br />
-                            </div>
-                          );
-                        })}
-                      </div>
-                      <div className="writing__exam">
-                        <div className="dashboard__section__title">
-                          <h4 className="sidebar__title">Tutor Assessment</h4>
+                      ) : (
+                        <h5 className="text-center text-danger">
+                          No AI Assessment Available !!
+                        </h5>
+                      )}
+
+                      {assessment?.Writing?.some(
+                        (item) => item?.tutor_assessment
+                      ) ? (
+                        <div className="writing__exam">
+                          <div className="dashboard__section__title">
+                            <h4 className="sidebar__title">Tutor Assessment</h4>
+                          </div>
+                          {assessment?.Writing.map(
+                            (item, index) =>
+                              item?.tutor_assessment && (
+                                <div>
+                                  <div key={index} className="gptResponse">
+                                    ({index + 1}). {item.tutor_assessment}
+                                  </div>
+                                  <br />
+                                </div>
+                              )
+                          )}
                         </div>
-                        {assessment?.Writing?.map((item, index) => {
-                          return (
-                            <div>
-                              <div key={index} className="gptResponse">
-                                ({index + 1}). {item?.tutor_assessment}
-                              </div>
-                              <br />
-                            </div>
-                          );
-                        })}
-                      </div>
+                      ) : (
+                        <h5 className="text-center text-danger">
+                          No Tutor Assessment Available !!
+                        </h5>
+                      )}
                     </div>
                   )}
                 </div>

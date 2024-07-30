@@ -3,7 +3,7 @@ import React from "react";
 const CancelIcon = () => {
   return (
     <div>
-      <i className="icofont-close-circled text-danger icofont-md icofont-bold"></i>
+      <i className="icofont-close-circled text-danger icofont-md"></i>
     </div>
   );
 };

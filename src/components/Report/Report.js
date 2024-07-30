@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../helpers/ajaxCall";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
+import SkipIcon from "../UI/SkipIcon";
 
 const Report = ({ paperId, testType }) => {
   const [examName, setExamName] = useState("");
@@ -99,20 +100,52 @@ const Report = ({ paperId, testType }) => {
         <div className="blog__details__content__wraper">
           <h4 className="sidebar__title">Solution For : {examName}</h4>
           {testType === "Writing" && (
-            <div className="writing__exam">
-              <div className="dashboard__section__title">
-                <h4 className="sidebar__title">AI Assessment</h4>
-              </div>
-              {writingAnswers?.map((item, index) => {
-                return (
-                  <div>
-                    <div key={index} className="gptResponse">
-                      ({index + 1}). {item?.ai_assessment}
-                    </div>
-                    <br />
+            <div>
+              {writingAnswers?.some((item) => item?.ai_assessment) ? (
+                <div className="writing__exam">
+                  <div className="dashboard__section__title">
+                    <h4 className="sidebar__title">AI Assessment</h4>
                   </div>
-                );
-              })}
+                  {writingAnswers.map(
+                    (item, index) =>
+                      item?.ai_assessment && (
+                        <div>
+                          <div key={index} className="gptResponse">
+                            ({index + 1}). {item.ai_assessment}
+                          </div>
+                          <br />
+                        </div>
+                      )
+                  )}
+                </div>
+              ) : (
+                <h5 className="text-center text-danger">
+                  No AI Assessment Available !!
+                </h5>
+              )}
+
+              {writingAnswers?.some((item) => item?.tutor_assessment) ? (
+                <div className="writing__exam">
+                  <div className="dashboard__section__title">
+                    <h4 className="sidebar__title">Tutor Assessment</h4>
+                  </div>
+                  {writingAnswers.map(
+                    (item, index) =>
+                      item?.tutor_assessment && (
+                        <div>
+                          <div key={index} className="gptResponse">
+                            ({index + 1}). {item.tutor_assessment}
+                          </div>
+                          <br />
+                        </div>
+                      )
+                  )}
+                </div>
+              ) : (
+                <h5 className="text-center text-danger">
+                  No Tutor Assessment Available !!
+                </h5>
+              )}
             </div>
           )}
           {(testType === "Reading" || testType === "Listening") && (
@@ -133,74 +166,62 @@ const Report = ({ paperId, testType }) => {
                         </tr>
                       </thead>
                       <tbody>
-                        {correctAnswer?.map(({ id, answer_text }, index) => (
-                          <tr
-                            key={id}
-                            className={`${
-                              index % 2 === 0 ? "" : "dashboard__table__row"
-                            }`}
-                          >
-                            <td className="text-dark">{index + 1}.</td>
-                            <td className="text-dark">
-                              <div className="dashboard__table__star">
-                                {answer_text}
-                              </div>
-                            </td>
-                            <td className="text-dark">
-                              {studentAnswers?.length > 0 &&
-                                studentAnswers[index] &&
-                                studentAnswers[index]?.answer_text}
-                            </td>
-                            <td className="text-dark">
-                              {studentAnswers?.length > 0 &&
-                              studentAnswers[index] &&
-                              correctAnswer[index]?.answer_text?.includes(
-                                " OR "
-                              ) ? (
-                                correctAnswer[index]?.answer_text
-                                  ?.split(" OR ")
-                                  ?.map((option) =>
-                                    option?.trim()?.toLowerCase()
-                                  )
-                                  ?.includes(
-                                    studentAnswers[
-                                      index
-                                    ]?.answer_text?.toLowerCase()
-                                  ) ? (
-                                  <CheckIcon />
-                                ) : (
-                                  <CancelIcon />
-                                )
-                              ) : studentAnswers?.length > 0 &&
-                                studentAnswers[index] &&
-                                correctAnswer[index]?.answer_text?.includes(
-                                  " AND "
-                                ) ? (
-                                correctAnswer[index]?.answer_text
-                                  ?.split(" AND ")
-                                  ?.map((option) =>
-                                    option?.trim()?.toLowerCase()
-                                  )
-                                  ?.every((option) =>
-                                    studentAnswers[index]?.answer_text
-                                      ?.toLowerCase()
-                                      ?.includes(option)
-                                  ) ? (
-                                  <CheckIcon />
-                                ) : (
-                                  <CancelIcon />
-                                )
-                              ) : studentAnswers?.length > 0 &&
-                                studentAnswers[index] &&
-                                studentAnswers[index]?.answer_text ===
-                                  correctAnswer[index]?.answer_text ? (
+                        {correctAnswer?.map(({ id, answer_text }, index) => {
+                          let icon;
+                          const studentAnswer =
+                            studentAnswers?.[index]?.answer_text?.trim();
+                          const correctAnswerText = answer_text?.trim();
+
+                          if (!studentAnswer) {
+                            icon = <SkipIcon />;
+                          } else if (correctAnswerText.includes(" OR ")) {
+                            const correctOptions = correctAnswerText
+                              .split(" OR ")
+                              .map((option) => option.trim().toLowerCase());
+                            icon = correctOptions.includes(
+                              studentAnswer.toLowerCase()
+                            ) ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            );
+                          } else if (correctAnswerText.includes(" AND ")) {
+                            const correctOptions = correctAnswerText
+                              .split(" AND ")
+                              .map((option) => option.trim().toLowerCase());
+                            icon = correctOptions.every((option) =>
+                              studentAnswer.toLowerCase().includes(option)
+                            ) ? (
+                              <CheckIcon />
+                            ) : (
+                              <CancelIcon />
+                            );
+                          } else {
+                            icon =
+                              studentAnswer === correctAnswerText ? (
                                 <CheckIcon />
                               ) : (
                                 <CancelIcon />
-                              )}
-                            </td>
-                          </tr>
-                        ))}
+                              );
+                          }
+                          return (
+                            <tr
+                              key={id}
+                              className={`${
+                                index % 2 === 0 ? "" : "dashboard__table__row"
+                              }`}
+                            >
+                              <td className="text-dark">{index + 1}.</td>
+                              <td className="text-dark">
+                                <div className="dashboard__table__star">
+                                  {correctAnswerText}
+                                </div>
+                              </td>
+                              <td className="text-dark">{studentAnswer}</td>
+                              <td className="text-dark">{icon}</td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>

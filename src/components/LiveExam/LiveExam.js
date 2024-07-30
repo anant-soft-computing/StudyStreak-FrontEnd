@@ -156,7 +156,7 @@ const LiveExam = () => {
         8000
       );
       if (response.status === 201) {
-        toast.success("Points Updated Successfully");
+        toast.success("Points Updated Successfully 🚀 !!");
       } else {
         console.log("error");
       }

@@ -4,6 +4,7 @@ const AnswerCard = ({
   totalQuestions,
   correctCount,
   incorrectCount,
+  skipCount,
   bandValue,
   examType,
 }) => {
@@ -36,15 +37,21 @@ const AnswerCard = ({
       </ul>
       <ul className="answerContent">
         <li className="text-dark">
-          Correct :
+          Correct Answer :
           <div className="scc__meta">
             <strong className="answerCount">{correctCount}</strong>
           </div>
         </li>
         <li className="text-dark">
-          In Correct :
+          Incorrect Answer :
           <div className="scc__meta">
             <strong className="answerCount">{incorrectCount}</strong>
+          </div>
+        </li>
+        <li className="text-dark">
+          Skip Answer :
+          <div className="scc__meta">
+            <strong className="answerCount">{skipCount}</strong>
           </div>
         </li>
       </ul>

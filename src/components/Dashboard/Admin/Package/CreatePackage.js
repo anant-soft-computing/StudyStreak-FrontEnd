@@ -29,6 +29,10 @@ const initialPackageData = {
   group_doubt_solving_count: 0,
   one_to_one_doubt_solving: false,
   one_to_one_doubt_solving_count: 0,
+  speaking_practice: 0,
+  tutor_support: 0,
+  webinar: 0,
+  counselling: 0,
 };
 
 const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
@@ -45,7 +49,7 @@ const tabs = [
   { name: "Materials" },
   { name: "Tests" },
   { name: "Membership" },
-  { name: "Doubt Solving" },
+  { name: "Classes" },
 ];
 
 const validateForm = (createPackageData, setFormError) => {
@@ -480,10 +484,42 @@ const CreatePackage = ({ setMainTab }) => {
         </div>
         <div
           className={`tab-pane fade ${
-            activeTab === "Doubt Solving" ? "show active" : ""
+            activeTab === "Classes" ? "show active" : ""
           }`}
         >
           <div className="row">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>One To One Doubt Solving Count</label>
+                  <input
+                    type="number"
+                    placeholder="One To One Doubt Solving Count"
+                    value={createPackageData.one_to_one_doubt_solving_count}
+                    onChange={(e) => {
+                      dispatchCreatePackage({
+                        type: "one_to_one_doubt_solving_count",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="form__check">
+                  <label>One To One Doubt Solving</label>{" "}
+                  <input
+                    type="checkbox"
+                    value={createPackageData.one_to_one_doubt_solving}
+                    checked={createPackageData.one_to_one_doubt_solving}
+                    onChange={(e) => {
+                      dispatchCreatePackage({
+                        type: "one_to_one_doubt_solving",
+                        value: e.target.checked,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
@@ -516,32 +552,72 @@ const CreatePackage = ({ setMainTab }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>One To One Doubt Solving Count</label>
+                  <label>Speaking Practice Count</label>
                   <input
                     type="number"
-                    placeholder="One To One Doubt Solving Count"
-                    value={createPackageData.one_to_one_doubt_solving_count}
+                    placeholder="Speaking Practice Count"
+                    value={createPackageData.speaking_practice}
                     onChange={(e) => {
                       dispatchCreatePackage({
-                        type: "one_to_one_doubt_solving_count",
+                        type: "speaking_practice",
                         value: e.target.value,
                       });
                     }}
                   />
                 </div>
-                <div className="form__check">
-                  <label>One To One Doubt Solving</label>{" "}
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Tutor Support Count</label>
                   <input
-                    type="checkbox"
-                    value={createPackageData.one_to_one_doubt_solving}
-                    checked={createPackageData.one_to_one_doubt_solving}
+                    type="number"
+                    placeholder="Tutor Support Count"
+                    value={createPackageData.tutor_support}
                     onChange={(e) => {
                       dispatchCreatePackage({
-                        type: "one_to_one_doubt_solving",
-                        value: e.target.checked,
+                        type: "tutor_support",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Webinar Count</label>
+                  <input
+                    type="number"
+                    placeholder="Webinar Count"
+                    value={createPackageData.webinar}
+                    onChange={(e) => {
+                      dispatchCreatePackage({
+                        type: "webinar",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Counselling Count</label>
+                  <input
+                    type="number"
+                    placeholder="Counselling Count"
+                    value={createPackageData.counselling}
+                    onChange={(e) => {
+                      dispatchCreatePackage({
+                        type: "counselling",
+                        value: e.target.value,
                       });
                     }}
                   />

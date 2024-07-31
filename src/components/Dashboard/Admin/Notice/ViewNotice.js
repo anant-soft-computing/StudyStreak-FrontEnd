@@ -33,7 +33,6 @@ const ViewNotice = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            console.log("notice", response.data);
             const noticeWithNumbers = response?.data?.map((item, index) => ({
               ...item,
               no: index + 1,

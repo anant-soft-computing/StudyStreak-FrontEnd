@@ -6,9 +6,9 @@ import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import ajaxCall from "../../helpers/ajaxCall";
 
-const TestReport = ({ reportData, testType, isLoading }) => {
-  const [reportParams, setReportParams] = useState(null);
+const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
   const [rowsData, setRowsData] = useState([]);
+  const [reportParams, setReportParams] = useState(null);
 
   useEffect(() => {
     const initialData = reportData.map((data, index) => ({
@@ -137,6 +137,13 @@ const TestReport = ({ reportData, testType, isLoading }) => {
               ? readingBandValues[correct]
               : listeningBandValues[correct];
         }
+        setCounts((prev) => ({
+          ...prev,
+          correct: correct,
+          incorrect: incorrect,
+          skipped: skip,
+          band: band,
+        }));
         return { paperId, skip, correct, incorrect, band };
       } else {
         console.log("error");
@@ -147,19 +154,19 @@ const TestReport = ({ reportData, testType, isLoading }) => {
   };
 
   const viewReport = async (params) => {
-    const paperId = params?.data?.paperId;
+    const paperId = params.data.paperId;
     const result = await fetchData(paperId);
 
     if (result) {
-      setRowsData((prev) =>
-        prev?.map((row) =>
-          row?.paperId === paperId
+      setRowsData((prevRowsData) =>
+        prevRowsData.map((row) =>
+          row.paperId === paperId
             ? {
                 ...row,
-                skip: result?.skip,
-                correct: result?.correct,
-                incorrect: result?.incorrect,
-                band: result?.band,
+                correct: result.correct,
+                incorrect: result.incorrect,
+                skipped: result.skip,
+                band: result.band,
               }
             : row
         )

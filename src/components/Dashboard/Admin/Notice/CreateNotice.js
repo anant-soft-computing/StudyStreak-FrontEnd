@@ -1,14 +1,14 @@
 import React, { useReducer, useState } from "react";
-import SingleSelection from "../../../UI/SingleSelect";
+import SelectionBox from "../../../UI/SelectionBox";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 
 const initialNoticData = {
-  student: "",
-  batch: "",
-  course: "",
+  studentId: [],
+  batchId: [],
+  courseId: [],
   expiry_date: "",
   notice: "",
 };
@@ -28,15 +28,46 @@ const CreateNotice = ({ setActiveTab }) => {
     initialNoticData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [activeButton, setActiveButton] = useState("student");
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
     dispatchCreateNotice({ type: "reset" });
   };
 
+  const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
+    if (isSingle) {
+      dispatchCreateNotice({
+        type: fieldName,
+        value: val,
+      });
+      dispatchCreateNotice({
+        type: proFieldName,
+        value: +val[0]?.id,
+      });
+      return;
+    }
+    const newValIds = val.map((ids) => ids.id);
+    dispatchCreateNotice({
+      type: fieldName,
+      value: val,
+    });
+    dispatchCreateNotice({
+      type: proFieldName,
+      value: newValIds,
+    });
+  };
+
   const createNotice = async (e) => {
     e.preventDefault();
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
+    const data = {
+      student: createNoticeData.studentId,
+      batch: createNoticeData.batchId,
+      course: createNoticeData.courseId,
+      expiry_date: createNoticeData.expiry_date,
+      notice: createNoticeData.notice,
+    };
     try {
       const response = await ajaxCall(
         "/noticeboard/",
@@ -47,7 +78,7 @@ const CreateNotice = ({ setActiveTab }) => {
             Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",
-          body: JSON.stringify(createNoticeData),
+          body: JSON.stringify(data),
         },
         8000
       );
@@ -70,77 +101,135 @@ const CreateNotice = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-xl-12">
-        <div className="row">
-          <div className="col-xl-6 mb-4">
-            <div className="dashboard__select__heading">
-              <span>Student</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createNoticeData?.student}
-                onChange={(val) => {
-                  dispatchCreateNotice({
-                    type: "student",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url="/student-list/"
-                objKey={["full_name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6 mb-4">
-            <div className="dashboard__select__heading">
-              <span>Batch</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createNoticeData?.batch}
-                onChange={(val) => {
-                  dispatchCreateNotice({
-                    type: "batch",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url="/batchview/"
-                objKey={["batch_name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Course</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createNoticeData?.course}
-                onChange={(val) => {
-                  dispatchCreateNotice({
-                    type: "course",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url="/courselistforpackage/"
-                objKey={["Course_Title"]}
-              />
+    <>
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <button
+          className={`default__button ${
+            activeButton === "student" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("student")}
+        >
+          Student
+        </button>
+        <button
+          className={`default__button ${
+            activeButton === "course" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("course")}
+        >
+          Course
+        </button>
+        <button
+          className={`default__button ${
+            activeButton === "batch" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("batch")}
+        >
+          Batch
+        </button>
+      </div>
+      <div className="row">
+        <div className="col-xl-12">
+          <div className="row">
+            {activeButton === "student" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Student</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createNoticeData?.student}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "student",
+                      "studentId",
+                      false
+                    )}
+                    url="/student-list/"
+                    name="full_name"
+                    objKey={["full_name"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            {activeButton === "course" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Course</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createNoticeData?.course}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "course",
+                      "courseId",
+                      false
+                    )}
+                    url="/courselistforpackage/"
+                    name="Course_Title"
+                    objKey={["Course_Title"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            {activeButton === "batch" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Batch</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createNoticeData?.batch}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "batch",
+                      "batchId",
+                      false
+                    )}
+                    url="/batchview/"
+                    name="batch_name"
+                    objKey={["batch_name"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Expiry Date</label>
+                  <input
+                    type="date"
+                    placeholder="expiry date"
+                    value={createNoticeData?.expiry_date}
+                    onChange={(e) =>
+                      dispatchCreateNotice({
+                        type: "expiry_date",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="col-xl-6">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
-                <label>Expiry Date</label>
-                <input
-                  type="date"
-                  placeholder="expiry date"
-                  value={createNoticeData?.expiry_date}
+                <label>Notice</label>
+                <textarea
+                  type="text"
+                  placeholder="Notice"
+                  value={createNoticeData?.notice}
                   onChange={(e) =>
                     dispatchCreateNotice({
-                      type: "expiry_date",
+                      type: "notice",
                       value: e.target.value,
                     })
                   }
@@ -148,45 +237,27 @@ const CreateNotice = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-xl-6">
-          <div className="dashboard__form__wraper">
-            <div className="dashboard__form__input">
-              <label>Notice</label>
-              <textarea
-                type="text"
-                placeholder="Notice"
-                value={createNoticeData?.notice}
-                onChange={(e) =>
-                  dispatchCreateNotice({
-                    type: "notice",
-                    value: e.target.value,
-                  })
-                }
-              />
+          <div className="col-xl-12 text-center">
+            <div className="dashboard__form__button text-center mt-4">
+              {formStatus.isError && (
+                <div className="text-danger mb-2">{formStatus.errMsg}</div>
+              )}
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Notice..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createNotice}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Notice
+                </button>
+              )}
             </div>
           </div>
         </div>
-        <div className="col-xl-12 text-center">
-          <div className="dashboard__form__button text-center mt-4">
-            {formStatus.isError && (
-              <div className="text-danger mb-2">{formStatus.errMsg}</div>
-            )}
-            {formStatus.isSubmitting ? (
-              <Loading color="primary" text="Creating Notice..." />
-            ) : (
-              <button
-                className="default__button"
-                onClick={createNotice}
-                disabled={formStatus.isSubmitting}
-              >
-                Create Notice
-              </button>
-            )}
-          </div>
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Tab from "../UI/Tab";
 import ajaxCall from "../../helpers/ajaxCall";
 import TestReport from "./TestReport";
+import CounterCard from "./CounterCard";
 
 const tabs = [
   { name: "Reading" },
@@ -20,6 +21,12 @@ const PracticeTestReport = () => {
   });
   const [givenTest, setGivenTest] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
+  const [counts, setCounts] = useState({
+    correct: 0,
+    incorrect: 0,
+    skipped: 0,
+    band: 0,
+  });
 
   useEffect(() => {
     (async () => {
@@ -112,6 +119,7 @@ const PracticeTestReport = () => {
                     <div className="dashboard__section__title">
                       <h4>Practice Test Report</h4>
                     </div>
+                    <CounterCard counts={counts} />
                     <div className="row">
                       <Tab
                         tabs={tabs}
@@ -123,6 +131,7 @@ const PracticeTestReport = () => {
                           reportData={reportData(activeTab)}
                           testType={activeTab}
                           isLoading={isLoading}
+                          setCounts={setCounts}
                         />
                       </div>
                     </div>

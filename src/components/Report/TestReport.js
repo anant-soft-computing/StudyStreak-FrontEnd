@@ -6,8 +6,15 @@ import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import ajaxCall from "../../helpers/ajaxCall";
 
-const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
+const TestReport = ({
+  reportData,
+  testType,
+  isLoading,
+  setCounts,
+  setExamName,
+}) => {
   const [rowsData, setRowsData] = useState([]);
+  const [activeTest, setActiveTest] = useState();
   const [reportParams, setReportParams] = useState(null);
 
   useEffect(() => {
@@ -36,6 +43,7 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
         8000
       );
       if (response.status === 200) {
+        setExamName(response?.data?.name);
         let studentAnswers = [],
           correctAnswer = [];
         let skip = 0,
@@ -149,7 +157,7 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
     }
   };
 
-  const viewReport = async (params) => {
+  const viewReport = async (params, index) => {
     const paperId = params.data.paperId;
     const result = await fetchData(paperId);
 
@@ -158,6 +166,7 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
         paperId: paperId,
         testType: testType,
       });
+      setActiveTest(index);
     }
   };
 
@@ -182,15 +191,21 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
     {
       headerName: "View Report",
       field: "button",
-      cellRenderer: (params) => (
-        <button
-          className="take-test"
-          onClick={() => viewReport(params)}
-          style={{ backgroundColor: "green", border: "1px solid green" }}
-        >
-          View Report
-        </button>
-      ),
+      cellRenderer: (params) => {
+        return (
+          <button
+            className="take-test"
+            onClick={() => viewReport(params, params.node.rowIndex)}
+            style={
+              params.node.rowIndex === activeTest
+                ? { backgroundColor: "green", border: "1px solid green" }
+                : { backgroundColor: "#01579b", border: "1px solid #01579b" }
+            }
+          >
+            View Report
+          </button>
+        );
+      },
     },
   ];
 
@@ -200,9 +215,7 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
         <Loading text="Loading...." color="primary" />
       ) : reportData.length > 0 ? (
         <>
-          <div className="d-flex flex-wrap">
-            <Table rowData={rowsData} columnDefs={columns} />
-          </div>
+          <Table rowData={rowsData} columnDefs={columns} />
           {reportParams && (
             <Report
               paperId={reportParams?.paperId}

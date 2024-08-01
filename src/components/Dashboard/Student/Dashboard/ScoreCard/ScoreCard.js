@@ -163,6 +163,7 @@ const ScoreCard = () => {
                         practiceTestData?.[0]?.practise_set_name &&
                         "/praticeTest-report"
                       }
+                      state={{ latestBand: band }}
                     >
                       <h6>View Full Report {">>"}</h6>
                     </Link>

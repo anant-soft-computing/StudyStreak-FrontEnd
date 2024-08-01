@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Tab from "../UI/Tab";
 import ajaxCall from "../../helpers/ajaxCall";
 import TestReport from "./TestReport";
@@ -12,6 +13,7 @@ const tabs = [
 ];
 
 const PracticeTestReport = () => {
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [testData, setTestData] = useState({
     Reading: [],
@@ -19,6 +21,7 @@ const PracticeTestReport = () => {
     Listening: [],
     Speaking: [],
   });
+  const [examName, setExamName] = useState("");
   const [givenTest, setGivenTest] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
   const [counts, setCounts] = useState({
@@ -27,6 +30,18 @@ const PracticeTestReport = () => {
     skipped: 0,
     band: 0,
   });
+
+  const testAvailable = () => {
+    if (activeTab === "Reading") {
+      return testData.Reading?.length;
+    } else if (activeTab === "Writing") {
+      return testData.Writing?.length;
+    } else if (activeTab === "Listening") {
+      return testData.Listening?.length;
+    } else if (activeTab === "Speaking") {
+      return testData.Speaking?.length;
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -119,7 +134,18 @@ const PracticeTestReport = () => {
                     <div className="dashboard__section__title">
                       <h4>Practice Test Report</h4>
                     </div>
-                    <CounterCard counts={counts} />
+                    {examName && (
+                      <h4 className="sidebar__title">
+                        Solution For : {examName}
+                      </h4>
+                    )}
+                    <CounterCard
+                      counts={counts}
+                      testType={activeTab}
+                      latestBand={location?.state?.latestBand}
+                      testGiven={reportData(activeTab)?.length}
+                      testAvailable={testAvailable(activeTab)}
+                    />
                     <div className="row">
                       <Tab
                         tabs={tabs}
@@ -132,6 +158,7 @@ const PracticeTestReport = () => {
                           testType={activeTab}
                           isLoading={isLoading}
                           setCounts={setCounts}
+                          setExamName={setExamName}
                         />
                       </div>
                     </div>

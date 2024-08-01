@@ -19,9 +19,6 @@ const Table = ({ rowData, columnDefs }) => {
       sortable: true,
       resizable: true,
     },
-    onGridReady: (params) => {
-      params.api.sizeColumnsToFit();
-    },
   };
 
   return (

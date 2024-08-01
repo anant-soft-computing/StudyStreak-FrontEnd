@@ -16789,6 +16789,13 @@ div.gridarea__wraper {
   padding: 10px;
 }
 
+.latest_wrapper {
+  border: 2px solid red;
+  border-radius: 20px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
 .wrap_item {
   display: flex;
   flex-direction: column;

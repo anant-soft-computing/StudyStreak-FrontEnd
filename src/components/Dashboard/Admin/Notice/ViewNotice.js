@@ -4,16 +4,58 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
 
-const columns = [
-  { headerName: "No.", field: "no", resizable: false, width: 60 },
-  { headerName: "Notice", field: "notice", filter: true, width: 600 },
-  { headerName: "Expiry Date", field: "expiry_date", filter: true },
-];
-
 const ViewNotice = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [noticeList, setNoticeList] = useState([]);
   const authData = useSelector((state) => state.authStore);
+
+  const checkLink = (text) => {
+    const urlPattern = /(https?:\/\/[^\s]+)/g;
+    return text.split(urlPattern).map((item, index) =>
+      urlPattern.test(item) ? (
+        <a
+          href={item}
+          target="_blank"
+          rel="noopener noreferrer"
+          key={index}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          [link]
+        </a>
+      ) : (
+        item
+      )
+    );
+  };
+
+  const columns = [
+    { headerName: "No.", field: "no", resizable: false,width:60 },
+    {
+      headerName: "Notice",
+      field: "notice",
+      filter: true,
+      cellRenderer: (params) => checkLink(params.value),
+    },
+    { headerName: "Expiry Date", field: "expiry_date", filter: true },
+    {
+      headerName: "Student",
+      field: "student",
+      resizable: true,
+      filter: true,
+    },
+    {
+      headerName: "Course",
+      field: "course",
+      resizable: true,
+      filter: true,
+    },
+    {
+      headerName: "Batch",
+      field: "batch",
+      resizable: true,
+      filter: true,
+    },
+  ];
 
   useEffect(() => {
     if (activeTab === "View Notice") {
@@ -33,12 +75,32 @@ const ViewNotice = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            const noticeWithNumbers = response?.data?.map((item, index) => ({
-              ...item,
+            const noticeData = response.data.map((item, index) => ({
               no: index + 1,
+              notice: item.notice,
+              expiry_date: item.expiry_date,
+              batch:
+                item?.batch?.length > 0
+                  ? item?.batch?.map((batch) => batch?.batch_name).join(", ")
+                  : "-",
+              student:
+                item?.student?.length > 0
+                  ? item?.student
+                      .map(
+                        (student) =>
+                          `${student?.user?.first_name} ${student?.user?.last_name}`
+                      )
+                      .join(", ")
+                  : "-",
+              course:
+                item?.course?.length > 0
+                  ? item?.course
+                      .map((course) => course?.Course_Title)
+                      .join(", ")
+                  : "-",
             }));
+            setNoticeList(noticeData);
             setIsLoading(false);
-            setNoticeList(noticeWithNumbers);
           } else {
             setIsLoading(false);
           }

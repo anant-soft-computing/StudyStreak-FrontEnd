@@ -98,7 +98,6 @@ const Report = ({ paperId, testType }) => {
     <div className="row mt-4">
       <div className="col-xl-12 col-lg-12 AnswerCard">
         <div className="blog__details__content__wraper">
-          <h4 className="sidebar__title">Solution For : {examName}</h4>
           {testType === "Writing" && (
             <div>
               {writingAnswers?.some((item) => item?.ai_assessment) ? (

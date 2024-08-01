@@ -22,6 +22,7 @@ const initialPackageData = {
   speaking_test: false,
   speaking_test_count: 0,
   writing_evaluation: false,
+  writing_evaluation_count: 0,
   live_classes_membership: false,
   online_membership: false,
   offline_membership: false,
@@ -29,10 +30,14 @@ const initialPackageData = {
   group_doubt_solving_count: 0,
   one_to_one_doubt_solving: false,
   one_to_one_doubt_solving_count: 0,
-  speaking_practice: 0,
-  tutor_support: 0,
-  webinar: 0,
-  counselling: 0,
+  speaking_practice: false,
+  speaking_practice_count: 0,
+  tutor_support: false,
+  tutor_support_count: 0,
+  webinar: false,
+  webinar_count: 0,
+  counselling: false,
+  counselling_count: 0,
 };
 
 const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
@@ -398,35 +403,51 @@ const CreatePackage = ({ setMainTab }) => {
                     }}
                   />
                 </div>
-                <div className="d-flex gap-4">
-                  <div className="form__check">
-                    <label>Specking Test</label>{" "}
-                    <input
-                      type="checkbox"
-                      value={createPackageData?.speaking_test}
-                      checked={createPackageData?.speaking_test}
-                      onChange={(e) => {
-                        dispatchCreatePackage({
-                          type: "speaking_test",
-                          value: e.target.checked,
-                        });
-                      }}
-                    />
-                  </div>
-                  <div className="form__check">
-                    <label>Writing Evaluation</label>{" "}
-                    <input
-                      type="checkbox"
-                      value={createPackageData?.writing_evaluation}
-                      checked={createPackageData?.writing_evaluation}
-                      onChange={(e) => {
-                        dispatchCreatePackage({
-                          type: "writing_evaluation",
-                          value: e.target.checked,
-                        });
-                      }}
-                    />
-                  </div>
+                <div className="form__check">
+                  <label>Specking Test</label>{" "}
+                  <input
+                    type="checkbox"
+                    value={createPackageData?.speaking_test}
+                    checked={createPackageData?.speaking_test}
+                    onChange={(e) => {
+                      dispatchCreatePackage({
+                        type: "speaking_test",
+                        value: e.target.checked,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Writing Evaluation Count</label>
+                  <input
+                    type="number"
+                    placeholder="Writing Evaluation Count"
+                    value={createPackageData?.writing_evaluation_count}
+                    onChange={(e) => {
+                      dispatchCreatePackage({
+                        type: "writing_evaluation_count",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+                <div className="form__check">
+                  <label>Writing Evaluation</label>{" "}
+                  <input
+                    type="checkbox"
+                    value={createPackageData?.writing_evaluation}
+                    checked={createPackageData?.writing_evaluation}
+                    onChange={(e) => {
+                      dispatchCreatePackage({
+                        type: "writing_evaluation",
+                        value: e.target.checked,
+                      });
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -559,13 +580,27 @@ const CreatePackage = ({ setMainTab }) => {
                   <input
                     type="number"
                     placeholder="Speaking Practice Count"
-                    value={createPackageData.speaking_practice}
+                    value={createPackageData.speaking_practice_count}
                     onChange={(e) => {
                       dispatchCreatePackage({
-                        type: "speaking_practice",
+                        type: "speaking_practice_count",
                         value: e.target.value,
                       });
                     }}
+                  />
+                </div>
+                <div className="form__check">
+                  <label>Speaking Practice</label>{" "}
+                  <input
+                    type="checkbox"
+                    checked={createPackageData.speaking_practice}
+                    value={createPackageData.speaking_practice}
+                    onChange={(e) =>
+                      dispatchCreatePackage({
+                        type: "speaking_practice",
+                        value: e.target.checked,
+                      })
+                    }
                   />
                 </div>
               </div>
@@ -577,49 +612,91 @@ const CreatePackage = ({ setMainTab }) => {
                   <input
                     type="number"
                     placeholder="Tutor Support Count"
-                    value={createPackageData.tutor_support}
+                    value={createPackageData.tutor_support_count}
                     onChange={(e) => {
                       dispatchCreatePackage({
-                        type: "tutor_support",
+                        type: "tutor_support_count",
                         value: e.target.value,
                       });
                     }}
                   />
                 </div>
+                <div className="form__check">
+                  <label>Tutor Support</label>{" "}
+                  <input
+                    type="checkbox"
+                    checked={createPackageData.tutor_support}
+                    value={createPackageData.tutor_support}
+                    onChange={(e) =>
+                      dispatchCreatePackage({
+                        type: "tutor_support",
+                        value: e.target.checked,
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Webinar Count</label>
                   <input
                     type="number"
                     placeholder="Webinar Count"
-                    value={createPackageData.webinar}
+                    value={createPackageData.webinar_count}
                     onChange={(e) => {
                       dispatchCreatePackage({
-                        type: "webinar",
+                        type: "webinar_count",
                         value: e.target.value,
                       });
                     }}
                   />
                 </div>
+                <div className="form__check">
+                  <label>Webinar</label>{" "}
+                  <input
+                    type="checkbox"
+                    checked={createPackageData.webinar}
+                    value={createPackageData.webinar}
+                    onChange={(e) =>
+                      dispatchCreatePackage({
+                        type: "webinar",
+                        value: e.target.checked,
+                      })
+                    }
+                  />
+                </div>
               </div>
             </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Counselling Count</label>
                   <input
                     type="number"
                     placeholder="Counselling Count"
-                    value={createPackageData.counselling}
+                    value={createPackageData.counselling_count}
                     onChange={(e) => {
                       dispatchCreatePackage({
-                        type: "counselling",
+                        type: "counselling_count",
                         value: e.target.value,
                       });
                     }}
+                  />
+                </div>
+                <div className="form__check">
+                  <label>Counselling</label>{" "}
+                  <input
+                    type="checkbox"
+                    checked={createPackageData.counselling}
+                    value={createPackageData.counselling}
+                    onChange={(e) =>
+                      dispatchCreatePackage({
+                        type: "counselling",
+                        value: e.target.checked,
+                      })
+                    }
                   />
                 </div>
               </div>

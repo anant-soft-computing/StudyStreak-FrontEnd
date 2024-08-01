@@ -4,6 +4,11 @@ import { Box, List, ListItem, Typography } from "@mui/material";
 
 const NoticeBoard = () => {
   const [noticeData, setNoticeData] = useState([]);
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON.parse(localStorage.getItem("courses"))?.map(
+    (item) => item?.id
+  );
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     (async () => {
@@ -23,7 +28,21 @@ const NoticeBoard = () => {
           8000
         );
         if (response.status === 200) {
-          setNoticeData(response?.data);
+          const filterNotice = response?.data?.filter((item) => {
+            const student = item?.student?.some((s) => s?.id === studentId);
+            const batch = item?.batch?.some((b) => batchIds?.includes(b?.id));
+            const course = item?.course?.some((c) =>
+              courseIds?.includes(c?.id)
+            );
+            return student || batch || course;
+          });
+
+          const responseNotice = filterNotice?.map((item) => {
+            return {
+              notice: item?.notice,
+            };
+          });
+          setNoticeData(responseNotice);
         } else {
           console.log("error");
         }

@@ -94,7 +94,7 @@ const AudioRecorder = ({
           <i className="icofont-stop audio_stop_icon"></i>
         ) : (
           <i
-            class={`icofont-mic audio-30  ${
+            className={`icofont-mic audio-30  ${
               enableRecording && "audio_recorder_icon"
             }`}
           ></i>

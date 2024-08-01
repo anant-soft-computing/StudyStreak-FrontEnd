@@ -4,16 +4,24 @@ import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 import Loading from "../../../UI/Loading";
+import moment from "moment";
 
 const initialLiveClassData = {
   select_batch: "",
   liveclasstype: "",
-  meeting_title: "",
-  meeting_description: "",
+  topic: "",
+  agenda: "",
   start_time: "",
   end_time: "",
-  zoom_meeting_password: "",
   registration_limit: 0,
+  recurrence_type: 1,
+  weekly_days: "",
+  monthly_day: "",
+  monthly_week: "",
+  monthly_week_day: "",
+  repeat_interval: 1,
+  end_date_time: "",
+  end_times: 1,
 };
 
 const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
@@ -30,20 +38,16 @@ const validateForm = (createLiveClassData, setFormError) => {
     setFormError("Live Class Type is Required");
     return false;
   }
-  if (!createLiveClassData.meeting_title) {
+  if (!createLiveClassData.topic) {
     setFormError("Meeting Title is Required");
     return false;
   }
-  if (!createLiveClassData.meeting_description) {
+  if (!createLiveClassData.agenda) {
     setFormError("Meeting Description Required");
     return false;
   }
   if (!createLiveClassData.start_time) {
     setFormError("Start Date & Time is Required");
-    return false;
-  }
-  if (!createLiveClassData.end_time) {
-    setFormError("End Date & Time is Required");
     return false;
   }
   return true;
@@ -71,6 +75,34 @@ const CreateLiveClass = ({ setActiveTab }) => {
     e.preventDefault();
     if (!validateForm(createLiveClassData, setFormError)) return;
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
+
+    const data = {
+      select_batch: createLiveClassData.select_batch,
+      liveclasstype: createLiveClassData.liveclasstype,
+      agenda: createLiveClassData.agenda,
+      duration: moment(createLiveClassData.end_date_time).diff(
+        moment(createLiveClassData.start_time),
+        "minutes"
+      ),
+      timezone: "Asia/Kolkata",
+      recurrence: {
+        end_date_time: moment(createLiveClassData.end_date_time).format(
+          "YYYY-MM-DDTHH:mm:ss"
+        ),
+        end_times: createLiveClassData.end_times,
+        monthly_day: createLiveClassData.monthly_day,
+        monthly_week: createLiveClassData.monthly_week,
+        monthly_week_day: createLiveClassData.monthly_week_day,
+        repeat_interval: createLiveClassData.repeat_interval,
+        type: createLiveClassData.recurrence_type,
+        weekly_days: createLiveClassData.weekly_days,
+      },
+      start_time: moment(createLiveClassData.start_time).format(
+        "YYYY-MM-DDTHH:mm:ss"
+      ),
+      topic: createLiveClassData.topic,
+    };
+
     try {
       const response = await ajaxCall(
         "/liveclass_create_view/",
@@ -81,7 +113,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
             Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",
-          body: JSON.stringify(createLiveClassData),
+          body: JSON.stringify(data),
         },
         8000
       );
@@ -104,114 +136,59 @@ const CreateLiveClass = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-xl-12">
-        <div className="row">
-        <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Live Class Type</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createLiveClass?.liveclasstype}
-                onChange={(val) => {
-                  dispatchCreateLiveClass({
-                    type: "liveclasstype",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url="/live_class_type_list_view/"
-                objKey={["name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Batch</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createLiveClass?.select_batch}
-                onChange={(val) => {
-                  dispatchCreateLiveClass({
-                    type: "select_batch",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url="/batchview/"
-                objKey={["batch_name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6 mt-3">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Meeting Title</label>
-                <input
-                  type="text"
-                  placeholder="Meeting Title"
-                  value={createLiveClassData?.meeting_title}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "meeting_title",
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-6 mt-3">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Start Date & Time</label>
-                <input
-                  type="datetime-local"
-                  value={createLiveClassData?.start_time}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "start_time",
-                      value: e.target.value,
-                    });
-                  }}
-                  min={new Date().toISOString().slice(0, 16)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>End Date & Time</label>
-                <input
-                  type="datetime-local"
-                  value={createLiveClassData?.end_time}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "end_time",
-                      value: e.target.value,
-                    });
-                  }}
-                  min={new Date().toISOString().slice(0, 16)}
-                />
-              </div>
-            </div>
-          </div>
-          {(createLiveClassData?.liveclasstype === 2 ||
-            createLiveClassData?.liveclasstype === 4) && (
+    <>
+      <div className="row">
+        <div className="col-xl-12">
+          <div className="row">
             <div className="col-xl-6">
+              <div className="dashboard__select__heading">
+                <span>Live Class Type</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={createLiveClassData.liveclasstype}
+                  onChange={(val) => {
+                    dispatchCreateLiveClass({
+                      type: "liveclasstype",
+                      value: val,
+                    });
+                  }}
+                  isSearch={true}
+                  url="/live_class_type_list_view/"
+                  objKey={["name"]}
+                />
+              </div>
+            </div>
+            <div className="col-xl-6">
+              <div className="dashboard__select__heading">
+                <span>Batch</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={createLiveClassData.select_batch}
+                  onChange={(val) => {
+                    dispatchCreateLiveClass({
+                      type: "select_batch",
+                      value: val,
+                    });
+                  }}
+                  isSearch={true}
+                  url="/batchview/"
+                  objKey={["batch_name"]}
+                />
+              </div>
+            </div>
+            <div className="col-xl-6 mt-3">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Registration Limit</label>
+                  <label>Meeting Title</label>
                   <input
-                    type="number"
-                    placeholder="Registration Limit"
-                    value={createLiveClassData?.registration_limit}
+                    type="text"
+                    placeholder="Meeting Title"
+                    value={createLiveClassData.topic}
                     onChange={(e) => {
                       dispatchCreateLiveClass({
-                        type: "registration_limit",
+                        type: "topic",
                         value: e.target.value,
                       });
                     }}
@@ -219,50 +196,270 @@ const CreateLiveClass = ({ setActiveTab }) => {
                 </div>
               </div>
             </div>
-          )}
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Meeting Description</label>
-                <textarea
-                  id=""
-                  cols="3"
-                  rows="3"
-                  placeholder="Meeting Description"
-                  value={createLiveClassData?.meeting_description}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "meeting_description",
-                      value: e.target.value,
-                    });
-                  }}
-                >
-                  Meeting Description
-                </textarea>
+            <div className="col-xl-6 mt-3">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Start Date & Time</label>
+                  <input
+                    type="datetime-local"
+                    value={createLiveClassData.start_time}
+                    onChange={(e) => {
+                      dispatchCreateLiveClass({
+                        type: "start_time",
+                        value: e.target.value,
+                      });
+                    }}
+                    min={new Date().toISOString().slice(0, 16)}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-xl-12">
-            <div className="dashboard__form__button text-center mt-4">
-              {formStatus.isError && (
-                <div className="text-danger mb-2">{formStatus.errMsg}</div>
-              )}
-              {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Live Class..." />
-              ) : (
-                <button
-                  className="default__button"
-                  onClick={createLiveClass}
-                  disabled={formStatus.isSubmitting}
+            {(createLiveClassData.liveclasstype === 2 ||
+              createLiveClassData.liveclasstype === 4) && (
+              <div className="col-xl-6 mt-3">
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label>Registration Limit</label>
+                    <input
+                      type="number"
+                      placeholder="Registration Limit"
+                      value={createLiveClassData.registration_limit}
+                      onChange={(e) => {
+                        dispatchCreateLiveClass({
+                          type: "registration_limit",
+                          value: parseInt(e.target.value),
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Meeting Description</label>
+                  <input
+                    type="text"
+                    placeholder="Meeting Description"
+                    value={createLiveClassData.agenda}
+                    onChange={(e) => {
+                      dispatchCreateLiveClass({
+                        type: "agenda",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6">
+              <div className="dashboard__select__heading">
+                <span>Recurrence</span>
+              </div>
+              <div className="dashboard__selector">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={createLiveClassData.recurrence_type}
+                  onChange={(e) =>
+                    dispatchCreateLiveClass({
+                      type: "recurrence_type",
+                      value: parseInt(e.target.value),
+                    })
+                  }
                 >
-                  Create Live Class
-                </button>
-              )}
+                  <option value={1}>Daily</option>
+                  <option value={2}>Weekly</option>
+                  <option value={3}>Monthly</option>
+                </select>
+              </div>
+            </div>
+
+            {createLiveClassData.recurrence_type === 2 && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Weekly Days</span>
+                </div>
+                <div className="dashboard__selector">
+                  <select
+                    className="form-select"
+                    aria-label="Default select example"
+                    value={createLiveClassData.weekly_days}
+                    onChange={(e) =>
+                      dispatchCreateLiveClass({
+                        type: "weekly_days",
+                        value: parseInt(e.target.value),
+                      })
+                    }
+                  >
+                    <option value={1}>Sunday</option>
+                    <option value={2}>Monday</option>
+                    <option value={3}>Tuesday</option>
+                    <option value={4}>Wednesday</option>
+                    <option value={5}>Thursday</option>
+                    <option value={6}>Friday</option>
+                    <option value={7}>Saturday</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {createLiveClassData.recurrence_type === 3 && (
+              <>
+                <div className="col-xl-6">
+                  <div className="dashboard__form__wraper">
+                    <div className="dashboard__form__input">
+                      <label>Monthly Day</label>
+                      <input
+                        type="number"
+                        min={1}
+                        max={31}
+                        placeholder="Monthly Day"
+                        value={createLiveClassData.monthly_day}
+                        onChange={(e) =>
+                          dispatchCreateLiveClass({
+                            type: "monthly_day",
+                            value: parseInt(e.target.value),
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="col-xl-6">
+                  <div className="dashboard__select__heading">
+                    <span>Monthly Week</span>
+                  </div>
+                  <div className="dashboard__selector">
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      value={createLiveClassData.monthly_week}
+                      onChange={(e) =>
+                        dispatchCreateLiveClass({
+                          type: "monthly_week",
+                          value: parseInt(e.target.value),
+                        })
+                      }
+                    >
+                      <option value={-1}>Last Week Of The Month</option>
+                      <option value={1}>First Week Of The Month</option>
+                      <option value={2}>Second Week Of The Month</option>
+                      <option value={3}>Third Week Of The Month</option>
+                      <option value={4}>Fourth Week Of The Month</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="col-xl-6">
+                  <div className="dashboard__select__heading">
+                    <span>Monthly Week Day</span>
+                  </div>
+                  <div className="dashboard__selector">
+                    <select
+                      className="form-select"
+                      aria-label="Default select example"
+                      value={createLiveClassData.monthly_week_day}
+                      onChange={(e) =>
+                        dispatchCreateLiveClass({
+                          type: "monthly_week_day",
+                          value: parseInt(e.target.value),
+                        })
+                      }
+                    >
+                      <option value={1}>Sunday</option>
+                      <option value={2}>Monday</option>
+                      <option value={3}>Tuesday</option>
+                      <option value={4}>Wednesday</option>
+                      <option value={5}>Thursday</option>
+                      <option value={6}>Friday</option>
+                      <option value={7}>Saturday</option>
+                    </select>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Repeat Interval</label>
+                  <input
+                    type="number"
+                    placeholder="Repeat interval"
+                    value={createLiveClassData.repeat_interval}
+                    onChange={(e) =>
+                      dispatchCreateLiveClass({
+                        type: "repeat_interval",
+                        value: parseInt(e.target.value),
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>End Date & Time (UTC)</label>
+                  <input
+                    type="datetime-local"
+                    value={createLiveClassData.end_date_time}
+                    onChange={(e) =>
+                      dispatchCreateLiveClass({
+                        type: "end_date_time",
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>End Times</label>
+                  <input
+                    type="number"
+                    placeholder="End Times"
+                    value={createLiveClassData.end_times}
+                    onChange={(e) =>
+                      dispatchCreateLiveClass({
+                        type: "end_times",
+                        value: parseInt(e.target.value),
+                      })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="col-xl-12 mt-3">
+              <div className="dashboard__form__button text-center mt-4">
+                {formStatus.isError && (
+                  <div className="text-danger mb-2">{formStatus.errMsg}</div>
+                )}
+                {formStatus.isSubmitting ? (
+                  <Loading color="primary" text="Creating Live Class..." />
+                ) : (
+                  <button
+                    className="default__button"
+                    onClick={createLiveClass}
+                    disabled={formStatus.isSubmitting}
+                  >
+                    Create Live Class
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

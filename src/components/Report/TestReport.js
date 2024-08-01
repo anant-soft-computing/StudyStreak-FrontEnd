@@ -15,10 +15,6 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
       paperId: data.IELTS.id,
       no: index + 1,
       Name: data.IELTS.Name,
-      skip: "-",
-      correct: "-",
-      incorrect: "-",
-      band: "-",
     }));
     setRowsData(initialData);
   }, [reportData]);
@@ -144,7 +140,7 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
           skipped: skip,
           band: band,
         }));
-        return { paperId, skip, correct, incorrect, band };
+        return { paperId };
       } else {
         console.log("error");
       }
@@ -158,19 +154,6 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
     const result = await fetchData(paperId);
 
     if (result) {
-      setRowsData((prevRowsData) =>
-        prevRowsData.map((row) =>
-          row.paperId === paperId
-            ? {
-                ...row,
-                correct: result.correct,
-                incorrect: result.incorrect,
-                skipped: result.skip,
-                band: result.band,
-              }
-            : row
-        )
-      );
       setReportParams({
         paperId: paperId,
         testType: testType,
@@ -197,50 +180,6 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
       filter: true,
     },
     {
-      headerName: "Correct",
-      field: "correct",
-      cellRenderer: (params) => {
-        return (
-          <div style={{ color: "green", fontWeight: "bold" }}>
-            {params.data.correct}
-          </div>
-        );
-      },
-    },
-    {
-      headerName: "Incorrect",
-      field: "incorrect",
-      cellRenderer: (params) => {
-        return (
-          <div style={{ color: "red", fontWeight: "bold" }}>
-            {params.data.incorrect}
-          </div>
-        );
-      },
-    },
-    {
-      headerName: "Skip",
-      field: "skip",
-      cellRenderer: (params) => {
-        return (
-          <div style={{ color: "darkmagenta", fontWeight: "bold" }}>
-            {params.data.skip}
-          </div>
-        );
-      },
-    },
-    {
-      headerName: "Band",
-      field: "band",
-      cellRenderer: (params) => {
-        return (
-          <div style={{ color: "#01579b", fontWeight: "bold" }}>
-            {params.data.band}
-          </div>
-        );
-      },
-    },
-    {
       headerName: "View Report",
       field: "button",
       cellRenderer: (params) => (
@@ -261,7 +200,9 @@ const TestReport = ({ reportData, testType, isLoading, setCounts }) => {
         <Loading text="Loading...." color="primary" />
       ) : reportData.length > 0 ? (
         <>
-          <Table rowData={rowsData} columnDefs={columns} />
+          <div className="d-flex flex-wrap">
+            <Table rowData={rowsData} columnDefs={columns} />
+          </div>
           {reportParams && (
             <Report
               paperId={reportParams?.paperId}

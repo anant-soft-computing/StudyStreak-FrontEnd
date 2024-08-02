@@ -145,6 +145,7 @@ const PracticeTestReport = () => {
                       latestBand={location?.state?.latestBand}
                       testGiven={reportData(activeTab)?.length}
                       testAvailable={testAvailable(activeTab)}
+                      type="Practice"
                     />
                     <div className="row">
                       <Tab

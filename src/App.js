@@ -79,6 +79,7 @@ import StudentNavBarRoute from "./layout/StudentNavBarRoute";
 import AdminNavBarRoute from "./layout/AdminNavBarRoute";
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
 import PracticeTestReport from "./components/Report/PracticeTestReport";
+import FLTReport from "./components/Report/FLTReport";
 
 const App = () => {
   return (
@@ -165,6 +166,7 @@ const App = () => {
             element={<ViewPTAssessment />}
           />
           <Route path="/praticeTest-report" element={<PracticeTestReport />} />
+          <Route path="/full-length-test-report" element={<FLTReport />} />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
 

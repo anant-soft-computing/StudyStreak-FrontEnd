@@ -111,10 +111,14 @@ const CreateResourceLink = ({ setActiveTab }) => {
       formData.append("link", createRLData.link);
 
       createRLData.documents.forEach((document, index) => {
-        formData.append(`documents[${index}]`, document);
+        if (document) {
+          formData.append(`documents[${index}]`, document);
+        }
       });
       createRLData.descriptions.forEach((description, index) => {
-        formData.append(`descriptions[${index}]`, description);
+        if (description) {
+          formData.append(`descriptions[${index}]`, description);
+        }
       });
 
       const response = await ajaxCall(

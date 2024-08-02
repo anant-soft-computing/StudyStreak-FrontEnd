@@ -7140,7 +7140,7 @@ Event
 }
 
 .pricingarea__content__wraper .pricingarea__heading {
-  margin-bottom: 55px;
+  margin-bottom: 15px;
 }
 
 .pricingarea__content__wraper .pricingarea__heading h6 {
@@ -16837,5 +16837,12 @@ div.gridarea__wraper {
   .wrap_item:first-child {
     border-top: none;
   }
+}
 
+.pricingarea__list__content {
+  color: white;
+  background-color: #01579b;
+  padding: 5px;
+  text-align: center;
+  border-radius: 5px;
 }

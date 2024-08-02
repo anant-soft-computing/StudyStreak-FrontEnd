@@ -191,7 +191,11 @@ const ScoreCard = () => {
                 </div>
                 <div className="gridarea__bottom">
                   <div className="gridarea__small__content">
-                    <Link to="">
+                    <Link
+                      to={
+                        fltData?.[0]?.flt_set_name && "/full-length-test-report"
+                      }
+                    >
                       <h6>View Full Report {">>"}</h6>
                     </Link>
                   </div>

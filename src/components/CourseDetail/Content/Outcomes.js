@@ -16,7 +16,7 @@ const Outcomes = ({ courseDetail }) => {
                 <h5>Outcomes</h5>
               </div>
               {courseDetail?.Outcome?.map(({ description }, index) => (
-                <ul key={index}>
+                <ul key={index} style={{ paddingLeft: "0px" }}>
                   <li>
                     <i className="icofont-check"></i>
                     <p>{description}</p>

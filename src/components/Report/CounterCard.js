@@ -14,7 +14,7 @@ const CounterCard = ({
     <div>
       <div className="mainWrapper">
         <div className="d-flex flex-wrap gap-3 mb-3">
-          <div>{testType} : </div>
+          {testType && <div>{testType} : </div>}
           <div className="wrap_item_icon">
             <i className="icofont-justify-all text-info icofont-md" />{" "}
             {testGiven}
@@ -31,42 +31,46 @@ const CounterCard = ({
         </div>
       </div>
       <div className="mainWrapper gap-3">
-        <div className="wrapper">
-          <div className="wrap_item">
-            <div className="wrap_item_icon">
-              <CheckIcon />
-              {counts?.correct}
+        {counts && (
+          <div className="wrapper">
+            <div className="wrap_item">
+              <div className="wrap_item_icon">
+                <CheckIcon />
+                {counts?.correct}
+              </div>
+              <div className="warp_item_text">Correct Answers</div>
             </div>
-            <div className="warp_item_text">Correct Answers</div>
-          </div>
-          <div className="wrap_item">
-            <div className="wrap_item_icon">
-              <CancelIcon />
-              {counts?.incorrect}
+            <div className="wrap_item">
+              <div className="wrap_item_icon">
+                <CancelIcon />
+                {counts?.incorrect}
+              </div>
+              <div className="warp_item_text">Incorrect Answers</div>
             </div>
-            <div className="warp_item_text">Incorrect Answers</div>
-          </div>
-          <div className="wrap_item">
-            <div className="wrap_item_icon">
-              <SkipIcon />
-              {counts?.skipped}
+            <div className="wrap_item">
+              <div className="wrap_item_icon">
+                <SkipIcon />
+                {counts?.skipped}
+              </div>
+              <div className="warp_item_text">Skipped Answers</div>
             </div>
-            <div className="warp_item_text">Skipped Answers</div>
-          </div>
-          <div className="wrap_item">
-            <div className="wrap_item_icon">
-              <i className="icofont-score-board text-secondary icofont-md"></i>
-              {counts?.band}
+            <div className="wrap_item">
+              <div className="wrap_item_icon">
+                <i className="icofont-score-board text-secondary icofont-md"></i>
+                {counts?.band}
+              </div>
+              <div className="warp_item_text">Band Score</div>
             </div>
-            <div className="warp_item_text">Band Score</div>
           </div>
-        </div>
-        <div className="latest_wrapper">
-          <div className="wrap_item">
-            <div className="wrap_item_icon">{latestBand} - Band</div>
-            <div className="warp_item_text">Latest Score</div>
+        )}
+        {latestBand && (
+          <div className="latest_wrapper">
+            <div className="wrap_item">
+              <div className="wrap_item_icon">{latestBand} - Band</div>
+              <div className="warp_item_text">Latest Score</div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -3,16 +3,14 @@ import BatchSelection from "./BatchSelectionModal";
 import { useNavigate } from "react-router-dom";
 import image1 from "../../img/icon/price__3.png";
 
-const PackageDetails = (props) => {
-  const {
-    courseType,
-    courseId,
-    packages,
-    showBatchSelection,
-    setShowBatchSelection,
-    courseName,
-  } = props;
-
+const PackageDetails = ({
+  courseType,
+  courseId,
+  packages,
+  showBatchSelection,
+  setShowBatchSelection,
+  courseName,
+}) => {
   const [selectedPackageId, setSelectedPackageId] = useState("");
   const [packageName, setPackageName] = useState("");
   const [packagePrice, setPackagePrice] = useState("");
@@ -65,60 +63,115 @@ const PackageDetails = (props) => {
                         <span className="price__currency">
                           {packageItem?.package_price}
                         </span>
-                        <span className="price__durition">/ month</span>
+                        <span className="price__durition" />
                       </h1>
                     </div>
-                    <p>Perfect for startup</p>
                   </div>
                   <div className="pricingarea__list">
-                    <ul>
+                    <div className="pricingarea__list__content">Tests</div>
+                    <ul className="mt-4">
                       <li>
-                        <i className="icofont-check"></i> Duration{" "}
-                        <b>{packageItem?.duration} Mins </b>
+                        <i className="icofont-check" />
+                        {packageItem?.speaking_test
+                          ? packageItem?.speaking_test_count > 0
+                            ? `Speaking Test (${packageItem?.speaking_test_count})`
+                            : "Speaking Test"
+                          : packageItem?.speaking_test_count > 0
+                          ? `Speaking Test (${packageItem?.speaking_test_count})`
+                          : null}
                       </li>
                       <li>
-                        {packageItem?.full_length_test ? (
-                          <i className="icofont-check"></i>
-                        ) : (
-                          <i className="icofont-close close__button"></i>
-                        )}
-                        ({packageItem?.full_length_test_count || 0}) Full Length
-                        Test
+                        <i className="icofont-check" />
+                        {packageItem?.writing_evaluation
+                          ? packageItem?.writing_evaluation_count > 0
+                            ? `Writing Evaluation (${packageItem?.practice_test_count})`
+                            : "Writing Evaluation"
+                          : packageItem?.writing_evaluation_count > 0
+                          ? `Writing Evaluation (${packageItem?.writing_evaluation_count})`
+                          : null}
                       </li>
                       <li>
-                        {packageItem?.practice_test ? (
-                          <i className="icofont-check"></i>
-                        ) : (
-                          <i className="icofont-close close__button"></i>
-                        )}
-                        ({packageItem?.practice_test_count || 0}) Practice Test
+                        <i className="icofont-check" />
+                        {packageItem?.practice_test
+                          ? packageItem.practice_test_count > 0
+                            ? `Practice Test (${packageItem?.practice_test_count})`
+                            : "Practice Test"
+                          : packageItem?.practice_test_count > 0
+                          ? `Practice Test (${packageItem?.practice_test_count})`
+                          : null}
                       </li>
                       <li>
-                        {packageItem?.speaking_test ? (
-                          <i className="icofont-check"></i>
-                        ) : (
-                          <i className="icofont-close close__button"></i>
-                        )}
-                        ({packageItem?.speaking_test_count || 0}) Speaking
-                        Practice Classes
+                        <i className="icofont-check" />
+                        {packageItem?.full_length_test
+                          ? packageItem?.full_length_test_count > 0
+                            ? `Full Length Test (${packageItem?.full_length_test_count})`
+                            : "Full Length Test"
+                          : packageItem?.full_length_test_count > 0
+                          ? `Full Length Test (${packageItem?.full_length_test_count})`
+                          : null}
+                      </li>
+                    </ul>
+                    <div className="pricingarea__list__content">Classes</div>
+                    <ul className="mt-4">
+                      <li>
+                        <i className="icofont-check" />
+                        {packageItem?.speaking_practice
+                          ? packageItem?.speaking_practice_count > 0
+                            ? `Speaking Practice (${packageItem?.speaking_practice_count})`
+                            : "Speaking Practice"
+                          : packageItem?.speaking_practice_count > 0
+                          ? `Speaking Practice (${packageItem?.speaking_practice_count})`
+                          : null}
                       </li>
                       <li>
-                        {packageItem?.group_doubt_solving ? (
-                          <i className="icofont-check"></i>
-                        ) : (
-                          <i className="icofont-close close__button"></i>
-                        )}
-                        ({packageItem?.group_doubt_solving_count || 0}) Group
-                        Doubt Solving
+                        <i className="icofont-check" />
+                        {packageItem?.tutor_support
+                          ? packageItem?.tutor_support_count > 0
+                            ? `Tutor Support (${packageItem?.tutor_support_count})`
+                            : "Tutor Support"
+                          : packageItem?.tutor_support_count > 0
+                          ? `Tutor Support (${packageItem?.tutor_support_count})`
+                          : null}
                       </li>
                       <li>
-                        {packageItem?.one_to_one_doubt_solving ? (
-                          <i className="icofont-check"></i>
-                        ) : (
-                          <i className="icofont-close close__button"></i>
-                        )}
-                        ({packageItem?.one_to_one_doubt_solving_count || 0}) One
-                        To One Doubt Solving
+                        <i className="icofont-check" />
+                        {packageItem?.webinar
+                          ? packageItem?.webinar_count > 0
+                            ? `Webinar (${packageItem?.webinar_count})`
+                            : "Webinar"
+                          : packageItem?.tutor_support_count > 0
+                          ? `Webinar (${packageItem?.webinar_count})`
+                          : null}
+                      </li>
+                      <li>
+                        <i className="icofont-check" />
+                        {packageItem?.counselling
+                          ? packageItem?.counselling_count > 0
+                            ? `Counselling (${packageItem?.counselling_count})`
+                            : "Counselling"
+                          : packageItem?.tutor_support_count > 0
+                          ? `Counselling (${packageItem?.counselling_count})`
+                          : null}
+                      </li>
+                      <li>
+                        <i className="icofont-check" />
+                        {packageItem?.group_doubt_solving
+                          ? packageItem?.group_doubt_solving_count > 0
+                            ? `Group Doubt Solving (${packageItem?.group_doubt_solving_count})`
+                            : "Group Doubt Solving"
+                          : packageItem?.group_doubt_solving_count > 0
+                          ? `Group Doubt Solving (${packageItem?.group_doubt_solving_count})`
+                          : null}
+                      </li>
+                      <li>
+                        <i className="icofont-check" />
+                        {packageItem?.one_to_one_doubt_solving
+                          ? packageItem?.one_to_one_doubt_solving_count > 0
+                            ? `One To One Doubt Solving (${packageItem?.one_to_one_doubt_solving_count})`
+                            : "One To One Doubt Solving"
+                          : packageItem?.one_to_one_doubt_solving_count > 0
+                          ? `One To One Doubt Solving (${packageItem?.one_to_one_doubt_solving_count})`
+                          : null}
                       </li>
                     </ul>
                   </div>

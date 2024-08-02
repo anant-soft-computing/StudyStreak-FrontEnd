@@ -16,7 +16,7 @@ const Requirement = ({ courseDetail }) => {
                 <h5>Requirements</h5>
               </div>
               {courseDetail?.Requirements?.map(({ description }, index) => (
-                <ul key={index}>
+                <ul key={index} style={{ paddingLeft: "0px" }}>
                   <li>
                     <i className="icofont-check"></i>
                     <p>{description}</p>

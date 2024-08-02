@@ -37,7 +37,7 @@ const CourseDetail = () => {
       }
       try {
         const response = await ajaxCall(
-          `/courseretupddelview/${courseId}/`,
+          `/courseretupddel/${courseId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -151,9 +151,14 @@ const CourseDetail = () => {
             <div className="row">
               <div className="col-xl-12 col-lg-12">
                 <div className="blogarae__img__2 course__details__img__2">
-                  <div className="row">
-                    <div className="col-xl-6 col-lg-6">
-                      <img src={courseDetail?.Course_Thumbnail} alt="blog" />
+                  <div className="d-flex flex-wrap gap-4">
+                    <div>
+                      <img
+                        src={`http://studystreak.in/${courseDetail?.Course_Thumbnail}`}
+                        style={{ borderRadius: "10px" }}
+                        alt="Course Thumbnail"
+                        height={300}
+                      />
                     </div>
                     <DetailCard courseDetail={courseDetail} batches={batches} />
                   </div>

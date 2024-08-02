@@ -640,14 +640,10 @@ const FullLengthLiveExam = () => {
     }
   };
 
-  const fullLengthTestSubmit = async () => {
-    const data = {
-      student_id: studentId,
-      flt_id: parseInt(examId),
-    };
+  const examLatestSubmit = async () => {
     try {
       const response = await ajaxCall(
-        "/student-flt-submit/",
+        "/test-submission/",
         {
           headers: {
             Accept: "application/json",
@@ -657,18 +653,20 @@ const FullLengthLiveExam = () => {
             }`,
           },
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            student: studentId,
+            flt: examId,
+          }),
         },
         8000
       );
-      if (response.status === 200) {
-        gamificationSubmit();
-        toast.success("Your Exam Submitted Successfully");
+      if (response.status === 201) {
+        console.log("Lastest Full Length Exam Submitted");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        console.log("error");
       }
     } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
+      console.log("error", error);
     }
   };
 
@@ -700,6 +698,39 @@ const FullLengthLiveExam = () => {
       }
     } catch (error) {
       console.log("error", error);
+    }
+  };
+
+  const fullLengthTestSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      flt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-flt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        examLatestSubmit();
+        gamificationSubmit();
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have All Ready Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
     }
   };
 

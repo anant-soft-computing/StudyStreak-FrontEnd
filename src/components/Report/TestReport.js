@@ -187,6 +187,7 @@ const TestReport = ({
         return <div>{params.data.Name}</div>;
       },
       filter: true,
+      width: 355,
     },
     {
       headerName: "View Report",
@@ -206,6 +207,7 @@ const TestReport = ({
           </button>
         );
       },
+      width: 260,
     },
   ];
 
@@ -215,7 +217,9 @@ const TestReport = ({
         <Loading text="Loading...." color="primary" />
       ) : reportData.length > 0 ? (
         <>
-          <Table rowData={rowsData} columnDefs={columns} />
+          <div className="col-xl-6">
+            <Table rowData={rowsData} columnDefs={columns} />
+          </div>
           {reportParams && (
             <Report
               paperId={reportParams?.paperId}

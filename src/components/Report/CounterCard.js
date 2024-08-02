@@ -4,6 +4,7 @@ import CancelIcon from "../UI/CancelIcon";
 import SkipIcon from "../UI/SkipIcon";
 
 const CounterCard = ({
+  type,
   counts,
   testType,
   latestBand,
@@ -63,7 +64,7 @@ const CounterCard = ({
             </div>
           </div>
         )}
-        {latestBand && (
+        {type === "Practice" && (
           <div className="latest_wrapper">
             <div className="wrap_item">
               <div className="wrap_item_icon">{latestBand} - Band</div>

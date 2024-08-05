@@ -17,9 +17,16 @@ import logOut from "../../../../img/icon/logout.svg";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
 
 const DSSidebar = () => {
-  const [count, setCount] = useState({});
+  const [count, setCount] = useState({
+    practice_test_count: 0,
+    full_length_test_count: 0,
+  });
+  const [givenPTCount, setGivenPTCount] = useState(0);
+  const [givenFLTCount, setGivenFLTCount] = useState(0);
+
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [showMobileNavBtn, setShowMobileNavBtn] = useState(true);
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const location = useLocation().pathname;
   const { logoutUser } = useCheckAuth();
@@ -49,19 +56,18 @@ const DSSidebar = () => {
       name: "Mini Test",
       icon: <img src={assignment} alt="Mini Test" />,
       link: "/mockTest",
-      state: { count: count },
     },
     {
       name: "Practice Test",
       icon: <img src={practiceTest} alt="Practice Test" />,
       link: "/practiceTest",
-      state: { count: count },
+      state: { count: count?.practice_test_count },
     },
     {
       name: "Full Length Test",
       icon: <img src={fullLengthTest} alt="Full Length Test" />,
       link: "/fullLengthTest",
-      state: { count: count },
+      state: { count: count?.full_length_test_count },
     },
     {
       name: "Live Classes",
@@ -99,6 +105,35 @@ const DSSidebar = () => {
     (async () => {
       try {
         const response = await ajaxCall(
+          `/student-stats/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setGivenPTCount(response?.data?.student_pt?.length);
+          setGivenFLTCount(response?.data?.student_flt?.length);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
           "/userwisepackagewithcourseid/",
           {
             headers: {
@@ -116,20 +151,15 @@ const DSSidebar = () => {
           const { data } = response;
           const studentPackage = data?.student_packages?.[0];
           const packageDetails = studentPackage?.package;
-          const studentMT = studentPackage?.student_mock;
-          const studentPT = studentPackage?.student_pt;
-          const studentFLT = studentPackage?.student_flt;
 
           const batchIds = data?.student_packages.map((item) => item.batch_id);
           const courses = data.student_packages?.map(({ course }) => course);
 
           setCount({
             practice_test_count:
-              packageDetails?.practice_test_count - studentPT || "",
-            mini_test_count:
-              packageDetails?.practice_test_count - studentMT || "",
+              packageDetails?.practice_test_count - givenPTCount,
             full_length_test_count:
-              packageDetails?.full_length_test_count - studentFLT || "",
+              packageDetails?.full_length_test_count - givenFLTCount,
           });
           localStorage.setItem("StudentID", studentPackage?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
@@ -141,7 +171,7 @@ const DSSidebar = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [openMobileMenu]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -197,9 +227,16 @@ const DSSidebar = () => {
                     <div className="side-navbar-rexr-color-common admin__menu__title">
                       {item.name}
                     </div>
-                    {item.name === "Practice Test" ||
-                    item.name === "Mini Test" ||
-                    item.name === "Full Length Test" ? (
+                    {(item.name === "Practice Test" ||
+                      item.name === "Full Length Test") &&
+                    ((item.name === "Practice Test" &&
+                      givenPTCount >=
+                        count?.practice_test_count + givenPTCount) ||
+                      (item.name === "Full Length Test" &&
+                        givenFLTCount >
+                          count?.full_length_test_count + givenFLTCount)) ? (
+                      <i className="icofont-ui-press text-danger" />
+                    ) : (
                       <span className="dashboard__label">
                         {
                           count[
@@ -208,8 +245,6 @@ const DSSidebar = () => {
                           ]
                         }
                       </span>
-                    ) : (
-                      ""
                     )}
                   </Link>
                 </li>

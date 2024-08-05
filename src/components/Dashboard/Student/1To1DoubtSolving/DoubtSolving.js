@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
 import RecordedClass from "../Classes/RecordedClass";
+import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const tabs = [
   { name: "Upcoming" },
@@ -69,17 +69,9 @@ const DoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
   }, []);
 
   const doubtSolvingClasses = () => {
-    return doubtSolvingClass?.filter(({ start_time }) => {
-      const classDate = moment(start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange?.[0];
-      if (startDate && !endDate) {
-        return classDate === moment(startDate).format("YYYY-MM-DD");
-      }
-      return (
-        (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
-        (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
-      );
-    });
+    return doubtSolvingClass?.filter(({ start_time, end_time }) =>
+      filterByDateRange(start_time, end_time, selectedDateRange)
+    );
   };
 
   const oneToOneDoubtSolvingClasses = doubtSolvingClasses()?.filter((item) => {

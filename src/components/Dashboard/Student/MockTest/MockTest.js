@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import BuyCourse from "../BuyCourse/BuyCourse";
 import Tab from "../../../UI/Tab";
 import TestTable from "./TestTable";
 import MTAssessment from "../Assessment/MTAssessment/MTAssessment";
@@ -15,7 +13,6 @@ const tabs = [
 ];
 
 const MockTest = () => {
-  const { count } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [isLoading, setIsLoading] = useState(true);
   const [category, setCategory] = useState("IELTS");
@@ -170,36 +167,32 @@ const MockTest = () => {
                         </div>
                       </div>
                     </div>
-                    {count?.mini_test_count === "" ? (
-                      <BuyCourse message="No Mini Test Available, Please Buy a Course!" />
-                    ) : (
-                      <div className="row">
-                        <Tab
-                          tabs={tabs}
-                          activeTab={activeTab}
-                          handleTabChange={handleTabChange}
-                        />
-                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                          {tabs.map(
-                            ({ name }) =>
-                              activeTab === name && (
-                                <TestTable
-                                  key={name}
-                                  testData={
-                                    name === "Speaking"
-                                      ? allSpeakingData
-                                      : testByExamType(name)
-                                  }
-                                  givenTest={givenTest}
-                                  testType={name}
-                                  givenSpeakingTest={givenSpeakingTest}
-                                  isLoading={isLoading}
-                                />
-                              )
-                          )}
-                        </div>
+                    <div className="row">
+                      <Tab
+                        tabs={tabs}
+                        activeTab={activeTab}
+                        handleTabChange={handleTabChange}
+                      />
+                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                        {tabs.map(
+                          ({ name }) =>
+                            activeTab === name && (
+                              <TestTable
+                                key={name}
+                                testData={
+                                  name === "Speaking"
+                                    ? allSpeakingData
+                                    : testByExamType(name)
+                                }
+                                givenTest={givenTest}
+                                testType={name}
+                                givenSpeakingTest={givenSpeakingTest}
+                                isLoading={isLoading}
+                              />
+                            )
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                   {(activeTab === "Writing" || activeTab === "Speaking") && (
                     <MTAssessment

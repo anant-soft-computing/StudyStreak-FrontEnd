@@ -2,10 +2,25 @@ import React from "react";
 import Table from "../../../UI/Table";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../UI/Loading";
+import { toast } from "react-toastify";
 
-const PracticeTestTable = ({ testData, givenTest, testType, isLoading }) => {
+const PracticeTestTable = ({
+  pendingTest,
+  testType,
+  isLoading,
+  testData,
+  givenTest,
+}) => {
   const navigate = useNavigate();
+  
   const handleClick = (data) => {
+    if (pendingTest <= 0) {
+      toast.error(
+        "You Do Not Have Any Test Available, Please Upgrade Package !!"
+      );
+      return;
+    }
+
     Object?.keys(data?.IELTS)?.forEach((key) => {
       if (Array.isArray(data?.IELTS[key])) {
         if (data?.IELTS[key].length > 0) {

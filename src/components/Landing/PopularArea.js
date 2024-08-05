@@ -34,12 +34,6 @@ const PopulerArea = () => {
                   praesentium quaerat.
                 </p>
               </div>
-              <div>
-                <button className="default__button">
-                  Book A Demo
-                  <i className="icofont-long-arrow-right"></i>
-                </button>
-              </div>
             </div>
           </div>
           <div className="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 service__wrap__content">

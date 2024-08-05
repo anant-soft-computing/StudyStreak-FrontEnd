@@ -118,7 +118,7 @@ const PracticeTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Practice Test</h4>
                     </div>
-                    {count?.practice_test_count === "" ? (
+                    {count === "" ? (
                       <BuyCourse message="No Practice Test Available, Please Buy a Course !!" />
                     ) : (
                       <div className="row">
@@ -133,6 +133,7 @@ const PracticeTest = () => {
                             givenTest={givenTestOfType(activeTab)}
                             testType={activeTab}
                             isLoading={isLoading}
+                            pendingTest={count}
                           />
                         </div>
                       </div>

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import RegularClassList from "./RegularClassList";
 import Tab from "../../../UI/Tab";
 import RecordedClass from "../Classes/RecordedClass";
 import { useLocation } from "react-router-dom";
+import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const tabs = [{ name: "Regular" }, { name: "Recorded Class" }];
 
@@ -70,17 +70,9 @@ const RegularClass = ({ selectedDateRange }) => {
   }, []);
 
   const regularClasses = () => {
-    return regularClass.filter(({ start_time }) => {
-      const classDate = moment(start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange?.[0];
-      if (startDate && !endDate) {
-        return classDate === moment(startDate).format("YYYY-MM-DD");
-      }
-      return (
-        (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
-        (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
-      );
-    });
+    return regularClass.filter(({ start_time, end_time }) =>
+      filterByDateRange(start_time, end_time, selectedDateRange)
+    );
   };
 
   return (

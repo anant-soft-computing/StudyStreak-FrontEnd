@@ -5,6 +5,7 @@ import Loading from "../../../UI/Loading";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import Table from "../../../UI/Table";
+import { toast } from "react-toastify";
 
 const FullLengthTest = () => {
   const { count } = useLocation().state || {};
@@ -71,6 +72,11 @@ const FullLengthTest = () => {
   }, []);
 
   const handleFullLengthTest = (examId) => {
+    if (!count || count <= 0) {
+      toast.error(
+        "You Do Not Have Any Test Available, Please Upgrade Package !!"
+      );
+    }
     window.open(`/fulllength-live-exam/${examId}`, "_blank");
   };
 
@@ -162,7 +168,7 @@ const FullLengthTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Full Length Test</h4>
                     </div>
-                    {count?.full_length_test_count === "" ? (
+                    {count === "" ? (
                       <BuyCourse message="No Full Length Test Available, Please Buy a Course!" />
                     ) : isLoading ? (
                       <Loading text="Loading..." color="primary" />

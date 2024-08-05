@@ -906,19 +906,6 @@ const FullLengthLiveExam = () => {
     setNumberOfWord(words.length);
   };
 
-  useEffect(() => {
-    if (recordedFilePath) {
-      const { recorderIndex, filePath } = recordedFilePath;
-      const tempexamAnswer = [...examAnswer];
-      const tempSpeaking = tempexamAnswer[next].data;
-      const index = tempSpeaking.findIndex((item) => item.id === recorderIndex);
-      tempSpeaking[index].status = 2;
-      tempSpeaking[index].answer_text = filePath;
-      setExamAnswer(tempexamAnswer);
-      setRecordedFilePath(null);
-    }
-  }, [recordedFilePath]);
-
   const handleBackSectionClicked = () => {
     setReRenderAudio(false);
     setNext(next - 1);
@@ -1004,6 +991,42 @@ const FullLengthLiveExam = () => {
     };
   }, [next]);
 
+
+  useEffect(() => {
+    if (recordedFilePath) {
+      const { recorderIndex, filePath } = recordedFilePath;
+      const tempexamAnswer = [...examAnswer];
+      const tempSpeaking = tempexamAnswer[next].data;
+      const index = tempSpeaking.findIndex((item) => item.id === recorderIndex);
+      tempSpeaking[index].status = 2;
+      tempSpeaking[index].answer_text = filePath;
+      setExamAnswer(tempexamAnswer);
+      setRecordedFilePath(null);
+    }
+  }, [recordedFilePath]);
+
+  const recorderContainer = useCallback(
+    (item, index) => {
+      if (examData?.exam_type !== "Speaking") return null;
+      if (Object.keys(examData).length > 0) {
+        return (
+          <AudioRecorder
+            setRecordedFilePath={setRecordedFilePath}
+            next={next}
+            exam={examData}
+            enableRecording={examAnswer[next].data?.[index]?.status === 2}
+            completed={examAnswer[next].data?.[index]?.answer_text !== ""}
+            question_number={item.question_number}
+            user={userData.userId}
+            recorderIndex={item.id}
+          />
+        );
+      }
+      return;
+    },
+    [examAnswer, examData, userData, next]
+  );
+
   const reviewContent = () =>
     examAnswer.map((test, index) => (
       <div key={index}>
@@ -1075,27 +1098,7 @@ const FullLengthLiveExam = () => {
     });
   }, [uniqueIdArr, examAnswer, next, examData]);
 
-  const recorderContainer = useCallback(
-    (item, index) => {
-      if (examData?.exam_type !== "Speaking") return null;
-      if (Object.keys(examData).length > 0) {
-        return (
-          <AudioRecorder
-            setRecordedFilePath={setRecordedFilePath}
-            next={next}
-            exam={examData}
-            enableRecording={examAnswer[next].data?.[index]?.status === 2}
-            completed={examAnswer[next].data?.[index]?.answer_text !== ""}
-            question_number={item.question_number}
-            user={userData.userId}
-            recorderIndex={item.id}
-          />
-        );
-      }
-      return;
-    },
-    [examAnswer, examData, userData, next]
-  );
+
 
   return instructionCompleted.showInstruction ? (
     <div className="test-instruction">

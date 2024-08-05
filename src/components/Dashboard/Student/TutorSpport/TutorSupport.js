@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import List from "../Classes/List";
 import Tab from "../../../UI/Tab";
 import RecordedClass from "../Classes/RecordedClass";
+import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const tabs = [{ name: "Tutor Support" }, { name: "Recorded Class" }];
 
@@ -65,17 +65,9 @@ const TutorSupport = ({ selectedDateRange }) => {
   }, []);
 
   const tutorData = () => {
-    return tutorSupportClass.filter((item) => {
-      const classDate = moment(item.start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange?.[0];
-      if (startDate && !endDate) {
-        return classDate === moment(startDate).format("YYYY-MM-DD");
-      }
-      return (
-        (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
-        (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
-      );
-    });
+    return tutorSupportClass.filter(({ start_time, end_time }) =>
+      filterByDateRange(start_time, end_time, selectedDateRange)
+    );
   };
 
   return (

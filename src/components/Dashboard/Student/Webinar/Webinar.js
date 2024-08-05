@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import List from "../Classes/List";
-import moment from "moment";
 import Tab from "../../../UI/Tab";
 import RecordedClass from "../Classes/RecordedClass";
+import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const tabs = [{ name: "Webinar" }, { name: "Recorded Class" }];
 
@@ -65,17 +65,9 @@ const Webinar = ({ selectedDateRange }) => {
   }, []);
 
   const webinarData = () => {
-    return webinar.filter((item) => {
-      const classDate = moment(item.start_time).format("YYYY-MM-DD");
-      const { startDate, endDate } = selectedDateRange?.[0];
-      if (startDate && !endDate) {
-        return classDate === moment(startDate).format("YYYY-MM-DD");
-      }
-      return (
-        (!startDate || classDate >= moment(startDate).format("YYYY-MM-DD")) &&
-        (!endDate || classDate <= moment(endDate).format("YYYY-MM-DD"))
-      );
-    });
+    return webinar.filter(({ start_time, end_time }) =>
+      filterByDateRange(start_time, end_time, selectedDateRange)
+    );
   };
 
   return (

@@ -8243,8 +8243,7 @@ Testimonial Area
 
 .aboutarea__para__3 {
   background: var(--whiteColor);
-  padding: 50px 25px;
-  position: relative;
+  padding: 25px 25px;
 }
 
 .aboutarea__para__3::after {

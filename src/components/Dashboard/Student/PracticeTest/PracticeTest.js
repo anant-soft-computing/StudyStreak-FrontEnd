@@ -118,7 +118,7 @@ const PracticeTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Practice Test</h4>
                     </div>
-                    {count === "" ? (
+                    {isNaN(count) ? (
                       <BuyCourse message="No Practice Test Available, Please Buy a Course !!" />
                     ) : (
                       <div className="row">

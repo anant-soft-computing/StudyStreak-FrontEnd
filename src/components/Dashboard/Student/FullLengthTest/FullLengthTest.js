@@ -72,12 +72,13 @@ const FullLengthTest = () => {
   }, []);
 
   const handleFullLengthTest = (examId) => {
-    if (!count || count <= 0) {
+    if (count === 0) {
       toast.error(
         "You Do Not Have Any Test Available, Please Upgrade Package !!"
       );
+    } else {
+      window.open(`/fulllength-live-exam/${examId}`, "_blank");
     }
-    window.open(`/fulllength-live-exam/${examId}`, "_blank");
   };
 
   const columns = [
@@ -168,7 +169,7 @@ const FullLengthTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Full Length Test</h4>
                     </div>
-                    {count === "" ? (
+                    {isNaN(count) ? (
                       <BuyCourse message="No Full Length Test Available, Please Buy a Course!" />
                     ) : isLoading ? (
                       <Loading text="Loading..." color="primary" />

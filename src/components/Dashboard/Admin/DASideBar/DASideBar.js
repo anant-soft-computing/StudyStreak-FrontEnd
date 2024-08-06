@@ -15,6 +15,7 @@ import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import notice from "../../../../img/icon/notice.svg";
 import resource from "../../../../img/icon/support.svg";
+import testimonial from "../../../../img/icon/support.svg";
 
 const DASideBar = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -87,6 +88,11 @@ const DASideBar = () => {
       name: "Resources",
       icon: <img src={resource} alt="Resources" height={20} width={20} />,
       link: "/admin-resources",
+    },
+    {
+      name: "Testimonial",
+      icon: <img src={testimonial} alt="Testimonial" />,
+      link: "/admin-testimonial",
     },
     {
       name: "Settings",

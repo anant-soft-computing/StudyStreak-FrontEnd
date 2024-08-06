@@ -3,11 +3,32 @@ import CounterCard from "./CounterCard";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../UI/Loading";
 import Table from "../UI/Table";
+import FReport from "./FReport";
 
 const FLTReport = () => {
   const [givenTest, setGivenTest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fltData, setFLTData] = useState([]);
+  const [fltID, setFLTID] = useState();
+
+  const [counts, setCounts] = useState({
+    reading: { correct: 0, incorrect: 0, skipped: 0, band: 0 },
+    listening: { correct: 0, incorrect: 0, skipped: 0, band: 0 },
+    writing: { band: 0 },
+    speaking: { band: 0 },
+  });
+
+  const averageBand = () => {
+    const bands = [
+      counts.reading.band,
+      counts.listening.band,
+      counts.writing.band,
+      counts.speaking.band,
+    ];
+    const nonZeroBands = bands.filter((band) => band > 0);
+    const sum = nonZeroBands.reduce((acc, band) => acc + band, 0);
+    return nonZeroBands.length > 0 ? (sum / nonZeroBands.length).toFixed(1) : 0;
+  };
 
   useEffect(() => {
     (async () => {
@@ -71,6 +92,14 @@ const FLTReport = () => {
     ?.filter((item) => givenTest?.some((index) => index === item.id))
     ?.map((item, index) => ({ ...item, no: index + 1 }));
 
+  const viewReport = (params) => {
+    return (
+      <button className="take-test" onClick={() => setFLTID(params.data.id)}>
+        View Report
+      </button>
+    );
+  };
+
   const columns = [
     {
       headerName: "No",
@@ -109,9 +138,7 @@ const FLTReport = () => {
     {
       headerName: "View Report",
       field: "button",
-      cellRenderer: () => {
-        return <button className="take-test">View Report</button>;
-      },
+      cellRenderer: viewReport,
       width: 260,
     },
   ];
@@ -131,12 +158,28 @@ const FLTReport = () => {
                     <CounterCard
                       testGiven={reportData?.length}
                       testAvailable={fltData?.length}
+                      correct={
+                        counts?.reading?.correct + counts?.listening?.correct
+                      }
+                      incorrect={
+                        counts?.reading?.incorrect +
+                        counts?.listening?.incorrect
+                      }
+                      skipped={
+                        counts?.reading?.skipped + counts?.listening?.skipped
+                      }
+                      band={averageBand()}
                     />
                     <div className="row mt-3">
                       {isLoading ? (
                         <Loading text="Loading...." color="primary" />
                       ) : reportData.length > 0 ? (
-                        <Table rowData={reportData} columnDefs={columns} />
+                        <>
+                          <Table rowData={reportData} columnDefs={columns} />
+                          {fltID && (
+                            <FReport fltID={fltID} setCounts={setCounts} />
+                          )}
+                        </>
                       ) : (
                         <h5 className="text-center text-danger">{`No Full Length Test Report Available !!`}</h5>
                       )}

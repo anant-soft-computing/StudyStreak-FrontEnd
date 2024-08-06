@@ -140,12 +140,15 @@ const PracticeTestReport = () => {
                       </h4>
                     )}
                     <CounterCard
-                      counts={counts}
+                      type="Practice"
                       testType={activeTab}
                       latestBand={location?.state?.latestBand}
                       testGiven={reportData(activeTab)?.length}
                       testAvailable={testAvailable(activeTab)}
-                      type="Practice"
+                      correct={counts?.correct}
+                      incorrect={counts?.incorrect}
+                      skipped={counts?.skipped}
+                      band={counts?.band}
                     />
                     <div className="row">
                       <Tab

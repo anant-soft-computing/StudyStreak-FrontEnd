@@ -14,7 +14,7 @@ const PracticeTestTable = ({
   const navigate = useNavigate();
   
   const handleClick = (data) => {
-    if (pendingTest <= 0) {
+    if (pendingTest === 0) {
       toast.error(
         "You Do Not Have Any Test Available, Please Upgrade Package !!"
       );

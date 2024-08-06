@@ -235,9 +235,13 @@ const DSLeftDrawer = () => {
 
           setCount({
             practice_test_count:
-              packageDetails?.practice_test_count - givenPTCount,
+              packageDetails?.practice_test_count === -1
+                ? packageDetails?.practice_test_count
+                : packageDetails?.practice_test_count - givenPTCount,
             full_length_test_count:
-              packageDetails?.full_length_test_count - givenFLTCount,
+              packageDetails?.full_length_test_count === -1
+                ? packageDetails?.full_length_test_count
+                : packageDetails?.full_length_test_count - givenFLTCount,
           });
           localStorage.setItem("StudentID", studentPackage?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
@@ -326,16 +330,28 @@ const DSLeftDrawer = () => {
                           className="side-navbar-rexr-color-common admin__menu__title"
                           primary={item.name}
                         />
-                        {(item.name === "Practice Test" ||
-                          item.name === "Full Length Test") &&
-                        ((item.name === "Practice Test" &&
-                          givenPTCount >=
-                            count?.practice_test_count + givenPTCount) ||
-                          (item.name === "Full Length Test" &&
-                            givenFLTCount >
-                              count?.full_length_test_count +
-                                givenFLTCount)) ? (
-                          <i className="icofont-ui-press text-danger" />
+                        {item.name === "Practice Test" ? (
+                          count.practice_test_count === -1 ? (
+                            <span className="dashboard__label">All</span>
+                          ) : givenPTCount >=
+                            count?.practice_test_count + givenPTCount ? (
+                            <i className="icofont-ui-press text-danger" />
+                          ) : (
+                            <span className="dashboard__label">
+                              {count.practice_test_count}
+                            </span>
+                          )
+                        ) : item.name === "Full Length Test" ? (
+                          count?.full_length_test_count === -1 ? (
+                            <span className="dashboard__label">All</span>
+                          ) : givenFLTCount >=
+                            count?.full_length_test_count + givenFLTCount ? (
+                            <i className="icofont-ui-press text-danger" />
+                          ) : (
+                            <span className="dashboard__label">
+                              {count?.full_length_test_count}
+                            </span>
+                          )
                         ) : (
                           <span className="dashboard__label">
                             {

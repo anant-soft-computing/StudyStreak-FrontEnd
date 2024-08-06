@@ -5,11 +5,14 @@ import SkipIcon from "../UI/SkipIcon";
 
 const CounterCard = ({
   type,
-  counts,
+  band,
+  correct,
+  skipped,
   testType,
-  latestBand,
+  incorrect,
   testGiven,
   testAvailable,
+  latestBand,
 }) => {
   return (
     <div>
@@ -32,33 +35,33 @@ const CounterCard = ({
         </div>
       </div>
       <div className="mainWrapper gap-3">
-        {counts && (
+        {correct !== undefined && (
           <div className="wrapper">
             <div className="wrap_item">
               <div className="wrap_item_icon">
                 <CheckIcon />
-                {counts?.correct}
+                {correct}
               </div>
               <div className="warp_item_text">Correct Answers</div>
             </div>
             <div className="wrap_item">
               <div className="wrap_item_icon">
                 <CancelIcon />
-                {counts?.incorrect}
+                {incorrect}
               </div>
               <div className="warp_item_text">Incorrect Answers</div>
             </div>
             <div className="wrap_item">
               <div className="wrap_item_icon">
                 <SkipIcon />
-                {counts?.skipped}
+                {skipped}
               </div>
               <div className="warp_item_text">Skipped Answers</div>
             </div>
             <div className="wrap_item">
               <div className="wrap_item_icon">
                 <i className="icofont-score-board text-secondary icofont-md"></i>
-                {counts?.band}
+                {band}
               </div>
               <div className="warp_item_text">Band Score</div>
             </div>

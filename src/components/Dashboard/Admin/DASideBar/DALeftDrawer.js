@@ -12,6 +12,7 @@ import badges from "../../../../img/icon/badges.svg";
 import gamification from "../../../../img/icon/gamification.svg";
 import flashCard from "../../../../img/icon/flashCard.svg";
 import resourceLink from "../../../../img/icon/support.svg";
+import testimonial from "../../../../img/icon/notebook.svg"
 import settings from "../../../../img/icon/settings.svg";
 import notice from "../../../../img/icon/notice.svg";
 import logOut from "../../../../img/icon/logout.svg";
@@ -165,10 +166,13 @@ const DALeftDrawer = () => {
     },
     {
       name: "Resources",
-      icon: (
-        <img src={resourceLink} alt="Resources" height={20} width={20} />
-      ),
+      icon: <img src={resourceLink} alt="Resources" height={20} width={20} />,
       link: "/admin-resources",
+    },
+    {
+      name: "Testimonial",
+      icon: <img src={testimonial} alt="Testimonial" />,
+      link: "/admin-testimonial",
     },
     {
       name: "Settings",

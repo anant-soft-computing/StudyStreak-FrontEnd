@@ -201,7 +201,7 @@ const FReport = ({ fltID, setCounts }) => {
       const sum = bandScores?.reduce((a, b) => a + b, 0);
       return (sum / bandScores?.length).toFixed(1);
     }
-    return null;
+    return 0;
   };
 
   useEffect(() => {
@@ -220,8 +220,7 @@ const FReport = ({ fltID, setCounts }) => {
     <div className="row mt-4">
       <div className="col-xl-12 col-lg-12 AnswerCard">
         <div className="blog__details__content__wraper">
-          <h4 className="sidebar__title">Solution For : Full Length Test</h4>
-          <div style={{ marginTop: "50px" }}>
+          <div>
             {/* Reading */}
             <div className="dashboard__section__title">
               <h4 className="sidebar__title">Reading :- </h4>

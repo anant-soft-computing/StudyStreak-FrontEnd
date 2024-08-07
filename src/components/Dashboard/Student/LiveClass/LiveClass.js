@@ -23,7 +23,14 @@ const liveClasses = [
 
 const LiveClass = () => {
   const location = useLocation();
-  const [count, setCount] = useState({});
+  const [count, setCount] = useState({
+    webinar_count: 0,
+    counselling_count: 0,
+    tutor_support_count: 0,
+    speaking_practice_count: 0,
+    group_doubt_solving_count: 0,
+    one_to_one_doubt_solving_count: 0,
+  });
   const [solvingClassBook, setSolvingClassBook] = useState([]);
 
   const [activeTab, setActiveTab] = useState(() => {
@@ -69,11 +76,14 @@ const LiveClass = () => {
           const studentPackage = data?.student_packages?.[0];
           const packageDetails = studentPackage?.package;
           setCount({
-            speaking_test_count: packageDetails?.speaking_test_count || 0,
+            speaking_practice_count: packageDetails?.speaking_practice_count,
             one_to_one_doubt_solving_count:
-              packageDetails?.one_to_one_doubt_solving_count || 0,
+              packageDetails?.one_to_one_doubt_solving_count,
             group_doubt_solving_count:
-              packageDetails?.group_doubt_solving_count || 0,
+              packageDetails?.group_doubt_solving_count,
+            webinar_count: packageDetails?.webinar_count,
+            tutoring_support_count: packageDetails?.tutoring_support_count,
+            counselling_count: packageDetails?.counselling_count,
           });
           setSolvingClassBook(
             data.student_packages?.map(
@@ -96,7 +106,7 @@ const LiveClass = () => {
       case "Speaking Practice":
         return (
           <SpeakingPractice
-            count={count.speaking_test_count}
+            count={count.speaking_practice_count}
             solvingClassBook={solvingClassBook}
             selectedDateRange={selectedDateRange}
           />
@@ -118,11 +128,29 @@ const LiveClass = () => {
           />
         );
       case "Tutor Support":
-        return <TutorSupport selectedDateRange={selectedDateRange} />;
+        return (
+          <TutorSupport
+            count={count.tutor_support_count}
+            solvingClassBook={solvingClassBook}
+            selectedDateRange={selectedDateRange}
+          />
+        );
       case "Webinar":
-        return <Webinar selectedDateRange={selectedDateRange} />;
+        return (
+          <Webinar
+            count={count.webinar_count}
+            solvingClassBook={solvingClassBook}
+            selectedDateRange={selectedDateRange}
+          />
+        );
       case "Counselling":
-        return <Counselling selectedDateRange={selectedDateRange} />;
+        return (
+          <Counselling
+            count={count.counselling_count}
+            solvingClassBook={solvingClassBook}
+            selectedDateRange={selectedDateRange}
+          />
+        );
       default:
         return null;
     }

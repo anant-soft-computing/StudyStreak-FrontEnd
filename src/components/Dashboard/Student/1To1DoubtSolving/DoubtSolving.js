@@ -115,8 +115,10 @@ const DoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
             >
               <div className="row">
                 <ClassList
+                  count={count}
                   isLoading={isLoading}
                   classes={oToclasses}
+                  classType="One-To-One-Doubt-Solving"
                   message=" No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
                 />
               </div>

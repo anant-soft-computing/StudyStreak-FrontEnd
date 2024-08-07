@@ -4,7 +4,7 @@ import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
 import SkipIcon from "../UI/SkipIcon";
 
-const Report = ({ paperId, testType }) => {
+const Report = ({ paperId, testType, testID }) => {
   const [, setExamName] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
@@ -12,10 +12,10 @@ const Report = ({ paperId, testType }) => {
   const [speakingAnswers, setSpeakingAnswers] = useState([]);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/practice-answers/${paperId}/`,
+          `/practice-answers/${paperId || testID}/`,
           {
             headers: {
               Accept: "application/json",
@@ -91,8 +91,9 @@ const Report = ({ paperId, testType }) => {
       } catch (error) {
         console.log("error", error);
       }
-    })();
-  }, [testType, paperId]);
+    };
+    fetchData();
+  }, [testType, paperId, testID]);
 
   return (
     <div className="row mt-4">
@@ -108,8 +109,8 @@ const Report = ({ paperId, testType }) => {
                   {writingAnswers.map(
                     (item, index) =>
                       item?.ai_assessment && (
-                        <div>
-                          <div key={index} className="gptResponse">
+                        <div key={index}>
+                          <div className="gptResponse">
                             ({index + 1}). {item.ai_assessment}
                           </div>
                           <br />
@@ -131,8 +132,8 @@ const Report = ({ paperId, testType }) => {
                   {writingAnswers.map(
                     (item, index) =>
                       item?.tutor_assessment && (
-                        <div>
-                          <div key={index} className="gptResponse">
+                        <div key={index}>
+                          <div className="gptResponse">
                             ({index + 1}). {item.tutor_assessment}
                           </div>
                           <br />

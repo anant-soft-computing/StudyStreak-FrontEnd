@@ -121,8 +121,10 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
             >
               <div className="row">
                 <ClassList
+                  count={count}
                   isLoading={isLoading}
                   classes={speakingPracticeClasses}
+                  classType="Speaking-Practice"
                   message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
                 />
               </div>

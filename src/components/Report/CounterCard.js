@@ -67,14 +67,12 @@ const CounterCard = ({
             </div>
           </div>
         )}
-        {type === "Practice" && (
-          <div className="latest_wrapper">
-            <div className="wrap_item">
-              <div className="wrap_item_icon">{latestBand} - Band</div>
-              <div className="warp_item_text">Latest Score</div>
-            </div>
+        <div className="latest_wrapper">
+          <div className="wrap_item">
+            <div className="wrap_item_icon">{latestBand} - Band</div>
+            <div className="warp_item_text">Latest Score</div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

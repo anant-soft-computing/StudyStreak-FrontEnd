@@ -115,8 +115,10 @@ const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
             >
               <div className="row">
                 <ClassList
+                  count={count}
                   isLoading={isLoading}
                   classes={groupClasses}
+                  classType="Group-Doubt Solving"
                   message=" No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
                 />
               </div>

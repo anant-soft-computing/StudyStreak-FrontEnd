@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import CounterCard from "./CounterCard";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../UI/Loading";
@@ -6,8 +7,10 @@ import Table from "../UI/Table";
 import FReport from "./FReport";
 
 const FLTReport = () => {
+  const location = useLocation();
   const [givenTest, setGivenTest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeTest, setActiveTest] = useState(0);
   const [fltData, setFLTData] = useState([]);
   const [fltID, setFLTID] = useState();
 
@@ -24,10 +27,9 @@ const FLTReport = () => {
       counts.listening.band,
       counts.writing.band,
       counts.speaking.band,
-    ];
-    const nonZeroBands = bands.filter((band) => band > 0);
-    const sum = nonZeroBands.reduce((acc, band) => acc + band, 0);
-    return nonZeroBands.length > 0 ? (sum / nonZeroBands.length).toFixed(1) : 0;
+    ].map((band) => parseFloat(band) || 0);
+    const sum = bands.reduce((acc, band) => acc + band, 0);
+    return bands.length > 0 ? (sum / bands.length).toFixed(1) : 0;
   };
 
   useEffect(() => {
@@ -94,7 +96,18 @@ const FLTReport = () => {
 
   const viewReport = (params) => {
     return (
-      <button className="take-test" onClick={() => setFLTID(params.data.id)}>
+      <button
+        className="take-test"
+        style={
+          params.data.id === activeTest
+            ? { backgroundColor: "green", border: "1px solid green" }
+            : { backgroundColor: "#01579b", border: "1px solid #01579b" }
+        }
+        onClick={() => {
+          setFLTID(params.data.id);
+          setActiveTest(params.data.id);
+        }}
+      >
         View Report
       </button>
     );
@@ -155,6 +168,9 @@ const FLTReport = () => {
                     <div className="dashboard__section__title">
                       <h4>Full Length Test Report</h4>
                     </div>
+                    <h4 className="sidebar__title">
+                      Solution For : Full Length Test
+                    </h4>
                     <CounterCard
                       testGiven={reportData?.length}
                       testAvailable={fltData?.length}
@@ -169,6 +185,7 @@ const FLTReport = () => {
                         counts?.reading?.skipped + counts?.listening?.skipped
                       }
                       band={averageBand()}
+                      latestBand={location?.state?.latestBand}
                     />
                     <div className="row mt-3">
                       {isLoading ? (

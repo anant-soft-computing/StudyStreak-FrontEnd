@@ -1,13 +1,44 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const ClassList = ({ classes, isLoading, message }) => {
+const ClassList = ({ count, classes, isLoading, message, classType }) => {
   const [isBooking, setIsBooking] = useState(false);
+  const [bookedCount, setBookedCount] = useState(0);
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
+
+  const fetchBookedCount = useCallback(async () => {
+    try {
+      const response = await ajaxCall(
+        `/student/${studentId}/live-classes/?live_class_type=${classType}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setBookedCount(response?.data?.live_class_id?.length);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error:", error);
+    }
+  }, [classType, studentId]);
+
+  useEffect(() => {
+    fetchBookedCount();
+  }, [classType, fetchBookedCount, studentId]);
 
   const handleEnrollNow = async (Id) => {
     const data = JSON.stringify({
@@ -32,6 +63,8 @@ const ClassList = ({ classes, isLoading, message }) => {
       );
       if (response.status === 200) {
         toast.success("Slot Booked Successfully");
+        // Update the booked count by fetching the latest count
+        fetchBookedCount();
       } else if (response.status === 400) {
         toast.error(response?.data?.Message);
       }
@@ -43,6 +76,13 @@ const ClassList = ({ classes, isLoading, message }) => {
   };
 
   const bookCount = async (Id) => {
+    if (bookedCount >= count) {
+      toast.error(
+        `You Do Not Have ${classType} Class Available, Please Upgrade Package !!`
+      );
+      return;
+    }
+
     setIsBooking(true);
     try {
       const response = await ajaxCall(

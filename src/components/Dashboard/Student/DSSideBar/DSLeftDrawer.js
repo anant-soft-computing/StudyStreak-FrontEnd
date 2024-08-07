@@ -253,7 +253,7 @@ const DSLeftDrawer = () => {
         console.log("error", error);
       }
     })();
-  }, [open]);
+  }, [givenFLTCount, givenPTCount, open]);
 
   return (
     <Box sx={{ display: "flex" }}>

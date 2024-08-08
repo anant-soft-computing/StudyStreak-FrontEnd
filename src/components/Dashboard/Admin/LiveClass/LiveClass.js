@@ -3,8 +3,13 @@ import DASideBar from "../DASideBar/DASideBar";
 import CreateLiveClass from "./CreateLiveClass";
 import ViewLiveClasses from "./ViewLiveClasses";
 import Tab from "../../../UI/Tab";
+import CreateRecurrenceLiveClass from "./CreateRecurrenceLiveClass";
 
-const tabs = [{ name: "View LiveClass" }, { name: "Create LiveClass" }];
+const tabs = [
+  { name: "View LiveClass" },
+  { name: "Create LiveClass" },
+  { name: "Create Recurrence LiveClass" },
+];
 
 const LiveClass = () => {
   const [activeTab, setActiveTab] = useState("View LiveClass");
@@ -35,6 +40,18 @@ const LiveClass = () => {
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
+                            activeTab === "View LiveClass" ? "show active" : ""
+                          }`}
+                        >
+                          <div className="row">
+                            <ViewLiveClasses
+                              key={activeTab}
+                              activeTab={activeTab}
+                            />
+                          </div>
+                        </div>
+                        <div
+                          className={`tab-pane fade ${
                             activeTab === "Create LiveClass"
                               ? "show active"
                               : ""
@@ -46,13 +63,14 @@ const LiveClass = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "View LiveClass" ? "show active" : ""
+                            activeTab === "Create Recurrence LiveClass"
+                              ? "show active"
+                              : ""
                           }`}
                         >
                           <div className="row">
-                            <ViewLiveClasses
-                              key={activeTab}
-                              activeTab={activeTab}
+                            <CreateRecurrenceLiveClass
+                              setActiveTab={setActiveTab}
                             />
                           </div>
                         </div>

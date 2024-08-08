@@ -376,7 +376,10 @@ const ScoreCard = () => {
                       to={
                         fltData?.[0]?.flt_set_name && "/full-length-test-report"
                       }
-                      state={{ latestBand: fltBand }}
+                      state={{
+                        latestBand: fltBand,
+                        FullLengthTestID: fltData[0]?.flt,
+                      }}
                     >
                       <h6>View Full Report {">>"}</h6>
                     </Link>

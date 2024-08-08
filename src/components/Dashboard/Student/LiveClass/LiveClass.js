@@ -82,7 +82,7 @@ const LiveClass = () => {
             group_doubt_solving_count:
               packageDetails?.group_doubt_solving_count,
             webinar_count: packageDetails?.webinar_count,
-            tutoring_support_count: packageDetails?.tutoring_support_count,
+            tutor_support_count: packageDetails?.tutor_support_count,
             counselling_count: packageDetails?.counselling_count,
           });
           setSolvingClassBook(

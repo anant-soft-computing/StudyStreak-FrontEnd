@@ -4,8 +4,7 @@ import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
 import SkipIcon from "../UI/SkipIcon";
 
-const Report = ({ paperId, testType, testID }) => {
-  const [, setExamName] = useState("");
+const Report = ({ paperId, testType, testID, setExamName }) => {
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
   const [writingAnswers, setWritingAnswers] = useState([]);

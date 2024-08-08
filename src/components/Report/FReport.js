@@ -6,7 +6,7 @@ import SkipIcon from "../UI/SkipIcon";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 
-const FReport = ({ fltID, setCounts }) => {
+const FReport = ({ fltID, setCounts, setExamName }) => {
   const [rStudentAnswers, setRStudentAnswers] = useState([]);
   const [rCorrectAnswers, setRCorrectAnswers] = useState([]);
 
@@ -14,7 +14,7 @@ const FReport = ({ fltID, setCounts }) => {
   const [lCorrectAnswers, setLCorrectAnswers] = useState([]);
 
   const [writingTestAnswers, setWritingTestAnswers] = useState([]);
-  
+
   const [speakingTestAnswers, setSpeakingTestAnswers] = useState([]);
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const FReport = ({ fltID, setCounts }) => {
         );
 
         if (response.status === 200) {
+          setExamName(response?.data?.name);
           const { writing_set, speaking_set, reading_set, listening_set } =
             response.data;
 
@@ -191,7 +192,7 @@ const FReport = ({ fltID, setCounts }) => {
     };
 
     fetchData();
-  }, [fltID, setCounts]);
+  }, [fltID, setCounts, setExamName]);
 
   const calculateAverageBand = (answers) => {
     const bandScores = answers
@@ -213,7 +214,6 @@ const FReport = ({ fltID, setCounts }) => {
       writing: { band: writingBand },
       speaking: { band: speakingBand },
     }));
-
   }, [writingTestAnswers, speakingTestAnswers, setCounts]);
 
   return (

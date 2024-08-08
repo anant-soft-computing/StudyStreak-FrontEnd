@@ -23,6 +23,7 @@ const PracticeTestReport = () => {
   });
   const [examName, setExamName] = useState("");
   const [givenTest, setGivenTest] = useState([]);
+  const [activeTest, setActiveTest] = useState(null);
   const [activeTab, setActiveTab] = useState("Reading");
   const [initialTabSet, setInitialTabSet] = useState(false);
   const [counts, setCounts] = useState({
@@ -105,6 +106,7 @@ const PracticeTestReport = () => {
 
           if (location?.state?.practiceTestID && !initialTabSet) {
             setActiveTab(location?.state?.practiceTestType);
+            setActiveTest(location?.state?.practiceTestID);
             setInitialTabSet(true);
           }
         } else {
@@ -175,6 +177,8 @@ const PracticeTestReport = () => {
                           setCounts={setCounts}
                           setExamName={setExamName}
                           testID={location?.state?.practiceTestID}
+                          activeTest={activeTest}
+                          setActiveTest={setActiveTest}
                         />
                       </div>
                     </div>

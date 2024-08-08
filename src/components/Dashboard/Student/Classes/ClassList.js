@@ -8,6 +8,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 const ClassList = ({ count, classes, isLoading, message, classType }) => {
   const [isBooking, setIsBooking] = useState(false);
   const [bookedCount, setBookedCount] = useState(0);
+  const [bookingSlotId, setBookingSlotId] = useState(null);
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const fetchBookedCount = useCallback(async () => {
@@ -72,6 +73,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
       console.log("error", error);
     } finally {
       setIsBooking(false);
+      setBookingSlotId(null);
     }
   };
 
@@ -84,6 +86,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     }
 
     setIsBooking(true);
+    setBookingSlotId(Id);
     try {
       const response = await ajaxCall(
         `/add-bookslot/${Id}/`,
@@ -108,7 +111,9 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
       }
     } catch (error) {
       console.log("error", error);
+    } finally {
       setIsBooking(false);
+      setBookingSlotId(null);
     }
   };
 
@@ -119,10 +124,10 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
       <button
         className="take-test"
         onClick={() => bookCount(id)}
-        disabled={isPastDate || isBooking}
+        disabled={isPastDate || (isBooking && bookingSlotId === id)}
         style={{ opacity: isPastDate ? 0.5 : 1 }}
       >
-        {isBooking ? "Booking..." : "Book Slot"}
+        {isBooking && bookingSlotId === id ? "Booking..." : "Book Slot"}
       </button>
     );
   };
@@ -156,7 +161,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
       const description = meeting_description;
       const startingTime = moment(start_time).format("hh:mm A");
       const isPastDate = start_Date < new Date();
-      
+
       return {
         id,
         startDate,

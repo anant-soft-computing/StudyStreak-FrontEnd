@@ -13,9 +13,10 @@ const TestReport = ({
   setCounts,
   setExamName,
   testID,
+  setActiveTest,
+  activeTest,
 }) => {
   const [rowsData, setRowsData] = useState([]);
-  const [activeTest, setActiveTest] = useState(null);
 
   useEffect(() => {
     const initialData = reportData.map((data, index) => ({
@@ -44,7 +45,6 @@ const TestReport = ({
           8000
         );
         if (response.status === 200) {
-          setExamName(response?.data?.name);
           let studentAnswers = [],
             correctAnswer = [];
           let skip = 0,
@@ -158,7 +158,7 @@ const TestReport = ({
         console.log("error", error);
       }
     },
-    [setCounts, setExamName, testType]
+    [setCounts, testType]
   );
 
   useEffect(() => {
@@ -167,7 +167,7 @@ const TestReport = ({
     }
   }, [fetchData, testID]);
 
-  const viewReport = async (params, index) => {
+  const viewReport = async (params) => {
     const paperId = params.data.paperId;
     const result = await fetchData(paperId);
 
@@ -203,7 +203,7 @@ const TestReport = ({
         return (
           <button
             className="take-test"
-            onClick={() => viewReport(params, params.node.rowIndex)}
+            onClick={() => viewReport(params)}
             style={
               paperId === activeTest
                 ? { backgroundColor: "green", border: "1px solid green" }
@@ -228,7 +228,12 @@ const TestReport = ({
             <Table rowData={rowsData} columnDefs={columns} />
           </div>
           {activeTest && (
-            <Report testID={testID} paperId={activeTest} testType={testType} />
+            <Report
+              testID={testID}
+              paperId={activeTest}
+              testType={testType}
+              setExamName={setExamName}
+            />
           )}
         </>
       ) : (

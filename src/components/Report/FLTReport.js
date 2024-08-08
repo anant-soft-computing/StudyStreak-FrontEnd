@@ -8,6 +8,7 @@ import FReport from "./FReport";
 
 const FLTReport = () => {
   const location = useLocation();
+  const [examName, setExamName] = useState("");
   const [givenTest, setGivenTest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTest, setActiveTest] = useState(0);
@@ -81,6 +82,11 @@ const FLTReport = () => {
         if (response.status === 200) {
           setFLTData([...response.data]);
           setIsLoading(false);
+
+          if (location?.state?.FullLengthTestID) {
+            setFLTID(location?.state?.FullLengthTestID);
+            setActiveTest(location?.state?.FullLengthTestID);
+          }
         } else {
           console.log("error");
         }
@@ -88,7 +94,7 @@ const FLTReport = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [location.state]);
 
   const reportData = fltData
     ?.filter((item) => givenTest?.some((index) => index === item.id))
@@ -168,9 +174,11 @@ const FLTReport = () => {
                     <div className="dashboard__section__title">
                       <h4>Full Length Test Report</h4>
                     </div>
-                    <h4 className="sidebar__title">
-                      Solution For : Full Length Test
-                    </h4>
+                    {examName && (
+                      <h4 className="sidebar__title">
+                        Solution For : {examName}
+                      </h4>
+                    )}
                     <CounterCard
                       testGiven={reportData?.length}
                       testAvailable={fltData?.length}
@@ -194,7 +202,11 @@ const FLTReport = () => {
                         <>
                           <Table rowData={reportData} columnDefs={columns} />
                           {fltID && (
-                            <FReport fltID={fltID} setCounts={setCounts} />
+                            <FReport
+                              fltID={fltID}
+                              setCounts={setCounts}
+                              setExamName={setExamName}
+                            />
                           )}
                         </>
                       ) : (

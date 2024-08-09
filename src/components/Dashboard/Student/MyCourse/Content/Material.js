@@ -48,8 +48,8 @@ const Material = ({ courseId }) => {
   }, [courseId]);
 
   const columns = [
-    { headerName: "No.", field: "no" },
-    { headerName: "Name", field: "material_name", filter: true },
+    { headerName: "No.", field: "no", width: 60 },
+    { headerName: "Name", field: "material_name", filter: true, width: 250 },
     {
       headerName: "Download",
       field: "course_material",

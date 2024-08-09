@@ -112,6 +112,7 @@ const FullLengthTest = () => {
       headerName: "Name",
       field: "name",
       filter: true,
+      width: 250,
     },
     {
       headerName: "Reading Set",

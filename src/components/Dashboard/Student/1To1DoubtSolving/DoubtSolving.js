@@ -33,7 +33,7 @@ const DoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/`,
+            `/liveclass_listwithid_view/${batchId}/?live_class_type=One-To-One-Doubt-Solving`,
             {
               headers: {
                 Accept: "application/json",
@@ -48,12 +48,9 @@ const DoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
           );
           if (response?.status === 200) {
             setIsLoading(false);
-            const oToclassData = response?.data?.filter(
-              (item) => item?.liveclasstype?.name === "One-To-One-Doubt-Solving"
-            );
-            const id = oToclassData?.map((item) => item?.other_fields?.id);
+            const id = response?.data?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
-            oToclass.push(...oToclassData);
+            oToclass.push(...response?.data);
           } else {
             setIsLoading(false);
             console.log("error");

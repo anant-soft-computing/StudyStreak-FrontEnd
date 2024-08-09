@@ -9,25 +9,33 @@ const columns = [
     headerName: "No.",
     field: "no",
     resizable: false,
-    width: 76,
+    width: 92,
   },
-  { headerName: "Name", field: "batch_name", filter: true },
-  { headerName: "Package", field: "add_package.package_name", filter: true },
+  { headerName: "Name", field: "batch_name", filter: true, width: 300 },
+  {
+    headerName: "Package",
+    field: "add_package.package_name",
+    filter: true,
+    width: 220,
+  },
   {
     headerName: "Start Date",
     field: "batch_startdate",
     filter: true,
+    width: 210,
   },
-  { headerName: "End Date", field: "batch_enddate", filter: true },
+  { headerName: "End Date", field: "batch_enddate", filter: true, width: 210 },
   {
     headerName: "Start Time",
     field: "batch_start_timing",
     filter: true,
+    width: 210,
   },
   {
     headerName: "End Time",
     field: "batch_end_timing",
     filter: true,
+    width: 210,
   },
 ];
 

@@ -33,7 +33,7 @@ const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/`,
+            `/liveclass_listwithid_view/${batchId}/?live_class_type=Group-Doubt Solving`,
             {
               headers: {
                 Accept: "application/json",
@@ -47,12 +47,9 @@ const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
             8000
           );
           if (response?.status === 200) {
-            const groupDoubtData = response?.data?.filter(
-              (item) => item?.liveclasstype?.name === "Group-Doubt Solving"
-            );
-            const id = groupDoubtData?.map((item) => item?.other_fields?.id);
+            const id = response?.data?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
-            gPClass.push(...groupDoubtData);
+            gPClass.push(...response?.data);
             setIsLoading(false);
           } else {
             setIsLoading(false);

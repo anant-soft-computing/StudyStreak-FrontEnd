@@ -29,14 +29,20 @@ const ViewNotice = ({ activeTab }) => {
   };
 
   const columns = [
-    { headerName: "No.", field: "no", resizable: false,width:60 },
+    { headerName: "No.", field: "no", width: 60 },
     {
       headerName: "Notice",
       field: "notice",
       filter: true,
       cellRenderer: (params) => checkLink(params.value),
+      width: 430,
     },
-    { headerName: "Expiry Date", field: "expiry_date", filter: true },
+    {
+      headerName: "Expiry Date",
+      field: "expiry_date",
+      filter: true,
+      width: 150,
+    },
     {
       headerName: "Student",
       field: "student",

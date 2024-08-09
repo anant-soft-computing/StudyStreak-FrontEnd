@@ -77,6 +77,7 @@ const RegularClassList = ({ isLoading, regularClass }) => {
     {
       headerName: "Join Now",
       cellRenderer: handleJoinNow,
+      width: 190,
     },
     { headerName: "Meeting Title", field: "meeting_title" },
     { headerName: "Description", field: "meeting_description" },

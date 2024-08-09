@@ -21,11 +21,15 @@ const ViewTestimonial = ({ activeTab }) => {
     {
       headerName: "No.",
       field: "no",
-      resizable: false,
       width: 76,
     },
-    { headerName: "Name", field: "name", filter: true },
-    { headerName: "Description", field: "description", filter: true },
+    { headerName: "Name", field: "name", filter: true, width: 280 },
+    {
+      headerName: "Description",
+      field: "description",
+      filter: true,
+      width: 700,
+    },
     {
       headerName: "Position",
       field: "position",
@@ -76,7 +80,7 @@ const ViewTestimonial = ({ activeTab }) => {
       })();
     }
   }, [activeTab, authData?.accessToken]);
-  
+
   return isLoading ? (
     <Loading text="Loading..." color="primary" />
   ) : testimonialList.length > 0 ? (

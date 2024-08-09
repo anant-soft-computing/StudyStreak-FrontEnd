@@ -79,18 +79,27 @@ const TestTable = ({
       field: "button",
       cellRenderer: takeTest,
       filter: true,
+      width: 240,
     },
-    { headerName: "Name", field: "exam_name", filter: true },
+    { headerName: "Name", field: "exam_name", filter: true, width: 350 },
     {
       headerName: "No. Of Questions",
       field: "no_of_questions",
       filter: true,
+      width: 290,
+    },
+    {
+      headerName: "Category",
+      field: "exam_category",
+      filter: true,
+      width: 290,
     },
     {
       headerName: "Status",
       field: "status",
       filter: true,
       cellRenderer: testStatus,
+      width: 280,
     },
   ];
 

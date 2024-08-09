@@ -5,10 +5,15 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
 const columns = [
-  { headerName: "No.", field: "no", resizable: false, width: 110 },
-  { headerName: "Name", field: "title", filter: true },
-  { headerName: "Description", field: "description", filter: true },
-  { headerName: "Items", field: "flash_card_items.length", filter: true },
+  { headerName: "No.", field: "no", resizable: false, width: 120 },
+  { headerName: "Name", field: "title", filter: true, width: 450 },
+  { headerName: "Description", field: "description", filter: true, width: 500 },
+  {
+    headerName: "Items",
+    field: "flash_card_items.length",
+    filter: true,
+    width: 380,
+  },
 ];
 
 const ViewFlashCard = ({ activeTab }) => {

@@ -12,7 +12,7 @@ const PracticeTestTable = ({
   givenTest,
 }) => {
   const navigate = useNavigate();
-  
+
   const handleClick = (data) => {
     if (pendingTest === 0) {
       toast.error(
@@ -73,6 +73,7 @@ const PracticeTestTable = ({
       headerName: "Take Test",
       field: "button",
       cellRenderer: testButton,
+      width: 200,
     },
     {
       headerName: "Name",
@@ -81,6 +82,7 @@ const PracticeTestTable = ({
         return <div>{params.data.IELTS?.Name}</div>;
       },
       filter: true,
+      width: 250,
     },
     {
       headerName: "Sections",
@@ -100,6 +102,7 @@ const PracticeTestTable = ({
         }
       },
       filter: true,
+      width: 250,
     },
     {
       headerName: "Questions",
@@ -119,6 +122,7 @@ const PracticeTestTable = ({
         }
       },
       filter: true,
+      width: 250,
     },
     {
       headerName: "Time",
@@ -138,6 +142,7 @@ const PracticeTestTable = ({
         }
       },
       filter: true,
+      width: 250,
     },
     {
       headerName: "Status",
@@ -160,6 +165,7 @@ const PracticeTestTable = ({
         }
       },
       filter: true,
+      width: 250,
     },
   ];
 

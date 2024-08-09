@@ -18,8 +18,8 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
   // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
     const { join_url, start_time, id } = params.data;
-    const now = currentTime;
-    const classStartTime = moment(start_time);
+    const now = moment(currentTime, "hh:mm A");
+    const classStartTime = moment(start_time, "hh:mm A");
     const timeDifference = classStartTime.diff(now, "minutes");
     const isButtonEnabled = timeDifference <= 5 && timeDifference >= 0;
 
@@ -78,9 +78,8 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     },
     { headerName: "Meeting Title", field: "meeting_title" },
     { headerName: "Description", field: "meeting_description" },
-    { headerName: "Start Time", field: "start_time" },
-    { headerName: "Date", field: "date" },
-    { headerName: "Time", field: "time" },
+    { headerName: "Start Date", field: "start_date" },
+    { headerName: "End Date", field: "end_date" },
     { headerName: "Batch Name", field: "batch_name" },
     {
       headerName: "Status",
@@ -100,10 +99,8 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       select_batch,
     }) => ({
       id,
-      date: moment(start_time).format("DD MMM, YYYY"),
-      time: `${moment(start_time).format("hh:mm A")} - ${moment(
-        end_time
-      ).format("hh:mm A")}`,
+      start_date: moment(start_time).format("lll"),
+      end_date: moment(end_time).format("lll"),
       meeting_title,
       batch_name: select_batch?.batch_name,
       meeting_description,

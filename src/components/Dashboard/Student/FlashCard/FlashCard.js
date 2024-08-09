@@ -82,14 +82,20 @@ const FlashCard = () => {
       headerName: "View Card",
       field: "button",
       cellRenderer: viewCard,
-      width: 166,
+      width: 200,
     },
-    { headerName: "Title", field: "title", filter: true, width: 250 },
+    { headerName: "Title", field: "title", filter: true, width: 450 },
     {
       headerName: "Description",
       field: "description",
       filter: true,
-      width: 300,
+      width: 450,
+    },
+    {
+      headerName: "Flash Card Items",
+      field: "flash_card_items.length",
+      filter: true,
+      width: 350,
     },
   ];
 

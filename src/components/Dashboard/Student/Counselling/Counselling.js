@@ -33,7 +33,7 @@ const Counselling = ({ count, solvingClassBook, selectedDateRange }) => {
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/`,
+            `/liveclass_listwithid_view/${batchId}/?live_class_type=Counselling`,
             {
               headers: {
                 Accept: "application/json",
@@ -47,12 +47,9 @@ const Counselling = ({ count, solvingClassBook, selectedDateRange }) => {
             8000
           );
           if (response?.status === 200) {
-            const data = response?.data?.filter(
-              (item) => item?.liveclasstype?.name === "Counselling"
-            );
-            const id = data?.map((item) => item?.other_fields?.id);
+            const id = response?.data?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
-            counsellingData.push(...data);
+            counsellingData.push(...response?.data);
             setIsLoading(false);
           } else {
             console.log("error");

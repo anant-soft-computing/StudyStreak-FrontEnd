@@ -168,11 +168,10 @@ const LiveClass = () => {
                   <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
                     <h4 className="flex-fill">Select Date Range</h4>
                   </div>
-                  <div className="d-flex justify-content-center ">
+                  <div className="d-flex justify-content-center">
                     <DateRange
                       selectedRange={selectedDateRange}
                       onChange={handleDateRangeChange}
-                      inline
                     />
                   </div>
                 </div>

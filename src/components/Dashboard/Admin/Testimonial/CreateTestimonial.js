@@ -72,7 +72,7 @@ const CreateTestimonial = ({ setActiveTab }) => {
 
     try {
       const response = await ajaxCall(
-        "/testimonial/",
+        "/testimonial-create/",
         {
           headers: {
             Authorization: `Bearer ${authData?.accessToken}`,

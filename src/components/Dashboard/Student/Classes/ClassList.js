@@ -136,6 +136,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     {
       headerName: "Book Slot",
       cellRenderer: handleBook,
+      width: 190,
     },
     { headerName: "Meeting Title", field: "title" },
     { headerName: "Description", field: "description" },

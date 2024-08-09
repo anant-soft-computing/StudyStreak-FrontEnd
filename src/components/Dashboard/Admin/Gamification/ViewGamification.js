@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -7,19 +7,31 @@ import Loading from "../../../UI/Loading";
 
 const specificColumns = {
   "Flash Card": [
-    { headerName: "No.", field: "no", resizable: false, width: 110 },
-    { headerName: "Name", field: "title", filter: true },
-    { headerName: "Description", field: "description", filter: true },
-    { headerName: "Points", field: "points", filter: true },
+    { headerName: "No.", field: "no", width: 120 },
+    { headerName: "Name", field: "title", filter: true, width: 510 },
+    {
+      headerName: "Description",
+      field: "description",
+      filter: true,
+      width: 510,
+    },
+    { headerName: "Points", field: "points", filter: true, width: 310 },
   ],
   Lesson: [
-    { headerName: "Lesson Title", field: "name", filter: true },
+    { headerName: "No.", field: "no", width: 120 },
+    {
+      headerName: "Lesson Title",
+      field: "Lesson_Title",
+      filter: true,
+      width: 510,
+    },
     {
       headerName: "Description",
       field: "Lesson_Description",
       filter: true,
+      width: 510,
     },
-    { headerName: "Points", field: "points", filter: true },
+    { headerName: "Points", field: "points", filter: true, width: 310 },
   ],
   Course: [
     { headerName: "No.", field: "no", resizable: false, width: 60 },
@@ -27,11 +39,11 @@ const specificColumns = {
     { headerName: "Points", field: "points", filter: true },
   ],
   "Exam Block": [
-    { headerName: "No.", field: "no", resizable: false, width: 68 },
-    { headerName: "Exam Name", field: "exam_name", filter: true },
-    { headerName: "Exam Type", field: "exam_type", filter: true },
-    { headerName: "Block Type", field: "block_type", filter: true },
-    { headerName: "Points", field: "points", filter: true },
+    { headerName: "No.", field: "no", width: 150 },
+    { headerName: "Exam Name", field: "exam_name", filter: true, width: 330 },
+    { headerName: "Exam Type", field: "exam_type", filter: true, width: 330 },
+    { headerName: "Block Type", field: "block_type", filter: true, width: 320 },
+    { headerName: "Points", field: "points", filter: true, width: 320 },
   ],
   "Full Length Test": [
     { headerName: "No.", field: "no", resizable: false, width: 68 },
@@ -94,36 +106,39 @@ const ViewGamification = ({ content, activeTab }) => {
   const [gamificationList, setGamificationList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
-  const fetchData = async (url, setter) => {
-    setIsLoading(true);
-    try {
-      const response = await ajaxCall(
-        url,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authData?.accessToken}`,
+  const fetchData = useCallback(
+    async (url, setter) => {
+      setIsLoading(true);
+      try {
+        const response = await ajaxCall(
+          url,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
           },
-          method: "GET",
-        },
-        8000
-      );
-      if (response?.status === 200) {
-        setter(response?.data);
+          8000
+        );
+        if (response?.status === 200) {
+          setter(response?.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+    [authData.accessToken]
+  );
 
   useEffect(() => {
     if (activeTab === "View Gamification") {
       fetchData(`/gamification/`, setGamificationList);
     }
-  }, [activeTab, authData.accessToken]);
+  }, [activeTab, authData.accessToken, fetchData]);
 
   useEffect(() => {
     const endpoints = {
@@ -139,7 +154,7 @@ const ViewGamification = ({ content, activeTab }) => {
     if (content && endpoints[content] && activeTab === "View Gamification") {
       fetchData(endpoints[content], setDataList);
     }
-  }, [activeTab, authData.accessToken, content]);
+  }, [activeTab, authData.accessToken, content, fetchData]);
 
   const filteredDataList = () => {
     switch (content) {

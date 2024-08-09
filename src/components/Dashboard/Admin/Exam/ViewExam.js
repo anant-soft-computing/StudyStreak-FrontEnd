@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
@@ -18,36 +18,39 @@ const ViewExam = ({ activeTab }) => {
     no: index + 1,
   }));
 
-  const fetchData = async (url, filterFn, setData) => {
-    setIsLoading(true);
-    try {
-      const response = await ajaxCall(
-        url,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authData?.accessToken}`,
+  const fetchData = useCallback(
+    async (url, filterFn, setData) => {
+      setIsLoading(true);
+      try {
+        const response = await ajaxCall(
+          url,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
           },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        const filteredData = response.data.filter(filterFn);
-        const dataWithNumbers = filteredData.map((item, index) => ({
-          ...item,
-          no: index + 1,
-        }));
-        setData(dataWithNumbers);
-        setIsLoading(false);
-      } else {
-        console.log("error");
+          8000
+        );
+        if (response.status === 200) {
+          const filteredData = response.data.filter(filterFn);
+          const dataWithNumbers = filteredData.map((item, index) => ({
+            ...item,
+            no: index + 1,
+          }));
+          setData(dataWithNumbers);
+          setIsLoading(false);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
       }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+    },
+    [authData?.accessToken]
+  );
 
   useEffect(() => {
     if (activeTab === "View Exam") {
@@ -60,7 +63,7 @@ const ViewExam = ({ activeTab }) => {
       fetchData("/moduleListView/", () => true, setPtList);
       fetchData("/get/flt/", () => true, setFltList);
     }
-  }, [activeTab]);
+  }, [activeTab, fetchData]);
 
   return (
     <div>
@@ -75,7 +78,7 @@ const ViewExam = ({ activeTab }) => {
         <Table
           rowData={miniTestData}
           columnDefs={[
-            { headerName: "No.", field: "no", resizable: false, width: 68 },
+            { headerName: "No.", field: "no", resizable: false, width: 135 },
             {
               headerName: "Exam Name",
               field: "exam_name" || "name",
@@ -83,6 +86,7 @@ const ViewExam = ({ activeTab }) => {
               valueGetter: (params) => {
                 return params.data?.exam_name || params.data?.name;
               },
+              width: 330,
             },
             {
               headerName: "Exam Type",
@@ -91,6 +95,7 @@ const ViewExam = ({ activeTab }) => {
               valueGetter: (params) => {
                 return params.data?.exam_type || "Speaking";
               },
+              width: 330,
             },
             {
               headerName: "No. Of Questions",
@@ -101,6 +106,7 @@ const ViewExam = ({ activeTab }) => {
                   params.data?.no_of_questions || params.data?.questions.length
                 );
               },
+              width: 330,
             },
             {
               headerName: "Block Type",
@@ -109,6 +115,7 @@ const ViewExam = ({ activeTab }) => {
               valueGetter: (params) => {
                 return params.data?.block_type || "Mock Test";
               },
+              width: 330,
             },
           ]}
         />
@@ -128,27 +135,41 @@ const ViewExam = ({ activeTab }) => {
             <Table
               rowData={ptList}
               columnDefs={[
-                { headerName: "No.", field: "no", resizable: false, width: 68 },
-                { headerName: "Exam Name", field: "Name", filter: true },
+                {
+                  headerName: "No.",
+                  field: "no",
+                  resizable: false,
+                  width: 135,
+                },
+                {
+                  headerName: "Exam Name",
+                  field: "Name",
+                  filter: true,
+                  width: 265,
+                },
                 {
                   headerName: "Reading Set",
                   field: "reading_count",
                   filter: true,
+                  width: 210,
                 },
                 {
                   headerName: "Writing Set",
                   field: "writing_count",
                   filter: true,
+                  width: 210,
                 },
                 {
                   headerName: "Listening Set",
                   field: "listening_count",
                   filter: true,
+                  width: 210,
                 },
                 {
                   headerName: "Speaking Set",
                   field: "speaking_count",
                   filter: true,
+                  width: 210,
                 },
               ]}
             />
@@ -170,27 +191,41 @@ const ViewExam = ({ activeTab }) => {
             <Table
               rowData={fltList}
               columnDefs={[
-                { headerName: "No.", field: "no", resizable: false, width: 68 },
-                { headerName: "Exam Name", field: "name", filter: true },
+                {
+                  headerName: "No.",
+                  field: "no",
+                  resizable: false,
+                  width: 110,
+                },
+                {
+                  headerName: "Exam Name",
+                  field: "name",
+                  filter: true,
+                  width: 250,
+                },
                 {
                   headerName: "Reading Set",
                   field: "reading_set.Reading.length",
                   filter: true,
+                  width:220,
                 },
                 {
                   headerName: "Writing Set",
                   field: "writing_set.Writing.length",
                   filter: true,
+                  width:220,
                 },
                 {
                   headerName: "Listening Set",
                   field: "listening_set.Listening.length",
                   filter: true,
+                  width:220,
                 },
                 {
                   headerName: "Speaking Set",
                   field: "speaking_set.Speaking.length",
                   filter: true,
+                  width:220,
                 },
               ]}
             />

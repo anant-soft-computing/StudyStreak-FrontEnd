@@ -2,18 +2,13 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
-import Quiz from "./Quiz";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import noteBook from "../../../../img/icon/notebook.svg";
 import FloatingNote from "./FloatingNote";
 import Tab from "../../../UI/Tab";
 
-const tabs = [
-  { name: "Attachment" },
-  { name: "Assignment" },
-  { name: "Quiz" },
-];
+const tabs = [{ name: "Attachment" }, { name: "Assignment" }];
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
@@ -106,7 +101,6 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                       activeLesson={
                         activeLesson?.attachment_lession_count?.attachments
                       }
-                      lessonName={activeLesson?.Lesson_Title}
                     />
                   </div>
                 </div>
@@ -118,17 +112,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                   <div className="row">
                     <Assignment
                       activeLesson={activeLesson?.lesson_assignment}
-                      lessonName={activeLesson?.Lesson_Title}
                     />
-                  </div>
-                </div>
-                <div
-                  className={`tab-pane fade ${
-                    activeTab === "Quiz" ? "show active" : ""
-                  }`}
-                >
-                  <div className="row">
-                    <Quiz activeLesson={activeLesson?.quiz_question_options} />
                   </div>
                 </div>
               </div>
@@ -136,28 +120,13 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
           )}
         </div>
       )}
-      {activeContentType === "attachment" && (
-        <Attachment
-          activeLesson={activeLesson}
+      {isFloatingNotes && (
+        <FloatingNote
+          setIsFloatingNotes={setIsFloatingNotes}
+          lessonId={activeLesson?.id}
           lessonName={activeLesson?.Lesson_Title}
         />
       )}
-      {activeContentType === "quiz" && <Quiz activeLesson={activeLesson} />}
-      {activeContentType === "assignment" && (
-        <Assignment
-          activeLesson={activeLesson}
-          lessonName={activeLesson?.Lesson_Title}
-        />
-      )}
-      <div>
-        {isFloatingNotes && (
-          <FloatingNote
-            setIsFloatingNotes={setIsFloatingNotes}
-            lessonId={activeLesson?.id}
-            lessonName={activeLesson?.Lesson_Title}
-          />
-        )}
-      </div>
     </div>
   );
 };

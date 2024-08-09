@@ -63,6 +63,7 @@ const Resources = () => {
       field: "description",
       resizable: true,
       filter: true,
+      width: 380,
     },
     {
       headerName: "Video / Link",

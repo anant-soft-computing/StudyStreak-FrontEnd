@@ -29,8 +29,7 @@ const ViewResources = ({ activeTab }) => {
     {
       headerName: "No.",
       field: "no",
-      resizable: false,
-      width: 76,
+      width: 90,
     },
     {
       headerName: "Student",
@@ -55,6 +54,7 @@ const ViewResources = ({ activeTab }) => {
       field: "description",
       resizable: true,
       filter: true,
+      width: 360,
     },
     {
       headerName: "Video / Link",
@@ -89,32 +89,35 @@ const ViewResources = ({ activeTab }) => {
             8000
           );
           if (response?.status === 200) {
-            const resourcesWithNumbers = response?.data?.flatMap((item, index) =>
-              item?.documents?.map((document, docIndex) => ({
-                no: `${index + 1}. (${docIndex + 1}).`,
-                batch:
-                  item?.batch?.length > 0
-                    ? item?.batch?.map((batch) => batch?.batch_name).join(", ")
-                    : "-",
-                student:
-                  item?.student?.length > 0
-                    ? item?.student
-                        .map(
-                          (student) =>
-                            `${student?.user?.first_name} ${student?.user?.last_name}`
-                        )
-                        .join(", ")
-                    : "-",
-                course:
-                  item?.course?.length > 0
-                    ? item?.course
-                        .map((course) => course?.Course_Title)
-                        .join(", ")
-                    : "-",
-                description: document?.description || "-",
-                document: document?.document,
-                link: item?.link || "-",
-              }))
+            const resourcesWithNumbers = response?.data?.flatMap(
+              (item, index) =>
+                item?.documents?.map((document, docIndex) => ({
+                  no: `${index + 1}. (${docIndex + 1}).`,
+                  batch:
+                    item?.batch?.length > 0
+                      ? item?.batch
+                          ?.map((batch) => batch?.batch_name)
+                          .join(", ")
+                      : "-",
+                  student:
+                    item?.student?.length > 0
+                      ? item?.student
+                          .map(
+                            (student) =>
+                              `${student?.user?.first_name} ${student?.user?.last_name}`
+                          )
+                          .join(", ")
+                      : "-",
+                  course:
+                    item?.course?.length > 0
+                      ? item?.course
+                          .map((course) => course?.Course_Title)
+                          .join(", ")
+                      : "-",
+                  description: document?.description || "-",
+                  document: document?.document,
+                  link: item?.link || "-",
+                }))
             );
             setResourceList(resourcesWithNumbers);
             setIsLoading(false);

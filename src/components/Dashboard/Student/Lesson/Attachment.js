@@ -2,6 +2,12 @@ import React from "react";
 import Table from "../../../UI/Table";
 
 const Attachment = ({ activeLesson }) => {
+  const attachment = activeLesson?.map((lesson, index) => {
+    return {
+      ...lesson,
+      no: index + 1,
+    };
+  });
   const doDownload = (params) => {
     return (
       <button
@@ -14,6 +20,7 @@ const Attachment = ({ activeLesson }) => {
   };
 
   const columns = [
+    { headerName: "No", field: "no", resizable: false, width: 80 },
     {
       headerName: "Lesson Name",
       field: "lesson.Lesson_Title",
@@ -33,8 +40,8 @@ const Attachment = ({ activeLesson }) => {
     },
   ];
 
-  return activeLesson && activeLesson.length > 0 ? (
-    <Table rowData={activeLesson} columnDefs={columns} />
+  return attachment && attachment.length > 0 ? (
+    <Table rowData={attachment} columnDefs={columns} />
   ) : (
     <h5 className="text-center text-danger">Attachment Not Found !!</h5>
   );

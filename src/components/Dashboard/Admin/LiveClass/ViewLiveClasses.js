@@ -6,29 +6,38 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
 const columns = [
-  { headerName: "No.", field: "no", resizable: false, width: 86 },
+  { headerName: "No.", field: "no", resizable: false, width: 110 },
   {
     headerName: "Batch",
     field: "select_batch.batch_name",
     filter: true,
+    width: 280,
   },
-  { headerName: "Live Class Type", field: "liveclasstype", filter: true },
+  {
+    headerName: "Live Class Type",
+    field: "liveclasstype",
+    filter: true,
+    width: 280,
+  },
   {
     headerName: "Meeting Name",
     field: "meeting_title",
     filter: true,
+    width: 280,
   },
   {
     headerName: "Start Date",
     field: "start_time",
     filter: true,
     valueFormatter: ({ value }) => moment(value).format("lll"),
+    width: 250,
   },
   {
     headerName: "End Date",
     field: "end_time",
     filter: true,
     valueFormatter: ({ value }) => moment(value).format("lll"),
+    width: 250,
   },
 ];
 

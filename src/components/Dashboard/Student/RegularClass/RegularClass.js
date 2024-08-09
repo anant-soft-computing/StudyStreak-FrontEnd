@@ -33,7 +33,7 @@ const RegularClass = ({ selectedDateRange }) => {
         for (let i = 0; i < batchIds.length; i++) {
           const batchId = batchIds[i];
           const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/`,
+            `/liveclass_listwithid_view/${batchId}/?live_class_type=Regular Class`,
             {
               headers: {
                 Accept: "application/json",
@@ -47,13 +47,9 @@ const RegularClass = ({ selectedDateRange }) => {
             8000
           );
           if (response?.status === 200) {
-            const classData = response?.data?.filter(
-              (item) => item?.liveclasstype?.name === "Regular Class"
-            );
-
-            const id = classData?.map((item) => item?.other_fields?.id);
+            const id = response?.data?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
-            regularClassData.push(...classData);
+            regularClassData.push(...response?.data);
             setIsLoading(false);
           } else {
             setIsLoading(false);

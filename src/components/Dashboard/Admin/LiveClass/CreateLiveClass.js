@@ -5,10 +5,14 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 import Loading from "../../../UI/Loading";
 import moment from "moment";
+import SelectionBox from "../../../UI/SelectionBox";
 
 const initialLiveClassData = {
   liveclasstype: "",
-  select_batch: "",
+  select_batch: [],
+  select_batchId: [],
+  select_course: [],
+  select_courseId: [],
   topic: "",
   agenda: "",
   start_time: "",
@@ -55,6 +59,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
     initialLiveClassData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [activeButton, setActiveButton] = useState("batch");
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
@@ -67,6 +72,29 @@ const CreateLiveClass = ({ setActiveTab }) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
+  const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
+    if (isSingle) {
+      dispatchCreateLiveClass({
+        type: fieldName,
+        value: val,
+      });
+      dispatchCreateLiveClass({
+        type: proFieldName,
+        value: +val[0]?.id,
+      });
+      return;
+    }
+    const newValIds = val.map((ids) => ids.id);
+    dispatchCreateLiveClass({
+      type: fieldName,
+      value: val,
+    });
+    dispatchCreateLiveClass({
+      type: proFieldName,
+      value: newValIds,
+    });
+  };
+
   const createLiveClass = async (e) => {
     e.preventDefault();
     if (!validateForm(createLiveClassData, setFormError)) return;
@@ -75,7 +103,8 @@ const CreateLiveClass = ({ setActiveTab }) => {
     const data = {
       topic: createLiveClassData.topic,
       agenda: createLiveClassData.agenda,
-      select_batch: createLiveClassData.select_batch,
+      select_batch: createLiveClassData.select_batchId,
+      select_course: createLiveClassData.select_courseId,
       liveclasstype: createLiveClassData.liveclasstype,
       registration_limit: createLiveClassData.registration_limit,
       start_time: moment(createLiveClassData.start_time).format(
@@ -123,161 +152,208 @@ const CreateLiveClass = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-xl-12">
-        <div className="row">
-          <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Live Class Type</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createLiveClassData.liveclasstype}
-                onChange={(val) => {
-                  dispatchCreateLiveClass({
-                    type: "liveclasstype",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url="/live_class_type_list_view/"
-                objKey={["name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Batch</span>
-            </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={createLiveClassData.select_batch}
-                onChange={(val) => {
-                  dispatchCreateLiveClass({
-                    type: "select_batch",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url="/batchview/"
-                objKey={["batch_name"]}
-              />
-            </div>
-          </div>
-          <div className="col-xl-6 mt-3">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Meeting Title</label>
-                <input
-                  type="text"
-                  placeholder="Meeting Title"
-                  value={createLiveClassData.topic}
-                  onChange={(e) => {
+    <>
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <button
+          className={`default__button ${
+            activeButton === "batch" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("batch")}
+        >
+          Batch
+        </button>
+        <button
+          className={`default__button ${
+            activeButton === "course" ? "active bg-success" : ""
+          }`}
+          onClick={() => setActiveButton("course")}
+        >
+          Course
+        </button>
+      </div>
+      <div className="row">
+        <div className="col-xl-12">
+          <div className="row">
+            <div className="col-xl-6">
+              <div className="dashboard__select__heading">
+                <span>Live Class Type</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={createLiveClassData.liveclasstype}
+                  onChange={(val) => {
                     dispatchCreateLiveClass({
-                      type: "topic",
-                      value: e.target.value,
+                      type: "liveclasstype",
+                      value: val,
                     });
                   }}
+                  isSearch={true}
+                  url="/live_class_type_list_view/"
+                  objKey={["name"]}
                 />
               </div>
             </div>
-          </div>
-          <div className="col-xl-6 mt-3">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Meeting Description</label>
-                <input
-                  type="text"
-                  placeholder="Meeting Description"
-                  value={createLiveClassData.agenda}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "agenda",
-                      value: e.target.value,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>Start Date & Time (UTC)</label>
-                <input
-                  type="datetime-local"
-                  value={createLiveClassData.start_time}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "start_time",
-                      value: e.target.value,
-                    });
-                  }}
-                  min={new Date().toISOString().slice(0, 16)}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-6">
-            <div className="dashboard__form__wraper">
-              <div className="dashboard__form__input">
-                <label>End Date & Time (UTC)</label>
-                <input
-                  type="datetime-local"
-                  value={createLiveClassData.end_time}
-                  onChange={(e) => {
-                    dispatchCreateLiveClass({
-                      type: "end_time",
-                      value: e.target.value,
-                    });
-                  }}
-                  min={new Date().toISOString().slice(0, 16)}
-                />
-              </div>
-            </div>
-          </div>
-          {createLiveClassData.liveclasstype >= 2 &&
-            createLiveClassData.liveclasstype <= 7 && (
+            {activeButton === "batch" && (
               <div className="col-xl-6">
-                <div className="dashboard__form__wraper">
-                  <div className="dashboard__form__input">
-                    <label>Registration Limit</label>
-                    <input
-                      type="number"
-                      placeholder="Registration Limit"
-                      value={createLiveClassData.registration_limit}
-                      onChange={(e) => {
-                        dispatchCreateLiveClass({
-                          type: "registration_limit",
-                          value: parseInt(e.target.value),
-                        });
-                      }}
-                    />
-                  </div>
+                <div className="dashboard__select__heading">
+                  <span>Batch</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createLiveClassData?.select_batch}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "select_batch",
+                      "select_batchId",
+                      false
+                    )}
+                    url="/batchview/"
+                    name="batch_name"
+                    objKey={["batch_name"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
                 </div>
               </div>
             )}
-          <div className="col-xl-12 mt-3">
-            <div className="dashboard__form__button text-center mt-4">
-              {formStatus.isError && (
-                <div className="text-danger mb-2">{formStatus.errMsg}</div>
+            {activeButton === "course" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Course</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createLiveClassData?.select_course}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "select_course",
+                      "select_courseId",
+                      false
+                    )}
+                    url="/courselistforpackage/"
+                    name="Course_Title"
+                    objKey={["Course_Title"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            <div className="col-xl-6 mt-3">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Meeting Title</label>
+                  <input
+                    type="text"
+                    placeholder="Meeting Title"
+                    value={createLiveClassData.topic}
+                    onChange={(e) => {
+                      dispatchCreateLiveClass({
+                        type: "topic",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 mt-3">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Meeting Description</label>
+                  <input
+                    type="text"
+                    placeholder="Meeting Description"
+                    value={createLiveClassData.agenda}
+                    onChange={(e) => {
+                      dispatchCreateLiveClass({
+                        type: "agenda",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Start Date & Time (UTC)</label>
+                  <input
+                    type="datetime-local"
+                    value={createLiveClassData.start_time}
+                    onChange={(e) => {
+                      dispatchCreateLiveClass({
+                        type: "start_time",
+                        value: e.target.value,
+                      });
+                    }}
+                    min={new Date().toISOString().slice(0, 16)}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>End Date & Time (UTC)</label>
+                  <input
+                    type="datetime-local"
+                    value={createLiveClassData.end_time}
+                    onChange={(e) => {
+                      dispatchCreateLiveClass({
+                        type: "end_time",
+                        value: e.target.value,
+                      });
+                    }}
+                    min={new Date().toISOString().slice(0, 16)}
+                  />
+                </div>
+              </div>
+            </div>
+            {createLiveClassData.liveclasstype >= 2 &&
+              createLiveClassData.liveclasstype <= 7 && (
+                <div className="col-xl-6">
+                  <div className="dashboard__form__wraper">
+                    <div className="dashboard__form__input">
+                      <label>Registration Limit</label>
+                      <input
+                        type="number"
+                        placeholder="Registration Limit"
+                        value={createLiveClassData.registration_limit}
+                        onChange={(e) => {
+                          dispatchCreateLiveClass({
+                            type: "registration_limit",
+                            value: parseInt(e.target.value),
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
               )}
-              {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Live Class..." />
-              ) : (
-                <button
-                  className="default__button"
-                  onClick={createLiveClass}
-                  disabled={formStatus.isSubmitting}
-                >
-                  Create Live Class
-                </button>
-              )}
+            <div className="col-xl-12 mt-3">
+              <div className="dashboard__form__button text-center mt-4">
+                {formStatus.isError && (
+                  <div className="text-danger mb-2">{formStatus.errMsg}</div>
+                )}
+                {formStatus.isSubmitting ? (
+                  <Loading color="primary" text="Creating Live Class..." />
+                ) : (
+                  <button
+                    className="default__button"
+                    onClick={createLiveClass}
+                    disabled={formStatus.isSubmitting}
+                  >
+                    Create Live Class
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

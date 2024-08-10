@@ -8,7 +8,7 @@ import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const tabs = [{ name: "Regular" }, { name: "Recorded Class" }];
 
-const RegularClass = ({ selectedDateRange }) => {
+const RegularClass = ({ selectedDate, onDataFetch }) => {
   const location = useLocation();
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const [uuid, setUuid] = useState([]);
@@ -50,6 +50,7 @@ const RegularClass = ({ selectedDateRange }) => {
             const id = response?.data?.map((item) => item?.other_fields?.id);
             uuidData.push(...id);
             regularClassData.push(...response?.data);
+            onDataFetch(regularClassData);
             setIsLoading(false);
           } else {
             setIsLoading(false);
@@ -67,7 +68,7 @@ const RegularClass = ({ selectedDateRange }) => {
 
   const regularClasses = () => {
     return regularClass.filter(({ start_time, end_time }) =>
-      filterByDateRange(start_time, end_time, selectedDateRange)
+      filterByDateRange(start_time, end_time, selectedDate)
     );
   };
 

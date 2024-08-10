@@ -1,23 +1,50 @@
 import React from "react";
 import ReactDatePicker from "react-datepicker";
+import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 
-const DateRange = ({ selectedRange, onChange }) => {
+const DateRange = ({ selectedDate, onChange, highlightedRanges, ...rest }) => {
+  const isDateInRange = (date, range) => {
+    const day = moment(date).startOf("day");
+    const start = moment(range.start).startOf("day");
+    const end = moment(range.end).endOf("day");
+    return day.isBetween(start, end, null, "[]");
+  };
+
+  const isCurrentDate = (date) => {
+    return moment(date)?.isSame(moment(), "day");
+  };
+
+  const isSelectedDate = (date) => {
+    const selectedDateMoment = moment(selectedDate).startOf("day");
+    const currentDate = moment(date).startOf("day");
+    return currentDate.isSame(selectedDateMoment, "day");
+  };
+
   return (
     <ReactDatePicker
-      selectsRange={true}
-      startDate={selectedRange?.[0]?.startDate || null}
-      endDate={selectedRange?.[0]?.endDate || null}
-      onChange={(range) => {
-        const selectedRange = {
-          selection: [
-            { startDate: range?.[0], endDate: range?.[1], key: "selection" },
-          ],
-        };
-        onChange(selectedRange);
+      selected={selectedDate}
+      onChange={(date) => {
+        onChange(date);
       }}
-      isClearable
-      placeholderText="Select A Date"
+      isClearable={false}
+      {...rest}
+      highlightDates={[
+        ...highlightedRanges?.map((range) => ({
+          "highlighted-range": [new Date(range.start), new Date(range.end)],
+        })),
+      ]}
+      dayClassName={(date) => {
+        if (isCurrentDate(date)) {
+          return "current-day";
+        }
+        if (isSelectedDate(date)) {
+          return "selected-day";
+        }
+        return highlightedRanges?.some((range) => isDateInRange(date, range))
+          ? "highlighted-day"
+          : undefined;
+      }}
     />
   );
 };

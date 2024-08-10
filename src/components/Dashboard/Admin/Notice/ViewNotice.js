@@ -69,7 +69,7 @@ const ViewNotice = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/noticeboard/`,
+            `/noticeboard-list/`,
             {
               headers: {
                 Accept: "application/json",

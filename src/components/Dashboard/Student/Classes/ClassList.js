@@ -158,7 +158,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
       const startDate = moment(start_time).format("lll");
       const endDate = moment(end_time).format("lll");
       const title = meeting_title;
-      const batchName = select_batch?.batch_name;
+      const batchName = select_batch?.map((batch) => batch.batch_name).join(",");
       const description = meeting_description;
       const startingTime = moment(start_time).format("hh:mm A");
       const isPastDate = start_Date < new Date();

@@ -14,7 +14,12 @@ const tabs = [
   { name: "Recorded Class" },
 ];
 
-const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
+const SpeakingPractice = ({
+  count,
+  solvingClassBook,
+  selectedDate,
+  onDataFetch,
+}) => {
   const location = useLocation();
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -63,6 +68,7 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
           }
         }
         setUuid(uuidData);
+        onDataFetch(speakingClass);
         setSpeakingSolvingClass(speakingClass);
       } catch (error) {
         setIsLoading(false);
@@ -73,7 +79,7 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
 
   const speakingClasses = () => {
     return speakingSolvingClass?.filter(({ start_time, end_time }) =>
-      filterByDateRange(start_time, end_time, selectedDateRange)
+      filterByDateRange(start_time, end_time, selectedDate)
     );
   };
 
@@ -88,7 +94,7 @@ const SpeakingPractice = ({ count, solvingClassBook, selectedDateRange }) => {
 
   return (
     <div>
-      {count === 0 ? (
+      {count === undefined ? (
         <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
       ) : (
         <div className="row">

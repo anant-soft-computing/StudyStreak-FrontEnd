@@ -33,7 +33,6 @@ import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTe
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
 import SLiveClass from "./components/Dashboard/Student/LiveClass/LiveClass";
 import SFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
-import AllWebinar from "./components/Dashboard/Student/Webinar/AllWebinar";
 import SSettings from "./components/Dashboard/Student/Setting/Settings";
 import SResources from "./components/Dashboard/Student/Resources/Resources";
 
@@ -129,7 +128,6 @@ const App = () => {
           <Route path="/fullLengthTest" element={<FullLengthTest />} />
           <Route path="/studentLiveClasses" element={<SLiveClass />} />
           <Route path="/flashcard" element={<SFlashCard />} />
-          <Route path="/webinars" element={<AllWebinar />} />
           <Route path="/resources" element={<SResources />} />
           <Route path="/studentSettings" element={<SSettings />} />
 

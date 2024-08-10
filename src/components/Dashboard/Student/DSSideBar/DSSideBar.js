@@ -80,11 +80,6 @@ const DSSidebar = () => {
       link: "/flashCard",
     },
     {
-      name: "Webinars",
-      icon: <img src={webinars} alt="Webinars" height={20} width={20} />,
-      link: "/webinars",
-    },
-    {
       name: "Resources",
       icon: <img src={resources} alt="Resources" height={20} width={20} />,
       link: "/resources",

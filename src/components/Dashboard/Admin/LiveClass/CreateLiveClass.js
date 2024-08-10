@@ -17,7 +17,7 @@ const initialLiveClassData = {
   agenda: "",
   start_time: "",
   end_time: "",
-  registration_limit: "",
+  registration_limit: null,
 };
 
 const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
@@ -70,6 +70,22 @@ const CreateLiveClass = ({ setActiveTab }) => {
 
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
+  };
+
+  const handleButtonClick = (buttonType) => {
+    setActiveButton(buttonType);
+    switch (buttonType) {
+      case "course":
+        dispatchCreateLiveClass({ type: "select_batch", value: [] });
+        dispatchCreateLiveClass({ type: "select_batchId", value: [] });
+        break;
+      case "batch":
+        dispatchCreateLiveClass({ type: "select_course", value: [] });
+        dispatchCreateLiveClass({ type: "select_courseId", value: [] });
+        break;
+      default:
+        break;
+    }
   };
 
   const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
@@ -158,7 +174,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "batch" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("batch")}
+          onClick={() => handleButtonClick("batch")}
         >
           Batch
         </button>
@@ -166,7 +182,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "course" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("course")}
+          onClick={() => handleButtonClick("course")}
         >
           Course
         </button>

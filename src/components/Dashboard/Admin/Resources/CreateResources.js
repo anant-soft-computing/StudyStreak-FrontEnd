@@ -41,6 +41,32 @@ const CreateResourceLink = ({ setActiveTab }) => {
     dispatchCreateRL({ type: "reset" });
   };
 
+  const handleButtonClick = (buttonType) => {
+    setActiveButton(buttonType);
+    switch (buttonType) {
+      case "student":
+        dispatchCreateRL({ type: "course", value: [] });
+        dispatchCreateRL({ type: "batch", value: [] });
+        dispatchCreateRL({ type: "courseId", value: [] });
+        dispatchCreateRL({ type: "batchId", value: [] });
+        break;
+      case "course":
+        dispatchCreateRL({ type: "student", value: [] });
+        dispatchCreateRL({ type: "batch", value: [] });
+        dispatchCreateRL({ type: "studentId", value: [] });
+        dispatchCreateRL({ type: "batchId", value: [] });
+        break;
+      case "batch":
+        dispatchCreateRL({ type: "student", value: [] });
+        dispatchCreateRL({ type: "course", value: [] });
+        dispatchCreateRL({ type: "studentId", value: [] });
+        dispatchCreateRL({ type: "courseId", value: [] });
+        break;
+      default:
+        break;
+    }
+  };
+
   const addContent = () => {
     dispatchCreateRL({
       type: "documents",
@@ -157,7 +183,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "student" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("student")}
+          onClick={() => handleButtonClick("student")}
         >
           Student
         </button>
@@ -165,7 +191,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "course" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("course")}
+          onClick={() => handleButtonClick("course")}
         >
           Course
         </button>
@@ -173,7 +199,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "batch" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("batch")}
+          onClick={() => handleButtonClick("batch")}
         >
           Batch
         </button>

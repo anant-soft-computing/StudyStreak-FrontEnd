@@ -10,6 +10,8 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import Webinar from "../Webinar/Webinar";
 import TutorSupport from "../TutorSpport/TutorSupport";
 import Counselling from "../Counselling/Counselling";
+import moment from "moment";
+import StatusBox from "../Classes/StatusBox";
 
 const liveClasses = [
   "Regular",
@@ -32,27 +34,79 @@ const LiveClass = () => {
     one_to_one_doubt_solving_count: 0,
   });
   const [solvingClassBook, setSolvingClassBook] = useState([]);
+  const [regularClassData, setRegularClassData] = useState([]);
+  const [speakingPracticeData, setSpeakingPracticeData] = useState([]);
+  const [groupDoubtSolvingData, setGroupDoubtSolvingData] = useState([]);
+  const [oneToOneDoubtData, setOneToOneDoubtData] = useState([]);
+  const [tutorSupportData, setTutorSupportData] = useState([]);
+  const [webinarData, setWebinarData] = useState([]);
+  const [counsellingData, setCounsellingData] = useState([]);
+  const [highlightedRanges, setHighlightedRanges] = useState([]);
 
   const [activeTab, setActiveTab] = useState(() => {
     const tab = location?.state?.activeTab;
     return liveClasses.includes(tab) ? tab : "Regular";
   });
 
-  const [selectedDateRange, setSelectedDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleDateRangeChange = (ranges) => {
-    setSelectedDateRange(ranges.selection);
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
+
+  useEffect(() => {
+    const updateHighlightedRanges = () => {
+      let data = [];
+
+      switch (activeTab) {
+        case "Regular":
+          data = regularClassData;
+          break;
+        case "Speaking Practice":
+          data = speakingPracticeData;
+          break;
+        case "Group Dobut":
+          data = groupDoubtSolvingData;
+          break;
+        case "One TO One Doubt":
+          data = oneToOneDoubtData;
+          break;
+        case "Tutor Support":
+          data = tutorSupportData;
+          break;
+        case "Webinar":
+          data = webinarData;
+          break;
+        case "Counselling":
+          data = counsellingData;
+          break;
+        default:
+          data = [];
+      }
+
+      const ranges = data.map((item) => ({
+        start: moment(item.start_time).toDate(),
+        end: moment(item.end_time).toDate(),
+      }));
+
+      setHighlightedRanges(ranges);
+    };
+
+    updateHighlightedRanges();
+  }, [
+    activeTab,
+    regularClassData,
+    speakingPracticeData,
+    groupDoubtSolvingData,
+    oneToOneDoubtData,
+    tutorSupportData,
+    webinarData,
+    counsellingData,
+  ]);
 
   useEffect(() => {
     (async () => {
@@ -99,16 +153,50 @@ const LiveClass = () => {
     })();
   }, []);
 
+  const handleDataFetch = (data) => {
+    switch (activeTab) {
+      case "Regular":
+        setRegularClassData(data);
+        break;
+      case "Speaking Practice":
+        setSpeakingPracticeData(data);
+        break;
+      case "Group Dobut":
+        setGroupDoubtSolvingData(data);
+        break;
+      case "One TO One Doubt":
+        setOneToOneDoubtData(data);
+        break;
+      case "Tutor Support":
+        setTutorSupportData(data);
+        break;
+      case "Webinar":
+        setWebinarData(data);
+        break;
+      case "Counselling":
+        setCounsellingData(data);
+        break;
+      default:
+        break;
+    }
+  };
+
   const renderTab = () => {
     switch (activeTab) {
       case "Regular":
-        return <RegularClass selectedDateRange={selectedDateRange} />;
+        return (
+          <RegularClass
+            selectedDate={selectedDate}
+            onDataFetch={handleDataFetch}
+          />
+        );
       case "Speaking Practice":
         return (
           <SpeakingPractice
             count={count.speaking_practice_count}
             solvingClassBook={solvingClassBook}
-            selectedDateRange={selectedDateRange}
+            selectedDate={selectedDate}
+            onDataFetch={handleDataFetch}
           />
         );
       case "Group Dobut":
@@ -116,7 +204,8 @@ const LiveClass = () => {
           <GroupDoubtSolving
             count={count.group_doubt_solving_count}
             solvingClassBook={solvingClassBook}
-            selectedDateRange={selectedDateRange}
+            selectedDate={selectedDate}
+            onDataFetch={handleDataFetch}
           />
         );
       case "One TO One Doubt":
@@ -124,7 +213,8 @@ const LiveClass = () => {
           <DoubtSolving
             count={count.one_to_one_doubt_solving_count}
             solvingClassBook={solvingClassBook}
-            selectedDateRange={selectedDateRange}
+            selectedDate={selectedDate}
+            onDataFetch={handleDataFetch}
           />
         );
       case "Tutor Support":
@@ -132,7 +222,8 @@ const LiveClass = () => {
           <TutorSupport
             count={count.tutor_support_count}
             solvingClassBook={solvingClassBook}
-            selectedDateRange={selectedDateRange}
+            selectedDate={selectedDate}
+            onDataFetch={handleDataFetch}
           />
         );
       case "Webinar":
@@ -140,7 +231,8 @@ const LiveClass = () => {
           <Webinar
             count={count.webinar_count}
             solvingClassBook={solvingClassBook}
-            selectedDateRange={selectedDateRange}
+            selectedDate={selectedDate}
+            onDataFetch={handleDataFetch}
           />
         );
       case "Counselling":
@@ -148,7 +240,8 @@ const LiveClass = () => {
           <Counselling
             count={count.counselling_count}
             solvingClassBook={solvingClassBook}
-            selectedDateRange={selectedDateRange}
+            selectedDate={selectedDate}
+            onDataFetch={handleDataFetch}
           />
         );
       default:
@@ -166,14 +259,17 @@ const LiveClass = () => {
                 <DSSidebar />
                 <div className="col-lg-auto col-md-12 ">
                   <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
-                    <h4 className="flex-fill">Select Date Range</h4>
+                    <h4 className="flex-fill">Select Date</h4>
                   </div>
                   <div className="d-flex justify-content-center">
                     <DateRange
-                      selectedRange={selectedDateRange}
-                      onChange={handleDateRangeChange}
+                      inline
+                      selectedDate={selectedDate}
+                      onChange={handleDateChange}
+                      highlightedRanges={highlightedRanges}
                     />
                   </div>
+                  <StatusBox />
                 </div>
                 <div className="col">
                   <div className="dashboard__content__wraper common-background-color-across-app">

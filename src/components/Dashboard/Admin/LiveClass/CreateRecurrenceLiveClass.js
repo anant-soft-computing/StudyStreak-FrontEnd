@@ -16,7 +16,7 @@ const initialRLCD = {
   topic: "",
   agenda: "",
   start_time: "",
-  registration_limit: "",
+  registration_limit: null,
   recurrence_type: 1,
   weekly_days: "",
   monthly_day: "",
@@ -70,6 +70,22 @@ const CreateRecurrenceLiveClass = ({ setActiveTab }) => {
 
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
+  };
+
+  const handleButtonClick = (buttonType) => {
+    setActiveButton(buttonType);
+    switch (buttonType) {
+      case "course":
+        dispatchCRLD({ type: "select_batch", value: [] });
+        dispatchCRLD({ type: "select_batchId", value: [] });
+        break;
+      case "batch":
+        dispatchCRLD({ type: "select_course", value: [] });
+        dispatchCRLD({ type: "select_courseId", value: [] });
+        break;
+      default:
+        break;
+    }
   };
 
   const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
@@ -167,7 +183,7 @@ const CreateRecurrenceLiveClass = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "batch" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("batch")}
+          onClick={() => handleButtonClick("batch")}
         >
           Batch
         </button>
@@ -175,7 +191,7 @@ const CreateRecurrenceLiveClass = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "course" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("course")}
+          onClick={() => handleButtonClick("course")}
         >
           Course
         </button>

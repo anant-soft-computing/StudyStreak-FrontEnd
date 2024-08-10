@@ -16845,3 +16845,21 @@ div.gridarea__wraper {
   text-align: center;
   border-radius: 5px;
 }
+
+.highlighted-day {
+  border-radius: 10px !important;
+  background-color: rgb(49, 143, 49) !important;
+  color: white !important;
+}
+
+.current-day {
+  border-radius: 10px !important;
+  background-color: #01579b !important;
+  color: white !important;
+}
+
+.selected-day {
+  border-radius: 10px !important;
+  background-color: red !important;
+  color: white !important;
+}

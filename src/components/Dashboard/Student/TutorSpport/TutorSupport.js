@@ -13,7 +13,12 @@ const tabs = [
   { name: "Recorded Class" },
 ];
 
-const TutorSupport = ({ count, solvingClassBook, selectedDateRange }) => {
+const TutorSupport = ({
+  count,
+  solvingClassBook,
+  selectedDate,
+  onDataFetch,
+}) => {
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Tutor Support");
@@ -57,6 +62,7 @@ const TutorSupport = ({ count, solvingClassBook, selectedDateRange }) => {
           }
         }
         setUuid(uuidData);
+        onDataFetch(tutorSupportClassData);
         setTutorSupportClass(tutorSupportClassData);
       } catch (error) {
         setIsLoading(false);
@@ -69,7 +75,7 @@ const TutorSupport = ({ count, solvingClassBook, selectedDateRange }) => {
 
   const tutorData = () => {
     return tutorSupportClass.filter(({ start_time, end_time }) =>
-      filterByDateRange(start_time, end_time, selectedDateRange)
+      filterByDateRange(start_time, end_time, selectedDate)
     );
   };
 
@@ -84,7 +90,7 @@ const TutorSupport = ({ count, solvingClassBook, selectedDateRange }) => {
 
   return (
     <div>
-      {count === 0 ? (
+      {count === undefined ? (
         <BuyCourse message="No Tutor Support Class Available, Please Buy a Course !!" />
       ) : (
         <div className="row">

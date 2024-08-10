@@ -9,9 +9,25 @@ const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 110 },
   {
     headerName: "Batch",
-    field: "select_batch.batch_name",
+    field: "select_batch",
     filter: true,
     width: 280,
+    cellRenderer: (params) => (
+      <div>
+        {params.data.select_batch?.map((item) => item.batch_name).join(", ") || "-"}
+      </div>
+    ),
+  },
+  {
+    headerName: "Course",
+    field: "select_course",
+    filter: true,
+    width: 280,
+    cellRenderer: (params) => (
+      <div>
+        {params.data.select_course?.map((item) => item.course_name).join(", ") || "-"}
+      </div>
+    ),
   },
   {
     headerName: "Live Class Type",

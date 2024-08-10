@@ -13,7 +13,12 @@ const tabs = [
   { name: "Recorded Class" },
 ];
 
-const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
+const GroupDoubtSolving = ({
+  count,
+  solvingClassBook,
+  selectedDate,
+  onDataFetch,
+}) => {
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
@@ -57,6 +62,7 @@ const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
           }
         }
         setUuid(uuidData);
+        onDataFetch(gPClass);
         setGroupDoubtSolvingClass(gPClass);
       } catch (error) {
         setIsLoading(false);
@@ -67,7 +73,7 @@ const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
 
   const groupDoubtSolvingClasses = () => {
     return groupDoubtSolvingClass?.filter(({ start_time, end_time }) =>
-      filterByDateRange(start_time, end_time, selectedDateRange)
+      filterByDateRange(start_time, end_time, selectedDate)
     );
   };
 
@@ -82,7 +88,7 @@ const GroupDoubtSolving = ({ count, solvingClassBook, selectedDateRange }) => {
 
   return (
     <div>
-      {count === 0 ? (
+      {count === undefined ? (
         <BuyCourse message="No Group Doubt Solving Class Available , Please Buy a Course !!" />
       ) : (
         <div className="row">

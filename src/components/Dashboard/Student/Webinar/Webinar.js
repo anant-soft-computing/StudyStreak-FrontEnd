@@ -13,7 +13,12 @@ const tabs = [
   { name: "Recorded Class" },
 ];
 
-const Webinar = ({ count, solvingClassBook, selectedDateRange }) => {
+const Webinar = ({
+  count,
+  solvingClassBook,
+  selectedDate,
+  onDataFetch,
+}) => {
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Webinar");
@@ -57,6 +62,7 @@ const Webinar = ({ count, solvingClassBook, selectedDateRange }) => {
           }
         }
         setUuid(uuidData);
+        onDataFetch(webinarData);
         setWebinar(webinarData);
       } catch (error) {
         setIsLoading(false);
@@ -69,7 +75,7 @@ const Webinar = ({ count, solvingClassBook, selectedDateRange }) => {
 
   const webinarData = () => {
     return webinar.filter(({ start_time, end_time }) =>
-      filterByDateRange(start_time, end_time, selectedDateRange)
+      filterByDateRange(start_time, end_time, selectedDate)
     );
   };
 
@@ -84,7 +90,7 @@ const Webinar = ({ count, solvingClassBook, selectedDateRange }) => {
 
   return (
     <div>
-      {count === 0 ? (
+      {count === undefined ? (
         <BuyCourse message="No Webinar Available, Please Buy a Course !!" />
       ) : (
         <div className="row">

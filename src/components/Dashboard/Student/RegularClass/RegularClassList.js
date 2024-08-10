@@ -83,7 +83,15 @@ const RegularClassList = ({ isLoading, regularClass }) => {
     { headerName: "Description", field: "meeting_description" },
     { headerName: "Start Date", field: "start_date" },
     { headerName: "End Date", field: "end_date" },
-    { headerName: "Batch Name", field: "select_batch.batch_name" },
+    {
+      headerName: "Batch Name",
+      field: "select_batch",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_batch?.map((item) => item.batch_name).join(", ")}
+        </div>
+      ),
+    },
   ];
 
   const rowData = regularClass.map((item) => ({

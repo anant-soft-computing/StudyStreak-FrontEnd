@@ -102,7 +102,7 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       start_date: moment(start_time).format("lll"),
       end_date: moment(end_time).format("lll"),
       meeting_title,
-      batch_name: select_batch?.batch_name,
+      batch_name: select_batch?.map((item) => item.batch_name).join(", "),
       meeting_description,
       join_url,
       start_time: moment(start_time).format("hh:mm A"),

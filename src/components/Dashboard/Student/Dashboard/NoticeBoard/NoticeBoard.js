@@ -4,17 +4,17 @@ import { Box, List, ListItem, Typography } from "@mui/material";
 
 const NoticeBoard = () => {
   const [noticeData, setNoticeData] = useState([]);
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON.parse(localStorage.getItem("courses"))?.map(
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"))?.map(
     (item) => item?.id
   );
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/noticeboard/",
+          "/noticeboard-list/",
           {
             headers: {
               Accept: "application/json",

@@ -4,85 +4,108 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
 
+const DownloadButton = ({ url }) =>
+  url !== "-" ? (
+    <button className="take-test" onClick={() => window.open(url)}>
+      <i className="icofont-download" /> Download
+    </button>
+  ) : (
+    "-"
+  );
+
+const ViewButton = ({ url }) =>
+  url !== "-" ? (
+    <button className="take-test" onClick={() => window.open(url)}>
+      View
+    </button>
+  ) : (
+    "-"
+  );
+
+const columns = [
+  { headerName: "No.", field: "no", resizable: false, width: 76 },
+  { headerName: "Student", field: "student", resizable: true, filter: true },
+  { headerName: "Course", field: "course", resizable: true, filter: true },
+  { headerName: "Batch", field: "batch", resizable: true, filter: true },
+  {
+    headerName: "Description",
+    field: "description",
+    resizable: true,
+    filter: true,
+    width: 380,
+  },
+  {
+    headerName: "Video / Link",
+    field: "link",
+    resizable: true,
+    filter: true,
+    cellRenderer: (params) => <ViewButton url={params.value} />,
+  },
+  {
+    headerName: "Documents",
+    field: "document",
+    resizable: true,
+    cellRenderer: (params) => <DownloadButton url={params.value} />,
+  },
+];
+
 const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
+
   const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON.parse(localStorage.getItem("courses"))?.map(
     (item) => item?.id
   );
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
-  const doDocument = (params) => {
-    return params.value !== "-" ? (
-      <button className="take-test" onClick={() => window.open(params.value)}>
-        <i className="icofont-download" /> Download
-      </button>
-    ) : (
-      "-"
-    );
+  const filterResources = (data) => {
+    return data.filter((item) => {
+      const studentMatch = item?.student?.some((s) => s?.id === studentId);
+      const batchMatch = item?.batch?.some((b) => batchIds?.includes(b?.id));
+      const courseMatch = item?.course?.some((c) => courseIds?.includes(c?.id));
+      return studentMatch || batchMatch || courseMatch;
+    });
   };
 
-  const doVideoAndLink = (params) => {
-    return params.value !== "-" ? (
-      <button className="take-test" onClick={() => window.open(params.value)}>
-        View
-      </button>
-    ) : (
-      "-"
-    );
-  };
+  const formatResources = (resources) => {
+    return resources.flatMap((item, index) => {
+      const baseData = {
+        no: `${index + 1}.`,
+        student: item?.student?.some((s) => s?.id === studentId)
+          ? `${
+              item.student.find((s) => s?.id === studentId)?.user.first_name
+            } ${item.student.find((s) => s?.id === studentId)?.user.last_name}`
+          : "-",
+        batch:
+          item?.batch
+            ?.filter((b) => batchIds?.includes(b?.id))
+            ?.map((b) => b?.batch_name)
+            ?.join(", ") || "-",
+        course:
+          item?.course
+            ?.filter((c) => courseIds?.includes(c?.id))
+            ?.map((c) => c?.Course_Title)
+            ?.join(", ") || "-",
+        link: item?.link || "-",
+      };
 
-  const columns = [
-    {
-      headerName: "No.",
-      field: "no",
-      resizable: false,
-      width: 76,
-    },
-    {
-      headerName: "Student",
-      field: "student",
-      resizable: true,
-      filter: true,
-    },
-    {
-      headerName: "Course",
-      field: "course",
-      resizable: true,
-      filter: true,
-    },
-    {
-      headerName: "Batch",
-      field: "batch",
-      resizable: true,
-      filter: true,
-    },
-    {
-      headerName: "Description",
-      field: "description",
-      resizable: true,
-      filter: true,
-      width: 380,
-    },
-    {
-      headerName: "Video / Link",
-      field: "link",
-      resizable: true,
-      filter: true,
-      cellRenderer: doVideoAndLink,
-    },
-    {
-      headerName: "Documents",
-      field: "document",
-      resizable: true,
-      cellRenderer: doDocument,
-    },
-  ];
+      if (!item?.documents || item.documents.length === 0) {
+        return [{ ...baseData, description: "-", document: "-" }];
+      }
+
+      return item.documents.map((document, docIndex) => ({
+        ...baseData,
+        no: `${baseData.no} (${docIndex + 1}).`,
+        description: document?.description || "-",
+        document: document?.document || "-",
+      }));
+    });
+  };
 
   useEffect(() => {
-    setIsLoading(true);
-    (async () => {
+    const fetchResources = async () => {
+      setIsLoading(true);
       try {
         const response = await ajaxCall(
           `/resources/`,
@@ -100,48 +123,18 @@ const Resources = () => {
         );
 
         if (response?.status === 200) {
-          const filteredResources = response?.data?.filter((item) => {
-            const student = item?.student?.some((s) => s?.id === studentId);
-            const batch = item?.batch?.some((b) => batchIds?.includes(b?.id));
-            const course = item?.course?.some((c) =>
-              courseIds?.includes(c?.id)
-            );
-            return student || batch || course;
-          });
-
-          const resourcesWithNumbers = filteredResources.flatMap(
-            (item, index) =>
-              item?.documents?.map((document, docIndex) => ({
-                no: `${index + 1}. (${docIndex + 1}).`,
-                student: item?.student?.some((s) => s?.id === studentId)
-                  ? `${
-                      item?.student.find((s) => s?.id === studentId)?.user
-                        .first_name
-                    } ${
-                      item?.student.find((s) => s.id === studentId)?.user
-                        .last_name
-                    }`
-                  : "-",
-                batch:
-                  item?.batch
-                    ?.filter((b) => batchIds?.includes(b?.id))
-                    ?.map((b) => b?.batch_name)
-                    ?.join(", ") || "-",
-                course:
-                  item?.course?.map((c) => c?.Course_Title)?.join(", ") || "-",
-                description: document?.description || "-",
-                document: document?.document || "-",
-                link: item?.link || "-",
-              }))
-          );
-          setResourceList(resourcesWithNumbers);
+          const filteredResources = filterResources(response?.data);
+          const formattedResources = formatResources(filteredResources);
+          setResourceList(formattedResources);
         }
       } catch (error) {
         console.log("error", error);
       } finally {
         setIsLoading(false);
       }
-    })();
+    };
+
+    fetchResources();
   }, []);
 
   return (

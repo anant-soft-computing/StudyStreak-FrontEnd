@@ -35,6 +35,32 @@ const CreateNotice = ({ setActiveTab }) => {
     dispatchCreateNotice({ type: "reset" });
   };
 
+  const handleButtonClick = (buttonType) => {
+    setActiveButton(buttonType);
+    switch (buttonType) {
+      case "student":
+        dispatchCreateNotice({ type: "course", value: [] });
+        dispatchCreateNotice({ type: "batch", value: [] });
+        dispatchCreateNotice({ type: "courseId", value: [] });
+        dispatchCreateNotice({ type: "batchId", value: [] });
+        break;
+      case "course":
+        dispatchCreateNotice({ type: "student", value: [] });
+        dispatchCreateNotice({ type: "batch", value: [] });
+        dispatchCreateNotice({ type: "studentId", value: [] });
+        dispatchCreateNotice({ type: "batchId", value: [] });
+        break;
+      case "batch":
+        dispatchCreateNotice({ type: "student", value: [] });
+        dispatchCreateNotice({ type: "course", value: [] });
+        dispatchCreateNotice({ type: "studentId", value: [] });
+        dispatchCreateNotice({ type: "courseId", value: [] });
+        break;
+      default:
+        break;
+    }
+  };
+
   const addedSelectVal = (fieldName, proFieldName, isSingle, val) => {
     if (isSingle) {
       dispatchCreateNotice({
@@ -107,7 +133,7 @@ const CreateNotice = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "student" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("student")}
+          onClick={() => handleButtonClick("student")}
         >
           Student
         </button>
@@ -115,7 +141,7 @@ const CreateNotice = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "course" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("course")}
+          onClick={() => handleButtonClick("course")}
         >
           Course
         </button>
@@ -123,7 +149,7 @@ const CreateNotice = ({ setActiveTab }) => {
           className={`default__button ${
             activeButton === "batch" ? "active bg-success" : ""
           }`}
-          onClick={() => setActiveButton("batch")}
+          onClick={() => handleButtonClick("batch")}
         >
           Batch
         </button>

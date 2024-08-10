@@ -13,7 +13,12 @@ const tabs = [
   { name: "Recorded Class" },
 ];
 
-const Counselling = ({ count, solvingClassBook, selectedDateRange }) => {
+const Counselling = ({
+  count,
+  solvingClassBook,
+  selectedDate,
+  onDataFetch,
+}) => {
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Counselling");
@@ -57,6 +62,7 @@ const Counselling = ({ count, solvingClassBook, selectedDateRange }) => {
           }
         }
         setUuid(uuidData);
+        onDataFetch(counsellingData);
         setCounselling(counsellingData);
       } catch (error) {
         setIsLoading(false);
@@ -69,7 +75,7 @@ const Counselling = ({ count, solvingClassBook, selectedDateRange }) => {
 
   const counsellingData = () => {
     return counselling.filter(({ start_time, end_time }) =>
-      filterByDateRange(start_time, end_time, selectedDateRange)
+      filterByDateRange(start_time, end_time, selectedDate)
     );
   };
 
@@ -84,7 +90,7 @@ const Counselling = ({ count, solvingClassBook, selectedDateRange }) => {
 
   return (
     <div>
-      {count === 0 ? (
+      {count === undefined ? (
         <BuyCourse message="No Counselling Available, Please Buy a Course !!" />
       ) : (
         <div className="row">

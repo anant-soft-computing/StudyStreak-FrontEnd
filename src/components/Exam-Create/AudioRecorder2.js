@@ -11,6 +11,7 @@ const AudioRecorder = ({
   completed = false,
   recorderIndex = 0,
   practice,
+  Flt,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -64,6 +65,7 @@ const AudioRecorder = ({
       formData.append("user", user);
       formData.append("speaking_block", exam?.id);
       formData.append("practise_test", practice);
+      formData.append("Flt", Flt);
 
       ajaxCall(
         "/speaking-answers/",

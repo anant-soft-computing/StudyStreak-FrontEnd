@@ -23,7 +23,9 @@ const DoubtSolving = ({
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -33,40 +35,74 @@ const DoubtSolving = ({
     setIsLoading(true);
     (async () => {
       try {
-        const oToclass = [];
-        const uuidData = [];
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/?live_class_type=One-To-One-Doubt-Solving`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let oToclass = [];
+        let uuidData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/?live_class_type=One-To-One-Doubt-Solving`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            setIsLoading(false);
-            const id = response?.data?.map((item) => item?.other_fields?.id);
-            uuidData.push(...id);
-            oToclass.push(...response?.data);
-          } else {
-            setIsLoading(false);
-            console.log("error");
+              8000
+            );
+            if (response?.status === 200) {
+              setIsLoading(false);
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              oToclass = [...oToclass, ...response?.data];
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let j = 0; j < courseIds.length; j++) {
+            const courseId = courseIds[j];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/?live_class_type=One-To-One-Doubt-Solving`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              setIsLoading(false);
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              oToclass = [...oToclass, ...response?.data];
+            }
+          }
+        }
+
+        // Optionally: Remove duplicates based on unique identifiers
+        oToclass = [
+          ...new Map(oToclass.map((item) => [item.id, item])).values(),
+        ];
+        uuidData = [...new Set(uuidData)];
+
         setUuid(uuidData);
         onDataFetch(oToclass);
         setDoubtSolvingClass(oToclass);
       } catch (error) {
-        setIsLoading(false);
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -107,7 +143,7 @@ const DoubtSolving = ({
                 <UpcomingClass
                   isLoading={isLoading}
                   classes={oneToOneDoubtSolvingClasses}
-                  message="No Upcomming One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                  message="No Upcoming One To One Doubt Solving Classes Available !!, Please Schedule Your Classes"
                 />
               </div>
             </div>
@@ -122,7 +158,7 @@ const DoubtSolving = ({
                   isLoading={isLoading}
                   classes={oToclasses}
                   classType="One-To-One-Doubt-Solving"
-                  message=" No One To One Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                  message="No One To One Doubt Solving Classes Available !!, Please Schedule Your Classes"
                 />
               </div>
             </div>

@@ -21,6 +21,10 @@ const DateRange = ({ selectedDate, onChange, highlightedRanges, ...rest }) => {
     return currentDate.isSame(selectedDateMoment, "day");
   };
 
+  const isBeforeCurrentDate = (date) => {
+    return moment(date).isBefore(moment(), "day");
+  };
+
   return (
     <ReactDatePicker
       selected={selectedDate}
@@ -28,6 +32,7 @@ const DateRange = ({ selectedDate, onChange, highlightedRanges, ...rest }) => {
         onChange(date);
       }}
       isClearable={false}
+      filterDate={(date) => !isBeforeCurrentDate(date)}
       {...rest}
       highlightDates={[
         ...highlightedRanges?.map((range) => ({
@@ -35,6 +40,9 @@ const DateRange = ({ selectedDate, onChange, highlightedRanges, ...rest }) => {
         })),
       ]}
       dayClassName={(date) => {
+        if (isBeforeCurrentDate(date)) {
+          return "greyed-day";
+        }
         if (isCurrentDate(date)) {
           return "current-day";
         }

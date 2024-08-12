@@ -22,7 +22,9 @@ const TutorSupport = ({
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Tutor Support");
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const [tutorSupportClass, setTutorSupportClass] = useState([]);
 
   const handleTabChange = (tab) => {
@@ -33,39 +35,77 @@ const TutorSupport = ({
     setIsLoading(true);
     (async () => {
       try {
-        const uuidData = [];
-        const tutorSupportClassData = [];
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/?live_class_type=Tutor Support`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let uuidData = [];
+        let tutorSupportClassData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/?live_class_type=Tutor Support`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            const id = response?.data?.map((item) => item?.other_fields?.id);
-            uuidData.push(...id);
-            tutorSupportClassData.push(...response?.data);
-            setIsLoading(false);
-          } else {
-            console.log("error");
-            setIsLoading(false);
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              tutorSupportClassData = [
+                ...tutorSupportClassData,
+                ...response?.data,
+              ];
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let i = 0; i < courseIds.length; i++) {
+            const courseId = courseIds[i];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Tutor Support`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              tutorSupportClassData = [
+                ...tutorSupportClassData,
+                ...response?.data,
+              ];
+            }
+          }
+        }
+
+        // Optionally: Remove duplicates based on unique identifiers
+        tutorSupportClassData = [
+          ...new Map(
+            tutorSupportClassData.map((item) => [item.id, item])
+          ).values(),
+        ];
+        uuidData = [...new Set(uuidData)];
+
         setUuid(uuidData);
         onDataFetch(tutorSupportClassData);
         setTutorSupportClass(tutorSupportClassData);
       } catch (error) {
-        setIsLoading(false);
         console.log("error", error);
       } finally {
         setIsLoading(false);
@@ -109,7 +149,7 @@ const TutorSupport = ({
                 <UpcomingClass
                   isLoading={isLoading}
                   classes={tutorClasses}
-                  message="No Upcoming Tuotor Support Classes Available Today !! , Please Schedule Your Tuotor Support Classes."
+                  message="No Upcoming Tuotor Support Classes Available !!, Please Schedule Your Tuotor Support Classes"
                 />
               </div>
             </div>
@@ -124,7 +164,7 @@ const TutorSupport = ({
                   isLoading={isLoading}
                   classes={tutorSupportClasses}
                   classType="Tutor Support"
-                  message="No Tuotor Support Classes Available Today !! , Please Schedule Your Classes."
+                  message="No Tuotor Support Classes Available !!, Please Schedule Your Classes"
                 />
               </div>
             </div>

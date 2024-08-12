@@ -81,6 +81,7 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     { headerName: "Start Date", field: "start_date" },
     { headerName: "End Date", field: "end_date" },
     { headerName: "Batch Name", field: "batch_name" },
+    { headerName: "Course Name", field: "course_name" },
     {
       headerName: "Status",
       field: "status",
@@ -97,12 +98,16 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       meeting_description,
       join_url,
       select_batch,
+      select_course,
     }) => ({
       id,
       start_date: moment(start_time).format("lll"),
       end_date: moment(end_time).format("lll"),
       meeting_title,
-      batch_name: select_batch?.map((item) => item.batch_name).join(", "),
+      batch_name:
+        select_batch?.map((item) => item.batch_name).join(", ") || "-",
+      course_name:
+        select_course?.map((item) => item.Course_Title).join(", ") || "-",
       meeting_description,
       join_url,
       start_time: moment(start_time).format("hh:mm A"),

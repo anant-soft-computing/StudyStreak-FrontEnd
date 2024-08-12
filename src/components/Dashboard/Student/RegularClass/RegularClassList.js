@@ -88,7 +88,20 @@ const RegularClassList = ({ isLoading, regularClass }) => {
       field: "select_batch",
       cellRenderer: (params) => (
         <div>
-          {params.data.select_batch?.map((item) => item.batch_name).join(", ")}
+          {params.data.select_batch
+            ?.map((item) => item.batch_name)
+            .join(", ") || "-"}
+        </div>
+      ),
+    },
+    {
+      headerName: "Course Name",
+      field: "select_course",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_course
+            ?.map((item) => item.Course_Title)
+            .join(", ") || "-"}
         </div>
       ),
     },

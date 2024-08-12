@@ -22,7 +22,9 @@ const Counselling = ({
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Counselling");
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const [counselling, setCounselling] = useState([]);
 
   const handleTabChange = (tab) => {
@@ -33,39 +35,69 @@ const Counselling = ({
     setIsLoading(true);
     (async () => {
       try {
-        const uuidData = [];
-        const counsellingData = [];
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/?live_class_type=Counselling`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let uuidData = [];
+        let counsellingData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/?live_class_type=Counselling`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            const id = response?.data?.map((item) => item?.other_fields?.id);
-            uuidData.push(...id);
-            counsellingData.push(...response?.data);
-            setIsLoading(false);
-          } else {
-            console.log("error");
-            setIsLoading(false);
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              counsellingData = [...counsellingData, ...response?.data];
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let i = 0; i < courseIds.length; i++) {
+            const courseId = courseIds[i];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Tutor Support`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              counsellingData = [...counsellingData, ...response?.data];
+            }
+          }
+        }
+
+        // Optionally: Remove duplicates based on unique identifiers
+        counsellingData = [
+          ...new Map(counsellingData.map((item) => [item.id, item])).values(),
+        ];
+        uuidData = [...new Set(uuidData)];
+
         setUuid(uuidData);
         onDataFetch(counsellingData);
         setCounselling(counsellingData);
       } catch (error) {
-        setIsLoading(false);
         console.log("error", error);
       } finally {
         setIsLoading(false);
@@ -109,7 +141,7 @@ const Counselling = ({
                 <UpcomingClass
                   isLoading={isLoading}
                   classes={counsellinges}
-                  message="No Upcoming Counselling Available Today !! , Please Schedule Your Counselling."
+                  message="No Upcoming Counselling Available !!, Please Schedule Your Counselling"
                 />
               </div>
             </div>
@@ -124,7 +156,7 @@ const Counselling = ({
                   isLoading={isLoading}
                   classes={counsellingClasses}
                   classType="Counselling"
-                  message="No Counselling Available Today !! , Please Schedule Your Counselling."
+                  message="No Counselling Available !!, Please Schedule Your Counselling"
                 />
               </div>
             </div>

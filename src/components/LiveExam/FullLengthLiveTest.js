@@ -989,7 +989,6 @@ const FullLengthLiveExam = () => {
     };
   }, [next]);
 
-
   useEffect(() => {
     if (recordedFilePath) {
       const { recorderIndex, filePath } = recordedFilePath;
@@ -1017,12 +1016,13 @@ const FullLengthLiveExam = () => {
             question_number={item.question_number}
             user={userData.userId}
             recorderIndex={item.id}
+            Flt={examId}
           />
         );
       }
       return;
     },
-    [examAnswer, examData, userData, next]
+    [examData, next, examAnswer, userData.userId, examId]
   );
 
   const reviewContent = () =>
@@ -1095,8 +1095,6 @@ const FullLengthLiveExam = () => {
       );
     });
   }, [uniqueIdArr, examAnswer, next, examData]);
-
-
 
   return instructionCompleted.showInstruction ? (
     <div className="test-instruction">

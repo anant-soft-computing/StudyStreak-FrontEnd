@@ -143,6 +143,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     { headerName: "Start Date", field: "startDate" },
     { headerName: "End Date", field: "endDate" },
     { headerName: "Batch Name", field: "batchName" },
+    { headerName: "Course Name", field: "courseName" },
   ];
 
   const rowData = classes.map(
@@ -153,12 +154,14 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
       meeting_title,
       meeting_description,
       select_batch,
+      select_course,
     }) => {
       const start_Date = new Date(start_time);
       const startDate = moment(start_time).format("lll");
       const endDate = moment(end_time).format("lll");
       const title = meeting_title;
-      const batchName = select_batch?.map((batch) => batch.batch_name).join(",");
+      const batchName = select_batch?.map((batch) => batch.batch_name).join(",") || "-";
+      const courseName = select_course?.map((course) => course.Course_Title).join(",") || "-";
       const description = meeting_description;
       const startingTime = moment(start_time).format("hh:mm A");
       const isPastDate = start_Date < new Date();
@@ -169,6 +172,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
         endDate,
         title,
         batchName,
+        courseName,
         description,
         startingTime,
         isPastDate,

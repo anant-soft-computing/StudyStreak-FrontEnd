@@ -13,16 +13,13 @@ const tabs = [
   { name: "Recorded Class" },
 ];
 
-const Webinar = ({
-  count,
-  solvingClassBook,
-  selectedDate,
-  onDataFetch,
-}) => {
+const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Webinar");
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const [webinar, setWebinar] = useState([]);
 
   const handleTabChange = (tab) => {
@@ -33,39 +30,69 @@ const Webinar = ({
     setIsLoading(true);
     (async () => {
       try {
-        const uuidData = [];
-        const webinarData = [];
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/?live_class_type=Webinar`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let uuidData = [];
+        let webinarData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/?live_class_type=Webinar`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            const id = response?.data?.map((item) => item?.other_fields?.id);
-            uuidData.push(...id);
-            webinarData.push(...response?.data);
-            setIsLoading(false);
-          } else {
-            console.log("error");
-            setIsLoading(false);
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              webinarData = [...webinarData, ...response?.data];
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let i = 0; i < courseIds.length; i++) {
+            const courseId = courseIds[i];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Tutor Support`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              webinarData = [...webinarData, ...response?.data];
+            }
+          }
+        }
+
+        // Optionally: Remove duplicates based on unique identifiers
+        webinarData = [
+          ...new Map(webinarData.map((item) => [item.id, item])).values(),
+        ];
+        uuidData = [...new Set(uuidData)];
+
         setUuid(uuidData);
         onDataFetch(webinarData);
         setWebinar(webinarData);
       } catch (error) {
-        setIsLoading(false);
         console.log("error", error);
       } finally {
         setIsLoading(false);
@@ -109,7 +136,7 @@ const Webinar = ({
                 <UpcomingClass
                   isLoading={isLoading}
                   classes={webinarClass}
-                  message="No Upcoming Webinar Available Today !! , Please Schedule Your Webinar."
+                  message="No Upcoming Webinar Available !!, Please Schedule Your Webinar"
                 />
               </div>
             </div>
@@ -124,7 +151,7 @@ const Webinar = ({
                   isLoading={isLoading}
                   classes={webinarClasses}
                   classType="Webinar"
-                  message="No Webinar Available Today !! , Please Schedule Your Webinar."
+                  message="No Webinar Available !!, Please Schedule Your Webinar"
                 />
               </div>
             </div>

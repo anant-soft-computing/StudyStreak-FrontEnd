@@ -798,8 +798,6 @@ const FullLengthLiveExam = () => {
                   body: JSON.stringify(gptBody),
                 }
               );
-              if (!res.ok)
-                throw new Error("Some Problem Occurred. Please try again.");
               const data = await res.json();
               bandValue = data?.choices?.[0]?.message?.content
                 ?.split("#Band:")[1]

@@ -22,7 +22,9 @@ const GroupDoubtSolving = ({
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
 
   const handleTabChange = (tab) => {
@@ -33,40 +35,70 @@ const GroupDoubtSolving = ({
     setIsLoading(true);
     (async () => {
       try {
-        const gPClass = [];
-        const uuidData = [];
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/?live_class_type=Group-Doubt Solving`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let gPClass = [];
+        let uuidData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/?live_class_type=Group-Doubt Solving`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            const id = response?.data?.map((item) => item?.other_fields?.id);
-            uuidData.push(...id);
-            gPClass.push(...response?.data);
-            setIsLoading(false);
-          } else {
-            setIsLoading(false);
-            console.log("error");
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              gPClass = [...gPClass, ...response?.data];
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let j = 0; j < courseIds.length; j++) {
+            const courseId = courseIds[j];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Group-Doubt Solving`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              gPClass = [...gPClass, ...response?.data];
+            }
+          }
+        }
+
+        // Optionally: Remove duplicates based on unique identifiers
+        gPClass = [...new Map(gPClass.map((item) => [item.id, item])).values()];
+        uuidData = [...new Set(uuidData)];
+
         setUuid(uuidData);
         onDataFetch(gPClass);
         setGroupDoubtSolvingClass(gPClass);
       } catch (error) {
-        setIsLoading(false);
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -107,7 +139,7 @@ const GroupDoubtSolving = ({
                 <UpcomingClass
                   isLoading={isLoading}
                   classes={groupSolvingClasses}
-                  message="No Upcomming Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                  message="No Upcoming Group Doubt Solving Classes Available !!, Please Schedule Your Classes"
                 />
               </div>
             </div>
@@ -122,7 +154,7 @@ const GroupDoubtSolving = ({
                   isLoading={isLoading}
                   classes={groupClasses}
                   classType="Group-Doubt Solving"
-                  message=" No Group Doubt Solving Classes Available Today !! , Please Schedule Your Classes."
+                  message=" No Group Doubt Solving Classes Available !!, Please Schedule Your Classes"
                 />
               </div>
             </div>

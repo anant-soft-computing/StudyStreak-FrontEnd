@@ -14,7 +14,9 @@ const columns = [
     width: 280,
     cellRenderer: (params) => (
       <div>
-        {params.data.select_batch?.map((item) => item.batch_name).join(", ") || "-"}
+        {params.data.select_batch
+        ?.map((item) => item.batch_name)
+        .join(", ") || "-"}
       </div>
     ),
   },
@@ -25,7 +27,9 @@ const columns = [
     width: 280,
     cellRenderer: (params) => (
       <div>
-        {params.data.select_course?.map((item) => item.course_name).join(", ") || "-"}
+        {params.data.select_course
+          ?.map((item) => item.Course_Title)
+          .join(", ") || "-"}
       </div>
     ),
   },

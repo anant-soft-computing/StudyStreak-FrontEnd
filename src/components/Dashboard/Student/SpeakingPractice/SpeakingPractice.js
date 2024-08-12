@@ -28,7 +28,9 @@ const SpeakingPractice = ({
       ? "Available Slot"
       : "Upcoming"
   );
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
 
   const handleTabChange = (tab) => {
@@ -39,40 +41,72 @@ const SpeakingPractice = ({
     setIsLoading(true);
     (async () => {
       try {
-        const speakingClass = [];
-        const uuidData = [];
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/?live_class_type=Speaking-Practice`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let speakingClass = [];
+        let uuidData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/?live_class_type=Speaking-Practice`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            const id = response?.data?.map((item) => item?.other_fields?.id);
-            uuidData.push(...id);
-            speakingClass.push(...response?.data);
-            setIsLoading(false);
-          } else {
-            console.log("error");
-            setIsLoading(false);
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              speakingClass = [...speakingClass, ...response?.data];
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let j = 0; j < courseIds.length; j++) {
+            const courseId = courseIds[j];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Speaking-Practice`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              speakingClass = [...speakingClass, ...response?.data];
+            }
+          }
+        }
+
+        // Optionally: Remove duplicates based on unique identifiers
+        speakingClass = [
+          ...new Map(speakingClass.map((item) => [item.id, item])).values(),
+        ];
+        uuidData = [...new Set(uuidData)];
+
         setUuid(uuidData);
         onDataFetch(speakingClass);
         setSpeakingSolvingClass(speakingClass);
       } catch (error) {
-        setIsLoading(false);
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -113,7 +147,7 @@ const SpeakingPractice = ({
                 <UpcomingClass
                   isLoading={isLoading}
                   classes={speackingClasses}
-                  message="No Upcomming Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                  message="No Upcoming Speaking Practice Classes Available !!, Please Schedule Your Classes"
                 />
               </div>
             </div>
@@ -128,7 +162,7 @@ const SpeakingPractice = ({
                   isLoading={isLoading}
                   classes={speakingPracticeClasses}
                   classType="Speaking-Practice"
-                  message="No Speaking Practice Classes Available Today !! , Please Schedule Your Classes."
+                  message="No Speaking Practice Classes Available !!, Please Schedule Your Classes"
                 />
               </div>
             </div>

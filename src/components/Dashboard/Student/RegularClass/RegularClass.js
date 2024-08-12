@@ -10,7 +10,10 @@ const tabs = [{ name: "Regular" }, { name: "Recorded Class" }];
 
 const RegularClass = ({ selectedDate, onDataFetch }) => {
   const location = useLocation();
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds = JSON?.parse(localStorage.getItem("courses"))?.map(
+    (item) => item?.id
+  ) || [];
   const [uuid, setUuid] = useState([]);
   const [regularClass, setRegularClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,38 +31,70 @@ const RegularClass = ({ selectedDate, onDataFetch }) => {
     setIsLoading(true);
     (async () => {
       try {
-        const regularClassData = [];
-        const uuidData = [];
-        for (let i = 0; i < batchIds.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/?live_class_type=Regular Class`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let regularClassData = [];
+        let uuidData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/?live_class_type=Regular Class`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            const id = response?.data?.map((item) => item?.other_fields?.id);
-            uuidData.push(...id);
-            regularClassData.push(...response?.data);
-            onDataFetch(regularClassData);
-            setIsLoading(false);
-          } else {
-            setIsLoading(false);
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              regularClassData = [...regularClassData, ...response?.data];
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let j = 0; j < courseIds.length; j++) {
+            const courseId = courseIds[j];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Regular Class`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              const id = response?.data?.map((item) => item?.other_fields?.id);
+              uuidData = [...uuidData, ...id];
+              regularClassData = [...regularClassData, ...response?.data];
+            }
+          }
+        }
+
+        // Optionally: Remove duplicates based on unique identifiers
+        regularClassData = [
+          ...new Map(regularClassData.map((item) => [item.id, item])).values(),
+        ];
+        uuidData = [...new Set(uuidData)];
+
         setUuid(uuidData);
+        onDataFetch(regularClassData);
         setRegularClass(regularClassData);
       } catch (error) {
-        setIsLoading(false);
+        console.error("error", error);
       } finally {
         setIsLoading(false);
       }

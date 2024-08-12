@@ -16863,3 +16863,9 @@ div.gridarea__wraper {
   background-color: red !important;
   color: white !important;
 }
+
+.greyed-day {
+  border-radius: 10px !important;
+  background-color: grey !important;
+  color: white !important;
+}

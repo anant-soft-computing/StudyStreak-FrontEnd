@@ -62,7 +62,7 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
           for (let i = 0; i < courseIds.length; i++) {
             const courseId = courseIds[i];
             const response = await ajaxCall(
-              `/liveclass-withcourseid/${courseId}/?live_class_type=Tutor Support`,
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Webinar`,
               {
                 headers: {
                   Accept: "application/json",

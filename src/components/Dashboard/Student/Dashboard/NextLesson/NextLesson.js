@@ -40,7 +40,7 @@ const NextLesson = () => {
         <h6>Next Lesson Due</h6>
       </div>
       <hr />
-      {lessonData  ? (
+      {lessonData ? (
         <>
           <div>{lessonData?.lesson?.Lesson_Title}</div>
           <div className="d-flex justify-content-between align-items-center">
@@ -48,6 +48,7 @@ const NextLesson = () => {
             <Link
               to={`/courseLessons/${lessonData?.course?.id}`}
               className="text-decoration-none"
+              state={{ currentLesson: lessonData }}
             >
               <div>View Lesson {">>"}</div>
             </Link>

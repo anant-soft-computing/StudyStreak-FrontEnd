@@ -15,18 +15,18 @@ const StatusBox = () => (
     }}
   >
     <div className="row">
-    <div className="col-md-6">
+      <div className="col-6 col-md-6 d-flex justify-content-center justify-content-md-start">
         <StatusItem color="red" text="Selected" />
       </div>
-      <div className="col-md-6 mb-3 mb-md-0">
+      <div className="col-6 col-md-6 d-flex justify-content-center justify-content-md-end">
         <StatusItem color="#01579b" text="Today's Date" />
       </div>
     </div>
-    <div className="row mt-3">
-      <div className="col-md-6 mb-3 mb-md-0">
+    <div className="row">
+      <div className="col-6 col-md-6 d-flex justify-content-center justify-content-md-start">
         <StatusItem color="green" text="Available" />
       </div>
-      <div className="col-md-6">
+      <div className="col-6 col-md-6 d-flex justify-content-center justify-content-md-end">
         <StatusItem color="gray" text="Not Available" />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,11 +14,41 @@ const Lesson = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeLesson, setActiveLesson] = useState({});
   const [courseLessons, setCourseLessons] = useState([]);
+  const [currentLesson, setCurrentLesson] = useState({});
   const [activeContentType, setActiveContentType] = useState("video");
 
   const authData = useSelector((state) => state.authStore);
 
-  const getCourseLessons = async () => {
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/getyoutubedataview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setCurrentLesson(response?.data);
+        } else {
+          setCurrentLesson({});
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  const getCourseLessons = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await ajaxCall(
@@ -53,26 +83,34 @@ const Lesson = () => {
             });
           }
         });
-
         const tempCourse = [{ ...response?.data, section: tempSessions }];
-        setIsLoading(false);
         setCourseLessons(tempCourse);
-        setActiveLesson(tempCourse[0]);
+
+        // Find And Set The Active Lesson Based On CurrentLesson
+        const lessonToActivate = response?.data?.lessons.find(
+          (lesson) => lesson.id === currentLesson.lesson?.id
+        );
+        if (lessonToActivate) {
+          setActiveLesson(lessonToActivate);
+          const sectionIndex = tempCourse[0].section.findIndex(
+            (section) => section.id === lessonToActivate.section?.id
+          );
+          if (sectionIndex !== -1) {
+            setActiveIndex(sectionIndex);
+          }
+        } else {
+          // If No Matching Lesson Found, Set The First Lesson As Active
+          setActiveLesson(tempCourse[0].section[0].lessons[0]);
+        }
       } else {
-        setIsLoading(false);
         console.log("error");
       }
     } catch (error) {
-      setIsLoading(false);
       console.log("error", error);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    if (courseLessons.length > 0) {
-      setActiveLesson(courseLessons[activeIndex]);
-    }
-  }, [activeIndex, courseLessons]);
+  }, [courseId, currentLesson]);
 
   useEffect(() => {
     if (!courseId || isNaN(courseId)) {
@@ -86,7 +124,7 @@ const Lesson = () => {
       return;
     }
     getCourseLessons();
-  }, [courseId]);
+  }, [courseId, getCourseLessons]);
 
   return (
     <div className="body__wrapper">
@@ -98,6 +136,13 @@ const Lesson = () => {
                 <Loading text="Loading..." color="primary" />
               ) : (
                 <>
+                  {currentLesson?.lesson && currentLesson?.course && (
+                    <h5>
+                      Current Learning Lesson :{" "}
+                      {currentLesson?.lesson?.Lesson_Title},{" "}
+                      {currentLesson?.course?.Course_Title}
+                    </h5>
+                  )}
                   <div className="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
                     <LessonList
                       lessons={courseLessons}

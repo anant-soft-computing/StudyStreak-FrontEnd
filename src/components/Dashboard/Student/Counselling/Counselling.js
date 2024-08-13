@@ -67,7 +67,7 @@ const Counselling = ({
           for (let i = 0; i < courseIds.length; i++) {
             const courseId = courseIds[i];
             const response = await ajaxCall(
-              `/liveclass-withcourseid/${courseId}/?live_class_type=Tutor Support`,
+              `/liveclass-withcourseid/${courseId}/?live_class_type=Counselling`,
               {
                 headers: {
                   Accept: "application/json",

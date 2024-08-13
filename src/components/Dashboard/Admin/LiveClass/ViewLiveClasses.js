@@ -12,11 +12,9 @@ const columns = [
     field: "select_batch",
     filter: true,
     width: 280,
-    cellRenderer: (params) => (
+    cellRenderer: ({ data }) => (
       <div>
-        {params.data.select_batch
-        ?.map((item) => item.batch_name)
-        .join(", ") || "-"}
+        {data.select_batch?.map((item) => item.batch_name).join(", ") || "-"}
       </div>
     ),
   },
@@ -25,11 +23,9 @@ const columns = [
     field: "select_course",
     filter: true,
     width: 280,
-    cellRenderer: (params) => (
+    cellRenderer: ({ data }) => (
       <div>
-        {params.data.select_course
-          ?.map((item) => item.Course_Title)
-          .join(", ") || "-"}
+        {data.select_course?.map((item) => item.Course_Title).join(", ") || "-"}
       </div>
     ),
   },
@@ -67,49 +63,51 @@ const ViewLiveClasses = ({ activeTab }) => {
   const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
-    if (activeTab === "View LiveClass") {
+    const fetchLiveClasses = async () => {
+      if (activeTab !== "View LiveClass") return;
       setIsLoading(true);
-      (async () => {
-        try {
-          const response = await ajaxCall(
-            `/liveclass_list_view/`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${authData?.accessToken}`,
-              },
-              method: "GET",
+      try {
+        const response = await ajaxCall(
+          `/liveclass_list_view/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
             },
-            8000
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          const liveClassWithNumbers = response.data.map(
+            (liveClass, index) => ({
+              ...liveClass,
+              no: index + 1,
+            })
           );
-          if (response?.status === 200) {
-            const liveClassWithNumbers = response?.data?.map(
-              (liveClass, index) => ({
-                ...liveClass,
-                no: index + 1,
-              })
-            );
-            setIsLoading(false);
-            setLiveClassList(liveClassWithNumbers);
-          } else {
-            setIsLoading(false);
-          }
-        } catch (error) {
-          console.log("error", error);
-        } finally {
-          setIsLoading(false);
+          setLiveClassList(liveClassWithNumbers);
         }
-      })();
-    }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchLiveClasses();
   }, [activeTab, authData?.accessToken]);
 
-  return isLoading ? (
-    <Loading text="Loading..." color="primary" />
-  ) : liveClassList.length > 0 ? (
-    <Table columnDefs={columns} rowData={liveClassList} />
-  ) : (
-    <h5 className="text-center text-danger">No Live Classes Available !!</h5>
-  );
+  if (isLoading) {
+    return <Loading text="Loading..." color="primary" />;
+  }
+
+  if (liveClassList.length === 0) {
+    return (
+      <h5 className="text-center text-danger">No Live Classes Available !!</h5>
+    );
+  }
+
+  return <Table columnDefs={columns} rowData={liveClassList} />;
 };
+
 export default ViewLiveClasses;

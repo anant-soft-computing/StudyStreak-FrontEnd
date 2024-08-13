@@ -5,12 +5,7 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
 const columns = [
-  {
-    headerName: "No.",
-    field: "no",
-    resizable: false,
-    width: 92,
-  },
+  { headerName: "No.", field: "no", resizable: false, width: 92 },
   { headerName: "Name", field: "batch_name", filter: true, width: 300 },
   {
     headerName: "Package",
@@ -45,48 +40,47 @@ const ViewBatches = ({ activeTab }) => {
   const authData = useSelector((state) => state.authStore);
 
   useEffect(() => {
-    if (activeTab === "View Batch") {
+    const fetchBatches = async () => {
+      if (activeTab !== "View Batch") return;
       setIsLoading(true);
-      (async () => {
-        try {
-          const response = await ajaxCall(
-            `/batchview/`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${authData?.accessToken}`,
-              },
-              method: "GET",
+      try {
+        const response = await ajaxCall(
+          `/batchview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
             },
-            8000
-          );
-          if (response?.status === 200) {
-            const batchesWithNumbers = response?.data?.map((batch, index) => ({
-              ...batch,
-              no: index + 1,
-            }));
-            setIsLoading(false);
-            setBatchList(batchesWithNumbers);
-          } else {
-            setIsLoading(false);
-          }
-        } catch (error) {
-          console.log("error", error);
-        } finally {
-          setIsLoading(false);
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          const batchesWithNumbers = response.data.map((batch, index) => ({
+            ...batch,
+            no: index + 1,
+          }));
+          setBatchList(batchesWithNumbers);
         }
-      })();
-    }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchBatches();
   }, [activeTab, authData?.accessToken]);
 
-  return isLoading ? (
-    <Loading text="Loading..." color="primary" />
-  ) : batchList.length > 0 ? (
-    <Table rowData={batchList} columnDefs={columns} />
-  ) : (
-    <h5 className="text-center text-danger">No Batches Available !!</h5>
-  );
+  if (isLoading) {
+    return <Loading text="Loading..." color="primary" />;
+  }
+
+  if (batchList.length === 0) {
+    return <h5 className="text-center text-danger">No Batches Available !!</h5>;
+  }
+
+  return <Table rowData={batchList} columnDefs={columns} />;
 };
 
 export default ViewBatches;

@@ -4,9 +4,14 @@ import ajaxCall from "../../helpers/ajaxCall";
 import { useParams } from "react-router-dom";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
+import listeningBandValues from "../../utils/bandValues/listeningBandValues";
+import readingBandValues from "../../utils/bandValues/ReadingBandValues";
+import SkipIcon from "../UI/SkipIcon";
+import AnswerCard from "./AnswerCard";
 
 const FullLengthTestAnswer = () => {
   const { examId } = useParams();
+  const [examName, setExamName] = useState("");
   const [rStudentAnswers, setRStudentAnswers] = useState([]);
   const [rCorrectAnswers, setRCorrectAnswers] = useState([]);
 
@@ -14,10 +19,29 @@ const FullLengthTestAnswer = () => {
   const [lCorrectAnswers, setLCorrectAnswers] = useState([]);
 
   const [writingTestAnswers, setWritingTestAnswers] = useState([]);
+
   const [speakingTestAnswers, setSpeakingTestAnswers] = useState([]);
 
+  const [counts, setCounts] = useState({
+    reading: { correct: 0, incorrect: 0, skipped: 0, band: 0 },
+    listening: { correct: 0, incorrect: 0, skipped: 0, band: 0 },
+    writing: { band: 0 },
+    speaking: { band: 0 },
+  });
+
+  const averageBand = () => {
+    const bands = [
+      counts.reading.band,
+      counts.listening.band,
+      counts.writing.band,
+      counts.speaking.band,
+    ].map((band) => parseFloat(band) || 0);
+    const sum = bands.reduce((acc, band) => acc + band, 0);
+    return bands.length > 0 ? (sum / bands.length).toFixed(1) : 0;
+  };
+
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const response = await ajaxCall(
           `/flt-answers/${examId}/`,
@@ -25,67 +49,194 @@ const FullLengthTestAnswer = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
             },
             method: "GET",
           },
           8000
         );
+
         if (response.status === 200) {
-          setWritingTestAnswers(response?.data?.writing_set?.student_answers);
-          setSpeakingTestAnswers(response?.data?.speaking_set?.student_answers);
+          setExamName(response?.data?.name);
+          const { writing_set, speaking_set, reading_set, listening_set } =
+            response.data;
 
-          let rstudentAnswers;
+          setWritingTestAnswers(writing_set?.student_answers);
+          setSpeakingTestAnswers(speaking_set?.student_answers);
+
+          let rstudentAnswers = [];
           let rcorrectAnswer = [];
-
-          rstudentAnswers =
-            response?.data?.reading_set?.student_answers?.Reading?.reduce(
-              (acc, curr) => {
-                return acc.concat(curr?.answers);
-              },
-              []
-            );
-          rcorrectAnswer.push(
-            ...response?.data?.reading_set?.correct_answers?.Reading?.reduce(
-              (acc, curr) => {
-                return acc.concat(curr?.answers);
-              },
-              []
-            )
-          );
-          setRStudentAnswers(rstudentAnswers);
-          setRCorrectAnswers(rcorrectAnswer);
-
-          let lstudentAnswers;
+          let lstudentAnswers = [];
           let lcorrectAnswer = [];
 
-          lstudentAnswers =
-            response.data?.listening_set?.student_answers?.Listening?.reduce(
-              (acc, curr) => {
-                return acc.concat(curr.answers);
-              },
+          // Reading
+          if (
+            reading_set?.student_answers?.Reading &&
+            reading_set?.correct_answers?.Reading
+          ) {
+            rstudentAnswers = reading_set.student_answers.Reading.reduce(
+              (acc, curr) => acc.concat(curr.answers),
               []
             );
-          lcorrectAnswer.push(
-            ...response.data?.listening_set?.correct_answers?.Listening?.reduce(
-              (acc, curr) => {
-                return acc.concat(curr?.answers);
-              },
+            rcorrectAnswer = reading_set.correct_answers.Reading.reduce(
+              (acc, curr) => acc.concat(curr.answers),
               []
-            )
-          );
+            );
+          }
+
+          // Listening
+          if (
+            listening_set?.student_answers?.Listening &&
+            listening_set?.correct_answers?.Listening
+          ) {
+            lstudentAnswers = listening_set.student_answers.Listening.reduce(
+              (acc, curr) => acc.concat(curr.answers),
+              []
+            );
+            lcorrectAnswer = listening_set.correct_answers.Listening.reduce(
+              (acc, curr) => acc.concat(curr.answers),
+              []
+            );
+          }
+
+          // Calculate counts for Reading
+          let rSkip = 0,
+            rCorrect = 0,
+            rIncorrect = 0;
+          rstudentAnswers.forEach((item, index) => {
+            const correctAnswerText =
+              rcorrectAnswer[index]?.answer_text?.trim();
+            const studentAnswerText = item?.answer_text?.trim();
+
+            if (!studentAnswerText) {
+              rSkip++;
+            } else if (correctAnswerText?.includes(" OR ")) {
+              const correctOptions = correctAnswerText
+                .split(" OR ")
+                .map((option) => option.trim());
+              if (correctOptions.includes(studentAnswerText)) {
+                rCorrect++;
+              } else {
+                rIncorrect++;
+              }
+            } else if (correctAnswerText?.includes(" AND ")) {
+              const correctOptions = correctAnswerText
+                .split(" AND ")
+                .map((option) => option.trim());
+              if (
+                correctOptions.every((option) =>
+                  studentAnswerText.includes(option)
+                )
+              ) {
+                rCorrect++;
+              } else {
+                rIncorrect++;
+              }
+            } else {
+              if (correctAnswerText === studentAnswerText) {
+                rCorrect++;
+              } else {
+                rIncorrect++;
+              }
+            }
+          });
+
+          // Calculate counts for Listening
+          let lSkip = 0,
+            lCorrect = 0,
+            lIncorrect = 0;
+          lstudentAnswers.forEach((item, index) => {
+            const correctAnswerText =
+              lcorrectAnswer[index]?.answer_text?.trim();
+            const studentAnswerText = item?.answer_text?.trim();
+
+            if (!studentAnswerText) {
+              lSkip++;
+            } else if (correctAnswerText?.includes(" OR ")) {
+              const correctOptions = correctAnswerText
+                .split(" OR ")
+                .map((option) => option.trim());
+              if (correctOptions.includes(studentAnswerText)) {
+                lCorrect++;
+              } else {
+                lIncorrect++;
+              }
+            } else if (correctAnswerText?.includes(" AND ")) {
+              const correctOptions = correctAnswerText
+                .split(" AND ")
+                .map((option) => option.trim());
+              if (
+                correctOptions.every((option) =>
+                  studentAnswerText.includes(option)
+                )
+              ) {
+                lCorrect++;
+              } else {
+                lIncorrect++;
+              }
+            } else {
+              if (correctAnswerText === studentAnswerText) {
+                lCorrect++;
+              } else {
+                lIncorrect++;
+              }
+            }
+          });
+
+          // Set state
+          setRStudentAnswers(rstudentAnswers);
+          setRCorrectAnswers(rcorrectAnswer);
           setLStudentAnswers(lstudentAnswers);
           setLCorrectAnswers(lcorrectAnswer);
+
+          setCounts((prev) => ({
+            ...prev,
+            reading: {
+              correct: rCorrect,
+              incorrect: rIncorrect,
+              skipped: rSkip,
+              band: readingBandValues[rCorrect],
+            },
+            listening: {
+              correct: lCorrect,
+              incorrect: lIncorrect,
+              skipped: lSkip,
+              band: listeningBandValues[lCorrect],
+            },
+          }));
         } else {
           console.log("error");
         }
       } catch (error) {
         console.log("error", error);
       }
-    })();
+    };
+
+    fetchData();
   }, [examId]);
+
+  const calculateAverageBand = (answers) => {
+    const bandScores = answers
+      ?.map((item) => parseFloat(item.band))
+      .filter((band) => !isNaN(band));
+    if (bandScores?.length > 0) {
+      const sum = bandScores?.reduce((a, b) => a + b, 0);
+      return (sum / bandScores?.length).toFixed(1);
+    }
+    return 0;
+  };
+
+  useEffect(() => {
+    const writingBand = calculateAverageBand(writingTestAnswers?.Writing);
+    const speakingBand = calculateAverageBand(speakingTestAnswers?.Speaking);
+
+    setCounts((prev) => ({
+      ...prev,
+      writing: { band: writingBand },
+      speaking: { band: speakingBand },
+    }));
+  }, [writingTestAnswers, speakingTestAnswers, setCounts]);
 
   return (
     <div className="body__wrapper">
@@ -95,11 +246,20 @@ const FullLengthTestAnswer = () => {
             <div className="row">
               <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
-                  <h4 className="sidebar__title">
-                    Solution For : Full Length Test
-                  </h4>
+                  <h4 className="sidebar__title">Solution For : {examName}</h4>
+                  <AnswerCard
+                    skipCount={
+                      counts?.reading?.skipped + counts?.listening?.skipped
+                    }
+                    correctCount={
+                      counts?.reading?.correct + counts?.listening?.correct
+                    }
+                    incorrectCount={
+                      counts?.reading?.incorrect + counts?.listening?.incorrect
+                    }
+                    bandValue={averageBand()}
+                  />
                   <div style={{ marginTop: "50px" }}>
-
                     {/* Reading */}
                     <div className="dashboard__section__title">
                       <h4 className="sidebar__title">Reading :- </h4>
@@ -124,11 +284,10 @@ const FullLengthTestAnswer = () => {
                                 ) => (
                                   <tr
                                     key={id}
-                                    className={`${
-                                      index % 2 === 0
+                                    className={`${index % 2 === 0
                                         ? ""
                                         : "dashboard__table__row"
-                                    }`}
+                                      }`}
                                   >
                                     <td className="text-dark">
                                       {question_number}.
@@ -140,53 +299,48 @@ const FullLengthTestAnswer = () => {
                                     </td>
                                     <td className="text-dark">
                                       {rStudentAnswers?.length > 0 &&
-                                        rStudentAnswers[index] &&
                                         rStudentAnswers[index]?.answer_text}
                                     </td>
                                     <td className="text-dark">
-                                      {rStudentAnswers?.length > 0 &&
-                                      rStudentAnswers[index] &&
-                                      rCorrectAnswers[
+                                      {!rStudentAnswers[index]?.answer_text ? (
+                                        <SkipIcon />
+                                      ) : rCorrectAnswers[
                                         index
                                       ]?.answer_text.includes(" OR ") ? (
                                         rCorrectAnswers[index]?.answer_text
                                           .split(" OR ")
                                           .map((option) =>
-                                            option?.trim()?.toLowerCase()
+                                            option.trim().toLowerCase()
                                           )
                                           .includes(
                                             rStudentAnswers[
                                               index
-                                            ]?.answer_text?.toLowerCase()
+                                            ]?.answer_text.toLowerCase()
                                           ) ? (
                                           <CheckIcon />
                                         ) : (
                                           <CancelIcon />
                                         )
-                                      ) : rStudentAnswers?.length > 0 &&
-                                        rStudentAnswers[index] &&
-                                        rCorrectAnswers[
-                                          index
-                                        ]?.answer_text?.includes(" AND ") ? (
+                                      ) : rCorrectAnswers[
+                                        index
+                                      ]?.answer_text.includes(" AND ") ? (
                                         rCorrectAnswers[index]?.answer_text
                                           .split(" AND ")
                                           .map((option) =>
-                                            option?.trim()?.toLowerCase()
+                                            option.trim().toLowerCase()
                                           )
                                           .every((option) =>
                                             rStudentAnswers[index]?.answer_text
-                                              ?.toLowerCase()
-                                              ?.includes(option)
+                                              .toLowerCase()
+                                              .includes(option)
                                           ) ? (
                                           <CheckIcon />
                                         ) : (
                                           <CancelIcon />
                                         )
-                                      ) : rStudentAnswers?.length > 0 &&
-                                        rStudentAnswers[index] &&
-                                        rStudentAnswers[index]?.answer_text ===
-                                          rCorrectAnswers[index]
-                                            ?.answer_text ? (
+                                      ) : rStudentAnswers[index]
+                                        ?.answer_text ===
+                                        rCorrectAnswers[index]?.answer_text ? (
                                         <CheckIcon />
                                       ) : (
                                         <CancelIcon />
@@ -264,11 +418,10 @@ const FullLengthTestAnswer = () => {
                                 ) => (
                                   <tr
                                     key={id}
-                                    className={`${
-                                      index % 2 === 0
+                                    className={`${index % 2 === 0
                                         ? ""
                                         : "dashboard__table__row"
-                                    }`}
+                                      }`}
                                   >
                                     <td className="text-dark">
                                       {question_number}.
@@ -280,53 +433,48 @@ const FullLengthTestAnswer = () => {
                                     </td>
                                     <td className="text-dark">
                                       {lStudentAnswers?.length > 0 &&
-                                        lStudentAnswers[index] &&
                                         lStudentAnswers[index]?.answer_text}
                                     </td>
                                     <td className="text-dark">
-                                      {lStudentAnswers?.length > 0 &&
-                                      lStudentAnswers[index] &&
-                                      lCorrectAnswers[
+                                      {!lStudentAnswers[index]?.answer_text ? (
+                                        <SkipIcon />
+                                      ) : lCorrectAnswers[
                                         index
                                       ]?.answer_text.includes(" OR ") ? (
                                         lCorrectAnswers[index]?.answer_text
                                           .split(" OR ")
                                           .map((option) =>
-                                            option?.trim()?.toLowerCase()
+                                            option.trim().toLowerCase()
                                           )
                                           .includes(
                                             lStudentAnswers[
                                               index
-                                            ]?.answer_text?.toLowerCase()
+                                            ]?.answer_text.toLowerCase()
                                           ) ? (
                                           <CheckIcon />
                                         ) : (
                                           <CancelIcon />
                                         )
-                                      ) : lStudentAnswers?.length > 0 &&
-                                        lStudentAnswers[index] &&
-                                        lCorrectAnswers[
-                                          index
-                                        ]?.answer_text?.includes(" AND ") ? (
+                                      ) : lCorrectAnswers[
+                                        index
+                                      ]?.answer_text.includes(" AND ") ? (
                                         lCorrectAnswers[index]?.answer_text
                                           .split(" AND ")
                                           .map((option) =>
-                                            option?.trim()?.toLowerCase()
+                                            option.trim().toLowerCase()
                                           )
                                           .every((option) =>
                                             lStudentAnswers[index]?.answer_text
-                                              ?.toLowerCase()
-                                              ?.includes(option)
+                                              .toLowerCase()
+                                              .includes(option)
                                           ) ? (
                                           <CheckIcon />
                                         ) : (
                                           <CancelIcon />
                                         )
-                                      ) : lStudentAnswers?.length > 0 &&
-                                        lStudentAnswers[index] &&
-                                        lStudentAnswers[index]?.answer_text ===
-                                          lCorrectAnswers[index]
-                                            ?.answer_text ? (
+                                      ) : lStudentAnswers[index]
+                                        ?.answer_text ===
+                                        lCorrectAnswers[index]?.answer_text ? (
                                         <CheckIcon />
                                       ) : (
                                         <CancelIcon />
@@ -362,11 +510,10 @@ const FullLengthTestAnswer = () => {
                                 (item, index) => (
                                   <tr
                                     key={index}
-                                    className={`${
-                                      index % 2 === 0
+                                    className={`${index % 2 === 0
                                         ? ""
                                         : "dashboard__table__row"
-                                    }`}
+                                      }`}
                                   >
                                     <td>{index + 1}</td>
                                     <td>

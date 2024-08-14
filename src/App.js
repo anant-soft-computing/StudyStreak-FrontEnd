@@ -47,6 +47,7 @@ import LiveClass from "./components/Dashboard/Admin/LiveClass/LiveClass";
 import Batch from "./components/Dashboard/Admin/Batch/Batch";
 import Badge from "./components/Dashboard/Admin/Badge/Badge";
 import FlashCard from "./components/Dashboard/Admin/FlashCard/FlashCard";
+import PaperTest from "./components/Dashboard/Admin/PaperTest/PaperTest";
 import Gamification from "./components/Dashboard/Admin/Gamification/Gamification";
 import Notice from "./components/Dashboard/Admin/Notice/Notice";
 import AProfile from "./components/Dashboard/Admin/Profile";
@@ -105,6 +106,7 @@ const App = () => {
           <Route path="/admin-batch" element={<Batch />} />
           <Route path="/admin-badges" element={<Badge />} />
           <Route path="/admin-flashCard" element={<FlashCard />} />
+          <Route path="/admin-paperTest" element={<PaperTest />} />
           <Route path="/admin-gamification" element={<Gamification />} />
           <Route path="/admin-notice" element={<Notice />} />
           <Route path="/admin-resources" element={<Resources />} />

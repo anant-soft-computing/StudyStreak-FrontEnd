@@ -121,7 +121,7 @@ const RegularClassList = ({ isLoading, regularClass }) => {
         <Table rowData={rowData} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">
-          No Regular Classes Available Today !! , Please Schedule Your Classes.
+          No Regular Classes Available !! , Please Schedule Your Classes.
         </h5>
       )}
     </>

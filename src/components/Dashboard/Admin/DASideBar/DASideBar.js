@@ -11,6 +11,7 @@ import batch from "../../../../img/icon/batch.svg";
 import badges from "../../../../img/icon/badges.svg";
 import gamification from "../../../../img/icon/gamification.svg";
 import flashCard from "../../../../img/icon/flashCard.svg";
+import paperTest from "../../../../img/icon/practiceTest.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import notice from "../../../../img/icon/notice.svg";
@@ -68,6 +69,11 @@ const DASideBar = () => {
       name: "Flash Card",
       icon: <img src={flashCard} alt="Flash Card" />,
       link: "/admin-flashCard",
+    },
+    {
+      name: "Paper Test",
+      icon: <img src={paperTest} alt="Paper Test" />,
+      link: "/admin-paperTest",
     },
     {
       name: "Badges",

@@ -2,13 +2,18 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
+import PaperTest from "./PaperTest";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import noteBook from "../../../../img/icon/notebook.svg";
 import FloatingNote from "./FloatingNote";
 import Tab from "../../../UI/Tab";
 
-const tabs = [{ name: "Attachment" }, { name: "Assignment" }];
+const tabs = [
+  { name: "Attachment" },
+  { name: "Assignment" },
+  { name: "Paper Test" },
+];
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
   const { courseId } = useParams();
@@ -113,6 +118,15 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                     <Assignment
                       activeLesson={activeLesson?.lesson_assignment}
                     />
+                  </div>
+                </div>
+                <div
+                  className={`tab-pane fade ${
+                    activeTab === "Paper Test" ? "show active" : ""
+                  }`}
+                >
+                  <div className="row">
+                    <PaperTest />
                   </div>
                 </div>
               </div>

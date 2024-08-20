@@ -20,60 +20,78 @@ import DSSidebar from "../DSSideBar/DSSideBar";
 import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
 import NextLesson from "./NextLesson/NextLesson";
 
-const cardList = [
-  {
-    name: "Book Speaking Slot",
-    icon: bookSpeakingSlot,
-    link: "/studentLiveClasses",
-    state: { activeTab: "Speaking Practice" },
-  },
-  { name: "Practice Test", icon: practice, link: "/practiceTest" },
-  { name: "Full Length Test", icon: fullLengthTest, link: "/fullLengthTest" },
-  {
-    name: "Counselling",
-    icon: counselling,
-    link: "/studentLiveClasses",
-    state: { activeTab: "Counselling" },
-  },
-  {
-    name: "Regular Classes",
-    icon: regularClass,
-    link: "/studentLiveClasses",
-  },
-  {
-    name: "Tutor Support",
-    icon: counselling,
-    link: "/studentLiveClasses",
-    state: { activeTab: "Tutor Support" },
-  },
-  {
-    name: "Webinar",
-    icon: webinar,
-    link: "/studentLiveClasses",
-    state: { activeTab: "Webinar" },
-  },
-  { name: "Progress", icon: progress },
-  { name: "Resources", icon: support, link: "/resources" },
-];
-
 const SDashboard = () => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState({
+    batch_package_count: 0,
+    practice_test_count: 0,
+    full_length_test_count: 0,
+  });
+  const [givenPTCount, setGivenPTCount] = useState(0);
+  const [givenFLTCount, setGivenFLTCount] = useState(0);
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [courseList, setCourseList] = useState([]);
   const [upcomingSS, setUpcomingSS] = useState([]);
   const [upcommingClass, setUpcommingClass] = useState([]);
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON.parse(localStorage.getItem("courses"));
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds = JSON?.parse(localStorage.getItem("courses"))?.map(
+    (item) => item?.id
+  ) || [];
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+
+  const cardList = [
+    {
+      name: "Book Speaking Slot",
+      icon: bookSpeakingSlot,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Speaking Practice" },
+    },
+    {
+      name: "Practice Test",
+      icon: practice,
+      link: "/practiceTest",
+      state: { count: count?.practice_test_count },
+    },
+    {
+      name: "Full Length Test",
+      icon: fullLengthTest,
+      link: "/fullLengthTest",
+      state: { count: count?.full_length_test_count },
+    },
+    {
+      name: "Counselling",
+      icon: counselling,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Counselling" },
+    },
+    {
+      name: "Regular Classes",
+      icon: regularClass,
+      link: "/studentLiveClasses",
+    },
+    {
+      name: "Tutor Support",
+      icon: counselling,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Tutor Support" },
+    },
+    {
+      name: "Webinar",
+      icon: webinar,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Webinar" },
+    },
+    { name: "Progress", icon: progress },
+    { name: "Resources", icon: support, link: "/resources" },
+  ];
 
   const studentBatch = batchData?.filter((item) =>
     batchIds?.includes(item?.id)
   );
 
   const courses = courseList.filter((item) =>
-    courseIds?.some((data) => data?.id === item?.id)
+    courseIds?.includes(item?.id)
   );
 
   const getDaysRemaining = (endDate) => {
@@ -110,13 +128,54 @@ const SDashboard = () => {
   };
 
   useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/student-stats/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setGivenPTCount(response?.data?.student_pt?.length);
+          setGivenFLTCount(response?.data?.student_flt?.length);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
     const fetchAllData = async () => {
       setIsLoading(true);
       await Promise.all([
         fetchData("/batchview/", setBatchData),
         fetchData("/courselistview/", setCourseList),
         fetchData("/userwisepackagewithcourseid/", (data) => {
-          setCount(data?.batch_package_count);
+          const studentPackage = data?.student_packages?.[0];
+          const packageDetails = studentPackage?.package;
+          setCount({
+            batch_package_count: data?.batch_package_count,
+            practice_test_count:
+              packageDetails?.practice_test_count === -1
+                ? packageDetails?.practice_test_count
+                : packageDetails?.practice_test_count - givenPTCount,
+            full_length_test_count:
+              packageDetails?.full_length_test_count === -1
+                ? packageDetails?.full_length_test_count
+                : packageDetails?.full_length_test_count - givenFLTCount,
+          });
           setStudentID(data?.student_packages[0]?.student_id);
         }),
       ]);
@@ -124,45 +183,90 @@ const SDashboard = () => {
     };
 
     fetchAllData();
-  }, []);
+  }, [givenFLTCount, givenPTCount]);
 
   useEffect(() => {
     const fetchBatchData = async () => {
       setIsLoading(true);
       try {
-        const regularClassData = [];
-        const speakingClassData = [];
-        for (let i = 0; i < batchIds?.length; i++) {
-          const batchId = batchIds[i];
-          const response = await ajaxCall(
-            `/liveclass_listwithid_view/${batchId}/`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+        let regularClassData = [];
+        let speakingClassData = [];
+
+        if (batchIds?.length) {
+          for (let i = 0; i < batchIds.length; i++) {
+            const batchId = batchIds[i];
+            const response = await ajaxCall(
+              `/liveclass_listwithid_view/${batchId}/`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
               },
-              method: "GET",
-            },
-            8000
-          );
-          if (response?.status === 200) {
-            regularClassData.push(
-              ...response?.data?.filter(
-                (item) => item?.liveclasstype?.name === "Regular Class"
-              )
+              8000
             );
-            speakingClassData.push(
-              ...response?.data?.filter(
-                (item) => item?.liveclasstype?.name === "Speaking-Practice"
-              )
-            );
-          } else {
-            console.log("error");
+            if (response?.status === 200) {
+              regularClassData.push(
+                ...response?.data?.filter(
+                  (item) => item?.liveclasstype?.name === "Regular Class"
+                )
+              );
+              speakingClassData.push(
+                ...response?.data?.filter(
+                  (item) => item?.liveclasstype?.name === "Speaking-Practice"
+                )
+              );
+            } else {
+              console.log("error");
+            }
           }
         }
+
+        if (courseIds?.length) {
+          for (let j = 0; j < courseIds.length; j++) {
+            const courseId = courseIds[j];
+            const response = await ajaxCall(
+              `/liveclass-withcourseid/${courseId}/`,
+              {
+                headers: {
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+                method: "GET",
+              },
+              8000
+            );
+            if (response?.status === 200) {
+              regularClassData.push(
+                ...response?.data?.filter(
+                  (item) => item?.liveclasstype?.name === "Regular Class"
+                )
+              );
+              speakingClassData.push(
+                ...response?.data?.filter(
+                  (item) => item?.liveclasstype?.name === "Speaking-Practice"
+                )
+              );
+            } else {
+              console.log("error");
+            }
+          }
+        }
+
+        regularClassData = [
+          ...new Map(regularClassData.map((item) => [item.id, item])).values(),
+        ];
+        speakingClassData = [
+          ...new Map(speakingClassData.map((item) => [item.id, item])).values(),
+        ];
+
         setUpcomingSS(speakingClassData);
         setUpcommingClass(regularClassData);
       } catch (error) {
@@ -181,7 +285,7 @@ const SDashboard = () => {
 
   return (
     <>
-      {count !== 0 ? (
+      {count?.batch_package_count !== 0 ? (
         <div className="body__wrapper">
           <div className="main_wrapper overflow-hidden">
             <div className="dashboardarea sp_bottom_100">

@@ -61,9 +61,9 @@ const NoticeBoard = () => {
           target="_blank"
           rel="noopener noreferrer"
           key={index}
-          style={{ textDecoration: "none", color: "inherit" }}
+          style={{ textDecoration: "none", color: "red" }}
         >
-          [link]
+          [Click here]
         </a>
       ) : (
         item

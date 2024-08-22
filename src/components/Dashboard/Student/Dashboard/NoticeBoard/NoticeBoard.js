@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment/moment";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 import { Box, List, ListItem, Typography } from "@mui/material";
 
 const NoticeBoard = () => {
+  const currentDate = moment().startOf("day");
   const [noticeData, setNoticeData] = useState([]);
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"))?.map(
     (item) => item?.id
   );
   const studentId = JSON?.parse(localStorage.getItem("StudentID"));
+  
+  const activeNotice = noticeData.filter((item) =>
+    moment(item.expiry_date, "YYYY-MM-DD").isSameOrAfter(currentDate)
+  );
 
   useEffect(() => {
     (async () => {
@@ -40,6 +46,7 @@ const NoticeBoard = () => {
           const responseNotice = filterNotice?.map((item) => {
             return {
               notice: item?.notice,
+              expiry_date: item?.expiry_date,
             };
           });
           setNoticeData(responseNotice);
@@ -85,7 +92,7 @@ const NoticeBoard = () => {
             Notice board
           </Typography>
           <List>
-            {noticeData?.map((notice, index) => (
+            {activeNotice?.map((notice, index) => (
               <ListItem
                 key={index}
                 sx={{

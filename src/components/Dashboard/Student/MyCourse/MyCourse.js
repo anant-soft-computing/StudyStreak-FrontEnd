@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import DSSidebar from "../DSSideBar/DSSideBar";
@@ -10,45 +10,83 @@ import Loading from "../../../UI/Loading";
 const MyCourse = () => {
   const navigate = useNavigate();
   const [courseList, setCourseList] = useState([]);
+  const [expiryDate, setExpiryDate] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const authData = useSelector((state) => state.authStore);
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
-  const courses = courseList.filter((item) =>
-    courseIds?.some((data) => data?.id === item?.id)
+  const courses = courseList.filter((course) =>
+    courseIds.some((data) => data?.id === course?.id)
   );
+
+  const coursesWithExpiry = courses.map((course) => {
+    const expiry = expiryDate.find((exp) => exp.course.id === course.id);
+    return {
+      ...course,
+      expiryDate: expiry ? expiry.expiry_date : null,
+    };
+  });
+
+  const fetchCourses = useCallback(async () => {
+    try {
+      const response = await ajaxCall(
+        `/courselistview/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+
+      if (response.status === 200) {
+        setCourseList(response.data);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [authData.accessToken]);
+
+  const fetchExpiryDates = useCallback(async () => {
+    try {
+      const response = await ajaxCall(
+        `/student/enrollment/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authData.accessToken}`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+
+      if (response.status === 200) {
+        setExpiryDate(response.data);
+      } else {
+        console.error("error");
+      }
+    } catch (error) {
+      console.error("error", error);
+    }
+  }, [authData.accessToken]);
 
   useEffect(() => {
     setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/courselistview/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setIsLoading(false);
-          setCourseList(response?.data);
-        } else {
-          setIsLoading(false);
-          console.log("error");
-        }
-      } catch (error) {
-        setIsLoading(false);
-        console.log("error", error);
-      }
-    })();
-  }, [authData?.accessToken]);
+    fetchCourses();
+  }, [fetchCourses]);
+
+  useEffect(() => {
+    fetchExpiryDates();
+  }, [fetchExpiryDates]);
 
   const getDaysRemaining = (endDate) => {
     const end = moment(endDate);
@@ -69,16 +107,15 @@ const MyCourse = () => {
                     <div className="dashboard__section__title">
                       <h4>Courses</h4>
                       <h5 className="text-danger">
-                        {courses?.length > 0 &&
-                          courses.map((course) => {
+                        {coursesWithExpiry?.length > 0 &&
+                          coursesWithExpiry.map((course) => {
                             const daysRemaining = getDaysRemaining(
-                              course.EnrollmentEndDate
+                              course.expiryDate
                             );
                             return (
                               <span key={course?.id}>
-                                {" "}
-                                {course.Course_Title} : {daysRemaining} days Left
-                                |
+                                {course.Course_Title} : {daysRemaining} days
+                                Left |
                               </span>
                             );
                           })}
@@ -90,11 +127,11 @@ const MyCourse = () => {
                       ) : courses?.length > 0 ? (
                         courses?.map((course) => (
                           <div
-                            key={course?.id}
                             className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
+                            key={course?.id}
                           >
                             <div className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling">
-                              <div className="gridarea__img mt-2">
+                              <div className="gridarea__img">
                                 <img
                                   src={course?.Course_Thumbnail}
                                   alt={course?.Course_Title}
@@ -130,12 +167,12 @@ const MyCourse = () => {
                                     </ul>
                                   </div>
                                 </div>
-                                <div className="d-flex justify-content-center mt-3">
+                                <div className="d-flex justify-content-center">
                                   <button
                                     onClick={() =>
                                       navigate(`/courseLessons/${course?.id}`)
                                     }
-                                    className="default__button mb-2"
+                                    className="default__button"
                                   >
                                     Start Lessons
                                   </button>

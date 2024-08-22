@@ -9,9 +9,15 @@ const UpcomingLiveClass = ({ upcommingClass }) => {
       (a, b) => moment(a.start_time) - moment(b.start_time)
     );
     const upcomingMeeting =
+      sortedMeetings?.find(
+        (meeting) =>
+          moment(meeting.start_time).isSameOrBefore(now) &&
+          moment(meeting.end_time).isAfter(now)
+      ) ||
       sortedMeetings?.find((meeting) =>
-        moment(meeting?.start_time).isAfter(now)
-      ) || null;
+        moment(meeting.start_time).isAfter(now)
+      ) ||
+      null;
     return upcomingMeeting;
   };
 

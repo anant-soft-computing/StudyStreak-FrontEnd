@@ -21,11 +21,15 @@ const RegularClassList = ({ isLoading, regularClass }) => {
 
   // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
-    const { join_url, start_time, id } = params.data;
+    const { join_url, start_time, end_time, id } = params.data;
     const now = currentTime;
     const classStartTime = moment(start_time);
-    const timeDifference = classStartTime.diff(now, "minutes");
-    const isButtonEnabled = timeDifference <= 5 && timeDifference >= -5;
+    const classEndTime = moment(end_time);
+
+    const isButtonEnabled = now.isBetween(
+      classStartTime.subtract(5, "minutes"),
+      classEndTime.add(5, "minutes")
+    );
 
     return (
       <button
@@ -81,8 +85,16 @@ const RegularClassList = ({ isLoading, regularClass }) => {
     },
     { headerName: "Meeting Title", field: "meeting_title" },
     { headerName: "Description", field: "meeting_description" },
-    { headerName: "Start Date", field: "start_date" },
-    { headerName: "End Date", field: "end_date" },
+    {
+      headerName: "Start Date",
+      field: "start_date",
+      cellRenderer: (params) => moment(params.data.start_time).format("lll"),
+    },
+    {
+      headerName: "End Date",
+      field: "end_date",
+      cellRenderer: (params) => moment(params.data.end_time).format("lll"),
+    },
     {
       headerName: "Batch Name",
       field: "select_batch",
@@ -107,18 +119,12 @@ const RegularClassList = ({ isLoading, regularClass }) => {
     },
   ];
 
-  const rowData = regularClass.map((item) => ({
-    ...item,
-    start_date: moment(item.start_time).format("lll"),
-    end_date: moment(item.end_time).format("lll"),
-  }));
-
   return (
     <>
       {isLoading ? (
         <Loading text="Loading..." color="primary" />
       ) : regularClass.length > 0 ? (
-        <Table rowData={rowData} columnDefs={columns} />
+        <Table rowData={regularClass} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">
           No Regular Classes Available !! , Please Schedule Your Classes.

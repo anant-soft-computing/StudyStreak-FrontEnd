@@ -28,6 +28,7 @@ import SProfile from "./components/Dashboard/Student/Profile";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
 import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
+import SPaperTest from "./components/Dashboard/Student/PaperTest/PaperTest";
 import MockTest from "./components/Dashboard/Student/MockTest/MockTest";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
@@ -125,6 +126,7 @@ const App = () => {
           <Route path="/studentMyCourse" element={<MyCourse />} />
           <Route path="/courseLessons/:courseId" element={<Lesson />} />
           <Route path="/course/:courseId" element={<CourseContent />} />
+          <Route path="/paperTest" element={<SPaperTest />} />
           <Route path="/mockTest" element={<MockTest />} />
           <Route path="/practiceTest" element={<PracticeTest />} />
           <Route path="/fullLengthTest" element={<FullLengthTest />} />

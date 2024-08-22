@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
-import PaperTest from "./PaperTest";
+import Quiz from "./Quiz";
 import ReactPlayer from "react-player";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import noteBook from "../../../../img/icon/notebook.svg";
@@ -12,7 +12,7 @@ import Tab from "../../../UI/Tab";
 const tabs = [
   { name: "Attachment" },
   { name: "Assignment" },
-  { name: "Paper Test" },
+  { name: "Quiz" },
 ];
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
@@ -122,11 +122,11 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
                 </div>
                 <div
                   className={`tab-pane fade ${
-                    activeTab === "Paper Test" ? "show active" : ""
+                    activeTab === "Quiz" ? "show active" : ""
                   }`}
                 >
                   <div className="row">
-                    <PaperTest />
+                    <Quiz activeLesson={activeLesson?.quiz_question_options} />
                   </div>
                 </div>
               </div>

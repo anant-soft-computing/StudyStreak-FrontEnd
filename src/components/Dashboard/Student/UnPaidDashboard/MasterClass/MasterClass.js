@@ -1,36 +1,48 @@
 import moment from "moment";
 import React from "react";
-import { Link } from "react-router-dom";
 
 const MasterClass = ({ masterClass }) => {
-  const isDataAvailable =
-    masterClass &&
-    masterClass.meeting_title &&
-    masterClass.start_time &&
-    masterClass.join_url;
-
   return (
     <div className="dashboard__inner mt-4 card-background">
       <div className="dashboard__nav__title">
-        <h6>Join an IELTS Masterclass</h6>
+        <h6>Masterclass</h6>
       </div>
       <hr />
-      {isDataAvailable ? (
-        <>
-          <div>{masterClass.meeting_title}</div>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>{moment(masterClass.start_time).format("lll")}</div>
-            <Link
-              to={masterClass.join_url}
-              target="_blank"
-              className="text-decoration-none"
-            >
-              <div>Join now {">>"}</div>
-            </Link>
-          </div>
-        </>
+      {masterClass.length > 0 ? (
+        <div className="dashboard__table table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Date & Time</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody>
+              {masterClass.map(
+                ({ id, meeting_title, start_time, join_url }, index) => (
+                  <tr
+                    key={id}
+                    className={index % 2 === 0 ? "" : "dashboard__table__row"}
+                  >
+                    <td>{meeting_title}</td>
+                    <td>{moment(start_time).format("lll")}</td>
+                    <td>
+                      <button
+                        className="take-test"
+                        onClick={() => window.open(join_url)}
+                      >
+                        Join Now
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )}
+            </tbody>
+          </table>
+        </div>
       ) : (
-        <div className="text-center text-danger">No Master Class Available !!</div>
+        <h5 className="text-center text-danger">No MasterClass Available !!</h5>
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
 import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
@@ -55,8 +55,8 @@ const UnPaidDashboard = () => {
   const navigate = useNavigate();
 
   const [webinar, setWebinar] = useState([]);
-  const [demoClass, setDemoClass] = useState({});
-  const [masterClass, setMasterClass] = useState({});
+  const [demoClass, setDemoClass] = useState([]);
+  const [masterClass, setMasterClass] = useState([]);
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const authData = useSelector((state) => state.authStore);
@@ -80,19 +80,19 @@ const UnPaidDashboard = () => {
           setMasterClass(
             response?.data?.filter(
               ({ liveclasstype }) => liveclasstype === "Master"
-            )[0]
+            )
           );
           setWebinar(
             response?.data?.filter(
               ({ liveclasstype, meeting_title }) =>
                 liveclasstype === "Webinar" &&
                 meeting_title.startsWith("Introduction")
-            )[0]
+            )
           );
           setDemoClass(
             response?.data?.filter(
               ({ liveclasstype }) => liveclasstype === "Demo"
-            )[0]
+            )
           );
         } else {
           console.log("error");
@@ -110,7 +110,7 @@ const UnPaidDashboard = () => {
           <div className="container">
             <div className="row">
               <DSSidebar />
-              <div className="col-xl-8 col-lg-8">
+              <div className="col-xl-7 col-lg-7">
                 <div className="blog__details__content__wraper">
                   <div className="course__details__heading">
                     <h3>Welcome, {userData?.username}</h3>
@@ -193,7 +193,12 @@ const UnPaidDashboard = () => {
                                 height={35}
                                 width={35}
                               />
-                              <h2 className="mt-2">Free Mini Test</h2>
+                              <Link
+                                to="/mockTest"
+                                className="text-decoration-none"
+                              >
+                                <h2 className="mt-2">Free Mini Test</h2>
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -202,7 +207,7 @@ const UnPaidDashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-xl-4 col-lg-4">
+              <div className="col-xl-5 col-lg-5">
                 <div className="dashboard__inner card-background">
                   <div className="dashboard__nav__title">
                     <h6>Our Instructors</h6>

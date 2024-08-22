@@ -32,12 +32,12 @@ const SDashboard = () => {
   const [batchData, setBatchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [courseList, setCourseList] = useState([]);
+  const [expiryDate, setExpiryDate] = useState([]);
   const [upcomingSS, setUpcomingSS] = useState([]);
   const [upcommingClass, setUpcommingClass] = useState([]);
   const batchIds = JSON.parse(localStorage.getItem("BatchIds")) || [];
-  const courseIds = JSON?.parse(localStorage.getItem("courses"))?.map(
-    (item) => item?.id
-  ) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
   const cardList = [
@@ -90,15 +90,21 @@ const SDashboard = () => {
     batchIds?.includes(item?.id)
   );
 
-  const courses = courseList.filter((item) =>
-    courseIds?.includes(item?.id)
-  );
+  const courses = courseList.filter((item) => courseIds?.includes(item?.id));
 
   const getDaysRemaining = (endDate) => {
     const end = moment(endDate);
     const today = moment();
     return end.diff(today, "days");
   };
+
+  const coursesWithExpiry = courses.map((course) => {
+    const expiry = expiryDate.find((exp) => exp.course.id === course.id);
+    return {
+      ...course,
+      expiryDate: expiry ? expiry.expiry_date : null,
+    };
+  });
 
   const fetchData = async (url, dataes) => {
     try {
@@ -279,6 +285,34 @@ const SDashboard = () => {
     fetchBatchData();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/student/enrollment/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setExpiryDate(response.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
+
   if (isLoading) {
     return <Loading text="Loading..." color="primary" />;
   }
@@ -389,10 +423,10 @@ const SDashboard = () => {
                     <div className="col-xl-4 col-lg-4">
                       <h5>
                         Course :
-                        {courses?.length > 0 &&
-                          courses.map((course) => {
+                        {coursesWithExpiry?.length > 0 &&
+                          coursesWithExpiry.map((course) => {
                             const daysRemaining = getDaysRemaining(
-                              course.EnrollmentEndDate
+                              course.expiryDate
                             );
                             return (
                               <span key={course?.id} className="text-danger">

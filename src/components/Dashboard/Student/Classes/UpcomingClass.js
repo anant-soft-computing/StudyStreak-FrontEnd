@@ -17,11 +17,15 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
 
   // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
-    const { join_url, start_time, id } = params.data;
-    const now = moment(currentTime, "hh:mm A");
-    const classStartTime = moment(start_time, "hh:mm A");
-    const timeDifference = classStartTime.diff(now, "minutes");
-    const isButtonEnabled = timeDifference <= 5 && timeDifference >= 0;
+    const { join_url, start_time, end_time, id } = params.data;
+    const now = currentTime;
+    const classStartTime = moment(start_time);
+    const classEndTime = moment(end_time);
+
+    const isButtonEnabled = now.isBetween(
+      classStartTime.subtract(5, "minutes"),
+      classEndTime.add(5, "minutes")
+    );
 
     return (
       <button
@@ -78,10 +82,38 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     },
     { headerName: "Meeting Title", field: "meeting_title" },
     { headerName: "Description", field: "meeting_description" },
-    { headerName: "Start Date", field: "start_date" },
-    { headerName: "End Date", field: "end_date" },
-    { headerName: "Batch Name", field: "batch_name" },
-    { headerName: "Course Name", field: "course_name" },
+    {
+      headerName: "Start Date",
+      field: "start_date",
+      cellRenderer: (params) => moment(params.data.start_time).format("lll"),
+    },
+    {
+      headerName: "End Date",
+      field: "end_date",
+      cellRenderer: (params) => moment(params.data.end_time).format("lll"),
+    },
+    {
+      headerName: "Batch Name",
+      field: "batch_name",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_batch
+            ?.map((item) => item.batch_name)
+            .join(", ") || "-"}
+        </div>
+      ),
+    },
+    {
+      headerName: "Course Name",
+      field: "course_name",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_course
+            ?.map((item) => item.Course_Title)
+            .join(", ") || "-"}
+        </div>
+      ),
+    },
     {
       headerName: "Status",
       field: "status",
@@ -89,35 +121,10 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     },
   ];
 
-  const rowData = classes.map(
-    ({
-      id,
-      start_time,
-      end_time,
-      meeting_title,
-      meeting_description,
-      join_url,
-      select_batch,
-      select_course,
-    }) => ({
-      id,
-      start_date: moment(start_time).format("lll"),
-      end_date: moment(end_time).format("lll"),
-      meeting_title,
-      batch_name:
-        select_batch?.map((item) => item.batch_name).join(", ") || "-",
-      course_name:
-        select_course?.map((item) => item.Course_Title).join(", ") || "-",
-      meeting_description,
-      join_url,
-      start_time: moment(start_time).format("hh:mm A"),
-    })
-  );
-
   return isLoading ? (
     <Loading text="Loading..." color="primary" />
   ) : classes.length > 0 ? (
-    <Table rowData={rowData} columnDefs={columns} />
+    <Table rowData={classes} columnDefs={columns} />
   ) : (
     <h5 className="text-center text-danger">{message}</h5>
   );

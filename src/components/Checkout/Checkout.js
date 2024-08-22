@@ -36,6 +36,38 @@ const Checkout = () => {
     });
   }
 
+  const handlePackgaeAdd = async () => {
+    const data = {
+      package: packageId,
+    };
+    try {
+      const response = await ajaxCall(
+        `/student/enrollment/`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("success");
+      } else if (response.status === 400 && response.isError) {
+        console.log("error");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error");
+    }
+  };
+
   const handleEnroll = async () => {
     if (!authData.loggedIn) {
       navigate("/login");
@@ -63,8 +95,7 @@ const Checkout = () => {
       );
       if (response.status === 201) {
         toast.success(response?.data?.detail);
-      } else if (response.status === 200) {
-        toast.error(response?.data?.msg);
+        handlePackgaeAdd();
       } else if (response.status === 400 && response.isError) {
         toast.error(response?.data?.detail);
       } else {
@@ -103,8 +134,7 @@ const Checkout = () => {
       );
       if (response.status === 201) {
         toast.success(response?.data?.detail);
-      } else if (response.status === 200) {
-        toast.error(response?.data?.msg);
+        handlePackgaeAdd();
       } else if (response.status === 400 && response.isError) {
         toast.error(response?.data?.detail);
       } else {

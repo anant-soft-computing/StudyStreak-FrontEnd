@@ -5,6 +5,7 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 import dashBoard from "../../../../img/icon/dashboard.svg";
 import profile from "../../../../img/icon/profile.svg";
 import myCourse from "../../../../img/icon/myCourse.svg";
+import paperTest from "../../../../img/icon/paperTest.svg"
 import assignment from "../../../../img/icon/assignment.svg";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
@@ -128,6 +129,11 @@ const DSLeftDrawer = () => {
       name: "My Course",
       icon: <img src={myCourse} alt="My Course" />,
       link: "/studentMyCourse",
+    },
+    {
+      name: "Paper Test",
+      icon: <img src={paperTest} alt="Paper Test" />,
+      link: "/paperTest",
     },
     {
       name: "Mini Test",

@@ -6,6 +6,10 @@ import { toast } from "react-toastify";
 import Loading from "../../../UI/Loading";
 
 const initialPaperTestData = {
+  student: [],
+  studentId: [],
+  batch: [],
+  batchId: [],
   course: [],
   courseId: [],
   documents: [""],
@@ -29,10 +33,37 @@ const CreatePaperTest = ({ setActiveTab }) => {
     initialPaperTestData
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [activeButton, setActiveButton] = useState("student");
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
     dispatchCreatePT({ type: "reset" });
+  };
+
+  const handleButtonClick = (buttonType) => {
+    setActiveButton(buttonType);
+    switch (buttonType) {
+      case "student":
+        dispatchCreatePT({ type: "course", value: [] });
+        dispatchCreatePT({ type: "batch", value: [] });
+        dispatchCreatePT({ type: "courseId", value: [] });
+        dispatchCreatePT({ type: "batchId", value: [] });
+        break;
+      case "course":
+        dispatchCreatePT({ type: "student", value: [] });
+        dispatchCreatePT({ type: "batch", value: [] });
+        dispatchCreatePT({ type: "studentId", value: [] });
+        dispatchCreatePT({ type: "batchId", value: [] });
+        break;
+      case "batch":
+        dispatchCreatePT({ type: "student", value: [] });
+        dispatchCreatePT({ type: "course", value: [] });
+        dispatchCreatePT({ type: "studentId", value: [] });
+        dispatchCreatePT({ type: "courseId", value: [] });
+        break;
+      default:
+        break;
+    }
   };
 
   const addContent = () => {
@@ -103,8 +134,14 @@ const CreatePaperTest = ({ setActiveTab }) => {
     try {
       const formData = new FormData();
 
+      createPTData.studentId.forEach((id) => {
+        formData.append(`student`, id);
+      });
       createPTData.courseId.forEach((id) => {
         formData.append(`course`, id);
+      });
+      createPTData.batchId.forEach((id) => {
+        formData.append(`batch`, id);
       });
 
       createPTData.documents.forEach((document, index) => {
@@ -163,112 +200,188 @@ const CreatePaperTest = ({ setActiveTab }) => {
   };
 
   return (
-    <div className="row">
-      <div className="col-xl-12">
-        <div className="row">
-          <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Course</span>
-            </div>
-            <div className="dashboard__selector">
-              <SelectionBox
-                value={createPTData?.course}
-                onSelect={addedSelectVal.bind(
-                  null,
-                  "course",
-                  "courseId",
-                  false
-                )}
-                url="/courselistforpackage/"
-                name="Course_Title"
-                objKey={["Course_Title"]}
-                isSearch={true}
-                multiple={true}
-              />
-            </div>
-          </div>
-        </div>
-        {createPTData.documents.map((_, index) => (
-          <div className="row mt-3" key={index}>
-            <div className="col-xl-6">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label htmlFor={`documents-${index}`}>Document</label>
-                  <div className="d-flex align-items-center">
-                    <input
-                      id={`documents-${index}`}
-                      type="file"
-                      className="form-control"
-                      onChange={(e) => {
-                        const file = e.target.files[0];
-                        const updatedDocuments = [...createPTData.documents];
-                        updatedDocuments[index] = file;
-                        dispatchCreatePT({
-                          type: "documents",
-                          value: updatedDocuments,
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-6">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label htmlFor={`descriptions-${index}`}>Description</label>
-                  <div className="d-flex align-items-center">
-                    <input
-                      id={`descriptions-${index}`}
-                      type="text"
-                      className="form-control"
-                      placeholder="Paper Test - Add your description here"
-                      value={createPTData.descriptions[index]}
-                      onChange={(e) =>
-                        handleDescriptionChange(index, e.target.value)
-                      }
-                    />
-                    {createPTData.documents.length > 1 && (
-                      <button
-                        className="dashboard__small__btn__2 flash-card__remove__btn"
-                        onClick={() => removeContent(index)}
-                      >
-                        <i className="icofont-ui-delete" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
+    <>
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <button
+          className={`default__button ${
+            activeButton === "student" ? "active bg-success" : ""
+          }`}
+          onClick={() => handleButtonClick("student")}
+        >
+          Student
+        </button>
+        <button
+          className={`default__button ${
+            activeButton === "course" ? "active bg-success" : ""
+          }`}
+          onClick={() => handleButtonClick("course")}
+        >
+          Course
+        </button>
+        <button
+          className={`default__button ${
+            activeButton === "batch" ? "active bg-success" : ""
+          }`}
+          onClick={() => handleButtonClick("batch")}
+        >
+          Batch
+        </button>
+      </div>
+      <div className="row">
         <div className="col-xl-12">
-          <button className="dashboard__small__btn__2" onClick={addContent}>
-            + Description & Document
-          </button>
-        </div>
+          <div className="row">
+            {activeButton === "student" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Student</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createPTData?.student}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "student",
+                      "studentId",
+                      false
+                    )}
+                    url="/student-list/"
+                    name="full_name"
+                    objKey={["full_name"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            {activeButton === "course" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Course</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createPTData?.course}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "course",
+                      "courseId",
+                      false
+                    )}
+                    url="/courselistforpackage/"
+                    name="Course_Title"
+                    objKey={["Course_Title"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+            {activeButton === "batch" && (
+              <div className="col-xl-6">
+                <div className="dashboard__select__heading">
+                  <span>Batch</span>
+                </div>
+                <div className="dashboard__selector">
+                  <SelectionBox
+                    value={createPTData?.batch}
+                    onSelect={addedSelectVal.bind(
+                      null,
+                      "batch",
+                      "batchId",
+                      false
+                    )}
+                    url="/batchview/"
+                    name="batch_name"
+                    objKey={["batch_name"]}
+                    isSearch={true}
+                    multiple={true}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          {createPTData.documents.map((_, index) => (
+            <div className="row mt-3" key={index}>
+              <div className="col-xl-6">
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label htmlFor={`documents-${index}`}>Document</label>
+                    <div className="d-flex align-items-center">
+                      <input
+                        id={`documents-${index}`}
+                        type="file"
+                        className="form-control"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          const updatedDocuments = [...createPTData.documents];
+                          updatedDocuments[index] = file;
+                          dispatchCreatePT({
+                            type: "documents",
+                            value: updatedDocuments,
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-xl-6">
+                <div className="dashboard__form__wraper">
+                  <div className="dashboard__form__input">
+                    <label htmlFor={`descriptions-${index}`}>Description</label>
+                    <div className="d-flex align-items-center">
+                      <input
+                        id={`descriptions-${index}`}
+                        type="text"
+                        className="form-control"
+                        placeholder="Paper Test - Add your description here"
+                        value={createPTData.descriptions[index]}
+                        onChange={(e) =>
+                          handleDescriptionChange(index, e.target.value)
+                        }
+                      />
+                      {createPTData.documents.length > 1 && (
+                        <button
+                          className="dashboard__small__btn__2 flash-card__remove__btn"
+                          onClick={() => removeContent(index)}
+                        >
+                          <i className="icofont-ui-delete" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
 
-        <div className="col-xl-12 text-center">
-          <div className="dashboard__form__button text-center mt-4">
-            {formStatus.isError && (
-              <div className="text-danger mb-2">{formStatus.errMsg}</div>
-            )}
-            {formStatus.isSubmitting ? (
-              <Loading color="primary" text="Creating Paper Test..." />
-            ) : (
-              <button
-                className="default__button"
-                onClick={createPT}
-                disabled={formStatus.isSubmitting}
-              >
-                Create Paper Test
-              </button>
-            )}
+          <div className="col-xl-12">
+            <button className="dashboard__small__btn__2" onClick={addContent}>
+              + Description & Document
+            </button>
+          </div>
+
+          <div className="col-xl-12 text-center">
+            <div className="dashboard__form__button text-center mt-4">
+              {formStatus.isError && (
+                <div className="text-danger mb-2">{formStatus.errMsg}</div>
+              )}
+              {formStatus.isSubmitting ? (
+                <Loading color="primary" text="Creating Paper Test..." />
+              ) : (
+                <button
+                  className="default__button"
+                  onClick={createPT}
+                  disabled={formStatus.isSubmitting}
+                >
+                  Create Paper Test
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

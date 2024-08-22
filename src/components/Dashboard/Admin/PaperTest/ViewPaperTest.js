@@ -4,7 +4,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
 
-const Download= ({ url }) =>
+const Download = ({ url }) =>
   url !== "-" ? (
     <button className="take-test" onClick={() => window.open(url)}>
       <i className="icofont-download" /> Download
@@ -15,19 +15,15 @@ const Download= ({ url }) =>
 
 const columns = [
   { headerName: "No.", field: "no", width: 90 },
-  {
-    headerName: "Course",
-    field: "course",
-    resizable: true,
-    filter: true,
-    width: 480,
-  },
+  { headerName: "Student", field: "student", resizable: true, filter: true },
+  { headerName: "Course", field: "course", resizable: true, filter: true },
+  { headerName: "Batch", field: "batch", resizable: true, filter: true },
   {
     headerName: "Description",
     field: "description",
     resizable: true,
     filter: true,
-    width: 480,
+    width: 380,
   },
   {
     headerName: "Documents",
@@ -46,7 +42,20 @@ const formatPaperTestData = (responseData) => {
     );
     return (
       filteredDocuments?.map((document, docIndex) => ({
-        no: `${index + 1}. (${docIndex + 1}).`,
+        no: docIndex + 1,
+        batch:
+          item.batch?.length > 0
+            ? item.batch.map((batch) => batch.batch_name).join(", ")
+            : "-",
+        student:
+          item.student?.length > 0
+            ? item.student
+                .map(
+                  (student) =>
+                    `${student.user.first_name} ${student.user.last_name}`
+                )
+                .join(", ")
+            : "-",
         course:
           item?.course?.length > 0
             ? item?.course?.map((course) => course.Course_Title).join(", ")

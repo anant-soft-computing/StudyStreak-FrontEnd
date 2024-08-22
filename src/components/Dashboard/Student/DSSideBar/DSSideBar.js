@@ -11,7 +11,7 @@ import fullLengthTest from "../../../../img/icon/notebook.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
 import resources from "../../../../img/icon/support.svg";
-import webinars from "../../../../img/icon/webinar.svg";
+import paperTest from "../../../../img/icon/paperTest.svg"
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
@@ -51,6 +51,11 @@ const DSSidebar = () => {
       name: "My Course",
       icon: <img src={myCourse} alt="My Course" />,
       link: "/studentMyCourse",
+    },
+    {
+      name: "Paper Test",
+      icon: <img src={paperTest} alt="My Course" />,
+      link: "/paperTest",
     },
     {
       name: "Mini Test",

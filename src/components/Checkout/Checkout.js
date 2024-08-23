@@ -94,6 +94,7 @@ const Checkout = () => {
         8000
       );
       if (response.status === 201) {
+        navigate("/studentDashboard");
         toast.success(response?.data?.detail);
         handlePackgaeAdd();
       } else if (response.status === 400 && response.isError) {
@@ -133,6 +134,7 @@ const Checkout = () => {
         8000
       );
       if (response.status === 201) {
+        navigate("/studentDashboard");
         toast.success(response?.data?.detail);
         handlePackgaeAdd();
       } else if (response.status === 400 && response.isError) {
@@ -227,7 +229,6 @@ const Checkout = () => {
         if (result?.status === 200) {
           toast.success("Payment Successful");
           courseType === "TAUGHT" ? handleEnrollNow() : handleEnroll();
-          navigate("/studentDashboard");
         }
       },
       prefill: {

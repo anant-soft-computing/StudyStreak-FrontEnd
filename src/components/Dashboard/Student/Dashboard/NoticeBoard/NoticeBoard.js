@@ -12,7 +12,7 @@ const NoticeBoard = () => {
   );
   const studentId = JSON?.parse(localStorage.getItem("StudentID"));
   
-  const activeNotice = noticeData.filter((item) =>
+  const activeNotice = noticeData?.filter((item) =>
     moment(item.expiry_date, "YYYY-MM-DD").isSameOrAfter(currentDate)
   );
 
@@ -79,7 +79,7 @@ const NoticeBoard = () => {
   };
 
   return (
-    noticeData.length > 0 && (
+    activeNotice?.length > 0 && (
       <Box overflow="auto" p={1}>
         <Box
           sx={{

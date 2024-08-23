@@ -44,17 +44,6 @@ const DetailCard = ({ courseDetail, batches }) => {
         <li>
           Max Enroll :<span>{courseDetail?.max_enrollments || 0}</span>
         </li>
-        <li>
-          Total Duration :
-          <span className="sb_content">
-            {courseDetail?.lessons.reduce(
-              (totalDuration, lesson) =>
-                totalDuration + parseInt(lesson?.Lesson_Duration),
-              0
-            )}{" "}
-            Min
-          </span>
-        </li>
         {batches.map(({ batch_start_timing }) => {
           return (
             <li>

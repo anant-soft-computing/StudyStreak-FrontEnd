@@ -1,47 +1,140 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import moment from "moment";
-import DashboardContent from "./DashboardContent";
-import { useLocation } from "react-router-dom";
+import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
+import practice from "../../../../img/icon/practiceTest.svg";
+import fullLengthTest from "../../../../img/icon/notebook.svg";
+import regularClass from "../../../../img/icon/liveClass.svg";
+import counselling from "../../../../img/icon/users.svg";
+import progress from "../../../../img/icon/progress.svg";
+import webinar from "../../../../img/icon/webinar.svg";
+import support from "../../../../img/icon/support.svg";
+import recordedClasses from "../../../../img/icon/gamification.svg";
+import Loading from "../../../UI/Loading";
+import UpcomingLiveClass from "./UpCommingLiveClass/UpCommingLiveClass";
+import LeaderBoard from "./LeaderBoard/LeaderBoard";
+import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import ScoreCard from "./ScoreCard/ScoreCard";
 import DSSidebar from "../DSSideBar/DSSideBar";
+import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
+import NextLesson from "./NextLesson/NextLesson";
 
 const Dashboard = () => {
+  const [count, setCount] = useState({
+    batch_package_count: 0,
+    practice_test_count: 0,
+    full_length_test_count: 0,
+  });
+  const [givenPTCount, setGivenPTCount] = useState(0);
+  const [givenFLTCount, setGivenFLTCount] = useState(0);
+  const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
-  const { solvingClassBook } = useLocation()?.state || {};
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
+  const [isLoading, setIsLoading] = useState(true);
+  const [courseList, setCourseList] = useState([]);
+  const [expiryDate, setExpiryDate] = useState([]);
+  const batchIds = JSON.parse(localStorage.getItem("BatchIds")) || [];
+  const courseIds =
+    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
+  const userData = JSON.parse(localStorage.getItem("loginInfo"));
+
+  const cardList = [
+    {
+      name: "Book Speaking Slot",
+      icon: bookSpeakingSlot,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Speaking Practice" },
+    },
+    {
+      name: "Practice Test",
+      icon: practice,
+      link: "/practiceTest",
+      state: { count: count?.practice_test_count },
+    },
+    {
+      name: "Full Length Test",
+      icon: fullLengthTest,
+      link: "/fullLengthTest",
+      state: { count: count?.full_length_test_count },
+    },
+    {
+      name: "Counselling",
+      icon: counselling,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Counselling" },
+    },
+    {
+      name: "Regular Classes",
+      icon: regularClass,
+      link: "/studentLiveClasses",
+    },
+    {
+      name: "Tutor Support",
+      icon: counselling,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Tutor Support" },
+    },
+    {
+      name: "Webinar",
+      icon: webinar,
+      link: "/studentLiveClasses",
+      state: { activeTab: "Webinar" },
+    },
+    { name: "Progress", icon: progress },
+    { name: "Resources", icon: support, link: "/resources" },
+  ];
 
   const studentBatch = batchData?.filter((item) =>
     batchIds?.includes(item?.id)
   );
 
-  const joinNow = (url) => {
-    window.open(url, "__blank");
+  const courses = courseList.filter((item) => courseIds?.includes(item?.id));
+
+  const getDaysRemaining = (endDate) => {
+    const end = moment(endDate);
+    const today = moment();
+    return end.diff(today, "days");
   };
 
-  const isWithin5Minutes = (startTime) => {
-    const currentTime = moment();
-    const classStartTime = moment(startTime);
-    const difference = classStartTime.diff(currentTime, "milliseconds");
-    return difference >= 0 && difference <= 5 * 60 * 1000;
-  };
-
-  const latestLiveClass = solvingClassBook?.sort((a, b) => {
-    const dateA = moment(a.start_time);
-    const dateB = moment(b.start_time);
-
-    const monthComparison = dateB.month() - dateA.month();
-    if (monthComparison !== 0) {
-      return monthComparison;
-    }
-
-    return dateB.date() - dateA.date();
+  const coursesWithExpiry = courses.map((course) => {
+    const expiry = expiryDate.find((exp) => exp.course.id === course.id);
+    return {
+      ...course,
+      expiryDate: expiry ? expiry.expiry_date : null,
+    };
   });
+
+  const fetchData = async (url, dataes) => {
+    try {
+      const response = await ajaxCall(
+        url,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response?.status === 200) {
+        dataes(response?.data);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/batchview/`,
+          `/student-stats/`,
           {
             headers: {
               Accept: "application/json",
@@ -54,9 +147,9 @@ const Dashboard = () => {
           },
           8000
         );
-
         if (response?.status === 200) {
-          setBatchData(response?.data);
+          setGivenPTCount(response?.data?.student_pt?.length);
+          setGivenFLTCount(response?.data?.student_flt?.length);
         } else {
           console.log("error");
         }
@@ -66,20 +159,84 @@ const Dashboard = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    const fetchAllData = async () => {
+      setIsLoading(true);
+      await Promise.all([
+        fetchData("/batchview/", setBatchData),
+        fetchData("/courselistview/", setCourseList),
+        fetchData("/userwisepackagewithcourseid/", (data) => {
+          const studentPackage = data?.student_packages?.[0];
+          const packageDetails = studentPackage?.package;
+          setCount({
+            batch_package_count: data?.batch_package_count,
+            practice_test_count:
+              packageDetails?.practice_test_count === -1
+                ? packageDetails?.practice_test_count
+                : packageDetails?.practice_test_count - givenPTCount,
+            full_length_test_count:
+              packageDetails?.full_length_test_count === -1
+                ? packageDetails?.full_length_test_count
+                : packageDetails?.full_length_test_count - givenFLTCount,
+          });
+          setStudentID(data?.student_packages[0]?.student_id);
+        }),
+      ]);
+      setIsLoading(false);
+    };
+
+    fetchAllData();
+  }, [givenFLTCount, givenPTCount]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/student/enrollment/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setExpiryDate(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  if (isLoading) {
+    return <Loading text="Loading..." color="primary" />;
+  }
+
   return (
-    <div className='body__wrapper'>
-      <div className='main_wrapper overflow-hidden'>
-        <div className='dashboardarea sp_bottom_100'>
-          <div className='dashboard'>
-            <div className='container-fluid full__width__padding'>
-              <div className='row'>
-                <DSSidebar />
-                <div className='col-xl-12 col-lg-12 col-md-12'>
-                  <div className='dashboard__content__wraper common-background-color-across-app'>
-                    <div className='dashboard__section__title'>
-                      <h4>Dashboard</h4>
-                      <div>
+    <>
+      {count?.batch_package_count !== 0 ? (
+        <div className="body__wrapper">
+          <div className="main_wrapper overflow-hidden">
+            <div className="dashboardarea sp_bottom_100">
+              <div className="dashboard">
+                <div className="container-fluid full__width__padding">
+                  <div className="row">
+                    <DSSidebar />
+                    <div className="col-xl-8 col-lg-8">
+                      <div className="blog__details__content__wraper">
+                        <div className="course__details__heading">
+                          <h3>Welcome, {userData?.username}</h3>
+                        </div>
                         <h5>
+                          Batch :{" "}
                           {studentBatch.map((batch) => (
                             <span key={batch.id}>
                               {batch.batch_name} :{" "}
@@ -91,84 +248,113 @@ const Dashboard = () => {
                             </span>
                           ))}
                         </h5>
-                      </div>
-                    </div>
-                    <div className='row'>
-                      <div className='col-xl-4 col-lg-6 col-md-12 col-12'>
-                        <div className='dashboard__inner sticky-top mt-4 global-neomorphism-card-styling'>
-                          <div className='dashboard__nav__title'>
-                            <h6 className='mb-2'>Upcoming Live Class</h6>
+                        <div className="online__course__wrap mt-0">
+                          <div className="row instructor__slider__active row__custom__class">
+                            <ScoreCard />
                           </div>
-                          <hr />
-                          <ul className='ps-0 d-flex justify-content-between'>
-                            {latestLiveClass?.[0]?.start_time && (
-                              <li>
-                                <i className='icofont-calendar'></i>{" "}
-                                {moment(
-                                  latestLiveClass?.[0]?.start_time
-                                ).format("MMM DD, YYYY")}
-                              </li>
-                            )}
-                            {latestLiveClass?.[0]?.start_time &&
-                              latestLiveClass?.[0]?.end_time && (
-                                <li>
-                                  <i className='icofont-clock-time'></i>{" "}
-                                  {moment(
-                                    latestLiveClass[0]?.start_time
-                                  ).format("hh:mm A")}
-                                  -
-                                  {moment(
-                                    latestLiveClass?.[0]?.end_time
-                                  ).format("hh:mm A")}
-                                </li>
-                              )}
-                          </ul>
-                          {latestLiveClass?.[0]?.meeting_title && (
-                            <div className='gridarea__heading'>
-                              <h5>{latestLiveClass?.[0]?.meeting_title}</h5>
-                            </div>
-                          )}
-                          {latestLiveClass?.[0]?.start_time && (
-                            <div className='zoom__meeting__id'>
-                              <p>
-                                Starting Time :{" "}
-                                <span className='start__time'>
-                                  {moment(
-                                    latestLiveClass?.[0]?.start_time
-                                  ).format("hh:mm A")}
-                                </span>
-                              </p>
-                            </div>
-                          )}
-                          {latestLiveClass?.[0]?.join_url && (
-                            <div className='d-flex justify-content-center'>
-                              <button
-                                className='default__button mb-2'
-                                onClick={() =>
-                                  joinNow(latestLiveClass?.[0]?.join_url)
-                                }
-                                disabled={
-                                  !isWithin5Minutes(
-                                    latestLiveClass?.[0]?.start_time
-                                  )
-                                }
+                        </div>
+                        <div className="row">
+                          {cardList.map(
+                            ({ name, icon, link, state }, index) => (
+                              <div
+                                key={index}
+                                className="col-xl-4 column__custom__class"
                               >
-                                Join Now
-                              </button>
-                            </div>
+                                <div className="gridarea__wraper text-center card-background">
+                                  <div
+                                    className="gridarea__content p-2 m-2"
+                                    style={{
+                                      cursor: link ? "pointer" : "default",
+                                    }}
+                                  >
+                                    {link ? (
+                                      <Link
+                                        to={link}
+                                        className="text-decoration-none"
+                                        state={state}
+                                      >
+                                        <div className="gridarea__heading">
+                                          <img
+                                            src={icon}
+                                            alt={name}
+                                            height={50}
+                                            width={50}
+                                          />
+                                          <h3 className="mt-2">{name}</h3>
+                                        </div>
+                                      </Link>
+                                    ) : (
+                                      <div className="gridarea__heading">
+                                        <img
+                                          src={icon}
+                                          alt={name}
+                                          height={50}
+                                          width={50}
+                                        />
+                                        <h3 className="mt-2">{name}</h3>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            )
                           )}
+                          <div className="col-xl-12 column__custom__class">
+                            <div className="gridarea__wraper text-center card-background">
+                              <div className="gridarea__content p-2 m-2">
+                                <Link
+                                  to="/studentLiveClasses"
+                                  className="text-decoration-none"
+                                  state={{ activeTab: "Recorded Class" }}
+                                >
+                                  <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                    <img
+                                      src={recordedClasses}
+                                      alt="Recorded Classes"
+                                      height={35}
+                                      width={35}
+                                    />
+                                    <h2 className="mt-2">Recorded Classes</h2>
+                                  </div>
+                                </Link>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
+                    <div className="col-xl-4 col-lg-4">
+                      <h5>
+                        Course :
+                        {coursesWithExpiry?.length > 0 &&
+                          coursesWithExpiry.map((course) => {
+                            const daysRemaining = getDaysRemaining(
+                              course.expiryDate
+                            );
+                            return (
+                              <span key={course?.id} className="text-danger">
+                                {" "}
+                                {course.Course_Title} : {daysRemaining} days
+                                Left |
+                              </span>
+                            );
+                          })}
+                      </h5>
+                      <LeaderBoard studentID={studentID} />
+                      <UpcomingLiveClass />
+                      <NextLesson />
+                      <SpeakingSlots />
+                    </div>
                   </div>
-                  <DashboardContent batchData={batchData} />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <UnPaidDashboard />
+      )}
+    </>
   );
 };
 

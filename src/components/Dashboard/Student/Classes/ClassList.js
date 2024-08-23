@@ -118,14 +118,29 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
   };
 
   const handleBook = (params) => {
-    // Class Start Date is Greater than Current Date than it's worked
-    const { id, isPastDate } = params.data;
+    const { id, start_time, end_time } = params.data;
+    const startDate = moment(start_time).startOf("day"); // Start Of start_time Day
+    const endDate = moment(end_time).endOf("day"); // End Of end_time Day
+    const currentDate = moment().startOf("day"); // Current Date Without Time
+    const previousDay = moment(start_time).subtract(1, "days").startOf("day"); // 1 Day Before start_time
+
+    let isWithinRange;
+
+    // Check If start_time and end_time Are On The Same Day
+    if (startDate.isSame(endDate, "day")) {
+      // Button Active 1 Day Before The start date
+      isWithinRange = currentDate.isSame(previousDay, "day");
+    } else {
+      // Button Active From 1 Day Before start_date Up To end_date
+      isWithinRange = currentDate.isBetween(previousDay, endDate, null, "[]");
+    }
+
     return (
       <button
         className="take-test"
         onClick={() => bookCount(id)}
-        disabled={isPastDate || (isBooking && bookingSlotId === id)}
-        style={{ opacity: isPastDate ? 0.5 : 1 }}
+        disabled={!isWithinRange || (isBooking && bookingSlotId === id)}
+        style={{ opacity: !isWithinRange ? 0.5 : 1 }}
       >
         {isBooking && bookingSlotId === id ? "Booking..." : "Book Slot"}
       </button>
@@ -138,52 +153,46 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
       cellRenderer: handleBook,
       width: 190,
     },
-    { headerName: "Meeting Title", field: "title" },
-    { headerName: "Description", field: "description" },
-    { headerName: "Start Date", field: "startDate" },
-    { headerName: "End Date", field: "endDate" },
-    { headerName: "Batch Name", field: "batchName" },
-    { headerName: "Course Name", field: "courseName" },
+    { headerName: "Meeting Title", field: "meeting_title" },
+    { headerName: "Description", field: "meeting_description" },
+    {
+      headerName: "Start Date",
+      field: "start_time",
+      cellRenderer: (params) => moment(params.value).format("lll"),
+    },
+    {
+      headerName: "End Date",
+      field: "end_time",
+      cellRenderer: (params) => moment(params.value).format("lll"),
+    },
+    {
+      headerName: "Batch Name",
+      field: "select_batch",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_batch
+            ?.map((item) => item.batch_name)
+            .join(", ") || "-"}
+        </div>
+      ),
+    },
+    {
+      headerName: "Course Name",
+      field: "select_course",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_course
+            ?.map((item) => item.Course_Title)
+            .join(", ") || "-"}
+        </div>
+      ),
+    },
   ];
-
-  const rowData = classes.map(
-    ({
-      id,
-      start_time,
-      end_time,
-      meeting_title,
-      meeting_description,
-      select_batch,
-      select_course,
-    }) => {
-      const start_Date = new Date(start_time);
-      const startDate = moment(start_time).format("lll");
-      const endDate = moment(end_time).format("lll");
-      const title = meeting_title;
-      const batchName = select_batch?.map((batch) => batch.batch_name).join(",") || "-";
-      const courseName = select_course?.map((course) => course.Course_Title).join(",") || "-";
-      const description = meeting_description;
-      const startingTime = moment(start_time).format("hh:mm A");
-      const isPastDate = start_Date < new Date();
-
-      return {
-        id,
-        startDate,
-        endDate,
-        title,
-        batchName,
-        courseName,
-        description,
-        startingTime,
-        isPastDate,
-      };
-    }
-  );
 
   return isLoading ? (
     <Loading text="Loading..." color="primary" />
   ) : classes.length > 0 ? (
-    <Table rowData={rowData} columnDefs={columns} />
+    <Table rowData={classes} columnDefs={columns} />
   ) : (
     <h5 className="text-center text-danger">{message}</h5>
   );

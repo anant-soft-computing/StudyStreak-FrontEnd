@@ -1,27 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const UpcomingLiveClass = ({ upcommingClass }) => {
-  const getUpcomingMeeting = (meetings) => {
+const UpcomingLiveClass = () => {
+  const [upcomingClass, setUpcomingClass] = useState({});
+  const hasUpcomingClass = Object.keys(upcomingClass).length > 0;
+
+  useEffect(() => {
+    const fetchUpcomingClassData = async () => {
+      try {
+        const response = await ajaxCall(
+          `/student/upcoming-class/?class_type=regular`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setUpcomingClass(response?.data);
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    };
+    fetchUpcomingClassData();
+  }, []);
+
+  const displayDate = () => {
     const now = moment();
-    const sortedMeetings = meetings?.sort(
-      (a, b) => moment(a.start_time) - moment(b.start_time)
-    );
-    const upcomingMeeting =
-      sortedMeetings?.find(
-        (meeting) =>
-          moment(meeting.start_time).isSameOrBefore(now) &&
-          moment(meeting.end_time).isAfter(now)
-      ) ||
-      sortedMeetings?.find((meeting) =>
-        moment(meeting.start_time).isAfter(now)
-      ) ||
-      null;
-    return upcomingMeeting;
+    if (
+      moment(upcomingClass?.start_time).isSameOrBefore(now) &&
+      moment(upcomingClass?.end_time).isAfter(now)
+    ) {
+      // Combine Today's Date With The Meeting's Start Time
+      return moment(now)
+        .set({
+          hour: moment(upcomingClass.start_time).hour(),
+          minute: moment(upcomingClass.start_time).minute(),
+          second: 0,
+        })
+        .format("llll");
+    }
+    return moment(upcomingClass?.start_time).format("llll");
   };
-
-  const upcomingMeeting = getUpcomingMeeting(upcommingClass);
 
   return (
     <div className="dashboard__inner mt-4 card-background">
@@ -29,13 +58,13 @@ const UpcomingLiveClass = ({ upcommingClass }) => {
         <h6>Upcoming Live Class</h6>
       </div>
       <hr />
-      {upcomingMeeting ? (
+      {hasUpcomingClass ? (
         <>
-          <div>{upcomingMeeting?.meeting_title}</div>
+          <div>{upcomingClass?.meeting_title}</div>
           <div className="d-flex justify-content-between align-items-center">
-            <div>{moment(upcomingMeeting?.start_time).format("llll")}</div>
+            <div>{displayDate()}</div>
             <Link
-              to={upcomingMeeting?.join_url}
+              to={upcomingClass?.join_url}
               target="_blank"
               className="text-decoration-none"
             >

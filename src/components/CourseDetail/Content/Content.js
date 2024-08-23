@@ -7,7 +7,7 @@ import Outcomes from "./Outcomes";
 const tabs = [
   {
     title: "Curriculum",
-    icon: "icofont-book-alt",
+    icon: "icofont-ebook",
     target: "projects__one",
     active: true,
   },

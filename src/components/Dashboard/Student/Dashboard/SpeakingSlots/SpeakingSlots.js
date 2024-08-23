@@ -1,27 +1,56 @@
 import moment from "moment";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const SpeakingSlots = ({ upcomingSS }) => {
-  const getUSS = (meetings) => {
+const SpeakingSlots = () => {
+  const [upcomingSSClass, setUpcomingSSClass] = useState({});
+  const hasUpcomingSSClass = Object.keys(upcomingSSClass).length > 0;
+
+  useEffect(() => {
+    const fetchUpcomingSSData = async () => {
+      try {
+        const response = await ajaxCall(
+          `/student/upcoming-class/?class_type=speaking-practice`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setUpcomingSSClass(response?.data);
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    };
+    fetchUpcomingSSData();
+  }, []);
+
+  const displayDate = () => {
     const now = moment();
-    const sortedMeetings = meetings?.sort(
-      (a, b) => moment(a.start_time) - moment(b.start_time)
-    );
-    const upcomingMeeting =
-      sortedMeetings?.find(
-        (meeting) =>
-          moment(meeting.start_time).isSameOrBefore(now) &&
-          moment(meeting.end_time).isAfter(now)
-      ) ||
-      sortedMeetings?.find((meeting) =>
-        moment(meeting?.start_time).isAfter(now)
-      ) ||
-      null;
-    return upcomingMeeting;
+    if (
+      moment(upcomingSSClass?.start_time).isSameOrBefore(now) &&
+      moment(upcomingSSClass?.end_time).isAfter(now)
+    ) {
+      // Combine Today's Date With The Meeting's Start Time
+      return moment(now)
+        .set({
+          hour: moment(upcomingSSClass.start_time).hour(),
+          minute: moment(upcomingSSClass.start_time).minute(),
+          second: 0,
+        })
+        .format("llll");
+    }
+    return moment(upcomingSSClass?.start_time).format("llll");
   };
-
-  const upcomingSSClass = getUSS(upcomingSS);
 
   return (
     <div className="dashboard__inner mt-4 card-background">
@@ -29,11 +58,11 @@ const SpeakingSlots = ({ upcomingSS }) => {
         <h6>Speaking Slots</h6>
       </div>
       <hr />
-      {upcomingSSClass ? (
+      {hasUpcomingSSClass ? (
         <>
           <div>{upcomingSSClass?.meeting_title}</div>
           <div className="d-flex justify-content-between align-items-center">
-            <div>{moment(upcomingSSClass?.start_time).format("llll")}</div>
+            <div>{displayDate()}</div>
             <Link
               to={"/studentLiveClasses"}
               state={{ activeTab: "Speaking Practice" }}

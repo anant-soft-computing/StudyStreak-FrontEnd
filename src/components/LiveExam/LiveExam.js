@@ -38,6 +38,8 @@ const LiveExam = () => {
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
+  console.log("-----ChatGPT API KEY----------->",process.env.REACT_APP_OPEN_AI_SECRET)
+
   useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||
@@ -105,99 +107,68 @@ const LiveExam = () => {
     })();
   }, [examId, examType]);
 
-  const examLastSubmit = async () => {
-    try {
-      const response = await ajaxCall(
-        "/test-submission/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify({
-            student: studentId,
-            exam_block: examId,
-          }),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        console.log("Lastest Exam Submitted");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  // const gamificationSubmit = async () => {
+  //   try {
+  //     const response = await ajaxCall(
+  //       "/gamification/points/",
+  //       {
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${
+  //             JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+  //           }`,
+  //         },
+  //         method: "POST",
+  //         body: JSON.stringify({
+  //           model: "Exam Block",
+  //           object_id: parseInt(examId),
+  //         }),
+  //       },
+  //       8000
+  //     );
+  //     if (response.status === 201) {
+  //       toast.success("Points Updated Successfully 🚀 !!");
+  //     } else {
+  //       console.log("error");
+  //     }
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
 
-  const gamificationSubmit = async () => {
-    try {
-      const response = await ajaxCall(
-        "/gamification/points/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify({
-            model: "Exam Block",
-            object_id: parseInt(examId),
-          }),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        toast.success("Points Updated Successfully 🚀 !!");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const examSubmit = async () => {
-    const data = {
-      student_id: studentId,
-      exam_id: parseInt(examId),
-      typetest: "Mock Test",
-    };
-    try {
-      const response = await ajaxCall(
-        "/student-mocktest-submit/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-        8000
-      );
-      if (response.status === 200) {
-        examLastSubmit();
-        gamificationSubmit();
-        toast.success("Your Exam Submitted Successfully");
-      } else {
-        toast.error("You Have All Ready Submitted This Exam");
-      }
-    } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
-    }
-  };
+  // const examSubmit = async () => {
+  //   const data = {
+  //     student_id: studentId,
+  //     exam_id: parseInt(examId),
+  //     typetest: "Mock Test",
+  //   };
+  //   try {
+  //     const response = await ajaxCall(
+  //       "/student-mocktest-submit/",
+  //       {
+  //         headers: {
+  //           Accept: "application/json",
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${
+  //             JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+  //           }`,
+  //         },
+  //         method: "POST",
+  //         body: JSON.stringify(data),
+  //       },
+  //       8000
+  //     );
+  //     if (response.status === 200) {
+  //       gamificationSubmit();
+  //       toast.success("Your Exam Submitted Successfully");
+  //     } else {
+  //       toast.error("You Have All Ready Submitted This Exam");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Some Problem Occurred. Please try again.");
+  //   }
+  // };
 
   const handleWritingAnswer = (e, next) => {
     const answer = e.target.value;
@@ -302,8 +273,8 @@ const LiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        examSubmit();
-        navigate(`/exam-answer/${examData?.id}`);
+        // examSubmit();
+        // navigate(`/exam-answer/${examData?.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -396,7 +367,7 @@ const LiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        examSubmit();
+        // examSubmit();
         navigate(`/exam-answer/${examData?.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

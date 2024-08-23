@@ -17,14 +17,14 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
 
   // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
-    const { join_url, start_time, end_time, id } = params.data;
-    const now = currentTime;
-    const classStartTime = moment(start_time);
-    const classEndTime = moment(end_time);
+    const { join_url, start_time, id } = params.data;
 
-    const isButtonEnabled = now.isBetween(
-      classStartTime.subtract(5, "minutes"),
-      classEndTime.add(5, "minutes")
+    const now = currentTime.format("HH:mm:ss");
+    const classStartTime = moment(start_time).format("HH:mm:ss");
+
+    const isButtonEnabled = moment(now, "HH:mm:ss").isBetween(
+      moment(classStartTime, "HH:mm:ss").subtract(5, "minutes"),
+      moment(classStartTime, "HH:mm:ss").add(5, "minutes")
     );
 
     return (
@@ -84,17 +84,17 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     { headerName: "Description", field: "meeting_description" },
     {
       headerName: "Start Date",
-      field: "start_date",
-      cellRenderer: (params) => moment(params.data.start_time).format("lll"),
+      field: "start_time",
+      cellRenderer: (params) => moment(params.value).format("lll"),
     },
     {
       headerName: "End Date",
-      field: "end_date",
-      cellRenderer: (params) => moment(params.data.end_time).format("lll"),
+      field: "end_time",
+      cellRenderer: (params) => moment(params.value).format("lll"),
     },
     {
       headerName: "Batch Name",
-      field: "batch_name",
+      field: "select_batch",
       cellRenderer: (params) => (
         <div>
           {params.data.select_batch
@@ -105,7 +105,7 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     },
     {
       headerName: "Course Name",
-      field: "course_name",
+      field: "select_course",
       cellRenderer: (params) => (
         <div>
           {params.data.select_course

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
 
@@ -8,6 +9,8 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   const [courseList, setCouresList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const courseIds = JSON.parse(localStorage.getItem("courses"));
+  const authData = useSelector((state) => state.authStore);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,6 +46,14 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
     })();
   }, [search, selectedCategory, selectedLevel]);
 
+  const handleClick = (courseId) => {
+    if (!authData.loggedIn) {
+      toast.error("Please Do Login To View Course Details.");
+    } else {
+      navigate(`/courseDetail/${courseId}`);
+    }
+  };
+
   return (
     <>
       {isLoading ? (
@@ -60,13 +71,12 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                     <span className="tag tag__color">Enrolled</span>
                   )}
                   <div className="gridarea__img">
-                    <Link to={`/courseDetail/${course?.id}`}>
-                      <img
-                        src={course?.Course_Thumbnail}
-                        alt={course?.Course_Title}
-                        className="course__image"
-                      />
-                    </Link>
+                    <img
+                      src={course?.Course_Thumbnail}
+                      alt={course?.Course_Title}
+                      className="course__image"
+                      onClick={() => handleClick(course?.id)}
+                    />
                   </div>
                   <div className="gridarea__content">
                     <div className="gridarea__list">
@@ -88,7 +98,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                     </div>
                     <div className="gridarea__heading">
                       <h3>
-                        <Link to={`/courseDetail/${course?.id}`}>
+                        <Link onClick={() => handleClick(course?.id)}>
                           {course?.Course_Title}
                         </Link>
                       </h3>

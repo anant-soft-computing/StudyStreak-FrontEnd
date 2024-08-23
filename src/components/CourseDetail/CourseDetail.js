@@ -70,7 +70,6 @@ const CourseDetail = () => {
             );
             sectionItem.lessons = lessons;
           });
-  
           setCourseDetail(updatedData);
         } else {
           console.log("error");
@@ -209,7 +208,7 @@ const CourseDetail = () => {
                   <Content courseDetail={courseDetail} />
                   <div className="course__list__wraper">
                     <div className="blog__details__heading__2">
-                      <h5>Why course is important ?</h5>
+                    <h4 className="sidebar__title">FAQ's</h4>
                     </div>
                     <div className="aboutarea__list__2 blog__details__list__2">
                       <ul className="ps-0">

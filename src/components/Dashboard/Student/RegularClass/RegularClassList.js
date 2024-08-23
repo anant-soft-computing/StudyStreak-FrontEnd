@@ -21,14 +21,14 @@ const RegularClassList = ({ isLoading, regularClass }) => {
 
   // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
-    const { join_url, start_time, end_time, id } = params.data;
-    const now = currentTime;
-    const classStartTime = moment(start_time);
-    const classEndTime = moment(end_time);
+    const { join_url, start_time, id } = params.data;
 
-    const isButtonEnabled = now.isBetween(
-      classStartTime.subtract(5, "minutes"),
-      classEndTime.add(5, "minutes")
+    const now = currentTime.format("HH:mm:ss");
+    const classStartTime = moment(start_time).format("HH:mm:ss");
+
+    const isButtonEnabled = moment(now, "HH:mm:ss").isBetween(
+      moment(classStartTime, "HH:mm:ss").subtract(5, "minutes"),
+      moment(classStartTime, "HH:mm:ss").add(5, "minutes")
     );
 
     return (

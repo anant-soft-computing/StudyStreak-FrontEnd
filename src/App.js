@@ -23,7 +23,7 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 //-----------------------> Student <----------------------------------------------
 
-import SDashboard from "./components/Dashboard/Student/Dashboard/SDashboard";
+import Dashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
 import SProfile from "./components/Dashboard/Student/Profile";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
@@ -120,7 +120,7 @@ const App = () => {
         <Route element={<StudentNavBarRoute isProtected={true} />}>
           <Route
             path="/studentDashboard"
-            element={<ProtectedRoute element={SDashboard} />}
+            element={<ProtectedRoute element={Dashboard} />}
           />
           <Route path="/studentProfile" element={<SProfile />} />
           <Route path="/studentMyCourse" element={<MyCourse />} />

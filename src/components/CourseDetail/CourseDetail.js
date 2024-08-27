@@ -208,7 +208,7 @@ const CourseDetail = () => {
                   <Content courseDetail={courseDetail} />
                   <div className="course__list__wraper">
                     <div className="blog__details__heading__2">
-                    <h4 className="sidebar__title">FAQ's</h4>
+                      <h4 className="sidebar__title">FAQ's</h4>
                     </div>
                     <div className="aboutarea__list__2 blog__details__list__2">
                       <ul className="ps-0">

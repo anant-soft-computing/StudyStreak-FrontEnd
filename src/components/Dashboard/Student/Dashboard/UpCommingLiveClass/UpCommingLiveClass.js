@@ -5,7 +5,10 @@ import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const UpcomingLiveClass = () => {
   const [upcomingClass, setUpcomingClass] = useState({});
-  const hasUpcomingClass = Object.keys(upcomingClass).length > 0;
+  const now = moment();
+
+  const hasUpcomingClass =
+    upcomingClass?.end_time && moment(upcomingClass.end_time).isAfter(now);
 
   useEffect(() => {
     const fetchUpcomingClassData = async () => {
@@ -35,7 +38,6 @@ const UpcomingLiveClass = () => {
   }, []);
 
   const displayDate = () => {
-    const now = moment();
     if (
       moment(upcomingClass?.start_time).isSameOrBefore(now) &&
       moment(upcomingClass?.end_time).isAfter(now)

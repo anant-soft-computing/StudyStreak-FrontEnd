@@ -2,13 +2,34 @@ import moment from "moment";
 import React from "react";
 
 const MasterClass = ({ masterClass }) => {
+  const now = moment();
+  const masterClasses = masterClass.filter((item) =>
+    moment(item.end_time).isAfter(now)
+  );
+
+  const displayDate = (start_time, end_time) => {
+    if (
+      moment(start_time).isSameOrBefore(now) &&
+      moment(end_time).isAfter(now)
+    ) {
+      return moment(now)
+        .set({
+          hour: moment(start_time).hour(),
+          minute: moment(start_time).minute(),
+          second: 0,
+        })
+        .format("llll");
+    }
+    return moment(start_time).format("llll");
+  };
+
   return (
     <div className="dashboard__inner mt-4 card-background">
       <div className="dashboard__nav__title">
         <h6>Masterclass</h6>
       </div>
       <hr />
-      {masterClass.length > 0 ? (
+      {masterClasses.length > 0 ? (
         <div className="dashboard__table table-responsive">
           <table>
             <thead>
@@ -19,14 +40,17 @@ const MasterClass = ({ masterClass }) => {
               </tr>
             </thead>
             <tbody>
-              {masterClass.map(
-                ({ id, meeting_title, start_time, join_url }, index) => (
+              {masterClasses.map(
+                (
+                  { id, meeting_title, start_time, end_time, join_url },
+                  index
+                ) => (
                   <tr
                     key={id}
                     className={index % 2 === 0 ? "" : "dashboard__table__row"}
                   >
                     <td>{meeting_title}</td>
-                    <td>{moment(start_time).format("lll")}</td>
+                    <td>{displayDate(start_time, end_time)}</td>
                     <td>
                       <button
                         className="take-test"

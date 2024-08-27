@@ -97,10 +97,8 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                       </ul>
                     </div>
                     <div className="gridarea__heading">
-                      <h3>
-                        <Link onClick={() => handleClick(course?.id)}>
-                          {course?.Course_Title}
-                        </Link>
+                      <h3 onClick={() => handleClick(course?.id)}>
+                        <Link>{course?.Course_Title}</Link>
                       </h3>
                     </div>
                   </div>

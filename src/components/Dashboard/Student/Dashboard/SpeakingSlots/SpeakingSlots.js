@@ -5,7 +5,10 @@ import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const SpeakingSlots = () => {
   const [upcomingSSClass, setUpcomingSSClass] = useState({});
-  const hasUpcomingSSClass = Object.keys(upcomingSSClass).length > 0;
+  const now = moment();
+
+  const hasUpcomingSSClass =
+    upcomingSSClass?.end_time && moment(upcomingSSClass.end_time).isAfter(now);
 
   useEffect(() => {
     const fetchUpcomingSSData = async () => {
@@ -35,7 +38,6 @@ const SpeakingSlots = () => {
   }, []);
 
   const displayDate = () => {
-    const now = moment();
     if (
       moment(upcomingSSClass?.start_time).isSameOrBefore(now) &&
       moment(upcomingSSClass?.end_time).isAfter(now)

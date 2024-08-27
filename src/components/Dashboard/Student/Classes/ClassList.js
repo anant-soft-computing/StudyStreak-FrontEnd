@@ -78,7 +78,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
   };
 
   const bookCount = async (Id) => {
-    if (bookedCount >= count) {
+    if (count !== -1 && bookedCount >= count) {
       toast.error(
         `You Do Not Have ${classType} Class Available, Please Upgrade Package !!`
       );

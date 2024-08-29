@@ -5,7 +5,7 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 import dashBoard from "../../../../img/icon/dashboard.svg";
 import profile from "../../../../img/icon/profile.svg";
 import myCourse from "../../../../img/icon/myCourse.svg";
-import paperTest from "../../../../img/icon/paperTest.svg"
+import paperTest from "../../../../img/icon/paperTest.svg";
 import assignment from "../../../../img/icon/assignment.svg";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
@@ -212,6 +212,35 @@ const DSLeftDrawer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
+          "/get-student-course/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const enrollCourses = response?.data?.map((item) => item.course_id);
+          localStorage.setItem("courses", JSON.stringify(enrollCourses));
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
           "/userwisepackagewithcourseid/",
           {
             headers: {
@@ -231,7 +260,6 @@ const DSLeftDrawer = () => {
           const packageDetails = studentPackage?.package;
 
           const batchIds = data?.student_packages.map((item) => item.batch_id);
-          const courses = data.student_packages?.map(({ course }) => course);
 
           setCount({
             practice_test_count:
@@ -245,7 +273,6 @@ const DSLeftDrawer = () => {
           });
           localStorage.setItem("StudentID", studentPackage?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
-          localStorage.setItem("courses", JSON.stringify(courses));
         } else {
           console.log("error");
         }

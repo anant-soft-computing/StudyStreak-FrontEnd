@@ -33,10 +33,10 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [courseList, setCourseList] = useState([]);
   const [expiryDate, setExpiryDate] = useState([]);
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds")) || [];
-  const courseIds =
-    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
-  const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
+  const userData = JSON?.parse(localStorage.getItem("loginInfo"));
 
   const cardList = [
     {

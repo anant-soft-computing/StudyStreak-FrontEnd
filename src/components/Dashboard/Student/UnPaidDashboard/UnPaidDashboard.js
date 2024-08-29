@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
@@ -10,11 +11,8 @@ import progress from "../../../../img/icon/progress.svg";
 import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import DemoClass from "./DemoClass/DemoClass";
-import Webinar from "./Webinar/Webinar";
-import MasterClass from "./MasterClass/MasterClass";
-import { useSelector } from "react-redux";
 import ajaxCall from "../../../../helpers/ajaxCall";
+import UnPaidClasses from "./UnPaidClasses/UnPaidClasses";
 
 const tableData = [
   {
@@ -58,14 +56,14 @@ const UnPaidDashboard = () => {
   const [demoClass, setDemoClass] = useState([]);
   const [masterClass, setMasterClass] = useState([]);
 
-  const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const authData = useSelector((state) => state.authStore);
+  const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
   useEffect(() => {
-    (async () => {
+    const fetchClasses = async () => {
       try {
         const response = await ajaxCall(
-          `/liveclass_list_view/`,
+          "/liveclass_list_view/",
           {
             headers: {
               Accept: "application/json",
@@ -77,22 +75,19 @@ const UnPaidDashboard = () => {
           8000
         );
         if (response?.status === 200) {
+          const classes = response?.data;
           setMasterClass(
-            response?.data?.filter(
-              ({ liveclasstype }) => liveclasstype === "Master"
-            )
+            classes.filter(({ liveclasstype }) => liveclasstype === "Master")
           );
           setWebinar(
-            response?.data?.filter(
+            classes.filter(
               ({ liveclasstype, meeting_title }) =>
                 liveclasstype === "Webinar" &&
                 meeting_title.startsWith("Introduction")
             )
           );
           setDemoClass(
-            response?.data?.filter(
-              ({ liveclasstype }) => liveclasstype === "Demo"
-            )
+            classes.filter(({ liveclasstype }) => liveclasstype === "Demo")
           );
         } else {
           console.log("error");
@@ -100,7 +95,9 @@ const UnPaidDashboard = () => {
       } catch (error) {
         console.log("error", error);
       }
-    })();
+    };
+
+    fetchClasses();
   }, [authData?.accessToken]);
 
   return (
@@ -232,9 +229,21 @@ const UnPaidDashboard = () => {
                     </table>
                   </div>
                 </div>
-                <MasterClass masterClass={masterClass} />
-                <Webinar webinar={webinar} />
-                <DemoClass demoClass={demoClass} />
+                <UnPaidClasses
+                  classData={masterClass}
+                  title="Free Master Class"
+                  message="No MasterClass Available !!"
+                />
+                <UnPaidClasses
+                  classData={webinar}
+                  title="Free Webinar"
+                  message="No Webinar Available !!"
+                />
+                <UnPaidClasses
+                  classData={demoClass}
+                  title="Free Demo Class"
+                  message="No Demo Class Available !!"
+                />
               </div>
             </div>
           </div>

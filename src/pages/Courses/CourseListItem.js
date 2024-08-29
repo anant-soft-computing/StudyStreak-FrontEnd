@@ -6,11 +6,12 @@ import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
 
 const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
+  const navigate = useNavigate();
   const [courseList, setCouresList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const courseIds = JSON.parse(localStorage.getItem("courses"));
   const authData = useSelector((state) => state.authStore);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -67,7 +68,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                 key={course.id}
               >
                 <div className="gridarea__wraper gridarea__wraper__2 tagMain">
-                  {courseIds?.some((item) => item?.id === course.id) && (
+                  {courseIds?.some((item) => item === course.id) && (
                     <span className="tag tag__color">Enrolled</span>
                   )}
                   <div className="gridarea__img">

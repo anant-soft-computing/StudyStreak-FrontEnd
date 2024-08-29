@@ -6,12 +6,11 @@ import { Box, List, ListItem, Typography } from "@mui/material";
 const NoticeBoard = () => {
   const currentDate = moment().startOf("day");
   const [noticeData, setNoticeData] = useState([]);
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"))?.map(
-    (item) => item?.id
-  );
-  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
   
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
+  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
+
   const activeNotice = noticeData?.filter((item) =>
     moment(item.expiry_date, "YYYY-MM-DD").isSameOrAfter(currentDate)
   );

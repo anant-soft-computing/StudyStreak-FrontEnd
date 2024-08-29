@@ -28,10 +28,10 @@ const SpeakingPractice = ({
       ? "Available Slot"
       : "Upcoming"
   );
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
-  const courseIds =
-    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
+
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

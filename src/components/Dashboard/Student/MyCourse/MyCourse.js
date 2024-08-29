@@ -12,11 +12,12 @@ const MyCourse = () => {
   const [courseList, setCourseList] = useState([]);
   const [expiryDate, setExpiryDate] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
   const authData = useSelector((state) => state.authStore);
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   const courses = courseList.filter((course) =>
-    courseIds.some((data) => data?.id === course?.id)
+    courseIds.some((data) => data === course?.id)
   );
 
   const coursesWithExpiry = courses.map((course) => {
@@ -104,7 +105,7 @@ const MyCourse = () => {
                 <DSSidebar />
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
-                    <div className="dashboard__section__title">
+                    <div className="dashboard__section__title flex-wrap gap-2">
                       <h4>Courses</h4>
                       <h5 className="text-danger">
                         {coursesWithExpiry?.length > 0 &&
@@ -115,7 +116,7 @@ const MyCourse = () => {
                             return (
                               <span key={course?.id}>
                                 {course.Course_Title} : {daysRemaining} days
-                                Left |
+                                Left |{" "}
                               </span>
                             );
                           })}

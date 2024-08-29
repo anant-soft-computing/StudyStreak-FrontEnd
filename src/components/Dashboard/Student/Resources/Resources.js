@@ -53,11 +53,9 @@ const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
 
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON.parse(localStorage.getItem("courses"))?.map(
-    (item) => item?.id
-  );
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
+  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
 
   const filterResources = (data) => {
     return data.filter((item) => {

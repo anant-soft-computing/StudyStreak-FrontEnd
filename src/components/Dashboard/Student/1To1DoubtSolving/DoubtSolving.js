@@ -23,9 +23,9 @@ const DoubtSolving = ({
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
-  const courseIds =
-    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
+  
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

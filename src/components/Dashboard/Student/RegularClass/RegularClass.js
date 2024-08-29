@@ -10,10 +10,7 @@ const tabs = [{ name: "Regular" }, { name: "Recorded Class" }];
 
 const RegularClass = ({ selectedDate, onDataFetch }) => {
   const location = useLocation();
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
-  const courseIds = JSON?.parse(localStorage.getItem("courses"))?.map(
-    (item) => item?.id
-  ) || [];
+
   const [uuid, setUuid] = useState([]);
   const [regularClass, setRegularClass] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -22,6 +19,9 @@ const RegularClass = ({ selectedDate, onDataFetch }) => {
       ? "Recorded Class"
       : "Regular"
   );
+
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

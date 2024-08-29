@@ -1,9 +1,9 @@
+import moment from "moment";
 import React from "react";
-import moment from "moment/moment";
 
-const DemoClass = ({ demoClass }) => {
+const UnPaidClasses = ({ classData, title, message }) => {
   const now = moment();
-  const demoClasses = demoClass.filter((item) =>
+  const classes = classData.filter((item) =>
     moment(item.end_time).isAfter(now)
   );
 
@@ -26,10 +26,10 @@ const DemoClass = ({ demoClass }) => {
   return (
     <div className="dashboard__inner mt-4 card-background">
       <div className="dashboard__nav__title">
-        <h6>Free Demo Class</h6>
+        <h6>{title}</h6>
       </div>
       <hr />
-      {demoClasses.length > 0 ? (
+      {classes.length > 0 ? (
         <div className="dashboard__table table-responsive">
           <table>
             <thead>
@@ -40,7 +40,7 @@ const DemoClass = ({ demoClass }) => {
               </tr>
             </thead>
             <tbody>
-              {demoClasses.map(
+              {classes.map(
                 (
                   { id, meeting_title, start_time, end_time, join_url },
                   index
@@ -66,10 +66,10 @@ const DemoClass = ({ demoClass }) => {
           </table>
         </div>
       ) : (
-        <h5 className="text-center text-danger">No Demo Class Available !!</h5>
+        <h5 className="text-center text-danger">{message}</h5>
       )}
     </div>
   );
 };
 
-export default DemoClass;
+export default UnPaidClasses;

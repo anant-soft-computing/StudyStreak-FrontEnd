@@ -66,7 +66,7 @@ const AboutSection = () => {
                   <p className="testimonial__quote">
                     <i className="icofont-quote-left quote__left"></i>
                     {item?.description}
-                    <i class="icofont-quote-right quote__right"></i>
+                    <i className="icofont-quote-right quote__right"></i>
                   </p>
                   <div className="testimonialarea__person__3">
                     <div className="testimonial__img__3">

@@ -37,9 +37,9 @@ const Checkout = () => {
   }
 
   const handlePackgaeAdd = async () => {
-    const data = {
+    const data = JSON.stringify({
       package: packageId,
-    };
+    });
     try {
       const response = await ajaxCall(
         `/student/enrollment/`,

@@ -22,10 +22,10 @@ const Counselling = ({
   const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Counselling");
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds")) || [];
-  const courseIds =
-    JSON?.parse(localStorage.getItem("courses"))?.map((item) => item?.id) || [];
   const [counselling, setCounselling] = useState([]);
+  
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);

@@ -39,11 +39,9 @@ const PaperTest = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [paperTestList, setPaperTestList] = useState([]);
 
-  const batchIds = JSON.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON.parse(localStorage.getItem("courses"))?.map(
-    (item) => item?.id
-  );
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
+  const courseIds = JSON?.parse(localStorage.getItem("courses"));
+  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
 
   const filterPaperTest = (data) => {
     return data.filter((item) => {

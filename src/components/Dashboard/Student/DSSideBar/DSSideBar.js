@@ -11,7 +11,7 @@ import fullLengthTest from "../../../../img/icon/notebook.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
 import resources from "../../../../img/icon/support.svg";
-import paperTest from "../../../../img/icon/paperTest.svg"
+import paperTest from "../../../../img/icon/paperTest.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
@@ -134,6 +134,35 @@ const DSSidebar = () => {
     (async () => {
       try {
         const response = await ajaxCall(
+          "/get-student-course/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const enrollCourses = response?.data?.map((item) => item.course_id);
+          localStorage.setItem("courses", JSON.stringify(enrollCourses));
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
           "/userwisepackagewithcourseid/",
           {
             headers: {
@@ -151,9 +180,7 @@ const DSSidebar = () => {
           const { data } = response;
           const studentPackage = data?.student_packages?.[0];
           const packageDetails = studentPackage?.package;
-
           const batchIds = data?.student_packages.map((item) => item.batch_id);
-          const courses = data.student_packages?.map(({ course }) => course);
 
           setCount({
             practice_test_count:
@@ -167,7 +194,6 @@ const DSSidebar = () => {
           });
           localStorage.setItem("StudentID", studentPackage?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
-          localStorage.setItem("courses", JSON.stringify(courses));
         } else {
           console.log("error");
         }
@@ -175,7 +201,7 @@ const DSSidebar = () => {
         console.log("error", error);
       }
     })();
-  }, [openMobileMenu]);
+  }, [givenFLTCount, givenPTCount, openMobileMenu]);
 
   useEffect(() => {
     const handleResize = () => {

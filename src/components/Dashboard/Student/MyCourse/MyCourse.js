@@ -12,7 +12,7 @@ const MyCourse = () => {
   const [courseList, setCourseList] = useState([]);
   const [expiryDate, setExpiryDate] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  
+
   const authData = useSelector((state) => state.authStore);
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
@@ -45,8 +45,6 @@ const MyCourse = () => {
 
       if (response.status === 200) {
         setCourseList(response.data);
-      } else {
-        console.log("error");
       }
     } catch (error) {
       console.log("error", error);
@@ -72,8 +70,6 @@ const MyCourse = () => {
 
       if (response.status === 200) {
         setExpiryDate(response.data);
-      } else {
-        console.error("error");
       }
     } catch (error) {
       console.error("error", error);
@@ -93,6 +89,21 @@ const MyCourse = () => {
     const end = moment(endDate);
     const today = moment();
     return end.diff(today, "days");
+  };
+
+  const calculateTotalDuration = (lessons) => {
+    const totalMinutes = lessons.reduce((totalDuration, lesson) => {
+      const [minutes] = lesson?.Lesson_Duration.split(" ");
+      const [minPart, secPart] = minutes.split(".").map(Number);
+      const totalSeconds = minPart * 60 + (secPart || 0);
+      return totalDuration + totalSeconds;
+    }, 0);
+
+    const hours = Math.floor(totalMinutes / 3600);
+    const minutes = Math.floor((totalMinutes % 3600) / 60);
+
+    return `${hours > 0 ? `${hours} Hr${hours > 1 ? "s" : ""} ` : ""
+      }${minutes} Minute${minutes !== 1 ? "s" : ""}`;
   };
 
   return (
@@ -128,7 +139,7 @@ const MyCourse = () => {
                       ) : courses?.length > 0 ? (
                         courses?.map((course) => (
                           <div
-                            className="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12"
+                            className="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12"
                             key={course?.id}
                           >
                             <div className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling">
@@ -140,15 +151,10 @@ const MyCourse = () => {
                                 />
                               </div>
                               <div className="gridarea__content d-flex flex-column justify-content-between">
-                                <div
-                                  className="course__pointer"
-                                  onClick={() =>
-                                    navigate(`/course/${course?.id}`)
-                                  }
-                                >
-                                  <div className="gridarea__heading">
-                                    <h3>{course?.Course_Title}</h3>
-                                  </div>
+                                <div className="gridarea__heading">
+                                  <h3>{course?.Course_Title}</h3>
+                                </div>
+                                {course?.lessons?.length > 0 && (
                                   <div className="gridarea__list">
                                     <ul className="ps-0">
                                       <li>
@@ -157,18 +163,14 @@ const MyCourse = () => {
                                       </li>
                                       <li>
                                         <i className="icofont-clock-time"></i>{" "}
-                                        {course?.lessons.reduce(
-                                          (totalDuration, lesson) =>
-                                            totalDuration +
-                                            parseInt(lesson?.Lesson_Duration),
-                                          0
-                                        )}{" "}
-                                        Minutes
+                                        {calculateTotalDuration(
+                                          course?.lessons
+                                        )}
                                       </li>
                                     </ul>
                                   </div>
-                                </div>
-                                <div className="d-flex justify-content-center">
+                                )}
+                                <div className="d-flex gap-2 align-items-center justify-content-center">
                                   <button
                                     onClick={() =>
                                       navigate(`/courseLessons/${course?.id}`)
@@ -176,6 +178,14 @@ const MyCourse = () => {
                                     className="default__button"
                                   >
                                     Start Lessons
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      navigate(`/course/${course?.id}`)
+                                    }
+                                    className="default__button"
+                                  >
+                                    View Materials
                                   </button>
                                 </div>
                               </div>

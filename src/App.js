@@ -54,6 +54,7 @@ import Notice from "./components/Dashboard/Admin/Notice/Notice";
 import AProfile from "./components/Dashboard/Admin/Profile";
 import Resources from "./components/Dashboard/Admin/Resources/Resources";
 import Testimonial from "./components/Dashboard/Admin/Testimonial/Testimonial";
+import Coupon from "./components/Dashboard/Admin/Coupon/Coupon";
 
 //------------------------> Exam <------------------------------------------
 
@@ -111,6 +112,7 @@ const App = () => {
           <Route path="/admin-gamification" element={<Gamification />} />
           <Route path="/admin-notice" element={<Notice />} />
           <Route path="/admin-resources" element={<Resources />} />
+          <Route path="/admin-coupon" element={<Coupon />} />
           <Route path="/admin-testimonial" element={<Testimonial />} />
           <Route path="/admin-profile" element={<AProfile />} />
           <Route path="/admin-exam/:examType" element={<Exam />} />

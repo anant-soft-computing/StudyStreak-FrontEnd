@@ -51,6 +51,21 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
     }
   };
 
+  const calculateTotalDuration = (lessons) => {
+    const totalMinutes = lessons.reduce((totalDuration, lesson) => {
+      const [minutes] = lesson?.Lesson_Duration.split(" ");
+      const [minPart, secPart] = minutes.split(".").map(Number);
+      const totalSeconds = minPart * 60 + (secPart || 0);
+      return totalDuration + totalSeconds;
+    }, 0);
+
+    const hours = Math.floor(totalMinutes / 3600);
+    const minutes = Math.floor((totalMinutes % 3600) / 60);
+
+    return `${hours > 0 ? `${hours} Hr${hours > 1 ? 's' : ''} ` : ''}${
+      minutes} Minute${minutes !== 1 ? 's' : ''}`;
+  };
+
   return (
     <>
       {isLoading ? (
@@ -85,13 +100,7 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                           </li>
                           <li>
                             <i className="icofont-clock-time"></i>{" "}
-                            {course?.lessons.reduce(
-                              (totalDuration, lesson) =>
-                                totalDuration +
-                                parseInt(lesson?.Lesson_Duration),
-                              0
-                            )}{" "}
-                            Minutes
+                            {calculateTotalDuration(course?.lessons)}
                           </li>
                         </ul>
                       </div>

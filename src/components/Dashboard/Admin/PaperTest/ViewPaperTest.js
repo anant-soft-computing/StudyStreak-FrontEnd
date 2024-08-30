@@ -13,6 +13,15 @@ const Download = ({ url }) =>
     "-"
   );
 
+const ViewButton = ({ url }) =>
+  url !== "-" ? (
+    <button className="take-test" onClick={() => window.open(url)}>
+      View
+    </button>
+  ) : (
+    "-"
+  );
+
 const columns = [
   { headerName: "No.", field: "no", width: 90 },
   { headerName: "Student", field: "student", resizable: true, filter: true },
@@ -24,6 +33,13 @@ const columns = [
     resizable: true,
     filter: true,
     width: 380,
+  },
+  {
+    headerName: "Video / Link",
+    field: "link",
+    resizable: true,
+    filter: true,
+    cellRenderer: (params) => <ViewButton url={params.value} />,
   },
   {
     headerName: "Documents",
@@ -40,30 +56,53 @@ const formatPaperTestData = (responseData) => {
     const filteredDocuments = item?.documents?.filter((document) =>
       document.description.includes("Paper Test")
     );
-    return (
-      filteredDocuments?.map((document, docIndex) => ({
-        no: docIndex + 1,
-        batch:
-          item.batch?.length > 0
-            ? item.batch.map((batch) => batch.batch_name).join(", ")
-            : "-",
-        student:
-          item.student?.length > 0
-            ? item.student
-                .map(
-                  (student) =>
-                    `${student.user.first_name} ${student.user.last_name}`
-                )
-                .join(", ")
-            : "-",
-        course:
-          item?.course?.length > 0
-            ? item?.course?.map((course) => course.Course_Title).join(", ")
-            : "-",
-        description: document?.description || "-",
-        document: document?.document || "-",
-      })) || []
-    );
+    return filteredDocuments.length > 0
+      ? filteredDocuments?.map((document, docIndex) => ({
+          no: docIndex + 1,
+          batch:
+            item.batch?.length > 0
+              ? item.batch.map((batch) => batch.batch_name).join(", ")
+              : "-",
+          student:
+            item.student?.length > 0
+              ? item.student
+                  .map(
+                    (student) =>
+                      `${student.user.first_name} ${student.user.last_name}`
+                  )
+                  .join(", ")
+              : "-",
+          course:
+            item?.course?.length > 0
+              ? item?.course?.map((course) => course.Course_Title).join(", ")
+              : "-",
+          description: document?.description || "-",
+          document: document?.document || "-",
+          link: item.link || "-",
+        }))
+      : filteredDocuments?.map((docIndex) => ({
+          no: docIndex + 1,
+          batch:
+            item.batch?.length > 0
+              ? item.batch.map((batch) => batch.batch_name).join(", ")
+              : "-",
+          student:
+            item.student?.length > 0
+              ? item.student
+                  .map(
+                    (student) =>
+                      `${student.user.first_name} ${student.user.last_name}`
+                  )
+                  .join(", ")
+              : "-",
+          course:
+            item?.course?.length > 0
+              ? item?.course?.map((course) => course.Course_Title).join(", ")
+              : "-",
+          description: "-",
+          document: "-",
+          link: item.link || "-",
+        }));
   });
 };
 

@@ -13,6 +13,15 @@ const Download = ({ url }) =>
     "-"
   );
 
+const ViewButton = ({ url }) =>
+  url !== "-" ? (
+    <button className="take-test" onClick={() => window.open(url)}>
+      View
+    </button>
+  ) : (
+    "-"
+  );
+
 const columns = [
   { headerName: "No.", field: "no", width: 90 },
   { headerName: "Student", field: "student", resizable: true, filter: true },
@@ -24,6 +33,13 @@ const columns = [
     resizable: true,
     filter: true,
     width: 380,
+  },
+  {
+    headerName: "Video / Link",
+    field: "link",
+    resizable: true,
+    filter: true,
+    cellRenderer: (params) => <ViewButton url={params.value} />,
   },
   {
     headerName: "Documents",
@@ -71,6 +87,7 @@ const PaperTest = () => {
             ?.filter((c) => courseIds?.includes(c?.id))
             ?.map((c) => c?.Course_Title)
             ?.join(", ") || "-",
+        link: item?.link || "-",
       };
 
       const filteredDocuments = item?.documents?.filter((document) =>

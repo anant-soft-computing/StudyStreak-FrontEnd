@@ -6,6 +6,9 @@ import logo from "../../img/logo/Logo.png";
 import ajaxCall from "../../helpers/ajaxCall";
 
 const Checkout = () => {
+  const [discount, setDiscount] = useState(0);
+  const [couponCode, setCouponCode] = useState("");
+  const [noCoupon, setNoCoupon] = useState("");
   const [userDetails, setUserDetails] = useState({});
   const authData = useSelector((state) => state.authStore);
 
@@ -22,6 +25,8 @@ const Checkout = () => {
 
   const navigate = useNavigate();
 
+  const package_amount = discount ? packagePrice - discount : packagePrice;
+
   function loadScript(src) {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -35,6 +40,45 @@ const Checkout = () => {
       document.body.appendChild(script);
     });
   }
+
+  useEffect(() => {
+    if (!couponCode) {
+      setDiscount(0);
+      setNoCoupon("");
+      return;
+    }
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/cuponview/?cupon_code=${couponCode}`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+  
+        if (response?.status === 200) {
+          setNoCoupon("");
+          setDiscount(response.data[0].discount);
+        } else if (
+          (response?.status === 400 || response?.status === 404) &&
+          response.isError
+        ) {
+          setDiscount(0);
+          setNoCoupon("Invalid Coupon Code");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, [couponCode]);
 
   const handlePackgaeAdd = async () => {
     const data = JSON.stringify({
@@ -59,8 +103,6 @@ const Checkout = () => {
       if (response.status === 201) {
         console.log("success");
       } else if (response.status === 400 && response.isError) {
-        console.log("error");
-      } else {
         console.log("error");
       }
     } catch (error) {
@@ -160,7 +202,7 @@ const Checkout = () => {
     // creating a new order
 
     const body = {
-      amount: packagePrice,
+      amount: package_amount,
       currency: "INR",
     };
 
@@ -308,11 +350,25 @@ const Checkout = () => {
                             <td className="checkoutarea__ctg__type">Total</td>
                             <td className="checkoutarea__cgt__des">
                               <i className="icofont-rupee"></i>
-                              {packagePrice}
+                              {package_amount}
                             </td>
                           </tr>
                         </tbody>
                       </table>
+                      <div className="col-xl-6">
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>Have a Coupon Code ?</label>
+                            <input
+                              type="text"
+                              placeholder="Coupon Code"
+                              value={couponCode}
+                              onChange={(e) => setCouponCode(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                        <div className="text-danger">{noCoupon}</div>
+                      </div>
                     </div>
                   </div>
                   <div className="checkoutarea__payment clearfix">

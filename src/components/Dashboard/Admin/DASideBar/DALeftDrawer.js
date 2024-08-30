@@ -14,6 +14,7 @@ import flashCard from "../../../../img/icon/flashCard.svg";
 import paperTest from "../../../../img/icon/practiceTest.svg";
 import resourceLink from "../../../../img/icon/support.svg";
 import testimonial from "../../../../img/icon/notebook.svg";
+import coupon from "../../../../img/icon/coupon.svg";
 import settings from "../../../../img/icon/settings.svg";
 import notice from "../../../../img/icon/notice.svg";
 import logOut from "../../../../img/icon/logout.svg";
@@ -174,6 +175,11 @@ const DALeftDrawer = () => {
       name: "Resources",
       icon: <img src={resourceLink} alt="Resources" height={20} width={20} />,
       link: "/admin-resources",
+    },
+    {
+      name: "Coupon",
+      icon: <img src={coupon} alt="Coupon" />,
+      link: "/admin-coupon",
     },
     {
       name: "Testimonial",

@@ -12,6 +12,7 @@ const initialPaperTestData = {
   batchId: [],
   course: [],
   courseId: [],
+  link: "",
   documents: [""],
   descriptions: [""],
 };
@@ -143,6 +144,8 @@ const CreatePaperTest = ({ setActiveTab }) => {
       createPTData.batchId.forEach((id) => {
         formData.append(`batch`, id);
       });
+
+      formData.append("link", createPTData.link);
 
       createPTData.documents.forEach((document, index) => {
         if (document) {
@@ -299,9 +302,27 @@ const CreatePaperTest = ({ setActiveTab }) => {
                 </div>
               </div>
             )}
+             <div className="col-xl-6">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Link</label>
+                  <input
+                    type="text"
+                    placeholder="Link"
+                    value={createPTData?.link}
+                    onChange={(e) => {
+                      dispatchCreatePT({
+                        type: "link",
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           {createPTData.documents.map((_, index) => (
-            <div className="row mt-3" key={index}>
+            <div className="row" key={index}>
               <div className="col-xl-6">
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">

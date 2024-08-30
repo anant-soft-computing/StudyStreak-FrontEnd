@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
+import moment from "moment/moment";
 
 const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   const navigate = useNavigate();
@@ -30,17 +31,12 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
         );
 
         if (response.status === 200) {
-          setIsLoading(false);
           setCouresList(
             response.data?.filter(({ course_type }) => course_type === "PUBLIC")
           );
-        } else {
-          setIsLoading(false);
-          toast.error("Some Problem Occurred. Please try again.");
         }
       } catch (error) {
-        setIsLoading(false);
-        toast.error("Some Problem Occurred. Please try again.");
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }
@@ -80,23 +76,30 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
                     />
                   </div>
                   <div className="gridarea__content">
-                    <div className="gridarea__list">
-                      <ul className="ps-0">
-                        <li>
-                          <i className="icofont-book-alt"></i>{" "}
-                          {course?.lessons?.length} Lessons
-                        </li>
-                        <li>
-                          <i className="icofont-clock-time"></i>{" "}
-                          {course?.lessons.reduce(
-                            (totalDuration, lesson) =>
-                              totalDuration + parseInt(lesson?.Lesson_Duration),
-                            0
-                          )}{" "}
-                          Minutes
-                        </li>
-                      </ul>
-                    </div>
+                    {course?.lessons?.length > 0 && (
+                      <div className="gridarea__list">
+                        <ul className="ps-0">
+                          <li>
+                            <i className="icofont-book-alt"></i>{" "}
+                            {course?.lessons?.length} Lessons
+                          </li>
+                          <li>
+                            <i className="icofont-clock-time"></i>{" "}
+                            {course?.lessons.reduce(
+                              (totalDuration, lesson) =>
+                                totalDuration +
+                                parseInt(lesson?.Lesson_Duration),
+                              0
+                            )}{" "}
+                            Minutes
+                          </li>
+                        </ul>
+                      </div>
+                    )}
+                    <h6 className="gridarea__heading">
+                      Valid Up To :{" "}
+                      {moment(course?.EnrollmentEndDate).format("ll")}
+                    </h6>
                     <div className="gridarea__heading">
                       <h3 onClick={() => handleClick(course?.id)}>
                         <Link>{course?.Course_Title}</Link>

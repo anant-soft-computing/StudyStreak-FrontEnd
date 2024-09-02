@@ -56,7 +56,6 @@ const DoubtSolving = ({
               8000
             );
             if (response?.status === 200) {
-              setIsLoading(false);
               const id = response?.data?.map((item) => item?.other_fields?.id);
               uuidData = [...uuidData, ...id];
               oToclass = [...oToclass, ...response?.data];
@@ -82,7 +81,6 @@ const DoubtSolving = ({
               8000
             );
             if (response?.status === 200) {
-              setIsLoading(false);
               const id = response?.data?.map((item) => item?.other_fields?.id);
               uuidData = [...uuidData, ...id];
               oToclass = [...oToclass, ...response?.data];

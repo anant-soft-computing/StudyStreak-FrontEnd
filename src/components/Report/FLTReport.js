@@ -81,17 +81,15 @@ const FLTReport = () => {
         );
         if (response.status === 200) {
           setFLTData([...response.data]);
-          setIsLoading(false);
-
           if (location?.state?.FullLengthTestID) {
             setFLTID(location?.state?.FullLengthTestID);
             setActiveTest(location?.state?.FullLengthTestID);
           }
-        } else {
-          console.log("error");
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [location.state]);

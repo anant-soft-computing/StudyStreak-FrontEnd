@@ -41,12 +41,11 @@ const ViewExam = ({ activeTab }) => {
             no: index + 1,
           }));
           setData(dataWithNumbers);
-          setIsLoading(false);
-        } else {
-          console.log("error");
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     },
     [authData?.accessToken]
@@ -207,25 +206,25 @@ const ViewExam = ({ activeTab }) => {
                   headerName: "Reading Set",
                   field: "reading_set.Reading.length",
                   filter: true,
-                  width:220,
+                  width: 220,
                 },
                 {
                   headerName: "Writing Set",
                   field: "writing_set.Writing.length",
                   filter: true,
-                  width:220,
+                  width: 220,
                 },
                 {
                   headerName: "Listening Set",
                   field: "listening_set.Listening.length",
                   filter: true,
-                  width:220,
+                  width: 220,
                 },
                 {
                   headerName: "Speaking Set",
                   field: "speaking_set.Speaking.length",
                   filter: true,
-                  width:220,
+                  width: 220,
                 },
               ]}
             />

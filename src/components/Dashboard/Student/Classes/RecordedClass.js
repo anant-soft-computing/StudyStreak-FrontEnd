@@ -58,10 +58,8 @@ const RecordedClass = ({ uuid, classes, activeTab }) => {
               data.push(response.data);
             }
           }
-          setIsLoading(false);
           setRecordClass(data);
         } catch (error) {
-          setIsLoading(false);
           console.error("Error fetching recorded classes:", error);
         } finally {
           setIsLoading(false);

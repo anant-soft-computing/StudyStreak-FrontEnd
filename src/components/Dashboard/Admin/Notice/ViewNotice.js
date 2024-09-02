@@ -106,9 +106,6 @@ const ViewNotice = ({ activeTab }) => {
                   : "-",
             }));
             setNoticeList(noticeData);
-            setIsLoading(false);
-          } else {
-            setIsLoading(false);
           }
         } catch (error) {
           console.log("error", error);

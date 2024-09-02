@@ -131,10 +131,6 @@ const ViewResources = ({ activeTab }) => {
           if (response?.status === 200) {
             const data = formatResourceData(response?.data);
             setResourceList(data);
-            setIsLoading(false);
-          } else {
-            console.error("error");
-            setIsLoading(false);
           }
         } catch (error) {
           console.log("error", error);

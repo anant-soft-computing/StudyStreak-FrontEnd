@@ -45,8 +45,6 @@ const PracticeTest = () => {
         );
         if (response.status === 200) {
           setGivenTest(response?.data?.student_pt);
-        } else {
-          console.log("error");
         }
       } catch (error) {
         console.log("error:", error);
@@ -82,15 +80,12 @@ const PracticeTest = () => {
             ),
             Speaking: data.filter(({ exam_type }) => exam_type === "Speaking"),
           };
-          setIsLoading(false);
           setTestData(filteredData);
-        } else {
-          setIsLoading(false);
-          console.log("error");
         }
       } catch (error) {
-        setIsLoading(false);
         console.error("error", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();

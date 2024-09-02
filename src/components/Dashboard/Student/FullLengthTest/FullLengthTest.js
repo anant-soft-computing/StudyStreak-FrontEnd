@@ -60,13 +60,12 @@ const FullLengthTest = () => {
           8000
         );
         if (response.status === 200) {
-          setIsLoading(false);
           setFullLengthTestData([...response.data]);
-        } else {
-          console.log("error");
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);

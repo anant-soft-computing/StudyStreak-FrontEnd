@@ -71,10 +71,7 @@ const ViewCourse = ({ activeTab }) => {
               ...course,
               no: index + 1,
             }));
-            setIsLoading(false);
             setCouresList(courseWithNumbers);
-          } else {
-            setIsLoading(false);
           }
         } catch (error) {
           console.log("error", error);

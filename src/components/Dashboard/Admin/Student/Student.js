@@ -29,14 +29,11 @@ const Student = () => {
           8000
         );
         if (response?.status === 200) {
-          setIsLoading(false);
           const studentWithNumbers = response?.data?.map((student, index) => ({
             ...student,
             no: index + 1,
           }));
           setStudentList(studentWithNumbers);
-        } else {
-          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);

@@ -26,8 +26,6 @@ const Dashboard = () => {
     practice_test_count: 0,
     full_length_test_count: 0,
   });
-  const [givenPTCount, setGivenPTCount] = useState(0);
-  const [givenFLTCount, setGivenFLTCount] = useState(0);
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -131,35 +129,6 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          `/student-stats/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          setGivenPTCount(response?.data?.student_pt?.length);
-          setGivenFLTCount(response?.data?.student_flt?.length);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error", error);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
     const fetchAllData = async () => {
       setIsLoading(true);
       await Promise.all([
@@ -173,11 +142,11 @@ const Dashboard = () => {
             practice_test_count:
               packageDetails?.practice_test_count === -1
                 ? packageDetails?.practice_test_count
-                : packageDetails?.practice_test_count - givenPTCount,
+                : packageDetails?.practice_test_count - studentPackage?.student_pt,
             full_length_test_count:
               packageDetails?.full_length_test_count === -1
                 ? packageDetails?.full_length_test_count
-                : packageDetails?.full_length_test_count - givenFLTCount,
+                : packageDetails?.full_length_test_count - studentPackage?.student_flt,
           });
           setStudentID(data?.student_packages[0]?.student_id);
         }),
@@ -186,7 +155,7 @@ const Dashboard = () => {
     };
 
     fetchAllData();
-  }, [givenFLTCount, givenPTCount]);
+  }, []);
 
   useEffect(() => {
     (async () => {

@@ -762,8 +762,19 @@ const FullLengthLiveExam = () => {
               messages: [
                 {
                   role: "user",
-                  content:
-                    "Analyse The Package For IELTS Writing Task With Following Criteria TASK RESPONSE, COHERENCE AND COHESION, LEXICAL RESOURCE AND Grammatical Range and Accuracy and Give IELTS Bands To The Task",
+                  content: `Analyse The Package For IELTS Writing Task With Following Criteria
+  
+                  Assessment Criteria:
+  
+                  Task 1:
+  
+                  Task Achievement: Does the response address all parts of the task and provide a well-developed description, summary, or explanation of the information presented?
+  
+                  Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately?
+  
+                  Lexical Resource: Is a wide range of vocabulary used with precision and accuracy?
+  
+                  Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy? `,
                 },
                 {
                   role: "user",
@@ -775,8 +786,17 @@ const FullLengthLiveExam = () => {
                 },
                 {
                   role: "user",
-                  content:
-                    "Give band explanation as #Explanation: exaplanationValue  and band as #Band:bandValue",
+                  content: `Give band explanation as #Explanation:  
+              
+                  Task Achievement: 
+      
+                  Coherence and Cohesion:
+      
+                  Lexical Resource:
+      
+                  Grammatical Range and Accuracy:
+                  
+                  as #Band:bandValue`,
                 },
               ],
             };
@@ -877,7 +897,9 @@ const FullLengthLiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         fullLengthTestSubmit();
-        navigate("/fullLengthTest");
+        navigate(`/exam-fulllength-answer/${examId}`, {
+          state: { fltId: examId },
+        });
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

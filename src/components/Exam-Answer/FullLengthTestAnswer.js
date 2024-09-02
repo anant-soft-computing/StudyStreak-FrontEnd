@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import BandScoreCard from "./BandScoreCard";
 import ajaxCall from "../../helpers/ajaxCall";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
@@ -11,6 +11,7 @@ import AnswerCard from "./AnswerCard";
 
 const FullLengthTestAnswer = () => {
   const { examId } = useParams();
+  const { fltId } = useLocation()?.state || {};
   const [examName, setExamName] = useState("");
   const [rStudentAnswers, setRStudentAnswers] = useState([]);
   const [rCorrectAnswers, setRCorrectAnswers] = useState([]);
@@ -44,13 +45,14 @@ const FullLengthTestAnswer = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/flt-answers/${examId}/`,
+          `/flt-answers/${examId || fltId}/`,
           {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
@@ -218,7 +220,7 @@ const FullLengthTestAnswer = () => {
 
   const calculateAverageBand = (answers) => {
     const bandScores = answers
-      ?.map((item) => parseFloat(item.band))
+      ?.map((item) => (item.band !== null ? parseFloat(item.band) : 0))
       .filter((band) => !isNaN(band));
     if (bandScores?.length > 0) {
       const sum = bandScores?.reduce((a, b) => a + b, 0);
@@ -237,6 +239,21 @@ const FullLengthTestAnswer = () => {
       speaking: { band: speakingBand },
     }));
   }, [writingTestAnswers, speakingTestAnswers, setCounts]);
+
+  const parseAssessment = (assessment) => {
+    const sections = {};
+    const regex =
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+    const matches = assessment?.split(regex);
+    const titles = assessment?.match(regex);
+
+    if (titles && matches) {
+      titles?.forEach((title, index) => {
+        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
+      });
+    }
+    return sections;
+  };
 
   return (
     <div className="body__wrapper">
@@ -278,20 +295,16 @@ const FullLengthTestAnswer = () => {
                             </thead>
                             <tbody>
                               {rCorrectAnswers?.map(
-                                (
-                                  { id, question_number, answer_text },
-                                  index
-                                ) => (
+                                ({ id, answer_text }, index) => (
                                   <tr
                                     key={id}
-                                    className={`${index % 2 === 0
+                                    className={`${
+                                      index % 2 === 0
                                         ? ""
                                         : "dashboard__table__row"
-                                      }`}
+                                    }`}
                                   >
-                                    <td className="text-dark">
-                                      {question_number}.
-                                    </td>
+                                    <td className="text-dark">{index + 1}.</td>
                                     <td className="text-dark">
                                       <div className="dashboard__table__star">
                                         {answer_text}
@@ -305,8 +318,8 @@ const FullLengthTestAnswer = () => {
                                       {!rStudentAnswers[index]?.answer_text ? (
                                         <SkipIcon />
                                       ) : rCorrectAnswers[
-                                        index
-                                      ]?.answer_text.includes(" OR ") ? (
+                                          index
+                                        ]?.answer_text.includes(" OR ") ? (
                                         rCorrectAnswers[index]?.answer_text
                                           .split(" OR ")
                                           .map((option) =>
@@ -322,8 +335,8 @@ const FullLengthTestAnswer = () => {
                                           <CancelIcon />
                                         )
                                       ) : rCorrectAnswers[
-                                        index
-                                      ]?.answer_text.includes(" AND ") ? (
+                                          index
+                                        ]?.answer_text.includes(" AND ") ? (
                                         rCorrectAnswers[index]?.answer_text
                                           .split(" AND ")
                                           .map((option) =>
@@ -339,7 +352,7 @@ const FullLengthTestAnswer = () => {
                                           <CancelIcon />
                                         )
                                       ) : rStudentAnswers[index]
-                                        ?.answer_text ===
+                                          ?.answer_text ===
                                         rCorrectAnswers[index]?.answer_text ? (
                                         <CheckIcon />
                                       ) : (
@@ -366,10 +379,22 @@ const FullLengthTestAnswer = () => {
                             <h4 className="sidebar__title">AI Assessment</h4>
                           </div>
                           {writingTestAnswers?.Writing?.map((item, index) => {
+                            const assessments = parseAssessment(
+                              item.ai_assessment
+                            );
                             return (
-                              <div>
-                                <div key={index} className="gptResponse">
-                                  ({index + 1}). {item?.ai_assessment}
+                              <div key={index}>
+                                <div className="gptResponse">
+                                  <h4>({index + 1}) Explanation:</h4>
+                                  {Object.keys(assessments)?.map(
+                                    (section, i) => (
+                                      <div key={i}>
+                                        <br />
+                                        <strong>{section}</strong>
+                                        <div>{assessments[section]}</div>
+                                      </div>
+                                    )
+                                  )}
                                 </div>
                                 <br />
                               </div>
@@ -380,16 +405,22 @@ const FullLengthTestAnswer = () => {
                           <div className="dashboard__section__title">
                             <h4 className="sidebar__title">Tutor Assessment</h4>
                           </div>
-                          {writingTestAnswers?.Writing?.map((item, index) => {
-                            return (
-                              <div>
-                                <div key={index} className="gptResponse">
+                          {writingTestAnswers?.Writing?.some(
+                            (item) => item?.tutor_assessment
+                          ) ? (
+                            writingTestAnswers?.Writing?.map((item, index) => (
+                              <div key={index}>
+                                <div className="gptResponse">
                                   ({index + 1}). {item?.tutor_assessment}
                                 </div>
                                 <br />
                               </div>
-                            );
-                          })}
+                            ))
+                          ) : (
+                            <h5 className="text-center text-danger">
+                              Assessment By Tutor Will Be Displayed Here
+                            </h5>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -412,20 +443,16 @@ const FullLengthTestAnswer = () => {
                             </thead>
                             <tbody>
                               {lCorrectAnswers?.map(
-                                (
-                                  { id, question_number, answer_text },
-                                  index
-                                ) => (
+                                ({ id, answer_text }, index) => (
                                   <tr
                                     key={id}
-                                    className={`${index % 2 === 0
+                                    className={`${
+                                      index % 2 === 0
                                         ? ""
                                         : "dashboard__table__row"
-                                      }`}
+                                    }`}
                                   >
-                                    <td className="text-dark">
-                                      {question_number}.
-                                    </td>
+                                    <td className="text-dark">{index + 1}.</td>
                                     <td className="text-dark">
                                       <div className="dashboard__table__star">
                                         {answer_text}
@@ -439,8 +466,8 @@ const FullLengthTestAnswer = () => {
                                       {!lStudentAnswers[index]?.answer_text ? (
                                         <SkipIcon />
                                       ) : lCorrectAnswers[
-                                        index
-                                      ]?.answer_text.includes(" OR ") ? (
+                                          index
+                                        ]?.answer_text.includes(" OR ") ? (
                                         lCorrectAnswers[index]?.answer_text
                                           .split(" OR ")
                                           .map((option) =>
@@ -456,8 +483,8 @@ const FullLengthTestAnswer = () => {
                                           <CancelIcon />
                                         )
                                       ) : lCorrectAnswers[
-                                        index
-                                      ]?.answer_text.includes(" AND ") ? (
+                                          index
+                                        ]?.answer_text.includes(" AND ") ? (
                                         lCorrectAnswers[index]?.answer_text
                                           .split(" AND ")
                                           .map((option) =>
@@ -473,7 +500,7 @@ const FullLengthTestAnswer = () => {
                                           <CancelIcon />
                                         )
                                       ) : lStudentAnswers[index]
-                                        ?.answer_text ===
+                                          ?.answer_text ===
                                         lCorrectAnswers[index]?.answer_text ? (
                                         <CheckIcon />
                                       ) : (
@@ -510,10 +537,11 @@ const FullLengthTestAnswer = () => {
                                 (item, index) => (
                                   <tr
                                     key={index}
-                                    className={`${index % 2 === 0
+                                    className={`${
+                                      index % 2 === 0
                                         ? ""
                                         : "dashboard__table__row"
-                                      }`}
+                                    }`}
                                   >
                                     <td>{index + 1}</td>
                                     <td>

@@ -96,6 +96,23 @@ const Answer = () => {
     setSkipCount(skipped);
   }, [studentAnswers, correctAnswer]);
 
+  const parseAssessment = (assessment) => {
+    const sections = {};
+    const regex =
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+    const matches = assessment?.split(regex);
+    const titles = assessment?.match(regex);
+
+    if (titles && matches) {
+      titles?.forEach((title, index) => {
+        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
+      });
+    }
+    return sections;
+  };
+
+  const aiAssessmentSections = gptResponse ? parseAssessment(gptResponse) : {};
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -123,7 +140,22 @@ const Answer = () => {
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Assessment</h4>
                       </div>
-                      <div className="gptResponse">{gptResponse}</div>
+                      <div className="gptResponse">
+                        {Object.keys(aiAssessmentSections)?.length > 0 && (
+                          <>
+                            <h4>#Explanation:</h4>
+                            {Object.keys(aiAssessmentSections)?.map(
+                              (section, index) => (
+                                <div key={index}>
+                                  <br />
+                                  <strong>{section}</strong>
+                                  <div>{aiAssessmentSections[section]}</div>
+                                </div>
+                              )
+                            )}
+                          </>
+                        )}
+                      </div>
                     </div>
                   )}
                   {(examType === "Reading" || examType === "Listening") && (

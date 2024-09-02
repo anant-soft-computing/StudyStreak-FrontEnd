@@ -94,57 +94,68 @@ const Report = ({ paperId, testType, testID, setExamName }) => {
     fetchData();
   }, [testType, paperId, testID]);
 
+  const parseAssessment = (assessment) => {
+    const sections = {};
+    const regex =
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+    const matches = assessment?.split(regex);
+    const titles = assessment?.match(regex);
+
+    if (titles && matches) {
+      titles?.forEach((title, index) => {
+        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
+      });
+    }
+    return sections;
+  };
+
   return (
     <div className="row mt-4">
       <div className="col-xl-12 col-lg-12 AnswerCard">
         <div className="blog__details__content__wraper">
           {testType === "Writing" && (
-            <div>
-              {writingAnswers?.some((item) => item?.ai_assessment) ? (
-                <div className="writing__exam">
-                  <div className="dashboard__section__title">
-                    <h4 className="sidebar__title">AI Assessment</h4>
-                  </div>
-                  {writingAnswers.map(
-                    (item, index) =>
-                      item?.ai_assessment && (
-                        <div key={index}>
-                          <div className="gptResponse">
-                            ({index + 1}). {item.ai_assessment}
-                          </div>
+            <div className="writing__exam">
+              <div className="dashboard__section__title">
+                <h4 className="sidebar__title">AI Assessment</h4>
+              </div>
+              {writingAnswers?.map((item, index) => {
+                const assessments = parseAssessment(item?.ai_assessment);
+                return (
+                  <div key={index}>
+                    <div className="gptResponse">
+                      <h4>({index + 1}) Explanation:</h4>
+                      {Object.keys(assessments)?.map((section, i) => (
+                        <div key={i}>
                           <br />
+                          <strong>{section}</strong>
+                          <div>{assessments[section]}</div>
                         </div>
-                      )
-                  )}
-                </div>
-              ) : (
-                <h5 className="text-center text-danger">
-                  No AI Assessment Available !!
-                </h5>
-              )}
+                      ))}
+                    </div>
+                    <br />
+                  </div>
+                );
+              })}
 
-              {writingAnswers?.some((item) => item?.tutor_assessment) ? (
-                <div className="writing__exam">
-                  <div className="dashboard__section__title">
-                    <h4 className="sidebar__title">Tutor Assessment</h4>
-                  </div>
-                  {writingAnswers.map(
-                    (item, index) =>
-                      item?.tutor_assessment && (
-                        <div key={index}>
-                          <div className="gptResponse">
-                            ({index + 1}). {item.tutor_assessment}
-                          </div>
-                          <br />
-                        </div>
-                      )
-                  )}
+              <div className="writing__exam">
+                <div className="dashboard__section__title">
+                  <h4 className="sidebar__title">Tutor Assessment</h4>
                 </div>
-              ) : (
-                <h5 className="text-center text-danger">
-                  No Tutor Assessment Available !!
-                </h5>
-              )}
+                {writingAnswers?.some((item) => item?.tutor_assessment) ? (
+                  writingAnswers?.map((item, index) => (
+                    <div key={index}>
+                      <div className="gptResponse">
+                        ({index + 1}). {item.tutor_assessment}
+                      </div>
+                      <br />
+                    </div>
+                  ))
+                ) : (
+                  <h5 className="text-center text-danger">
+                    Assessment By Tutor Will Be Displayed Here
+                  </h5>
+                )}
+              </div>
             </div>
           )}
           {(testType === "Reading" || testType === "Listening") && (

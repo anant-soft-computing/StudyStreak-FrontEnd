@@ -101,7 +101,6 @@ const PracticeTestReport = () => {
             ),
             Speaking: data?.filter(({ exam_type }) => exam_type === "Speaking"),
           };
-          setIsLoading(false);
           setTestData(filteredData);
 
           if (location?.state?.practiceTestID && !initialTabSet) {
@@ -109,13 +108,11 @@ const PracticeTestReport = () => {
             setActiveTest(location?.state?.practiceTestID);
             setInitialTabSet(true);
           }
-        } else {
-          setIsLoading(false);
-          console.log("error");
         }
       } catch (error) {
-        setIsLoading(false);
         console.error("error", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchData();

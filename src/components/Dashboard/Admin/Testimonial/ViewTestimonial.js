@@ -67,10 +67,7 @@ const ViewTestimonial = ({ activeTab }) => {
                 no: index + 1,
               })
             );
-            setIsLoading(false);
             setTestimonialList(testimonialWithNumbers);
-          } else {
-            setIsLoading(false);
           }
         } catch (error) {
           console.log("error", error);

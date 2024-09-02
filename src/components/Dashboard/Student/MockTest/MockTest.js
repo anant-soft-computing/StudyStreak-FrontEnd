@@ -41,8 +41,6 @@ const MockTest = () => {
         if (response.status === 200) {
           setGivenTest(response?.data?.student_mock);
           setGivenSpeakingTest(response?.data?.student_speakingblock);
-        } else {
-          console.log("error");
         }
       } catch (error) {
         console.log("error:", error);
@@ -78,8 +76,6 @@ const MockTest = () => {
                 no_of_questions: item.questions.length,
               }));
             setAllSpeakingData(allSpeakingData);
-          } else {
-            console.log("Error fetching speaking blocks");
           }
         } else {
           const examBlocksResponse = await ajaxCall(
@@ -102,13 +98,11 @@ const MockTest = () => {
                 block_type === "Assignments" && exam_category === category
             );
             setAllMockTestData(mockTestData);
-          } else {
-            console.log("Error fetching exam blocks");
           }
         }
-        setIsLoading(false);
       } catch (error) {
         console.error("Error", error);
+      } finally {
         setIsLoading(false);
       }
     };

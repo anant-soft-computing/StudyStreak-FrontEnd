@@ -188,14 +188,9 @@ const FullLengthLiveExam = () => {
           filteredData[0].papers = pappers;
           setFullPaper(pappers);
           setFullLengthId(filteredData[0].id);
-          setIsLoading(false);
-        } else {
-          console.log("error");
-          setIsLoading(false);
         }
       } catch (error) {
         console.log("error", error);
-        setIsLoading(false);
       } finally {
         setIsLoading(false);
       }

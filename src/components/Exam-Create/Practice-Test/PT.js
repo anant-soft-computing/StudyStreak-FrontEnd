@@ -61,9 +61,8 @@ const PT = ({ activeTab, type }) => {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
               },
               method: "GET",
             },
@@ -75,9 +74,8 @@ const PT = ({ activeTab, type }) => {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+                Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
               },
               method: "GET",
             },
@@ -106,15 +104,11 @@ const PT = ({ activeTab, type }) => {
               ({ block_threshold }) => block_threshold === 1
             ),
           };
-
           setExams(updatedExams);
-          setIsLoading(false);
-        } else {
-          console.log("Error: Failed to fetch data");
-          setIsLoading(false);
         }
       } catch (error) {
         console.log("Error:", error);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -162,9 +156,8 @@ const PT = ({ activeTab, type }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
           },
           method: "POST",
           body: JSON.stringify(data),

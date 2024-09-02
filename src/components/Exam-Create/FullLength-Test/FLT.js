@@ -89,13 +89,12 @@ const FLT = ({ activeTab }) => {
                 )
                 .map((item, index) => ({ ...item, no: index + 1 })),
             };
-            setIsLoading(false);
             setExams(updatedExams);
-          } else {
-            console.log("error");
           }
         } catch (error) {
           console.log("error", error);
+        } finally {
+          setIsLoading(false);
         }
       })();
     }
@@ -183,7 +182,7 @@ const FLT = ({ activeTab }) => {
         resizable: false,
         width: 50,
       },
-      { headerName: "Exam Name", field: "Name", filter: true },
+      { headerName: "Exam Name", field: "Name", filter: true, width: 228 },
       type === "Reading" && {
         headerName: "Reading Set",
         field: "reading_count",
@@ -233,7 +232,7 @@ const FLT = ({ activeTab }) => {
           </div>
         </div>
         <div className="col-xl-12 col-lg-12 col-md-12 col-12">
-          <div className="dashboard__form__wraper">
+          <div className="d-flex flex-wrap gap-3">
             <div className="dashboard__form__input">
               <label>(1) Reading : </label>
               {isLoading ? (
@@ -254,8 +253,6 @@ const FLT = ({ activeTab }) => {
                 </h5>
               )}
             </div>
-          </div>
-          <div className="dashboard__form__wraper mt-4">
             <div className="dashboard__form__input">
               <label>(2) Writing : </label>
               {isLoading ? (
@@ -277,7 +274,7 @@ const FLT = ({ activeTab }) => {
               )}
             </div>
           </div>
-          <div className="dashboard__form__wraper mt-4">
+          <div className="d-flex flex-wrap gap-3 mt-3">
             <div className="dashboard__form__input">
               <label>(3) Listening : </label>
               {isLoading ? (
@@ -298,8 +295,6 @@ const FLT = ({ activeTab }) => {
                 </h5>
               )}
             </div>
-          </div>
-          <div className="dashboard__form__wraper mt-4">
             <div className="dashboard__form__input">
               <label>(4) Speaking : </label>
               {isLoading ? (

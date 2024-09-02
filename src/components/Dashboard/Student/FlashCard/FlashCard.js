@@ -46,14 +46,12 @@ const FlashCard = () => {
             acc[curr.id] = false;
             return acc;
           }, {});
-          setIsLoading(false);
           setIsFlipped(initialFlipState);
-        } else {
-          setIsLoading(false);
         }
       } catch (error) {
-        setIsLoading(false);
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);

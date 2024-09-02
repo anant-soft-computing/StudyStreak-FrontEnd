@@ -223,7 +223,7 @@ const DALeftDrawer = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <Box sx={{ overflow: "auto", mt: 14 }}>
+          <Box sx={{ mt: 14 }}>
             <List>
               {menuList.map((item, index) => (
                 <ListItem

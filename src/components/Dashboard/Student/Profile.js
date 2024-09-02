@@ -33,15 +33,12 @@ const Profile = () => {
           8000
         );
         if (response.status === 200) {
-          setIsLoading(false);
           setProfileData(response?.data);
-        } else {
-          setIsLoading(false);
-          console.log("error");
         }
       } catch (error) {
-        setIsLoading(false);
         console.log("error:", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);

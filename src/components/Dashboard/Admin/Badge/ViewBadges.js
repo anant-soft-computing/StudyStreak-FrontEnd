@@ -49,10 +49,7 @@ const ViewBadges = ({ activeTab }) => {
               ...batch,
               no: index + 1,
             }));
-            setIsLoading(false);
             setBadgeList(badgesWithNumbers);
-          } else {
-            setIsLoading(false);
           }
         } catch (error) {
           console.log("error", error);

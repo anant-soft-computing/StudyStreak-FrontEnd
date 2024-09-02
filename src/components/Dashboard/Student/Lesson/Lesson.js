@@ -102,8 +102,6 @@ const Lesson = () => {
           // If No Matching Lesson Found, Set The First Lesson As Active
           setActiveLesson(tempCourse[0].section[0].lessons[0]);
         }
-      } else {
-        console.log("error");
       }
     } catch (error) {
       console.log("error", error);

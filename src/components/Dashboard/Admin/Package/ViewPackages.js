@@ -35,10 +35,7 @@ const ViewPackages = ({ activeTab }) => {
                 no: index + 1,
               })
             );
-            setIsLoading(false);
             setPackageList(packageWithNumbers);
-          } else {
-            setIsLoading(false);
           }
         } catch (error) {
           console.log("error", error);

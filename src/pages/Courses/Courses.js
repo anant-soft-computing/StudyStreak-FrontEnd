@@ -115,7 +115,7 @@ const Courses = () => {
                 </div>
                 <div className="course__sidebar__wraper">
                   <div className="course__heading">
-                    <h5>Skill Level</h5>
+                    <h5>Skill's Level</h5>
                   </div>
                   <div className="course__tag__list">
                     <ul>

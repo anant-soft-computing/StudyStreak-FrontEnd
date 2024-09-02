@@ -183,35 +183,6 @@ const DSLeftDrawer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student-stats/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setGivenPTCount(response?.data?.student_pt?.length);
-          setGivenFLTCount(response?.data?.student_flt?.length);
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error:", error);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
           "/get-student-course/",
           {
             headers: {
@@ -261,6 +232,8 @@ const DSLeftDrawer = () => {
 
           const batchIds = data?.student_packages.map((item) => item.batch_id);
 
+          setGivenPTCount(studentPackage?.student_pt);
+          setGivenFLTCount(studentPackage?.student_flt);
           setCount({
             practice_test_count:
               packageDetails?.practice_test_count === -1
@@ -362,7 +335,7 @@ const DSLeftDrawer = () => {
                             <span className="dashboard__label">All</span>
                           ) : givenPTCount >=
                             count?.practice_test_count + givenPTCount ? (
-                            <i className="icofont-ui-press text-danger" />
+                              <span className="dashboard__label bg-danger">N/A</span>
                           ) : (
                             <span className="dashboard__label">
                               {count.practice_test_count}
@@ -373,7 +346,7 @@ const DSLeftDrawer = () => {
                             <span className="dashboard__label">All</span>
                           ) : givenFLTCount >=
                             count?.full_length_test_count + givenFLTCount ? (
-                            <i className="icofont-ui-press text-danger" />
+                              <span className="dashboard__label bg-danger">N/A</span>
                           ) : (
                             <span className="dashboard__label">
                               {count?.full_length_test_count}

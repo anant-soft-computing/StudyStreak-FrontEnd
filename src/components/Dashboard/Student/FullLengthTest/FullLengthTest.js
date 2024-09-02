@@ -10,8 +10,8 @@ import { toast } from "react-toastify";
 const FullLengthTest = () => {
   const { count } = useLocation().state || {};
   const [givenTest, setGivenTest] = useState([]);
-  const [fullLengthTestData, setFullLengthTestData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [fullLengthTestData, setFullLengthTestData] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -80,6 +80,10 @@ const FullLengthTest = () => {
     }
   };
 
+  const viewFullLengthTest = (examId) => {
+    window.open(`/exam-fulllength-answer/${examId}`, "_blank");
+  };
+
   const columns = [
     {
       headerName: "Take Test",
@@ -92,6 +96,7 @@ const FullLengthTest = () => {
             <button
               className="take-test"
               style={{ backgroundColor: "green", border: "1px solid green" }}
+              onClick={() => viewFullLengthTest(params.data.id)}
             >
               Review Test
             </button>

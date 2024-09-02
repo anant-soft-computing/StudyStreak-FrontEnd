@@ -71,10 +71,6 @@ const ViewPackages = ({ activeTab }) => {
     },
     { headerName: "Duration", field: "duration" },
     {
-      headerName: "Coupon Code",
-      field: "coupon_code.cupon_code",
-    },
-    {
       headerName: "Soft Copy",
       field: "soft_copy",
       cellRenderer: renderItemAvailable,

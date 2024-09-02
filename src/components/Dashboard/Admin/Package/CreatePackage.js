@@ -12,7 +12,6 @@ const initialPackageData = {
   duration: 0,
   PackageType: "",
   select_course: "",
-  coupon_code: "",
   soft_copy: false,
   hard_copy: false,
   full_length_test: false,
@@ -64,10 +63,6 @@ const validateForm = (createPackageData, setFormError) => {
   }
   if (!createPackageData.select_course) {
     setFormError("Course is Required");
-    return false;
-  }
-  if (!createPackageData.coupon_code) {
-    setFormError("Coupon code is Required");
     return false;
   }
   if (!createPackageData.full_length_test_count) {
@@ -256,25 +251,6 @@ const CreatePackage = ({ setMainTab }) => {
                   isSearch={true}
                   url="/courselistforpackage/"
                   objKey={["Course_Title"]}
-                />
-              </div>
-            </div>
-            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
-              <div className="dashboard__select__heading">
-                <span>Coupon Code</span>
-              </div>
-              <div className="dashboard__selector w-100">
-                <SingleSelection
-                  value={createPackageData?.coupon_code}
-                  onChange={(val) => {
-                    dispatchCreatePackage({
-                      type: "coupon_code",
-                      value: val,
-                    });
-                  }}
-                  isSearch={true}
-                  url="/cuponlistview/"
-                  objKey={["cupon_name"]}
                 />
               </div>
             </div>

@@ -821,8 +821,17 @@ const PracticeLiveExam = () => {
               },
               {
                 role: "user",
-                content:
-                  "Give band explanation as #Explanation: exaplanationValue  and band as #Band:bandValue",
+                content: `Give band explanation as #Explanation:  
+            
+                Task Achievement: 
+    
+                Coherence and Cohesion:
+    
+                Lexical Resource:
+    
+                Grammatical Range and Accuracy:
+                
+                as #Band:bandValue`,
               },
             ],
           };

@@ -43,10 +43,10 @@ const PracticeTestAnswer = () => {
         if (response.status === 200) {
           if (examForm === "Writing") {
             const studentAnswers = response?.data?.student_answers?.Writing;
-            const totalBand = studentAnswers?.reduce(
-              (sum, item) => sum + parseFloat(item.band),
-              0
-            );
+            const totalBand = studentAnswers?.reduce((sum, item) => {
+              const bandValue = item.band !== null ? parseFloat(item.band) : 0;
+              return sum + bandValue;
+            }, 0);
             setBand(totalBand / studentAnswers?.length);
             setWritingAnswers(studentAnswers);
           }
@@ -158,6 +158,21 @@ const PracticeTestAnswer = () => {
     })();
   }, [examForm, fullPaper]);
 
+  const parseAssessment = (assessment) => {
+    const sections = {};
+    const regex =
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+    const matches = assessment?.split(regex);
+    const titles = assessment?.match(regex);
+
+    if (titles && matches) {
+      titles?.forEach((title, index) => {
+        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
+      });
+    }
+    return sections;
+  };
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -184,11 +199,19 @@ const PracticeTestAnswer = () => {
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">AI Assessment</h4>
                       </div>
-                      {writingAnswers.map((item, index) => {
+                      {writingAnswers?.map((item, index) => {
+                        const assessments = parseAssessment(item.ai_assessment);
                         return (
-                          <div>
-                            <div key={index} className="gptResponse">
-                              ({index + 1}). {item?.ai_assessment}
+                          <div key={index}>
+                            <div className="gptResponse">
+                              <h4>({index + 1}) Explanation:</h4>
+                              {Object.keys(assessments)?.map((section, i) => (
+                                <div key={i}>
+                                  <br />
+                                  <strong>{section}</strong>
+                                  <div>{assessments[section]}</div>
+                                </div>
+                              ))}
                             </div>
                             <br />
                           </div>

@@ -29,10 +29,10 @@ const ViewPTAssessment = () => {
         );
         if (response.status === 200) {
           const studentAnswers = response?.data?.student_answers[examType];
-          const totalBand = studentAnswers?.reduce(
-            (sum, item) => sum + parseFloat(item.band),
-            0
-          );
+          const totalBand = studentAnswers?.reduce((sum, item) => {
+            const bandValue = item.band !== null ? parseFloat(item.band) : 0;
+            return sum + bandValue;
+          }, 0);
           setBand(totalBand / studentAnswers?.length);
           setExamName(response?.data?.name);
           setAssessment(response?.data?.student_answers);
@@ -44,6 +44,21 @@ const ViewPTAssessment = () => {
       }
     })();
   }, [examId, examType]);
+
+  const parseAssessment = (assessment) => {
+    const sections = {};
+    const regex =
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+    const matches = assessment?.split(regex);
+    const titles = assessment?.match(regex);
+
+    if (titles && matches) {
+      titles?.forEach((title, index) => {
+        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
+      });
+    }
+    return sections;
+  };
 
   return (
     <div className="body__wrapper">
@@ -58,57 +73,53 @@ const ViewPTAssessment = () => {
                   </h4>
                   <h4 className="sidebar__title">Band : {band}</h4>
                   {examType === "Writing" && (
-                    <div>
-                      {assessment?.Writing?.some(
-                        (item) => item?.ai_assessment
-                      ) ? (
-                        <div className="writing__exam">
-                          <div className="dashboard__section__title">
-                            <h4 className="sidebar__title">AI Assessment</h4>
-                          </div>
-                          {assessment?.Writing.map(
-                            (item, index) =>
-                              item?.ai_assessment && (
-                                <div>
-                                  <div key={index} className="gptResponse">
-                                    ({index + 1}). {item.ai_assessment}
-                                  </div>
-                                  <br />
-                                </div>
-                              )
-                          )}
+                    <>
+                      <div className="writing__exam">
+                        <div className="dashboard__section__title">
+                          <h4 className="sidebar__title">AI Assessment</h4>
                         </div>
-                      ) : (
-                        <h5 className="text-center text-danger">
-                          No AI Assessment Available !!
-                        </h5>
-                      )}
+                        {assessment?.Writing?.map((item, index) => {
+                          const assessments = parseAssessment(item.ai_assessment);
+                          return (
+                            <div key={index}>
+                              <div className="gptResponse">
+                                <h4>({index + 1}) Explanation:</h4>
+                                {Object.keys(assessments)?.map((section, i) => (
+                                  <div key={i}>
+                                    <br />
+                                    <strong>{section}</strong>
+                                    <div>{assessments[section]}</div>
+                                  </div>
+                                ))}
+                              </div>
+                              <br />
+                            </div>
+                          );
+                        })}
+                      </div>
 
-                      {assessment?.Writing?.some(
-                        (item) => item?.tutor_assessment
-                      ) ? (
-                        <div className="writing__exam">
-                          <div className="dashboard__section__title">
-                            <h4 className="sidebar__title">Tutor Assessment</h4>
-                          </div>
-                          {assessment?.Writing.map(
-                            (item, index) =>
-                              item?.tutor_assessment && (
-                                <div>
-                                  <div key={index} className="gptResponse">
-                                    ({index + 1}). {item.tutor_assessment}
-                                  </div>
-                                  <br />
-                                </div>
-                              )
-                          )}
+                      <div className="writing__exam">
+                        <div className="dashboard__section__title">
+                          <h4 className="sidebar__title">Tutor Assessment</h4>
                         </div>
-                      ) : (
-                        <h5 className="text-center text-danger">
-                          No Tutor Assessment Available !!
-                        </h5>
-                      )}
-                    </div>
+                        {assessment?.Writing?.some(
+                          (item) => item?.tutor_assessment
+                        ) ? (
+                          assessment?.Writing?.map((item, index) => (
+                            <div key={index}>
+                              <div className="gptResponse">
+                                ({index + 1}). {item.tutor_assessment}
+                              </div>
+                              <br />
+                            </div>
+                          ))
+                        ) : (
+                          <h5 className="text-center text-danger">
+                            Assessment By Tutor Will Be Displayed Here
+                          </h5>
+                        )}
+                      </div>
+                    </>
                   )}
                 </div>
               </div>

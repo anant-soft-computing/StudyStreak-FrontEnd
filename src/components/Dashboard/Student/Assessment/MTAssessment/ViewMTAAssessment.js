@@ -41,15 +41,34 @@ const ViewMTAAssessment = () => {
     })();
   }, [examId, examType]);
 
+  const parseAssessment = (assessment) => {
+    const sections = {};
+    const regex =
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+    const matches = assessment?.split(regex);
+    const titles = assessment?.match(regex);
+
+    if (titles && matches) {
+      titles?.forEach((title, index) => {
+        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
+      });
+    }
+    return sections;
+  };
+
+  const aiAssessmentSections = wAssData?.AI_Assessment
+    ? parseAssessment(wAssData?.AI_Assessment)
+    : {};
+
   return (
-    <div className='body__wrapper'>
-      <div className='main_wrapper overflow-hidden'>
-        <div className='blogarea__2 sp_top_100 sp_bottom_100'>
-          <div className='container'>
-            <div className='row'>
-              <div className='col-xl-8 col-lg-8 AnswerCard'>
-                <div className='blog__details__content__wraper'>
-                  <h4 className='sidebar__title'>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="blogarea__2 sp_top_100 sp_bottom_100">
+          <div className="container">
+            <div className="row">
+              <div className="col-xl-8 col-lg-8 AnswerCard">
+                <div className="blog__details__content__wraper">
+                  <h4 className="sidebar__title">
                     Assessment For :{" "}
                     {examType === "Writing"
                       ? wAssData?.exam_name
@@ -58,27 +77,46 @@ const ViewMTAAssessment = () => {
 
                   <div>
                     {examType === "Writing" && (
-                      <h4 className='sidebar__title'>
+                      <h4 className="sidebar__title">
                         Band : {wAssData?.band}
                       </h4>
                     )}
                     {examType === "Writing" && (
                       <div>
-                        <div className='writing__exam'>
-                          <div className='dashboard__section__title'>
-                            <h4 className='sidebar__title'>AI Assessment</h4>
+                        <div className="writing__exam">
+                          <div className="dashboard__section__title">
+                            <h4 className="sidebar__title">AI Assessment</h4>
                           </div>
-                          <div className='gptResponse'>
-                            {wAssData?.AI_Assessment}
+                          <div className="gptResponse">
+                            {Object.keys(aiAssessmentSections)?.length > 0 && (
+                              <>
+                                <h4>#Explanation:</h4>
+                                {Object.keys(aiAssessmentSections)?.map(
+                                  (section, index) => (
+                                    <div key={index}>
+                                      <br />
+                                      <strong>{section}</strong>
+                                      <div>{aiAssessmentSections[section]}</div>
+                                    </div>
+                                  )
+                                )}
+                              </>
+                            )}
                           </div>
                         </div>
-                        <div className='writing__exam'>
-                          <div className='dashboard__section__title'>
-                            <h4 className='sidebar__title'>Tutor Assessment</h4>
+                        <div className="writing__exam">
+                          <div className="dashboard__section__title">
+                            <h4 className="sidebar__title">Tutor Assessment</h4>
                           </div>
-                          <div className='gptResponse'>
-                            {wAssData?.Tutor_Assessment}
-                          </div>
+                          {wAssData?.Tutor_Assessment ? (
+                            <div className="gptResponse">
+                              {wAssData?.Tutor_Assessment}
+                            </div>
+                          ) : (
+                            <h5 className="text-center text-danger">
+                              Assessment By Tutor Will Be Displayed Here{" "}
+                            </h5>
+                          )}
                         </div>
                       </div>
                     )}
@@ -86,8 +124,8 @@ const ViewMTAAssessment = () => {
                 </div>
               </div>
               {examType === "Speaking" && (
-                  <div className='col-xl-12'>
-                    <div className='dashboard__table table-responsive'>
+                <div className="col-xl-12">
+                  <div className="dashboard__table table-responsive">
                     <table>
                       <thead>
                         <tr>
@@ -116,7 +154,7 @@ const ViewMTAAssessment = () => {
                               <audio controls>
                                 <source
                                   src={`https://studystreak.in/${answer.answer_audio}`}
-                                    type='audio/mpeg'
+                                  type="audio/mpeg"
                                 />
                               </audio>
                             </td>

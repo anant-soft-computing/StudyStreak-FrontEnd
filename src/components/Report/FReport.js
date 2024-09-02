@@ -196,7 +196,7 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
 
   const calculateAverageBand = (answers) => {
     const bandScores = answers
-      ?.map((item) => parseFloat(item.band))
+      ?.map((item) => (item.band !== null ? parseFloat(item.band) : 0))
       .filter((band) => !isNaN(band));
     if (bandScores?.length > 0) {
       const sum = bandScores?.reduce((a, b) => a + b, 0);
@@ -215,6 +215,21 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
       speaking: { band: speakingBand },
     }));
   }, [writingTestAnswers, speakingTestAnswers, setCounts]);
+
+  const parseAssessment = (assessment) => {
+    const sections = {};
+    const regex =
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+    const matches = assessment?.split(regex);
+    const titles = assessment?.match(regex);
+
+    if (titles && matches) {
+      titles?.forEach((title, index) => {
+        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
+      });
+    }
+    return sections;
+  };
 
   return (
     <div className="row mt-4">
@@ -316,10 +331,18 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
                     <h4 className="sidebar__title">AI Assessment</h4>
                   </div>
                   {writingTestAnswers?.Writing?.map((item, index) => {
+                    const assessments = parseAssessment(item?.ai_assessment);
                     return (
-                      <div>
-                        <div key={index} className="gptResponse">
-                          ({index + 1}). {item?.ai_assessment}
+                      <div key={index}>
+                        <div className="gptResponse">
+                          <h4>({index + 1}) Explanation:</h4>
+                          {Object.keys(assessments)?.map((section, i) => (
+                            <div key={i}>
+                              <br />
+                              <strong>{section}</strong>
+                              <div>{assessments[section]}</div>
+                            </div>
+                          ))}
                         </div>
                         <br />
                       </div>
@@ -330,16 +353,22 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
                   <div className="dashboard__section__title">
                     <h4 className="sidebar__title">Tutor Assessment</h4>
                   </div>
-                  {writingTestAnswers?.Writing?.map((item, index) => {
-                    return (
-                      <div>
-                        <div key={index} className="gptResponse">
-                          ({index + 1}). {item?.tutor_assessment}
+                  {writingTestAnswers?.Writing?.some(
+                    (item) => item?.tutor_assessment
+                  ) ? (
+                    writingTestAnswers?.Writing?.map((item, index) => (
+                      <div key={index}>
+                        <div className="gptResponse">
+                          ({index + 1}). {item.tutor_assessment}
                         </div>
                         <br />
                       </div>
-                    );
-                  })}
+                    ))
+                  ) : (
+                    <h5 className="text-center text-danger">
+                      Assessment By Tutor Will Be Displayed Here
+                    </h5>
+                  )}
                 </div>
               </div>
             </div>

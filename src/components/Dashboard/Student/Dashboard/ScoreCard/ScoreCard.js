@@ -70,10 +70,11 @@ const ScoreCard = () => {
           const studentAnswers = response?.data?.student_answers[testType];
 
           if (testType === "Writing" || testType === "Speaking") {
-            const totalBand = studentAnswers.reduce(
-              (sum, item) => sum + parseFloat(item.band),
-              0
-            );
+            const totalBand = studentAnswers.reduce((sum, item) => {
+              const bandValue = item.band !== null ? parseFloat(item.band) : 0;
+              return sum + bandValue;
+            }, 0);
+
             setBand(totalBand / studentAnswers.length);
           } else if (testType === "Reading" || testType === "Listening") {
             handleReadingOrListening(response.data, testType);
@@ -306,7 +307,7 @@ const ScoreCard = () => {
 
   const calculateAverageBand = (answers) => {
     const bandScores = answers
-      ?.map((item) => parseFloat(item.band))
+    ?.map((item) => (item.band !== null ? parseFloat(item.band) : 0))
       .filter((band) => !isNaN(band));
     if (bandScores?.length > 0) {
       const sum = bandScores.reduce((a, b) => a + b, 0);

@@ -55,10 +55,10 @@ const TestReport = ({
           if (testType === "Speaking" || testType === "Writing") {
             const answersKey = testType === "Speaking" ? "Speaking" : "Writing";
             studentAnswers = response?.data?.student_answers?.[answersKey];
-            const totalBand = studentAnswers?.reduce(
-              (sum, item) => sum + parseFloat(item.band),
-              0
-            );
+            const totalBand = studentAnswers?.reduce((sum, item) => {
+              const bandValue = item.band !== null ? parseFloat(item.band) : 0;
+              return sum + bandValue;
+            }, 0);
             band = totalBand / studentAnswers?.length;
           } else {
             if (

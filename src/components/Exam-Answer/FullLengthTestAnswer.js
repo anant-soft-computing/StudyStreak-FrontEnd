@@ -7,7 +7,6 @@ import CancelIcon from "../UI/CancelIcon";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import SkipIcon from "../UI/SkipIcon";
-import AnswerCard from "./AnswerCard";
 
 const FullLengthTestAnswer = () => {
   const { examId } = useParams();
@@ -264,18 +263,81 @@ const FullLengthTestAnswer = () => {
               <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
-                  <AnswerCard
-                    skipCount={
-                      counts?.reading?.skipped + counts?.listening?.skipped
-                    }
-                    correctCount={
-                      counts?.reading?.correct + counts?.listening?.correct
-                    }
-                    incorrectCount={
-                      counts?.reading?.incorrect + counts?.listening?.incorrect
-                    }
-                    bandValue={averageBand()}
-                  />
+
+                  <div className="d-flex flex-wrap justify-content-center gap-3">
+                    <div className="flt-question-card">
+                      Correct Answer :{" "}
+                      <span>
+                        {counts?.reading?.correct + counts?.listening?.correct}
+                      </span>
+                    </div>
+                    <div className="flt-question-card">
+                      Incorrect Answer :{" "}
+                      <span>
+                        {counts?.reading?.incorrect +
+                          counts?.listening?.incorrect}
+                      </span>
+                    </div>
+                    <div className="flt-question-card">
+                      Skip Answer :{" "}
+                      <span>
+                        {counts?.reading?.skipped + counts?.listening?.skipped}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="d-flex flex-wrap justify-content-center gap-3 mt-3">
+                    <div
+                      className="flt-band-card"
+                      style={{
+                        backgroundColor: "#86e9a9",
+                      }}
+                    >
+                      <div className="text-center">Reading</div>
+                      <div className="text-center">{counts?.reading?.band}</div>
+                    </div>
+                    <div
+                      className="flt-band-card"
+                      style={{
+                        backgroundColor: "#f7cb5e",
+                      }}
+                    >
+                      <div className="text-center">Writing</div>
+                      <div className="text-center">{counts?.writing?.band}</div>
+                    </div>
+                    <div
+                      className="flt-band-card"
+                      style={{
+                        backgroundColor: "#ff4d4d",
+                      }}
+                    >
+                      <div className="text-center">Listening</div>
+                      <div className="text-center">
+                        {counts?.listening?.band}
+                      </div>
+                    </div>
+                    <div
+                      className="flt-band-card"
+                      style={{
+                        backgroundColor: "#24d9d9",
+                      }}
+                    >
+                      <div className="text-center">Speaking</div>
+                      <div className="text-center">
+                        {counts?.speaking?.band}
+                      </div>
+                    </div>
+                    <div
+                      className="flt-band-card"
+                      style={{
+                        backgroundColor: "#dcdcdc",
+                      }}
+                    >
+                      <div className="text-center">Over All</div>
+                      <div className="text-center">{averageBand()}</div>
+                    </div>
+                  </div>
+
                   <div style={{ marginTop: "50px" }}>
                     {/* Reading */}
                     <div className="dashboard__section__title">

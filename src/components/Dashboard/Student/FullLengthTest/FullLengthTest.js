@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import DSSidebar from "../DSSideBar/DSSideBar";
@@ -8,6 +8,7 @@ import Table from "../../../UI/Table";
 import { toast } from "react-toastify";
 
 const FullLengthTest = () => {
+  const navigate = useNavigate();
   const { count } = useLocation().state || {};
   const [givenTest, setGivenTest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,7 +82,7 @@ const FullLengthTest = () => {
   };
 
   const viewFullLengthTest = (examId) => {
-    window.open(`/exam-fulllength-answer/${examId}`, "_blank");
+    navigate(`/exam-fulllength-answer/${examId}`);
   };
 
   const columns = [

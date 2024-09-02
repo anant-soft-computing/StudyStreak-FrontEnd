@@ -16869,3 +16869,19 @@ div.gridarea__wraper {
   background-color: grey !important;
   color: white !important;
 }
+
+.flt-band-card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 5px;
+  border: 1px solid #01579b;
+  font-weight: 600;
+}
+
+.flt-question-card {
+  padding: 20px;
+  border-radius: 5px;
+  background-color: lightgray;
+  border: 1px solid #01579b;
+  font-weight: 600;
+}

@@ -789,8 +789,10 @@ const PracticeLiveExam = () => {
           let gptResponse;
           let bandValue;
 
-          const examItem = examBlock.find(exam => exam.id === item.exam_id);
-          const passage = examItem ? examItem.passage : "Passage not found";
+          const examItem = examBlock.find((exam) => exam.id === item.exam_id);
+          const passage = examItem
+            ? examItem.passage?.replace(/<img[^>]*>/g, "")
+            : "Passage not found";
 
           const gptBody = {
             model: "gpt-3.5-turbo",

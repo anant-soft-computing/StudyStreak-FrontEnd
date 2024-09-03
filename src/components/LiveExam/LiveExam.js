@@ -38,11 +38,6 @@ const LiveExam = () => {
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
-  console.log(
-    "-----ChatGPT API KEY----------->",
-    process.env.REACT_APP_OPEN_AI_SECRET
-  );
-
   useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||
@@ -216,7 +211,7 @@ const LiveExam = () => {
         },
         {
           role: "user",
-          content: `Questions: ${examData?.passage}`,
+          content: `Questions: ${examData?.passage?.replace(/<img[^>]*>/g, "")}`,
         },
         {
           role: "user",

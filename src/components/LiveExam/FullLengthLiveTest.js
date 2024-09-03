@@ -778,7 +778,10 @@ const FullLengthLiveExam = () => {
                 },
                 {
                   role: "user",
-                  content: `Questions: ${item.question}`,
+                  content: `Questions: ${item?.question?.replace(
+                    /<img[^>]*>/g,
+                    ""
+                  )}`,
                 },
                 {
                   role: "user",

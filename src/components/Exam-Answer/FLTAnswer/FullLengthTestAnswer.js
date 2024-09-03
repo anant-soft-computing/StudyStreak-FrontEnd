@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import BandScoreCard from "./BandScoreCard";
-import ajaxCall from "../../helpers/ajaxCall";
+import ajaxCall from "../../../helpers/ajaxCall";
 import { useLocation, useParams } from "react-router-dom";
-import CheckIcon from "../UI/CheckIcon";
-import CancelIcon from "../UI/CancelIcon";
-import listeningBandValues from "../../utils/bandValues/listeningBandValues";
-import readingBandValues from "../../utils/bandValues/ReadingBandValues";
-import SkipIcon from "../UI/SkipIcon";
+import CheckIcon from "../../UI/CheckIcon";
+import CancelIcon from "../../UI/CancelIcon";
+import listeningBandValues from "../../../utils/bandValues/listeningBandValues";
+import readingBandValues from "../../../utils/bandValues/ReadingBandValues";
+import SkipIcon from "../../UI/SkipIcon";
+import QuestionCard from "./QuestionCard";
+import BandCard from "./BandCard";
+import ScoreCard from "../ScoreCard/ScoreCard";
 
 const FullLengthTestAnswer = () => {
   const { examId } = useParams();
@@ -242,7 +244,7 @@ const FullLengthTestAnswer = () => {
   const parseAssessment = (assessment) => {
     const sections = {};
     const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
     const matches = assessment?.split(regex);
     const titles = assessment?.match(regex);
 
@@ -263,81 +265,8 @@ const FullLengthTestAnswer = () => {
               <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
-
-                  <div className="d-flex flex-wrap justify-content-center gap-3">
-                    <div className="flt-question-card">
-                      Correct Answer :{" "}
-                      <span>
-                        {counts?.reading?.correct + counts?.listening?.correct}
-                      </span>
-                    </div>
-                    <div className="flt-question-card">
-                      Incorrect Answer :{" "}
-                      <span>
-                        {counts?.reading?.incorrect +
-                          counts?.listening?.incorrect}
-                      </span>
-                    </div>
-                    <div className="flt-question-card">
-                      Skip Answer :{" "}
-                      <span>
-                        {counts?.reading?.skipped + counts?.listening?.skipped}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="d-flex flex-wrap justify-content-center gap-3 mt-3">
-                    <div
-                      className="flt-band-card"
-                      style={{
-                        backgroundColor: "#86e9a9",
-                      }}
-                    >
-                      <div className="text-center">Reading</div>
-                      <div className="text-center">{counts?.reading?.band}</div>
-                    </div>
-                    <div
-                      className="flt-band-card"
-                      style={{
-                        backgroundColor: "#f7cb5e",
-                      }}
-                    >
-                      <div className="text-center">Writing</div>
-                      <div className="text-center">{counts?.writing?.band}</div>
-                    </div>
-                    <div
-                      className="flt-band-card"
-                      style={{
-                        backgroundColor: "#ff4d4d",
-                      }}
-                    >
-                      <div className="text-center">Listening</div>
-                      <div className="text-center">
-                        {counts?.listening?.band}
-                      </div>
-                    </div>
-                    <div
-                      className="flt-band-card"
-                      style={{
-                        backgroundColor: "#24d9d9",
-                      }}
-                    >
-                      <div className="text-center">Speaking</div>
-                      <div className="text-center">
-                        {counts?.speaking?.band}
-                      </div>
-                    </div>
-                    <div
-                      className="flt-band-card"
-                      style={{
-                        backgroundColor: "#dcdcdc",
-                      }}
-                    >
-                      <div className="text-center">Over All</div>
-                      <div className="text-center">{averageBand()}</div>
-                    </div>
-                  </div>
-
+                  <QuestionCard counts={counts} />
+                  <BandCard counts={counts} averageBand={averageBand()} />
                   <div style={{ marginTop: "50px" }}>
                     {/* Reading */}
                     <div className="dashboard__section__title">
@@ -627,7 +556,7 @@ const FullLengthTestAnswer = () => {
                   </div>
                 </div>
               </div>
-              <BandScoreCard />
+              <ScoreCard />
             </div>
           </div>
         </div>

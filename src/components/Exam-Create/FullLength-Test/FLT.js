@@ -65,8 +65,10 @@ const FLT = ({ activeTab }) => {
             },
             8000
           );
-          if (response.status === 200) {
-            const { data } = response;
+          if (response?.status === 200) {
+            const data = response?.data?.filter(
+              ({ Name }) => !Name.includes("SPT")
+            );
             const updatedExams = {
               Reading: data
                 .filter(

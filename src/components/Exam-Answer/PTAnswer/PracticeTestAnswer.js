@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import ajaxCall from "../../helpers/ajaxCall";
-import BandScoreCard from "./BandScoreCard";
-import AnswerCard from "./AnswerCard";
-import SkipIcon from "../UI/SkipIcon";
-import CheckIcon from "../UI/CheckIcon";
-import CancelIcon from "../UI/CancelIcon";
-import readingBandValues from "../../utils/bandValues/ReadingBandValues";
-import listeningBandValues from "../../utils/bandValues/listeningBandValues";
+import ajaxCall from "../../../helpers/ajaxCall";
+import ScoreCard from "../ScoreCard/ScoreCard";
+import AnswerCard from "../AnswerCard";
+import SkipIcon from "../../UI/SkipIcon";
+import CheckIcon from "../../UI/CheckIcon";
+import CancelIcon from "../../UI/CancelIcon";
+import readingBandValues from "../../../utils/bandValues/ReadingBandValues";
+import listeningBandValues from "../../../utils/bandValues/listeningBandValues";
 
 const PracticeTestAnswer = () => {
   const [band, setBand] = useState(0);
@@ -161,7 +161,7 @@ const PracticeTestAnswer = () => {
   const parseAssessment = (assessment) => {
     const sections = {};
     const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
     const matches = assessment?.split(regex);
     const titles = assessment?.match(regex);
 
@@ -323,7 +323,7 @@ const PracticeTestAnswer = () => {
                   )}
                 </div>
               </div>
-              <BandScoreCard />
+              <ScoreCard />
             </div>
           </div>
         </div>

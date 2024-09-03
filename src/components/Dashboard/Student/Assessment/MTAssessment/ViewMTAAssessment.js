@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import BandScoreCard from "../../../../Exam-Answer/BandScoreCard";
+import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
 import { useLocation, useParams } from "react-router-dom";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
@@ -15,7 +15,7 @@ const ViewMTAAssessment = () => {
         const response = await ajaxCall(
           examType === "Writing"
             ? `/exam-block-answers/${examId}/`
-            : `/speaking-block/answers/${examId}`,
+            : `/speaking-block/answers/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -44,7 +44,7 @@ const ViewMTAAssessment = () => {
   const parseAssessment = (assessment) => {
     const sections = {};
     const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
     const matches = assessment?.split(regex);
     const titles = assessment?.match(regex);
 
@@ -167,7 +167,7 @@ const ViewMTAAssessment = () => {
                   </div>
                 </div>
               )}
-              {examType === "Writing" && <BandScoreCard />}
+              {examType === "Writing" && <ScoreCard />}
             </div>
           </div>
         </div>

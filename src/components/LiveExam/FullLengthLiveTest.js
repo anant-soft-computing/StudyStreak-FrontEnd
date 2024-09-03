@@ -755,26 +755,26 @@ const FullLengthLiveExam = () => {
       await Promise.all(
         answersArray.map(async (item) => {
           if (item?.exam_type === "Writing") {
-            let gptResponse;
-            let bandValue;
+            let gptResponse = "";
+            let bandValue = null;
             const gptBody = {
               model: "gpt-3.5-turbo",
               messages: [
                 {
                   role: "user",
                   content: `Analyse The Package For IELTS Writing Task With Following Criteria
-  
+          
                   Assessment Criteria:
-  
+          
                   Task 1:
-  
+          
                   Task Achievement: Does the response address all parts of the task and provide a well-developed description, summary, or explanation of the information presented?
-  
+          
                   Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately?
-  
+          
                   Lexical Resource: Is a wide range of vocabulary used with precision and accuracy?
-  
-                  Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy? `,
+          
+                  Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy?`,
                 },
                 {
                   role: "user",
@@ -790,13 +790,13 @@ const FullLengthLiveExam = () => {
                 {
                   role: "user",
                   content: `Give band explanation as #Explanation:  
-              
+                  
                   Task Achievement: 
-      
+          
                   Coherence and Cohesion:
-      
+          
                   Lexical Resource:
-      
+          
                   Grammatical Range and Accuracy:
                   
                   as #Band:bandValue`,
@@ -817,10 +817,25 @@ const FullLengthLiveExam = () => {
                 }
               );
               const data = await res.json();
-              bandValue = data?.choices?.[0]?.message?.content
-                ?.split("#Band:")[1]
-                .split(" ")[1];
-              gptResponse = data?.choices?.[0]?.message?.content;
+              if (data?.choices?.[0]?.message?.content) {
+                gptResponse = data.choices[0].message.content;
+
+                // Use regex to extract the band value
+                const bandMatch = gptResponse.match(/Band:\s*(\d+(\.\d+)?)/);
+                bandValue = bandMatch ? bandMatch[1] : null;
+
+                if (!bandValue) {
+                  isError = true;
+                  toast.error(
+                    "Band value could not be extracted. Please try again."
+                  );
+                  return;
+                }
+              } else {
+                isError = true;
+                toast.error("AI response is empty. Please try again.");
+                return;
+              }
               newAnswersArray.push({
                 exam_id: item.exam_id,
                 band: bandValue,

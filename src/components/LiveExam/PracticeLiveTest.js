@@ -786,8 +786,8 @@ const PracticeLiveExam = () => {
       // Wait for all ChatGPT API calls to complete
       await Promise.all(
         answersArray.map(async (item) => {
-          let gptResponse;
-          let bandValue;
+          let gptResponse = "";
+          let bandValue = null;
 
           const examItem = examBlock.find((exam) => exam.id === item.exam_id);
           const passage = examItem
@@ -819,18 +819,18 @@ const PracticeLiveExam = () => {
               },
               {
                 role: "user",
-                content: `Answers: ${item.data[0].answer_text} `,
+                content: `Answers: ${item.data[0].answer_text}`,
               },
               {
                 role: "user",
                 content: `Give band explanation as #Explanation:  
-            
+                
                 Task Achievement: 
-    
+        
                 Coherence and Cohesion:
-    
+        
                 Lexical Resource:
-    
+        
                 Grammatical Range and Accuracy:
                 
                 as #Band:bandValue`,
@@ -849,11 +849,29 @@ const PracticeLiveExam = () => {
               body: JSON.stringify(gptBody),
             }
           );
+
           const data = await res.json();
-          bandValue = data?.choices?.[0]?.message?.content
-            ?.split("#Band:")[1]
-            .split(" ")[1];
-          gptResponse = data?.choices?.[0]?.message?.content;
+
+          if (data?.choices?.[0]?.message?.content) {
+            gptResponse = data.choices[0].message.content;
+
+            // Use regex to extract the band value
+            const bandMatch = gptResponse.match(/Band:\s*(\d+(\.\d+)?)/);
+            bandValue = bandMatch ? bandMatch[1] : null;
+
+            if (!bandValue) {
+              isError = true;
+              toast.error(
+                "Band value could not be extracted. Please try again."
+              );
+              return;
+            }
+          } else {
+            isError = true;
+            toast.error("AI response is empty. Please try again.");
+            return;
+          }
+
           newAnswersArray.push({
             exam_id: item.exam_id,
             band: bandValue,

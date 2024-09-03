@@ -196,18 +196,18 @@ const LiveExam = () => {
         {
           role: "user",
           content: `Analyse The Package For IELTS Writing Task With Following Criteria
-
+  
           Assessment Criteria:
-
+  
           Task 1:
-
+  
           Task Achievement: Does the response address all parts of the task and provide a well-developed description, summary, or explanation of the information presented?
-
+  
           Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately?
-
+  
           Lexical Resource: Is a wide range of vocabulary used with precision and accuracy?
-
-          Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy? `,
+  
+          Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy?`,
         },
         {
           role: "user",
@@ -215,18 +215,18 @@ const LiveExam = () => {
         },
         {
           role: "user",
-          content: `Answers: ${examAnswer[0].answers[0].answer} `,
+          content: `Answers: ${examAnswer[0].answers[0].answer}`,
         },
         {
           role: "user",
           content: `Give band explanation as #Explanation:  
             
             Task Achievement: 
-
+  
             Coherence and Cohesion:
-
+  
             Lexical Resource:
-
+  
             Grammatical Range and Accuracy:
             
             as #Band:bandValue`,
@@ -237,6 +237,7 @@ const LiveExam = () => {
     try {
       let gptResponse;
       let bandValue;
+  
       try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
@@ -246,13 +247,23 @@ const LiveExam = () => {
           },
           body: JSON.stringify(gptBody),
         });
+  
+        if (!res.ok) {
+          throw new Error("Failed to fetch from OpenAI API");
+        }
+  
         const data = await res.json();
-        bandValue = data?.choices?.[0]?.message?.content
-          ?.split("#Band:")[1]
-          .split(" ")[1];
-        gptResponse = data?.choices?.[0]?.message?.content;
-      } catch (error) {}
-
+        gptResponse = data?.choices?.[0]?.message?.content || "";
+  
+        // Extract band value using regex
+        const bandMatch = gptResponse.match(/#Band:\s*(\d+(\.\d+)?)/);
+        bandValue = bandMatch ? bandMatch[1] : null;
+        
+      } catch (error) {
+        toast.error("Error occurred while fetching data from AI. Please try again.");
+        return;
+      }
+  
       const data = JSON.stringify({
         student_exam: answersArray,
         user: userData?.userId,
@@ -261,34 +272,38 @@ const LiveExam = () => {
         band: bandValue,
         exam_type: examData?.exam_type,
       });
-
-      const response = await ajaxCall(
-        `/studentanswerlistview/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
+  
+      try {
+        const response = await ajaxCall(
+          `/studentanswerlistview/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "POST",
+            body: data,
           },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-
-      if (response.status === 201) {
-        setTimerRunning(false);
-        examSubmit();
-        navigate(`/exam-answer/${examData?.id}`);
-      } else if (response.status === 400) {
-        toast.error("Please Submit Your Exam Answer");
-      } else {
+          8000
+        );
+  
+        if (response.status === 201) {
+          setTimerRunning(false);
+          examSubmit();
+          navigate(`/exam-answer/${examData?.id}`);
+        } else if (response.status === 400) {
+          toast.error("Please Submit Your Exam Answer");
+        } else {
+          toast.error("Some Problem Occurred. Please try again.");
+        }
+      } catch (error) {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      console.log("error", error);
+      toast.error("An unexpected error occurred. Please try again.");
     }
   };
 

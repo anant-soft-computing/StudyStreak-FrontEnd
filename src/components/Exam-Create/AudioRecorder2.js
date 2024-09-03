@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import ajaxCall from "../../helpers/ajaxCall";
 
 const AudioRecorder = ({
@@ -15,6 +16,7 @@ const AudioRecorder = ({
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
+  const { transcript } = useSpeechRecognition();
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -47,6 +49,7 @@ const AudioRecorder = ({
 
         mediaRecorderRef.current.start();
         setIsRecording(true);
+        SpeechRecognition.startListening({ continuous: true });
       })
       .catch((error) => console.error("Error accessing microphone:", error));
   };
@@ -54,6 +57,7 @@ const AudioRecorder = ({
   const handleStopRecording = () => {
     mediaRecorderRef.current.stop();
     setIsRecording(false);
+    SpeechRecognition.stopListening();
   };
 
   useEffect(() => {
@@ -134,6 +138,7 @@ const AudioRecorder = ({
           (!isRecording && !audioBlob && "Click on Mic to Recording")}
       </h6>
       {audioBlob && <audio controls src={URL.createObjectURL(audioBlob)} />}
+      <p>Transcript: {transcript}</p>
     </div>
   );
 };

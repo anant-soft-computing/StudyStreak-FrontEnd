@@ -119,7 +119,7 @@ const LiveSpeakingExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/speaking-block/${examId}`,
+          `/speaking-block/${examId}/`,
           {
             headers: {
               Accept: "application/json",

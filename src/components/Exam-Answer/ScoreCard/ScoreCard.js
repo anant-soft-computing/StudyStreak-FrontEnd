@@ -1,6 +1,6 @@
 import React from "react";
 
-const BandScoreCard = () => {
+const ScoreCard = () => {
   return (
     <div className="col-xl-4 col-lg-4">
       <div className="course__details__sidebar">
@@ -110,4 +110,4 @@ const BandScoreCard = () => {
   );
 };
 
-export default BandScoreCard;
+export default ScoreCard;

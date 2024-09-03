@@ -4,12 +4,14 @@ import ajaxCall from "../../helpers/ajaxCall";
 import AnswerCard from "../Exam-Answer/AnswerCard";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
-import BandScoreCard from "../Exam-Answer/BandScoreCard";
+import ScoreCard from "../Exam-Answer/ScoreCard/ScoreCard";
+import SkipIcon from "../UI/SkipIcon";
 
 const LiveAssignmentAnswer = () => {
   const { examId } = useParams();
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
+  const [skipCount, setSkipCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [examName, setExamName] = useState("");
@@ -50,12 +52,16 @@ const LiveAssignmentAnswer = () => {
 
   useEffect(() => {
     let correct = 0;
+    let skipped = 0;
     let incorrect = 0;
+
     studentAnswers?.forEach((item, index) => {
       const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
       const studentAnswerText = item.answer_text?.trim();
 
-      if (correctAnswerText?.includes(" OR ")) {
+      if (!studentAnswerText) {
+        skipped++;
+      } else if (correctAnswerText?.includes(" OR ")) {
         const correctOptions = correctAnswerText
           .split(" OR ")
           .map((option) => option.trim());
@@ -83,6 +89,7 @@ const LiveAssignmentAnswer = () => {
         }
       }
     });
+    setSkipCount(skipped);
     setCorrectCount(correct);
     setIncorrectCount(incorrect);
   }, [studentAnswers, correctAnswer]);
@@ -100,6 +107,7 @@ const LiveAssignmentAnswer = () => {
                     totalQuestions={correctAnswer.length}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}
+                    skipCount={skipCount}
                     bandValue={band}
                     examType={examType}
                   />
@@ -122,79 +130,81 @@ const LiveAssignmentAnswer = () => {
                               </thead>
                               <tbody>
                                 {correctAnswer.map(
-                                  ({ id, answer_text }, index) => (
-                                    <tr
-                                      key={id}
-                                      className={`${
-                                        index % 2 === 0
-                                          ? ""
-                                          : "dashboard__table__row"
-                                      }`}
-                                    >
-                                      <td className="text-dark">
-                                        {index + 1}.
-                                      </td>
-                                      <td className="text-dark">
-                                        <div className="dashboard__table__star">
-                                          {answer_text}
-                                        </div>
-                                      </td>
-                                      <td className="text-dark">
-                                        {studentAnswers?.length > 0 &&
-                                          studentAnswers[index] &&
-                                          studentAnswers[index].answer_text}
-                                      </td>
-                                      <td className="text-dark">
-                                        {studentAnswers?.length > 0 &&
-                                        studentAnswers[index] &&
-                                        correctAnswer[
-                                          index
-                                        ]?.answer_text.includes(" OR ") ? (
-                                          correctAnswer[index]?.answer_text
-                                            .split(" OR ")
-                                            .map((option) =>
-                                              option.trim().toLowerCase()
-                                            )
-                                            .includes(
-                                              studentAnswers[
-                                                index
-                                              ]?.answer_text.toLowerCase()
-                                            ) ? (
-                                            <CheckIcon />
-                                          ) : (
-                                            <CancelIcon />
-                                          )
-                                        ) : studentAnswers?.length > 0 &&
-                                          studentAnswers[index] &&
-                                          correctAnswer[
-                                            index
-                                          ]?.answer_text.includes(" AND ") ? (
-                                          correctAnswer[index]?.answer_text
-                                            .split(" AND ")
-                                            .map((option) =>
-                                              option.trim().toLowerCase()
-                                            )
-                                            .every((option) =>
-                                              studentAnswers[index]?.answer_text
-                                                .toLowerCase()
-                                                .includes(option)
-                                            ) ? (
-                                            <CheckIcon />
-                                          ) : (
-                                            <CancelIcon />
-                                          )
-                                        ) : studentAnswers?.length > 0 &&
-                                          studentAnswers[index] &&
-                                          studentAnswers[index].answer_text ===
-                                            correctAnswer[index]
-                                              ?.answer_text ? (
+                                  ({ id, answer_text }, index) => {
+                                    let icon;
+                                    const studentAnswer =
+                                      studentAnswers?.[
+                                        index
+                                      ]?.answer_text?.trim();
+                                    const correctAnswerText =
+                                      answer_text?.trim();
+
+                                    if (!studentAnswer) {
+                                      icon = <SkipIcon />;
+                                    } else if (
+                                      correctAnswerText.includes(" OR ")
+                                    ) {
+                                      const correctOptions = correctAnswerText
+                                        .split(" OR ")
+                                        .map((option) =>
+                                          option.trim().toLowerCase()
+                                        );
+                                      icon = correctOptions.includes(
+                                        studentAnswer.toLowerCase()
+                                      ) ? (
+                                        <CheckIcon />
+                                      ) : (
+                                        <CancelIcon />
+                                      );
+                                    } else if (
+                                      correctAnswerText.includes(" AND ")
+                                    ) {
+                                      const correctOptions = correctAnswerText
+                                        .split(" AND ")
+                                        .map((option) =>
+                                          option.trim().toLowerCase()
+                                        );
+                                      icon = correctOptions.every((option) =>
+                                        studentAnswer
+                                          .toLowerCase()
+                                          .includes(option)
+                                      ) ? (
+                                        <CheckIcon />
+                                      ) : (
+                                        <CancelIcon />
+                                      );
+                                    } else {
+                                      icon =
+                                        studentAnswer === correctAnswerText ? (
                                           <CheckIcon />
                                         ) : (
                                           <CancelIcon />
-                                        )}
-                                      </td>
-                                    </tr>
-                                  )
+                                        );
+                                    }
+                                    return (
+                                      <tr
+                                        key={id}
+                                        className={`${
+                                          index % 2 === 0
+                                            ? ""
+                                            : "dashboard__table__row"
+                                        }`}
+                                      >
+                                        <td className="text-dark">
+                                          {index + 1}.
+                                        </td>
+                                        <td className="text-dark">
+                                          <div className="dashboard__table__star">
+                                            {correctAnswerText}
+                                          </div>
+                                        </td>
+                                        <td className="text-dark">
+                                          {studentAnswer}
+                                        </td>
+                                        <td className="text-dark">{icon}</td>
+                                      </tr>
+                                    );
+                                  }
                                 )}
                               </tbody>
                             </table>
@@ -205,7 +215,7 @@ const LiveAssignmentAnswer = () => {
                   )}
                 </div>
               </div>
-              <BandScoreCard />
+              <ScoreCard />
             </div>
           </div>
         </div>

@@ -64,8 +64,8 @@ const AudioRecorder = ({
       formData.append("answer_audio", audioBlob, "output.mp3");
       formData.append("user", user);
       formData.append("speaking_block", exam?.id);
-      formData.append("practise_test", practice);
-      formData.append("Flt", Flt);
+      formData.append("practise_test", practice ? practice : "");
+      formData.append("Flt", Flt ? Flt : "");
 
       ajaxCall(
         "/speaking-answers/",

@@ -236,7 +236,7 @@ const PracticeSpeakingLiveExam = () => {
     if (indianVoice) {
       utterance.voice = indianVoice;
     }
-    
+
     synth.speak(utterance);
     const updatedSpeaking = speaking.map((item, index) => {
       const tempId = item.id;

@@ -72,8 +72,8 @@ import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
-import PracticeTestAnswer from "./components/Exam-Answer/PracticeTestAnswer";
-import FullLengthTestAnswer from "./components/Exam-Answer/FullLengthTestAnswer";
+import PracticeTestAnswer from "./components/Exam-Answer/PTAnswer/PracticeTestAnswer";
+import FullLengthTestAnswer from "./components/Exam-Answer/FLTAnswer/FullLengthTestAnswer";
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
 import LiveAssignmentAnswer from "./components/LiveAssignment/LiveAssignmentAnswer";
 import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest";

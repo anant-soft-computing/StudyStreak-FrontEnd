@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
-import BandScoreCard from "./BandScoreCard";
+import ScoreCard from "./ScoreCard/ScoreCard";
 import AnswerCard from "./AnswerCard";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
@@ -99,7 +99,7 @@ const Answer = () => {
   const parseAssessment = (assessment) => {
     const sections = {};
     const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
     const matches = assessment?.split(regex);
     const titles = assessment?.match(regex);
 
@@ -262,7 +262,7 @@ const Answer = () => {
                   )}
                 </div>
               </div>
-              <BandScoreCard />
+              <ScoreCard />
             </div>
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import BandScoreCard from "../../../../Exam-Answer/BandScoreCard";
+import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const ViewPTAssessment = () => {
@@ -48,7 +48,7 @@ const ViewPTAssessment = () => {
   const parseAssessment = (assessment) => {
     const sections = {};
     const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:|#Band:)/g;
+      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
     const matches = assessment?.split(regex);
     const titles = assessment?.match(regex);
 
@@ -161,7 +161,7 @@ const ViewPTAssessment = () => {
                   </div>
                 </div>
               )}
-              {examType === "Writing" && <BandScoreCard />}
+              {examType === "Writing" && <ScoreCard />}
             </div>
           </div>
         </div>

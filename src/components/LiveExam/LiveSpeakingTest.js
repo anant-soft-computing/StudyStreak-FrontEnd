@@ -174,7 +174,6 @@ const LiveSpeakingExam = () => {
     fetchVoices();
   }, [synth]);
 
-  
   const speak = (speakingContent, i) => {
     const utterance = new SpeechSynthesisUtterance(
       extractVisibleText(speakingContent)
@@ -333,7 +332,7 @@ const LiveSpeakingExam = () => {
               examData.questions.map((item, i) => (
                 <div className="lv-question-container" key={item?.id}>
                   <div className="d-flex align-items-center lv-btn-mic-container">
-                  {i + 1} :
+                    {i + 1} :
                     <button
                       className="lv-footer-button lv-speaking-button"
                       onClick={() => speak(item.question, i)}

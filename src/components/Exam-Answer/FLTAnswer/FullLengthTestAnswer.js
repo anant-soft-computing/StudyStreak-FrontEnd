@@ -9,6 +9,9 @@ import SkipIcon from "../../UI/SkipIcon";
 import QuestionCard from "./QuestionCard";
 import BandCard from "./BandCard";
 import ScoreCard from "../ScoreCard/ScoreCard";
+import SmallModal from "../../UI/Modal";
+import { writingAssessment } from "../../../utils/assessment/writingAssessment";
+import { speakingAssessment } from "../../../utils/assessment/speakingAssessment";
 
 const FullLengthTestAnswer = () => {
   const { examId } = useParams();
@@ -24,12 +27,27 @@ const FullLengthTestAnswer = () => {
 
   const [speakingTestAnswers, setSpeakingTestAnswers] = useState([]);
 
+  const [sAssessment, setSAssessment] = useState("");
+  const [sTAssessment, setSTAssessment] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTutorModalOpen, setIsTutorModalOpen] = useState(false);
+
   const [counts, setCounts] = useState({
     reading: { correct: 0, incorrect: 0, skipped: 0, band: 0 },
     listening: { correct: 0, incorrect: 0, skipped: 0, band: 0 },
     writing: { band: 0 },
     speaking: { band: 0 },
   });
+
+  const handleOpenModal = (content) => {
+    setSAssessment(content);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenTAModal = (content) => {
+    setSTAssessment(content);
+    setIsTutorModalOpen(true);
+  };
 
   const averageBand = () => {
     const bands = [
@@ -241,329 +259,392 @@ const FullLengthTestAnswer = () => {
     }));
   }, [writingTestAnswers, speakingTestAnswers, setCounts]);
 
-  const parseAssessment = (assessment) => {
-    const sections = {};
-    const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
-    const matches = assessment?.split(regex);
-    const titles = assessment?.match(regex);
-
-    if (titles && matches) {
-      titles?.forEach((title, index) => {
-        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
-      });
-    }
-    return sections;
-  };
-
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="blogarea__2 sp_top_100 sp_bottom_100">
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-8 col-lg-8 AnswerCard">
-                <div className="blog__details__content__wraper">
-                  <h4 className="sidebar__title">Solution For : {examName}</h4>
-                  <QuestionCard counts={counts} />
-                  <BandCard counts={counts} averageBand={averageBand()} />
-                  <div style={{ marginTop: "50px" }}>
-                    {/* Reading */}
-                    <div className="dashboard__section__title">
-                      <h4 className="sidebar__title">Reading :- </h4>
-                    </div>
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <div className="dashboard__table table-responsive table__height">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Question No.</th>
-                                <th>Correct Answer</th>
-                                <th>Your Answer</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {rCorrectAnswers?.map(
-                                ({ id, answer_text }, index) => (
-                                  <tr
-                                    key={id}
-                                    className={`${
-                                      index % 2 === 0
-                                        ? ""
-                                        : "dashboard__table__row"
-                                    }`}
-                                  >
-                                    <td className="text-dark">{index + 1}.</td>
-                                    <td className="text-dark">
-                                      <div className="dashboard__table__star">
-                                        {answer_text}
-                                      </div>
-                                    </td>
-                                    <td className="text-dark">
-                                      {rStudentAnswers?.length > 0 &&
-                                        rStudentAnswers[index]?.answer_text}
-                                    </td>
-                                    <td className="text-dark">
-                                      {!rStudentAnswers[index]?.answer_text ? (
-                                        <SkipIcon />
-                                      ) : rCorrectAnswers[
-                                          index
-                                        ]?.answer_text.includes(" OR ") ? (
-                                        rCorrectAnswers[index]?.answer_text
-                                          .split(" OR ")
-                                          .map((option) =>
-                                            option.trim().toLowerCase()
-                                          )
-                                          .includes(
-                                            rStudentAnswers[
-                                              index
-                                            ]?.answer_text.toLowerCase()
-                                          ) ? (
-                                          <CheckIcon />
-                                        ) : (
-                                          <CancelIcon />
-                                        )
-                                      ) : rCorrectAnswers[
-                                          index
-                                        ]?.answer_text.includes(" AND ") ? (
-                                        rCorrectAnswers[index]?.answer_text
-                                          .split(" AND ")
-                                          .map((option) =>
-                                            option.trim().toLowerCase()
-                                          )
-                                          .every((option) =>
-                                            rStudentAnswers[index]?.answer_text
-                                              .toLowerCase()
-                                              .includes(option)
-                                          ) ? (
-                                          <CheckIcon />
-                                        ) : (
-                                          <CancelIcon />
-                                        )
-                                      ) : rStudentAnswers[index]
-                                          ?.answer_text ===
-                                        rCorrectAnswers[index]?.answer_text ? (
-                                        <CheckIcon />
-                                      ) : (
-                                        <CancelIcon />
-                                      )}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
+    <>
+      <div className="body__wrapper">
+        <div className="main_wrapper overflow-hidden">
+          <div className="blogarea__2 sp_top_100 sp_bottom_100">
+            <div className="container">
+              <div className="row">
+                <div className="col-xl-8 col-lg-8 AnswerCard">
+                  <div className="blog__details__content__wraper">
+                    <h4 className="sidebar__title">
+                      Solution For : {examName}
+                    </h4>
+                    <QuestionCard counts={counts} />
+                    <BandCard counts={counts} averageBand={averageBand()} />
+                    <div style={{ marginTop: "50px" }}>
+                      {/* Reading */}
+                      <div className="dashboard__section__title">
+                        <h4 className="sidebar__title">Reading :- </h4>
                       </div>
-                    </div>
-
-                    {/* Writing */}
-                    <div className="dashboard__section__title mt-4">
-                      <h4 className="sidebar__title">Writing :-</h4>
-                    </div>
-                    <div className="row">
-                      <div>
-                        <div className="writing__exam">
-                          <div className="dashboard__section__title">
-                            <h4 className="sidebar__title">AI Assessment</h4>
+                      <div className="row">
+                        <div className="col-xl-12">
+                          <div className="dashboard__table table-responsive table__height">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Question No.</th>
+                                  <th>Correct Answer</th>
+                                  <th>Your Answer</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {rCorrectAnswers?.map(
+                                  ({ id, answer_text }, index) => (
+                                    <tr
+                                      key={id}
+                                      className={`${
+                                        index % 2 === 0
+                                          ? ""
+                                          : "dashboard__table__row"
+                                      }`}
+                                    >
+                                      <td className="text-dark">
+                                        {index + 1}.
+                                      </td>
+                                      <td className="text-dark">
+                                        <div className="dashboard__table__star">
+                                          {answer_text}
+                                        </div>
+                                      </td>
+                                      <td className="text-dark">
+                                        {rStudentAnswers?.length > 0 &&
+                                          rStudentAnswers[index]?.answer_text}
+                                      </td>
+                                      <td className="text-dark">
+                                        {!rStudentAnswers[index]
+                                          ?.answer_text ? (
+                                          <SkipIcon />
+                                        ) : rCorrectAnswers[
+                                            index
+                                          ]?.answer_text.includes(" OR ") ? (
+                                          rCorrectAnswers[index]?.answer_text
+                                            .split(" OR ")
+                                            .map((option) =>
+                                              option.trim().toLowerCase()
+                                            )
+                                            .includes(
+                                              rStudentAnswers[
+                                                index
+                                              ]?.answer_text.toLowerCase()
+                                            ) ? (
+                                            <CheckIcon />
+                                          ) : (
+                                            <CancelIcon />
+                                          )
+                                        ) : rCorrectAnswers[
+                                            index
+                                          ]?.answer_text.includes(" AND ") ? (
+                                          rCorrectAnswers[index]?.answer_text
+                                            .split(" AND ")
+                                            .map((option) =>
+                                              option.trim().toLowerCase()
+                                            )
+                                            .every((option) =>
+                                              rStudentAnswers[
+                                                index
+                                              ]?.answer_text
+                                                .toLowerCase()
+                                                .includes(option)
+                                            ) ? (
+                                            <CheckIcon />
+                                          ) : (
+                                            <CancelIcon />
+                                          )
+                                        ) : rStudentAnswers[index]
+                                            ?.answer_text ===
+                                          rCorrectAnswers[index]
+                                            ?.answer_text ? (
+                                          <CheckIcon />
+                                        ) : (
+                                          <CancelIcon />
+                                        )}
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
                           </div>
-                          {writingTestAnswers?.Writing?.map((item, index) => {
-                            const assessments = parseAssessment(
-                              item.ai_assessment
-                            );
-                            return (
-                              <div key={index}>
-                                <div className="gptResponse">
-                                  <h4>({index + 1}) Explanation:</h4>
-                                  {Object.keys(assessments)?.map(
-                                    (section, i) => (
-                                      <div key={i}>
-                                        <br />
-                                        <strong>{section}</strong>
-                                        <div>{assessments[section]}</div>
-                                      </div>
-                                    )
-                                  )}
-                                </div>
-                                <br />
-                              </div>
-                            );
-                          })}
                         </div>
-                        <div className="writing__exam">
-                          <div className="dashboard__section__title">
-                            <h4 className="sidebar__title">Tutor Assessment</h4>
+                      </div>
+
+                      {/* Writing */}
+                      <div className="dashboard__section__title mt-4">
+                        <h4 className="sidebar__title">Writing :-</h4>
+                      </div>
+                      <div className="row">
+                        <div>
+                          <div className="writing__exam">
+                            <div className="dashboard__section__title">
+                              <h4 className="sidebar__title">AI Assessment</h4>
+                            </div>
+                            {writingTestAnswers?.Writing?.map((item, index) => {
+                              const assessments = writingAssessment(
+                                item.ai_assessment
+                              );
+                              return (
+                                <div key={index}>
+                                  <div className="gptResponse">
+                                    <h4>({index + 1}) Explanation:</h4>
+                                    {Object.keys(assessments)?.map(
+                                      (section, i) => (
+                                        <div key={i}>
+                                          <br />
+                                          <strong>{section}</strong>
+                                          <div>{assessments[section]}</div>
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                  <br />
+                                </div>
+                              );
+                            })}
                           </div>
-                          {writingTestAnswers?.Writing?.some(
-                            (item) => item?.tutor_assessment
-                          ) ? (
-                            writingTestAnswers?.Writing?.map((item, index) => (
-                              <div key={index}>
-                                <div className="gptResponse">
-                                  ({index + 1}). {item?.tutor_assessment}
-                                </div>
-                                <br />
-                              </div>
-                            ))
-                          ) : (
-                            <h5 className="text-center text-danger">
-                              Assessment By Tutor Will Be Displayed Here
-                            </h5>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Listening */}
-                    <div className="dashboard__section__title mt-4">
-                      <h4 className="sidebar__title">Listening :-</h4>
-                    </div>
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <div className="dashboard__table table-responsive table__height">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Question No.</th>
-                                <th>Correct Answer</th>
-                                <th>Your Answer</th>
-                                <th></th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {lCorrectAnswers?.map(
-                                ({ id, answer_text }, index) => (
-                                  <tr
-                                    key={id}
-                                    className={`${
-                                      index % 2 === 0
-                                        ? ""
-                                        : "dashboard__table__row"
-                                    }`}
-                                  >
-                                    <td className="text-dark">{index + 1}.</td>
-                                    <td className="text-dark">
-                                      <div className="dashboard__table__star">
-                                        {answer_text}
-                                      </div>
-                                    </td>
-                                    <td className="text-dark">
-                                      {lStudentAnswers?.length > 0 &&
-                                        lStudentAnswers[index]?.answer_text}
-                                    </td>
-                                    <td className="text-dark">
-                                      {!lStudentAnswers[index]?.answer_text ? (
-                                        <SkipIcon />
-                                      ) : lCorrectAnswers[
-                                          index
-                                        ]?.answer_text.includes(" OR ") ? (
-                                        lCorrectAnswers[index]?.answer_text
-                                          .split(" OR ")
-                                          .map((option) =>
-                                            option.trim().toLowerCase()
-                                          )
-                                          .includes(
-                                            lStudentAnswers[
-                                              index
-                                            ]?.answer_text.toLowerCase()
-                                          ) ? (
-                                          <CheckIcon />
-                                        ) : (
-                                          <CancelIcon />
-                                        )
-                                      ) : lCorrectAnswers[
-                                          index
-                                        ]?.answer_text.includes(" AND ") ? (
-                                        lCorrectAnswers[index]?.answer_text
-                                          .split(" AND ")
-                                          .map((option) =>
-                                            option.trim().toLowerCase()
-                                          )
-                                          .every((option) =>
-                                            lStudentAnswers[index]?.answer_text
-                                              .toLowerCase()
-                                              .includes(option)
-                                          ) ? (
-                                          <CheckIcon />
-                                        ) : (
-                                          <CancelIcon />
-                                        )
-                                      ) : lStudentAnswers[index]
-                                          ?.answer_text ===
-                                        lCorrectAnswers[index]?.answer_text ? (
-                                        <CheckIcon />
-                                      ) : (
-                                        <CancelIcon />
-                                      )}
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Speaking */}
-                    <div className="dashboard__section__title mt-4">
-                      <h4 className="sidebar__title">Speaking :-</h4>
-                    </div>
-                    <div className="row">
-                      <div className="col-xl-12">
-                        <div className="dashboard__table table-responsive table__height">
-                          <table>
-                            <thead>
-                              <tr>
-                                <th>Question Number</th>
-                                <th>Answer Audio</th>
-                                <th>AI Assessment</th>
-                                <th>Tutor Assessment</th>
-                                <th>Band</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {speakingTestAnswers?.Speaking?.map(
+                          <div className="writing__exam">
+                            <div className="dashboard__section__title">
+                              <h4 className="sidebar__title">
+                                Tutor Assessment
+                              </h4>
+                            </div>
+                            {writingTestAnswers?.Writing?.some(
+                              (item) => item?.tutor_assessment
+                            ) ? (
+                              writingTestAnswers?.Writing?.map(
                                 (item, index) => (
-                                  <tr
-                                    key={index}
-                                    className={`${
-                                      index % 2 === 0
-                                        ? ""
-                                        : "dashboard__table__row"
-                                    }`}
-                                  >
-                                    <td>{index + 1}</td>
-                                    <td>
-                                      <audio controls>
-                                        <source
-                                          src={`https://studystreak.in/${item?.answer_audio}`}
-                                          type="audio/mpeg"
-                                        />
-                                      </audio>
-                                    </td>
-                                    <td>{item.ai_assessment || "-"}</td>
-                                    <td>{item.tutor_assessment || "-"}</td>
-                                    <td>{item.band || "-"}</td>
-                                  </tr>
+                                  <div key={index}>
+                                    <div className="gptResponse">
+                                      ({index + 1}). {item?.tutor_assessment}
+                                    </div>
+                                    <br />
+                                  </div>
                                 )
-                              )}
-                            </tbody>
-                          </table>
+                              )
+                            ) : (
+                              <h5 className="text-center text-danger">
+                                Assessment By Tutor Will Be Displayed Here
+                              </h5>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Listening */}
+                      <div className="dashboard__section__title mt-4">
+                        <h4 className="sidebar__title">Listening :-</h4>
+                      </div>
+                      <div className="row">
+                        <div className="col-xl-12">
+                          <div className="dashboard__table table-responsive table__height">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Question No.</th>
+                                  <th>Correct Answer</th>
+                                  <th>Your Answer</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {lCorrectAnswers?.map(
+                                  ({ id, answer_text }, index) => (
+                                    <tr
+                                      key={id}
+                                      className={`${
+                                        index % 2 === 0
+                                          ? ""
+                                          : "dashboard__table__row"
+                                      }`}
+                                    >
+                                      <td className="text-dark">
+                                        {index + 1}.
+                                      </td>
+                                      <td className="text-dark">
+                                        <div className="dashboard__table__star">
+                                          {answer_text}
+                                        </div>
+                                      </td>
+                                      <td className="text-dark">
+                                        {lStudentAnswers?.length > 0 &&
+                                          lStudentAnswers[index]?.answer_text}
+                                      </td>
+                                      <td className="text-dark">
+                                        {!lStudentAnswers[index]
+                                          ?.answer_text ? (
+                                          <SkipIcon />
+                                        ) : lCorrectAnswers[
+                                            index
+                                          ]?.answer_text.includes(" OR ") ? (
+                                          lCorrectAnswers[index]?.answer_text
+                                            .split(" OR ")
+                                            .map((option) =>
+                                              option.trim().toLowerCase()
+                                            )
+                                            .includes(
+                                              lStudentAnswers[
+                                                index
+                                              ]?.answer_text.toLowerCase()
+                                            ) ? (
+                                            <CheckIcon />
+                                          ) : (
+                                            <CancelIcon />
+                                          )
+                                        ) : lCorrectAnswers[
+                                            index
+                                          ]?.answer_text.includes(" AND ") ? (
+                                          lCorrectAnswers[index]?.answer_text
+                                            .split(" AND ")
+                                            .map((option) =>
+                                              option.trim().toLowerCase()
+                                            )
+                                            .every((option) =>
+                                              lStudentAnswers[
+                                                index
+                                              ]?.answer_text
+                                                .toLowerCase()
+                                                .includes(option)
+                                            ) ? (
+                                            <CheckIcon />
+                                          ) : (
+                                            <CancelIcon />
+                                          )
+                                        ) : lStudentAnswers[index]
+                                            ?.answer_text ===
+                                          lCorrectAnswers[index]
+                                            ?.answer_text ? (
+                                          <CheckIcon />
+                                        ) : (
+                                          <CancelIcon />
+                                        )}
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Speaking */}
+                      <div className="dashboard__section__title mt-4">
+                        <h4 className="sidebar__title">Speaking :-</h4>
+                      </div>
+                      <div className="row">
+                        <div className="col-xl-12">
+                          <div className="dashboard__table table-responsive table__height">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Question Number</th>
+                                  <th>Answer Audio</th>
+                                  <th>AI Assessment</th>
+                                  <th>Tutor Assessment</th>
+                                  <th>Band</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {speakingTestAnswers?.Speaking?.map(
+                                  (item, index) => (
+                                    <tr
+                                      key={index}
+                                      className={`${
+                                        index % 2 === 0
+                                          ? ""
+                                          : "dashboard__table__row"
+                                      }`}
+                                    >
+                                      <td>{index + 1}</td>
+                                      <td>
+                                        <audio controls>
+                                          <source
+                                            src={`https://studystreak.in/${item?.answer_audio}`}
+                                            type="audio/mpeg"
+                                          />
+                                        </audio>
+                                      </td>
+                                      <td>
+                                        {item.ai_assessment ? (
+                                          <button
+                                            className="take-test"
+                                            onClick={() =>
+                                              handleOpenModal(
+                                                item.ai_assessment
+                                              )
+                                            }
+                                          >
+                                            View
+                                          </button>
+                                        ) : (
+                                          "-"
+                                        )}
+                                      </td>
+                                      <td>
+                                        {item.tutor_assessment ? (
+                                          <button
+                                            className="take-test"
+                                            onClick={() =>
+                                              handleOpenTAModal(
+                                                item.tutor_assessment
+                                              )
+                                            }
+                                          >
+                                            View
+                                          </button>
+                                        ) : (
+                                          "-"
+                                        )}
+                                      </td>
+                                      <td>{item.band || "-"}</td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
+                <ScoreCard />
               </div>
-              <ScoreCard />
             </div>
           </div>
         </div>
       </div>
-    </div>
+      {isModalOpen && (
+        <SmallModal
+          size="lg"
+          centered
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
+          {Object.keys(speakingAssessment(sAssessment)).map(
+            (section, index) => (
+              <div key={index}>
+                <br />
+                <strong>{section}</strong>
+                <div>{speakingAssessment(sAssessment)[section]}</div>
+              </div>
+            )
+          )}
+        </SmallModal>
+      )}
+      {isTutorModalOpen && (
+        <SmallModal
+          size="lg"
+          centered
+          isOpen={isTutorModalOpen}
+          onClose={() => setIsTutorModalOpen(false)}
+        >
+          {sTAssessment}
+        </SmallModal>
+      )}
+    </>
   );
 };
 

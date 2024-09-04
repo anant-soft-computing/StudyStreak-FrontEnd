@@ -130,36 +130,32 @@ const ViewMTAAssessment = () => {
                       <thead>
                         <tr>
                           <th>Question Number</th>
-                          <th>Question</th>
                           <th>Answer Audio</th>
                           <th>AI Assessment</th>
                           <th>Tutor Assessment</th>
+                          <th>Band</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {sAssData.student_answers?.map((answer, index) => (
+                        {sAssData.student_answers?.map((item, index) => (
                           <tr
                             key={index}
                             className={`${
                               index % 2 === 0 ? "" : "dashboard__table__row"
                             }`}
                           >
-                            <td>{answer.question_number}</td>
-                            <td
-                              dangerouslySetInnerHTML={{
-                                __html: answer.question,
-                              }}
-                            />
+                            <td>{index + 1}</td>
                             <td>
                               <audio controls>
                                 <source
-                                  src={`https://studystreak.in/${answer.answer_audio}`}
+                                  src={`https://studystreak.in/${item.answer_audio}`}
                                   type="audio/mpeg"
                                 />
                               </audio>
                             </td>
-                            <td>{answer.AI_Assessment || "-"}</td>
-                            <td>{answer.Tutor_Assessment || "-"}</td>
+                            <td>{item.AI_Assessment || "-"}</td>
+                            <td>{item.Tutor_Assessment || "-"}</td>
+                            <td>{item.band || "-"}</td>
                           </tr>
                         ))}
                       </tbody>

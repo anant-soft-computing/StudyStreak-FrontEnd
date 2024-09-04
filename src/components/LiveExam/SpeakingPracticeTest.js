@@ -225,16 +225,15 @@ const PracticeSpeakingLiveExam = () => {
       extractVisibleText(speakingContent)
     );
     utterance.rate = 0.9;
-    // Select an Indian voice
-    const indianVoice = voices.find(
+
+    // Select "Google UK English Male" voice
+    const ukMaleVoice = voices.find(
       (voice) =>
-        voice.lang === "hi-IN" ||
-        voice.name.toLowerCase().includes("Hindi") ||
-        voice.name.toLowerCase().includes("Indian")
+        voice.name === "Google UK English Male" && voice.lang === "en-GB"
     );
 
-    if (indianVoice) {
-      utterance.voice = indianVoice;
+    if (ukMaleVoice) {
+      utterance.voice = ukMaleVoice;
     }
 
     synth.speak(utterance);

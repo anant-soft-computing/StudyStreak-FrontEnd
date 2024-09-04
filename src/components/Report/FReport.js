@@ -471,6 +471,7 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
                         <th>Answer Audio</th>
                         <th>AI Assessment</th>
                         <th>Tutor Assessment</th>
+                        <th>Band</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -492,6 +493,7 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
                           </td>
                           <td>{item.ai_assessment || "-"}</td>
                           <td>{item.tutor_assessment || "-"}</td>
+                          <td>{item.band || "-"}</td>
                         </tr>
                       ))}
                     </tbody>

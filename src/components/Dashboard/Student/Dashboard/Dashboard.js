@@ -31,7 +31,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [courseList, setCourseList] = useState([]);
   const [expiryDate, setExpiryDate] = useState([]);
-  
+
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
   const userData = JSON?.parse(localStorage.getItem("loginInfo"));
@@ -142,11 +142,13 @@ const Dashboard = () => {
             practice_test_count:
               packageDetails?.practice_test_count === -1
                 ? packageDetails?.practice_test_count
-                : packageDetails?.practice_test_count - studentPackage?.student_pt,
+                : packageDetails?.practice_test_count -
+                  studentPackage?.student_pt,
             full_length_test_count:
               packageDetails?.full_length_test_count === -1
                 ? packageDetails?.full_length_test_count
-                : packageDetails?.full_length_test_count - studentPackage?.student_flt,
+                : packageDetails?.full_length_test_count -
+                  studentPackage?.student_flt,
           });
           setStudentID(data?.student_packages[0]?.student_id);
         }),

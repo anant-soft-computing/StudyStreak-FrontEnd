@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import ajaxCall from "../../helpers/ajaxCall";
 
 const AudioRecorder = ({
@@ -16,7 +18,7 @@ const AudioRecorder = ({
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
-  const { transcript } = useSpeechRecognition();
+  const { transcript, resetTranscript } = useSpeechRecognition();
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -27,9 +29,11 @@ const AudioRecorder = ({
     setRecordedFilePath(null);
     mediaRecorderRef.current = null;
     chunksRef.current = [];
-  }, [next]);
+    resetTranscript();
+  }, [next, resetTranscript, setRecordedFilePath]);
 
   const handleStartRecording = () => {
+    resetTranscript();
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -61,42 +65,56 @@ const AudioRecorder = ({
   };
 
   useEffect(() => {
-    if (audioBlob) {
-      const formData = new FormData();
-      formData.append("question_number", question_number);
-      formData.append("extension", "mp3");
-      formData.append("answer_audio", audioBlob, "output.mp3");
-      formData.append("user", user);
-      formData.append("speaking_block", exam?.id);
-      formData.append("practise_test", practice ? practice : "");
-      formData.append("Flt", Flt ? Flt : "");
+    const submitAudio = async () => {
+      if (audioBlob) {
+        const formData = new FormData();
+        formData.append("question_number", question_number);
+        formData.append("extension", "mp3");
+        formData.append("answer_audio", audioBlob, "output.mp3");
+        formData.append("user", user);
+        formData.append("speaking_block", exam?.id);
+        formData.append("practise_test", practice ? practice : "");
+        formData.append("Flt", Flt ? Flt : "");
 
-      ajaxCall(
-        "/speaking-answers/",
-        {
-          method: "POST",
-          body: formData,
-
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-        },
-        8000
-      )
-        .then((response) => {
-          setRecordedFilePath({
-            recorderIndex,
-            filePath: response?.data?.answer_audio,
-          });
-        })
-        .catch((error) => {
+        try {
+          const response = await ajaxCall(
+            "/speaking-answers/",
+            {
+              method: "POST",
+              body: formData,
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+            },
+            8000
+          );
+          if (response.status === 201) {
+            setRecordedFilePath({
+              recorderIndex,
+              filePath: response?.data?.answer_audio,
+            });
+          } else {
+            console.log("error in submission response:", response);
+          }
+        } catch (error) {
           console.log("error", error);
-        });
-    }
-  }, [audioBlob]); // Include 'next' as a dependency here
+        }
+      }
+    };
+    submitAudio();
+  }, [
+    Flt,
+    audioBlob,
+    exam?.id,
+    practice,
+    question_number,
+    recorderIndex,
+    setRecordedFilePath,
+    user,
+  ]);
 
   return (
     <div
@@ -104,7 +122,6 @@ const AudioRecorder = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        // borderBottom: "grey 1px solid",
       }}
       className="ly-mic-audio-container"
     >
@@ -138,7 +155,7 @@ const AudioRecorder = ({
           (!isRecording && !audioBlob && "Click on Mic to Recording")}
       </h6>
       {audioBlob && <audio controls src={URL.createObjectURL(audioBlob)} />}
-      <p>Transcript: {transcript}</p>
+      {isRecording && <p>Transcript: {transcript}</p>}{" "}
     </div>
   );
 };

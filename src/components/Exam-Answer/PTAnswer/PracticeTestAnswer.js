@@ -8,6 +8,7 @@ import CheckIcon from "../../UI/CheckIcon";
 import CancelIcon from "../../UI/CancelIcon";
 import readingBandValues from "../../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../../utils/bandValues/listeningBandValues";
+import { writingAssessment } from "../../../utils/assessment/writingAssessment";
 
 const PracticeTestAnswer = () => {
   const [band, setBand] = useState(0);
@@ -158,21 +159,6 @@ const PracticeTestAnswer = () => {
     })();
   }, [examForm, fullPaper]);
 
-  const parseAssessment = (assessment) => {
-    const sections = {};
-    const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
-    const matches = assessment?.split(regex);
-    const titles = assessment?.match(regex);
-
-    if (titles && matches) {
-      titles?.forEach((title, index) => {
-        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
-      });
-    }
-    return sections;
-  };
-
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -187,11 +173,10 @@ const PracticeTestAnswer = () => {
                   )}
                   {examForm !== "Writing" && (
                     <AnswerCard
-                      totalQuestions={correctAnswer.length}
+                      band={band}
                       skipCount={skipCount}
                       correctCount={correctCount}
                       incorrectCount={incorrectCount}
-                      bandValue={band}
                     />
                   )}
                   {examForm === "Writing" && (
@@ -200,7 +185,9 @@ const PracticeTestAnswer = () => {
                         <h4 className="sidebar__title">AI Assessment</h4>
                       </div>
                       {writingAnswers?.map((item, index) => {
-                        const assessments = parseAssessment(item.ai_assessment);
+                        const assessments = writingAssessment(
+                          item.ai_assessment
+                        );
                         return (
                           <div key={index}>
                             <div className="gptResponse">

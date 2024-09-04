@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
 import { useLocation, useParams } from "react-router-dom";
 import ajaxCall from "../../../../../helpers/ajaxCall";
@@ -10,7 +10,9 @@ const ViewMTAAssessment = () => {
   const [wAssData, setWAssData] = useState({});
   const [sAssData, setSASSData] = useState({});
   const [assessment, setAssessment] = useState("");
+  const [tutorAssessment, setTutorAssessment] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTutorModalOpen, setIsTutorModalOpen] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -44,29 +46,43 @@ const ViewMTAAssessment = () => {
     })();
   }, [examId, examType]);
 
-  const openModal = (content) => {
+  const handleOpenAIAssessment = (content) => {
     setAssessment(content);
     setIsModalOpen(true);
   };
 
-  const parseAssessment = (assessment) => {
+  const handleOpenTutorAssessment = (content) => {
+    setTutorAssessment(content);
+    setIsTutorModalOpen(true);
+  };
+
+  const parseAssessment = (assessment, regex) => {
     const sections = {};
-    const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
     const matches = assessment?.split(regex);
     const titles = assessment?.match(regex);
 
     if (titles && matches) {
-      titles?.forEach((title, index) => {
+      titles.forEach((title, index) => {
         sections[title.trim()] = matches[index + 1]?.trim() || "No data";
       });
     }
     return sections;
   };
 
-  const aiAssessmentSections = wAssData?.AI_Assessment
-    ? parseAssessment(wAssData?.AI_Assessment)
-    : {};
+  const aiAssessmentSections = useMemo(() => {
+    if (examType === "Writing" && wAssData?.AI_Assessment) {
+      const regex =
+        /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
+      return parseAssessment(wAssData?.AI_Assessment, regex);
+    }
+    return {};
+  }, [examType, wAssData]);
+
+  const speakingAssessmentSections = useMemo(() => {
+    const regex =
+      /(?:Fluency and Coherence:|Lexical Resource:|Grammatical Range and Accuracy:|Pronunciation:)/g;
+    return parseAssessment(assessment, regex);
+  }, [assessment]);
 
   return (
     <>
@@ -172,7 +188,7 @@ const ViewMTAAssessment = () => {
                                   <button
                                     className="take-test"
                                     onClick={() =>
-                                      openModal(item.AI_Assessment)
+                                      handleOpenAIAssessment(item.AI_Assessment)
                                     }
                                   >
                                     View
@@ -186,7 +202,9 @@ const ViewMTAAssessment = () => {
                                   <button
                                     className="take-test"
                                     onClick={() =>
-                                      openModal(item.Tutor_Assessment)
+                                      handleOpenTutorAssessment(
+                                        item.Tutor_Assessment
+                                      )
                                     }
                                   >
                                     View
@@ -216,7 +234,23 @@ const ViewMTAAssessment = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
-          {assessment}
+          {Object.keys(speakingAssessmentSections).map((section, index) => (
+            <div key={index}>
+              <br />
+              <strong>{section}</strong>
+              <div>{speakingAssessmentSections[section]}</div>
+            </div>
+          ))}
+        </SmallModal>
+      )}
+      {isTutorModalOpen && (
+        <SmallModal
+          size="lg"
+          centered
+          isOpen={isTutorModalOpen}
+          onClose={() => setIsTutorModalOpen(false)}
+        >
+          {tutorAssessment}
         </SmallModal>
       )}
     </>

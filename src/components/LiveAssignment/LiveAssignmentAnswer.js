@@ -104,12 +104,10 @@ const LiveAssignmentAnswer = () => {
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For: {examName}</h4>
                   <AnswerCard
-                    totalQuestions={correctAnswer.length}
+                    band={band}
+                    skipCount={skipCount}
                     correctCount={correctCount}
                     incorrectCount={incorrectCount}
-                    skipCount={skipCount}
-                    bandValue={band}
-                    examType={examType}
                   />
                   {examType === "General" && (
                     <div className="writing__exam">

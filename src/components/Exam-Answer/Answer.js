@@ -6,6 +6,7 @@ import AnswerCard from "./AnswerCard";
 import CheckIcon from "../UI/CheckIcon";
 import CancelIcon from "../UI/CancelIcon";
 import SkipIcon from "../UI/SkipIcon";
+import { writingAssessment } from "../../utils/assessment/writingAssessment";
 
 const Answer = () => {
   const { examId } = useParams();
@@ -96,22 +97,7 @@ const Answer = () => {
     setSkipCount(skipped);
   }, [studentAnswers, correctAnswer]);
 
-  const parseAssessment = (assessment) => {
-    const sections = {};
-    const regex =
-      /(?:Task Achievement:|Coherence and Cohesion:|Lexical Resource:|Grammatical Range and Accuracy:)/g;
-    const matches = assessment?.split(regex);
-    const titles = assessment?.match(regex);
-
-    if (titles && matches) {
-      titles?.forEach((title, index) => {
-        sections[title.trim()] = matches[index + 1]?.trim() || "No data";
-      });
-    }
-    return sections;
-  };
-
-  const aiAssessmentSections = gptResponse ? parseAssessment(gptResponse) : {};
+  const aiAssessmentSections = gptResponse ? writingAssessment(gptResponse) : {};
 
   return (
     <div className="body__wrapper">
@@ -127,12 +113,10 @@ const Answer = () => {
                   )}
                   {examType !== "Writing" && (
                     <AnswerCard
-                      totalQuestions={correctAnswer.length}
+                      band={band}
+                      skipCount={skipCount}
                       correctCount={correctCount}
                       incorrectCount={incorrectCount}
-                      skipCount={skipCount}
-                      bandValue={band}
-                      examType={examType}
                     />
                   )}
                   {examType === "Writing" && (

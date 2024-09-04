@@ -521,6 +521,7 @@ const FullLengthTestAnswer = () => {
                                 <th>Answer Audio</th>
                                 <th>AI Assessment</th>
                                 <th>Tutor Assessment</th>
+                                <th>Band</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -545,6 +546,7 @@ const FullLengthTestAnswer = () => {
                                     </td>
                                     <td>{item.ai_assessment || "-"}</td>
                                     <td>{item.tutor_assessment || "-"}</td>
+                                    <td>{item.band || "-"}</td>
                                   </tr>
                                 )
                               )}

@@ -133,6 +133,7 @@ const ViewPTAssessment = () => {
                           <th>Answer Audio</th>
                           <th>AI Assessment</th>
                           <th>Tutor Assessment</th>
+                          <th>Band</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -143,7 +144,7 @@ const ViewPTAssessment = () => {
                               index % 2 === 0 ? "" : "dashboard__table__row"
                             }`}
                           >
-                            <td>{index + 1}.</td>
+                            <td>{index + 1}</td>
                             <td>
                               <audio controls>
                                 <source
@@ -154,6 +155,7 @@ const ViewPTAssessment = () => {
                             </td>
                             <td>{item.ai_assessment || "-"}</td>
                             <td>{item.tutor_assessment || "-"}</td>
+                            <td>{item.band || "-"}</td>
                           </tr>
                         ))}
                       </tbody>

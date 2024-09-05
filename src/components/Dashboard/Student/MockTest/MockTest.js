@@ -5,13 +5,6 @@ import Tab from "../../../UI/Tab";
 import TestTable from "./TestTable";
 import MTAssessment from "../Assessment/MTAssessment/MTAssessment";
 
-const tabs = [
-  { name: "Reading" },
-  { name: "Writing" },
-  { name: "Listening" },
-  { name: "Speaking" },
-];
-
 const MockTest = () => {
   const [activeTab, setActiveTab] = useState("Reading");
   const [isLoading, setIsLoading] = useState(true);
@@ -20,6 +13,24 @@ const MockTest = () => {
   const [givenSpeakingTest, setGivenSpeakingTest] = useState([]);
   const [allMockTestData, setAllMockTestData] = useState([]);
   const [allSpeakingData, setAllSpeakingData] = useState([]);
+
+  const tabs =
+    category !== "GENERAL"
+      ? [
+          { name: "Reading" },
+          { name: "Writing" },
+          { name: "Listening" },
+          { name: "Speaking" },
+        ]
+      : [{ name: "General" }];
+
+  useEffect(() => {
+    if (category !== "GENERAL") {
+      setActiveTab("Reading");
+    } else {
+      setActiveTab("General");
+    }
+  }, [category]);
 
   useEffect(() => {
     (async () => {
@@ -79,7 +90,7 @@ const MockTest = () => {
           }
         } else {
           const examBlocksResponse = await ajaxCall(
-            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${activeTab}`,
+            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${activeTab}&exam_category=${category}`,
             {
               headers: {
                 Accept: "application/json",
@@ -151,6 +162,7 @@ const MockTest = () => {
                                 "DUOLINGO",
                                 "GRE",
                                 "GMAT",
+                                "GENERAL",
                               ].map((item) => (
                                 <option key={item} value={item}>
                                   {item}

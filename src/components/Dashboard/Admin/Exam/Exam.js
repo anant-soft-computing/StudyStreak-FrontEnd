@@ -313,24 +313,35 @@ const Exam = () => {
                                 <PT
                                   activeTab={activeTab}
                                   type={screenContent.examForm}
+                                  category={screenContent.examType}
                                 />
                               )) ||
                               (screenContent.examForm === "Writing" && (
                                 <PT
                                   activeTab={activeTab}
                                   type={screenContent.examForm}
+                                  category={screenContent.examType}
                                 />
                               )) ||
                               (screenContent.examForm === "Listening" && (
                                 <PT
                                   activeTab={activeTab}
                                   type={screenContent.examForm}
+                                  category={screenContent.examType}
                                 />
                               )) ||
                               (screenContent.examForm === "Speaking" && (
                                 <PT
                                   activeTab={activeTab}
                                   type={screenContent.examForm}
+                                  category={screenContent.examType}
+                                />
+                              )) ||
+                              (screenContent.examForm === "General" && (
+                                <PT
+                                  activeTab={activeTab}
+                                  type={screenContent.examForm}
+                                  category={screenContent.examType}
                                 />
                               ))}
                           </div>

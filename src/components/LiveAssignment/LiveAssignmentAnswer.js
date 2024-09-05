@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import AnswerCard from "../Exam-Answer/AnswerCard";
-import CheckIcon from "../UI/CheckIcon";
-import CancelIcon from "../UI/CancelIcon";
+import AnswerTable from "../Exam-Answer/AnswerTable/AnswerTable";
 import ScoreCard from "../Exam-Answer/ScoreCard/ScoreCard";
-import SkipIcon from "../UI/SkipIcon";
 
 const LiveAssignmentAnswer = () => {
   const { examId } = useParams();
@@ -110,106 +108,10 @@ const LiveAssignmentAnswer = () => {
                     incorrectCount={incorrectCount}
                   />
                   {examType === "General" && (
-                    <div className="writing__exam">
-                      <div className="dashboard__section__title">
-                        <h4 className="sidebar__title">Answer Table</h4>
-                      </div>
-                      <div className="row">
-                        <div className="col-xl-12">
-                          <div className="dashboard__table table-responsive table__height">
-                            <table>
-                              <thead>
-                                <tr>
-                                  <th>Question No.</th>
-                                  <th>Correct Answer</th>
-                                  <th>Your Answer</th>
-                                  <th></th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {correctAnswer.map(
-                                  ({ id, answer_text }, index) => {
-                                    let icon;
-                                    const studentAnswer =
-                                      studentAnswers?.[
-                                        index
-                                      ]?.answer_text?.trim();
-                                    const correctAnswerText =
-                                      answer_text?.trim();
-
-                                    if (!studentAnswer) {
-                                      icon = <SkipIcon />;
-                                    } else if (
-                                      correctAnswerText.includes(" OR ")
-                                    ) {
-                                      const correctOptions = correctAnswerText
-                                        .split(" OR ")
-                                        .map((option) =>
-                                          option.trim().toLowerCase()
-                                        );
-                                      icon = correctOptions.includes(
-                                        studentAnswer.toLowerCase()
-                                      ) ? (
-                                        <CheckIcon />
-                                      ) : (
-                                        <CancelIcon />
-                                      );
-                                    } else if (
-                                      correctAnswerText.includes(" AND ")
-                                    ) {
-                                      const correctOptions = correctAnswerText
-                                        .split(" AND ")
-                                        .map((option) =>
-                                          option.trim().toLowerCase()
-                                        );
-                                      icon = correctOptions.every((option) =>
-                                        studentAnswer
-                                          .toLowerCase()
-                                          .includes(option)
-                                      ) ? (
-                                        <CheckIcon />
-                                      ) : (
-                                        <CancelIcon />
-                                      );
-                                    } else {
-                                      icon =
-                                        studentAnswer === correctAnswerText ? (
-                                          <CheckIcon />
-                                        ) : (
-                                          <CancelIcon />
-                                        );
-                                    }
-                                    return (
-                                      <tr
-                                        key={id}
-                                        className={`${
-                                          index % 2 === 0
-                                            ? ""
-                                            : "dashboard__table__row"
-                                        }`}
-                                      >
-                                        <td className="text-dark">
-                                          {index + 1}.
-                                        </td>
-                                        <td className="text-dark">
-                                          <div className="dashboard__table__star">
-                                            {correctAnswerText}
-                                          </div>
-                                        </td>
-                                        <td className="text-dark">
-                                          {studentAnswer}
-                                        </td>
-                                        <td className="text-dark">{icon}</td>
-                                      </tr>
-                                    );
-                                  }
-                                )}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <AnswerTable
+                      correctAnswer={correctAnswer}
+                      studentAnswers={studentAnswers}
+                    />
                   )}
                 </div>
               </div>

@@ -69,7 +69,7 @@ const LiveSpeakingExam = () => {
           method: "POST",
           body: JSON.stringify({
             student: studentId,
-            exam_block: examId,
+            speaking_block: examId,
           }),
         },
         8000

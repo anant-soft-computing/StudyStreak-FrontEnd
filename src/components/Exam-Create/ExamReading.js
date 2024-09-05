@@ -4,6 +4,17 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Tab from "../UI/Tab";
 
+const intialReadingField = {
+  no_of_questions: "10",
+  difficulty_level: "Easy",
+  exam_name: "",
+  block_type: "Mock Test",
+  block_threshold: 0,
+  audio_file: "",
+  passage: "",
+  question: "",
+};
+
 const initialSubmit = {
   isError: false,
   errMsg: null,
@@ -18,17 +29,10 @@ const tabs = [{ name: "Details" }, { name: "Passage" }];
 
 const ExamReading = ({ category, examType }) => {
   const navigate = useNavigate();
-  const [readingData, dispatchReadingData] = useReducer(reducerReading, {
-    no_of_questions: "10",
-    difficulty_level: "Easy",
-    exam_name: "",
-    block_type: examType === "General" ? "Assignments" : "Mock Test",
-    block_threshold: 0,
-    passage: "",
-    passage_image: "",
-    question: "",
-    exam_type: "",
-  });
+  const [readingData, dispatchReadingData] = useReducer(
+    reducerReading,
+    intialReadingField
+  );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("Details");
 
@@ -121,29 +125,27 @@ const ExamReading = ({ category, examType }) => {
                 </div>
               </div>
             </div>
-            {examType !== "General" && (
-              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-                <div className="dashboard__select__heading">
-                  <span>Exam Type</span>
-                </div>
-                <div className="dashboard__selector">
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                    value={readingData.block_type}
-                    onChange={(e) =>
-                      dispatchReadingData({
-                        type: "block_type",
-                        value: e.target.value,
-                      })
-                    }
-                  >
-                    <option value="Mock Test">Mock Test</option>
-                    <option value="Assignments">Assignment</option>
-                  </select>
-                </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__select__heading">
+                <span>Exam Type</span>
               </div>
-            )}
+              <div className="dashboard__selector">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  value={readingData.block_type}
+                  onChange={(e) =>
+                    dispatchReadingData({
+                      type: "block_type",
+                      value: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Mock Test">Mock Test</option>
+                  <option value="Assignments">Assignment</option>
+                </select>
+              </div>
+            </div>
           </div>
         </div>
         <div

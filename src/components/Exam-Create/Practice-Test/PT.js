@@ -30,12 +30,13 @@ const reducerPT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const PT = ({ activeTab, type }) => {
+const PT = ({ category, type, activeTab }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
     Listening: [],
     Speaking: [],
+    General: [],
   });
   const [isLoading, setIsLoading] = useState(true);
   const [createPT, dispatchPT] = useReducer(reducerPT, initialPT);
@@ -56,13 +57,14 @@ const PT = ({ activeTab, type }) => {
       try {
         const [examResponse, speakingResponse] = await Promise.all([
           ajaxCall(
-            `/exam-blocks/?fields=id,exam_name,exam_type,block_type,no_of_questions&exam_type=${type}`,
+            `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,block_type,no_of_questions&exam_type=${type}&exam_category=${category}`,
             {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
               },
               method: "GET",
             },
@@ -74,8 +76,9 @@ const PT = ({ activeTab, type }) => {
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
               },
               method: "GET",
             },
@@ -103,6 +106,10 @@ const PT = ({ activeTab, type }) => {
             Speaking: speakingData.filter(
               ({ block_threshold }) => block_threshold === 1
             ),
+            General: examData.filter(
+              ({ exam_type, block_type }) =>
+                exam_type === type && block_type === "Mock Test"
+            ),
           };
           setExams(updatedExams);
         }
@@ -116,7 +123,7 @@ const PT = ({ activeTab, type }) => {
     if (activeTab === "Create PT") {
       fetchExams();
     }
-  }, [activeTab, type]);
+  }, [activeTab, category, type]);
 
   const validateForm = () => {
     if (!createPT.Name) {
@@ -127,7 +134,8 @@ const PT = ({ activeTab, type }) => {
       (type === "Reading" && createPT.Reading.length === 0) ||
       (type === "Writing" && createPT.Writing.length === 0) ||
       (type === "Listening" && createPT.Listening.length === 0) ||
-      (type === "Speaking" && createPT.Speaking.length === 0)
+      (type === "Speaking" && createPT.Speaking.length === 0) ||
+      (type === "General" && createPT.General.length === 0)
     ) {
       setFormError(`Please Choose at least one ${type} Exam`);
       return false;
@@ -148,6 +156,7 @@ const PT = ({ activeTab, type }) => {
         Writing: createPT.Writing,
         Listening: createPT.Listening,
         Speaking: createPT.Speaking,
+        category: category,
         difficulty_level: createPT.difficulty_level,
       };
       const response = await ajaxCall(
@@ -156,8 +165,9 @@ const PT = ({ activeTab, type }) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "POST",
           body: JSON.stringify(data),
@@ -209,6 +219,16 @@ const PT = ({ activeTab, type }) => {
         valueGetter: (params) => {
           return params.data?.exam_name || params.data?.name;
         },
+        width: 260,
+      },
+      {
+        headerName: "Exam Category",
+        field: "exam_category",
+        filter: true,
+        valueGetter: (params) => {
+          return params.data?.exam_category || "-";
+        },
+        width: 210,
       },
       {
         headerName: "Exam Type",
@@ -217,6 +237,7 @@ const PT = ({ activeTab, type }) => {
         valueGetter: (params) => {
           return params.data?.exam_type || "Speaking";
         },
+        width: 210,
       },
       {
         headerName: "No. Of Questions",
@@ -225,6 +246,7 @@ const PT = ({ activeTab, type }) => {
         valueGetter: (params) => {
           return params.data?.no_of_questions || params.data?.questions?.length;
         },
+        width: 210,
       },
       {
         headerName: "Block Type",
@@ -233,6 +255,7 @@ const PT = ({ activeTab, type }) => {
         valueGetter: (params) => {
           return params.data?.block_type || "Mock Test";
         },
+        width: 210,
       },
     ];
 

@@ -153,8 +153,9 @@ const AudioRecorder = ({
           const data = await gptResponse.json();
           const aiAssessment = data?.choices?.[0]?.message?.content || "";
 
-          const bandMatch = aiAssessment.match(/#Band:\s*(\d+(\.\d+)?)/);
-          const bandValue = bandMatch ? bandMatch[1] : null;
+          const pattern = /\b\d+(?:\.\d+)?\b/g;
+          const matches = aiAssessment.match(pattern);
+          const bandValue = matches ? matches[matches.length - 1] : 0;
 
           formData.append("AI_Assessment", aiAssessment);
           formData.append("band", bandValue);
@@ -192,18 +193,7 @@ const AudioRecorder = ({
       };
       getChatGPTResponse();
     }
-  }, [
-    Flt,
-    audioBlob,
-    exam?.id,
-    practice,
-    question_number,
-    recorderIndex,
-    setRecordedFilePath,
-    user,
-    transcript,
-    exam?.questions,
-  ]);
+  }, [audioBlob]);
 
   return (
     <div

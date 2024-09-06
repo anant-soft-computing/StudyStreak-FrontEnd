@@ -133,6 +133,9 @@ const CreateLiveClass = ({ setActiveTab }) => {
         moment(createLiveClassData.start_time),
         "minutes"
       ),
+      settings: {
+        auto_recording: "cloud",
+      }
     };
 
     try {

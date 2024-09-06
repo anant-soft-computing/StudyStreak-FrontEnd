@@ -143,6 +143,9 @@ const CreateRecurrenceLiveClass = ({ setActiveTab }) => {
       start_time: moment(createRLCData.start_time).format(
         "YYYY-MM-DDTHH:mm:ss"
       ),
+      settings: {
+        auto_recording: "cloud",
+      }
     };
 
     try {

@@ -29,6 +29,8 @@ import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
 import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
 import SPaperTest from "./components/Dashboard/Student/PaperTest/PaperTest";
+import FreeDiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/FreeDiagnosticTest";
+import FreeMiniTest from "./components/Dashboard/Student/FreeMiniTest/FreeMiniTest";
 import MockTest from "./components/Dashboard/Student/MockTest/MockTest";
 import PracticeTest from "./components/Dashboard/Student/PracticeTest/PracticeTest";
 import FullLengthTest from "./components/Dashboard/Student/FullLengthTest/FullLengthTest";
@@ -120,6 +122,8 @@ const App = () => {
         </Route>
 
         <Route element={<StudentNavBarRoute isProtected={true} />}>
+          <Route path="/freeDiagnosticTest" element={<FreeDiagnosticTest />} />
+          <Route path="/freeMiniTest" element={<FreeMiniTest />} />
           <Route
             path="/studentDashboard"
             element={<ProtectedRoute element={Dashboard} />}

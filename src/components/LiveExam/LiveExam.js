@@ -12,6 +12,7 @@ import ReadingInstruction from "./Instruction/ReadingInstruction";
 import ListeningInstruction from "./Instruction/ListeningInstruction";
 import WritingInstruction from "./Instruction/WritingInstruction";
 import SpeakingInstruction from "./Instruction/SpeakingInstruction";
+import GeneralInstruction from "./Instruction/GeneralInstruction";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -41,7 +42,8 @@ const LiveExam = () => {
   useEffect(() => {
     if (
       examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Writing"
+      examData?.exam_type === "Writing" ||
+      examData?.exam_type === "General"
     ) {
       setTimer(60 * 60);
     } else if (examData?.exam_type === "Listening") {
@@ -211,7 +213,10 @@ const LiveExam = () => {
         },
         {
           role: "user",
-          content: `Questions: ${examData?.passage?.replace(/<img[^>]*>/g, "")}`,
+          content: `Questions: ${examData?.passage?.replace(
+            /<img[^>]*>/g,
+            ""
+          )}`,
         },
         {
           role: "user",
@@ -237,7 +242,7 @@ const LiveExam = () => {
     try {
       let gptResponse;
       let bandValue;
-  
+
       try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
@@ -247,23 +252,24 @@ const LiveExam = () => {
           },
           body: JSON.stringify(gptBody),
         });
-  
+
         if (!res.ok) {
           throw new Error("Failed to fetch from OpenAI API");
         }
-  
+
         const data = await res.json();
         gptResponse = data?.choices?.[0]?.message?.content || "";
-  
+
         // Extract band value using regex
         const bandMatch = gptResponse.match(/#Band:\s*(\d+(\.\d+)?)/);
         bandValue = bandMatch ? bandMatch[1] : null;
-        
       } catch (error) {
-        toast.error("Error occurred while fetching data from AI. Please try again.");
+        toast.error(
+          "Error occurred while fetching data from AI. Please try again."
+        );
         return;
       }
-  
+
       const data = JSON.stringify({
         student_exam: answersArray,
         user: userData?.userId,
@@ -272,7 +278,7 @@ const LiveExam = () => {
         band: bandValue,
         exam_type: examData?.exam_type,
       });
-  
+
       try {
         const response = await ajaxCall(
           `/studentanswerlistview/`,
@@ -289,7 +295,7 @@ const LiveExam = () => {
           },
           8000
         );
-  
+
         if (response.status === 201) {
           setTimerRunning(false);
           examSubmit();
@@ -320,7 +326,8 @@ const LiveExam = () => {
 
     if (
       examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Listening"
+      examData?.exam_type === "Listening" ||
+      examData?.exam_type === "General"
     ) {
       let totalCorrect = 0;
       examAnswer[0]?.answers?.forEach((answer, index) => {
@@ -351,7 +358,10 @@ const LiveExam = () => {
         }
       });
 
-      if (examData?.exam_type === "Reading") {
+      if (
+        examData?.exam_type === "Reading" ||
+        examData?.exam_type === "General"
+      ) {
         bandValue = readingBandValues[totalCorrect];
       } else if (examData?.exam_type === "Listening") {
         bandValue = listeningBandValues[totalCorrect];
@@ -595,8 +605,9 @@ const LiveExam = () => {
 
       return questionPassage;
     } else if (
+      examData?.exam_type === "Reading" ||
       examData?.exam_type === "Listening" ||
-      examData?.exam_type === "Reading"
+      examData?.exam_type === "General"
     ) {
       const $ = Cheerio.load(question.toString());
 
@@ -769,6 +780,12 @@ const LiveExam = () => {
 
   return !instructionCompleted ? (
     <div className="test-instruction">
+      {examData.exam_type === "General" && (
+        <GeneralInstruction
+          testType="Mini"
+          startTest={handleCompleteInstruciton}
+        />
+      )}
       {examData.exam_type === "Reading" && (
         <ReadingInstruction
           testType="Mini"
@@ -835,7 +852,8 @@ const LiveExam = () => {
         <div className="lv-main-container">
           {/* Left Container */}
           {(examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Writing") && (
+            examData?.exam_type === "Writing" ||
+            examData?.exam_type === "General") && (
             <div className="lv-left-container">
               {displayLeftContainer(examData?.passage, examData?.passage_image)}
             </div>
@@ -895,7 +913,8 @@ const LiveExam = () => {
             <div className="lv-box-right">
               {/* Replace the following with your actual content */}
               {(examData?.exam_type === "Reading" ||
-                examData?.exam_type === "Listening") && (
+                examData?.exam_type === "Listening" ||
+                examData?.exam_type === "General") && (
                 <div
                   dangerouslySetInnerHTML={{
                     __html: htmlContent,
@@ -942,7 +961,8 @@ const LiveExam = () => {
           </div>
           <div className="lv-footer-btn">
             {(examData?.exam_type === "Reading" ||
-              examData?.exam_type === "Listening") && (
+              examData?.exam_type === "Listening" ||
+              examData?.exam_type === "General") && (
               <button
                 className="lv-footer-button review_size"
                 onClick={() => setIsModalOpen(true)}
@@ -971,6 +991,7 @@ const LiveExam = () => {
                     if (
                       examData?.exam_type === "Reading" ||
                       examData?.exam_type === "Listening" ||
+                      examData?.exam_type === "General" ||
                       examData?.exam_type === "Speaking"
                     ) {
                       handleRLSubmit();
@@ -996,7 +1017,8 @@ const LiveExam = () => {
         )}
         {isModalOpen &&
           (examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening") && (
+            examData?.exam_type === "Listening" ||
+            examData?.exam_type === "General") && (
             <SmallModal
               size="lg"
               centered

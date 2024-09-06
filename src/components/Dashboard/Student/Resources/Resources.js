@@ -92,9 +92,12 @@ const Resources = () => {
         return [{ ...baseData, description: "-", document: "-" }];
       }
 
-      return item.documents.map((document, docIndex) => ({
+      const filteredDocuments = item?.documents?.filter(
+        ({ description }) => !description.includes("Paper Test")
+      );
+
+      return filteredDocuments.map((document) => ({
         ...baseData,
-        no: `${baseData.no} (${docIndex + 1}).`,
         description: document?.description || "-",
         document: document?.document || "-",
       }));

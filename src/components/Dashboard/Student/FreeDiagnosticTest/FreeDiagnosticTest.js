@@ -27,7 +27,7 @@ const FreeDiagnosticTest = () => {
         );
         if (response.status === 200) {
           setFreeDiagnosticTest(
-            response?.data?.filter((name) => name?.includes("Diagnostic"))
+            response?.data?.filter(({ name }) => name?.includes("Diagnostic"))
           );
         }
       } catch (error) {

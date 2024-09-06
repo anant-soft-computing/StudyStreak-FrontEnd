@@ -29,11 +29,10 @@ const Dashboard = () => {
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [courseList, setCourseList] = useState([]);
-  const [expiryDate, setExpiryDate] = useState([]);
+  const [studentCourses, setStudentCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState("");
 
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
   const userData = JSON?.parse(localStorage.getItem("loginInfo"));
 
   const cardList = [
@@ -86,21 +85,10 @@ const Dashboard = () => {
     batchIds?.includes(item?.id)
   );
 
-  const courses = courseList.filter((item) => courseIds?.includes(item?.id));
-
-  const getDaysRemaining = (endDate) => {
-    const end = moment(endDate);
-    const today = moment();
-    return end.diff(today, "days");
+  const handleCourseCategory = (category) => {
+    setSelectedCourse(category);
+    localStorage.setItem("category", category);
   };
-
-  const coursesWithExpiry = courses.map((course) => {
-    const expiry = expiryDate.find((exp) => exp.course.id === course.id);
-    return {
-      ...course,
-      expiryDate: expiry ? expiry.expiry_date : null,
-    };
-  });
 
   const fetchData = async (url, dataes) => {
     try {
@@ -133,7 +121,6 @@ const Dashboard = () => {
       setIsLoading(true);
       await Promise.all([
         fetchData("/batchview/", setBatchData),
-        fetchData("/courselistview/", setCourseList),
         fetchData("/userwisepackagewithcourseid/", (data) => {
           const studentPackage = data?.student_packages?.[0];
           const packageDetails = studentPackage?.package;
@@ -163,7 +150,7 @@ const Dashboard = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student/enrollment/`,
+          "/get-student-course/",
           {
             headers: {
               Accept: "application/json",
@@ -176,8 +163,18 @@ const Dashboard = () => {
           },
           8000
         );
-        if (response?.status === 200) {
-          setExpiryDate(response?.data);
+        if (response.status === 200) {
+          const courses = response?.data?.map((item) => item.course_category);
+          setStudentCourses(courses);
+
+          const savedCourse = localStorage.getItem("category");
+          if (!savedCourse && courses.length > 0) {
+            const defaultCourse = courses[0];
+            setSelectedCourse(defaultCourse);
+            localStorage.setItem("category", defaultCourse);
+          } else if (savedCourse) {
+            setSelectedCourse(savedCourse);
+          }
         } else {
           console.log("error");
         }
@@ -295,22 +292,25 @@ const Dashboard = () => {
                       </div>
                     </div>
                     <div className="col-xl-4 col-lg-4">
-                      <h5>
-                        Course :
-                        {coursesWithExpiry?.length > 0 &&
-                          coursesWithExpiry.map((course) => {
-                            const daysRemaining = getDaysRemaining(
-                              course.expiryDate
-                            );
-                            return (
-                              <span key={course?.id} className="text-danger">
-                                {" "}
-                                {course.Course_Title} : {daysRemaining} days
-                                Left |
-                              </span>
-                            );
-                          })}
-                      </h5>
+                      <div className="dashboard__form__wraper mb-3">
+                        <div className="dashboard__form__input">
+                          <h5>Course</h5>
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                            value={selectedCourse}
+                            onChange={(e) =>
+                              handleCourseCategory(e.target.value)
+                            }
+                          >
+                            {studentCourses?.map((item) => (
+                              <option key={item} value={item}>
+                                {item}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                       <LeaderBoard studentID={studentID} />
                       <UpcomingLiveClass />
                       <NextLesson />

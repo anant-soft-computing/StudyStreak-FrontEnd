@@ -157,7 +157,10 @@ const UnPaidDashboard = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-xl-12 d-flex justify-content-center align-items-center">
+                      <div
+                        className="col-xl-12 d-flex justify-content-center align-items-center"
+                        onClick={() => navigate("/freeDiagnosticTest")}
+                      >
                         <div className="gridarea__wraper text-center card-background">
                           <div className="gridarea__content p-2 m-2">
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
@@ -167,12 +170,14 @@ const UnPaidDashboard = () => {
                                 height={35}
                                 width={35}
                               />
-                              <h5 className="mt-2">
-                                Take A free Diagnostic Test <br />
-                                With This Test,You can Determine Which Kind of
-                                Course and Package and You need for your
-                                Preparation
-                              </h5>
+                              <Link className="text-decoration-none">
+                                <h5 className="mt-2">
+                                  Take A free Diagnostic Test <br />
+                                  With This Test,You can Determine Which Kind of
+                                  Course and Package and You need for your
+                                  Preparation
+                                </h5>
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -182,7 +187,10 @@ const UnPaidDashboard = () => {
                           className="gridarea__wraper text-center card-background"
                           style={{ width: "1000px" }}
                         >
-                          <div className="gridarea__content p-4 m-2">
+                          <div
+                            className="gridarea__content p-4 m-2"
+                            onClick={() => navigate("/freeMiniTest")}
+                          >
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
                               <img
                                 src={fullLengthTest}
@@ -190,10 +198,7 @@ const UnPaidDashboard = () => {
                                 height={35}
                                 width={35}
                               />
-                              <Link
-                                to="/mockTest"
-                                className="text-decoration-none"
-                              >
+                              <Link className="text-decoration-none">
                                 <h2 className="mt-2">Free Mini Test</h2>
                               </Link>
                             </div>

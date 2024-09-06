@@ -71,7 +71,7 @@ const PaperTest = () => {
   const formatPaperTest = (resources) => {
     return resources.flatMap((item, index) => {
       const baseData = {
-        no: index + 1,
+        no: `${index + 1}.`,
         student: item?.student?.some((s) => s?.id === studentId)
           ? `${
               item.student.find((s) => s?.id === studentId)?.user.first_name
@@ -94,9 +94,8 @@ const PaperTest = () => {
         document.description.includes("Paper Test")
       );
 
-      return filteredDocuments.map((document, docIndex) => ({
+      return filteredDocuments.map((document) => ({
         ...baseData,
-        no: docIndex + 1,
         description: document?.description || "-",
         document: document?.document || "-",
       }));

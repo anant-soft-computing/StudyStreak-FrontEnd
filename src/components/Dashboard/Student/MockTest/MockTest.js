@@ -4,15 +4,18 @@ import DSSidebar from "../DSSideBar/DSSideBar";
 import Tab from "../../../UI/Tab";
 import TestTable from "./TestTable";
 import MTAssessment from "../Assessment/MTAssessment/MTAssessment";
+import { useLocation } from "react-router-dom";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const MockTest = () => {
+  const { count } = useLocation().state || {};
   const [activeTab, setActiveTab] = useState("Reading");
   const [isLoading, setIsLoading] = useState(true);
-  const [category, setCategory] = useState("IELTS");
   const [givenTest, setGivenTest] = useState([]);
   const [givenSpeakingTest, setGivenSpeakingTest] = useState([]);
   const [allMockTestData, setAllMockTestData] = useState([]);
   const [allSpeakingData, setAllSpeakingData] = useState([]);
+  const category = localStorage.getItem("category");
 
   const tabs =
     category !== "GENERAL"
@@ -104,11 +107,21 @@ const MockTest = () => {
             8000
           );
           if (examBlocksResponse.status === 200) {
-            const mockTestData = examBlocksResponse.data.filter(
-              ({ block_type, exam_category }) =>
-                block_type === "Assignments" && exam_category === category
-            );
-            setAllMockTestData(mockTestData);
+            if (category === "GENERAL") {
+              const mockTestData = examBlocksResponse.data.filter(
+                ({ exam_name, block_type, exam_category }) =>
+                  block_type === "Assignments" &&
+                  exam_category === category &&
+                  !exam_name.includes("Assignment")
+              );
+              setAllMockTestData(mockTestData);
+            } else {
+              const mockTestData = examBlocksResponse.data.filter(
+                ({ block_type, exam_category }) =>
+                  block_type === "Assignments" && exam_category === category
+              );
+              setAllMockTestData(mockTestData);
+            }
           }
         }
       } catch (error) {
@@ -145,60 +158,38 @@ const MockTest = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Mini Test</h4>
-                      <div className="col-xl-2">
-                        <div className="dashboard__form__wraper">
-                          <div className="dashboard__form__input">
-                            <label>Category</label>
-                            <select
-                              className="form-select"
-                              aria-label="Default select example"
-                              value={category}
-                              onChange={(e) => setCategory(e.target.value)}
-                            >
-                              {[
-                                "IELTS",
-                                "TOFEL",
-                                "PTE",
-                                "DUOLINGO",
-                                "GRE",
-                                "GMAT",
-                                "GENERAL",
-                              ].map((item) => (
-                                <option key={item} value={item}>
-                                  {item}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+                      {category && <h5>Course : {category}</h5>}
+                    </div>
+                    {count === 0 ? (
+                      <BuyCourse message="No Mini Test Available, Please Buy a Course !!" />
+                    ) : (
+                      <div className="row">
+                        <Tab
+                          tabs={tabs}
+                          activeTab={activeTab}
+                          handleTabChange={handleTabChange}
+                        />
+                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                          {tabs.map(
+                            ({ name }) =>
+                              activeTab === name && (
+                                <TestTable
+                                  key={name}
+                                  testData={
+                                    name === "Speaking"
+                                      ? allSpeakingData
+                                      : testByExamType(name)
+                                  }
+                                  givenTest={givenTest}
+                                  testType={name}
+                                  givenSpeakingTest={givenSpeakingTest}
+                                  isLoading={isLoading}
+                                />
+                              )
+                          )}
                         </div>
                       </div>
-                    </div>
-                    <div className="row">
-                      <Tab
-                        tabs={tabs}
-                        activeTab={activeTab}
-                        handleTabChange={handleTabChange}
-                      />
-                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                        {tabs.map(
-                          ({ name }) =>
-                            activeTab === name && (
-                              <TestTable
-                                key={name}
-                                testData={
-                                  name === "Speaking"
-                                    ? allSpeakingData
-                                    : testByExamType(name)
-                                }
-                                givenTest={givenTest}
-                                testType={name}
-                                givenSpeakingTest={givenSpeakingTest}
-                                isLoading={isLoading}
-                              />
-                            )
-                        )}
-                      </div>
-                    </div>
+                    )}
                   </div>
                   {(activeTab === "Writing" || activeTab === "Speaking") && (
                     <MTAssessment

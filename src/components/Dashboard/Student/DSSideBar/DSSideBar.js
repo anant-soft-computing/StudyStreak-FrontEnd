@@ -17,7 +17,12 @@ import logOut from "../../../../img/icon/logout.svg";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
 
 const DSSidebar = () => {
+  const location = useLocation().pathname;
+  const category = localStorage.getItem("category");
+  const { logoutUser } = useCheckAuth();
+
   const [count, setCount] = useState({
+    package_count: 0,
     practice_test_count: 0,
     full_length_test_count: 0,
   });
@@ -26,80 +31,135 @@ const DSSidebar = () => {
 
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [showMobileNavBtn, setShowMobileNavBtn] = useState(true);
-
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  const location = useLocation().pathname;
-  const { logoutUser } = useCheckAuth();
 
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
   };
 
-  const menuList = [
-    {
-      name: "Dashboard",
-      icon: <img src={dashBoard} alt="Dashboard" />,
-      link: "/studentDashboard",
-    },
-    {
-      name: "My Profile",
-      icon: <img src={profile} alt="Profile" />,
-      link: "/studentProfile",
-    },
-    {
-      name: "My Course",
-      icon: <img src={myCourse} alt="My Course" />,
-      link: "/studentMyCourse",
-    },
-    {
-      name: "Paper Test",
-      icon: <img src={paperTest} alt="My Course" />,
-      link: "/paperTest",
-    },
-    {
-      name: "Mini Test",
-      icon: <img src={assignment} alt="Mini Test" />,
-      link: "/mockTest",
-    },
-    {
-      name: "Practice Test",
-      icon: <img src={practiceTest} alt="Practice Test" />,
-      link: "/practiceTest",
-      state: { count: count?.practice_test_count },
-    },
-    {
-      name: "Full Length Test",
-      icon: <img src={fullLengthTest} alt="Full Length Test" />,
-      link: "/fullLengthTest",
-      state: { count: count?.full_length_test_count },
-    },
-    {
-      name: "Live Classes",
-      icon: <img src={liveClass} alt="Live Classes" />,
-      link: "/studentLiveClasses",
-    },
-    {
-      name: "Flash Card",
-      icon: <img src={flashcard} alt="Flash Card" />,
-      link: "/flashCard",
-    },
-    {
-      name: "Resources",
-      icon: <img src={resources} alt="Resources" height={20} width={20} />,
-      link: "/resources",
-    },
-    {
-      name: "Settings",
-      icon: <img src={settings} alt="Settings" />,
-      link: "/studentSettings",
-    },
-    {
-      name: "Logout",
-      icon: <img src={logOut} alt="Logout" />,
-      link: "/login",
-    },
-  ];
+  const menuList =
+    category === "IELTS" || count?.package_count === 0
+      ? [
+          {
+            name: "Dashboard",
+            icon: <img src={dashBoard} alt="Dashboard" />,
+            link: "/studentDashboard",
+          },
+          {
+            name: "My Profile",
+            icon: <img src={profile} alt="Profile" />,
+            link: "/studentProfile",
+          },
+          {
+            name: "My Course",
+            icon: <img src={myCourse} alt="My Course" />,
+            link: "/studentMyCourse",
+          },
+          {
+            name: "Paper Test",
+            icon: <img src={paperTest} alt="My Course" />,
+            link: "/paperTest",
+          },
+          {
+            name: "Mini Test",
+            icon: <img src={assignment} alt="Mini Test" />,
+            link: "/mockTest",
+          },
+          {
+            name: "Practice Test",
+            icon: <img src={practiceTest} alt="Practice Test" />,
+            link: "/practiceTest",
+            state: { count: count?.practice_test_count },
+          },
+          {
+            name: "Full Length Test",
+            icon: <img src={fullLengthTest} alt="Full Length Test" />,
+            link: "/fullLengthTest",
+            state: { count: count?.full_length_test_count },
+          },
+          {
+            name: "Live Classes",
+            icon: <img src={liveClass} alt="Live Classes" />,
+            link: "/studentLiveClasses",
+          },
+          {
+            name: "Flash Card",
+            icon: <img src={flashcard} alt="Flash Card" />,
+            link: "/flashCard",
+          },
+          {
+            name: "Resources",
+            icon: (
+              <img src={resources} alt="Resources" height={20} width={20} />
+            ),
+            link: "/resources",
+          },
+          {
+            name: "Settings",
+            icon: <img src={settings} alt="Settings" />,
+            link: "/studentSettings",
+          },
+          {
+            name: "Logout",
+            icon: <img src={logOut} alt="Logout" />,
+            link: "/login",
+          },
+        ]
+      : [
+          {
+            name: "Dashboard",
+            icon: <img src={dashBoard} alt="Dashboard" />,
+            link: "/studentDashboard",
+          },
+          {
+            name: "My Profile",
+            icon: <img src={profile} alt="Profile" />,
+            link: "/studentProfile",
+          },
+          {
+            name: "My Course",
+            icon: <img src={myCourse} alt="My Course" />,
+            link: "/studentMyCourse",
+          },
+          {
+            name: "Paper Test",
+            icon: <img src={paperTest} alt="My Course" />,
+            link: "/paperTest",
+          },
+          {
+            name: "Mini Test",
+            icon: <img src={assignment} alt="Mini Test" />,
+            link: "/mockTest",
+          },
+          {
+            name: "Live Classes",
+            icon: <img src={liveClass} alt="Live Classes" />,
+            link: "/studentLiveClasses",
+          },
+          {
+            name: "Flash Card",
+            icon: <img src={flashcard} alt="Flash Card" />,
+            link: "/flashCard",
+          },
+          {
+            name: "Resources",
+            icon: (
+              <img src={resources} alt="Resources" height={20} width={20} />
+            ),
+            link: "/resources",
+          },
+          {
+            name: "Settings",
+            icon: <img src={settings} alt="Settings" />,
+            link: "/studentSettings",
+          },
+          {
+            name: "Logout",
+            icon: <img src={logOut} alt="Logout" />,
+            link: "/login",
+          },
+        ];
 
   useEffect(() => {
     (async () => {
@@ -157,6 +217,7 @@ const DSSidebar = () => {
           setGivenPTCount(studentPackage?.student_pt);
           setGivenFLTCount(studentPackage?.student_flt);
           setCount({
+            package_count: data?.batch_package_count,
             practice_test_count:
               packageDetails?.practice_test_count === -1
                 ? packageDetails?.practice_test_count

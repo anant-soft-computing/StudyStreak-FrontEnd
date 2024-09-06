@@ -12,12 +12,15 @@ const MyCourse = () => {
   const [courseList, setCourseList] = useState([]);
   const [expiryDate, setExpiryDate] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const category = localStorage.getItem("category");
 
   const authData = useSelector((state) => state.authStore);
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   const courses = courseList.filter((course) =>
-    courseIds.some((data) => data === course?.id)
+    courseIds.some(
+      (data) => data === course?.id && course?.Category?.name === category
+    )
   );
 
   const coursesWithExpiry = courses.map((course) => {
@@ -102,8 +105,9 @@ const MyCourse = () => {
     const hours = Math.floor(totalMinutes / 3600);
     const minutes = Math.floor((totalMinutes % 3600) / 60);
 
-    return `${hours > 0 ? `${hours} Hr${hours > 1 ? "s" : ""} ` : ""
-      }${minutes} Minute${minutes !== 1 ? "s" : ""}`;
+    return `${
+      hours > 0 ? `${hours} Hr${hours > 1 ? "s" : ""} ` : ""
+    }${minutes} Minute${minutes !== 1 ? "s" : ""}`;
   };
 
   return (

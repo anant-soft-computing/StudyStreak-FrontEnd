@@ -66,6 +66,7 @@ import ExamWriting from "./components/Exam-Create/ExamWriting";
 import ExamListening from "./components/Exam-Create/ExamListening";
 import ExamSpeaking from "./components/Exam-Create/ExamSpeaking";
 import LiveExam from "./components/LiveExam/LiveExam";
+import GeneralMTExam from "./components/General/GeneralMT/GeneralMTExam";
 import LiveAssignment from "./components/LiveAssignment/LiveAssignment";
 import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import PracticeWritingExam from "./components/LiveExam/PracticeWritingExam";
@@ -74,6 +75,7 @@ import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
+import GeneralMTAnswer from "./components/General/GeneralMT/GeneralMTAnswer";
 import PracticeTestAnswer from "./components/Exam-Answer/PTAnswer/PracticeTestAnswer";
 import FullLengthTestAnswer from "./components/Exam-Answer/FLTAnswer/FullLengthTestAnswer";
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
@@ -161,6 +163,10 @@ const App = () => {
             path="/live-assignment-answer/:examId"
             element={<LiveAssignmentAnswer />}
           />
+          <Route
+            path="/general-exam-answer/:examId"
+            element={<GeneralMTAnswer />}
+          />
           <Route path="/exam-answer/:examId" element={<Answer />} />
           <Route
             path="/exam-practice-test-answer/:examId"
@@ -200,6 +206,10 @@ const App = () => {
 
           <Route path="*" element={<ErrorPage />} />
         </Route>
+        <Route
+          path="/general-exam/:examType/:examId"
+          element={<GeneralMTExam />}
+        />
         <Route
           path="/assignment/:examType/:examId"
           element={<LiveAssignment />}

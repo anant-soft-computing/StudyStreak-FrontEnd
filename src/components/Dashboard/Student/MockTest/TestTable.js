@@ -21,13 +21,17 @@ const TestTable = ({
       return (
         <button
           className="take-test"
-          onClick={() =>
-            testType === "Speaking" || testType === "Writing"
-              ? navigate(`/assessment/${examId}`, {
-                  state: { examType: testType },
-                })
-              : navigate(`/exam-answer/${examId}`)
-          }
+          onClick={() => {
+            if (testType === "Speaking" || testType === "Writing") {
+              navigate(`/assessment/${examId}`, {
+                state: { examType: testType },
+              });
+            } else if (testType === "General") {
+              navigate(`/general-exam-answer/${examId}`);
+            } else {
+              navigate(`/exam-answer/${examId}`);
+            }
+          }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >
           Review Test
@@ -39,8 +43,12 @@ const TestTable = ({
           className="take-test"
           onClick={() =>
             window.open(
-              `/${
-                testType !== "Speaking" ? "live-exam" : "live-speaking-exam"
+              `${
+                testType === "General"
+                  ? "general-exam"
+                  : testType !== "Speaking"
+                  ? "live-exam"
+                  : "live-speaking-exam"
               }/${testType}/${params.data.id}`,
               "_blank"
             )

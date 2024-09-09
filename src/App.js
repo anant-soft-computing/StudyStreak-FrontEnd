@@ -21,6 +21,11 @@ import Courses from "./pages/Courses/Courses";
 
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
+//-------------------------> layout <--------------------------------------
+
+import StudentNavBarRoute from "./layout/StudentNavBarRoute";
+import AdminNavBarRoute from "./layout/AdminNavBarRoute";
+
 //-----------------------> Student <----------------------------------------------
 
 import Dashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
@@ -69,9 +74,8 @@ import LiveExam from "./components/LiveExam/LiveExam";
 import GeneralMTExam from "./components/General/GeneralMT/GeneralMTExam";
 import LiveAssignment from "./components/LiveAssignment/LiveAssignment";
 import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
-import PracticeWritingExam from "./components/LiveExam/PracticeWritingExam";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
-import GmatLiveMockTest from "./components/LiveExam/GmatLiveMockTest";
+import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTest";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -82,8 +86,7 @@ import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
 import LiveAssignmentAnswer from "./components/LiveAssignment/LiveAssignmentAnswer";
 import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest";
 import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
-import StudentNavBarRoute from "./layout/StudentNavBarRoute";
-import AdminNavBarRoute from "./layout/AdminNavBarRoute";
+import DiagnosticTestAnswer from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTestAnswer";
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
 import PracticeTestReport from "./components/Report/PracticeTestReport";
 import FLTReport from "./components/Report/FLTReport";
@@ -150,14 +153,9 @@ const App = () => {
           <Route path="/Listening" element={<ExamListening />} />
           <Route path="/Writing" element={<ExamWriting />} />
           <Route path="/Speaking" element={<ExamSpeaking />} />
-
           <Route
-            path="/practice-live-writing-exam/:examType/:examForm/:examId"
-            element={<PracticeWritingExam />}
-          />
-          <Route
-            path="/gmat-live-mock-test/:examId"
-            element={<GmatLiveMockTest />}
+            path="/diagnostic-test-answer/:examId"
+            element={<DiagnosticTestAnswer />}
           />
           <Route
             path="/live-assignment-answer/:examId"
@@ -206,6 +204,7 @@ const App = () => {
 
           <Route path="*" element={<ErrorPage />} />
         </Route>
+        <Route path="/diagnostic-test/:examId" element={<DiagnosticTest />} />
         <Route
           path="/general-exam/:examType/:examId"
           element={<GeneralMTExam />}

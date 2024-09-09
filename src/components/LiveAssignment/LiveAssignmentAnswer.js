@@ -110,7 +110,7 @@ const LiveAssignmentAnswer = () => {
                   {examType === "General" && (
                     <AnswerTable
                       correctAnswer={correctAnswer}
-                      studentAnswers={studentAnswers}
+                      studentAnswer={studentAnswers}
                     />
                   )}
                 </div>

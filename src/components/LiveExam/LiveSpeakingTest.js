@@ -236,7 +236,9 @@ const LiveSpeakingExam = () => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
       examSubmit();
-      setTimeout(() => navigate("/mockTest"), 3000);
+      navigate(`/assessment/${examId}`, {
+        state: { examType: "Speaking" },
+      });
     }
   }, [speaking]);
 

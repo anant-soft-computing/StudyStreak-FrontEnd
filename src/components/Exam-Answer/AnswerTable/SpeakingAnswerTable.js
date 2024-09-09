@@ -31,10 +31,10 @@ const SpeakingAnswerTable = ({ data, viewAIA, viewTA }) => {
                     </audio>
                   </td>
                   <td>
-                    {item.AI_Assessment ? (
+                    {item.ai_assessment ? (
                       <button
                         className="take-test"
-                        onClick={() => viewAIA(item.AI_Assessment)}
+                        onClick={() => viewAIA(item.ai_assessment)}
                       >
                         View
                       </button>
@@ -43,10 +43,10 @@ const SpeakingAnswerTable = ({ data, viewAIA, viewTA }) => {
                     )}
                   </td>
                   <td>
-                    {item.Tutor_Assessment ? (
+                    {item.tutor_assessment ? (
                       <button
                         className="take-test"
-                        onClick={() => viewTA(item.Tutor_Assessment)}
+                        onClick={() => viewTA(item.tutor_assessment)}
                       >
                         View
                       </button>

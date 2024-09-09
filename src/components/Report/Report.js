@@ -122,7 +122,7 @@ const Report = ({ paperId, testType, testID, setExamName }) => {
             {(testType === "Reading" || testType === "Listening") && (
               <AnswerTable
                 correctAnswer={correctAnswer}
-                studentAnswers={studentAnswers}
+                studentAnswer={studentAnswers}
               />
             )}
             {testType === "Speaking" && (

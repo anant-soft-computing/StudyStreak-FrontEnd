@@ -312,6 +312,7 @@ const Exam = () => {
                               screenContent.examForm === "Reading" && (
                                 <PT
                                   activeTab={activeTab}
+                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -319,6 +320,7 @@ const Exam = () => {
                               (screenContent.examForm === "Writing" && (
                                 <PT
                                   activeTab={activeTab}
+                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -326,6 +328,7 @@ const Exam = () => {
                               (screenContent.examForm === "Listening" && (
                                 <PT
                                   activeTab={activeTab}
+                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -333,6 +336,7 @@ const Exam = () => {
                               (screenContent.examForm === "Speaking" && (
                                 <PT
                                   activeTab={activeTab}
+                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -340,6 +344,7 @@ const Exam = () => {
                               (screenContent.examForm === "General" && (
                                 <PT
                                   activeTab={activeTab}
+                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -376,7 +381,7 @@ const Exam = () => {
                                 </div>
                               ))}
                             {screenContent.examType && (
-                              <FLT activeTab={activeTab} />
+                              <FLT activeTab={activeTab} setActiveTab={setActiveTab} />
                             )}
                           </div>
                         </div>

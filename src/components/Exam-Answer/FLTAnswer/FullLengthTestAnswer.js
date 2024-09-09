@@ -275,7 +275,7 @@ const FullLengthTestAnswer = () => {
                     {/* Reading */}
                     <AnswerTable
                       correctAnswer={rCorrectAnswers}
-                      studentAnswers={rStudentAnswers}
+                      studentAnswer={rStudentAnswers}
                       tableTitle="Reading"
                     />
 
@@ -288,7 +288,7 @@ const FullLengthTestAnswer = () => {
                     {/* Listening */}
                     <AnswerTable
                       correctAnswer={lCorrectAnswers}
-                      studentAnswers={lStudentAnswers}
+                      studentAnswer={lStudentAnswers}
                       tableTitle="Listening"
                     />
 

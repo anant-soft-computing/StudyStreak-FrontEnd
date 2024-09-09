@@ -5,7 +5,6 @@ import SmallModal from "../../../../UI/Modal";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 import { writingAssessment } from "../../../../../utils/assessment/writingAssessment";
 import { speakingAssessment } from "../../../../../utils/assessment/speakingAssessment";
-import SpeakingAnswerTable from "../../../../Exam-Answer/AnswerTable/SpeakingAnswerTable";
 import { getBackgroundColor } from "../../../../../utils/background/background";
 
 const ViewMTAAssessment = () => {
@@ -140,11 +139,78 @@ const ViewMTAAssessment = () => {
                   {examType === "Writing" ? (
                     renderWritingAssessment()
                   ) : (
-                    <SpeakingAnswerTable
-                      data={examData?.student_answers}
-                      viewAIA={handleAIAssessment}
-                      viewTA={handleTutorAssessment}
-                    />
+                    <>
+                      <div className="row">
+                        <div className="col-xl-12">
+                          <div className="dashboard__table table-responsive">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Question Number</th>
+                                  <th>Answer Audio</th>
+                                  <th>AI Assessment</th>
+                                  <th>Tutor Assessment</th>
+                                  <th>Band</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {examData?.student_answers?.map(
+                                  (item, index) => (
+                                    <tr
+                                      key={index}
+                                      className={
+                                        index % 2 === 0
+                                          ? ""
+                                          : "dashboard__table__row"
+                                      }
+                                    >
+                                      <td>{index + 1}</td>
+                                      <td>
+                                        <audio controls>
+                                          <source
+                                            src={`https://studystreak.in/${item.answer_audio}`}
+                                            type="audio/mpeg"
+                                          />
+                                        </audio>
+                                      </td>
+                                      <td>
+                                        {item.AI_Assessment ? (
+                                          <button
+                                            className="take-test"
+                                            onClick={() =>
+                                              handleAIAssessment(item.AI_Assessment)
+                                            }
+                                          >
+                                            View
+                                          </button>
+                                        ) : (
+                                          "-"
+                                        )}
+                                      </td>
+                                      <td>
+                                        {item.Tutor_Assessment ? (
+                                          <button
+                                            className="take-test"
+                                            onClick={() =>
+                                              handleTutorAssessment(item.Tutor_Assessment)
+                                            }
+                                          >
+                                            View
+                                          </button>
+                                        ) : (
+                                          "-"
+                                        )}
+                                      </td>
+                                      <td>{item.band || "-"}</td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </>
                   )}
                 </div>
               </div>

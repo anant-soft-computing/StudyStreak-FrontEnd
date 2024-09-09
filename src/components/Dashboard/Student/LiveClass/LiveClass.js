@@ -274,11 +274,11 @@ const LiveClass = () => {
                 <div className="col">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
-                      <h4 className="flex-fill">Upcoming Live Classes</h4>
+                      <h4 className="flex-fill">Live Classes</h4>
                       <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
                         <div className="dashboard__form__wraper">
                           <div className="dashboard__form__input">
-                            <label>Select Upcoming Live Class</label>
+                            <label>Select Live Class</label>
                             <select
                               className="form-select"
                               aria-label="Default select example"

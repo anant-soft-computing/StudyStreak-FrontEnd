@@ -125,6 +125,9 @@ const PracticeSpeakingLiveExam = () => {
       );
       if (response.status === 200) {
         examLatestSubmit();
+        navigate(`/practice-assessment/${fullPaper?.IELTS?.id}`, {
+          state: { examType: "Speaking" },
+        });
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have All Ready Submitted This Exam");
@@ -287,14 +290,6 @@ const PracticeSpeakingLiveExam = () => {
     }
   }, [recordedFilePath]);
 
-  useEffect(() => {
-    const isAllAnswered = speaking.every((item) => item.filePath !== "");
-    if (isAllAnswered) {
-      practiceTestSubmit();
-      setTimeout(() => navigate(`/practiceTest`), 3000);
-    }
-  }, [speaking]);
-
   const recorderContainer = useCallback(
     (item, index) => {
       return (
@@ -446,6 +441,18 @@ const PracticeSpeakingLiveExam = () => {
               }}
             >
               <span>&#10152;</span>
+            </button>
+            <button
+              className="lv-footer-button"
+              style={{
+                display:
+                  next === fullPaper?.[examType].Speaking?.length - 1
+                    ? "block"
+                    : "none",
+              }}
+              onClick={practiceTestSubmit}
+            >
+              Submit
             </button>
           </div>
         </div>

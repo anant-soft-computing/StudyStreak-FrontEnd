@@ -27,7 +27,7 @@ const reducerFLT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const FLT = ({ activeTab }) => {
+const FLT = ({ activeTab, setActiveTab }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -44,6 +44,7 @@ const FLT = ({ activeTab }) => {
 
   const resetReducerForm = () => {
     dispatchFLT({ type: "reset" });
+    setActiveTab("View Exam")
   };
 
   useEffect(() => {

@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from "react";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import Tab from "../../../UI/Tab";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
-const tabs = [
-  { name: "Reading" },
-  { name: "Writing" },
-  { name: "Listening" },
-  { name: "Speaking" },
-];
-
 const FreeMiniTest = () => {
   const [testData, setTestData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Reading");
+  const [testType, setTestType] = useState("Reading");
 
   const takeTest = (params) => {
     return (
@@ -23,9 +15,13 @@ const FreeMiniTest = () => {
         className="take-test"
         onClick={() =>
           window.open(
-            `/${
-              activeTab !== "Speaking" ? "live-exam" : "live-speaking-exam"
-            }/${activeTab}/${params.data.id}`,
+            `${
+              testType === "General"
+                ? "general-exam"
+                : testType !== "Speaking"
+                ? "live-exam"
+                : "live-speaking-exam"
+            }/${testType}/${params.data.id}`,
             "_blank"
           )
         }
@@ -39,7 +35,7 @@ const FreeMiniTest = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        if (activeTab === "Speaking") {
+        if (testType === "Speaking") {
           const speakingBlocksResponse = await ajaxCall(
             "/speaking-block/",
             {
@@ -66,7 +62,7 @@ const FreeMiniTest = () => {
           }
         } else {
           const examBlocksResponse = await ajaxCall(
-            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${activeTab}`,
+            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${testType}`,
             {
               headers: {
                 Accept: "application/json",
@@ -80,10 +76,19 @@ const FreeMiniTest = () => {
             8000
           );
           if (examBlocksResponse.status === 200) {
-            const mockTestData = examBlocksResponse?.data?.filter(
-              ({ block_type }) => block_type === "Assignments"
-            );
-            setTestData(mockTestData);
+            if (testType === "General") {
+              const mockTestData = examBlocksResponse.data.filter(
+                ({ exam_name, block_type }) =>
+                  block_type === "Assignments" &&
+                  !exam_name.includes("Assignment")
+              );
+              setTestData(mockTestData);
+            } else {
+              const mockTestData = examBlocksResponse.data.filter(
+                ({ block_type }) => block_type === "Assignments"
+              );
+              setTestData(mockTestData);
+            }
           }
         }
       } catch (error) {
@@ -93,11 +98,7 @@ const FreeMiniTest = () => {
       }
     };
     fetchData();
-  }, [activeTab]);
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
+  }, [testType]);
 
   const columns = [
     {
@@ -134,20 +135,40 @@ const FreeMiniTest = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Free Mini Test</h4>
+                      <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>Select Exam</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              onChange={(e) => setTestType(e.target.value)}
+                              value={testType}
+                            >
+                              {[
+                                "Reading",
+                                "Writing",
+                                "Listening",
+                                "Speaking",
+                                "General",
+                              ].map((item) => (
+                                <option key={item} value={item}>
+                                  {item}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <div className="row">
-                      <Tab
-                        tabs={tabs}
-                        activeTab={activeTab}
-                        handleTabChange={handleTabChange}
-                      />
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         {isLoading ? (
                           <Loading text="Loading..." color="primary" />
                         ) : testData.length > 0 ? (
                           <Table rowData={testData} columnDefs={columns} />
                         ) : (
-                          <h5 className="text-center text-danger">{`No ${activeTab} Tests Available !!`}</h5>
+                          <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
                         )}
                       </div>
                     </div>

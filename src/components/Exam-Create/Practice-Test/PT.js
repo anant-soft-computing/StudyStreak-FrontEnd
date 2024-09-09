@@ -15,6 +15,7 @@ const initialPT = {
   Writing: [],
   Listening: [],
   Speaking: [],
+  General: [],
 };
 
 const initialSubmit = {
@@ -30,7 +31,7 @@ const reducerPT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const PT = ({ category, type, activeTab }) => {
+const PT = ({ category, type, activeTab,setActiveTab }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -49,6 +50,7 @@ const PT = ({ category, type, activeTab }) => {
 
   const resetReducerForm = () => {
     dispatchPT({ type: "reset" });
+    setActiveTab("View Exam");
   };
 
   useEffect(() => {
@@ -156,6 +158,7 @@ const PT = ({ category, type, activeTab }) => {
         Writing: createPT.Writing,
         Listening: createPT.Listening,
         Speaking: createPT.Speaking,
+        General: createPT.General,
         category: category,
         difficulty_level: createPT.difficulty_level,
       };
@@ -219,7 +222,7 @@ const PT = ({ category, type, activeTab }) => {
         valueGetter: (params) => {
           return params.data?.exam_name || params.data?.name;
         },
-        width: 260,
+        width: 400,
       },
       {
         headerName: "Exam Category",
@@ -228,7 +231,7 @@ const PT = ({ category, type, activeTab }) => {
         valueGetter: (params) => {
           return params.data?.exam_category || "-";
         },
-        width: 210,
+        width: 230,
       },
       {
         headerName: "Exam Type",
@@ -237,7 +240,7 @@ const PT = ({ category, type, activeTab }) => {
         valueGetter: (params) => {
           return params.data?.exam_type || "Speaking";
         },
-        width: 210,
+        width: 230,
       },
       {
         headerName: "No. Of Questions",
@@ -246,7 +249,7 @@ const PT = ({ category, type, activeTab }) => {
         valueGetter: (params) => {
           return params.data?.no_of_questions || params.data?.questions?.length;
         },
-        width: 210,
+        width: 230,
       },
       {
         headerName: "Block Type",
@@ -255,7 +258,7 @@ const PT = ({ category, type, activeTab }) => {
         valueGetter: (params) => {
           return params.data?.block_type || "Mock Test";
         },
-        width: 210,
+        width: 230,
       },
     ];
 

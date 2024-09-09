@@ -797,7 +797,10 @@ const DragDrop = () => {
     formData.append("exam_type", examType);
     formData.append("no_of_questions", readingData.no_of_questions);
     formData.append("passage", readingData.passage);
-    formData.append("passage_image", readingData.passage_image);
+    formData.append(
+      "passage_image",
+      readingData.passage_image ? readingData.passage_image : ""
+    );
     formData.append("question", htmlContent);
     tempAnswer.forEach((item, index) => {
       formData.append(`answers[${index}]question_number`, item.question_number);

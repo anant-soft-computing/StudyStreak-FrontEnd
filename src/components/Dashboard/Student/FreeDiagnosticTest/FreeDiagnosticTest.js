@@ -39,7 +39,7 @@ const FreeDiagnosticTest = () => {
   }, []);
 
   const handleFullLengthTest = (examId) => {
-    window.open(`/fulllength-live-exam/${examId}`, "_blank");
+    window.open(`/diagnostic-test/${examId}`, "_blank");
   };
 
   const columns = [

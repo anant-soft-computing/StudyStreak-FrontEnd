@@ -7,13 +7,6 @@ import Tab from "../../../UI/Tab";
 import PracticeTestTable from "./PracticeTestTable";
 import PTAssessment from "../Assessment/PTAssessment/PTAssessment";
 
-const tabs = [
-  { name: "Reading" },
-  { name: "Writing" },
-  { name: "Listening" },
-  { name: "Speaking" },
-];
-
 const PracticeTest = () => {
   const { count } = useLocation().state || {};
   const [isLoading, setIsLoading] = useState(true);
@@ -22,9 +15,29 @@ const PracticeTest = () => {
     Writing: [],
     Listening: [],
     Speaking: [],
+    General: [],
   });
   const [givenTest, setGivenTest] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
+  const category = localStorage.getItem("category");
+
+  const tabs =
+    category !== "GENERAL"
+      ? [
+          { name: "Reading" },
+          { name: "Writing" },
+          { name: "Listening" },
+          { name: "Speaking" },
+        ]
+      : [{ name: "General" }];
+
+  useEffect(() => {
+    if (category !== "GENERAL") {
+      setActiveTab("Reading");
+    } else {
+      setActiveTab("General");
+    }
+  }, [category]);
 
   useEffect(() => {
     (async () => {
@@ -57,7 +70,7 @@ const PracticeTest = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=${activeTab}`,
+          `/createexamview/?exam_type=${activeTab}&category=${category}`,
           {
             headers: {
               Accept: "application/json",
@@ -79,6 +92,7 @@ const PracticeTest = () => {
               ({ exam_type }) => exam_type === "Listening"
             ),
             Speaking: data.filter(({ exam_type }) => exam_type === "Speaking"),
+            General: data.filter(({ exam_type }) => exam_type === "General"),
           };
           setTestData(filteredData);
         }
@@ -89,7 +103,7 @@ const PracticeTest = () => {
       }
     };
     fetchData();
-  }, [activeTab]);
+  }, [activeTab, category]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -112,6 +126,7 @@ const PracticeTest = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Practice Test</h4>
+                      {category && <h5>Course : {category}</h5>}
                     </div>
                     {isNaN(count) ? (
                       <BuyCourse message="No Practice Test Available, Please Buy a Course !!" />

@@ -24,14 +24,26 @@ const PracticeTestTable = ({
     Object?.keys(data?.IELTS)?.forEach((key) => {
       if (Array.isArray(data?.IELTS[key])) {
         if (data?.IELTS[key].length > 0) {
-          window.open(
-            `${
-              testType === "Speaking"
-                ? "/practice-speaking-live-exam"
-                : "/practice-live-exam"
-            }/IELTS/${key}/${data.id}`,
-            "_blank"
-          );
+          if (testType === "Speaking") {
+            window.open(
+              `/practice-speaking-live-exam/IELTS/${key}/${data.id}`,
+              "_blank"
+            );
+          } else if (
+            testType === "Reading" ||
+            testType === "Writing" ||
+            testType === "Listening"
+          ) {
+            window.open(
+              `/practice-live-exam/IELTS/${key}/${data.id}`,
+              "_blank"
+            );
+          } else {
+            window.open(
+              `/general-practice-live-exam/IELTS/${key}/${data.id}`,
+              "_blank"
+            );
+          }
         }
       }
     });
@@ -45,15 +57,21 @@ const PracticeTestTable = ({
       return (
         <button
           className="take-test"
-          onClick={() =>
-            testType === "Writing" || testType === "Speaking"
-              ? navigate(`/practice-assessment/${paperId}`, {
-                  state: { examType: testType },
-                })
-              : navigate(`/exam-practice-test-answer/${examId}`, {
-                  state: { fullPaper: paperId, examForm: testType },
-                })
-          }
+          onClick={() => {
+            if (testType === "Writing" || testType === "Speaking") {
+              navigate(`/practice-assessment/${paperId}`, {
+                state: { examType: testType },
+              });
+            } else if (testType === "General") {
+              navigate(`/general-practice-test-answer/${examId}`, {
+                state: { fullPaper: paperId, examForm: testType },
+              });
+            } else {
+              navigate(`/exam-practice-test-answer/${examId}`, {
+                state: { fullPaper: paperId, examForm: testType },
+              });
+            }
+          }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >
           Review Test
@@ -97,6 +115,8 @@ const PracticeTestTable = ({
             return "4";
           case "Speaking":
             return "3";
+          case "General":
+            return "3";
           default:
             return "";
         }
@@ -117,6 +137,8 @@ const PracticeTestTable = ({
             return "40";
           case "Speaking":
             return "9 to 12";
+          case "General":
+            return "40";
           default:
             return "";
         }
@@ -137,6 +159,8 @@ const PracticeTestTable = ({
             return "30 Minutes";
           case "Speaking":
             return "15 Minutes";
+          case "General":
+            return "60 Minutes";
           default:
             return "";
         }

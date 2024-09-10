@@ -208,6 +208,12 @@ const DSLeftDrawer = () => {
             state: { count: count?.package_count },
           },
           {
+            name: "Practice Test",
+            icon: <img src={practiceTest} alt="Practice Test" />,
+            link: "/practiceTest",
+            state: { count: count?.practice_test_count },
+          },
+          {
             name: "Live Classes",
             icon: <img src={liveClass} alt="Live Classes" />,
             link: "/studentLiveClasses",

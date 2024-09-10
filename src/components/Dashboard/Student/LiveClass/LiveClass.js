@@ -109,6 +109,9 @@ const LiveClass = () => {
   ]);
 
   useEffect(() => {
+    const calculateTotalCount = (data, key) =>
+      data?.package.reduce((sum, pkg) => sum + (pkg[key] || 0), 0);
+
     (async () => {
       try {
         const response = await ajaxCall(
@@ -125,25 +128,33 @@ const LiveClass = () => {
           },
           8000
         );
+
         if (response.status === 200) {
           const { data } = response;
-          const studentPackage = data?.student_packages?.[0];
-          const packageDetails = studentPackage?.package;
-          setCount({
-            speaking_practice_count: packageDetails?.speaking_practice_count,
-            one_to_one_doubt_solving_count:
-              packageDetails?.one_to_one_doubt_solving_count,
-            group_doubt_solving_count:
-              packageDetails?.group_doubt_solving_count,
-            webinar_count: packageDetails?.webinar_count,
-            tutor_support_count: packageDetails?.tutor_support_count,
-            counselling_count: packageDetails?.counselling_count,
-          });
-          setSolvingClassBook(
-            data.student_packages?.map(
-              ({ Live_class_enroll }) => Live_class_enroll
-            )[0]
-          );
+
+          const counts = {
+            speaking_practice_count: calculateTotalCount(
+              data,
+              "speaking_test_count"
+            ),
+            one_to_one_doubt_solving_count: calculateTotalCount(
+              data,
+              "one_to_one_doubt_solving_count"
+            ),
+            group_doubt_solving_count: calculateTotalCount(
+              data,
+              "group_doubt_solving_count"
+            ),
+            webinar_count: calculateTotalCount(data, "webinar_count"),
+            tutor_support_count: calculateTotalCount(
+              data,
+              "tutor_support_count"
+            ),
+            counselling_count: calculateTotalCount(data, "counselling_count"),
+          };
+
+          setCount(counts);
+          setSolvingClassBook(data?.student[0]?.Live_class_enroll);
         } else {
           console.log("error");
         }

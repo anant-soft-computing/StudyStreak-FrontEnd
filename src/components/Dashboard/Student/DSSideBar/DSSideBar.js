@@ -22,7 +22,7 @@ const DSSidebar = () => {
   const { logoutUser } = useCheckAuth();
 
   const [count, setCount] = useState({
-    package_count: 0,
+    count: 0,
     practice_test_count: 0,
     full_length_test_count: 0,
   });
@@ -39,7 +39,7 @@ const DSSidebar = () => {
   };
 
   const menuList =
-    category === "IELTS" || count?.package_count === 0
+    category === "IELTS" || count?.count === 0
       ? [
           {
             name: "Dashboard",
@@ -165,35 +165,6 @@ const DSSidebar = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/get-student-course/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          const enrollCourses = response?.data?.map((item) => item.course_id);
-          localStorage.setItem("courses", JSON.stringify(enrollCourses));
-        } else {
-          console.log("error");
-        }
-      } catch (error) {
-        console.log("error:", error);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
           "/userwisepackagewithcourseid/",
           {
             headers: {
@@ -209,26 +180,34 @@ const DSSidebar = () => {
         );
         if (response.status === 200) {
           const { data } = response;
-          const studentPackage = data?.student_packages?.[0];
-          const packageDetails = studentPackage?.package;
+          const batchIds = data?.batch?.map((item) => item);
+          const courseIds = data?.course?.map((item) => item);
 
-          const batchIds = data?.student_packages.map((item) => item.batch_id);
+          const givenPTCount = data?.student[0]?.student_pt;
+          const givenFLTCount = data?.student[0]?.student_flt;
 
-          setGivenPTCount(studentPackage?.student_pt);
-          setGivenFLTCount(studentPackage?.student_flt);
+          setGivenPTCount(givenPTCount);
+          setGivenFLTCount(givenFLTCount);
+
+          const totalPracticeTests = data?.package.reduce(
+            (sum, pkg) => sum + pkg.practice_test_count,
+            0
+          );
+
+          const totalFullLengthTests = data?.package.reduce(
+            (sum, pkg) => sum + pkg.full_length_test_count,
+            0
+          );
+
           setCount({
-            package_count: data?.batch_package_count,
-            practice_test_count:
-              packageDetails?.practice_test_count === -1
-                ? packageDetails?.practice_test_count
-                : packageDetails?.practice_test_count - givenPTCount,
-            full_length_test_count:
-              packageDetails?.full_length_test_count === -1
-                ? packageDetails?.full_length_test_count
-                : packageDetails?.full_length_test_count - givenFLTCount,
+            count: data?.count,
+            practice_test_count: totalPracticeTests - givenPTCount,
+            full_length_test_count: totalFullLengthTests - givenFLTCount,
           });
-          localStorage.setItem("StudentID", studentPackage?.student_id);
+
+          localStorage.setItem("StudentID", data?.student[0]?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
+          localStorage.setItem("courses", JSON.stringify(courseIds));
         } else {
           console.log("error");
         }
@@ -236,7 +215,7 @@ const DSSidebar = () => {
         console.log("error", error);
       }
     })();
-  }, [givenFLTCount, givenPTCount, openMobileMenu]);
+  }, [givenFLTCount, givenPTCount]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -293,21 +272,17 @@ const DSSidebar = () => {
                       {item.name}
                     </div>
                     {item.name === "Practice Test" ? (
-                      count.practice_test_count === -1 ? (
-                        <span className="dashboard__label">All</span>
-                      ) : givenPTCount >=
-                        count?.practice_test_count + givenPTCount ? (
+                      givenPTCount >=
+                      count?.practice_test_count + givenPTCount ? (
                         <span className="dashboard__label bg-danger">N/A</span>
                       ) : (
                         <span className="dashboard__label">
-                          {count.practice_test_count}
+                          {count?.practice_test_count}
                         </span>
                       )
                     ) : item.name === "Full Length Test" ? (
-                      count?.full_length_test_count === -1 ? (
-                        <span className="dashboard__label">All</span>
-                      ) : givenFLTCount >=
-                        count?.full_length_test_count + givenFLTCount ? (
+                      givenFLTCount >=
+                      count?.full_length_test_count + givenFLTCount ? (
                         <span className="dashboard__label bg-danger">N/A</span>
                       ) : (
                         <span className="dashboard__label">

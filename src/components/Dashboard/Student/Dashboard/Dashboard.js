@@ -22,7 +22,7 @@ import NextLesson from "./NextLesson/NextLesson";
 
 const Dashboard = () => {
   const [count, setCount] = useState({
-    batch_package_count: 0,
+    count: 0,
     practice_test_count: 0,
     full_length_test_count: 0,
   });
@@ -122,22 +122,23 @@ const Dashboard = () => {
       await Promise.all([
         fetchData("/batchview/", setBatchData),
         fetchData("/userwisepackagewithcourseid/", (data) => {
-          const studentPackage = data?.student_packages?.[0];
-          const packageDetails = studentPackage?.package;
+          const givenPTCount = data?.student[0]?.student_pt;
+          const givenFLTCount = data?.student[0]?.student_flt;
+          const totalPracticeTests = data?.package.reduce(
+            (sum, pkg) => sum + pkg.practice_test_count,
+            0
+          );
+
+          const totalFullLengthTests = data?.package.reduce(
+            (sum, pkg) => sum + pkg.full_length_test_count,
+            0
+          );
           setCount({
-            batch_package_count: data?.batch_package_count,
-            practice_test_count:
-              packageDetails?.practice_test_count === -1
-                ? packageDetails?.practice_test_count
-                : packageDetails?.practice_test_count -
-                  studentPackage?.student_pt,
-            full_length_test_count:
-              packageDetails?.full_length_test_count === -1
-                ? packageDetails?.full_length_test_count
-                : packageDetails?.full_length_test_count -
-                  studentPackage?.student_flt,
+            count: data?.count,
+            practice_test_count: totalPracticeTests - givenPTCount,
+            full_length_test_count: totalFullLengthTests - givenFLTCount,
           });
-          setStudentID(data?.student_packages[0]?.student_id);
+          setStudentID(data?.student[0]?.student_id);
         }),
       ]);
       setIsLoading(false);
@@ -190,7 +191,7 @@ const Dashboard = () => {
 
   return (
     <>
-      {count?.batch_package_count !== 0 ? (
+      {count?.count !== 0 ? (
         <div className="body__wrapper">
           <div className="main_wrapper overflow-hidden">
             <div className="dashboardarea sp_bottom_100">

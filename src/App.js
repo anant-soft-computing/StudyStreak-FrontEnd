@@ -72,6 +72,7 @@ import ExamListening from "./components/Exam-Create/ExamListening";
 import ExamSpeaking from "./components/Exam-Create/ExamSpeaking";
 import LiveExam from "./components/LiveExam/LiveExam";
 import GeneralMTExam from "./components/General/GeneralMT/GeneralMTExam";
+import GeneralPTExam from "./components/General/GeneralPT/GeneralPTExam";
 import LiveAssignment from "./components/LiveAssignment/LiveAssignment";
 import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
@@ -80,6 +81,7 @@ import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/Di
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
 import GeneralMTAnswer from "./components/General/GeneralMT/GeneralMTAnswer";
+import GeneralPTAnswer from "./components/General/GeneralPT/GeneralPTAnswer";
 import PracticeTestAnswer from "./components/Exam-Answer/PTAnswer/PracticeTestAnswer";
 import FullLengthTestAnswer from "./components/Exam-Answer/FLTAnswer/FullLengthTestAnswer";
 import LiveSpeakingExam from "./components/LiveExam/LiveSpeakingTest";
@@ -162,6 +164,10 @@ const App = () => {
             element={<LiveAssignmentAnswer />}
           />
           <Route
+            path="/general-practice-test-answer/:examId"
+            element={<GeneralPTAnswer />}
+          />
+          <Route
             path="/general-exam-answer/:examId"
             element={<GeneralMTAnswer />}
           />
@@ -205,6 +211,10 @@ const App = () => {
           <Route path="*" element={<ErrorPage />} />
         </Route>
         <Route path="/diagnostic-test/:examId" element={<DiagnosticTest />} />
+        <Route
+          path="/general-practice-live-exam/:examType/:examForm/:examId"
+          element={<GeneralPTExam />}
+        />
         <Route
           path="/general-exam/:examType/:examId"
           element={<GeneralMTExam />}

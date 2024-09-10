@@ -76,7 +76,11 @@ const ScoreCard = () => {
             }, 0);
 
             setBand(totalBand / studentAnswers.length);
-          } else if (testType === "Reading" || testType === "Listening") {
+          } else if (
+            testType === "Reading" ||
+            testType === "Listening" ||
+            testType === "General"
+          ) {
             handleReadingOrListening(response.data, testType);
           }
         }
@@ -105,6 +109,13 @@ const ScoreCard = () => {
       studentAnswers.forEach((item, index) => {
         const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
         const studentAnswerText = item.answer_text?.trim();
+
+        if (type === "General") {
+          if (correctAnswerText === studentAnswerText) {
+            correct++;
+          }
+          return setBand(correct);
+        }
 
         if (correctAnswerText?.includes(" OR ")) {
           const correctOptions = correctAnswerText
@@ -307,7 +318,7 @@ const ScoreCard = () => {
 
   const calculateAverageBand = (answers) => {
     const bandScores = answers
-    ?.map((item) => (item.band !== null ? parseFloat(item.band) : 0))
+      ?.map((item) => (item.band !== null ? parseFloat(item.band) : 0))
       .filter((band) => !isNaN(band));
     if (bandScores?.length > 0) {
       const sum = bandScores.reduce((a, b) => a + b, 0);

@@ -129,7 +129,7 @@ export function useCheckAuth() {
         logInOperation: -1,
       })
     );
-    deleteFromLocalStorage("loginInfo");
+    localStorage.clear();
     navigate("/login");
   };
 

@@ -61,7 +61,10 @@ const FullLengthTest = () => {
           8000
         );
         if (response.status === 200) {
-          setFullLengthTestData([...response.data]);
+          const fullLengthTest = response.data.filter(
+            ({ name }) => !name.includes("Diagnostic")
+          );
+          setFullLengthTestData(fullLengthTest);
         }
       } catch (error) {
         console.log("error", error);

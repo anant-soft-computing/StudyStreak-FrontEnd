@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import ScoreCard from "./ScoreCard/ScoreCard";
-import AnswerCard from "./AnswerCard";
+import { getBackgroundColor } from "../../utils/background/background";
 import AnswerTable from "./AnswerTable/AnswerTable";
 import { writingAssessment } from "../../utils/assessment/writingAssessment";
 
@@ -10,13 +10,14 @@ const Answer = () => {
   const { examId } = useParams();
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
+  const [band, setBand] = useState(0);
+  const [percentage, setPercentage] = useState(0);
   const [skipCount, setSkipCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
   const [examName, setExamName] = useState("");
   const [examType, setExamType] = useState("");
   const [gptResponse, setGPTResponse] = useState("");
-  const [band, setBand] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -93,6 +94,11 @@ const Answer = () => {
     setCorrectCount(correct);
     setIncorrectCount(incorrect);
     setSkipCount(skipped);
+
+    if (correctAnswer?.length > 0) {
+      const percentage = (correct / correctAnswer?.length) * 100;
+      setPercentage(percentage.toFixed(2));
+    }
   }, [studentAnswers, correctAnswer]);
 
   const aiAssessment = gptResponse ? writingAssessment(gptResponse) : {};
@@ -107,18 +113,37 @@ const Answer = () => {
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For: {examName}</h4>
                   {examType === "Writing" && (
-                    <h4 className="sidebar__title">Band : {band}</h4>
+                    <h4 className="sidebar__title">Score : {band}</h4>
                   )}
                   {examType !== "Writing" && (
-                    <AnswerCard
-                      band={band}
-                      skipCount={skipCount}
-                      correctCount={correctCount}
-                      incorrectCount={incorrectCount}
-                    />
+                    <div className="d-flex flex-wrap gap-3">
+                      <div className="flt-question-card">
+                        Correct Answer : <span>{correctCount}</span>
+                      </div>
+                      <div className="flt-question-card">
+                        Incorrect Answer : <span>{incorrectCount}</span>
+                      </div>
+                      <div className="flt-question-card">
+                        Skip Answer : <span>{skipCount}</span>
+                      </div>
+                      <div
+                        className="flt-question-card"
+                        style={{
+                          backgroundColor: getBackgroundColor(correctCount),
+                        }}
+                      >
+                        Marks :{" "}
+                        <span>
+                          {correctCount} / {correctAnswer?.length}
+                        </span>
+                      </div>
+                      <div className="flt-question-card">
+                        Percentage : <span>{percentage} %</span>
+                      </div>
+                    </div>
                   )}
                   {examType === "Writing" && (
-                    <div className="writing__exam">
+                    <div className="writing__exam" style={{ marginTop: "0px" }}>
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Assessment</h4>
                       </div>

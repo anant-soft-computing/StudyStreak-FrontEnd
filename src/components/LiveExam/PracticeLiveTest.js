@@ -3,15 +3,12 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder";
 import SmallModal from "../UI/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
-import { htmlToText } from "html-to-text";
 import ReadingInstruction from "./Instruction/ReadingInstruction";
 import WritingInstruction from "./Instruction/WritingInstruction";
 import ListeningInstruction from "./Instruction/ListeningInstruction";
-import SpeakingInstruction from "./Instruction/SpeakingInstruction";
 const Cheerio = require("cheerio");
 
 const PracticeLiveExam = () => {
@@ -20,7 +17,6 @@ const PracticeLiveExam = () => {
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[4];
-  const synth = window.speechSynthesis;
   const [examData, setExamData] = useState([]);
   const [examBlock, setExamBlock] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
@@ -35,10 +31,8 @@ const PracticeLiveExam = () => {
   const [reRenderAudio, setReRenderAudio] = useState(false);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
-  const [speaking, setSpeaking] = useState(0);
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
-  const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
@@ -140,41 +134,6 @@ const PracticeLiveExam = () => {
       setExamData(examBlockWithNumbers[next]);
     }
   }, [fullPaper, next]);
-
-  const extractVisibleText = (htmlContent) => {
-    return htmlToText(htmlContent);
-  };
-
-  const speak = () => {
-    setTimerRunning(true);
-    const utterance = new SpeechSynthesisUtterance(
-      extractVisibleText(examData?.passage)
-    );
-    synth.speak(utterance);
-    setSpeaking(1);
-    utterance.onstart = () => {
-      setSpeaking(1);
-    };
-    utterance.onend = () => {
-      setSpeaking(2);
-    };
-  };
-
-  const stopSpeaking = () => {
-    if (synth.speaking) {
-      synth.cancel();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", stopSpeaking);
-    setSpeaking(0);
-
-    return () => {
-      window.removeEventListener("beforeunload", stopSpeaking);
-      stopSpeaking(0);
-    };
-  }, [next]);
 
   const handleAnswerLinking = (e, questionId, next) => {
     const { value, id, name, checked } = e.target;
@@ -327,10 +286,7 @@ const PracticeLiveExam = () => {
     const question = paperData?.question;
     let tempAnswer = {};
 
-    if (
-      paperData?.exam_type === "Writing" ||
-      paperData?.exam_type === "Speaking"
-    ) {
+    if (paperData?.exam_type === "Writing") {
       tempAnswer = {
         exam_id: paperData?.id,
         data: [
@@ -506,9 +462,6 @@ const PracticeLiveExam = () => {
         setHtmlContents(tempHtmlContents);
         setExamAnswer(tempExamAnswer);
         setLinkAnswer(!linkAnswer);
-        if (examForm !== "Speaking") {
-          setTimerRunning(true);
-        }
 
         // fetch correct answers
         try {
@@ -703,15 +656,6 @@ const PracticeLiveExam = () => {
       } else if (examForm === "Listening") {
         bandValue = listeningBandValues[correct];
       }
-    } else if (examForm === "Speaking") {
-      let tempBandValueArr = [];
-      examAnswer.forEach((item, index) => {
-        item.data.forEach((answer, index2) => {
-          tempBandValueArr.push(
-            answer.answer_text?.split("#Band:")[1].split(" ")[1]
-          );
-        });
-      });
     }
 
     try {
@@ -929,14 +873,6 @@ const PracticeLiveExam = () => {
     }
   };
 
-  useEffect(() => {
-    if (recordedFilePath) {
-      const tempExamAnswer = [...examAnswer];
-      tempExamAnswer[next].data[0].answer_text = recordedFilePath;
-      setExamAnswer(tempExamAnswer);
-    }
-  }, [recordedFilePath]);
-
   const reviewContent = () =>
     examAnswer.map((test, index) => (
       <div key={index}>
@@ -1033,12 +969,6 @@ const PracticeLiveExam = () => {
           startTest={handleCompleteInstruciton}
         />
       )}
-      {examData?.exam_type === "Speaking" && (
-        <SpeakingInstruction
-          testType="Practice"
-          startTest={handleCompleteInstruciton}
-        />
-      )}
     </div>
   ) : (
     <>
@@ -1079,22 +1009,6 @@ const PracticeLiveExam = () => {
               {displayLeftContainer(examData?.passage, examData?.passage_image)}
             </div>
           )}
-          {examData?.exam_type === "Speaking" && (
-            <div className="lv-left-container">
-              <button
-                className="lv-footer-button"
-                onClick={speak}
-                disabled={speaking === 1}
-                style={{
-                  opacity: speaking === 1 ? 0.5 : 1,
-                  cursor: speaking === 1 ? "not-allowed" : "pointer",
-                }}
-              >
-                {speaking ? "Replay" : "Start"}
-              </button>
-            </div>
-          )}
-
           {/* Right Container */}
           <div
             className="lv-right-container"
@@ -1121,14 +1035,6 @@ const PracticeLiveExam = () => {
                   />
                   <span>{numberOfWord} Words</span>
                 </div>
-              )}
-              {examData?.exam_type === "Speaking" && (
-                <AudioRecorder
-                  setRecordedFilePath={setRecordedFilePath}
-                  next={next}
-                  exam_id={examData?.id}
-                  enableRecording={speaking === 2}
-                />
               )}
             </div>
           </div>
@@ -1204,8 +1110,7 @@ const PracticeLiveExam = () => {
                   onClick={() => {
                     if (
                       examData?.exam_type === "Reading" ||
-                      examData?.exam_type === "Listening" ||
-                      examData?.exam_type === "Speaking"
+                      examData?.exam_type === "Listening"
                     ) {
                       handleRLSubmit();
                     } else if (examData?.exam_type === "Writing") {

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import liveClass from "../../../../img/icon/liveClass.svg";
+import assignment from "../../../../img/icon/assignment.svg";
 import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
 import practice from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
@@ -11,7 +13,7 @@ import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
 import recordedClasses from "../../../../img/icon/gamification.svg";
 import Loading from "../../../UI/Loading";
-import UpcomingLiveClass from "./UpCommingLiveClass/UpCommingLiveClass";
+import UpcomingLiveClasses from "./UpcomingLiveClasses/UpcomingLiveClasses";
 import LeaderBoard from "./LeaderBoard/LeaderBoard";
 import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -19,6 +21,7 @@ import ScoreCard from "./ScoreCard/ScoreCard";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
 import NextLesson from "./NextLesson/NextLesson";
+import UpcomingRegularLiveClass from "./UpcomingRegularLiveClass/UpCommingRegularLiveClass";
 
 const Dashboard = () => {
   const [count, setCount] = useState({
@@ -35,51 +38,97 @@ const Dashboard = () => {
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const userData = JSON?.parse(localStorage.getItem("loginInfo"));
 
-  const cardList = [
-    {
-      name: "Book Speaking Slot",
-      icon: bookSpeakingSlot,
-      link: "/studentLiveClasses",
-      state: { activeTab: "Speaking Practice" },
-    },
-    {
-      name: "Practice Test",
-      icon: practice,
-      link: "/practiceTest",
-      state: { count: count?.practice_test_count },
-    },
-    {
-      name: "Full Length Test",
-      icon: fullLengthTest,
-      link: "/fullLengthTest",
-      state: { count: count?.full_length_test_count },
-    },
-    {
-      name: "Counselling",
-      icon: counselling,
-      link: "/studentLiveClasses",
-      state: { activeTab: "Counselling" },
-    },
-    {
-      name: "Regular Classes",
-      icon: regularClass,
-      link: "/studentLiveClasses",
-    },
-    {
-      name: "Tutor Support",
-      icon: counselling,
-      link: "/studentLiveClasses",
-      state: { activeTab: "Tutor Support" },
-    },
-    {
-      name: "Webinar",
-      icon: webinar,
-      link: "/studentLiveClasses",
-      state: { activeTab: "Webinar" },
-    },
-    { name: "Progress", icon: progress },
-    { name: "Resources", icon: support, link: "/resources" },
-  ];
+  const cardList =
+    selectedCourse === "IELTS"
+      ? [
+          {
+            name: "Book Speaking Slot",
+            icon: bookSpeakingSlot,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Speaking Practice" },
+          },
+          {
+            name: "Practice Test",
+            icon: practice,
+            link: "/practiceTest",
+            state: { count: count?.practice_test_count },
+          },
+          {
+            name: "Full Length Test",
+            icon: fullLengthTest,
+            link: "/fullLengthTest",
+            state: { count: count?.full_length_test_count },
+          },
+          {
+            name: "Counselling",
+            icon: counselling,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Counselling" },
+          },
+          {
+            name: "Regular Classes",
+            icon: regularClass,
+            link: "/studentLiveClasses",
+          },
+          {
+            name: "Tutor Support",
+            icon: counselling,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Tutor Support" },
+          },
+          {
+            name: "Webinar",
+            icon: webinar,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Webinar" },
+          },
+          { name: "Progress", icon: progress, link: "/progress" },
+          { name: "Resources", icon: support, link: "/resources" },
+        ]
+      : [
+          {
+            name: "Mini Test",
+            icon: assignment,
+            link: "/mockTest",
+          },
+          {
+            name: "Practice Test",
+            icon: practice,
+            link: "/practiceTest",
+            state: { count: count?.practice_test_count },
+          },
+          {
+            name: "Regular Classes",
+            icon: regularClass,
+            link: "/studentLiveClasses",
+          },
+          {
+            name: "Counselling",
+            icon: counselling,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Counselling" },
+          },
+          {
+            name: "Webinar",
+            icon: webinar,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Webinar" },
+          },
+          {
+            name: "Tutor Support",
+            icon: counselling,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Tutor Support" },
+          },
+          {
+            name: "Group Doubt Solving",
+            icon: liveClass,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Group Dobut" },
+          },
+          { name: "Progress", icon: progress, link: "/progress" },
+          { name: "Resources", icon: support, link: "/resources" },
+        ];
 
   const studentBatch = batchData?.filter((item) =>
     batchIds?.includes(item?.id)
@@ -204,22 +253,24 @@ const Dashboard = () => {
                         <div className="course__details__heading">
                           <h3>Welcome, {userData?.username}</h3>
                         </div>
-                        <h5>
-                          Batch :{" "}
-                          {studentBatch.map((batch) => (
-                            <span key={batch.id}>
-                              {batch.batch_name} :{" "}
-                              {moment(
-                                batch.batch_start_timing,
-                                "HH:mm:ss"
-                              ).format("hh:mm A")}{" "}
-                              |{" "}
-                            </span>
-                          ))}
-                        </h5>
+                        {selectedCourse === "IELTS" && (
+                          <h5>
+                            Batch :{" "}
+                            {studentBatch.map((batch) => (
+                              <span key={batch.id}>
+                                {batch.batch_name} :{" "}
+                                {moment(
+                                  batch.batch_start_timing,
+                                  "HH:mm:ss"
+                                ).format("hh:mm A")}{" "}
+                                |{" "}
+                              </span>
+                            ))}
+                          </h5>
+                        )}
                         <div className="online__course__wrap mt-0">
                           <div className="row instructor__slider__active row__custom__class">
-                            <ScoreCard />
+                            <ScoreCard course={selectedCourse} />
                           </div>
                         </div>
                         <div className="row">
@@ -313,9 +364,10 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <LeaderBoard studentID={studentID} />
-                      <UpcomingLiveClass />
+                      <UpcomingRegularLiveClass />
                       <NextLesson />
                       <SpeakingSlots />
+                      <UpcomingLiveClasses />
                     </div>
                   </div>
                 </div>

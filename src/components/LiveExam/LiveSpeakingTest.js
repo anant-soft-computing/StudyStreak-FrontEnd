@@ -6,6 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import { htmlToText } from "html-to-text";
 import SpeakingInstruction from "./Instruction/SpeakingInstruction";
+import { formatTime } from "../../utils/timer/formateTime";
 
 const initialSpeakingSingleQuesionState = {
   // 0 for incoming, 1 for instruction on screen, 2 for completed
@@ -17,8 +18,8 @@ const LiveSpeakingExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[3];
   const [examData, setExamData] = useState({});
-  const [timer, setTimer] = useState(3600);
   const [voices, setVoices] = useState([]);
+  const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(true);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -32,27 +33,16 @@ const LiveSpeakingExam = () => {
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
   useEffect(() => {
-    setTimer(15 * 60);
-  }, [examId]);
-
-  useEffect(() => {
     let interval;
     if (timerRunning) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
     }
     return () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setTimerRunning(false);
-      toast.error("Time's up! Your exam has ended.");
-    }
-  }, [timer]);
 
   const examLastSubmit = async () => {
     try {
@@ -75,6 +65,7 @@ const LiveSpeakingExam = () => {
         8000
       );
       if (response.status === 201) {
+        setTimerRunning(false);
         console.log("Lastest Exam Submitted");
       } else {
         console.log("error");
@@ -291,10 +282,7 @@ const LiveSpeakingExam = () => {
           <div className="lv-userName">{examData?.name}</div>
         </div>
         <span className="lv-navbar-title">
-          Time Taken :
-          <span className="lv-userName">
-            {Math.floor(timer / 60)} : {timer % 60}
-          </span>
+          Time Taken :<span className="lv-userName">{formatTime(timer)}</span>
         </span>
         <div className="lv-navbar-title-mobile">
           <div className="username-mobile">
@@ -308,9 +296,7 @@ const LiveSpeakingExam = () => {
           <div className="lv-navbar-footer">
             <span>
               Time Taken :
-              <span className="lv-userName">
-                {Math.floor(timer / 60)} : {timer % 60}
-              </span>
+              <span className="lv-userName">{formatTime(timer)}</span>
             </span>
           </div>
         </div>

@@ -20,7 +20,7 @@ const GeneralMTExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
-  const [timer, setTimer] = useState(3600);
+  const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -29,29 +29,16 @@ const GeneralMTExam = () => {
   let highlightedElement = null;
 
   useEffect(() => {
-    if (examData?.exam_type === "General") {
-      setTimer(60 * 60);
-    }
-  }, [examData?.exam_type]);
-
-  useEffect(() => {
     let interval;
     if (timerRunning) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
     }
     return () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setTimerRunning(false);
-      toast.error("Time's up! Your exam has ended.");
-    }
-  }, [timer]);
 
   useEffect(() => {
     (async () => {

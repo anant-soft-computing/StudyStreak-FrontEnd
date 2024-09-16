@@ -13,18 +13,20 @@ import Counselling from "../Counselling/Counselling";
 import moment from "moment";
 import StatusBox from "../Classes/StatusBox";
 
-const liveClasses = [
-  "Regular",
-  "Speaking Practice",
-  "Group Dobut",
-  "One TO One Doubt",
-  "Tutor Support",
-  "Webinar",
-  "Counselling",
-];
-
 const LiveClass = () => {
   const location = useLocation();
+  const category = localStorage.getItem("category");
+
+  const liveClasses = [
+    "Regular",
+    ...(category === "IELTS" ? ["Speaking Practice"] : []),
+    "Group Doubt",
+    "One To One Doubt",
+    "Tutor Support",
+    "Webinar",
+    "Counselling",
+  ];
+
   const [count, setCount] = useState({
     webinar_count: 0,
     counselling_count: 0,

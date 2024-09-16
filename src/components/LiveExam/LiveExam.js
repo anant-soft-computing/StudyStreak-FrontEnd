@@ -3,15 +3,11 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder";
-import readingBandValues from "../../utils/bandValues/ReadingBandValues";
-import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
-import { htmlToText } from "html-to-text";
 import ReadingInstruction from "./Instruction/ReadingInstruction";
 import ListeningInstruction from "./Instruction/ListeningInstruction";
 import WritingInstruction from "./Instruction/WritingInstruction";
-import SpeakingInstruction from "./Instruction/SpeakingInstruction";
+import { formatTime } from "../../utils/timer/formateTime";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -23,50 +19,29 @@ const LiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
-  const [timer, setTimer] = useState(3600);
+  const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(true);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
-  const synth = window.speechSynthesis;
-  const [speaking, setSpeaking] = useState(0);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   let highlightedElement = null;
 
   const handleCompleteInstruciton = () => setInstructionCompleted(true);
 
   useEffect(() => {
-    if (
-      examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Writing"
-    ) {
-      setTimer(60 * 60);
-    } else if (examData?.exam_type === "Listening") {
-      setTimer(30 * 60);
-    }
-  }, [examData.exam_type, examId]);
-
-  useEffect(() => {
     let interval;
     if (timerRunning) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
     }
     return () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setTimerRunning(false);
-      toast.error("Time's up! Your exam has ended.");
-    }
-  }, [timer]);
 
   useEffect(() => {
     (async () => {
@@ -355,15 +330,12 @@ const LiveExam = () => {
         }
       });
 
-      if (examData?.exam_type === "Reading") {
-        bandValue = readingBandValues[totalCorrect];
-      } else if (examData?.exam_type === "Listening") {
-        bandValue = listeningBandValues[totalCorrect];
+      if (
+        examData?.exam_type === "Reading" ||
+        examData?.exam_type === "Listening"
+      ) {
+        bandValue = totalCorrect;
       }
-    } else if (examData?.exam_type === "Speaking") {
-      bandValue = examAnswer[0]?.answers?.[0]?.answer
-        ?.split("#Band:")[1]
-        .split(" ")[1];
     }
 
     try {
@@ -425,12 +397,7 @@ const LiveExam = () => {
     if (audio_file) {
       return (
         <div className="m-2">
-          <audio
-            controls
-            autoPlay
-            controlsList="nodownload noplaybackrate noplay"
-            className="hidden-controls"
-          >
+          <audio controls autoPlay controlsList="nodownload">
             <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>
@@ -555,10 +522,7 @@ const LiveExam = () => {
   const htmlContent = useMemo(() => {
     const question = examData?.question || examData?.passage;
     if (!question) return;
-    if (
-      examData?.exam_type === "Writing" ||
-      examData?.exam_type === "Speaking"
-    ) {
+    if (examData?.exam_type === "Writing") {
       const temp = [];
       temp.push({
         type: examData?.exam_type === "Writing" ? "Textarea" : "speaking_1",
@@ -714,48 +678,6 @@ const LiveExam = () => {
     }
   }, [examData?.question]);
 
-  useEffect(() => {
-    if (recordedFilePath) {
-      const tempExamAnswer = [...examAnswer];
-      tempExamAnswer[0].answers[0].answer = recordedFilePath;
-      setExamAnswer(tempExamAnswer);
-    }
-  }, [recordedFilePath]);
-
-  const extractVisibleText = (htmlContent) => {
-    return htmlToText(htmlContent);
-  };
-
-  const speak = () => {
-    const utterance = new SpeechSynthesisUtterance(
-      extractVisibleText(examData?.passage)
-    );
-    synth.speak(utterance);
-    setSpeaking(1);
-    utterance.onstart = () => {
-      setSpeaking(1);
-    };
-    utterance.onend = () => {
-      setSpeaking(2);
-    };
-  };
-
-  const stopSpeaking = () => {
-    if (synth.speaking) {
-      synth.cancel();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", stopSpeaking);
-    setSpeaking(0);
-
-    return () => {
-      window.removeEventListener("beforeunload", stopSpeaking);
-      stopSpeaking(0);
-    };
-  }, []);
-
   const reviewContent = () => (
     <div className="card-container">
       {examAnswer[0]?.answers.map((answer, index) => (
@@ -791,12 +713,6 @@ const LiveExam = () => {
           startTest={handleCompleteInstruciton}
         />
       )}
-      {examData.exam_type === "Speaking" && (
-        <SpeakingInstruction
-          testType="Mini"
-          startTest={handleCompleteInstruciton}
-        />
-      )}
     </div>
   ) : (
     <>
@@ -808,10 +724,7 @@ const LiveExam = () => {
           <div className="lv-userName">{`${examData?.exam_name}`}</div>
         </div>
         <span className="lv-navbar-title">
-          Time Taken :
-          <span className="lv-userName">
-            {Math.floor(timer / 60)} : {timer % 60}
-          </span>
+          Time Taken :<span className="lv-userName">{formatTime(timer)}</span>
         </span>
         <div className="lv-navbar-title-mobile">
           <div className="username-mobile">
@@ -825,9 +738,7 @@ const LiveExam = () => {
           <div className="lv-navbar-footer">
             <span>
               Time Taken :
-              <span className="lv-userName">
-                {Math.floor(timer / 60)} : {timer % 60}
-              </span>
+              <span className="lv-userName">{formatTime(timer)}</span>
             </span>
           </div>
         </div>
@@ -844,52 +755,6 @@ const LiveExam = () => {
               {displayLeftContainer(examData?.passage, examData?.passage_image)}
             </div>
           )}
-          {examData?.exam_type === "Speaking" && (
-            <div
-              className="lv-left-container"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-around",
-              }}
-            >
-              {["", "", ""].map((item, i) => (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    borderBottom: "grey 1px solid",
-                    paddingBottom: "20px",
-                    marginTop: "15px",
-                  }}
-                >
-                  <h4>Listen {i + 1} passage</h4>
-                  <div className="d-flex align-items-center lv-btn-mic-container">
-                    <button
-                      className="lv-footer-button lv-speaking-button"
-                      onClick={speak}
-                      disabled={speaking === 1}
-                      style={{
-                        opacity: speaking === 1 ? 0.5 : 1,
-                        cursor: speaking === 1 ? "not-allowed" : "pointer",
-                      }}
-                    >
-                      {speaking ? "Replay" : "Start"}
-                    </button>
-                    <hr />
-                    <AudioRecorder
-                      setRecordedFilePath={setRecordedFilePath}
-                      next={0}
-                      exam_id={examData?.id}
-                      enableRecording={speaking === 2}
-                      questions={examData?.passage}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
           {/* Right Container */}
           <div
             className="lv-right-container"
@@ -974,8 +839,7 @@ const LiveExam = () => {
                   onClick={() => {
                     if (
                       examData?.exam_type === "Reading" ||
-                      examData?.exam_type === "Listening" ||
-                      examData?.exam_type === "Speaking"
+                      examData?.exam_type === "Listening"
                     ) {
                       handleRLSubmit();
                     } else if (examData?.exam_type === "Writing") {

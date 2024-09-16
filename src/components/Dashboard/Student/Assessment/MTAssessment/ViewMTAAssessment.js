@@ -133,7 +133,7 @@ const ViewMTAAssessment = () => {
                         backgroundColor: getBackgroundColor(band),
                       }}
                     >
-                      Band : {band}
+                      Score : {band.toFixed(1)}
                     </h4>
                   </div>
                   {examType === "Writing" ? (
@@ -150,7 +150,7 @@ const ViewMTAAssessment = () => {
                                   <th>Answer Audio</th>
                                   <th>AI Assessment</th>
                                   <th>Tutor Assessment</th>
-                                  <th>Band</th>
+                                  <th>Score</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -178,7 +178,9 @@ const ViewMTAAssessment = () => {
                                           <button
                                             className="take-test"
                                             onClick={() =>
-                                              handleAIAssessment(item.AI_Assessment)
+                                              handleAIAssessment(
+                                                item.AI_Assessment
+                                              )
                                             }
                                           >
                                             View
@@ -192,7 +194,9 @@ const ViewMTAAssessment = () => {
                                           <button
                                             className="take-test"
                                             onClick={() =>
-                                              handleTutorAssessment(item.Tutor_Assessment)
+                                              handleTutorAssessment(
+                                                item.Tutor_Assessment
+                                              )
                                             }
                                           >
                                             View

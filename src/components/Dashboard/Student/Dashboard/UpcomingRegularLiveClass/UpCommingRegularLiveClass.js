@@ -3,7 +3,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const UpcomingLiveClass = () => {
+const UpcomingRegularLiveClass = () => {
   const [upcomingClass, setUpcomingClass] = useState({});
   const now = moment();
 
@@ -57,7 +57,7 @@ const UpcomingLiveClass = () => {
   return (
     <div className="dashboard__inner mt-4 card-background">
       <div className="dashboard__nav__title">
-        <h6>Upcoming Live Class</h6>
+        <h6>Upcoming Regular Live Class</h6>
       </div>
       <hr />
       {hasUpcomingClass ? (
@@ -75,10 +75,10 @@ const UpcomingLiveClass = () => {
           </div>
         </>
       ) : (
-        <div className="text-center text-danger">No Upcoming Live Class !!</div>
+        <div className="text-center text-danger">No Upcoming Regular Live Class !!</div>
       )}
     </div>
   );
 };
 
-export default UpcomingLiveClass;
+export default UpcomingRegularLiveClass;

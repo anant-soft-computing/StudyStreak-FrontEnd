@@ -111,12 +111,22 @@ const TestTable = ({
     },
   ];
 
+  const sortedData = testData.sort((a, b) => {
+    const getNumber = (name) => {
+      const match = name.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+    const nameA = getNumber(a.exam_name);
+    const nameB = getNumber(b.exam_name);
+    return nameA - nameB;
+  });
+
   return (
     <>
       {isLoading ? (
         <Loading text="Loading..." color="primary" />
       ) : testData.length > 0 ? (
-        <Table rowData={testData} columnDefs={columns} />
+        <Table rowData={sortedData} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
       )}

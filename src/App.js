@@ -92,6 +92,7 @@ import DiagnosticTestAnswer from "./components/Dashboard/Student/FreeDiagnosticT
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
 import PracticeTestReport from "./components/Report/PracticeTestReport";
 import FLTReport from "./components/Report/FLTReport";
+import Progress from "./components/Dashboard/Student/Progress/Progress";
 
 const App = () => {
   return (
@@ -135,6 +136,7 @@ const App = () => {
             path="/studentDashboard"
             element={<ProtectedRoute element={Dashboard} />}
           />
+          <Route path="/progress" element={<Progress />}/>
           <Route path="/studentProfile" element={<SProfile />} />
           <Route path="/studentMyCourse" element={<MyCourse />} />
           <Route path="/courseLessons/:courseId" element={<Lesson />} />

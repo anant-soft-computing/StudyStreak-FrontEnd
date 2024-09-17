@@ -2,19 +2,13 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import RecordedClass from "../Classes/RecordedClass";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 import UpcomingClass from "../Classes/UpcomingClass";
 import BuyCourse from "../BuyCourse/BuyCourse";
 
-const tabs = [
-  { name: "Upcoming" },
-  { name: "Webinar" },
-  { name: "Recorded Class" },
-];
+const tabs = [{ name: "Upcoming" }, { name: "Webinar" }];
 
 const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
-  const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Webinar");
   const [webinar, setWebinar] = useState([]);
@@ -30,7 +24,6 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
     setIsLoading(true);
     (async () => {
       try {
-        let uuidData = [];
         let webinarData = [];
 
         if (batchIds?.length) {
@@ -51,8 +44,6 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               webinarData = [...webinarData, ...response?.data];
             }
           }
@@ -76,20 +67,11 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               webinarData = [...webinarData, ...response?.data];
             }
           }
         }
 
-        // Optionally: Remove duplicates based on unique identifiers
-        webinarData = [
-          ...new Map(webinarData.map((item) => [item.id, item])).values(),
-        ];
-        uuidData = [...new Set(uuidData)];
-
-        setUuid(uuidData);
         onDataFetch(webinarData);
         setWebinar(webinarData);
       } catch (error) {
@@ -152,19 +134,6 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
                   classes={webinarClasses}
                   classType="Webinar"
                   message="No Webinar Available !!, Please Schedule Your Webinar"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Recorded Class" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <RecordedClass
-                  uuid={uuid}
-                  classes={webinarClass}
-                  activeTab={activeTab}
                 />
               </div>
             </div>

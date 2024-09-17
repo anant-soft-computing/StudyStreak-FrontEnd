@@ -4,14 +4,9 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import RecordedClass from "../Classes/RecordedClass";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 
-const tabs = [
-  { name: "Upcoming" },
-  { name: "Available Slot" },
-  { name: "Recorded Class" },
-];
+const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
 
 const DoubtSolving = ({
   count,
@@ -19,11 +14,10 @@ const DoubtSolving = ({
   selectedDate,
   onDataFetch,
 }) => {
-  const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [doubtSolvingClass, setDoubtSolvingClass] = useState([]);
-  
+
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
 
@@ -36,7 +30,6 @@ const DoubtSolving = ({
     (async () => {
       try {
         let oToclass = [];
-        let uuidData = [];
 
         if (batchIds?.length) {
           for (let i = 0; i < batchIds.length; i++) {
@@ -56,8 +49,6 @@ const DoubtSolving = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               oToclass = [...oToclass, ...response?.data];
             }
           }
@@ -81,20 +72,11 @@ const DoubtSolving = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               oToclass = [...oToclass, ...response?.data];
             }
           }
         }
 
-        // Optionally: Remove duplicates based on unique identifiers
-        oToclass = [
-          ...new Map(oToclass.map((item) => [item.id, item])).values(),
-        ];
-        uuidData = [...new Set(uuidData)];
-
-        setUuid(uuidData);
         onDataFetch(oToclass);
         setDoubtSolvingClass(oToclass);
       } catch (error) {
@@ -157,19 +139,6 @@ const DoubtSolving = ({
                   classes={oToclasses}
                   classType="One-To-One-Doubt-Solving"
                   message="No One To One Doubt Solving Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Recorded Class" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <RecordedClass
-                  uuid={uuid}
-                  classes={oneToOneDoubtSolvingClasses}
-                  activeTab={activeTab}
                 />
               </div>
             </div>

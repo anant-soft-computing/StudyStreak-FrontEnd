@@ -71,10 +71,10 @@ const LiveClass = () => {
         case "Speaking Practice":
           data = speakingPracticeData;
           break;
-        case "Group Dobut":
+        case "Group Doubt":
           data = groupDoubtSolvingData;
           break;
-        case "One TO One Doubt":
+        case "One To One Doubt":
           data = oneToOneDoubtData;
           break;
         case "Tutor Support":
@@ -174,10 +174,10 @@ const LiveClass = () => {
       case "Speaking Practice":
         setSpeakingPracticeData(data);
         break;
-      case "Group Dobut":
+      case "Group Doubt":
         setGroupDoubtSolvingData(data);
         break;
-      case "One TO One Doubt":
+      case "One To One Doubt":
         setOneToOneDoubtData(data);
         break;
       case "Tutor Support":
@@ -212,7 +212,7 @@ const LiveClass = () => {
             onDataFetch={handleDataFetch}
           />
         );
-      case "Group Dobut":
+      case "Group Doubt":
         return (
           <GroupDoubtSolving
             count={count.group_doubt_solving_count}
@@ -221,7 +221,7 @@ const LiveClass = () => {
             onDataFetch={handleDataFetch}
           />
         );
-      case "One TO One Doubt":
+      case "One To One Doubt":
         return (
           <DoubtSolving
             count={count.one_to_one_doubt_solving_count}

@@ -323,9 +323,8 @@ const Dashboard = () => {
                             <div className="gridarea__wraper text-center card-background">
                               <div className="gridarea__content p-2 m-2">
                                 <Link
-                                  to="/studentLiveClasses"
+                                  to="/recordedClasses"
                                   className="text-decoration-none"
-                                  state={{ activeTab: "Recorded Class" }}
                                 >
                                   <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
                                     <img
@@ -366,7 +365,7 @@ const Dashboard = () => {
                       <LeaderBoard studentID={studentID} />
                       <UpcomingRegularLiveClass />
                       <NextLesson />
-                      <SpeakingSlots />
+                      {selectedCourse === "IELTS" && <SpeakingSlots />}
                       <UpcomingLiveClasses />
                     </div>
                   </div>

@@ -5,14 +5,9 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import RecordedClass from "../Classes/RecordedClass";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 
-const tabs = [
-  { name: "Upcoming" },
-  { name: "Available Slot" },
-  { name: "Recorded Class" },
-];
+const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
 
 const SpeakingPractice = ({
   count,
@@ -21,7 +16,6 @@ const SpeakingPractice = ({
   onDataFetch,
 }) => {
   const location = useLocation();
-  const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(
     location?.state?.activeTab === "Speaking Practice"
@@ -42,7 +36,6 @@ const SpeakingPractice = ({
     (async () => {
       try {
         let speakingClass = [];
-        let uuidData = [];
 
         if (batchIds?.length) {
           for (let i = 0; i < batchIds.length; i++) {
@@ -62,8 +55,6 @@ const SpeakingPractice = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               speakingClass = [...speakingClass, ...response?.data];
             }
           }
@@ -87,20 +78,10 @@ const SpeakingPractice = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               speakingClass = [...speakingClass, ...response?.data];
             }
           }
         }
-
-        // Optionally: Remove duplicates based on unique identifiers
-        speakingClass = [
-          ...new Map(speakingClass.map((item) => [item.id, item])).values(),
-        ];
-        uuidData = [...new Set(uuidData)];
-
-        setUuid(uuidData);
         onDataFetch(speakingClass);
         setSpeakingSolvingClass(speakingClass);
       } catch (error) {
@@ -163,19 +144,6 @@ const SpeakingPractice = ({
                   classes={speakingPracticeClasses}
                   classType="Speaking-Practice"
                   message="No Speaking Practice Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Recorded Class" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <RecordedClass
-                  uuid={uuid}
-                  classes={speackingClasses}
-                  activeTab={activeTab}
                 />
               </div>
             </div>

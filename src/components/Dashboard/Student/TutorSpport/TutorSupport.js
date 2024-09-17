@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import RecordedClass from "../Classes/RecordedClass";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 import UpcomingClass from "../Classes/UpcomingClass";
 import BuyCourse from "../BuyCourse/BuyCourse";
 
-const tabs = [
-  { name: "Upcoming" },
-  { name: "Tutor Support" },
-  { name: "Recorded Class" },
-];
+const tabs = [{ name: "Upcoming" }, { name: "Tutor Support" }];
 
 const TutorSupport = ({
   count,
@@ -19,7 +14,6 @@ const TutorSupport = ({
   selectedDate,
   onDataFetch,
 }) => {
-  const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Tutor Support");
   const [tutorSupportClass, setTutorSupportClass] = useState([]);
@@ -35,7 +29,6 @@ const TutorSupport = ({
     setIsLoading(true);
     (async () => {
       try {
-        let uuidData = [];
         let tutorSupportClassData = [];
 
         if (batchIds?.length) {
@@ -56,8 +49,6 @@ const TutorSupport = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               tutorSupportClassData = [
                 ...tutorSupportClassData,
                 ...response?.data,
@@ -84,8 +75,6 @@ const TutorSupport = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               tutorSupportClassData = [
                 ...tutorSupportClassData,
                 ...response?.data,
@@ -94,15 +83,6 @@ const TutorSupport = ({
           }
         }
 
-        // Optionally: Remove duplicates based on unique identifiers
-        tutorSupportClassData = [
-          ...new Map(
-            tutorSupportClassData.map((item) => [item.id, item])
-          ).values(),
-        ];
-        uuidData = [...new Set(uuidData)];
-
-        setUuid(uuidData);
         onDataFetch(tutorSupportClassData);
         setTutorSupportClass(tutorSupportClassData);
       } catch (error) {
@@ -165,19 +145,6 @@ const TutorSupport = ({
                   classes={tutorSupportClasses}
                   classType="Tutor Support"
                   message="No Tuotor Support Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Recorded Class" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <RecordedClass
-                  uuid={uuid}
-                  classes={tutorClasses}
-                  activeTab={activeTab}
                 />
               </div>
             </div>

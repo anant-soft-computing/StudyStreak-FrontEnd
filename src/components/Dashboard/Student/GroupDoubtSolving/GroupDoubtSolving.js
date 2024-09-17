@@ -4,14 +4,9 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import RecordedClass from "../Classes/RecordedClass";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 
-const tabs = [
-  { name: "Upcoming" },
-  { name: "Available Slot" },
-  { name: "Recorded Class" },
-];
+const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
 
 const GroupDoubtSolving = ({
   count,
@@ -19,7 +14,6 @@ const GroupDoubtSolving = ({
   selectedDate,
   onDataFetch,
 }) => {
-  const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Upcoming");
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
@@ -36,7 +30,6 @@ const GroupDoubtSolving = ({
     (async () => {
       try {
         let gPClass = [];
-        let uuidData = [];
 
         if (batchIds?.length) {
           for (let i = 0; i < batchIds.length; i++) {
@@ -56,8 +49,6 @@ const GroupDoubtSolving = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               gPClass = [...gPClass, ...response?.data];
             }
           }
@@ -81,18 +72,11 @@ const GroupDoubtSolving = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               gPClass = [...gPClass, ...response?.data];
             }
           }
         }
 
-        // Optionally: Remove duplicates based on unique identifiers
-        gPClass = [...new Map(gPClass.map((item) => [item.id, item])).values()];
-        uuidData = [...new Set(uuidData)];
-
-        setUuid(uuidData);
         onDataFetch(gPClass);
         setGroupDoubtSolvingClass(gPClass);
       } catch (error) {
@@ -155,19 +139,6 @@ const GroupDoubtSolving = ({
                   classes={groupClasses}
                   classType="Group-Doubt Solving"
                   message=" No Group Doubt Solving Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Recorded Class" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <RecordedClass
-                  uuid={uuid}
-                  classes={groupSolvingClasses}
-                  activeTab={activeTab}
                 />
               </div>
             </div>

@@ -9,6 +9,7 @@ import assignment from "../../../../img/icon/assignment.svg";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
+import recordedClass from "../../../../img/icon/webinar.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
 import resources from "../../../../img/icon/support.svg";
 import paperTest from "../../../../img/icon/paperTest.svg";
@@ -84,6 +85,18 @@ const DSSidebar = () => {
             link: "/studentLiveClasses",
           },
           {
+            name: "Recorded Classes",
+            icon: (
+              <img
+                src={recordedClass}
+                alt="Recorded Classes"
+                height={18}
+                width={18}
+              />
+            ),
+            link: "/recordedClasses",
+          },
+          {
             name: "Flash Card",
             icon: <img src={flashcard} alt="Flash Card" />,
             link: "/flashCard",
@@ -136,6 +149,18 @@ const DSSidebar = () => {
             name: "Live Classes",
             icon: <img src={liveClass} alt="Live Classes" />,
             link: "/studentLiveClasses",
+          },
+          {
+            name: "Recorded Classes",
+            icon: (
+              <img
+                src={recordedClass}
+                alt="Recorded Classes"
+                height={18}
+                width={18}
+              />
+            ),
+            link: "/recordedClasses",
           },
           {
             name: "Flash Card",

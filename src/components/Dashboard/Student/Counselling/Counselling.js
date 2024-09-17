@@ -2,16 +2,11 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import RecordedClass from "../Classes/RecordedClass";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 import UpcomingClass from "../Classes/UpcomingClass";
 import BuyCourse from "../BuyCourse/BuyCourse";
 
-const tabs = [
-  { name: "Upcoming" },
-  { name: "Counselling" },
-  { name: "Recorded Class" },
-];
+const tabs = [{ name: "Upcoming" }, { name: "Counselling" }];
 
 const Counselling = ({
   count,
@@ -19,11 +14,10 @@ const Counselling = ({
   selectedDate,
   onDataFetch,
 }) => {
-  const [uuid, setUuid] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("Counselling");
   const [counselling, setCounselling] = useState([]);
-  
+
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
 
@@ -35,7 +29,6 @@ const Counselling = ({
     setIsLoading(true);
     (async () => {
       try {
-        let uuidData = [];
         let counsellingData = [];
 
         if (batchIds?.length) {
@@ -56,8 +49,6 @@ const Counselling = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               counsellingData = [...counsellingData, ...response?.data];
             }
           }
@@ -81,20 +72,11 @@ const Counselling = ({
               8000
             );
             if (response?.status === 200) {
-              const id = response?.data?.map((item) => item?.other_fields?.id);
-              uuidData = [...uuidData, ...id];
               counsellingData = [...counsellingData, ...response?.data];
             }
           }
         }
 
-        // Optionally: Remove duplicates based on unique identifiers
-        counsellingData = [
-          ...new Map(counsellingData.map((item) => [item.id, item])).values(),
-        ];
-        uuidData = [...new Set(uuidData)];
-
-        setUuid(uuidData);
         onDataFetch(counsellingData);
         setCounselling(counsellingData);
       } catch (error) {
@@ -157,19 +139,6 @@ const Counselling = ({
                   classes={counsellingClasses}
                   classType="Counselling"
                   message="No Counselling Available !!, Please Schedule Your Counselling"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Recorded Class" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <RecordedClass
-                  uuid={uuid}
-                  classes={counsellinges}
-                  activeTab={activeTab}
                 />
               </div>
             </div>

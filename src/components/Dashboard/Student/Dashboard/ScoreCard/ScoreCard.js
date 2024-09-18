@@ -402,7 +402,7 @@ const ScoreCard = ({ course }) => {
               <div>
                 <div className="gridarea__price d-flex align-items-center gap-2 mb-0">
                   <h3>
-                    {practiceTestData?.[0]?.practise_set_name}, Band : {band}
+                    {practiceTestData?.[0]?.practise_set_name}, Band : {band.toFixed(1)}
                   </h3>
                 </div>
                 <div

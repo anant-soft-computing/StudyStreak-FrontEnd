@@ -3,7 +3,13 @@ import ReactDatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 
-const DateRange = ({ selectedDate, onChange, highlightedRanges, ...rest }) => {
+const DateRange = ({
+  type,
+  selectedDate,
+  onChange,
+  highlightedRanges,
+  ...rest
+}) => {
   const isDateInRange = (date, range) => {
     const day = moment(date).startOf("day");
     const start = moment(range.start).startOf("day");
@@ -32,7 +38,12 @@ const DateRange = ({ selectedDate, onChange, highlightedRanges, ...rest }) => {
         onChange(date);
       }}
       isClearable={false}
-      filterDate={(date) => !isBeforeCurrentDate(date)}
+      filterDate={(date) => {
+        if (type !== "Recorded Classes") {
+          return !isBeforeCurrentDate(date);
+        }
+        return true;
+      }}
       {...rest}
       highlightDates={[
         ...highlightedRanges?.map((range) => ({
@@ -40,7 +51,7 @@ const DateRange = ({ selectedDate, onChange, highlightedRanges, ...rest }) => {
         })),
       ]}
       dayClassName={(date) => {
-        if (isBeforeCurrentDate(date)) {
+        if (type !== "Recorded Classes" && isBeforeCurrentDate(date)) {
           return "greyed-day";
         }
         if (isCurrentDate(date)) {

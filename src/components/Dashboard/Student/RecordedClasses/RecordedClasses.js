@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import moment from "moment";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
-import moment from "moment";
+import DateRange from "../../../UI/DateRangePicker";
+import StatusBox from "../Classes/StatusBox";
+import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const RecordedClasses = () => {
   const category = localStorage.getItem("category");
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [recordClass, setRecordClass] = useState([]);
-  const [activeTab, setActiveTab] = useState("Regular Class");
 
   const liveClasses =
     category === "IELTS"
@@ -31,6 +30,108 @@ const RecordedClasses = () => {
           { name: "Webinar", value: "Webinar" },
           { name: "Counselling", value: "Counselling" },
         ];
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [recordClass, setRecordClass] = useState([]);
+
+  const [activeTab, setActiveTab] = useState("Regular Class");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const [regularClassData, setRegularClassData] = useState([]);
+  const [speakingPracticeData, setSpeakingPracticeData] = useState([]);
+  const [groupDoubtSolvingData, setGroupDoubtSolvingData] = useState([]);
+  const [oneToOneDoubtData, setOneToOneDoubtData] = useState([]);
+  const [tutorSupportData, setTutorSupportData] = useState([]);
+  const [webinarData, setWebinarData] = useState([]);
+  const [counsellingData, setCounsellingData] = useState([]);
+  const [highlightedRanges, setHighlightedRanges] = useState([]);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  useEffect(() => {
+    const updateHighlightedRanges = () => {
+      let data = [];
+
+      switch (activeTab) {
+        case "Regular Class":
+          data = regularClassData;
+          break;
+        case "Speaking-Practice":
+          data = speakingPracticeData;
+          break;
+        case "Group Doubt Solving":
+          data = groupDoubtSolvingData;
+          break;
+        case "One-To-One-Doubt-Solving":
+          data = oneToOneDoubtData;
+          break;
+        case "Tutor Support":
+          data = tutorSupportData;
+          break;
+        case "Webinar":
+          data = webinarData;
+          break;
+        case "Counselling":
+          data = counsellingData;
+          break;
+        default:
+          data = [];
+      }
+
+      const ranges = data.flatMap((item) =>
+        item.recordings.map((recording) => ({
+          start: moment(recording.recording_start).toDate(),
+          end: moment(recording.recording_end).toDate(),
+        }))
+      );
+
+      setHighlightedRanges(ranges);
+    };
+
+    updateHighlightedRanges();
+  }, [
+    activeTab,
+    regularClassData,
+    groupDoubtSolvingData,
+    oneToOneDoubtData,
+    tutorSupportData,
+    webinarData,
+    counsellingData,
+    speakingPracticeData,
+  ]);
+
+  const handleDataFetch = useCallback(
+    (data) => {
+      switch (activeTab) {
+        case "Regular Class":
+          setRegularClassData(data);
+          break;
+        case "Speaking-Practice":
+          setSpeakingPracticeData(data);
+          break;
+        case "Group Doubt Solving":
+          setGroupDoubtSolvingData(data);
+          break;
+        case "One-To-One-Doubt-Solving":
+          setOneToOneDoubtData(data);
+          break;
+        case "Tutor Support":
+          setTutorSupportData(data);
+          break;
+        case "Webinar":
+          setWebinarData(data);
+          break;
+        case "Counselling":
+          setCounsellingData(data);
+          break;
+        default:
+          break;
+      }
+    },
+    [activeTab]
+  );
 
   useEffect(() => {
     (async () => {
@@ -55,6 +156,7 @@ const RecordedClasses = () => {
             ({ recordings, live_class_type }) =>
               recordings.length > 0 && live_class_type === activeTab
           );
+          handleDataFetch(recordData);
           setRecordClass(recordData);
         } else {
           console.log("error");
@@ -65,54 +167,50 @@ const RecordedClasses = () => {
         setIsLoading(false);
       }
     })();
-  }, [activeTab]);
+  }, [activeTab, handleDataFetch]);
 
   const joinNow = (url) => {
     window.open(url, "__blank");
   };
 
-  const handleView = (params) => {
-    return (
-      <button
-        className="take-test"
-        onClick={() => {
-          joinNow(params.data.recordings[0].play_url);
-        }}
-      >
-        View
-      </button>
-    );
-  };
+  const recordClasses = recordClass.filter(({ recordings }) =>
+    recordings.some(({ recording_start, recording_end }) =>
+      filterByDateRange(recording_start, recording_end, selectedDate)
+    )
+  );
+
+  const formatRecordClasses = recordClasses.flatMap((item, index) => {
+    const baseData = {
+      no: `${index + 1}.`,
+      title: item.meeting_title,
+    };
+
+    return item.recordings.map((recording, recordingIndex) => ({
+      ...baseData,
+      no: `${index + 1}.${recordingIndex + 1}`,
+      start_time: moment(recording.recording_start).format("lll"),
+      end_time: moment(recording.recording_end).format("lll"),
+      playUrl: recording.play_url,
+      password: recording.password,
+    }));
+  });
 
   const columns = [
-    { headerName: "View", cellRenderer: handleView },
-    { headerName: "Title", field: "meeting_title", width: 300 },
-    { headerName: "Description", field: "meeting_description", width: 250 },
     {
-      headerName: "Start Date & Time",
-      field: "recordings",
-      cellRenderer: (params) =>
-        params.value.map((item) => {
-          return moment(item.recording_start).format("lll");
-        }),
+      headerName: "View",
+      cellRenderer: (params) => (
+        <button
+          className="take-test"
+          onClick={() => joinNow(params.data.playUrl)}
+        >
+          View
+        </button>
+      ),
     },
-    {
-      headerName: "End Date & Time",
-      field: "recordings",
-      cellRenderer: (params) =>
-        params.value.map((item) => {
-          return moment(item.recording_end).format("lll");
-        }),
-    },
-    {
-      headerName: "Password",
-      field: "recordings",
-      cellRenderer: (params) =>
-        params.value.map((item) => {
-          return item.password;
-        }),
-      width: 300,
-    },
+    { headerName: "Title", field: "title" },
+    { headerName: "Start Date & Time", field: "start_time" },
+    { headerName: "End Date & Time", field: "end_time" },
+    { headerName: "Password", field: "password" },
   ];
 
   return (
@@ -123,14 +221,29 @@ const RecordedClasses = () => {
             <div className="container-fluid full__width__padding">
               <div className="row">
                 <DSSidebar />
-                <div className="col-xl-12 col-lg-12 col-md-12">
+                <div className="col-lg-auto col-md-12 ">
+                  <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
+                    <h4 className="flex-fill">Select Date</h4>
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <DateRange
+                      inline
+                      type="Recorded Classes"
+                      selectedDate={selectedDate}
+                      onChange={handleDateChange}
+                      highlightedRanges={highlightedRanges}
+                    />
+                  </div>
+                  <StatusBox />
+                </div>
+                <div className="col">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
                       <h4 className="flex-fill">Recorded Classes</h4>
                       <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
                         <div className="dashboard__form__wraper">
                           <div className="dashboard__form__input">
-                            <label>Select Live Class</label>
+                            <label>Select Recorded Class</label>
                             <select
                               className="form-select"
                               aria-label="Default select example"
@@ -150,8 +263,11 @@ const RecordedClasses = () => {
                     <div className="row">
                       {isLoading ? (
                         <Loading text="Loading..." color="primary" />
-                      ) : recordClass.length > 0 ? (
-                        <Table rowData={recordClass} columnDefs={columns} />
+                      ) : formatRecordClasses.length > 0 ? (
+                        <Table
+                          rowData={formatRecordClasses}
+                          columnDefs={columns}
+                        />
                       ) : (
                         <h5 className="text-center text-danger">
                           No Recorded Classes Available !!

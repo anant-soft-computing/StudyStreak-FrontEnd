@@ -14,6 +14,16 @@ const FullLengthTest = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
 
+  const sortedFLT = fullLengthTestData.sort((a, b) => {
+    const getNumber = (name) => {
+      const match = name.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+    const nameA = getNumber(a.name);
+    const nameB = getNumber(b.name);
+    return nameA - nameB;
+  });
+
   useEffect(() => {
     (async () => {
       try {
@@ -182,11 +192,8 @@ const FullLengthTest = () => {
                       <BuyCourse message="No Full Length Test Available, Please Buy a Course!" />
                     ) : isLoading ? (
                       <Loading text="Loading..." color="primary" />
-                    ) : fullLengthTestData.length > 0 ? (
-                      <Table
-                        rowData={fullLengthTestData}
-                        columnDefs={columns}
-                      />
+                    ) : sortedFLT.length > 0 ? (
+                      <Table rowData={sortedFLT} columnDefs={columns} />
                     ) : (
                       <h5 className="text-center text-danger">
                         No Tests Available !!

@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
-import ReadingInstruction from "./Instruction/ReadingInstruction";
-import ListeningInstruction from "./Instruction/ListeningInstruction";
+import ReadingMTInstruction from "./MiniTestInstruction/ReadingMTInstruction";
+import ListeningMTInstraction from "./MiniTestInstruction/ListeningMTInstraction";
 import WritingInstruction from "./Instruction/WritingInstruction";
 import { formatTime } from "../../utils/timer/formateTime";
 const Cheerio = require("cheerio");
@@ -696,16 +696,10 @@ const LiveExam = () => {
   return !instructionCompleted ? (
     <div className="test-instruction">
       {examData.exam_type === "Reading" && (
-        <ReadingInstruction
-          testType="Mini"
-          startTest={handleCompleteInstruciton}
-        />
+        <ReadingMTInstruction startTest={handleCompleteInstruciton} />
       )}
       {examData.exam_type === "Listening" && (
-        <ListeningInstruction
-          testType="Mini"
-          startTest={handleCompleteInstruciton}
-        />
+        <ListeningMTInstraction startTest={handleCompleteInstruciton} />
       )}
       {examData.exam_type === "Writing" && (
         <WritingInstruction

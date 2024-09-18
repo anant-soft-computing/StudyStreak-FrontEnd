@@ -354,7 +354,7 @@ const ScoreCard = ({ course }) => {
                 <div>
                   <div className="gridarea__price d-flex align-items-center gap-2 mb-0">
                     <h3>
-                      {miniTestData?.[0]?.exam_name}, Score : {band}
+                      {miniTestData?.[0]?.exam_name}, Score : {miniTestData?.[0]?.band}
                     </h3>
                   </div>
                   <div

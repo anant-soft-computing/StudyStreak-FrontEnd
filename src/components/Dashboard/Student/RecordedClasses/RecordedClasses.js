@@ -138,7 +138,7 @@ const RecordedClasses = () => {
       setIsLoading(true);
       try {
         const response = await ajaxCall(
-          "/liveclass/recording/",
+          `/liveclass/recording/?class_type=${activeTab}`,
           {
             headers: {
               Accept: "application/json",
@@ -153,8 +153,7 @@ const RecordedClasses = () => {
         );
         if (response.status === 200) {
           const recordData = response?.data.filter(
-            ({ recordings, live_class_type }) =>
-              recordings.length > 0 && live_class_type === activeTab
+            ({ recordings }) => recordings.length > 0
           );
           handleDataFetch(recordData);
           setRecordClass(recordData);
@@ -207,10 +206,10 @@ const RecordedClasses = () => {
         </button>
       ),
     },
-    { headerName: "Title", field: "title" },
-    { headerName: "Start Date & Time", field: "start_time" },
-    { headerName: "End Date & Time", field: "end_time" },
-    { headerName: "Password", field: "password" },
+    { headerName: "Title", field: "title", width: 250 },
+    { headerName: "Start Date & Time", field: "start_time", width: 250 },
+    { headerName: "End Date & Time", field: "end_time", width: 250 },
+    { headerName: "Password", field: "password", width: 220 },
   ];
 
   return (

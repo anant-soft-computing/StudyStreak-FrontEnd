@@ -12,6 +12,7 @@ const MockTest = () => {
   const [activeTab, setActiveTab] = useState("Reading");
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
+  const [studentCourses, setStudentCourses] = useState([]);
   const [givenSpeakingTest, setGivenSpeakingTest] = useState([]);
   const [allMockTestData, setAllMockTestData] = useState([]);
   const [allSpeakingData, setAllSpeakingData] = useState([]);
@@ -34,6 +35,44 @@ const MockTest = () => {
       setActiveTab("General");
     }
   }, [category]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/get-student-course/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const courses = response?.data
+            ?.filter((item) => item.course_category === "GENERAL")
+            .map((course) => {
+              return course.course_name
+                .split(" ")
+                .map((word) => word[0])
+                .join("")
+                .toUpperCase();
+            });
+
+          setStudentCourses(courses);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -112,7 +151,8 @@ const MockTest = () => {
                 ({ exam_name, block_type, exam_category }) =>
                   block_type === "Assignments" &&
                   exam_category === category &&
-                  !exam_name.includes("Assignment")
+                  !exam_name.includes("Assignment") &&
+                  studentCourses?.some((item) => exam_name.includes(item))
               );
               setAllMockTestData(mockTestData);
             } else {
@@ -131,7 +171,7 @@ const MockTest = () => {
       }
     };
     fetchData();
-  }, [activeTab, category]);
+  }, [activeTab, category, studentCourses]);
 
   const testByExamType = (examType) =>
     allMockTestData.filter(({ exam_type }) => exam_type === examType);

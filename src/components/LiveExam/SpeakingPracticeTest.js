@@ -22,7 +22,7 @@ const PracticeSpeakingLiveExam = () => {
   const [examData, setExamData] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [voices, setVoices] = useState([]);
-  const [timerRunning, setTimerRunning] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(true);
   const [fullPaper, setFullPaper] = useState([]);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish

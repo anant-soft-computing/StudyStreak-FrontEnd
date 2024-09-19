@@ -24,7 +24,7 @@ const PracticeLiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [timer, setTimer] = useState(3600);
-  const [timerRunning, setTimerRunning] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);

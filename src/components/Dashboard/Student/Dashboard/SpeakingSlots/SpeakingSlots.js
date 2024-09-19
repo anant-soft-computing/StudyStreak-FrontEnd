@@ -57,7 +57,7 @@ const SpeakingSlots = () => {
   return (
     <div className="dashboard__inner mt-4 card-background">
       <div className="dashboard__nav__title">
-        <h6>Speaking Slots</h6>
+        <h6>Upcoming Speaking Class</h6>
       </div>
       <hr />
       {hasUpcomingSSClass ? (
@@ -66,11 +66,11 @@ const SpeakingSlots = () => {
           <div className="d-flex justify-content-between align-items-center">
             <div>{displayDate()}</div>
             <Link
-              to={"/studentLiveClasses"}
-              state={{ activeTab: "Speaking Practice" }}
+              to={upcomingSSClass?.join_url}
+              target="_blank"
               className="text-decoration-none"
             >
-              <div>View all slots {">>"}</div>
+              <div>Join now {">>"}</div>
             </Link>
           </div>
         </>

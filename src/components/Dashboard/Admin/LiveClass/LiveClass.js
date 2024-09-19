@@ -3,13 +3,8 @@ import DASideBar from "../DASideBar/DASideBar";
 import CreateLiveClass from "./CreateLiveClass";
 import ViewLiveClasses from "./ViewLiveClasses";
 import Tab from "../../../UI/Tab";
-import CreateRecurrenceLiveClass from "./CreateRecurrenceLiveClass";
 
-const tabs = [
-  { name: "View LiveClass" },
-  { name: "Create LiveClass" },
-  { name: "Create Recurrence LiveClass" },
-];
+const tabs = [{ name: "View LiveClass" }, { name: "Create LiveClass" }];
 
 const LiveClass = () => {
   const [activeTab, setActiveTab] = useState("View LiveClass");
@@ -29,7 +24,7 @@ const LiveClass = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <h4>LiveClass</h4>
+                      <h4>Live Class</h4>
                     </div>
                     <div className="row">
                       <Tab
@@ -59,19 +54,6 @@ const LiveClass = () => {
                         >
                           <div className="row">
                             <CreateLiveClass setActiveTab={setActiveTab} />
-                          </div>
-                        </div>
-                        <div
-                          className={`tab-pane fade ${
-                            activeTab === "Create Recurrence LiveClass"
-                              ? "show active"
-                              : ""
-                          }`}
-                        >
-                          <div className="row">
-                            <CreateRecurrenceLiveClass
-                              setActiveTab={setActiveTab}
-                            />
                           </div>
                         </div>
                       </div>

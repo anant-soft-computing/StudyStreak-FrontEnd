@@ -50,6 +50,14 @@ const validateForm = (createLiveClassData, setFormError) => {
     setFormError("End Date & Time is Required");
     return false;
   }
+  if (
+    moment(createLiveClassData.end_time).isBefore(
+      createLiveClassData.start_time
+    )
+  ) {
+    setFormError("End Time Must Be After Start Time");
+    return false;
+  }
   return true;
 };
 
@@ -113,6 +121,16 @@ const CreateLiveClass = ({ setActiveTab }) => {
 
   const createLiveClass = async (e) => {
     e.preventDefault();
+    const currentTime = moment();
+    const selectedStartTime = moment(createLiveClassData.start_time);
+    const timeDiffInHours = selectedStartTime.diff(currentTime, "hours");
+
+    if (timeDiffInHours < 6) {
+      setFormError(
+        "Please Select A Start Time At Least 6 Hours From The Current Time."
+      );
+      return;
+    }
     if (!validateForm(createLiveClassData, setFormError)) return;
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
 
@@ -135,7 +153,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
       ),
       settings: {
         auto_recording: "cloud",
-      }
+      },
     };
 
     try {
@@ -152,6 +170,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
         },
         8000
       );
+
       if (response.status === 201) {
         resetReducerForm();
         setActiveTab("View LiveClass");

@@ -5,10 +5,30 @@ import listeningBandValues from "../../../../utils/bandValues/listeningBandValue
 import readingBandValues from "../../../../utils/bandValues/ReadingBandValues";
 import PointHistory from "../PointHistory/PointHistory";
 
+const exams = {
+  miniTest: "Mini Exam",
+  practiceTest: "Practice Exam",
+  fullLengthTest: "Full Length Exam",
+};
+
+const assignments = {
+  assignments: "Assignment",
+};
+
+const liveClasses = {
+  speakingPracticeClass: "Speaking Practice Class",
+  groupDoubtSolvingClass: "Group Doubt Solving Class",
+  oneToOneDoubtSolvingClass: "One To One Doubt Solving Class",
+  tutorSupport: "Tutor Support",
+  webinar: "Webinar",
+  counselling: "Counselling",
+};
+
 const Progress = () => {
   const [band, setBand] = useState(0);
-  const [totalPoints, setTotalPoints] = useState(0);
   const [fltBand, setFltBand] = useState(0);
+  const [totalPoints, setTotalPoints] = useState(0);
+  const [badges, setBadges] = useState([]);
   const [fltData, setFltData] = useState([]);
   const [miniTestData, setMiniTestData] = useState([]);
   const [practiceTestData, setPracticeTestData] = useState([]);
@@ -17,6 +37,13 @@ const Progress = () => {
     miniTest: 0,
     practiceTest: 0,
     fullLengthTest: 0,
+    assignments: 0,
+    speakingPracticeClass: 0,
+    groupDoubtSolvingClass: 0,
+    oneToOneDoubtSolvingClass: 0,
+    tutorSupport: 0,
+    webinar: 0,
+    counselling: 0,
   });
 
   const latestScore = {
@@ -25,11 +52,9 @@ const Progress = () => {
     fltLatestScore: fltBand,
   };
 
-  const exams = {
-    miniTest: "Mini Exam",
-    practiceTest: "Practice Exam",
-    fullLengthTest: "Full Length Exam",
-  };
+  const availableBadges = badges
+    .filter((badge) => totalPoints >= badge.points_required)
+    .sort((a, b) => a.points_required - b.points_required);
 
   const fetchTestData = async (url, setData) => {
     try {
@@ -39,8 +64,9 @@ const Progress = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -55,6 +81,10 @@ const Progress = () => {
       console.error("Error fetching data", error);
     }
   };
+
+  useEffect(() => {
+    fetchTestData("/gamification/badges/", setBadges);
+  }, []);
 
   useEffect(() => {
     fetchTestData(
@@ -83,8 +113,9 @@ const Progress = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
@@ -189,8 +220,9 @@ const Progress = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
@@ -361,24 +393,32 @@ const Progress = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
           8000
         );
         if (response.status === 200) {
-          const givenMiniExam = [
-            ...response?.data?.student_mock,
-            ...response?.data?.student_speakingblock,
-          ]?.length;
-          const givenPracticeTest = response?.data?.student_pt?.length;
-          const givenFLT = response?.data?.student_flt?.length;
           setStudentExams({
-            miniTest: givenMiniExam,
-            practiceTest: givenPracticeTest,
-            fullLengthTest: givenFLT,
+            miniTest: [
+              ...response?.data?.student_mock,
+              ...response?.data?.student_speakingblock,
+            ]?.length,
+            practiceTest: response?.data?.student_pt?.length,
+            fullLengthTest: response?.data?.student_flt?.length,
+            assignments: response?.data?.student_assignment?.length,
+            speakingPracticeClass:
+              response?.data?.student_speaking_practice?.length,
+            groupDoubtSolvingClass:
+              response?.data?.student_group_doubt_solving?.length,
+            oneToOneDoubtSolvingClass:
+              response?.data?.student_one_to_one_solving?.length,
+            tutorSupport: response?.data?.student_tutor_support?.length,
+            webinar: response?.data?.student_webinar?.length,
+            counselling: response?.data?.student_counselling?.length,
           });
         }
       } catch (error) {
@@ -400,6 +440,47 @@ const Progress = () => {
                     <div className="dashboard__section__title">
                       <h4>Progress Report</h4>
                     </div>
+                    {availableBadges.length > 0 && (
+                      <div className="d-flex justify-content-center">
+                        <ul>
+                          {availableBadges.map((badge) => (
+                            <li className="ribbon" key={badge.id}>
+                              {badge.title}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    <div className="dashboard__content__wraper common-background-color-across-app">
+                      <h4 className="sidebar__title">Assignment</h4>
+                      <div className="dashboard__table table-responsive">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Assignment Name</th>
+                              <th>No Of Given Assignment</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {Object.keys(assignments).map(
+                              (assignmentKey, index) => (
+                                <tr
+                                  key={assignmentKey}
+                                  className={`${
+                                    index % 2 === 0
+                                      ? ""
+                                      : "dashboard__table__row"
+                                  }`}
+                                >
+                                  <td>{assignments[assignmentKey]}</td>
+                                  <td>{studentExams[assignmentKey]}</td>
+                                </tr>
+                              )
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                     <div className="dashboard__content__wraper common-background-color-across-app">
                       <h4 className="sidebar__title">Exam</h4>
                       <div className="dashboard__table table-responsive">
@@ -415,8 +496,9 @@ const Progress = () => {
                             {Object.keys(exams).map((examKey, index) => (
                               <tr
                                 key={examKey}
-                                className={`${index % 2 === 0 ? "" : "dashboard__table__row"
-                                  }`}
+                                className={`${
+                                  index % 2 === 0 ? "" : "dashboard__table__row"
+                                }`}
                               >
                                 <td>{exams[examKey]}</td>
                                 <td>{studentExams[examKey]}</td>
@@ -424,11 +506,41 @@ const Progress = () => {
                                   {examKey === "fullLengthTest"
                                     ? latestScore.fltLatestScore
                                     : examKey === "practiceTest"
-                                      ? latestScore.pTLatestScore
-                                      : latestScore.mTLatestScore}
+                                    ? latestScore.pTLatestScore
+                                    : latestScore.mTLatestScore}
                                 </td>
                               </tr>
                             ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div className="dashboard__content__wraper common-background-color-across-app">
+                      <h4 className="sidebar__title">Live Classes</h4>
+                      <div className="dashboard__table table-responsive">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Live Class Type</th>
+                              <th>No Of Attempt Class</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {Object.keys(liveClasses).map(
+                              (liveClassesKey, index) => (
+                                <tr
+                                  key={liveClassesKey}
+                                  className={`${
+                                    index % 2 === 0
+                                      ? ""
+                                      : "dashboard__table__row"
+                                  }`}
+                                >
+                                  <td>{liveClasses[liveClassesKey]}</td>
+                                  <td>{studentExams[liveClassesKey]}</td>
+                                </tr>
+                              )
+                            )}
                           </tbody>
                         </table>
                       </div>

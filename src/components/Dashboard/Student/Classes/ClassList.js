@@ -118,22 +118,12 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
   };
 
   const handleBook = (params) => {
-    const { id, start_time, end_time } = params.data;
-    const startDate = moment(start_time).startOf("day"); // Start Of start_time Day
-    const endDate = moment(end_time).endOf("day"); // End Of end_time Day
-    const currentDate = moment().startOf("day"); // Current Date Without Time
-    const previousDay = moment(start_time).subtract(1, "days").startOf("day"); // 1 Day Before start_time
+    const { id, start_time } = params.data;
+    const currentDate = moment();
+    const sixHoursBeforeStart = moment(start_time).subtract(6, "hours");
 
-    let isWithinRange;
-
-    // Check If start_time and end_time Are On The Same Day
-    if (startDate.isSame(endDate, "day")) {
-      // Button Active 1 Day Before The start date
-      isWithinRange = currentDate.isSame(previousDay, "day");
-    } else {
-      // Button Active From 1 Day Before start_date Up To end_date
-      isWithinRange = currentDate.isBetween(previousDay, endDate, null, "[]");
-    }
+    // Enable the button if currentDate is after or equal to sixHoursBeforeStart
+    const isWithinRange = currentDate.isSameOrAfter(sixHoursBeforeStart);
 
     return (
       <button

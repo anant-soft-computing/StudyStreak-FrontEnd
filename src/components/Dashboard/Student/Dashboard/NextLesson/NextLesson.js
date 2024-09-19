@@ -48,7 +48,6 @@ const NextLesson = () => {
             <Link
               to={`/courseLessons/${lessonData?.course?.id}`}
               className="text-decoration-none"
-              state={{ currentLesson: lessonData }}
             >
               <div>View Lesson {">>"}</div>
             </Link>

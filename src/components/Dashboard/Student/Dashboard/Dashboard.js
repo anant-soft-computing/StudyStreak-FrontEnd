@@ -198,7 +198,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
+    const fetchStudentCourses = async () => {
       try {
         const response = await ajaxCall(
           "/get-student-course/",
@@ -214,27 +214,46 @@ const Dashboard = () => {
           },
           8000
         );
-        if (response.status === 200) {
-          const courses = response?.data?.map((item) => item.course_category);
-          setLesson(response?.data);
-          setStudentCourses(courses);
 
-          const savedCourse = localStorage.getItem("category");
-          if (!savedCourse && courses.length > 0) {
-            const defaultCourse = courses[0];
-            setSelectedCourse(defaultCourse);
-            localStorage.setItem("category", defaultCourse);
-          } else if (savedCourse) {
-            setSelectedCourse(savedCourse);
-          }
+        if (response.status === 200) {
+          const courseData = response?.data || [];
+          const courses = [
+            ...new Set(courseData.map((item) => item.course_category)),
+          ];
+
+          setLesson(
+            courseData
+              .filter((lesson) => lesson.course_category === selectedCourse)
+              .filter(
+                (lesson, index, self) =>
+                  self.findIndex((l) => l.course_id === lesson.course_id) ===
+                  index
+              )
+          );
+
+          setStudentCourses(courses);
+          handleCourseSelection(courses);
         } else {
-          console.log("error");
+          console.error("Error fetching courses");
         }
       } catch (error) {
-        console.log("error", error);
+        console.error("Error:", error);
       }
-    })();
-  }, []);
+    };
+
+    const handleCourseSelection = (courses) => {
+      const savedCourse = localStorage.getItem("category");
+      if (!savedCourse && courses.length > 0) {
+        const defaultCourse = courses[0];
+        setSelectedCourse(defaultCourse);
+        localStorage.setItem("category", defaultCourse);
+      } else if (savedCourse) {
+        setSelectedCourse(savedCourse);
+      }
+    };
+
+    fetchStudentCourses();
+  }, [selectedCourse]);
 
   if (isLoading) {
     return <Loading text="Loading..." color="primary" />;

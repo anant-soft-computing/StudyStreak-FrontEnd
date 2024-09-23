@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const DownloadButton = ({ url }) =>
   url !== "-" ? (
@@ -50,6 +52,7 @@ const columns = [
 ];
 
 const Resources = () => {
+  const { packageCount } = useLocation().state || {};
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
 
@@ -152,7 +155,9 @@ const Resources = () => {
                       <h4>Resources</h4>
                     </div>
                     <div className="row">
-                      {isLoading ? (
+                      {packageCount === 0 ? (
+                        <BuyCourse message="No Resources Available, Please Buy a Course !!" />
+                      ) : isLoading ? (
                         <Loading text="Loading..." color="primary" />
                       ) : resourcesList.length > 0 ? (
                         <Table rowData={resourcesList} columnDefs={columns} />

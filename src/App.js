@@ -137,7 +137,7 @@ const App = () => {
             path="/studentDashboard"
             element={<ProtectedRoute element={Dashboard} />}
           />
-          <Route path="/progress" element={<Progress />}/>
+          <Route path="/progress" element={<Progress />} />
           <Route path="/studentProfile" element={<SProfile />} />
           <Route path="/studentMyCourse" element={<MyCourse />} />
           <Route path="/courseLessons/:courseId" element={<Lesson />} />
@@ -147,7 +147,7 @@ const App = () => {
           <Route path="/practiceTest" element={<PracticeTest />} />
           <Route path="/fullLengthTest" element={<FullLengthTest />} />
           <Route path="/studentLiveClasses" element={<SLiveClass />} />
-          <Route path="/recordedClasses" element={<RecordedClasses />}/>
+          <Route path="/recordedClasses" element={<RecordedClasses />} />
           <Route path="/flashcard" element={<SFlashCard />} />
           <Route path="/resources" element={<SResources />} />
           <Route path="/studentSettings" element={<SSettings />} />

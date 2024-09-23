@@ -8,7 +8,7 @@ import PracticeTestTable from "./PracticeTestTable";
 import PTAssessment from "../Assessment/PTAssessment/PTAssessment";
 
 const PracticeTest = () => {
-  const { count } = useLocation().state || {};
+  const { count, packageCount } = useLocation().state || {};
   const [isLoading, setIsLoading] = useState(true);
   const [testData, setTestData] = useState({
     Reading: [],
@@ -18,6 +18,7 @@ const PracticeTest = () => {
     General: [],
   });
   const [givenTest, setGivenTest] = useState([]);
+  const [studentCourses, setStudentCourses] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
   const category = localStorage.getItem("category");
 
@@ -38,6 +39,46 @@ const PracticeTest = () => {
       setActiveTab("General");
     }
   }, [category]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/get-student-course/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const courses = response?.data
+            ?.filter((item) => item.course_category === "GENERAL")
+            .map((course) => {
+              return course.course_name
+                .split(" ")
+                .map((word, index) =>
+                  index === 0 ? word.substring(0, 2) : word[0]
+                )
+                .join("")
+                .toUpperCase();
+            });
+
+          setStudentCourses(courses);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -92,7 +133,11 @@ const PracticeTest = () => {
               ({ exam_type }) => exam_type === "Listening"
             ),
             Speaking: data.filter(({ exam_type }) => exam_type === "Speaking"),
-            General: data.filter(({ exam_type }) => exam_type === "General"),
+            General: data.filter(
+              ({ exam_type, IELTS }) =>
+                exam_type === "General" &&
+                studentCourses?.some((item) => IELTS?.Name?.includes(item))
+            ),
           };
           setTestData(filteredData);
         }
@@ -103,7 +148,7 @@ const PracticeTest = () => {
       }
     };
     fetchData();
-  }, [activeTab, category]);
+  }, [activeTab, category, studentCourses]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -128,7 +173,7 @@ const PracticeTest = () => {
                       <h4>Practice Test</h4>
                       {category && <h5>Course : {category}</h5>}
                     </div>
-                    {isNaN(count) ? (
+                    {packageCount === 0 ? (
                       <BuyCourse message="No Practice Test Available, Please Buy a Course !!" />
                     ) : (
                       <div className="row">

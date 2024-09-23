@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const Download = ({ url }) =>
   url !== "-" ? (
@@ -52,6 +54,7 @@ const columns = [
 ];
 
 const PaperTest = () => {
+  const { packageCount } = useLocation().state || {};
   const [isLoading, setIsLoading] = useState(true);
   const [paperTestList, setPaperTestList] = useState([]);
 
@@ -149,13 +152,15 @@ const PaperTest = () => {
                       <h4>Paper Test</h4>
                     </div>
                     <div className="row">
-                      {isLoading ? (
+                      {packageCount === 0 ? (
+                        <BuyCourse message="No Paper Test Available, Please Buy a Course !!" />
+                      ) : isLoading ? (
                         <Loading text="Loading..." color="primary" />
                       ) : paperTestList.length > 0 ? (
                         <Table rowData={paperTestList} columnDefs={columns} />
                       ) : (
                         <h5 className="text-center text-danger">
-                          No Resources Available !!
+                          No Paper Test Available !!
                         </h5>
                       )}
                     </div>

@@ -59,7 +59,9 @@ const MockTest = () => {
             .map((course) => {
               return course.course_name
                 .split(" ")
-                .map((word) => word[0])
+                .map((word, index) =>
+                  index === 0 ? word.substring(0, 2) : word[0]
+                )
                 .join("")
                 .toUpperCase();
             });

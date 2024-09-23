@@ -61,6 +61,7 @@ const DSSidebar = () => {
             name: "Paper Test",
             icon: <img src={paperTest} alt="My Course" />,
             link: "/paperTest",
+            state: { packageCount: count?.count },
           },
           {
             name: "Mini Test",
@@ -71,18 +72,25 @@ const DSSidebar = () => {
             name: "Practice Test",
             icon: <img src={practiceTest} alt="Practice Test" />,
             link: "/practiceTest",
-            state: { count: count?.practice_test_count },
+            state: {
+              count: count?.practice_test_count,
+              packageCount: count?.count,
+            },
           },
           {
             name: "Full Length Test",
             icon: <img src={fullLengthTest} alt="Full Length Test" />,
             link: "/fullLengthTest",
-            state: { count: count?.full_length_test_count },
+            state: {
+              count: count?.full_length_test_count,
+              packageCount: count?.count,
+            },
           },
           {
             name: "Live Classes",
             icon: <img src={liveClass} alt="Live Classes" />,
             link: "/studentLiveClasses",
+            state: { packageCount: count?.count },
           },
           {
             name: "Recorded Classes",
@@ -95,11 +103,13 @@ const DSSidebar = () => {
               />
             ),
             link: "/recordedClasses",
+            state: { packageCount: count?.count },
           },
           {
             name: "Flash Card",
             icon: <img src={flashcard} alt="Flash Card" />,
             link: "/flashCard",
+            state: { packageCount: count?.count },
           },
           {
             name: "Resources",
@@ -107,6 +117,7 @@ const DSSidebar = () => {
               <img src={resources} alt="Resources" height={20} width={20} />
             ),
             link: "/resources",
+            state: { packageCount: count?.count },
           },
           {
             name: "Settings",
@@ -144,6 +155,15 @@ const DSSidebar = () => {
             name: "Mini Test",
             icon: <img src={assignment} alt="Mini Test" />,
             link: "/mockTest",
+          },
+          {
+            name: "Practice Test",
+            icon: <img src={practiceTest} alt="Practice Test" />,
+            link: "/practiceTest",
+            state: {
+              count: count?.practice_test_count,
+              packageCount: count?.count,
+            },
           },
           {
             name: "Live Classes",

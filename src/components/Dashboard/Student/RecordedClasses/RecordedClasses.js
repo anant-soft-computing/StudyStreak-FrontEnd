@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import moment from "moment";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -7,8 +8,10 @@ import Table from "../../../UI/Table";
 import DateRange from "../../../UI/DateRangePicker";
 import StatusBox from "../Classes/StatusBox";
 import { filterByDateRange } from "../Classes/filterByDateRange";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const RecordedClasses = () => {
+  const { packageCount } = useLocation().state || {};
   const category = localStorage.getItem("category");
 
   const liveClasses =
@@ -172,13 +175,7 @@ const RecordedClasses = () => {
     window.open(url, "__blank");
   };
 
-  const recordClasses = recordClass.filter(({ recordings }) =>
-    recordings.some(({ recording_start, recording_end }) =>
-      filterByDateRange(recording_start, recording_end, selectedDate)
-    )
-  );
-
-  const formatRecordClasses = recordClasses.flatMap((item, index) => {
+  const formatRecordClasses = recordClass.flatMap((item, index) => {
     const baseData = {
       no: `${index + 1}.`,
       title: item.meeting_title,
@@ -193,6 +190,10 @@ const RecordedClasses = () => {
       password: recording.password,
     }));
   });
+
+  const recordClasses = formatRecordClasses.filter(({ start_time, end_time }) =>
+    filterByDateRange(start_time, end_time, selectedDate)
+  );
 
   const columns = [
     {
@@ -260,13 +261,12 @@ const RecordedClasses = () => {
                       </div>
                     </div>
                     <div className="row">
-                      {isLoading ? (
+                      {packageCount === 0 ? (
+                        <BuyCourse message="No Recorded Classes Available, Please Buy a Course !!" />
+                      ) : isLoading ? (
                         <Loading text="Loading..." color="primary" />
-                      ) : formatRecordClasses.length > 0 ? (
-                        <Table
-                          rowData={formatRecordClasses}
-                          columnDefs={columns}
-                        />
+                      ) : recordClasses.length > 0 ? (
+                        <Table rowData={recordClasses} columnDefs={columns} />
                       ) : (
                         <h5 className="text-center text-danger">
                           No Recorded Classes Available !!

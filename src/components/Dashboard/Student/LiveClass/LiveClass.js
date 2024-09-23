@@ -12,6 +12,7 @@ import TutorSupport from "../TutorSpport/TutorSupport";
 import Counselling from "../Counselling/Counselling";
 import moment from "moment";
 import StatusBox from "../Classes/StatusBox";
+import BuyCourse from "../BuyCourse/BuyCourse";
 
 const LiveClass = () => {
   const location = useLocation();
@@ -308,11 +309,15 @@ const LiveClass = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="row">
-                      <div className="tab-content tab__content__wrapper aos-init aos-animate">
-                        {renderTab()}
+                    {location?.state?.packageCount === 0 ? (
+                      <BuyCourse message="No Live Class Available, Please Buy a Course !!" />
+                    ) : (
+                      <div className="row">
+                        <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                          {renderTab()}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>

@@ -6,7 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
 import ReadingMTInstruction from "./MiniTestInstruction/ReadingMTInstruction";
 import ListeningMTInstraction from "./MiniTestInstruction/ListeningMTInstraction";
-import WritingInstruction from "./Instruction/WritingInstruction";
+import WritingMTInstraction from "./MiniTestInstruction/WritingMTInstraction";
 import { formatTime } from "../../utils/timer/formateTime";
 const Cheerio = require("cheerio");
 
@@ -702,10 +702,7 @@ const LiveExam = () => {
         <ListeningMTInstraction startTest={handleCompleteInstruciton} />
       )}
       {examData.exam_type === "Writing" && (
-        <WritingInstruction
-          testType="Mini"
-          startTest={handleCompleteInstruciton}
-        />
+        <WritingMTInstraction startTest={handleCompleteInstruciton} />
       )}
     </div>
   ) : (

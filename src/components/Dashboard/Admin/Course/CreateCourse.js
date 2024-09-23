@@ -206,8 +206,6 @@ const CreateCourse = ({ setMainTab }) => {
         "/courselistview/",
         {
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
             Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import Table from "../../../UI/Table";
-import { toast } from "react-toastify";
 
 const FullLengthTest = () => {
   const navigate = useNavigate();
-  const { count } = useLocation().state || {};
+  const { count, packageCount } = useLocation().state || {};
   const [givenTest, setGivenTest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
@@ -188,8 +188,8 @@ const FullLengthTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Full Length Test</h4>
                     </div>
-                    {isNaN(count) ? (
-                      <BuyCourse message="No Full Length Test Available, Please Buy a Course!" />
+                    {packageCount === 0 ? (
+                      <BuyCourse message="No Full Length Test Available, Please Buy a Course !!" />
                     ) : isLoading ? (
                       <Loading text="Loading..." color="primary" />
                     ) : sortedFLT.length > 0 ? (

@@ -5,20 +5,13 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
 const columns = [
-  { headerName: "No.", field: "no", width: 130 },
-  { headerName: "Name", field: "title", filter: true, width: 410 },
-  { headerName: "Description", field: "description", filter: true, width: 410 },
+  { headerName: "No.", field: "no", width: 490 },
+  { headerName: "Name", field: "title", filter: true, width: 490 },
   {
     headerName: "Points Required",
     field: "points_required",
     filter: true,
-    width: 250,
-  },
-  {
-    headerName: "Gamification Items",
-    field: "gamification_items.length",
-    filter: true,
-    width: 250,
+    width: 490,
   },
 ];
 

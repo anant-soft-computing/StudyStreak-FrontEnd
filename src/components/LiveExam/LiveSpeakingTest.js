@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import { htmlToText } from "html-to-text";
-import SpeakingInstruction from "./Instruction/SpeakingInstruction";
+import SpeakingMTInstruction from "./MiniTestInstruction/SpeakingMTInstraction";
 import { formatTime } from "../../utils/timer/formateTime";
 
 const initialSpeakingSingleQuesionState = {
@@ -267,10 +267,7 @@ const LiveSpeakingExam = () => {
 
   return !instructionCompleted ? (
     <div className="test-instruction">
-      <SpeakingInstruction
-        testType="Mini"
-        startTest={handleCompleteInstruciton}
-      />
+      <SpeakingMTInstruction startTest={handleCompleteInstruciton} />
     </div>
   ) : (
     <>

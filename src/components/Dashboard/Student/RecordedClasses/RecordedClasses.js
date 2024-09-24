@@ -221,44 +221,48 @@ const RecordedClasses = () => {
             <div className="container-fluid full__width__padding">
               <div className="row">
                 <DSSidebar />
-                <div className="col-lg-auto col-md-12 ">
-                  <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
-                    <h4 className="flex-fill">Select Date</h4>
+                {packageCount !== 0 && (
+                  <div className="col-lg-auto col-md-12 ">
+                    <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
+                      <h4 className="flex-fill">Select Date</h4>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <DateRange
+                        inline
+                        type="Recorded Classes"
+                        selectedDate={selectedDate}
+                        onChange={handleDateChange}
+                        highlightedRanges={highlightedRanges}
+                      />
+                    </div>
+                    <StatusBox />
                   </div>
-                  <div className="d-flex justify-content-center">
-                    <DateRange
-                      inline
-                      type="Recorded Classes"
-                      selectedDate={selectedDate}
-                      onChange={handleDateChange}
-                      highlightedRanges={highlightedRanges}
-                    />
-                  </div>
-                  <StatusBox />
-                </div>
+                )}
                 <div className="col">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
                       <h4 className="flex-fill">Recorded Classes</h4>
-                      <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
-                        <div className="dashboard__form__wraper">
-                          <div className="dashboard__form__input">
-                            <label>Select Recorded Class</label>
-                            <select
-                              className="form-select"
-                              aria-label="Default select example"
-                              onChange={(e) => setActiveTab(e.target.value)}
-                              value={activeTab}
-                            >
-                              {liveClasses.map((item) => (
-                                <option key={item} value={item.value}>
-                                  {item.name}
-                                </option>
-                              ))}
-                            </select>
+                      {packageCount !== 0 && (
+                        <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
+                          <div className="dashboard__form__wraper">
+                            <div className="dashboard__form__input">
+                              <label>Select Recorded Class</label>
+                              <select
+                                className="form-select"
+                                aria-label="Default select example"
+                                onChange={(e) => setActiveTab(e.target.value)}
+                                value={activeTab}
+                              >
+                                {liveClasses.map((item) => (
+                                  <option key={item} value={item.value}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                     <div className="row">
                       {packageCount === 0 ? (

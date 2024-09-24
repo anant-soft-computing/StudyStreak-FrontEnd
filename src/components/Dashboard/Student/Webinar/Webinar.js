@@ -4,7 +4,6 @@ import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 import UpcomingClass from "../Classes/UpcomingClass";
-import BuyCourse from "../BuyCourse/BuyCourse";
 
 const tabs = [{ name: "Upcoming" }, { name: "Webinar" }];
 
@@ -98,48 +97,42 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
   );
 
   return (
-    <div>
-      {count === undefined ? (
-        <BuyCourse message="No Webinar Available, Please Buy a Course !!" />
-      ) : (
-        <div className="row">
-          <Tab
-            tabs={tabs}
-            activeTab={activeTab}
-            handleTabChange={handleTabChange}
-          />
-          <div className="tab-content tab__content__wrapper aos-init aos-animate">
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Upcoming" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <UpcomingClass
-                  isLoading={isLoading}
-                  classes={webinarClass}
-                  message="No Upcoming Webinar Available !!, Please Schedule Your Webinar"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Webinar" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <ClassList
-                  count={count}
-                  isLoading={isLoading}
-                  classes={webinarClasses}
-                  classType="Webinar"
-                  message="No Webinar Available !!, Please Schedule Your Webinar"
-                />
-              </div>
-            </div>
+    <div className="row">
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Upcoming" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <UpcomingClass
+              isLoading={isLoading}
+              classes={webinarClass}
+              message="No Upcoming Webinar Available !!, Please Schedule Your Webinar"
+            />
           </div>
         </div>
-      )}
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Webinar" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <ClassList
+              count={count}
+              isLoading={isLoading}
+              classes={webinarClasses}
+              classType="Webinar"
+              message="No Webinar Available !!, Please Schedule Your Webinar"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -4,7 +4,6 @@ import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 import UpcomingClass from "../Classes/UpcomingClass";
-import BuyCourse from "../BuyCourse/BuyCourse";
 
 const tabs = [{ name: "Upcoming" }, { name: "Tutor Support" }];
 
@@ -109,48 +108,42 @@ const TutorSupport = ({
   );
 
   return (
-    <div>
-      {count === undefined ? (
-        <BuyCourse message="No Tutor Support Class Available, Please Buy a Course !!" />
-      ) : (
-        <div className="row">
-          <Tab
-            tabs={tabs}
-            activeTab={activeTab}
-            handleTabChange={handleTabChange}
-          />
-          <div className="tab-content tab__content__wrapper aos-init aos-animate">
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Upcoming" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <UpcomingClass
-                  isLoading={isLoading}
-                  classes={tutorClasses}
-                  message="No Upcoming Tuotor Support Classes Available !!, Please Schedule Your Tuotor Support Classes"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Tutor Support" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <ClassList
-                  count={count}
-                  isLoading={isLoading}
-                  classes={tutorSupportClasses}
-                  classType="Tutor Support"
-                  message="No Tuotor Support Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
+    <div className="row">
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Upcoming" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <UpcomingClass
+              isLoading={isLoading}
+              classes={tutorClasses}
+              message="No Upcoming Tuotor Support Classes Available !!, Please Schedule Your Tuotor Support Classes"
+            />
           </div>
         </div>
-      )}
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Tutor Support" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <ClassList
+              count={count}
+              isLoading={isLoading}
+              classes={tutorSupportClasses}
+              classType="Tutor Support"
+              message="No Tuotor Support Classes Available !!, Please Schedule Your Classes"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

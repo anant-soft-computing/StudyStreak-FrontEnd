@@ -1043,7 +1043,7 @@ const DiagnosticTest = () => {
             All the Best
           </SmallModal>
           <ReadingInstruction
-            testType="Full Length"
+            testType="Diagnostic"
             startTest={handleInstruction}
           />
         </>
@@ -1066,7 +1066,7 @@ const DiagnosticTest = () => {
       )}
       {instructionCompleted.type.listening === 1 && (
         <ListeningInstruction
-          testType="Full Length"
+          testType="Diagnostic"
           startTest={handleInstruction}
         />
       )}

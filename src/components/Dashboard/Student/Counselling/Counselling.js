@@ -4,7 +4,6 @@ import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 import UpcomingClass from "../Classes/UpcomingClass";
-import BuyCourse from "../BuyCourse/BuyCourse";
 
 const tabs = [{ name: "Upcoming" }, { name: "Counselling" }];
 
@@ -103,48 +102,42 @@ const Counselling = ({
   );
 
   return (
-    <div>
-      {count === undefined ? (
-        <BuyCourse message="No Counselling Available, Please Buy a Course !!" />
-      ) : (
-        <div className="row">
-          <Tab
-            tabs={tabs}
-            activeTab={activeTab}
-            handleTabChange={handleTabChange}
-          />
-          <div className="tab-content tab__content__wrapper aos-init aos-animate">
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Upcoming" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <UpcomingClass
-                  isLoading={isLoading}
-                  classes={counsellinges}
-                  message="No Upcoming Counselling Available !!, Please Schedule Your Counselling"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Counselling" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <ClassList
-                  count={count}
-                  isLoading={isLoading}
-                  classes={counsellingClasses}
-                  classType="Counselling"
-                  message="No Counselling Available !!, Please Schedule Your Counselling"
-                />
-              </div>
-            </div>
+    <div className="row">
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Upcoming" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <UpcomingClass
+              isLoading={isLoading}
+              classes={counsellinges}
+              message="No Upcoming Counselling Available !!, Please Schedule Your Counselling"
+            />
           </div>
         </div>
-      )}
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Counselling" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <ClassList
+              count={count}
+              isLoading={isLoading}
+              classes={counsellingClasses}
+              classType="Counselling"
+              message="No Counselling Available !!, Please Schedule Your Counselling"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

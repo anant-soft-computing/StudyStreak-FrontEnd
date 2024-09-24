@@ -236,7 +236,7 @@ const Checkout = () => {
 
     const options = {
       key: process.env.REACT_APP_RAZORPAY_KEY_ID,
-      amount: amount.toString(),
+      amount: amount?.toString(),
       currency: currency,
       name: `${userDetails?.user?.first_name} ${userDetails?.user?.last_name}`,
       description: "Test Transaction",

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
@@ -108,48 +107,42 @@ const SpeakingPractice = ({
   );
 
   return (
-    <div>
-      {count === undefined ? (
-        <BuyCourse message="No Speaking Practice Class Available, Please Buy a Course !!" />
-      ) : (
-        <div className="row">
-          <Tab
-            tabs={tabs}
-            activeTab={activeTab}
-            handleTabChange={handleTabChange}
-          />
-          <div className="tab-content tab__content__wrapper aos-init aos-animate">
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Upcoming" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <UpcomingClass
-                  isLoading={isLoading}
-                  classes={speackingClasses}
-                  message="No Upcoming Speaking Practice Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Available Slot" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <ClassList
-                  count={count}
-                  isLoading={isLoading}
-                  classes={speakingPracticeClasses}
-                  classType="Speaking-Practice"
-                  message="No Speaking Practice Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
+    <div className="row">
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Upcoming" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <UpcomingClass
+              isLoading={isLoading}
+              classes={speackingClasses}
+              message="No Upcoming Speaking Practice Classes Available !!, Please Schedule Your Classes"
+            />
           </div>
         </div>
-      )}
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Available Slot" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <ClassList
+              count={count}
+              isLoading={isLoading}
+              classes={speakingPracticeClasses}
+              classType="Speaking-Practice"
+              message="No Speaking Practice Classes Available !!, Please Schedule Your Classes"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

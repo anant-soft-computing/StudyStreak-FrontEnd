@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import "../../../css/LiveExam.css"
 import ajaxCall from "../../../helpers/ajaxCall";
 import SmallModal from "../../UI/Modal";
 const Cheerio = require("cheerio");

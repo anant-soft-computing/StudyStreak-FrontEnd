@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import "../../css/LiveExam.css"
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
 import { toast } from "react-toastify";

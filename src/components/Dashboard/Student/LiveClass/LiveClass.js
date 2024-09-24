@@ -138,7 +138,7 @@ const LiveClass = () => {
           const counts = {
             speaking_practice_count: calculateTotalCount(
               data,
-              "speaking_test_count"
+              "speaking_practice_count"
             ),
             one_to_one_doubt_solving_count: calculateTotalCount(
               data,
@@ -271,43 +271,49 @@ const LiveClass = () => {
             <div className="container-fluid full__width__padding">
               <div className="row">
                 <DSSidebar />
-                <div className="col-lg-auto col-md-12 ">
-                  <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
-                    <h4 className="flex-fill">Select Date</h4>
+                {location.state.packageCount !== 0 && (
+                  <div className="col-lg-auto col-md-12 ">
+                    <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
+                      <h4 className="flex-fill">Select Date</h4>
+                    </div>
+                    <div className="d-flex justify-content-center">
+                      <DateRange
+                        inline
+                        selectedDate={selectedDate}
+                        onChange={handleDateChange}
+                        highlightedRanges={highlightedRanges}
+                      />
+                    </div>
+                    <StatusBox />
                   </div>
-                  <div className="d-flex justify-content-center">
-                    <DateRange
-                      inline
-                      selectedDate={selectedDate}
-                      onChange={handleDateChange}
-                      highlightedRanges={highlightedRanges}
-                    />
-                  </div>
-                  <StatusBox />
-                </div>
+                )}
                 <div className="col">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
                       <h4 className="flex-fill">Live Classes</h4>
-                      <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
-                        <div className="dashboard__form__wraper">
-                          <div className="dashboard__form__input">
-                            <label>Select Live Class</label>
-                            <select
-                              className="form-select"
-                              aria-label="Default select example"
-                              onChange={(e) => handleTabChange(e.target.value)}
-                              value={activeTab}
-                            >
-                              {liveClasses.map((item) => (
-                                <option key={item} value={item}>
-                                  {item}
-                                </option>
-                              ))}
-                            </select>
+                      {location?.state?.packageCount !== 0 && (
+                        <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
+                          <div className="dashboard__form__wraper">
+                            <div className="dashboard__form__input">
+                              <label>Select Live Class</label>
+                              <select
+                                className="form-select"
+                                aria-label="Default select example"
+                                onChange={(e) =>
+                                  handleTabChange(e.target.value)
+                                }
+                                value={activeTab}
+                              >
+                                {liveClasses.map((item) => (
+                                  <option key={item} value={item}>
+                                    {item}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                     {location?.state?.packageCount === 0 ? (
                       <BuyCourse message="No Live Class Available, Please Buy a Course !!" />

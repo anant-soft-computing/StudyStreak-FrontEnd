@@ -1,22 +1,41 @@
 import React from "react";
 
-function ReadingInstruction({ testType = "Practice", startTest }) {
+function ReadingInstruction({ testType, startTest }) {
   return (
     <div className="instruction-card">
       <h3 className="instruction-heading">Instructions</h3>
       <div className="instruction-type">
         {testType} Reading Test - Instructions
       </div>
-      <div className="instruction-content">
-        You will be given three reading passages based on which you will have to
-        answer a total of 40 questions. You will be able to surf between the
-        passages so you can attempt the passages in any order. You may select
-        any sentence(s) and right click to highlight or take notes.
-      </div>
-      <div className="instruction-note">
-        Since this is a practice test, it is not timed. You may take as long as
-        you wish to enter your answers before submitting the test.
-      </div>
+      {testType === "Practice" ? (
+        <div className="instruction-content">
+          You will be given 4 sections/audio tracks and you will have to answer
+          a total of 40 questions based on those tracks. Once you click on the
+          ‘Start the test’ button, the audio will start automatically. Enter
+          your responses/answers in the spaces given with the questions. On the
+          top right corner of this screen, you will find a Play button and a
+          volume slider. Kindly click on Play and adjust the volume as per your
+          comfort before starting the test.
+        </div>
+      ) : (
+        <div className="instruction-content">
+          You will be given three reading passages based on which you will have
+          to answer a total of 40 questions. You will be able to surf between
+          the passages so you can attempt the passages in any order. You may
+          select any sentence(s) and right click to highlight or take notes.
+        </div>
+      )}
+      {testType === "Practice" ? (
+        <div className="instruction-note">
+          Since this is a practice test, it is timed. You have 60 minutes to
+          enter your answers before submitting the test.
+        </div>
+      ) : (
+        <div className="instruction-note">
+          This is a {testType} Test and thus it is timed. The test will be auto
+          submitted after 60 minutes.
+        </div>
+      )}
       <p className="instruction-wishes">Good Luck!</p>
       <div className="instruction-attention">
         Do not click 'start test' untill you are told to do so.

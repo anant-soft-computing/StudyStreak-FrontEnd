@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import "../../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../../helpers/ajaxCall";

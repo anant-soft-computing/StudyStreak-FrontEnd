@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import BuyCourse from "../BuyCourse/BuyCourse";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
@@ -103,48 +102,42 @@ const DoubtSolving = ({
   );
 
   return (
-    <div>
-      {count === undefined ? (
-        <BuyCourse message="No One To One Doubt Solving Class Available , Please Buy a Course !!" />
-      ) : (
-        <div className="row">
-          <Tab
-            tabs={tabs}
-            activeTab={activeTab}
-            handleTabChange={handleTabChange}
-          />
-          <div className="tab-content tab__content__wrapper aos-init aos-animate">
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Upcoming" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <UpcomingClass
-                  isLoading={isLoading}
-                  classes={oneToOneDoubtSolvingClasses}
-                  message="No Upcoming One To One Doubt Solving Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
-            <div
-              className={`tab-pane fade ${
-                activeTab === "Available Slot" ? "show active" : ""
-              }`}
-            >
-              <div className="row">
-                <ClassList
-                  count={count}
-                  isLoading={isLoading}
-                  classes={oToclasses}
-                  classType="One-To-One-Doubt-Solving"
-                  message="No One To One Doubt Solving Classes Available !!, Please Schedule Your Classes"
-                />
-              </div>
-            </div>
+    <div className="row">
+      <Tab
+        tabs={tabs}
+        activeTab={activeTab}
+        handleTabChange={handleTabChange}
+      />
+      <div className="tab-content tab__content__wrapper aos-init aos-animate">
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Upcoming" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <UpcomingClass
+              isLoading={isLoading}
+              classes={oneToOneDoubtSolvingClasses}
+              message="No Upcoming One To One Doubt Solving Classes Available !!, Please Schedule Your Classes"
+            />
           </div>
         </div>
-      )}
+        <div
+          className={`tab-pane fade ${
+            activeTab === "Available Slot" ? "show active" : ""
+          }`}
+        >
+          <div className="row">
+            <ClassList
+              count={count}
+              isLoading={isLoading}
+              classes={oToclasses}
+              classType="One-To-One-Doubt-Solving"
+              message="No One To One Doubt Solving Classes Available !!, Please Schedule Your Classes"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

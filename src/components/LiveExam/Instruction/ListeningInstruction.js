@@ -1,6 +1,6 @@
 import React from "react";
 
-function ListeningInstruction({ testType = "Practice", startTest }) {
+function ListeningInstruction({ testType, startTest }) {
   return (
     <div className="instruction-card">
       <h3 className="instruction-heading">Instructions</h3>
@@ -17,8 +17,8 @@ function ListeningInstruction({ testType = "Practice", startTest }) {
         before starting the test.
       </div>
       <div className="instruction-note">
-        Since this is a practice test, it will not be timed. You can also replay
-        the track in case you wish to listen to it again before answering.
+        Since this is a {testType} Test, it will be timed. You cannot replay the
+        track. You will hear the conversations only once.
       </div>
       <p className="instruction-wishes">Good Luck!</p>
       <div className="instruction-attention">

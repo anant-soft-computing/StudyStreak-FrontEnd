@@ -6,8 +6,9 @@ import React, {
   useState,
 } from "react";
 import "../../../css/LiveExam.css";
-import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../../helpers/ajaxCall";
 import SmallModal from "../../UI/Modal";
 const Cheerio = require("cheerio");
@@ -236,11 +237,9 @@ const GeneralMTExam = () => {
             />
           </div>
         )}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: passage,
-          }}
-        ></div>
+        <SelectionProvider>
+          <Highlighter htmlString={passage} />
+        </SelectionProvider>
       </>
     );
   };

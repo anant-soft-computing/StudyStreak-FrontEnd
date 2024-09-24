@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import "../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../../../css/LiveExam.css"
+import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../../helpers/ajaxCall";
 import SmallModal from "../../UI/Modal";
 const Cheerio = require("cheerio");
@@ -233,11 +234,9 @@ const GeneralPTExam = () => {
             />
           </div>
         )}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: passage,
-          }}
-        ></div>
+        <SelectionProvider>
+          <Highlighter htmlString={passage} />
+        </SelectionProvider>
       </>
     );
   };

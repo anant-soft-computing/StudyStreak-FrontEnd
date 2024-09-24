@@ -1,7 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "../../css/LiveExam.css";
-import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
 import ReadingMTInstruction from "./MiniTestInstruction/ReadingMTInstruction";
@@ -421,68 +428,71 @@ const LiveExam = () => {
             />
           </div>
         )}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: passage,
-          }}
-        ></div>
+        <SelectionProvider>
+          <Highlighter htmlString={passage} />
+        </SelectionProvider>
       </>
     );
   };
 
-  const handleAnswerLinking = useCallback((e, questionId, next) => {
-    const { value, id, name, checked } = e.target;
+  const handleAnswerLinking = useCallback(
+    (e, questionId, next) => {
+      const { value, id, name, checked } = e.target;
 
-    const elementId = id.split("_")[0];
+      const elementId = id.split("_")[0];
 
-    const temp = [...examAnswer];
-    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+      const temp = [...examAnswer];
+      let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
 
-    // is this a multipleTypeQuestions
-    const isMultiQuestions = examAnswer[next]?.answers?.filter(
-      (item) => item.questionId === id
-    );
+      // is this a multipleTypeQuestions
+      const isMultiQuestions = examAnswer[next]?.answers?.filter(
+        (item) => item.questionId === id
+      );
 
-    if (isMultiQuestions?.length <= 1) {
-      temp[next].answers.forEach((item) => {
-        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
-        if (item.questionId === id && elementId === "InputText") {
-          const trimedValue = value.trim();
-          item.answer = trimedValue;
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.questionId === id && elementId === "Checkbox") {
-          item.answer = checked ? value : "";
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.questionId === id) {
-          item.answer = value;
-          conditionSatisfied = true; // Set the flag to true
-        }
-      });
+      if (isMultiQuestions?.length <= 1) {
+        temp[next].answers.forEach((item) => {
+          if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+          if (item.questionId === id && elementId === "InputText") {
+            const trimedValue = value.trim();
+            item.answer = trimedValue;
+            conditionSatisfied = true; // Set the flag to true
+          } else if (item.questionId === id && elementId === "Checkbox") {
+            item.answer = checked ? value : "";
+            conditionSatisfied = true; // Set the flag to true
+          } else if (item.questionId === id) {
+            item.answer = value;
+            conditionSatisfied = true; // Set the flag to true
+          }
+        });
 
-      setExamAnswer(temp);
-    } else {
-      const multipleTypeQuestions = checked
-        ? examAnswer[next].answers.findIndex(
-            (item) => item.questionId === id && item.answer === ""
-          )
-        : examAnswer[next].answers.findIndex(
-            (item) => item.questionId === id && item.answer !== ""
-          );
-      if (multipleTypeQuestions !== -1) {
-        temp[next].answers[multipleTypeQuestions].answer = checked ? value : "";
         setExamAnswer(temp);
       } else {
-        const contentElements = document.querySelectorAll(`[id="${id}"]`);
-        contentElements.forEach((element) => {
-          const isAlreadyAnswered = isMultiQuestions.findIndex(
-            (a) => a.answer === element.value
-          );
+        const multipleTypeQuestions = checked
+          ? examAnswer[next].answers.findIndex(
+              (item) => item.questionId === id && item.answer === ""
+            )
+          : examAnswer[next].answers.findIndex(
+              (item) => item.questionId === id && item.answer !== ""
+            );
+        if (multipleTypeQuestions !== -1) {
+          temp[next].answers[multipleTypeQuestions].answer = checked
+            ? value
+            : "";
+          setExamAnswer(temp);
+        } else {
+          const contentElements = document.querySelectorAll(`[id="${id}"]`);
+          contentElements.forEach((element) => {
+            const isAlreadyAnswered = isMultiQuestions.findIndex(
+              (a) => a.answer === element.value
+            );
 
-          if (isAlreadyAnswered === -1) element.checked = false;
-        });
+            if (isAlreadyAnswered === -1) element.checked = false;
+          });
+        }
       }
-    }
-  },[examAnswer]);
+    },
+    [examAnswer]
+  );
 
   useEffect(() => {
     if (

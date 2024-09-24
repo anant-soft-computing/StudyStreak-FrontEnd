@@ -1,3 +1,28 @@
+/* highlight */
+.relative {
+  position: relative;
+}
+
+.bg-lightgreen {
+  background-color: #15f5ba;
+}
+
+.bg-red {
+  background-color: #ff407d;
+}
+
+.select-none {
+  user-select: none;
+}
+
+.bg-yellow {
+  background-color: #f5dd61;
+}
+
+.bg-blue {
+  background-color: #59d5e0;
+}
+
 .lv-navbar {
   color: black;
   padding-left: 15px;

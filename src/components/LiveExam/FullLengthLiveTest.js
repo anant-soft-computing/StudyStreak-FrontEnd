@@ -6,14 +6,15 @@ import React, {
   useState,
 } from "react";
 import "../../css/LiveExam.css";
-import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { htmlToText } from "html-to-text";
+import { useNavigate, useParams } from "react-router-dom";
+import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
-import { htmlToText } from "html-to-text";
 import ReadingInstruction from "./Instruction/ReadingInstruction";
 import WritingInstruction from "./Instruction/WritingInstruction";
 import ListeningInstruction from "./Instruction/ListeningInstruction";
@@ -452,11 +453,9 @@ const FullLengthLiveExam = () => {
             />
           </div>
         )}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: passage,
-          }}
-        ></div>
+        <SelectionProvider>
+          <Highlighter htmlString={passage} />
+        </SelectionProvider>
       </>
     );
   };

@@ -1,7 +1,7 @@
 import React from "react";
 import cpuJack from "../../../img/service/img.png";
 
-function SpeakingInstruction({ testType = "Practice", startTest }) {
+function SpeakingInstruction({ testType, startTest }) {
   return (
     <div className="instruction-card mb-5 pb-5">
       <h3 className="instruction-heading">Instructions</h3>
@@ -30,7 +30,6 @@ function SpeakingInstruction({ testType = "Practice", startTest }) {
             In case of a desktop PC, plug in both the microphone cord and the
             headphone cord at the back of your CPU.
           </div>
-
           <div className="instruction-content">
             All the instructions will be given to you by the examiner. So listen
             carefully and respond in a clear voice.

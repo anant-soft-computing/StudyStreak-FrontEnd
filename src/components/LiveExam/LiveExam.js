@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -17,7 +17,6 @@ const LiveExam = () => {
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
-  const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(true);
@@ -431,7 +430,7 @@ const LiveExam = () => {
     );
   };
 
-  const handleAnswerLinking = (e, questionId, next) => {
+  const handleAnswerLinking = useCallback((e, questionId, next) => {
     const { value, id, name, checked } = e.target;
 
     const elementId = id.split("_")[0];
@@ -483,7 +482,7 @@ const LiveExam = () => {
         });
       }
     }
-  };
+  },[examAnswer]);
 
   useEffect(() => {
     if (
@@ -517,10 +516,10 @@ const LiveExam = () => {
         });
       }, 500);
     }
-  }, [instructionCompleted]);
+  }, [examAnswer, handleAnswerLinking, instructionCompleted]);
 
   const htmlContent = useMemo(() => {
-    const question = examData?.question || examData?.passage;
+    const question = examData?.question_other || examData?.passage;
     if (!question) return;
     if (examData?.exam_type === "Writing") {
       const temp = [];
@@ -671,12 +670,18 @@ const LiveExam = () => {
         };
         setExamAnswer(tempAnswerArr);
       }
-      setLinkAnswer(true);
 
       setUniqueIdArr(paginationsStrucutre);
       return questionPassage;
     }
-  }, [examData?.question]);
+  }, [
+    examAnswer,
+    examData?.exam_type,
+    examData?.id,
+    examData?.passage,
+    examData?.question_other,
+    examData?.question_structure,
+  ]);
 
   const reviewContent = () => (
     <div className="card-container">

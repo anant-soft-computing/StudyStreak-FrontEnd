@@ -459,7 +459,7 @@ const DiagnosticTest = () => {
   };
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
-    const question = paperData?.question;
+    const question = paperData?.question_other;
     let tempAnswer = {};
 
     if (paperData?.exam_type === "Writing") {
@@ -475,7 +475,7 @@ const DiagnosticTest = () => {
           },
         ],
         exam_type: paperData?.exam_type,
-        question: paperData?.question,
+        question: paperData?.question_other,
       };
       if (paperData?.exam_type === "Writing") {
         const tempUniqueArr = {

@@ -802,6 +802,7 @@ const DragDrop = () => {
       readingData.passage_image ? readingData.passage_image : ""
     );
     formData.append("question", htmlContent);
+    formData.append("question_other", htmlContent);
     tempAnswer.forEach((item, index) => {
       formData.append(`answers[${index}]question_number`, item.question_number);
       formData.append(`answers[${index}]answer_text`, item.answer_text);
@@ -858,6 +859,7 @@ const DragDrop = () => {
     formData.append("no_of_questions", listeningData.no_of_questions);
     formData.append("passage", listeningData.passage);
     formData.append("question", htmlContent);
+    formData.append("question_other", htmlContent);
     tempAnswer.forEach((item, index) => {
       formData.append(`answers[${index}]question_number`, item.question_number);
       formData.append(`answers[${index}]answer_text`, item.answer_text);

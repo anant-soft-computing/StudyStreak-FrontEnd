@@ -283,7 +283,7 @@ const PracticeLiveExam = () => {
   };
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
-    const question = paperData?.question;
+    const question = paperData?.question_other;
     let tempAnswer = {};
 
     if (paperData?.exam_type === "Writing") {

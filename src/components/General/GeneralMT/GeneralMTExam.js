@@ -19,7 +19,6 @@ const GeneralMTExam = () => {
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const [examData, setExamData] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
-  const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(0);
   const [timerRunning, setTimerRunning] = useState(true);
@@ -336,7 +335,7 @@ const GeneralMTExam = () => {
   }, [examAnswer, handleAnswerLinking]);
 
   const htmlContent = useMemo(() => {
-    const question = examData?.question || examData?.passage;
+    const question = examData?.question_other || examData?.passage;
     if (!question) return;
     if (examData?.exam_type === "General") {
       const $ = Cheerio.load(question.toString());
@@ -444,12 +443,18 @@ const GeneralMTExam = () => {
         };
         setExamAnswer(tempAnswerArr);
       }
-      setLinkAnswer(true);
 
       setUniqueIdArr(paginationsStrucutre);
       return questionPassage;
     }
-  }, [examData?.question]);
+  }, [
+    examAnswer,
+    examData?.exam_type,
+    examData?.id,
+    examData?.passage,
+    examData?.question_other,
+    examData?.question_structure,
+  ]);
 
   const reviewContent = () => (
     <div className="card-container">

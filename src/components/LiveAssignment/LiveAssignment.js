@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../../css/LiveExam.css"
+import "../../css/LiveExam.css";
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
 import { toast } from "react-toastify";
@@ -273,7 +273,7 @@ const LiveAssignment = () => {
   }, [examAnswer, handleAnswerLinking]);
 
   const htmlContent = useMemo(() => {
-    const question = examData?.question || examData?.passage;
+    const question = examData?.question_other || examData?.passage;
     if (!question) return;
     if (examData?.exam_type === "General") {
       const $ = Cheerio.load(question.toString());
@@ -386,7 +386,14 @@ const LiveAssignment = () => {
       setUniqueIdArr(paginationsStrucutre);
       return questionPassage;
     }
-  }, [examData?.question]);
+  }, [
+    examAnswer,
+    examData?.exam_type,
+    examData?.id,
+    examData?.passage,
+    examData?.question_other,
+    examData?.question_structure,
+  ]);
 
   const scrollToContent = (contentId) => {
     const container = containerRef.current;

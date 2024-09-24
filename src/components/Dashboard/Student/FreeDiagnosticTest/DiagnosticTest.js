@@ -6,12 +6,13 @@ import React, {
   useState,
 } from "react";
 import "../../../../css/LiveExam.css";
-import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { htmlToText } from "html-to-text";
+import { useNavigate, useParams } from "react-router-dom";
+import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import AudioRecorder from "../../../Exam-Create/AudioRecorder2";
 import SmallModal from "../../../UI/Modal";
-import { htmlToText } from "html-to-text";
 import ReadingInstruction from "../../../LiveExam/Instruction/ReadingInstruction";
 import WritingInstruction from "../../../LiveExam/Instruction/WritingInstruction";
 import ListeningInstruction from "../../../LiveExam/Instruction/ListeningInstruction";
@@ -449,11 +450,9 @@ const DiagnosticTest = () => {
             />
           </div>
         )}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: passage,
-          }}
-        ></div>
+        <SelectionProvider>
+          <Highlighter htmlString={passage} />
+        </SelectionProvider>
       </>
     );
   };

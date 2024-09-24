@@ -36,6 +36,7 @@
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
     "react-select-search": "^4.1.7",
+    "react-selection-highlighter": "^2.0.1",
     "react-slick": "^0.29.0",
     "react-speech-recognition": "^3.10.0",
     "react-toastify": "^9.1.3",

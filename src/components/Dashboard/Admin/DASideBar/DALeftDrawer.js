@@ -17,6 +17,7 @@ import testimonial from "../../../../img/icon/notebook.svg";
 import coupon from "../../../../img/icon/coupon.svg";
 import settings from "../../../../img/icon/settings.svg";
 import notice from "../../../../img/icon/notice.svg";
+import video from "../../../../img/icon/video.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -175,6 +176,11 @@ const DALeftDrawer = () => {
       name: "Resources",
       icon: <img src={resourceLink} alt="Resources" height={20} width={20} />,
       link: "/admin-resources",
+    },
+    {
+      name: "Upload Lesson",
+      icon: <img src={video} alt="Upload Lesson" height={20} width={20} />,
+      link: "/admin-upload-lesson",
     },
     {
       name: "Coupon",

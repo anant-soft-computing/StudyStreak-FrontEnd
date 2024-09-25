@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
-import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const ViewTestimonial = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -79,7 +79,7 @@ const ViewTestimonial = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading />
   ) : testimonialList.length > 0 ? (
     <Table rowData={testimonialList} columnDefs={columns} />
   ) : (

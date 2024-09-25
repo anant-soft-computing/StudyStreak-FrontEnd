@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const ViewExam = ({ activeTab }) => {
   const [examList, setExamList] = useState([]);
@@ -72,7 +72,7 @@ const ViewExam = ({ activeTab }) => {
         </div>
       </div>
       {isLoading ? (
-        <Loading text="Loading..." color="primary" />
+        <Loading />
       ) : miniTestData.length > 0 ? (
         <Table
           rowData={miniTestData}
@@ -129,7 +129,7 @@ const ViewExam = ({ activeTab }) => {
             </div>
           </div>
           {isLoading ? (
-            <Loading text="Loading..." color="primary" />
+            <Loading />
           ) : ptList.length > 0 ? (
             <Table
               rowData={ptList}
@@ -185,7 +185,7 @@ const ViewExam = ({ activeTab }) => {
             </div>
           </div>
           {isLoading ? (
-            <Loading text="Loading..." color="primary" />
+            <Loading />
           ) : fltList.length > 0 ? (
             <Table
               rowData={fltList}

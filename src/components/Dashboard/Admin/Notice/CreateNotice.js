@@ -1,9 +1,9 @@
 import React, { useReducer, useState } from "react";
-import SelectionBox from "../../../UI/SelectionBox";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
+import SelectionBox from "../../../UI/SelectionBox";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import Loading from "../../../UI/Loading";
 
 const initialNoticData = {
   studentId: [],
@@ -269,7 +269,7 @@ const CreateNotice = ({ setActiveTab }) => {
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Notice..." />
+                <Spinner animation="border" style={{ color: "#01579b" }} />
               ) : (
                 <button
                   className="default__button"

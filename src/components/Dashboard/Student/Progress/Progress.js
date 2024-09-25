@@ -88,27 +88,27 @@ const Progress = () => {
 
   useEffect(() => {
     fetchTestData(
-      "/test-submission/?test_type=exam_block&records=1",
+      // "/test-submission/?test_type=exam_block&records=1",
       setMiniTestData
     );
   }, []);
 
   useEffect(() => {
     fetchTestData(
-      "/test-submission/?test_type=practise_set&records=1",
+      // "/test-submission/?test_type=practise_set&records=1",
       setPracticeTestData
     );
   }, []);
 
   useEffect(() => {
-    fetchTestData("/test-submission/?test_type=flt&records=1", setFltData);
+    // fetchTestData("/test-submission/?test_type=flt&records=1", setFltData);
   }, []);
 
   useEffect(() => {
     const fetchPracticeAnswers = async () => {
       try {
         const response = await ajaxCall(
-          `/practice-answers/${practiceTestData?.[0]?.practise_set}/`,
+          // `/practice-answers/${practiceTestData?.[0]?.practise_set}/`,
           {
             headers: {
               Accept: "application/json",
@@ -215,7 +215,7 @@ const Progress = () => {
     const fetchFullTestAnswers = async () => {
       try {
         const response = await ajaxCall(
-          `/flt-answers/${fltData[0]?.flt}/`,
+          // `/flt-answers/${fltData[0]?.flt}/`,
           {
             headers: {
               Accept: "application/json",
@@ -388,7 +388,7 @@ const Progress = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student-stats/`,
+          // `/student-stats/`,
           {
             headers: {
               Accept: "application/json",
@@ -440,15 +440,15 @@ const Progress = () => {
                     <div className="dashboard__section__title">
                       <h4>Progress Report</h4>
                     </div>
-                    {availableBadges.length > 0 && (
+                    {availableBadges?.length > 0 && (
                       <div className="d-flex justify-content-center">
-                        <ul>
-                          {availableBadges.map((badge) => (
-                            <li className="ribbon" key={badge.id}>
+                        <div className="badge-list">
+                          {availableBadges?.map((badge) => (
+                            <div className="ribbon" key={badge.id}>
                               {badge.title}
-                            </li>
+                            </div>
                           ))}
-                        </ul>
+                        </div>
                       </div>
                     )}
                     <div className="dashboard__content__wraper common-background-color-across-app">

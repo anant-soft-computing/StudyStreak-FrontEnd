@@ -31,7 +31,7 @@ const reducerPT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const PT = ({ category, type, activeTab,setActiveTab }) => {
+const PT = ({ category, type, activeTab, setActiveTab }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -303,7 +303,7 @@ const PT = ({ category, type, activeTab,setActiveTab }) => {
       <div className="dashboard__form__wraper">
         <div className="dashboard__form__input">
           {isLoading ? (
-            <Loading text="Loading..." color="primary" />
+            <Loading />
           ) : exams[type]?.length > 0 ? (
             <div className="ag-theme-quartz">
               <AgGridReact

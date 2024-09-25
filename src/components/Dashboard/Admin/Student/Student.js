@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import DASideBar from "../DASideBar/DASideBar";
-import ajaxCall from "../../../../helpers/ajaxCall";
-import CheckIcon from "../../../UI/CheckIcon";
-import CancelIcon from "../../../UI/CancelIcon";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
+import CheckIcon from "../../../UI/CheckIcon";
+import DASideBar from "../DASideBar/DASideBar";
+import CancelIcon from "../../../UI/CancelIcon";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const Student = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -159,7 +159,7 @@ const Student = () => {
                     </div>
                     <div className="row">
                       {isLoading ? (
-                        <Loading text="Loading..." color="primary" />
+                        <Loading />
                       ) : studentList.length > 0 ? (
                         <Table rowData={studentList} columnDefs={columns} />
                       ) : (

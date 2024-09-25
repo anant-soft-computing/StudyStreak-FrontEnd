@@ -1,8 +1,8 @@
 import React, { useReducer, useState } from "react";
-import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
-import Loading from "../../../UI/Loading";
+import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const initialTestimonialData = {
   name: "",
@@ -180,7 +180,7 @@ const CreateTestimonial = ({ setActiveTab }) => {
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Testimonial..." />
+                <Spinner animation="border" style={{ color: "#01579b" }} />
               ) : (
                 <button
                   className="default__button"

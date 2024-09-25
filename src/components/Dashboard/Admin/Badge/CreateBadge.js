@@ -1,8 +1,8 @@
 import React, { useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import Loading from "../../../UI/Loading";
 
 const initialBadgeData = {
   title: "",
@@ -128,7 +128,7 @@ const CreateBadge = ({ setActiveTab }) => {
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Badge..." />
+                <Spinner animation="border" style={{ color: "#01579b" }} />
               ) : (
                 <button
                   className="default__button"

@@ -122,7 +122,7 @@ const RegularClassList = ({ isLoading, regularClass }) => {
   return (
     <>
       {isLoading ? (
-        <Loading text="Loading..." color="primary" />
+        <Loading />
       ) : regularClass.length > 0 ? (
         <Table rowData={regularClass} columnDefs={columns} />
       ) : (

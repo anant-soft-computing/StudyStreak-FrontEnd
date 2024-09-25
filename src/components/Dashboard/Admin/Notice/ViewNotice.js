@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const ViewNotice = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -117,7 +117,7 @@ const ViewNotice = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading />
   ) : noticeList.length > 0 ? (
     <Table rowData={noticeList} columnDefs={columns} />
   ) : (

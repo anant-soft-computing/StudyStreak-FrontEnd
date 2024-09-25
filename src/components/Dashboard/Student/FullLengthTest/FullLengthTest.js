@@ -191,7 +191,7 @@ const FullLengthTest = () => {
                     {packageCount === 0 ? (
                       <BuyCourse message="No Full Length Test Available, Please Buy a Course !!" />
                     ) : isLoading ? (
-                      <Loading text="Loading..." color="primary" />
+                      <Loading />
                     ) : sortedFLT.length > 0 ? (
                       <Table rowData={sortedFLT} columnDefs={columns} />
                     ) : (

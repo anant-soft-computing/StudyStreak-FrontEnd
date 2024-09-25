@@ -131,7 +131,7 @@ const Lesson = () => {
           <div className="container-fluid full__width__padding">
             <div className="row">
               {isLoading ? (
-                <Loading text="Loading..." color="primary" />
+                <Loading />
               ) : (
                 <>
                   {currentLesson?.lesson && currentLesson?.course && (

@@ -1188,7 +1188,7 @@ const FullLengthLiveExam = () => {
     </div>
   ) : isLoading ? (
     <div className="mt-4">
-      <Loading text="Loading Exam..." color="primary" />
+      <Loading />
     </div>
   ) : (
     <>

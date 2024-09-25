@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const Download = ({ url }) =>
   url !== "-" ? (
@@ -142,7 +142,7 @@ const ViewPaperTest = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken]);
 
   if (isLoading) {
-    return <Loading text="Loading..." color="primary" />;
+    return <Loading />;
   }
 
   if (paperTestList.length === 0) {

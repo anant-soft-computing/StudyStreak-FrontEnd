@@ -158,7 +158,7 @@ const Resources = () => {
                       {packageCount === 0 ? (
                         <BuyCourse message="No Resources Available, Please Buy a Course !!" />
                       ) : isLoading ? (
-                        <Loading text="Loading..." color="primary" />
+                        <Loading />
                       ) : resourcesList.length > 0 ? (
                         <Table rowData={resourcesList} columnDefs={columns} />
                       ) : (

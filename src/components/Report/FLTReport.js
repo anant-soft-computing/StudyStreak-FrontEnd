@@ -195,7 +195,7 @@ const FLTReport = () => {
                     />
                     <div className="row mt-3">
                       {isLoading ? (
-                        <Loading text="Loading...." color="primary" />
+                        <Loading />
                       ) : reportData.length > 0 ? (
                         <>
                           <Table rowData={reportData} columnDefs={columns} />

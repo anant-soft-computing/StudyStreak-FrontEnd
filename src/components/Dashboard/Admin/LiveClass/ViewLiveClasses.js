@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import moment from "moment";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 110 },
@@ -98,7 +98,7 @@ const ViewLiveClasses = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken]);
 
   if (isLoading) {
-    return <Loading text="Loading..." color="primary" />;
+    return <Loading />;
   }
 
   if (liveClassList.length === 0) {

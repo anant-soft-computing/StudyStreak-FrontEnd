@@ -1,9 +1,9 @@
-import moment from "moment";
 import React, { useReducer, useState } from "react";
-import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
-import Loading from "../../../UI/Loading";
+import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
+import moment from "moment";
+import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
 import SelectionBox from "../../../UI/SelectionBox";
 
@@ -145,7 +145,7 @@ const CreateRecurrenceLiveClass = ({ setActiveTab }) => {
       ),
       settings: {
         auto_recording: "cloud",
-      }
+      },
     };
 
     try {
@@ -539,10 +539,7 @@ const CreateRecurrenceLiveClass = ({ setActiveTab }) => {
                   <div className="text-danger mb-2">{formStatus.errMsg}</div>
                 )}
                 {formStatus.isSubmitting ? (
-                  <Loading
-                    color="primary"
-                    text="Creating Recurrence Live Class..."
-                  />
+                  <Spinner animation="border" style={{ color: "#01579b" }} />
                 ) : (
                   <button
                     className="default__button"

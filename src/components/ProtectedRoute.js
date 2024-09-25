@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import Loading from "../components/UI/Loading";
+import { useDispatch, useSelector } from "react-redux";
 import { useCheckAuth } from "../hooks/useCheckAuth";
+import Loading from "../components/UI/Loading";
 
 const ProtectedRoute = ({ element: Element }) => {
   const dispatch = useDispatch();
@@ -15,7 +15,7 @@ const ProtectedRoute = ({ element: Element }) => {
   }, [authData, checkAuth, dispatch]);
 
   if (authData?.authLoading) {
-    return <Loading color="primary" text="Loading ..." />;
+    return <Loading />;
   }
 
   if (!authData?.loggedIn) {

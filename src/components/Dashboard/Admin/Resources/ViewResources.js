@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const DownloadButton = ({ url }) =>
   url !== "-" ? (
@@ -144,7 +144,7 @@ const ViewResources = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading />
   ) : resourcesList.length > 0 ? (
     <Table rowData={resourcesList} columnDefs={columns} />
   ) : (

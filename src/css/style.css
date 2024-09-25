@@ -929,11 +929,6 @@ li {
   justify-content: center;
   -ms-flex-align: center;
   align-items: center;
-  height: 100vh;
-  background: #ffffff;
-  position: fixed;
-  z-index: 999999;
-  width: 100%;
   top: 0;
   left: 0;
   right: 0;
@@ -945,16 +940,29 @@ li {
 }
 
 .back__loader_logo img {
-  width: 40px;
+  width: 30px;
+  animation: flip 1.5s ease-in-out infinite;
+}
+
+@keyframes flip {
+  0% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(-1);
+  }
+  100% {
+    transform: scaleX(1);
+  }
 }
 
 #back__circle_loader {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border-style: solid;
-  border-width: 5px;
-  border-top-color: #465fe9;
-  border-right-color: #465fe9;
+  border-width: 3px;
+  border-top-color: #01579b;
+  border-right-color: #01579b;
   border-bottom-color: #d5eaff;
   border-left-color: #d5eaff;
   border-radius: 50%;
@@ -16884,6 +16892,19 @@ div.gridarea__wraper {
   background-color: lightgray;
   border: 1px solid #01579b;
   font-weight: 600;
+}
+
+.badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 110px;
+  padding: 0;
+}
+
+@media (max-width: 576px) {
+  .badge-list {
+    display: block;
+  }
 }
 
 /* HTML: <div class="ribbon">Your text content</div> */

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { useSelector } from "react-redux";
 import Loading from "../../../UI/Loading";
 
 const MyCourse = () => {
@@ -139,7 +139,7 @@ const MyCourse = () => {
                     </div>
                     <div className="row">
                       {isLoading ? (
-                        <Loading text="Loading..." color="primary" />
+                        <Loading />
                       ) : courses?.length > 0 ? (
                         courses?.map((course) => (
                           <div

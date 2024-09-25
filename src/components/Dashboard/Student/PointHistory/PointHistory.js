@@ -207,7 +207,7 @@ const PointHistory = ({ setTotalPoints }) => {
       <div className="col-xl-12">
         <div className="dashboard__table table-responsive">
           {isLoading ? (
-            <Loading text="Loading..." color="primary" />
+            <Loading />
           ) : getFilteredDataList().length > 0 ? (
             <Table rowData={getFilteredDataList()} columnDefs={columns} />
           ) : (

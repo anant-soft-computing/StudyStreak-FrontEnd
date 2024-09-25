@@ -155,7 +155,7 @@ const PaperTest = () => {
                       {packageCount === 0 ? (
                         <BuyCourse message="No Paper Test Available, Please Buy a Course !!" />
                       ) : isLoading ? (
-                        <Loading text="Loading..." color="primary" />
+                        <Loading />
                       ) : paperTestList.length > 0 ? (
                         <Table rowData={paperTestList} columnDefs={columns} />
                       ) : (

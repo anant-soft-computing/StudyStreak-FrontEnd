@@ -1,4 +1,10 @@
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -59,12 +65,6 @@ const Login = () => {
     checkAuth();
   }, [authData, checkAuth]);
 
-  useEffect(() => {
-    if (credentials) {
-      doLogin();
-    }
-  }, [credentials]);
-
   const setFormError = (errMsg) => {
     setFormStatus({
       isError: true,
@@ -73,7 +73,7 @@ const Login = () => {
     });
   };
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     if (!loginData.username) {
       setFormError("User Name is Required");
       return false;
@@ -88,121 +88,133 @@ const Login = () => {
       isSubmitting: false,
     });
     return true;
-  };
+  }, [loginData.password, loginData.username]);
 
-  const doLogin = async (e) => {
-    resetReducerForm();
-    if (e) e.preventDefault();
-    if (!credentials && !validateForm()) return;
-
-    setFormStatus({
-      ...formStatus,
-      isSubmitting: true,
-    });
-
-    const data = credentials
-      ? {
-          email: credentials.email,
-          family_name: credentials.family_name,
-          given_name: credentials.given_name,
-          aud: credentials.aud,
-        }
-      : loginData;
-
-    controller.current = new AbortController();
-
-    const signal = controller.current.signal;
-
-    const gotLate = setTimeout(() => {
-      console.log("------->");
-    }, 4000);
-
-    const timeOutFunction = () => {
-      controller.current.abort();
-    };
-
-    try {
-      const response = await ajaxCall(
-        credentials ? "/auth/google/" : "/login/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-          withCredentials: true,
-          signal,
-        },
-        8000,
-        timeOutFunction
-      );
-      clearTimeout(gotLate);
-      if (response.status === 200) {
-        toast.success(response.data?.msg);
-        handleLoginSuccess(response);
-      } else {
-        setFormStatus({
-          isError: true,
-          errMsg: response.data?.errors,
-          isSubmitting: false,
-        });
-      }
-    } catch (error) {
-      setFormStatus({
-        isError: true,
-        errMsg: "Some Problem Occurred. Please try again.",
-        isSubmitting: false,
-      });
-    }
-  };
-
-  const handleLoginSuccess = (response) => {
-    const localObj = {
-      accessToken: response.data?.token?.access,
-      refreshToken: response.data?.token?.refresh,
-      user_type: response.data?.user_status,
-      userId: response.data?.userid,
-      timeOfLogin: Date.now(),
-      user_role: response.data?.user_role,
-      username: loginData.username,
-    };
-    setToLocalStorage("loginInfo", localObj, true);
-    dispatch(
-      authAction.setAuthStatus({
-        username: loginData.username,
-        loggedIn: true,
+  const handleLoginSuccess = useCallback(
+    (response) => {
+      const localObj = {
         accessToken: response.data?.token?.access,
         refreshToken: response.data?.token?.refresh,
         user_type: response.data?.user_status,
-        user_role: response.data?.user_role,
         userId: response.data?.userid,
         timeOfLogin: Date.now(),
-        logInOperation: 1,
-      })
-    );
-    setTimeout(
-      () =>
-        dispatch(
-          authAction.setAuthStatus({
-            username: "",
-            loggedIn: false,
-            accessToken: null,
-            refreshToken: null,
-            userId: null,
-            user_type: null,
-            user_role: null,
-            timeOfLogin: null,
-            logInOperation: -1,
-          })
-        ),
-      1000 * 60 * 30
-    );
-    toast.success("Welcome To Study Streak");
-    response.data.user_role === "admin"
-      ? navigate("/admin-dashboard")
-      : navigate("/studentDashboard");
-  };
+        user_role: response.data?.user_role,
+        username: loginData.username,
+      };
+      setToLocalStorage("loginInfo", localObj, true);
+      dispatch(
+        authAction.setAuthStatus({
+          username: loginData.username,
+          loggedIn: true,
+          accessToken: response.data?.token?.access,
+          refreshToken: response.data?.token?.refresh,
+          user_type: response.data?.user_status,
+          user_role: response.data?.user_role,
+          userId: response.data?.userid,
+          timeOfLogin: Date.now(),
+          logInOperation: 1,
+        })
+      );
+      setTimeout(
+        () =>
+          dispatch(
+            authAction.setAuthStatus({
+              username: "",
+              loggedIn: false,
+              accessToken: null,
+              refreshToken: null,
+              userId: null,
+              user_type: null,
+              user_role: null,
+              timeOfLogin: null,
+              logInOperation: -1,
+            })
+          ),
+        1000 * 60 * 30
+      );
+      toast.success("Welcome To Study Streak");
+      response.data.user_role === "admin"
+        ? navigate("/admin-dashboard")
+        : navigate("/studentDashboard");
+    },
+    [dispatch, loginData.username, navigate]
+  );
+
+  const doLogin = useCallback(
+    async (e) => {
+      resetReducerForm();
+      if (e) e.preventDefault();
+      if (!credentials && !validateForm()) return;
+
+      setFormStatus({
+        ...formStatus,
+        isSubmitting: true,
+      });
+
+      const data = credentials
+        ? {
+            email: credentials.email,
+            family_name: credentials.family_name,
+            given_name: credentials.given_name,
+            aud: credentials.aud,
+          }
+        : loginData;
+
+      controller.current = new AbortController();
+
+      const signal = controller.current.signal;
+
+      const gotLate = setTimeout(() => {
+        console.log("------->");
+      }, 4000);
+
+      const timeOutFunction = () => {
+        controller.current.abort();
+      };
+
+      try {
+        const response = await ajaxCall(
+          credentials ? "/auth/google/" : "/login/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify(data),
+            withCredentials: true,
+            signal,
+          },
+          8000,
+          timeOutFunction
+        );
+        clearTimeout(gotLate);
+        if (response.status === 200) {
+          toast.success(response.data?.msg);
+          handleLoginSuccess(response);
+        } else {
+          setFormStatus({
+            isError: true,
+            errMsg: response.data?.errors,
+            isSubmitting: false,
+          });
+        }
+      } catch (error) {
+        setFormStatus({
+          isError: true,
+          errMsg: "Some Problem Occurred. Please try again.",
+          isSubmitting: false,
+        });
+      }
+    },
+    [credentials, formStatus, handleLoginSuccess, loginData, validateForm]
+  );
+
+  useEffect(() => {
+    if (credentials) {
+      doLogin();
+    }
+  }, [credentials, doLogin]);
 
   const toggleForm = () => {
     setActiveTab((prevTab) => (prevTab === "login" ? "signup" : "login"));

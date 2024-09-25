@@ -268,7 +268,7 @@ const RecordedClasses = () => {
                       {packageCount === 0 ? (
                         <BuyCourse message="No Recorded Classes Available, Please Buy a Course !!" />
                       ) : isLoading ? (
-                        <Loading text="Loading..." color="primary" />
+                        <Loading />
                       ) : recordClasses.length > 0 ? (
                         <Table rowData={recordClasses} columnDefs={columns} />
                       ) : (

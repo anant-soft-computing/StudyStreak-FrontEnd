@@ -256,7 +256,7 @@ const Dashboard = () => {
   }, [selectedCourse]);
 
   if (isLoading) {
-    return <Loading text="Loading..." color="primary" />;
+    return <Loading />;
   }
 
   return (

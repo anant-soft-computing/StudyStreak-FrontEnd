@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import moment from "moment";
 import { toast } from "react-toastify";
+import moment from "moment";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -180,7 +180,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
   ];
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading />
   ) : classes.length > 0 ? (
     <Table rowData={classes} columnDefs={columns} />
   ) : (

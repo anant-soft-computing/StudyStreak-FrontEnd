@@ -1,11 +1,11 @@
 import React, { useReducer, useState } from "react";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
 import SelectionBox from "../../../UI/SelectionBox";
 import Tab from "../../../UI/Tab";
-import Loading from "../../../UI/Loading";
 
 const initialCourseData = {
   Course_Title: "",
@@ -776,7 +776,7 @@ const CreateCourse = ({ setMainTab }) => {
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Course..." />
+                <Spinner animation="border" style={{ color: "#01579b" }} />
               ) : (
                 <button
                   className="default__button"

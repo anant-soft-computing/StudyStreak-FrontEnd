@@ -1,10 +1,10 @@
 import React, { useReducer, useState } from "react";
-import { useSelector } from "react-redux";
-import SingleSelection from "../../../UI/SingleSelect";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
 import Tab from "../../../UI/Tab";
-import Loading from "../../../UI/Loading";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import SingleSelection from "../../../UI/SingleSelect";
 
 const initialPackageData = {
   package_name: "",
@@ -683,7 +683,7 @@ const CreatePackage = ({ setMainTab }) => {
               <div className="text-danger mb-2">{formStatus.errMsg}</div>
             )}
             {formStatus.isSubmitting ? (
-              <Loading color="primary" text="Creating Package..." />
+              <Spinner animation="border" style={{ color: "#01579b" }} />
             ) : (
               <button
                 className="default__button"

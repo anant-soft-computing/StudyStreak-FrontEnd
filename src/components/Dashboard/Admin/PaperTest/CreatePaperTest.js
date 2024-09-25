@@ -1,9 +1,9 @@
 import React, { useReducer, useState } from "react";
-import SelectionBox from "../../../UI/SelectionBox";
-import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import { toast } from "react-toastify";
-import Loading from "../../../UI/Loading";
+import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
+import SelectionBox from "../../../UI/SelectionBox";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const initialPaperTestData = {
   student: [],
@@ -302,7 +302,7 @@ const CreatePaperTest = ({ setActiveTab }) => {
                 </div>
               </div>
             )}
-             <div className="col-xl-6">
+            <div className="col-xl-6">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Link</label>
@@ -388,7 +388,7 @@ const CreatePaperTest = ({ setActiveTab }) => {
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Paper Test..." />
+                <Spinner animation="border" style={{ color: "#01579b" }} />
               ) : (
                 <button
                   className="default__button"

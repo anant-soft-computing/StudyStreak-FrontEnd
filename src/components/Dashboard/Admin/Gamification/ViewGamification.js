@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const specificColumns = {
   "Flash Card": [
@@ -275,7 +275,7 @@ const ViewGamification = ({ content, activeTab }) => {
   const columns = [...(specificColumns[content] || [])];
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading />
   ) : filteredDataList().length > 0 ? (
     <Table rowData={filteredDataList()} columnDefs={columns} />
   ) : (

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
   { headerName: "No.", field: "no", resizable: false, width: 60 },
@@ -83,7 +83,7 @@ const ViewCourse = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken]);
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading />
   ) : courseList.length > 0 ? (
     <Table rowData={courseList} columnDefs={columns} />
   ) : (

@@ -117,7 +117,7 @@ const FlashCard = () => {
                     {packageCount === 0 ? (
                       <BuyCourse message="No Flash Card Available, Please Buy a Course !!" />
                     ) : isLoading ? (
-                      <Loading text="Loading...." color="primary" />
+                      <Loading />
                     ) : flashCardList.length > 0 ? (
                       <Table rowData={flashCardList} columnDefs={columns} />
                     ) : (

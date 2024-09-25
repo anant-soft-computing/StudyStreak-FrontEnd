@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import ajaxCall from "../../../../helpers/ajaxCall";
 import CheckIcon from "../../../UI/CheckIcon";
 import CancelIcon from "../../../UI/CancelIcon";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const ViewPackages = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -128,7 +128,7 @@ const ViewPackages = ({ activeTab }) => {
   ];
 
   return isLoading ? (
-    <Loading text="Loading..." color="primary" />
+    <Loading />
   ) : packageList.length > 0 ? (
     <Table rowData={packageList} columnDefs={columns} />
   ) : (

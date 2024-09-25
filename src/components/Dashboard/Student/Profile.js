@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import DSSidebar from "./DSSideBar/DSSideBar";
 import { useNavigate } from "react-router-dom";
-import ajaxCall from "../../../helpers/ajaxCall";
+import Loading from "../../UI/Loading";
 import CheckIcon from "../../UI/CheckIcon";
 import CancelIcon from "../../UI/CancelIcon";
-import Loading from "../../UI/Loading";
+import DSSidebar from "./DSSideBar/DSSideBar";
+import ajaxCall from "../../../helpers/ajaxCall";
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -63,7 +63,7 @@ const Profile = () => {
                       </button>
                     </div>
                     {isLoading ? (
-                      <Loading text="Loading..." color="primary" />
+                      <Loading />
                     ) : (
                       <div className="d-flex">
                         <div className="row">
@@ -243,7 +243,7 @@ const Profile = () => {
                       <h4>Exam Taken Before</h4>
                     </div>
                     {isLoading ? (
-                      <Loading text="Loading..." color="primary" />
+                      <Loading />
                     ) : (
                       <div className="d-flex">
                         <div className="row">

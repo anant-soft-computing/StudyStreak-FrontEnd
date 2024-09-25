@@ -102,7 +102,7 @@ const FreeDiagnosticTest = () => {
                       <h4>Free Diagnostic Test</h4>
                     </div>
                     {isLoading ? (
-                      <Loading text="Loading..." color="primary" />
+                      <Loading />
                     ) : freeDiagnosticTest.length > 0 ? (
                       <Table
                         rowData={freeDiagnosticTest}

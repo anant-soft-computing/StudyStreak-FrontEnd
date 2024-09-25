@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import moment from "moment/moment";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
-import moment from "moment/moment";
 
 const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
   const navigate = useNavigate();
@@ -62,14 +62,15 @@ const CourseListItem = ({ search, selectedCategory, selectedLevel }) => {
     const hours = Math.floor(totalMinutes / 3600);
     const minutes = Math.floor((totalMinutes % 3600) / 60);
 
-    return `${hours > 0 ? `${hours} Hr${hours > 1 ? 's' : ''} ` : ''}${
-      minutes} Minute${minutes !== 1 ? 's' : ''}`;
+    return `${
+      hours > 0 ? `${hours} Hr${hours > 1 ? "s" : ""} ` : ""
+    }${minutes} Minute${minutes !== 1 ? "s" : ""}`;
   };
 
   return (
     <>
       {isLoading ? (
-        <Loading text="Loading..." color="primary" />
+        <Loading />
       ) : (
         <div className="row">
           {courseList.length > 0 ? (

@@ -1,16 +1,13 @@
 import React from "react";
+import studyStreak from "../../img/logo/Logo1.png";
 
-const Loading = ({ color, text }) => {
+const Loading = () => {
   return (
-    <div className="text-center">
-      <button className={`btn btn-${color}`} type="button">
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>{" "}
-        {text}
-      </button>
+    <div id="back__preloader">
+      <div id="back__circle_loader" />
+      <div class="back__loader_logo">
+        <img src={studyStreak} alt="Loading" />
+      </div>
     </div>
   );
 };

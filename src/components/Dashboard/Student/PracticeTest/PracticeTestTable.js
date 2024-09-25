@@ -1,8 +1,8 @@
 import React from "react";
-import Table from "../../../UI/Table";
-import { useNavigate } from "react-router-dom";
-import Loading from "../../../UI/Loading";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 
 const PracticeTestTable = ({
   pendingTest,
@@ -220,7 +220,7 @@ const PracticeTestTable = ({
   return (
     <>
       {isLoading ? (
-        <Loading text="Loading...." color="primary" />
+        <Loading />
       ) : testData.length > 0 ? (
         <Table rowData={rowData} columnDefs={columns} />
       ) : (

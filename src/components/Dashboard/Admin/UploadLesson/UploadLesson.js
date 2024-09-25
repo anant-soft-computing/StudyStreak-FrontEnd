@@ -1,9 +1,9 @@
 import React, { useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
 import DASideBar from "../DASideBar/DASideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import Loading from "../../../UI/Loading";
 
 const initialData = {
   fileName: null,
@@ -132,7 +132,10 @@ const UploadLesson = () => {
                             </div>
                           )}
                           {formStatus.isSubmitting ? (
-                            <Loading color="primary" text="Uploading ..." />
+                            <Spinner
+                              animation="border"
+                              style={{ color: "#01579b" }}
+                            />
                           ) : (
                             <button
                               className="default__button"

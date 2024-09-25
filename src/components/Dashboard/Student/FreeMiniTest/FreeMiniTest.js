@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import DSSidebar from "../DSSideBar/DSSideBar";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
+import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const FreeMiniTest = () => {
@@ -164,7 +164,7 @@ const FreeMiniTest = () => {
                     <div className="row">
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         {isLoading ? (
-                          <Loading text="Loading..." color="primary" />
+                          <Loading />
                         ) : testData.length > 0 ? (
                           <Table rowData={testData} columnDefs={columns} />
                         ) : (

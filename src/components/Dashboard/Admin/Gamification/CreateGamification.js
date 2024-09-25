@@ -1,9 +1,9 @@
 import React, { useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
-import Loading from "../../../UI/Loading";
 
 const initialGamificationData = {
   model: "Flash Card",
@@ -81,9 +81,7 @@ const CreateGamification = ({ setActiveTab }) => {
         setActiveTab("View Gamification");
         toast.success("Gamification Created Successfully");
       } else if (response.status === 400) {
-        toast.error(
-          `This ${gamificationData.model} already exists.`
-        );
+        toast.error(`This ${gamificationData.model} already exists.`);
       } else {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -168,7 +166,7 @@ const CreateGamification = ({ setActiveTab }) => {
                 <div className="text-danger mb-2">{formStatus.errMsg}</div>
               )}
               {formStatus.isSubmitting ? (
-                <Loading color="primary" text="Creating Gamification..." />
+                <Spinner animation="border" style={{ color: "#01579b" }} />
               ) : (
                 <button
                   className="default__button"

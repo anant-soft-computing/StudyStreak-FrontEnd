@@ -1,10 +1,10 @@
 import React, { useReducer, useState } from "react";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Spinner } from "react-bootstrap";
+import moment from "moment";
 import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
-import { toast } from "react-toastify";
-import Loading from "../../../UI/Loading";
-import moment from "moment";
 import SelectionBox from "../../../UI/SelectionBox";
 
 const initialLiveClassData = {
@@ -376,7 +376,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
                   <div className="text-danger mb-2">{formStatus.errMsg}</div>
                 )}
                 {formStatus.isSubmitting ? (
-                  <Loading color="primary" text="Creating Live Class..." />
+                  <Spinner animation="border" style={{ color: "#01579b" }} />
                 ) : (
                   <button
                     className="default__button"

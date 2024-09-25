@@ -44,7 +44,7 @@ const FLT = ({ activeTab, setActiveTab }) => {
 
   const resetReducerForm = () => {
     dispatchFLT({ type: "reset" });
-    setActiveTab("View Exam")
+    setActiveTab("View Exam");
   };
 
   useEffect(() => {
@@ -239,7 +239,7 @@ const FLT = ({ activeTab, setActiveTab }) => {
             <div className="dashboard__form__input">
               <label>(1) Reading : </label>
               {isLoading ? (
-                <Loading text="Loading..." color="primary" />
+                <Loading />
               ) : exams.Reading?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
@@ -259,7 +259,7 @@ const FLT = ({ activeTab, setActiveTab }) => {
             <div className="dashboard__form__input">
               <label>(2) Writing : </label>
               {isLoading ? (
-                <Loading text="Loading..." color="primary" />
+                <Loading />
               ) : exams.Writing?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
@@ -281,7 +281,7 @@ const FLT = ({ activeTab, setActiveTab }) => {
             <div className="dashboard__form__input">
               <label>(3) Listening : </label>
               {isLoading ? (
-                <Loading text="Loading..." color="primary" />
+                <Loading />
               ) : exams.Listening?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact
@@ -301,7 +301,7 @@ const FLT = ({ activeTab, setActiveTab }) => {
             <div className="dashboard__form__input">
               <label>(4) Speaking : </label>
               {isLoading ? (
-                <Loading text="Loading..." color="primary" />
+                <Loading />
               ) : exams.Speaking?.length > 0 ? (
                 <div className="ag-theme-quartz">
                   <AgGridReact

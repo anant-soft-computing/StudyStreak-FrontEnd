@@ -221,7 +221,7 @@ const TestReport = ({
   return (
     <div>
       {isLoading ? (
-        <Loading text="Loading...." color="primary" />
+        <Loading />
       ) : reportData.length > 0 ? (
         <>
           <div className="col-xl-6">

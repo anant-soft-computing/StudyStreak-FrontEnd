@@ -375,10 +375,22 @@ const PracticeSpeakingLiveExam = () => {
               );
               return (
                 <div className="lv-question-container" key={item.id}>
+                  <div
+                    className="lv-speaking-question"
+                    style={{
+                      flex: 1,
+                    }}
+                  >
+                    <p> {i + 1} :</p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: item.question,
+                      }}
+                    />
+                  </div>
                   <div className="d-flex align-items-center lv-btn-mic-container">
-                    {i + 1} :
                     <button
-                      className="lv-speaking-button"
+                      className="lv-speaking-button lv-speaking-button"
                       onClick={() => speak(item.question, item.id)}
                       disabled={speaking?.[speakingIndex]?.status === 1}
                       style={{
@@ -416,44 +428,47 @@ const PracticeSpeakingLiveExam = () => {
                 );
               })}
           </div>
-          <div className="lv-footer-btn">
-            <button
-              className="lv-footer-button"
-              style={{
-                display: next === 0 ? "none" : "block",
-              }}
-              onClick={() => {
-                setNext(next - 1);
-              }}
-            >
-              <span>Back</span>
-            </button>
-            <button
-              className="lv-footer-button"
-              style={{
-                display:
-                  next === fullPaper?.[examType].Speaking?.length - 1
-                    ? "none"
-                    : "block",
-              }}
-              onClick={() => {
-                setNext(next + 1);
-              }}
-            >
-              <span>&#10152;</span>
-            </button>
-            <button
-              className="lv-footer-button"
-              style={{
-                display:
-                  next === fullPaper?.[examType].Speaking?.length - 1
-                    ? "block"
-                    : "none",
-              }}
-              onClick={practiceTestSubmit}
-            >
-              Submit
-            </button>
+          <div className="d-flex justify-content-between mb-2">
+            <div className="lv-question-pagination" />
+            <div className="lv-footer-btn">
+              <button
+                className="lv-footer-button"
+                style={{
+                  display: next === 0 ? "none" : "block",
+                }}
+                onClick={() => {
+                  setNext(next - 1);
+                }}
+              >
+                <span>Back</span>
+              </button>
+              <button
+                className="lv-footer-button"
+                style={{
+                  display:
+                    next === fullPaper?.[examType].Speaking?.length - 1
+                      ? "none"
+                      : "block",
+                }}
+                onClick={() => {
+                  setNext(next + 1);
+                }}
+              >
+                <span>&#10152;</span>
+              </button>
+              <button
+                className="lv-footer-button"
+                style={{
+                  display:
+                    next === fullPaper?.[examType].Speaking?.length - 1
+                      ? "block"
+                      : "none",
+                }}
+                onClick={practiceTestSubmit}
+              >
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>

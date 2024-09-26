@@ -353,10 +353,10 @@ const ScoreCard = ({ course }) => {
               {miniTestData?.length > 0 ? (
                 <div>
                   <div className="gridarea__price d-flex align-items-center gap-2 mb-0">
-                    <h3>
+                    <h4>
                       {miniTestData?.[0]?.exam_name}, Score :{" "}
                       {miniTestData?.[0]?.band}.0
-                    </h3>
+                    </h4>
                   </div>
                   <div
                     className="gridarea__bottom"
@@ -402,13 +402,13 @@ const ScoreCard = ({ course }) => {
             {practiceTestData?.length > 0 ? (
               <div>
                 <div className="gridarea__price d-flex align-items-center gap-2 mb-0">
-                  <h3>
+                  <h4>
                     {practiceTestData?.[0]?.practise_set_name},
                     {practiceTestData?.[0]?.practise_set_type === "General"
                       ? " Score :"
                       : " Band :"}{" "}
                     {band.toFixed(1)}
-                  </h3>
+                  </h4>
                 </div>
                 <div
                   className="gridarea__bottom"
@@ -475,9 +475,9 @@ const ScoreCard = ({ course }) => {
               {fltData?.length > 0 ? (
                 <div>
                   <div className="gridarea__price d-flex gap-2 mb-0">
-                    <h3>
+                    <h4>
                       {fltData?.[0]?.flt_set_name}, Band : {fltBand}
-                    </h3>
+                    </h4>
                   </div>
                   <div
                     className="gridarea__bottom"

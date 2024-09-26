@@ -226,6 +226,12 @@ const DSLeftDrawer = () => {
             link: "/studentMyCourse",
           },
           {
+            name: "Paper Test",
+            icon: <img src={paperTest} alt="Paper Test" />,
+            link: "/paperTest",
+            state: { packageCount: count?.count },
+          },
+          {
             name: "Mini Test",
             icon: <img src={assignment} alt="Mini Test" />,
             link: "/mockTest",

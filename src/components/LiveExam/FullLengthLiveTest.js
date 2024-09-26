@@ -1246,9 +1246,24 @@ const FullLengthLiveExam = () => {
                     (element) => element.id === item.id
                   );
                   return (
-                    <div className="lv-question-container">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        borderBottom: "grey 1px solid",
+                        paddingBottom: "20px",
+                        marginTop: "15px",
+                      }}
+                    >
+                      <div className="lv-speaking-question">
+                        <p> {i + 1} :</p>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: item.question,
+                          }}
+                        />
+                      </div>
                       <div className="d-flex align-items-center lv-btn-mic-container">
-                        {i + 1} :
                         <button
                           className="lv-footer-button lv-speaking-button"
                           onClick={() => speak(item.question, item.id)}

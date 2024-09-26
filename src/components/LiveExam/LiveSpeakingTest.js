@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import { htmlToText } from "html-to-text";
-import SpeakingMTInstruction from "./MiniTestInstruction/SpeakingMTInstraction";
+import SpeakingMTInstruction from "../Instruction/MiniTestInstruction/SpeakingMTInstruction";
 import { formatTime } from "../../utils/timer/formateTime";
 
 const initialSpeakingSingleQuesionState = {

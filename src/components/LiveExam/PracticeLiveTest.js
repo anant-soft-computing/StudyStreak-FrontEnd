@@ -7,9 +7,9 @@ import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
-import ReadingInstruction from "./Instruction/ReadingInstruction";
-import WritingInstruction from "./Instruction/WritingInstruction";
-import ListeningInstruction from "./Instruction/ListeningInstruction";
+import ReadingInstruction from "../Instruction/ReadingInstruction";
+import WritingInstruction from "../Instruction/WritingInstruction";
+import ListeningInstruction from "../Instruction/ListeningInstruction";
 const Cheerio = require("cheerio");
 
 const PracticeLiveExam = () => {

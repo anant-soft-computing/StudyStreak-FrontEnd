@@ -1,5 +1,5 @@
 import React from "react";
-import cpuJack from "../../../img/service/img.png";
+import cpuJack from "../../img/service/img.png"
 
 function SpeakingInstruction({ testType, startTest }) {
   return (

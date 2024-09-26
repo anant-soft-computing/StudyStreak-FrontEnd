@@ -15,10 +15,10 @@ import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
-import ReadingInstruction from "./Instruction/ReadingInstruction";
-import WritingInstruction from "./Instruction/WritingInstruction";
-import ListeningInstruction from "./Instruction/ListeningInstruction";
-import SpeakingInstruction from "./Instruction/SpeakingInstruction";
+import ReadingInstruction from "../Instruction/ReadingInstruction";
+import WritingInstruction from "../Instruction/WritingInstruction";
+import ListeningInstruction from "../Instruction/ListeningInstruction";
+import SpeakingInstruction from "../Instruction/SpeakingInstruction";
 import Loading from "../UI/Loading";
 const Cheerio = require("cheerio");
 

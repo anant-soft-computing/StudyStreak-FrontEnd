@@ -1,6 +1,6 @@
 import React from "react";
 
-const ListeningMTInstraction = ({ startTest }) => {
+const ListeningMTInstruction = ({ startTest }) => {
   return (
     <div className="instruction-card">
       <h3 className="instruction-heading">Instructions</h3>
@@ -29,4 +29,4 @@ const ListeningMTInstraction = ({ startTest }) => {
   );
 };
 
-export default ListeningMTInstraction;
+export default ListeningMTInstruction;

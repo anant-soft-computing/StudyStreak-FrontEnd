@@ -87,7 +87,7 @@ const Quiz = ({ activeLesson }) => {
       </div>
     </>
   ) : (
-    <h5 className="text-danger">Quiz Not Found !!</h5>
+    <h5 className="text-center text-danger">Quiz Not Found !!</h5>
   );
 };
 

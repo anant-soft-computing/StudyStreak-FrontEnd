@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import UpcomingClass from "../Classes/UpcomingClass";
 import ClassList from "../Classes/ClassList";
@@ -13,8 +14,11 @@ const GroupDoubtSolving = ({
   selectedDate,
   onDataFetch,
 }) => {
+  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Upcoming");
+  const [activeTab, setActiveTab] = useState(
+    location?.state?.activeTab === "Group Doubt" ? "Available Slot" : "Upcoming"
+  );
   const [groupDoubtSolvingClass, setGroupDoubtSolvingClass] = useState([]);
 
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));

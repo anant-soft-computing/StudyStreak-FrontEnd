@@ -13,10 +13,10 @@ import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import AudioRecorder from "../../../Exam-Create/AudioRecorder2";
 import SmallModal from "../../../UI/Modal";
-import ReadingInstruction from "../../../Instruction/ReadingInstruction";
+import ReadingDTI from "../../../Instruction/DiagnosticTestInstruction/ReadingDTI";
 import WritingInstruction from "../../../Instruction/WritingInstruction";
-import ListeningInstruction from "../../../Instruction/ListeningInstruction";
-import SpeakingInstruction from "../../../Instruction/SpeakingInstruction";
+import ListeningDTI from "../../../Instruction/DiagnosticTestInstruction/ListeningDTI";
+import SpeakingDTI from "../../../Instruction/DiagnosticTestInstruction/SpeakingDTI";
 import Loading from "../../../UI/Loading";
 const Cheerio = require("cheerio");
 
@@ -1041,10 +1041,7 @@ const DiagnosticTest = () => {
             the next Section of your Exam. Kindly Read through the Instructions.
             All the Best
           </SmallModal>
-          <ReadingInstruction
-            testType="Diagnostic"
-            startTest={handleInstruction}
-          />
+          <ReadingDTI startTest={handleInstruction} />
         </>
       )}
       {instructionCompleted.type.writing === 1 && (
@@ -1058,16 +1055,13 @@ const DiagnosticTest = () => {
             All the Best
           </SmallModal>
           <WritingInstruction
-            testType="Full Length"
+            testType="Diagnostic"
             startTest={handleInstruction}
           />
         </>
       )}
       {instructionCompleted.type.listening === 1 && (
-        <ListeningInstruction
-          testType="Diagnostic"
-          startTest={handleInstruction}
-        />
+        <ListeningDTI startTest={handleInstruction} />
       )}
       {instructionCompleted.type.speaking === 1 && (
         <>
@@ -1079,10 +1073,7 @@ const DiagnosticTest = () => {
             the next Section of your Exam. Kindly Read through the Instructions.
             All the Best
           </SmallModal>
-          <SpeakingInstruction
-            testType="Full Length"
-            startTest={handleInstruction}
-          />
+          <SpeakingDTI startTest={handleInstruction} />
         </>
       )}
     </div>

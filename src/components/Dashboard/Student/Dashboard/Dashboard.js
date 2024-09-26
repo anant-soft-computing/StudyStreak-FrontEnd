@@ -125,7 +125,7 @@ const Dashboard = () => {
             name: "Group Doubt Solving",
             icon: liveClass,
             link: "/studentLiveClasses",
-            state: { activeTab: "Group Dobut" },
+            state: { activeTab: "Group Doubt" },
           },
           { name: "Progress", icon: progress, link: "/progress" },
           { name: "Resources", icon: support, link: "/resources" },

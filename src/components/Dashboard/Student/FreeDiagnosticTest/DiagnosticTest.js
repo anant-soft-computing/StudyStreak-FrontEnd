@@ -13,10 +13,10 @@ import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import AudioRecorder from "../../../Exam-Create/AudioRecorder2";
 import SmallModal from "../../../UI/Modal";
-import ReadingInstruction from "../../../LiveExam/Instruction/ReadingInstruction";
-import WritingInstruction from "../../../LiveExam/Instruction/WritingInstruction";
-import ListeningInstruction from "../../../LiveExam/Instruction/ListeningInstruction";
-import SpeakingInstruction from "../../../LiveExam/Instruction/SpeakingInstruction";
+import ReadingInstruction from "../../../Instruction/ReadingInstruction";
+import WritingInstruction from "../../../Instruction/WritingInstruction";
+import ListeningInstruction from "../../../Instruction/ListeningInstruction";
+import SpeakingInstruction from "../../../Instruction/SpeakingInstruction";
 import Loading from "../../../UI/Loading";
 const Cheerio = require("cheerio");
 

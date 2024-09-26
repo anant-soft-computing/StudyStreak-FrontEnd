@@ -1,6 +1,6 @@
 import React from "react";
 
-const WritingMTInstraction = ({ startTest }) => {
+const WritingMTInstruction = ({ startTest }) => {
   return (
     <div className="instruction-card">
       <h3 className="instruction-heading">Instructions</h3>
@@ -65,4 +65,4 @@ const WritingMTInstraction = ({ startTest }) => {
   );
 };
 
-export default WritingMTInstraction;
+export default WritingMTInstruction;

@@ -11,9 +11,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
-import ReadingMTInstruction from "./MiniTestInstruction/ReadingMTInstruction";
-import ListeningMTInstraction from "./MiniTestInstruction/ListeningMTInstraction";
-import WritingMTInstraction from "./MiniTestInstruction/WritingMTInstraction";
+import ReadingMTInstruction from "../Instruction/MiniTestInstruction/ReadingMTInstruction";
+import ListeningMTInstruction from "../Instruction/MiniTestInstruction/ListeningMTInstruction";
+import WritingMTInstruction from "../Instruction/MiniTestInstruction/WritingMTInstruction";
 import { formatTime } from "../../utils/timer/formateTime";
 const Cheerio = require("cheerio");
 
@@ -714,10 +714,10 @@ const LiveExam = () => {
         <ReadingMTInstruction startTest={handleCompleteInstruciton} />
       )}
       {examData.exam_type === "Listening" && (
-        <ListeningMTInstraction startTest={handleCompleteInstruciton} />
+        <ListeningMTInstruction startTest={handleCompleteInstruciton} />
       )}
       {examData.exam_type === "Writing" && (
-        <WritingMTInstraction startTest={handleCompleteInstruciton} />
+        <WritingMTInstruction startTest={handleCompleteInstruciton} />
       )}
     </div>
   ) : (

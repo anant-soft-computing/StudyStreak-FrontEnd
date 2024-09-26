@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import { htmlToText } from "html-to-text";
-import SpeakingInstruction from "./Instruction/SpeakingInstruction";
+import SpeakingInstruction from "../Instruction/SpeakingInstruction";
 
 const initialSpeakingSingleQuesionState = {
   // 0 for incoming, 1 for instruction on screen, 2 for completed

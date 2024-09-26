@@ -1,9 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import React from "react";
 import Table from "../../../UI/Table";
 
 const Assignment = ({ activeLesson }) => {
-  const navigate = useNavigate();
-
   const assignments = activeLesson
     ?.filter(
       (exam) =>
@@ -22,7 +20,12 @@ const Assignment = ({ activeLesson }) => {
     return (
       <button
         className="take-test"
-        onClick={() => navigate(`/assignment/General/${params.data.id}`)}
+        onClick={() =>
+          window.open(
+            `/assignment/${params.data.exam_type}/${params.data.id}`,
+            "_blank"
+          )
+        }
       >
         View
       </button>

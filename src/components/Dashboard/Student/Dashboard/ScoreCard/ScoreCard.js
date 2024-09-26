@@ -354,7 +354,8 @@ const ScoreCard = ({ course }) => {
                 <div>
                   <div className="gridarea__price d-flex align-items-center gap-2 mb-0">
                     <h3>
-                      {miniTestData?.[0]?.exam_name}, Score : {miniTestData?.[0]?.band}
+                      {miniTestData?.[0]?.exam_name}, Score :{" "}
+                      {miniTestData?.[0]?.band}.0
                     </h3>
                   </div>
                   <div
@@ -402,7 +403,11 @@ const ScoreCard = ({ course }) => {
               <div>
                 <div className="gridarea__price d-flex align-items-center gap-2 mb-0">
                   <h3>
-                    {practiceTestData?.[0]?.practise_set_name}, Band : {band.toFixed(1)}
+                    {practiceTestData?.[0]?.practise_set_name},
+                    {practiceTestData?.[0]?.practise_set_type === "General"
+                      ? " Score :"
+                      : " Band :"}{" "}
+                    {band.toFixed(1)}
                   </h3>
                 </div>
                 <div

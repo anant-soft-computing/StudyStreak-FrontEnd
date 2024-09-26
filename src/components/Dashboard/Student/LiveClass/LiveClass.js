@@ -271,7 +271,7 @@ const LiveClass = () => {
             <div className="container-fluid full__width__padding">
               <div className="row">
                 <DSSidebar />
-                {location.state.packageCount !== 0 && (
+                {location?.state?.packageCount !== 0 && (
                   <div className="col-lg-auto col-md-12 ">
                     <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
                       <h4 className="flex-fill">Select Date</h4>

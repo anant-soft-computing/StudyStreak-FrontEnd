@@ -24,7 +24,6 @@ const LiveAssignment = () => {
   const [examData, setExamData] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
-  const [linkAnswer, setLinkAnswer] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
@@ -381,7 +380,6 @@ const LiveAssignment = () => {
         };
         setExamAnswer(tempAnswerArr);
       }
-      setLinkAnswer(true);
 
       setUniqueIdArr(paginationsStrucutre);
       return questionPassage;

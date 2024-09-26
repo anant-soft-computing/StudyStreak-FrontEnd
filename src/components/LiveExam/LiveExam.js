@@ -86,6 +86,36 @@ const LiveExam = () => {
     })();
   }, [examId, examType]);
 
+  const examLastSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            exam_block: examId,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Exam Submitted");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const gamificationSubmit = async () => {
     try {
       const response = await ajaxCall(
@@ -139,6 +169,7 @@ const LiveExam = () => {
         8000
       );
       if (response.status === 200) {
+        examLastSubmit();
         gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {

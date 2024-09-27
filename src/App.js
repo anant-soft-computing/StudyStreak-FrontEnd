@@ -135,10 +135,7 @@ const App = () => {
         <Route element={<StudentNavBarRoute isProtected={true} />}>
           <Route path="/freeDiagnosticTest" element={<FreeDiagnosticTest />} />
           <Route path="/freeMiniTest" element={<FreeMiniTest />} />
-          <Route
-            path="/studentDashboard"
-            element={<ProtectedRoute element={Dashboard} />}
-          />
+          <Route path="/studentDashboard" element={<Dashboard />} />
           <Route path="/progress" element={<Progress />} />
           <Route path="/studentProfile" element={<SProfile />} />
           <Route path="/studentMyCourse" element={<MyCourse />} />

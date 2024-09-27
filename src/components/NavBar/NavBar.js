@@ -62,18 +62,20 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
                         Courses
                       </Link>
                     </li>
-                    <li className="mega__menu position-static">
-                      <Link
-                        className="headerarea__has__dropdown"
-                        to={
-                          role === "admin"
-                            ? "/admin-dashboard"
-                            : "/studentDashboard"
-                        }
-                      >
-                        Dashboard
-                      </Link>
-                    </li>
+                    {token && (
+                      <li className="mega__menu position-static">
+                        <Link
+                          className="headerarea__has__dropdown"
+                          to={
+                            role === "admin"
+                              ? "/admin-dashboard"
+                              : "/studentDashboard"
+                          }
+                        >
+                          Dashboard
+                        </Link>
+                      </li>
+                    )}
                     <li className="mega__menu position-static">
                       <Link
                         className="headerarea__has__dropdown"

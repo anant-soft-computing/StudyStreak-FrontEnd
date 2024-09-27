@@ -153,7 +153,7 @@ const CourseDetail = () => {
                   <div className="d-flex flex-wrap gap-4">
                     <div>
                       <img
-                        src={`http://studystreak.in/${courseDetail?.Course_Thumbnail}`}
+                        src={courseDetail?.Course_Thumbnail}
                         style={{ borderRadius: "10px" }}
                         alt="Course Thumbnail"
                         height={300}

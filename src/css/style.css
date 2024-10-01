@@ -1194,7 +1194,7 @@ Header Area
   position: relative;
 }
 
-.headerarea__right .header__cart > a::before {
+.notification-badge {
   font-size: 10px;
   font-weight: 500;
   line-height: 15px;
@@ -1204,15 +1204,14 @@ Header Area
   width: 15px;
   height: 15px;
   padding: 0 4px;
-  content: "3";
   text-align: center;
   border-radius: 100%;
-  background: var(--secondaryColor);
+  background-color: red;
   color: var(--whiteColor);
 }
 
 @media (min-width: 992px) and (max-width: 1365px) {
-  .headerarea__right .header__cart > a::before {
+  .notification-badge {
     top: 7px;
     right: 11px;
   }

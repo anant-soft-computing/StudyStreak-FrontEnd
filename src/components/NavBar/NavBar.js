@@ -90,6 +90,22 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
             </div>
             <div className="col-xl-3 col-lg-3 col-md-6">
               <div className="headerarea__right">
+                <div className="header__cart">
+                  <Link className="text-decoration-none">
+                    <i
+                      className="icofont-notification"
+                      style={{ color: "#01579b", fontSize: "22px" }}
+                    />
+                    <span className="notification-badge">{1}</span>
+                  </Link>
+                  <div className="header__right__dropdown__wrapper">
+                    <div className="header__right__dropdown__inner">
+                      <h6 className="text-center text-danger">
+                        Coming Soon !!
+                      </h6>
+                    </div>
+                  </div>
+                </div>
                 <div className="headerarea__login">
                   {token ? (
                     <Link to="/login" onClick={logout}>

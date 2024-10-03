@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
-import { htmlToText } from "html-to-text";
+import { convert } from "html-to-text";
 import SpeakingMTInstruction from "../Instruction/MiniTestInstruction/SpeakingMTInstruction";
 import { formatTime } from "../../utils/timer/formateTime";
 
@@ -147,8 +147,16 @@ const LiveSpeakingExam = () => {
     }
   }, [recordedFilePath]);
 
+  const options = {
+    wordwrap: false, 
+    ignoreHref: true,
+    ignoreImage: true,
+    preserveNewlines: true,
+  };
+
   const extractVisibleText = (htmlContent) => {
-    return htmlToText(htmlContent);
+    const text = convert(htmlContent, options);
+    return text.replace(/\n+/g, '. ').trim();
   };
 
   useEffect(() => {
@@ -163,22 +171,38 @@ const LiveSpeakingExam = () => {
   }, [synth]);
 
   const speak = (speakingContent, i) => {
-    const utterance = new SpeechSynthesisUtterance(
-      extractVisibleText(speakingContent)
-    );
-    utterance.rate = 0.9;
+    const utterances = extractVisibleText(speakingContent).split(". ");
+    utterances.forEach((text, index) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
 
-    // Select "Google UK English Male" voice
-    const ukMaleVoice = voices.find(
-      (voice) =>
-        voice.name === "Google UK English Male" && voice.lang === "en-GB"
-    );
+      // Select "Google UK English Male" voice
+      const ukMaleVoice = voices.find(
+        (voice) =>
+          voice.name === "Google UK English Male" && voice.lang === "en-GB"
+      );
 
-    if (ukMaleVoice) {
-      utterance.voice = ukMaleVoice;
-    }
+      if (ukMaleVoice) {
+        utterance.voice = ukMaleVoice;
+      }
 
-    synth.speak(utterance);
+      synth.speak(utterance);
+
+      if (index === utterances.length - 1) {
+        utterance.onend = () => {
+          const updatedSpeaking = speaking.map((item, idx) => {
+            if (idx === i) {
+              return { ...item, status: 2 }; // Mark as completed
+            } else {
+              return item;
+            }
+          });
+          setSpeaking(updatedSpeaking);
+        };
+      }
+    });
+
+    // Update speaking state to reflect that the current question is being spoken
     const updatedSpeaking = speaking.map((item, index) => {
       if (index === i) {
         return { ...item, status: 1 };
@@ -187,17 +211,6 @@ const LiveSpeakingExam = () => {
       }
     });
     setSpeaking(updatedSpeaking);
-
-    utterance.onend = () => {
-      const updatedSpeaking = speaking.map((item, index) => {
-        if (index === i) {
-          return { ...item, status: 2 };
-        } else {
-          return item;
-        }
-      });
-      setSpeaking(updatedSpeaking);
-    };
   };
 
   const stopSpeaking = () => {

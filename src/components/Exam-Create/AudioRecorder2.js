@@ -3,6 +3,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import ajaxCall from "../../helpers/ajaxCall";
+import DisplayAudio from "../UI/DisplayAudio";
 
 const AudioRecorder = ({
   setRecordedFilePath,
@@ -233,7 +234,7 @@ const AudioRecorder = ({
           (isRecording && "Recording...") ||
           (!isRecording && !audioBlob && "Click on Mic to Recording")}
       </h6>
-      {audioBlob && <audio controls src={URL.createObjectURL(audioBlob)} />}
+      {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
       {isRecording && <p>Transcript: {transcript}</p>}{" "}
     </div>
   );

@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import "../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
-import { htmlToText } from "html-to-text";
+import { convert } from "html-to-text";
 import { useNavigate, useParams } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import AudioRecorder from "../../../Exam-Create/AudioRecorder2";
@@ -836,52 +836,70 @@ const DiagnosticTest = () => {
     fetchVoices();
   }, [synth]);
 
+  const options = {
+    wordwrap: false,
+    ignoreHref: true,
+    ignoreImage: true,
+    preserveNewlines: true,
+  };
+
   const extractVisibleText = (htmlContent) => {
-    return htmlToText(htmlContent);
+    const text = convert(htmlContent, options);
+    return text.replace(/\n+/g, ". ").trim();
   };
 
   const speak = (speakingContent, id) => {
-    const utterance = new SpeechSynthesisUtterance(
-      extractVisibleText(speakingContent)
-    );
-    utterance.rate = 0.9;
-
-    // Select "Google UK English Male" voice
-    const ukMaleVoice = voices.find(
-      (voice) =>
-        voice.name === "Google UK English Male" && voice.lang === "en-GB"
-    );
-
-    if (ukMaleVoice) {
-      utterance.voice = ukMaleVoice;
-    }
-
-    synth.speak(utterance);
+    // Split the speaking content into separate sentences
+    const utterances = extractVisibleText(speakingContent).split(". ");
     const tempExamAnswer = [...examAnswer];
-    const updatedSpeaking = tempExamAnswer[next].data.map((item, index) => {
+
+    // Iterate through each utterance (sentence)
+    utterances.forEach((text, index) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+
+      // Select "Google UK English Male" voice
+      const ukMaleVoice = voices.find(
+        (voice) =>
+          voice.name === "Google UK English Male" && voice.lang === "en-GB"
+      );
+
+      if (ukMaleVoice) {
+        utterance.voice = ukMaleVoice;
+      }
+
+      // Speak the current sentence
+      synth.speak(utterance);
+
+      // Handle the end of the last utterance
+      if (index === utterances.length - 1) {
+        utterance.onend = () => {
+          // Update the status to '2' (completed) when speaking ends
+          const updatedSpeaking = tempExamAnswer[next].data.map((item) => {
+            const tempId = item.id;
+            if (tempId === id) {
+              return { ...item, status: 2 }; // Mark as completed
+            } else {
+              return item;
+            }
+          });
+          tempExamAnswer[next].data = updatedSpeaking;
+          setExamAnswer(tempExamAnswer);
+        };
+      }
+    });
+
+    // Set the status to '1' (in-progress) for the current speaking item
+    const updatedSpeaking = tempExamAnswer[next].data.map((item) => {
       const tempId = item.id;
       if (tempId === id) {
-        return { ...item, status: 1 };
+        return { ...item, status: 1 }; // Mark as in-progress
       } else {
         return item;
       }
     });
     tempExamAnswer[next].data = updatedSpeaking;
     setExamAnswer(tempExamAnswer);
-
-    utterance.onend = () => {
-      const tempExamAnswer = [...examAnswer];
-      const updatedSpeaking = tempExamAnswer[next].data.map((item, index) => {
-        const tempId = item.id;
-        if (tempId === id) {
-          return { ...item, status: 2 };
-        } else {
-          return item;
-        }
-      });
-      tempExamAnswer[next].data = updatedSpeaking;
-      setExamAnswer(tempExamAnswer);
-    };
   };
 
   const stopSpeaking = () => {

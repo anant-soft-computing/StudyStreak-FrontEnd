@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
-import { htmlToText } from "html-to-text";
+import { convert } from "html-to-text";
 import SpeakingInstruction from "../Instruction/SpeakingInstruction";
 
 const initialSpeakingSingleQuestionState = {
@@ -222,27 +222,52 @@ const PracticeSpeakingLiveExam = () => {
     fetchVoices();
   }, [synth]);
 
+  const options = {
+    wordwrap: false,
+    ignoreHref: true,
+    ignoreImage: true,
+    preserveNewlines: true,
+  };
+
   const extractVisibleText = (htmlContent) => {
-    return htmlToText(htmlContent);
+    const text = convert(htmlContent, options);
+    return text.replace(/\n+/g, ". ").trim();
   };
 
   const speak = (speakingContent, id) => {
-    const utterance = new SpeechSynthesisUtterance(
-      extractVisibleText(speakingContent)
-    );
-    utterance.rate = 0.9;
+    const utterances = extractVisibleText(speakingContent).split(". ");
+    utterances.forEach((text, index) => {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
 
-    // Select "Google UK English Male" voice
-    const ukMaleVoice = voices.find(
-      (voice) =>
-        voice.name === "Google UK English Male" && voice.lang === "en-GB"
-    );
+      // Select "Google UK English Male" voice
+      const ukMaleVoice = voices.find(
+        (voice) =>
+          voice.name === "Google UK English Male" && voice.lang === "en-GB"
+      );
 
-    if (ukMaleVoice) {
-      utterance.voice = ukMaleVoice;
-    }
+      if (ukMaleVoice) {
+        utterance.voice = ukMaleVoice;
+      }
 
-    synth.speak(utterance);
+      synth.speak(utterance);
+
+      if (index === utterances.length - 1) {
+        utterance.onend = () => {
+          const updatedSpeaking = speaking.map((item, index) => {
+            const tempId = item.id;
+            if (tempId === id) {
+              return { ...item, status: 2 }; // Mark as completed
+            } else {
+              return item;
+            }
+          });
+          setSpeaking(updatedSpeaking);
+        };
+      }
+    });
+
+    // Update speaking state to reflect that the current question is being spoken
     const updatedSpeaking = speaking.map((item, index) => {
       const tempId = item.id;
       if (tempId === id) {
@@ -252,18 +277,6 @@ const PracticeSpeakingLiveExam = () => {
       }
     });
     setSpeaking(updatedSpeaking);
-
-    utterance.onend = () => {
-      const updatedSpeaking = speaking.map((item, index) => {
-        const tempId = item.id;
-        if (tempId === id) {
-          return { ...item, status: 2 };
-        } else {
-          return item;
-        }
-      });
-      setSpeaking(updatedSpeaking);
-    };
   };
 
   const stopSpeaking = () => {
@@ -378,12 +391,7 @@ const PracticeSpeakingLiveExam = () => {
               );
               return (
                 <div className="lv-question-container" key={item.id}>
-                  <div
-                    className="lv-speaking-question"
-                    style={{
-                      flex: 1,
-                    }}
-                  >
+                   <div className="lv-speaking-question" style={{ flex: 1 }}>
                     <p> {i + 1} :</p>
                     <div
                       dangerouslySetInnerHTML={{

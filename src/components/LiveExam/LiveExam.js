@@ -1,20 +1,14 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Highlighter, SelectionProvider } from "react-selection-highlighter";
-import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
+import ajaxCall from "../../helpers/ajaxCall";
+import DisplayLeftContainer from "../UI/DisplayPassage";
+import { formatTime } from "../../utils/timer/formateTime";
 import ReadingMTInstruction from "../Instruction/MiniTestInstruction/ReadingMTInstruction";
 import ListeningMTInstruction from "../Instruction/MiniTestInstruction/ListeningMTInstruction";
 import WritingMTInstruction from "../Instruction/MiniTestInstruction/WritingMTInstruction";
-import { formatTime } from "../../utils/timer/formateTime";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -35,7 +29,7 @@ const LiveExam = () => {
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   let highlightedElement = null;
 
-  const handleCompleteInstruciton = () => setInstructionCompleted(true);
+  const handleCompleteInstruction = () => setInstructionCompleted(true);
 
   useEffect(() => {
     let interval;
@@ -173,7 +167,7 @@ const LiveExam = () => {
         gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        toast.error("You Have Already Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
@@ -444,86 +438,59 @@ const LiveExam = () => {
     }
   };
 
-  const displayLeftContainer = (passage, image) => {
-    // Replace this with your actual implementation
-    return (
-      <>
-        {image && (
-          <div className="text-center">
-            <img
-              className="mb-2"
-              src={image}
-              alt="Study Streak"
-              height={250}
-              width={250}
-            />
-          </div>
-        )}
-        <SelectionProvider>
-          <Highlighter htmlString={passage} />
-        </SelectionProvider>
-      </>
+  const handleAnswerLinking = (e, questionId, next) => {
+    const { value, id, name, checked } = e.target;
+
+    const elementId = id.split("_")[0];
+
+    const temp = [...examAnswer];
+    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+
+    // is this a multipleTypeQuestions
+    const isMultiQuestions = examAnswer[next]?.answers?.filter(
+      (item) => item.questionId === id
     );
-  };
 
-  const handleAnswerLinking = useCallback(
-    (e, questionId, next) => {
-      const { value, id, name, checked } = e.target;
+    if (isMultiQuestions?.length <= 1) {
+      temp[next].answers.forEach((item) => {
+        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+        if (item.questionId === id && elementId === "InputText") {
+          const trimedValue = value.trim();
+          item.answer = trimedValue;
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.questionId === id && elementId === "Checkbox") {
+          item.answer = checked ? value : "";
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.questionId === id) {
+          item.answer = value;
+          conditionSatisfied = true; // Set the flag to true
+        }
+      });
 
-      const elementId = id.split("_")[0];
-
-      const temp = [...examAnswer];
-      let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
-
-      // is this a multipleTypeQuestions
-      const isMultiQuestions = examAnswer[next]?.answers?.filter(
-        (item) => item.questionId === id
-      );
-
-      if (isMultiQuestions?.length <= 1) {
-        temp[next].answers.forEach((item) => {
-          if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
-          if (item.questionId === id && elementId === "InputText") {
-            const trimedValue = value.trim();
-            item.answer = trimedValue;
-            conditionSatisfied = true; // Set the flag to true
-          } else if (item.questionId === id && elementId === "Checkbox") {
-            item.answer = checked ? value : "";
-            conditionSatisfied = true; // Set the flag to true
-          } else if (item.questionId === id) {
-            item.answer = value;
-            conditionSatisfied = true; // Set the flag to true
-          }
-        });
-
+      setExamAnswer(temp);
+    } else {
+      const multipleTypeQuestions = checked
+        ? examAnswer[next].answers.findIndex(
+            (item) => item.questionId === id && item.answer === ""
+          )
+        : examAnswer[next].answers.findIndex(
+            (item) => item.questionId === id && item.answer !== ""
+          );
+      if (multipleTypeQuestions !== -1) {
+        temp[next].answers[multipleTypeQuestions].answer = checked ? value : "";
         setExamAnswer(temp);
       } else {
-        const multipleTypeQuestions = checked
-          ? examAnswer[next].answers.findIndex(
-              (item) => item.questionId === id && item.answer === ""
-            )
-          : examAnswer[next].answers.findIndex(
-              (item) => item.questionId === id && item.answer !== ""
-            );
-        if (multipleTypeQuestions !== -1) {
-          temp[next].answers[multipleTypeQuestions].answer = checked
-            ? value
-            : "";
-          setExamAnswer(temp);
-        } else {
-          const contentElements = document.querySelectorAll(`[id="${id}"]`);
-          contentElements.forEach((element) => {
-            const isAlreadyAnswered = isMultiQuestions.findIndex(
-              (a) => a.answer === element.value
-            );
+        const contentElements = document.querySelectorAll(`[id="${id}"]`);
+        contentElements.forEach((element) => {
+          const isAlreadyAnswered = isMultiQuestions.findIndex(
+            (a) => a.answer === element.value
+          );
 
-            if (isAlreadyAnswered === -1) element.checked = false;
-          });
-        }
+          if (isAlreadyAnswered === -1) element.checked = false;
+        });
       }
-    },
-    [examAnswer]
-  );
+    }
+  };
 
   useEffect(() => {
     if (
@@ -557,7 +524,7 @@ const LiveExam = () => {
         });
       }, 500);
     }
-  }, [examAnswer, handleAnswerLinking, instructionCompleted]);
+  }, [instructionCompleted]);
 
   const htmlContent = useMemo(() => {
     const question = examData?.question_other || examData?.passage;
@@ -715,14 +682,7 @@ const LiveExam = () => {
       setUniqueIdArr(paginationsStrucutre);
       return questionPassage;
     }
-  }, [
-    examAnswer,
-    examData?.exam_type,
-    examData?.id,
-    examData?.passage,
-    examData?.question_other,
-    examData?.question_structure,
-  ]);
+  }, [examData?.question_other]);
 
   const reviewContent = () => (
     <div className="card-container">
@@ -742,13 +702,13 @@ const LiveExam = () => {
   return !instructionCompleted ? (
     <div className="test-instruction">
       {examData.exam_type === "Reading" && (
-        <ReadingMTInstruction startTest={handleCompleteInstruciton} />
+        <ReadingMTInstruction startTest={handleCompleteInstruction} />
       )}
       {examData.exam_type === "Listening" && (
-        <ListeningMTInstruction startTest={handleCompleteInstruciton} />
+        <ListeningMTInstruction startTest={handleCompleteInstruction} />
       )}
       {examData.exam_type === "Writing" && (
-        <WritingMTInstruction startTest={handleCompleteInstruciton} />
+        <WritingMTInstruction startTest={handleCompleteInstruction} />
       )}
     </div>
   ) : (
@@ -789,7 +749,10 @@ const LiveExam = () => {
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Writing") && (
             <div className="lv-left-container">
-              {displayLeftContainer(examData?.passage, examData?.passage_image)}
+              <DisplayLeftContainer
+                passage={examData?.passage}
+                image={examData?.passage_image}
+              />
             </div>
           )}
           {/* Right Container */}

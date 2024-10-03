@@ -18,6 +18,7 @@ const FlashCard = () => {
   const [flashCardItems, setFlashCardItems] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
+  const category = localStorage.getItem("category");
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   useEffect(() => {
@@ -41,7 +42,9 @@ const FlashCard = () => {
         if (response?.status === 200) {
           const filteredFlashCards = response?.data?.filter((item) =>
             item?.course?.some((course) =>
-              courseIds?.some((data) => data === course)
+              courseIds?.some(
+                (data) => data === course?.id && course?.category === category
+              )
             )
           );
           setFlashCardList(filteredFlashCards);
@@ -57,7 +60,7 @@ const FlashCard = () => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [category]);
 
   const handleCloseModal = () => {
     setModalShow(false);

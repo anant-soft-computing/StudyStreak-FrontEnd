@@ -9,7 +9,6 @@ import "../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { htmlToText } from "html-to-text";
 import { useNavigate, useParams } from "react-router-dom";
-import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import AudioRecorder from "../../../Exam-Create/AudioRecorder2";
 import SmallModal from "../../../UI/Modal";
@@ -18,6 +17,7 @@ import WritingInstruction from "../../../Instruction/WritingInstruction";
 import ListeningDTI from "../../../Instruction/DiagnosticTestInstruction/ListeningDTI";
 import SpeakingDTI from "../../../Instruction/DiagnosticTestInstruction/SpeakingDTI";
 import Loading from "../../../UI/Loading";
+import DisplayLeftContainer from "../../../UI/DisplayPassage";
 const Cheerio = require("cheerio");
 
 const intialInstructionState = {
@@ -433,28 +433,6 @@ const DiagnosticTest = () => {
     } else {
       return <p></p>;
     }
-  };
-
-  const displayLeftContainer = (passage, image) => {
-    // Replace this with your actual implementation
-    return (
-      <>
-        {image && (
-          <div className="text-center">
-            <img
-              className="mb-2"
-              src={image}
-              alt="Study Streak"
-              height={250}
-              width={250}
-            />
-          </div>
-        )}
-        <SelectionProvider>
-          <Highlighter htmlString={passage} />
-        </SelectionProvider>
-      </>
-    );
   };
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
@@ -1119,7 +1097,10 @@ const DiagnosticTest = () => {
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Writing") && (
             <div className="lv-left-container">
-              {displayLeftContainer(examData?.passage, examData?.passage_image)}
+              <DisplayLeftContainer
+                passage={examData?.passage}
+                image={examData?.passage_image}
+              />
             </div>
           )}
           {examData?.exam_type === "Speaking" && (

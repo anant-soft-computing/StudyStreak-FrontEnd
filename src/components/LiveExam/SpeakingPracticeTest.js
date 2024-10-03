@@ -7,7 +7,7 @@ import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import { htmlToText } from "html-to-text";
 import SpeakingInstruction from "../Instruction/SpeakingInstruction";
 
-const initialSpeakingSingleQuesionState = {
+const initialSpeakingSingleQuestionState = {
   // 0 for incoming, 1 for instruction on screen, 2 for completed
   status: 0,
   filePath: "",
@@ -26,7 +26,9 @@ const PracticeSpeakingLiveExam = () => {
   const [fullPaper, setFullPaper] = useState([]);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
-  const [speaking, setSpeaking] = useState([initialSpeakingSingleQuesionState]);
+  const [speaking, setSpeaking] = useState([
+    initialSpeakingSingleQuestionState,
+  ]);
   const [next, setNext] = useState(0);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
@@ -35,7 +37,7 @@ const PracticeSpeakingLiveExam = () => {
   const containerRef = useRef(null);
   let highlightedElement = null;
 
-  const handleCompleteInstruciton = () => setInstructionCompleted(true);
+  const handleCompleteInstruction = () => setInstructionCompleted(true);
 
   useEffect(() => {
     setTimer(15 * 60);
@@ -130,7 +132,7 @@ const PracticeSpeakingLiveExam = () => {
         });
         toast.success("Your Exam Submitted Successfully");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        toast.error("You Have Already Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
@@ -180,13 +182,14 @@ const PracticeSpeakingLiveExam = () => {
           }));
           setFullPaper(tempSpeaking);
 
-          const tempSepakinQuesitons = tempSpeaking.IELTS.Speaking.map((item) =>
-            item.questions.map((question) => ({
-              ...initialSpeakingSingleQuesionState,
-              id: question.id,
-            }))
+          const tempSpeakingQuestions = tempSpeaking.IELTS.Speaking.map(
+            (item) =>
+              item.questions.map((question) => ({
+                ...initialSpeakingSingleQuestionState,
+                id: question.id,
+              }))
           );
-          setSpeaking(tempSepakinQuesitons.flat());
+          setSpeaking(tempSpeakingQuestions.flat());
         } else {
           console.log("error");
         }
@@ -327,7 +330,7 @@ const PracticeSpeakingLiveExam = () => {
     <div className="test-instruction">
       <SpeakingInstruction
         testType="Practice"
-        startTest={handleCompleteInstruciton}
+        startTest={handleCompleteInstruction}
       />
     </div>
   ) : (

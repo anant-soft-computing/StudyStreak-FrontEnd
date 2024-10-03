@@ -131,14 +131,14 @@ const ViewGamification = ({ content, activeTab }) => {
         setIsLoading(false);
       }
     },
-    [authData.accessToken]
+    [authData?.accessToken]
   );
 
   useEffect(() => {
     if (activeTab === "View Gamification") {
       fetchData(`/gamification/`, setGamificationList);
     }
-  }, [activeTab, authData.accessToken, fetchData]);
+  }, [activeTab, authData?.accessToken, fetchData]);
 
   useEffect(() => {
     const endpoints = {
@@ -154,7 +154,7 @@ const ViewGamification = ({ content, activeTab }) => {
     if (content && endpoints[content] && activeTab === "View Gamification") {
       fetchData(endpoints[content], setDataList);
     }
-  }, [activeTab, authData.accessToken, content, fetchData]);
+  }, [activeTab, authData?.accessToken, content, fetchData]);
 
   const filteredDataList = () => {
     switch (content) {

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import DSSidebar from "../DSSideBar/DSSideBar";
@@ -12,9 +11,8 @@ const MyCourse = () => {
   const [courseList, setCourseList] = useState([]);
   const [expiryDate, setExpiryDate] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  
   const category = localStorage.getItem("category");
-
-  const authData = useSelector((state) => state.authStore);
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   const courses = courseList.filter((course) =>
@@ -39,7 +37,9 @@ const MyCourse = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -54,7 +54,7 @@ const MyCourse = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [authData.accessToken]);
+  }, []);
 
   const fetchExpiryDates = useCallback(async () => {
     try {
@@ -64,7 +64,9 @@ const MyCourse = () => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authData.accessToken}`,
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
           method: "GET",
         },
@@ -77,7 +79,7 @@ const MyCourse = () => {
     } catch (error) {
       console.error("error", error);
     }
-  }, [authData.accessToken]);
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);

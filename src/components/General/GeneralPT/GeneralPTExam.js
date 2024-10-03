@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../../helpers/ajaxCall";
 import SmallModal from "../../UI/Modal";
+import DisplayLeftContainer from "../../UI/DisplayPassage";
 const Cheerio = require("cheerio");
 
 const GeneralPTExam = () => {
@@ -217,28 +217,6 @@ const GeneralPTExam = () => {
       contentElement.classList.add("lv-highlight");
       highlightedElement = contentElement;
     }
-  };
-
-  const displayLeftContainer = (passage, image) => {
-    // Replace this with your actual implementation
-    return (
-      <>
-        {image && (
-          <div className="text-center">
-            <img
-              className="mb-2"
-              src={image}
-              alt="Study Streak"
-              height={250}
-              width={250}
-            />
-          </div>
-        )}
-        <SelectionProvider>
-          <Highlighter htmlString={passage} />
-        </SelectionProvider>
-      </>
-    );
   };
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
@@ -514,7 +492,7 @@ const GeneralPTExam = () => {
         gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        toast.error("You Have Already Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
@@ -693,7 +671,10 @@ const GeneralPTExam = () => {
           {/* Left Container */}
           {examData?.exam_type === "General" && (
             <div className="lv-left-container">
-              {displayLeftContainer(examData?.passage, examData?.passage_image)}
+              <DisplayLeftContainer
+                passage={examData?.passage}
+                image={examData?.passage_image}
+              />
             </div>
           )}
           {/* Right Container */}

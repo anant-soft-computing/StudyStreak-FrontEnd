@@ -8,7 +8,7 @@ import { htmlToText } from "html-to-text";
 import SpeakingMTInstruction from "../Instruction/MiniTestInstruction/SpeakingMTInstruction";
 import { formatTime } from "../../utils/timer/formateTime";
 
-const initialSpeakingSingleQuesionState = {
+const initialSpeakingSingleQuestionState = {
   // 0 for incoming, 1 for instruction on screen, 2 for completed
   status: 0,
   filePath: "",
@@ -25,12 +25,14 @@ const LiveSpeakingExam = () => {
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
   const synth = window.speechSynthesis;
-  const [speaking, setSpeaking] = useState([initialSpeakingSingleQuesionState]);
+  const [speaking, setSpeaking] = useState([
+    initialSpeakingSingleQuestionState,
+  ]);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   const containerRef = useRef(null);
   let highlightedElement = null;
 
-  const handleCompleteInstruciton = () => setInstructionCompleted(true);
+  const handleCompleteInstruction = () => setInstructionCompleted(true);
 
   useEffect(() => {
     let interval;
@@ -66,9 +68,6 @@ const LiveSpeakingExam = () => {
       );
       if (response.status === 201) {
         setTimerRunning(false);
-        console.log("Lastest Exam Submitted");
-      } else {
-        console.log("error");
       }
     } catch (error) {
       console.log("error", error);
@@ -99,7 +98,7 @@ const LiveSpeakingExam = () => {
         examLastSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        toast.error("You Have Already Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
@@ -125,13 +124,11 @@ const LiveSpeakingExam = () => {
         );
         if (response.status === 200) {
           setExamData(response.data);
-          const tempSepakinQuesitons = Array.from(
+          const tempSpeakingQuestions = Array.from(
             { length: response.data.questions.length || 0 },
-            () => initialSpeakingSingleQuesionState
+            () => initialSpeakingSingleQuestionState
           );
-          setSpeaking(tempSepakinQuesitons);
-        } else {
-          console.log("error");
+          setSpeaking(tempSpeakingQuestions);
         }
       } catch (error) {
         console.log("error", error);
@@ -227,9 +224,7 @@ const LiveSpeakingExam = () => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
       examSubmit();
-      navigate(`/assessment/${examId}`, {
-        state: { examType: "Speaking" },
-      });
+      navigate(`/assessment/${examId}`, { state: { examType: "Speaking" } });
     }
   }, [speaking]);
 
@@ -267,7 +262,7 @@ const LiveSpeakingExam = () => {
 
   return !instructionCompleted ? (
     <div className="test-instruction">
-      <SpeakingMTInstruction startTest={handleCompleteInstruciton} />
+      <SpeakingMTInstruction startTest={handleCompleteInstruction} />
     </div>
   ) : (
     <>
@@ -312,12 +307,7 @@ const LiveSpeakingExam = () => {
           {Object.keys(examData).length > 0 &&
             examData.questions.map((item, i) => (
               <div className="lv-question-container" key={item?.id}>
-                <div
-                  className="lv-speaking-question"
-                  style={{
-                    flex: 1,
-                  }}
-                >
+                <div className="lv-speaking-question" style={{ flex: 1 }}>
                   <p> {i + 1} :</p>
                   <div
                     dangerouslySetInnerHTML={{

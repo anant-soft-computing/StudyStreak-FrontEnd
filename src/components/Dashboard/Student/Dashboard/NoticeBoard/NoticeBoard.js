@@ -6,7 +6,8 @@ import { Box, List, ListItem, Typography } from "@mui/material";
 const NoticeBoard = () => {
   const currentDate = moment().startOf("day");
   const [noticeData, setNoticeData] = useState([]);
-  
+
+  const category = localStorage.getItem("category");
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
   const studentId = JSON?.parse(localStorage.getItem("StudentID"));
@@ -37,7 +38,7 @@ const NoticeBoard = () => {
             const student = item?.student?.some((s) => s?.id === studentId);
             const batch = item?.batch?.some((b) => batchIds?.includes(b?.id));
             const course = item?.course?.some((c) =>
-              courseIds?.includes(c?.id)
+              courseIds?.includes(c?.id) && c?.category === category
             );
             return student || batch || course;
           });
@@ -56,7 +57,7 @@ const NoticeBoard = () => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [category]);
 
   const checkLink = (text) => {
     const urlPattern = /(https?:\/\/[^\s]+)/g;

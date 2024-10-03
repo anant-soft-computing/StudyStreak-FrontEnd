@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const NextLesson = () => {
-  const [lessonData, setLessonData] = useState({});
+  const category = localStorage.getItem("category");
+  const [lessonData, setLessonData] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -23,16 +24,17 @@ const NextLesson = () => {
           8000
         );
         if (response?.status === 200) {
-          setLessonData(response?.data);
+          const nextLesson =
+            response.data?.course?.category === category ? response.data : null;
+          setLessonData(nextLesson);
         } else {
-          setLessonData(0);
           console.log("error");
         }
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [category]);
 
   return (
     <div className="dashboard__inner mt-4 card-background">

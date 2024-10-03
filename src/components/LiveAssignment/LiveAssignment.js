@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/LiveExam.css";
 import ajaxCall from "../../helpers/ajaxCall";
@@ -91,7 +85,7 @@ const LiveAssignment = () => {
       if (response.status === 200) {
         toast.success("Your Assignment Submitted Successfully");
       } else {
-        toast.error("You Have All Ready Submitted This Assignment");
+        toast.error("You Have Already Submitted This Assignment");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
@@ -182,64 +176,59 @@ const LiveAssignment = () => {
     }
   };
 
-  const handleAnswerLinking = useCallback(
-    (e, questionId, next) => {
-      const { value, id, name, checked } = e.target;
+  const handleAnswerLinking = (e, questionId, next) => {
+    const { value, id, name, checked } = e.target;
 
-      const elementId = id.split("_")[0];
+    const elementId = id.split("_")[0];
 
-      const temp = [...examAnswer];
-      let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+    const temp = [...examAnswer];
+    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
 
-      // is this a multipleTypeQuestions
-      const isMultiQuestions = examAnswer[next]?.answers?.filter(
-        (item) => item.questionId === id
-      );
+    // is this a multipleTypeQuestions
+    const isMultiQuestions = examAnswer[next]?.answers?.filter(
+      (item) => item.questionId === id
+    );
 
-      if (isMultiQuestions?.length <= 1) {
-        temp[next].answers.forEach((item) => {
-          if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
-          if (item.questionId === id && elementId === "InputText") {
-            const trimedValue = value.trim();
-            item.answer = trimedValue;
-            conditionSatisfied = true; // Set the flag to true
-          } else if (item.questionId === id && elementId === "Checkbox") {
-            item.answer = checked ? value : "";
-            conditionSatisfied = true; // Set the flag to true
-          } else if (item.questionId === id) {
-            item.answer = value;
-            conditionSatisfied = true; // Set the flag to true
-          }
-        });
+    if (isMultiQuestions?.length <= 1) {
+      temp[next].answers.forEach((item) => {
+        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+        if (item.questionId === id && elementId === "InputText") {
+          const trimedValue = value.trim();
+          item.answer = trimedValue;
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.questionId === id && elementId === "Checkbox") {
+          item.answer = checked ? value : "";
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.questionId === id) {
+          item.answer = value;
+          conditionSatisfied = true; // Set the flag to true
+        }
+      });
 
+      setExamAnswer(temp);
+    } else {
+      const multipleTypeQuestions = checked
+        ? examAnswer[next].answers.findIndex(
+            (item) => item.questionId === id && item.answer === ""
+          )
+        : examAnswer[next].answers.findIndex(
+            (item) => item.questionId === id && item.answer !== ""
+          );
+      if (multipleTypeQuestions !== -1) {
+        temp[next].answers[multipleTypeQuestions].answer = checked ? value : "";
         setExamAnswer(temp);
       } else {
-        const multipleTypeQuestions = checked
-          ? examAnswer[next].answers.findIndex(
-              (item) => item.questionId === id && item.answer === ""
-            )
-          : examAnswer[next].answers.findIndex(
-              (item) => item.questionId === id && item.answer !== ""
-            );
-        if (multipleTypeQuestions !== -1) {
-          temp[next].answers[multipleTypeQuestions].answer = checked
-            ? value
-            : "";
-          setExamAnswer(temp);
-        } else {
-          const contentElements = document.querySelectorAll(`[id="${id}"]`);
-          contentElements.forEach((element) => {
-            const isAlreadyAnswered = isMultiQuestions.findIndex(
-              (a) => a.answer === element.value
-            );
+        const contentElements = document.querySelectorAll(`[id="${id}"]`);
+        contentElements.forEach((element) => {
+          const isAlreadyAnswered = isMultiQuestions.findIndex(
+            (a) => a.answer === element.value
+          );
 
-            if (isAlreadyAnswered === -1) element.checked = false;
-          });
-        }
+          if (isAlreadyAnswered === -1) element.checked = false;
+        });
       }
-    },
-    [examAnswer]
-  );
+    }
+  };
 
   useEffect(() => {
     if (examAnswer[0] && examAnswer[0].answers.length > 0) {
@@ -269,7 +258,7 @@ const LiveAssignment = () => {
         });
       }, 500);
     }
-  }, [examAnswer, handleAnswerLinking]);
+  }, [examAnswer]);
 
   const htmlContent = useMemo(() => {
     const question = examData?.question_other || examData?.passage;
@@ -384,14 +373,7 @@ const LiveAssignment = () => {
       setUniqueIdArr(paginationsStrucutre);
       return questionPassage;
     }
-  }, [
-    examAnswer,
-    examData?.exam_type,
-    examData?.id,
-    examData?.passage,
-    examData?.question_other,
-    examData?.question_structure,
-  ]);
+  }, [examData?.question_other]);
 
   const scrollToContent = (contentId) => {
     const container = containerRef.current;

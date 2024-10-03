@@ -9,7 +9,6 @@ import "../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { htmlToText } from "html-to-text";
 import { useNavigate, useParams } from "react-router-dom";
-import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../helpers/ajaxCall";
 import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
@@ -20,6 +19,7 @@ import WritingInstruction from "../Instruction/WritingInstruction";
 import ListeningInstruction from "../Instruction/ListeningInstruction";
 import SpeakingInstruction from "../Instruction/SpeakingInstruction";
 import Loading from "../UI/Loading";
+import DisplayLeftContainer from "../UI/DisplayPassage";
 const Cheerio = require("cheerio");
 
 const intialInstructionState = {
@@ -438,28 +438,6 @@ const FullLengthLiveExam = () => {
     }
   };
 
-  const displayLeftContainer = (passage, image) => {
-    // Replace this with your actual implementation
-    return (
-      <>
-        {image && (
-          <div className="text-center">
-            <img
-              className="mb-2"
-              src={image}
-              alt="Study Streak"
-              height={250}
-              width={250}
-            />
-          </div>
-        )}
-        <SelectionProvider>
-          <Highlighter htmlString={passage} />
-        </SelectionProvider>
-      </>
-    );
-  };
-
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
     const question = paperData?.question_other;
     let tempAnswer = {};
@@ -721,7 +699,7 @@ const FullLengthLiveExam = () => {
         gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        toast.error("You Have Already Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
@@ -1228,7 +1206,10 @@ const FullLengthLiveExam = () => {
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Writing") && (
             <div className="lv-left-container">
-              {displayLeftContainer(examData?.passage, examData?.passage_image)}
+              <DisplayLeftContainer
+                passage={examData?.passage}
+                image={examData?.passage_image}
+              />
             </div>
           )}
           {examData?.exam_type === "Speaking" && (

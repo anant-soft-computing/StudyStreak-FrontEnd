@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -58,52 +58,65 @@ const PaperTest = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [paperTestList, setPaperTestList] = useState([]);
 
+  const category = localStorage.getItem("category");
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
   const studentId = JSON?.parse(localStorage.getItem("StudentID"));
 
-  const filterPaperTest = (data) => {
-    return data.filter((item) => {
-      const studentMatch = item?.student?.some((s) => s?.id === studentId);
-      const batchMatch = item?.batch?.some((b) => batchIds?.includes(b?.id));
-      const courseMatch = item?.course?.some((c) => courseIds?.includes(c?.id));
-      return studentMatch || batchMatch || courseMatch;
-    });
-  };
+  const filterPaperTest = useCallback(
+    (data) => {
+      return data.filter((item) => {
+        const studentMatch = item?.student?.some((s) => s?.id === studentId);
+        const batchMatch = item?.batch?.some((b) => batchIds?.includes(b?.id));
+        const courseMatch = item?.course?.some(
+          (c) => courseIds?.includes(c?.id) && c?.category === category
+        );
+        return studentMatch || batchMatch || courseMatch;
+      });
+    },
+    [category]
+  );
 
-  const formatPaperTest = (resources) => {
-    return resources.flatMap((item, index) => {
-      const baseData = {
-        no: `${index + 1}.`,
-        student: item?.student?.some((s) => s?.id === studentId)
-          ? `${
-              item.student.find((s) => s?.id === studentId)?.user.first_name
-            } ${item.student.find((s) => s?.id === studentId)?.user.last_name}`
-          : "-",
-        batch:
-          item?.batch
-            ?.filter((b) => batchIds?.includes(b?.id))
-            ?.map((b) => b?.batch_name)
-            ?.join(", ") || "-",
-        course:
-          item?.course
-            ?.filter((c) => courseIds?.includes(c?.id))
-            ?.map((c) => c?.Course_Title)
-            ?.join(", ") || "-",
-        link: item?.link || "-",
-      };
+  const formatPaperTest = useCallback(
+    (resources) => {
+      return resources.flatMap((item, index) => {
+        const baseData = {
+          no: `${index + 1}.`,
+          student: item?.student?.some((s) => s?.id === studentId)
+            ? `${
+                item.student.find((s) => s?.id === studentId)?.user.first_name
+              } ${
+                item.student.find((s) => s?.id === studentId)?.user.last_name
+              }`
+            : "-",
+          batch:
+            item?.batch
+              ?.filter((b) => batchIds?.includes(b?.id))
+              ?.map((b) => b?.batch_name)
+              ?.join(", ") || "-",
+          course:
+            item?.course
+              ?.filter(
+                (c) => courseIds?.includes(c?.id) && c?.category === category
+              )
+              ?.map((c) => c?.Course_Title)
+              ?.join(", ") || "-",
+          link: item?.link || "-",
+        };
 
-      const filteredDocuments = item?.documents?.filter((document) =>
-        document.description.includes("Paper Test")
-      );
+        const filteredDocuments = item?.documents?.filter((document) =>
+          document.description.includes("Paper Test")
+        );
 
-      return filteredDocuments.map((document) => ({
-        ...baseData,
-        description: document?.description || "-",
-        document: document?.document || "-",
-      }));
-    });
-  };
+        return filteredDocuments.map((document) => ({
+          ...baseData,
+          description: document?.description || "-",
+          document: document?.document || "-",
+        }));
+      });
+    },
+    [category]
+  );
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -136,7 +149,7 @@ const PaperTest = () => {
       }
     };
     fetchResources();
-  }, []);
+  }, [filterPaperTest, formatPaperTest]);
 
   return (
     <div className="body__wrapper">

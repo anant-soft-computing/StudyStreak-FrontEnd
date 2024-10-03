@@ -5,7 +5,7 @@ const Loading = () => {
   return (
     <div id="back__preloader">
       <div id="back__circle_loader" />
-      <div class="back__loader_logo">
+      <div className="back__loader_logo">
         <img src={studyStreak} alt="Loading" />
       </div>
     </div>

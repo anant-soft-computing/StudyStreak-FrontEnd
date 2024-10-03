@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
@@ -20,6 +21,47 @@ const specificColumns = {
       width: 220,
     },
     { headerName: "Point", field: "points", filter: true, width: 220 },
+  ],
+  "Live Class": [
+    { headerName: "Meeting Title", field: "meeting_title" },
+    {
+      headerName: "Start Date",
+      field: "start_date",
+      valueGetter: (params) => {
+        return moment(params.data.start_time).format("lll");
+      },
+    },
+    {
+      headerName: "End Date",
+      field: "end_date",
+      valueGetter: (params) => {
+        return moment(params.data.end_time).format("lll");
+      },
+    },
+    {
+      headerName: "Batch Name",
+      field: "select_batch",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_batch
+            ?.map((item) => item.batch_name)
+            .join(", ") || "-"}
+        </div>
+      ),
+    },
+    {
+      headerName: "Course Name",
+      field: "select_course",
+      cellRenderer: (params) => (
+        <div>
+          {params.data.select_course
+            ?.map((item) => item.Course_Title)
+            .join(", ") || "-"}
+        </div>
+      ),
+    },
+    { headerName: "Description", field: "meeting_description" },
+    { headerName: "Points", field: "points", filter: true },
   ],
   "Exam Block": [
     { headerName: "No.", field: "no", width: 80 },
@@ -79,6 +121,7 @@ const specificColumns = {
 
 const options = [
   { value: "Flash Card", label: "Flash Card" },
+  { value: "Live Class", label: "Live Class" },
   { value: "Exam Block", label: "Mock Test" },
   { value: "Practice Test", label: "Practice Test" },
   { value: "Full Length Test", label: "Full Length Test" },
@@ -86,6 +129,7 @@ const options = [
 
 const endpoints = {
   "Flash Card": `/gamification/flashcard/`,
+  "Live Class": `/liveclass_list_view/`,
   "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,no_of_questions`,
   "Full Length Test": `/get/flt/`,
   "Practice Test": `/moduleListView/`,

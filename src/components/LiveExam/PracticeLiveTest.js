@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Highlighter, SelectionProvider } from "react-selection-highlighter";
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
@@ -10,6 +9,7 @@ import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import ReadingInstruction from "../Instruction/ReadingInstruction";
 import WritingInstruction from "../Instruction/WritingInstruction";
 import ListeningInstruction from "../Instruction/ListeningInstruction";
+import DisplayLeftContainer from "../UI/DisplayPassage";
 const Cheerio = require("cheerio");
 
 const PracticeLiveExam = () => {
@@ -40,7 +40,7 @@ const PracticeLiveExam = () => {
   const [numberOfWord, setNumberOfWord] = useState(0);
   let highlightedElement = null;
 
-  const handleCompleteInstruciton = () => setInstructionCompleted(true);
+  const handleCompleteInstruction = () => setInstructionCompleted(true);
 
   useEffect(() => {
     if (
@@ -257,28 +257,6 @@ const PracticeLiveExam = () => {
     } else {
       return <p></p>;
     }
-  };
-
-  const displayLeftContainer = (passage, image) => {
-    // Replace this with your actual implementation
-    return (
-      <>
-        {image && (
-          <div className="text-center">
-            <img
-              className="mb-2"
-              src={image}
-              alt="Study Streak"
-              height={250}
-              width={250}
-            />
-          </div>
-        )}
-        <SelectionProvider>
-          <Highlighter htmlString={passage} />
-        </SelectionProvider>
-      </>
-    );
   };
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
@@ -594,7 +572,7 @@ const PracticeLiveExam = () => {
         gamificationSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
-        toast.error("You Have All Ready Submitted This Exam");
+        toast.error("You Have Already Submitted This Exam");
       }
     } catch (error) {
       toast.error("Some Problem Occurred. Please try again.");
@@ -953,19 +931,19 @@ const PracticeLiveExam = () => {
       {examData?.exam_type === "Reading" && (
         <ReadingInstruction
           testType="Practice"
-          startTest={handleCompleteInstruciton}
+          startTest={handleCompleteInstruction}
         />
       )}
       {examData?.exam_type === "Listening" && (
         <ListeningInstruction
           testType="Practice"
-          startTest={handleCompleteInstruciton}
+          startTest={handleCompleteInstruction}
         />
       )}
       {examData?.exam_type === "Writing" && (
         <WritingInstruction
           testType="Practice"
-          startTest={handleCompleteInstruciton}
+          startTest={handleCompleteInstruction}
         />
       )}
     </div>
@@ -1005,7 +983,10 @@ const PracticeLiveExam = () => {
           {(examData?.exam_type === "Reading" ||
             examData?.exam_type === "Writing") && (
             <div className="lv-left-container">
-              {displayLeftContainer(examData?.passage, examData?.passage_image)}
+              <DisplayLeftContainer
+                passage={examData?.passage}
+                image={examData?.passage_image}
+              />
             </div>
           )}
           {/* Right Container */}

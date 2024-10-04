@@ -28,6 +28,7 @@ const LiveSpeakingExam = () => {
   const [speaking, setSpeaking] = useState([
     initialSpeakingSingleQuestionState,
   ]);
+  const [activeRecordingIndex, setActiveRecordingIndex] = useState(null);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   const containerRef = useRef(null);
   let highlightedElement = null;
@@ -148,7 +149,7 @@ const LiveSpeakingExam = () => {
   }, [recordedFilePath]);
 
   const options = {
-    wordwrap: false, 
+    wordwrap: false,
     ignoreHref: true,
     ignoreImage: true,
     preserveNewlines: true,
@@ -156,7 +157,7 @@ const LiveSpeakingExam = () => {
 
   const extractVisibleText = (htmlContent) => {
     const text = convert(htmlContent, options);
-    return text.replace(/\n+/g, '. ').trim();
+    return text.replace(/\n+/g, ". ").trim();
   };
 
   useEffect(() => {
@@ -213,26 +214,20 @@ const LiveSpeakingExam = () => {
     setSpeaking(updatedSpeaking);
   };
 
-  const stopSpeaking = () => {
+  const stopSpeaking = (questionId) => {
     if (synth.speaking) {
       synth.cancel();
     }
-  };
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", stopSpeaking);
-    let tempSpeaking = [...speaking];
-    tempSpeaking = tempSpeaking.map((item) => {
-      return { ...item, status: 0 };
+    // Update the status to stopped
+    const updatedSpeaking = speaking.map((item, index) => {
+      if (index === questionId) {
+        return { ...item, status: 3 };
+      } else {
+        return item;
+      }
     });
-    setSpeaking(tempSpeaking);
-
-    return () => {
-      window.removeEventListener("beforeunload", stopSpeaking);
-      stopSpeaking(0);
-    };
-  }, []);
-
+    setSpeaking(updatedSpeaking);
+  };
   useEffect(() => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
@@ -240,6 +235,10 @@ const LiveSpeakingExam = () => {
       navigate(`/assessment/${examId}`, { state: { examType: "Speaking" } });
     }
   }, [speaking]);
+
+  const handleReplay = (speakingContent, questionId) => {
+    speak(speakingContent, questionId);
+  };
 
   const scrollToQuestion = (index) => {
     if (containerRef.current) {
@@ -262,15 +261,19 @@ const LiveSpeakingExam = () => {
           setRecordedFilePath={setRecordedFilePath}
           next={0}
           exam={examData}
-          enableRecording={speaking?.[i]?.status === 2}
+          enableRecording={
+            speaking?.[i]?.status === 2 || speaking[i].status === 3
+          }
           completed={speaking?.[i]?.filePath !== ""}
           question_number={item.question_number}
           user={userData.userId}
           recorderIndex={i}
+          setActiveRecordingIndex={setActiveRecordingIndex}
+          isActiveRecording={activeRecordingIndex === i}
         />
       );
     },
-    [speaking, examData, userData]
+    [speaking, examData, userData, activeRecordingIndex]
   );
 
   return !instructionCompleted ? (
@@ -331,15 +334,50 @@ const LiveSpeakingExam = () => {
                 <div className="d-flex align-items-center lv-btn-mic-container">
                   <button
                     className="lv-footer-button lv-speaking-button"
-                    onClick={() => speak(item.question, i)}
-                    disabled={speaking?.[i]?.status === 1}
+                    onClick={() =>
+                      speaking[i].status === 2
+                        ? handleReplay(item.question, i)
+                        : speak(item.question, i)
+                    }
+                    disabled={
+                      speaking[i].status === 1 ||
+                      speaking.some(
+                        (item, index) => index !== i && item.status === 1
+                      ) ||
+                      activeRecordingIndex !== null
+                    }
                     style={{
-                      opacity: speaking?.[i]?.status === 1 ? 0.5 : 1,
+                      opacity:
+                        speaking[i].status === 1 ||
+                        speaking.some(
+                          (item, index) => index !== i && item.status === 1
+                        ) ||
+                        activeRecordingIndex !== null
+                          ? 0.5
+                          : 1,
                       cursor:
-                        speaking?.[i]?.status === 1 ? "not-allowed" : "pointer",
+                        speaking[i].status === 1 ||
+                        speaking.some(
+                          (item, index) => index !== i && item.status === 1
+                        ) ||
+                        activeRecordingIndex !== null
+                          ? "not-allowed"
+                          : "pointer",
                     }}
                   >
-                    {speaking?.[i]?.status === 2 ? "Replay" : "Start"}
+                    {speaking[i].status === 2 ? "Replay" : "Start"}
+                  </button>
+                  <button
+                    className="lv-footer-button lv-stop-button"
+                    onClick={() => stopSpeaking(i)}
+                    disabled={speaking?.[i]?.status !== 1}
+                    style={{
+                      opacity: speaking?.[i]?.status === 1 ? 1 : 0.5,
+                      cursor:
+                        speaking?.[i]?.status === 1 ? "pointer" : "not-allowed",
+                    }}
+                  >
+                    Stop
                   </button>
                   <hr />
                   {recorderContainer(item, i)}

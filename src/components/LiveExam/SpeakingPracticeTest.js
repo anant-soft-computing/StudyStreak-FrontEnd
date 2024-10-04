@@ -24,6 +24,7 @@ const PracticeSpeakingLiveExam = () => {
   const [voices, setVoices] = useState([]);
   const [timerRunning, setTimerRunning] = useState(true);
   const [fullPaper, setFullPaper] = useState([]);
+  const [activeRecordingIndex, setActiveRecordingIndex] = useState(null);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
   const [speaking, setSpeaking] = useState([
@@ -209,7 +210,7 @@ const PracticeSpeakingLiveExam = () => {
       );
       setExamData(examBlockWithNumbers[next]);
     }
-  }, [fullPaper, next]);
+  }, [examForm, examType, fullPaper, next]);
 
   useEffect(() => {
     const fetchVoices = () => {
@@ -279,20 +280,21 @@ const PracticeSpeakingLiveExam = () => {
     setSpeaking(updatedSpeaking);
   };
 
-  const stopSpeaking = () => {
+  const stopSpeaking = (questionId) => {
     if (synth.speaking) {
       synth.cancel();
     }
+    // Update the status to stopped
+    setSpeaking((prev) =>
+      prev.map((item) =>
+        item.id === questionId ? { ...item, status: 3 } : item
+      )
+    );
   };
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", stopSpeaking);
-
-    return () => {
-      window.removeEventListener("beforeunload", stopSpeaking);
-      stopSpeaking(0);
-    };
-  }, [next]);
+  const handleReplay = (speakingContent, questionId) => {
+    speak(speakingContent, questionId);
+  };
 
   useEffect(() => {
     if (recordedFilePath) {
@@ -304,7 +306,7 @@ const PracticeSpeakingLiveExam = () => {
       setSpeaking(tempSpeaking);
       setRecordedFilePath(null);
     }
-  }, [recordedFilePath]);
+  }, [recordedFilePath, speaking]);
 
   const recorderContainer = useCallback(
     (item, index) => {
@@ -313,16 +315,27 @@ const PracticeSpeakingLiveExam = () => {
           setRecordedFilePath={setRecordedFilePath}
           next={next}
           exam={examData}
-          enableRecording={speaking?.[index]?.status === 2}
+          enableRecording={
+            speaking?.[index]?.status === 2 || speaking?.[index]?.status === 3
+          }
           completed={speaking?.[index]?.filePath !== ""}
           question_number={item.question_number}
           user={userData.userId}
           recorderIndex={item.id}
           practice={fullPaper?.IELTS?.id}
+          setActiveRecordingIndex={setActiveRecordingIndex}
+          isActiveRecording={activeRecordingIndex === index}
         />
       );
     },
-    [speaking, examData, userData, next]
+    [
+      next,
+      examData,
+      speaking,
+      userData.userId,
+      fullPaper?.IELTS?.id,
+      activeRecordingIndex,
+    ]
   );
 
   const scrollToQuestion = (index) => {
@@ -391,7 +404,7 @@ const PracticeSpeakingLiveExam = () => {
               );
               return (
                 <div className="lv-question-container" key={item.id}>
-                   <div className="lv-speaking-question" style={{ flex: 1 }}>
+                  <div className="lv-speaking-question" style={{ flex: 1 }}>
                     <p> {i + 1} :</p>
                     <div
                       dangerouslySetInnerHTML={{
@@ -402,13 +415,36 @@ const PracticeSpeakingLiveExam = () => {
                   <div className="d-flex align-items-center lv-btn-mic-container">
                     <button
                       className="lv-speaking-button lv-speaking-button"
-                      onClick={() => speak(item.question, item.id)}
-                      disabled={speaking?.[speakingIndex]?.status === 1}
+                      onClick={() =>
+                        speaking?.[speakingIndex]?.status === 2
+                          ? handleReplay(item.question, item.id)
+                          : speak(item.question, item.id)
+                      }
+                      disabled={
+                        speaking?.[speakingIndex]?.status === 1 ||
+                        speaking.some(
+                          (element, index) =>
+                            index !== speakingIndex && element.status === 1
+                        ) ||
+                        activeRecordingIndex !== null
+                      }
                       style={{
                         opacity:
-                          speaking?.[speakingIndex]?.status === 1 ? 0.5 : 1,
+                          speaking?.[speakingIndex]?.status === 1 ||
+                          speaking.some(
+                            (element, index) =>
+                              index !== speakingIndex && element.status === 1
+                          ) ||
+                          activeRecordingIndex !== null
+                            ? 0.5
+                            : 1,
                         cursor:
-                          speaking?.[speakingIndex]?.status === 1
+                          speaking?.[speakingIndex]?.status === 1 ||
+                          speaking.some(
+                            (element, index) =>
+                              index !== speakingIndex && element.status === 1
+                          ) ||
+                          activeRecordingIndex !== null
                             ? "not-allowed"
                             : "pointer",
                       }}
@@ -416,6 +452,21 @@ const PracticeSpeakingLiveExam = () => {
                       {speaking?.[speakingIndex]?.status === 2
                         ? "Replay"
                         : "Start"}
+                    </button>
+                    <button
+                      className="lv-speaking-button lv-stop-button"
+                      onClick={() => stopSpeaking(item.id)}
+                      disabled={speaking?.[speakingIndex]?.status !== 1}
+                      style={{
+                        opacity:
+                          speaking?.[speakingIndex]?.status === 1 ? 1 : 0.5,
+                        cursor:
+                          speaking?.[speakingIndex]?.status === 1
+                            ? "pointer"
+                            : "not-allowed",
+                      }}
+                    >
+                      Stop
                     </button>
                     <hr />
                     {recorderContainer(item, speakingIndex)}

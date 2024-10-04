@@ -52,7 +52,7 @@ const DiagnosticTest = () => {
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [numberOfWord, setNumberOfWord] = useState(0);
-  const [speaking, setSpeaking] = useState(0);
+  const [activeRecordingIndex, setActiveRecordingIndex] = useState(null);
   const [instructionCompleted, setInstructionCompleted] = useState(
     intialInstructionState
   );
@@ -875,14 +875,16 @@ const DiagnosticTest = () => {
       if (index === utterances.length - 1) {
         utterance.onend = () => {
           // Update the status to '2' (completed) when speaking ends
-          const updatedSpeaking = tempExamAnswer[next].data.map((item) => {
-            const tempId = item.id;
-            if (tempId === id) {
-              return { ...item, status: 2 }; // Mark as completed
-            } else {
-              return item;
+          const updatedSpeaking = tempExamAnswer[next].data.map(
+            (item, index) => {
+              const tempId = item.id;
+              if (tempId === id) {
+                return { ...item, status: 2 }; // Mark as completed
+              } else {
+                return item;
+              }
             }
-          });
+          );
           tempExamAnswer[next].data = updatedSpeaking;
           setExamAnswer(tempExamAnswer);
         };
@@ -890,7 +892,7 @@ const DiagnosticTest = () => {
     });
 
     // Set the status to '1' (in-progress) for the current speaking item
-    const updatedSpeaking = tempExamAnswer[next].data.map((item) => {
+    const updatedSpeaking = tempExamAnswer[next].data.map((item, index) => {
       const tempId = item.id;
       if (tempId === id) {
         return { ...item, status: 1 }; // Mark as in-progress
@@ -902,21 +904,21 @@ const DiagnosticTest = () => {
     setExamAnswer(tempExamAnswer);
   };
 
-  const stopSpeaking = () => {
+  const stopSpeaking = (questionId) => {
     if (synth.speaking) {
       synth.cancel();
     }
+    // Update the status to stopped
+    setExamAnswer((prev) =>
+      prev.map((item) =>
+        item.id === questionId ? { ...item, status: 3 } : item
+      )
+    );
   };
 
-  useEffect(() => {
-    window.addEventListener("beforeunload", stopSpeaking);
-    setSpeaking(0);
-
-    return () => {
-      window.removeEventListener("beforeunload", stopSpeaking);
-      stopSpeaking(0);
-    };
-  }, [next]);
+  const handleReplay = (speakingContent, questionId) => {
+    speak(speakingContent, questionId);
+  };
 
   useEffect(() => {
     if (recordedFilePath) {
@@ -940,18 +942,23 @@ const DiagnosticTest = () => {
             setRecordedFilePath={setRecordedFilePath}
             next={next}
             exam={examData}
-            enableRecording={examAnswer[next].data?.[index]?.status === 2}
+            enableRecording={
+              examAnswer[next].data?.[index]?.status === 2 ||
+              examAnswer[next].data?.[index]?.status === 3
+            }
             completed={examAnswer[next].data?.[index]?.answer_text !== ""}
             question_number={item.question_number}
             user={userData.userId}
             recorderIndex={item.id}
             Flt={examId}
+            setActiveRecordingIndex={setActiveRecordingIndex}
+            isActiveRecording={activeRecordingIndex === index}
           />
         );
       }
       return;
     },
-    [examData, next, examAnswer, userData.userId, examId]
+    [examData, next, examAnswer, userData.userId, examId, activeRecordingIndex]
   );
 
   const reviewContent = () =>
@@ -1141,19 +1148,41 @@ const DiagnosticTest = () => {
                         {i + 1} :
                         <button
                           className="lv-footer-button lv-speaking-button"
-                          onClick={() => speak(item.question, item.id)}
+                          onClick={() =>
+                            examAnswer[next].data?.[speakingIndex]?.status === 2
+                              ? handleReplay(item.question, item.id)
+                              : speak(item.question, item.id)
+                          }
                           disabled={
-                            examAnswer[next].data?.[speakingIndex]?.status === 1
+                            examAnswer[next].data?.[speakingIndex]?.status ===
+                              1 ||
+                            examAnswer[next].data?.some(
+                              (element, index) =>
+                                index !== speakingIndex && element.status === 1
+                            ) ||
+                            activeRecordingIndex !== null
                           }
                           style={{
                             opacity:
                               examAnswer[next].data?.[speakingIndex]?.status ===
-                              1
+                                1 ||
+                              examAnswer[next].data?.some(
+                                (element, index) =>
+                                  index !== speakingIndex &&
+                                  element.status === 1
+                              ) ||
+                              activeRecordingIndex !== null
                                 ? 0.5
                                 : 1,
                             cursor:
                               examAnswer[next].data?.[speakingIndex]?.status ===
-                              1
+                                1 ||
+                              examAnswer[next].data?.some(
+                                (element, index) =>
+                                  index !== speakingIndex &&
+                                  element.status === 1
+                              ) ||
+                              activeRecordingIndex !== null
                                 ? "not-allowed"
                                 : "pointer",
                           }}
@@ -1161,6 +1190,27 @@ const DiagnosticTest = () => {
                           {examAnswer[next].data?.[speakingIndex]?.status === 2
                             ? "Replay"
                             : "Start"}
+                        </button>
+                        <button
+                          className="lv-speaking-button lv-stop-button"
+                          onClick={() => stopSpeaking(item.id)}
+                          disabled={
+                            examAnswer[next].data?.[speakingIndex]?.status !== 1
+                          }
+                          style={{
+                            opacity:
+                              examAnswer[next].data?.[speakingIndex]?.status ===
+                              1
+                                ? 1
+                                : 0.5,
+                            cursor:
+                              examAnswer[next].data?.[speakingIndex]?.status ===
+                              1
+                                ? "pointer"
+                                : "not-allowed",
+                          }}
+                        >
+                          Stop
                         </button>
                         <hr />
                         {recorderContainer(item, speakingIndex)}

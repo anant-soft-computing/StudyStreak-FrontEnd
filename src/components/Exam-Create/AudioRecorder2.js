@@ -16,6 +16,8 @@ const AudioRecorder = ({
   recorderIndex = 0,
   practice,
   Flt,
+  setActiveRecordingIndex,
+  isActiveRecording,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -53,6 +55,7 @@ const AudioRecorder = ({
 
         mediaRecorderRef.current.start();
         setIsRecording(true);
+        setActiveRecordingIndex(recorderIndex);
         SpeechRecognition.startListening({ continuous: true });
       })
       .catch((error) => {
@@ -61,9 +64,12 @@ const AudioRecorder = ({
   };
 
   const handleStopRecording = () => {
-    mediaRecorderRef.current.stop();
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+    }
     setIsRecording(false);
     SpeechRecognition.stopListening();
+    setActiveRecordingIndex(null);
   };
 
   useEffect(() => {
@@ -206,11 +212,14 @@ const AudioRecorder = ({
       className="ly-mic-audio-container"
     >
       <button
-        disabled={!enableRecording}
+        disabled={!enableRecording || (isActiveRecording && !isRecording)}
         className="audio__recorder__btn"
         onClick={isRecording ? handleStopRecording : handleStartRecording}
         style={{
-          cursor: enableRecording ? "pointer" : "not-allowed",
+          cursor:
+            enableRecording && (!isActiveRecording || isRecording)
+              ? "pointer"
+              : "not-allowed",
         }}
       >
         {isRecording ? (
@@ -218,11 +227,16 @@ const AudioRecorder = ({
         ) : !completed ? (
           <i
             className={`icofont-mic audio-30  ${
-              enableRecording && "audio_recorder_icon"
+              enableRecording &&
+              (!isActiveRecording || isRecording) &&
+              "audio_recorder_icon"
             }`}
             style={{
               background: completed ? "green" : "",
-              color: !enableRecording ? "grey" : "",
+              color:
+                !enableRecording || (isActiveRecording && !isRecording)
+                  ? "grey"
+                  : "",
             }}
           ></i>
         ) : null}
@@ -232,10 +246,10 @@ const AudioRecorder = ({
           "Click on the Mic icon to Record your Response") ||
           (completed && "Recording Completed") ||
           (isRecording && "Recording...") ||
-          (!isRecording && !audioBlob && "Click on Mic to Recording")}
+          (!isRecording && !audioBlob && "Click on Mic to Record")}
       </h6>
       {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
-      {isRecording && <p>Transcript: {transcript}</p>}{" "}
+      {isRecording && <p>Transcript: {transcript}</p>}
     </div>
   );
 };

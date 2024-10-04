@@ -18,7 +18,7 @@ import notice from "../../../../img/icon/notice.svg";
 import resource from "../../../../img/icon/support.svg";
 import testimonial from "../../../../img/icon/support.svg";
 import coupon from "../../../../img/icon/coupon.svg";
-import video from "../../../../img/icon/video.svg";
+import lesson from "../../../../img/icon/lesson.svg";
 
 const DASideBar = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
@@ -98,9 +98,9 @@ const DASideBar = () => {
       link: "/admin-resources",
     },
     {
-      name: "Upload Lesson",
-      icon: <img src={video} alt="Upload Lesson" height={20} width={20} />,
-      link: "/admin-upload-lesson",
+      name: "Lesson",
+      icon: <img src={lesson} alt="Lesson" height={20} width={20} />,
+      link: "/admin-lesson",
     },
     {
       name: "Coupon",

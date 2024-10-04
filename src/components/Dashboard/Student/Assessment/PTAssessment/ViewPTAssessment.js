@@ -85,7 +85,7 @@ const ViewPTAssessment = () => {
                         backgroundColor: getBackgroundColor(band),
                       }}
                     >
-                      Band : {band}
+                      Band : {band?.toFixed(1)}
                     </h4>
                   </div>
                   {examType === "Writing" ? (

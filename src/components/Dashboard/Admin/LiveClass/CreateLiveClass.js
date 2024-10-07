@@ -71,9 +71,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
-    dispatchCreateLiveClass({
-      type: "reset",
-    });
+    dispatchCreateLiveClass({ type: "reset" });
   };
 
   const setFormError = (errMsg) => {

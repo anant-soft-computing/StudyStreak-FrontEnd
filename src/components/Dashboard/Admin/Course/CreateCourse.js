@@ -140,9 +140,7 @@ const CreateCourse = ({ setMainTab }) => {
   };
 
   const resetReducerForm = () => {
-    dispatchCreateCourse({
-      type: "reset",
-    });
+    dispatchCreateCourse({ type: "reset" });
   };
 
   const setFormError = (errMsg) => {

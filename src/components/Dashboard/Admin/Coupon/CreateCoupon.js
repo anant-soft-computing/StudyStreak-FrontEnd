@@ -59,9 +59,7 @@ const CreateCoupon = ({ setActiveTab }) => {
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
-    dispatchCoupon({
-      type: "reset",
-    });
+    dispatchCoupon({ type: "reset" });
   };
 
   const setFormError = (errMsg) => {

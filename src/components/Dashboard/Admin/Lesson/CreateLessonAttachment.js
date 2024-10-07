@@ -56,7 +56,11 @@ const CreateLessonAttachment = () => {
           <span>Lesson</span>
         </div>
         <div className="dashboard__selector">
-          <SingleSelection isSearch={true} />
+          <SingleSelection
+            url="/lessoncreateview/"
+            objKey={["Lesson_Title"]}
+            isSearch={true}
+          />
         </div>
       </div>
       {createLAData.documents.map((_, index) => (

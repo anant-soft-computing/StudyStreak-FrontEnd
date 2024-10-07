@@ -63,9 +63,7 @@ const CreateRecurrenceLiveClass = ({ setActiveTab }) => {
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
-    dispatchCRLD({
-      type: "reset",
-    });
+    dispatchCRLD({ type: "reset" });
   };
 
   const setFormError = (errMsg) => {

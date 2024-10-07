@@ -50,9 +50,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
-    dispatchFlashCardData({
-      type: "reset",
-    });
+    dispatchFlashCardData({ type: "reset" });
   };
 
   const setFormError = (errMsg) => {

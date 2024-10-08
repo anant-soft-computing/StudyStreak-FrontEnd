@@ -1,7 +1,8 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
+import SelectSearch from "react-select-search";
 import SelectionBox from "../../../UI/SelectionBox";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
@@ -45,6 +46,9 @@ const CreateLesson = () => {
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
+
+  const [options, setOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const resetReducerForm = () => {
     dispatchCreateLesson({ type: "reset" });
@@ -124,6 +128,38 @@ const CreateLesson = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchVideoLinks = async () => {
+      setIsLoading(true);
+      try {
+        const response = await ajaxCall(
+          "/list/lessons-videos/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          const result = response?.data?.files?.map((item) => ({
+            name: item?.url?.slice(62),
+            value: item?.url,
+          }));
+          setOptions(result);
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchVideoLinks();
+  }, [authData?.accessToken]);
+
   return (
     <div className="row">
       <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
@@ -181,22 +217,30 @@ const CreateLesson = () => {
           </div>
         </div>
       </div>
-      <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-        <div className="dashboard__form__wraper">
-          <div className="dashboard__form__input">
-            <label>Video</label>
-            <input
-              type="text"
-              placeholder="Lesson Video"
-              value={createLessonData.Lesson_Video}
-              onChange={(e) => {
-                dispatchCreateLesson({
-                  type: "Lesson_Video",
-                  value: e.target.value,
-                });
-              }}
-            />
-          </div>
+      <div className="col-xl-6 col-lg-6 col-md-6 col-12 mb-4">
+        <div className="dashboard__select__heading">
+          <span>Video</span>
+        </div>
+        <div className="dashboard__selector">
+          <SelectSearch
+            search
+            options={options}
+            className="select-search"
+            value={createLessonData.Lesson_Video}
+            onChange={(val) => {
+              dispatchCreateLesson({
+                type: "Lesson_Video",
+                value: val,
+              });
+            }}
+            placeholder={
+              isLoading
+                ? "Loading"
+                : options?.length
+                ? "Select Options"
+                : "No Data Found"
+            }
+          />
         </div>
       </div>
       <div className="col-xl-6 col-lg-6 col-md-6 col-12">

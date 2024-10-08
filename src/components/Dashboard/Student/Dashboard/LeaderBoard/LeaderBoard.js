@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const LeaderBoard = ({ studentID }) => {
+  const category = localStorage.getItem("category");
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
@@ -22,7 +23,10 @@ const LeaderBoard = ({ studentID }) => {
           8000
         );
         if (response.status === 200) {
-          setTableData(response?.data);
+          const data = response?.data?.filter((item) =>
+            item?.courses?.category?.includes(category)
+          );
+          setTableData(data);
         } else {
           console.log("error");
         }
@@ -30,7 +34,7 @@ const LeaderBoard = ({ studentID }) => {
         console.log("error", error);
       }
     })();
-  }, []);
+  }, [category]);
 
   return (
     <div className="dashboard__inner card-background">

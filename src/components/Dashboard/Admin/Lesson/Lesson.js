@@ -3,18 +3,16 @@ import DASideBar from "../DASideBar/DASideBar";
 import Tab from "../../../UI/Tab";
 import UploadLesson from "./UploadLesson";
 import CreateLesson from "./CreateLesson";
-import CreateLessonAttachment from "./CreateLessonAttachment";
-import CreateLessonQuiz from "./CreateLessonQuiz";
+import ViewLesson from "./ViewLesson";
 
 const tabs = [
+  { name: "View Lesson" },
   { name: "Upload Lesson" },
   { name: "Create Lesson" },
-  { name: "Create Lesson Attachment" },
-  { name: "Create Lesson Quiz" },
 ];
 
 const Lesson = () => {
-  const [activeTab, setActiveTab] = useState("Upload Lesson");
+  const [activeTab, setActiveTab] = useState("View Lesson");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -41,6 +39,15 @@ const Lesson = () => {
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
+                            activeTab === "View Lesson" ? "show active" : ""
+                          }`}
+                        >
+                          <div className="row">
+                            <ViewLesson activeTab={activeTab} />
+                          </div>
+                        </div>
+                        <div
+                          className={`tab-pane fade ${
                             activeTab === "Upload Lesson" ? "show active" : ""
                           }`}
                         >
@@ -54,29 +61,10 @@ const Lesson = () => {
                           }`}
                         >
                           <div className="row">
-                            <CreateLesson key={activeTab} />
-                          </div>
-                        </div>
-                        <div
-                          className={`tab-pane fade ${
-                            activeTab === "Create Lesson Attachment"
-                              ? "show active"
-                              : ""
-                          }`}
-                        >
-                          <div className="row">
-                            <CreateLessonAttachment key={activeTab} />
-                          </div>
-                        </div>
-                        <div
-                          className={`tab-pane fade ${
-                            activeTab === "Create Lesson Quiz"
-                              ? "show active"
-                              : ""
-                          }`}
-                        >
-                          <div className="row">
-                            <CreateLessonQuiz key={activeTab} />
+                            <CreateLesson
+                              parentActiveTab={activeTab}
+                              parentSetActiveTab={setActiveTab}
+                            />
                           </div>
                         </div>
                       </div>

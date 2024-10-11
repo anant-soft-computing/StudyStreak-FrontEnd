@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
 import Quiz from "./Quiz";
@@ -16,9 +17,11 @@ const tabs = [
 ];
 
 const LessonContent = ({ activeLesson, activeContentType }) => {
+  const videoRef = useRef(null);
   const { courseId } = useParams();
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
   const [activeTab, setActiveTab] = useState("Attachment");
+  const [isLessonComplete, setIsLessonComplete] = useState(false);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -59,7 +62,22 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
       if (state.playedSeconds % 10 < 1) {
         updateWatchedUpto(state.playedSeconds);
       }
+
+      // Check if the lesson is complete
+      const videoDuration = videoRef.current?.getDuration();
+      if (
+        videoDuration &&
+        state.playedSeconds >= videoDuration - 1 &&
+        !isLessonComplete
+      ) {
+        setIsLessonComplete(true);
+        toast.success("Your lesson Is Complete!"); 
+      }
     }
+  };
+
+  const handleContextMenu = (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -68,6 +86,7 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
         <div>
           <div className="plyr__video-embed rbtplayer">
             <ReactPlayer
+              ref={videoRef}
               url={
                 activeLesson?.timestamp !== undefined &&
                 `${activeLesson?.Lesson_Video?.replace(
@@ -79,6 +98,15 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               controls
               height={"590px"}
               width={"100%"}
+              config={{
+                file: {
+                  attributes: {
+                    controlsList: "nodownload noremoteplayback",
+                    disablePictureInPicture: true,
+                    onContextMenu: handleContextMenu,
+                  },
+                },
+              }}
             />
             <div className="floating-notes-container-icon">
               <img

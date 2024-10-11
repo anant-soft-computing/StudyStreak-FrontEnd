@@ -6,17 +6,18 @@ import CreateLesson from "./CreateLesson";
 import ViewLesson from "./ViewLesson";
 
 const tabs = [
-  { name: "View Lesson" },
   { name: "Upload Lesson" },
+  { name: "View Lesson" },
   { name: "Create Lesson" },
 ];
 
 const Lesson = () => {
-  const [activeTab, setActiveTab] = useState("View Lesson");
+  const [activeTab, setActiveTab] = useState("Upload Lesson");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+  
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -37,6 +38,15 @@ const Lesson = () => {
                         handleTabChange={handleTabChange}
                       />
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                      <div
+                          className={`tab-pane fade ${
+                            activeTab === "Upload Lesson" ? "show active" : ""
+                          }`}
+                        >
+                          <div className="row">
+                            <UploadLesson />
+                          </div>
+                        </div>
                         <div
                           className={`tab-pane fade ${
                             activeTab === "View Lesson" ? "show active" : ""
@@ -44,15 +54,6 @@ const Lesson = () => {
                         >
                           <div className="row">
                             <ViewLesson activeTab={activeTab} />
-                          </div>
-                        </div>
-                        <div
-                          className={`tab-pane fade ${
-                            activeTab === "Upload Lesson" ? "show active" : ""
-                          }`}
-                        >
-                          <div className="row">
-                            <UploadLesson />
                           </div>
                         </div>
                         <div

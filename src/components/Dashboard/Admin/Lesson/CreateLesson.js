@@ -199,7 +199,7 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
     formData.append("Lesson_Duration", createLessonData?.Lesson_Duration);
     formData.append("active", createLessonData?.active);
     formData.append("sequence", createLessonData?.sequence);
-    formData.append("Lesson_Video", createLessonData.Lesson_Video);
+    formData.append("Lesson_Video", encodeURI(createLessonData.Lesson_Video));
 
     createLessonData.lesson_assignment.forEach((item, index) => {
       formData.append(`lesson_assignment`, item.id);
@@ -251,7 +251,7 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
 
       if (response.status === 201) {
         resetReducerForm();
-        parentSetActiveTab("Create Lesson");
+        parentSetActiveTab("View Lesson");
         toast.success("Lesson Created Successfully");
       } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");

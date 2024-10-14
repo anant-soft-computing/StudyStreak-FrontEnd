@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 const LessonList = ({
   lessons,
   activeIndex,
+  lessonStatus,
   setActiveIndex,
   setActiveLesson,
   handleContentChange,
@@ -81,7 +82,27 @@ const LessonList = ({
                         </h5>
                       </div>
                       <div className="scc__meta">
-                        <strong>{lesson?.Lesson_Duration}</strong>
+                        <span className="time">
+                          <i
+                            className="icofont-clock-time"
+                            style={{ color: "black" }}
+                          />{" "}
+                          {lesson?.Lesson_Duration}
+                        </span>
+                        <span
+                          className="question"
+                          style={{
+                            backgroundColor:
+                              lessonStatus === "Complete" ? "green" : "red",
+                          }}
+                        >
+                          {lessonStatus === "Complete" ? (
+                            <i className="icofont-check-circled" />
+                          ) : (
+                            <i className="icofont-close-circled" />
+                          )}{" "}
+                          {lessonStatus}
+                        </span>
                       </div>
                     </div>
                   </div>

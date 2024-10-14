@@ -15,6 +15,7 @@ const Lesson = () => {
   const [activeLesson, setActiveLesson] = useState({});
   const [courseLessons, setCourseLessons] = useState([]);
   const [currentLesson, setCurrentLesson] = useState({});
+  const [lessonStatus, setLessonStatus] = useState("Pending");
   const [activeContentType, setActiveContentType] = useState("video");
 
   const authData = useSelector((state) => state.authStore);
@@ -134,25 +135,20 @@ const Lesson = () => {
                 <Loading />
               ) : (
                 <>
-                  {currentLesson?.lesson && currentLesson?.course && (
-                    <h5>
-                      Current Learning Lesson :{" "}
-                      {currentLesson?.lesson?.Lesson_Title},{" "}
-                      {currentLesson?.course?.Course_Title}
-                    </h5>
-                  )}
                   <div className="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 course__lessons">
                     <LessonList
                       lessons={courseLessons}
                       activeIndex={activeIndex}
+                      lessonStatus={lessonStatus}
                       setActiveIndex={setActiveIndex}
-                      handleContentChange={setActiveContentType}
                       setActiveLesson={setActiveLesson}
+                      handleContentChange={setActiveContentType}
                     />
                   </div>
                   <div className="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">
                     <LessonContent
                       activeLesson={activeLesson}
+                      setLessonStatus={setLessonStatus}
                       activeContentType={activeContentType}
                     />
                   </div>

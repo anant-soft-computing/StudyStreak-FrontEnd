@@ -274,21 +274,22 @@ const Dashboard = () => {
                         <div className="course__details__heading">
                           <h3>Welcome, {userData?.username}</h3>
                         </div>
-                        {selectedCourse === "IELTS" && (
-                          <h5>
-                            Batch :{" "}
-                            {studentBatch.map((batch) => (
-                              <span key={batch.id}>
-                                {batch.batch_name} :{" "}
-                                {moment(
-                                  batch.batch_start_timing,
-                                  "HH:mm:ss"
-                                ).format("hh:mm A")}{" "}
-                                |{" "}
-                              </span>
-                            ))}
-                          </h5>
-                        )}
+                        {selectedCourse === "IELTS" &&
+                          studentBatch?.length > 0 && (
+                            <h5>
+                              Batch :{" "}
+                              {studentBatch?.map((batch) => (
+                                <span key={batch.id}>
+                                  {batch.batch_name} :{" "}
+                                  {moment(
+                                    batch.batch_start_timing,
+                                    "HH:mm:ss"
+                                  ).format("hh:mm A")}{" "}
+                                  |{" "}
+                                </span>
+                              ))}
+                            </h5>
+                          )}
                         <div className="online__course__wrap mt-0">
                           <div className="row instructor__slider__active row__custom__class">
                             <ScoreCard course={selectedCourse} />

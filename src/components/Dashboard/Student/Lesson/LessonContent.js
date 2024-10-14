@@ -10,13 +10,13 @@ import noteBook from "../../../../img/icon/notebook.svg";
 import FloatingNote from "./FloatingNote";
 import Tab from "../../../UI/Tab";
 
-const tabs = [
-  { name: "Attachment" },
-  { name: "Assignment" },
-  { name: "Quiz" },
-];
+const tabs = [{ name: "Attachment" }, { name: "Assignment" }, { name: "Quiz" }];
 
-const LessonContent = ({ activeLesson, activeContentType }) => {
+const LessonContent = ({
+  activeLesson,
+  activeContentType,
+  setLessonStatus,
+}) => {
   const videoRef = useRef(null);
   const { courseId } = useParams();
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
@@ -71,7 +71,8 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
         !isLessonComplete
       ) {
         setIsLessonComplete(true);
-        toast.success("Your lesson Is Complete!"); 
+        setLessonStatus("Complete");
+        toast.success("Your lesson is Complete.");
       }
     }
   };
@@ -96,8 +97,8 @@ const LessonContent = ({ activeLesson, activeContentType }) => {
               }
               onProgress={handleProgress}
               controls
-              height={"590px"}
-              width={"100%"}
+              width="100%"
+              height="100%"
               config={{
                 file: {
                   attributes: {

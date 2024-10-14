@@ -208,6 +208,7 @@ const AudioRecorder = ({
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
+        alignItems: "center",
       }}
       className="ly-mic-audio-container"
     >
@@ -220,28 +221,23 @@ const AudioRecorder = ({
             enableRecording && (!isActiveRecording || isRecording)
               ? "pointer"
               : "not-allowed",
+          backgroundColor: isRecording ? "red" : "green",
+          color: "white",
+          border: "none",
+          borderRadius: "5px",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        {isRecording ? (
-          <i className="icofont-stop audio_stop_icon"></i>
-        ) : !completed ? (
-          <i
-            className={`icofont-mic audio-30  ${
-              enableRecording &&
-              (!isActiveRecording || isRecording) &&
-              "audio_recorder_icon"
-            }`}
-            style={{
-              background: completed ? "green" : "",
-              color:
-                !enableRecording || (isActiveRecording && !isRecording)
-                  ? "grey"
-                  : "",
-            }}
-          ></i>
-        ) : null}
+        <i
+          className={`icofont-${isRecording ? "stop" : "mic"} audio_icon`}
+          style={{ marginRight: "8px" }}
+        ></i>
+        <span>{isRecording ? "Stop" : "Start"}</span>
       </button>
-      <h6 style={{ alignSelf: "center", textAlign: "center" }}>
+      <h6
+        style={{ alignSelf: "center", textAlign: "center", marginTop: "10px" }}
+      >
         {(!enableRecording &&
           "Click on the Mic icon to Record your Response") ||
           (completed && "Recording Completed") ||

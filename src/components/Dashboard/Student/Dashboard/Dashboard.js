@@ -272,7 +272,7 @@ const Dashboard = () => {
                     <div className="col-xl-8 col-lg-8">
                       <div className="blog__details__content__wraper">
                         <div className="course__details__heading">
-                          <h3>Welcome, {userData?.username}</h3>
+                          <h3>Welcomee, {userData?.username}</h3>
                         </div>
                         {selectedCourse === "IELTS" &&
                           studentBatch?.length > 0 && (

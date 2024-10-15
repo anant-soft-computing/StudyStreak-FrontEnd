@@ -22,6 +22,7 @@ const LessonContent = ({
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
   const [activeTab, setActiveTab] = useState("Attachment");
   const [isLessonComplete, setIsLessonComplete] = useState(false);
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -57,6 +58,36 @@ const LessonContent = ({
     }
   };
 
+  const completeLesson = async () => {
+    const body = {
+      student_id: studentId,
+      lesson_ids: [activeLesson?.id],
+    };
+    const response = await ajaxCall(
+      "/enroll-lesson/",
+      {
+        body: JSON.stringify(body),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${
+            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+          }`,
+        },
+        method: "POST",
+      },
+      8000
+    );
+
+    if (response.status === 201) {
+      setIsLessonComplete(true);
+      setLessonStatus("Complete");
+      toast.success("Your lesson is Complete.");
+    } else {
+      console.log("error");
+    }
+  };
+
   const handleProgress = (state) => {
     if (!state.seeking) {
       if (state.playedSeconds % 10 < 1) {
@@ -70,9 +101,7 @@ const LessonContent = ({
         state.playedSeconds >= videoDuration - 1 &&
         !isLessonComplete
       ) {
-        setIsLessonComplete(true);
-        setLessonStatus("Complete");
-        toast.success("Your lesson is Complete.");
+        completeLesson();
       }
     }
   };
@@ -97,8 +126,8 @@ const LessonContent = ({
               }
               onProgress={handleProgress}
               controls
-              width="100%"
-              height="100%"
+              height={"590px"}
+              width={"100%"}
               config={{
                 file: {
                   attributes: {

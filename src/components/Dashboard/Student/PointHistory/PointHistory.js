@@ -5,6 +5,28 @@ import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
 
 const specificColumns = {
+  Lesson: [
+    { headerName: "No.", field: "no", width: 120 },
+    {
+      headerName: "Lesson Title",
+      field: "Lesson_Title",
+      filter: true,
+      width: 310,
+    },
+    {
+      headerName: "Description",
+      field: "Lesson_Description",
+      filter: true,
+      width: 310,
+    },
+    {
+      headerName: "Duration",
+      field: "Lesson_Duration",
+      filter: true,
+      width: 310,
+    },
+    { headerName: "Points", field: "points", filter: true, width: 310 },
+  ],
   "Flash Card": [
     { headerName: "No.", field: "no", width: 80 },
     { headerName: "Name", field: "title", filter: true, width: 400 },
@@ -120,6 +142,7 @@ const specificColumns = {
 };
 
 const options = [
+  { value: "Lesson", label: "Lesson" },
   { value: "Flash Card", label: "Flash Card" },
   { value: "Live Class", label: "Live Class" },
   { value: "Exam Block", label: "Mock Test" },
@@ -128,6 +151,7 @@ const options = [
 ];
 
 const endpoints = {
+  "Lesson": `/lessonview/`,
   "Flash Card": `/gamification/flashcard/`,
   "Live Class": `/liveclass_list_view/`,
   "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,no_of_questions`,

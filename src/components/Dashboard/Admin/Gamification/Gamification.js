@@ -9,7 +9,6 @@ const tabs = [{ name: "View Gamification" }, { name: "Create Gamification" }];
 const options = [
   { value: "Flash Card", label: "Flash Card" },
   { value: "Lesson", label: "Lesson" },
-  { value: "Course", label: "Course" },
   { value: "Exam Block", label: "Mock Test" },
   { value: "Full Length Test", label: "Full Length Test" },
   { value: "Practice Test", label: "Practice Test" },

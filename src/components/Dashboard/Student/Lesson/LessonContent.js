@@ -58,6 +58,37 @@ const LessonContent = ({
     }
   };
 
+  const gamificationSubmit = async (lessonID) => {
+    const data = {
+      model: "Lesson",
+      object_id: lessonID,
+    };
+    try {
+      const response = await ajaxCall(
+        "/gamification/points/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const completeLesson = async () => {
     const body = {
       student_id: studentId,
@@ -82,6 +113,7 @@ const LessonContent = ({
     if (response.status === 201) {
       setIsLessonComplete(true);
       setLessonStatus("Complete");
+      gamificationSubmit(activeLesson?.id);
       toast.success("Your lesson is Complete.");
     } else {
       console.log("error");

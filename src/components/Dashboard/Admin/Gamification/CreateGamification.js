@@ -23,7 +23,6 @@ const reducerGamification = (state, action) => {
 const options = [
   "Flash Card",
   "Lesson",
-  "Course",
   "Exam Block",
   "Full Length Test",
   "Practice Test",

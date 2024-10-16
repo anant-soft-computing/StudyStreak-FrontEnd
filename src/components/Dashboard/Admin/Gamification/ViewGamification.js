@@ -23,20 +23,21 @@ const specificColumns = {
       headerName: "Lesson Title",
       field: "Lesson_Title",
       filter: true,
-      width: 510,
+      width: 310,
     },
     {
       headerName: "Description",
       field: "Lesson_Description",
       filter: true,
-      width: 510,
+      width: 310,
+    },
+    {
+      headerName: "Duration",
+      field: "Lesson_Duration",
+      filter: true,
+      width: 310,
     },
     { headerName: "Points", field: "points", filter: true, width: 310 },
-  ],
-  Course: [
-    { headerName: "No.", field: "no", resizable: false, width: 60 },
-    { headerName: "Course Title", field: "Course_Title", filter: true },
-    { headerName: "Points", field: "points", filter: true },
   ],
   "Exam Block": [
     { headerName: "No.", field: "no", width: 150 },
@@ -144,7 +145,6 @@ const ViewGamification = ({ content, activeTab }) => {
     const endpoints = {
       "Flash Card": `/gamification/flashcard/`,
       Lesson: `/lessonview/`,
-      Course: `/courselistview/`,
       "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,block_type`,
       "Full Length Test": `/get/flt/`,
       "Practice Test": `/moduleListView/`,
@@ -186,21 +186,6 @@ const ViewGamification = ({ content, activeTab }) => {
             points:
               gamificationList.find(
                 (i) => i.name === item.Lesson_Title && i.model === content
-              )?.points || 0,
-          }));
-      case "Course":
-        return dataList
-          .filter((item) =>
-            gamificationList.some(
-              (i) => i.name === item.Course_Title && i.model === content
-            )
-          )
-          .map((item, index) => ({
-            ...item,
-            no: index + 1,
-            points:
-              gamificationList.find(
-                (i) => i.name === item.Course_Title && i.model === content
               )?.points || 0,
           }));
       case "Exam Block":

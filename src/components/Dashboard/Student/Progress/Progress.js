@@ -30,8 +30,15 @@ const Progress = () => {
   const [totalPoints, setTotalPoints] = useState(0);
   const [badges, setBadges] = useState([]);
   const [fltData, setFltData] = useState([]);
+  const [lessons, setLessons] = useState([]);
+  const [studentLessons, setStudentLessons] = useState([]);
   const [miniTestData, setMiniTestData] = useState([]);
   const [practiceTestData, setPracticeTestData] = useState([]);
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+
+  const completeLesson = lessons?.filter((item) =>
+    studentLessons?.some((i) => i?.id === item?.id)
+  );
 
   const [studentExams, setStudentExams] = useState({
     miniTest: 0,
@@ -55,6 +62,34 @@ const Progress = () => {
   const availableBadges = badges
     .filter((badge) => totalPoints >= badge.points_required)
     .sort((a, b) => a.points_required - b.points_required);
+
+  useEffect(() => {
+    const fetchStudentLessons = async () => {
+      try {
+        const response = await ajaxCall(
+          `/student/${studentId}/lessons/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setStudentLessons(response?.data);
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    };
+
+    fetchStudentLessons();
+  }, [studentId]);
 
   const fetchTestData = async (url, setData) => {
     try {
@@ -102,6 +137,10 @@ const Progress = () => {
 
   useEffect(() => {
     fetchTestData("/test-submission/?test_type=flt&records=1", setFltData);
+  }, []);
+
+  useEffect(() => {
+    fetchTestData("/lessonview/", setLessons);
   }, []);
 
   useEffect(() => {
@@ -457,7 +496,7 @@ const Progress = () => {
                         <table>
                           <thead>
                             <tr>
-                              <th>Assignment Name</th>
+                              <th>Assignment</th>
                               <th>No Of Given Assignment</th>
                             </tr>
                           </thead>
@@ -509,6 +548,36 @@ const Progress = () => {
                                     ? latestScore.pTLatestScore
                                     : latestScore.mTLatestScore}
                                 </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div className="dashboard__content__wraper common-background-color-across-app">
+                      <h4 className="sidebar__title">Lessons</h4>
+                      <div className="dashboard__table table-responsive">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Description</th>
+                              <th>Duration</th>
+                              <th>No Of Assignment</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {completeLesson?.map((item, index) => (
+                              <tr
+                                key={index}
+                                className={`${
+                                  index % 2 === 0 ? "" : "dashboard__table__row"
+                                }`}
+                              >
+                                <td>{item.Lesson_Title}</td>
+                                <td>{item.Lesson_Description}</td>
+                                <td>{item.Lesson_Duration}</td>
+                                <td>{item.lesson_assignment?.length}</td>
                               </tr>
                             ))}
                           </tbody>

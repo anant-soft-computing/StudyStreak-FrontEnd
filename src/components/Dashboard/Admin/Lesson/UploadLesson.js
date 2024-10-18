@@ -20,10 +20,19 @@ const reducerData = (state, action) => {
 };
 
 const validateForm = (uploadData, setFormError) => {
+  const fileName = uploadData?.fileName?.name;
+
   if (!uploadData.fileName) {
     setFormError("Upload File is Required");
     return false;
   }
+
+  const fileExtension = fileName?.split(".")?.pop()?.toLowerCase();
+  if (fileExtension !== "mp4") {
+    setFormError("Only .mp4 video files are allowed");
+    return false;
+  }
+
   return true;
 };
 

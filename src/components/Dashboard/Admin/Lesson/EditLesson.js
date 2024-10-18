@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
+import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import SelectSearch from "react-select-search";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -83,14 +84,13 @@ const EditLesson = ({ lesson, onClose }) => {
         8000
       );
       if (response.status === 200) {
-        alert("Lesson updated successfully");
+        toast.success("Lesson updated successfully");
         onClose();
       } else {
-        alert("Failed to update the lesson");
+        toast.error("Failed to update the lesson");
       }
     } catch (error) {
-      console.error("Error updating lesson:", error);
-      alert("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
@@ -206,7 +206,7 @@ const EditLesson = ({ lesson, onClose }) => {
         />
       </div>
       <div className="mt-4 d-flex justify-content-end align-items-center gap-2">
-        <button className="btn btn-success" onClick={handleSubmit}>
+        <button className="btn btn-success" onClick={handleSubmit} disabled>
           Save
         </button>
         <button className="btn btn-danger" onClick={onClose}>

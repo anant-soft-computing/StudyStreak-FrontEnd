@@ -31,13 +31,12 @@ const Progress = () => {
   const [badges, setBadges] = useState([]);
   const [fltData, setFltData] = useState([]);
   const [lessons, setLessons] = useState([]);
-  const [studentLessons, setStudentLessons] = useState([]);
   const [miniTestData, setMiniTestData] = useState([]);
+  const [studentLessons, setStudentLessons] = useState([]);
   const [practiceTestData, setPracticeTestData] = useState([]);
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const completeLesson = lessons?.filter((item) =>
-    studentLessons?.some((i) => i?.id === item?.id)
+    studentLessons?.some((i) => i === item?.id)
   );
 
   const [studentExams, setStudentExams] = useState({
@@ -62,34 +61,6 @@ const Progress = () => {
   const availableBadges = badges
     .filter((badge) => totalPoints >= badge.points_required)
     .sort((a, b) => a.points_required - b.points_required);
-
-  useEffect(() => {
-    const fetchStudentLessons = async () => {
-      try {
-        const response = await ajaxCall(
-          `/student/${studentId}/lessons/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          setStudentLessons(response?.data);
-        }
-      } catch (error) {
-        console.log("error:", error);
-      }
-    };
-
-    fetchStudentLessons();
-  }, [studentId]);
 
   const fetchTestData = async (url, setData) => {
     try {
@@ -140,7 +111,7 @@ const Progress = () => {
   }, []);
 
   useEffect(() => {
-    fetchTestData("/lessonview/", setLessons);
+    fetchTestData("/lesson-get/", setLessons);
   }, []);
 
   useEffect(() => {
@@ -441,6 +412,7 @@ const Progress = () => {
           8000
         );
         if (response.status === 200) {
+          setStudentLessons(response?.data?.student_lesson_list_of_id);
           setStudentExams({
             miniTest: [
               ...response?.data?.student_mock,
@@ -564,6 +536,8 @@ const Progress = () => {
                               <th>Description</th>
                               <th>Duration</th>
                               <th>No Of Assignment</th>
+                              <th>No Of Attachment</th>
+                              <th>No Of Quiz</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -578,6 +552,8 @@ const Progress = () => {
                                 <td>{item.Lesson_Description}</td>
                                 <td>{item.Lesson_Duration}</td>
                                 <td>{item.lesson_assignment?.length}</td>
+                                <td>{item.lesson_attachments?.length}</td>
+                                <td>{item.quiz_questions?.length}</td>
                               </tr>
                             ))}
                           </tbody>

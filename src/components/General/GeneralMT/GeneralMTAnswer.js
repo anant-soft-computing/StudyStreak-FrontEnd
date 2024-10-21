@@ -34,8 +34,16 @@ const GeneralMTAnswer = () => {
         );
         if (response.status === 200) {
           setExamName(response.data?.exam_name);
-          setCorrectAnswer(response.data?.correct_answers);
-          setStudentAnswer(response.data?.student_answers);
+          setCorrectAnswer(
+            response.data?.correct_answers?.sort(
+              (a, b) => a.question_number - b.question_number
+            )
+          );
+          setStudentAnswer(
+            response.data?.student_answers?.sort(
+              (a, b) => a.question_number - b.question_number
+            )
+          );
         } else {
           console.log("error");
         }

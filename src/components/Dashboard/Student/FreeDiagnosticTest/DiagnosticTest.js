@@ -13,7 +13,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 import AudioRecorder from "../../../Exam-Create/AudioRecorder2";
 import SmallModal from "../../../UI/Modal";
 import ReadingDTI from "../../../Instruction/DiagnosticTestInstruction/ReadingDTI";
-import WritingInstruction from "../../../Instruction/WritingInstruction";
+import WritingDTI from "../../../Instruction/DiagnosticTestInstruction/WritingDTI";
 import ListeningDTI from "../../../Instruction/DiagnosticTestInstruction/ListeningDTI";
 import SpeakingDTI from "../../../Instruction/DiagnosticTestInstruction/SpeakingDTI";
 import Loading from "../../../UI/Loading";
@@ -62,6 +62,7 @@ const DiagnosticTest = () => {
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
   let highlightedElement = null;
 
   const handleInstruction = (instruction) => {
@@ -609,6 +610,37 @@ const DiagnosticTest = () => {
     }
   };
 
+  const diagnosticTestSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      flt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-flt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        toast.success("Your Diagnostic Test Submitted Successfully");
+      } else {
+        toast.error("You Have Already Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
   const handleRLSubmit = async () => {
     const answersArray = [];
     let bandValue = 0;
@@ -794,6 +826,7 @@ const DiagnosticTest = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
+        diagnosticTestSubmit();
         navigate(`/diagnostic-test-answer/${examId}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
@@ -1057,10 +1090,7 @@ const DiagnosticTest = () => {
             the next Section of your Exam. Kindly Read through the Instructions.
             All the Best
           </SmallModal>
-          <WritingInstruction
-            testType="Diagnostic"
-            startTest={handleInstruction}
-          />
+          <WritingDTI startTest={handleInstruction} />
         </>
       )}
       {instructionCompleted.type.listening === 1 && (

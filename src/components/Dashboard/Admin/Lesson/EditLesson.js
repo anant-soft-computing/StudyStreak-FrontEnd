@@ -21,7 +21,7 @@ const reducerEditLesson = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const EditLesson = ({ lesson, onClose }) => {
+const EditLesson = ({ lesson, onClose, setRefresh }) => {
   const [editLessonData, dispatchEditLesson] = useReducer(
     reducerEditLesson,
     initialLessonData
@@ -68,23 +68,33 @@ const EditLesson = ({ lesson, onClose }) => {
     fetchVideoLinks();
   }, [authData?.accessToken]);
 
-  const handleSubmit = async (e) => {
+  const handleLessonUpdate = async (e) => {
     e.preventDefault();
+    const editData = {
+      section: editLessonData.section,
+      Lesson_Title: editLessonData.Lesson_Title,
+      Lesson_Description: editLessonData.Lesson_Description,
+      Lesson_Video: encodeURI(editLessonData.Lesson_Video),
+      Lesson_Duration: editLessonData.Lesson_Duration,
+      active: editLessonData.active,
+    };
     try {
       const response = await ajaxCall(
-        `/lesson-update/${lesson.id}/`,
+        `/lesson-edit/${lesson.id}/`,
         {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
+            Authorization: `Bearer ${authData?.accessToken}`,
           },
-          method: "PUT",
-          body: JSON.stringify(editLessonData),
+          method: "PATCH",
+          body: JSON.stringify(editData),
         },
         8000
       );
       if (response.status === 200) {
         toast.success("Lesson updated successfully");
+        setRefresh((prev) => !prev);
         onClose();
       } else {
         toast.error("Failed to update the lesson");
@@ -115,6 +125,9 @@ const EditLesson = ({ lesson, onClose }) => {
       <div className="mt-3">
         <div className="dashboard__select__heading">
           <span>Video</span>
+        </div>
+        <div className="dashboard__select__heading">
+          <span>{lesson?.Lesson_Video}</span>
         </div>
         <div className="dashboard__selector">
           <SelectSearch
@@ -206,7 +219,7 @@ const EditLesson = ({ lesson, onClose }) => {
         />
       </div>
       <div className="mt-4 d-flex justify-content-end align-items-center gap-2">
-        <button className="btn btn-success" onClick={handleSubmit} disabled>
+        <button className="btn btn-success" onClick={handleLessonUpdate}>
           Save
         </button>
         <button className="btn btn-danger" onClick={onClose}>

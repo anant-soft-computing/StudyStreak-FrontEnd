@@ -26,6 +26,21 @@ const specificColumns = {
       width: 310,
     },
     { headerName: "Points", field: "points", filter: true, width: 310 },
+    {
+      headerName: "No of Assignment",
+      field: "lesson_assignment.length",
+      filter: true,
+    },
+    {
+      headerName: "No of Attachment",
+      field: "lesson_attachments.length",
+      filter: true,
+    },
+    {
+      headerName: "No of Quiz",
+      field: "quiz_questions.length",
+      filter: true,
+    },
   ],
   "Flash Card": [
     { headerName: "No.", field: "no", width: 80 },
@@ -151,7 +166,7 @@ const options = [
 ];
 
 const endpoints = {
-  "Lesson": `/lessonview/`,
+  "Lesson": `/lesson-get/`,
   "Flash Card": `/gamification/flashcard/`,
   "Live Class": `/liveclass_list_view/`,
   "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,no_of_questions`,

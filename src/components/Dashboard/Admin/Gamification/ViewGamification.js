@@ -38,6 +38,21 @@ const specificColumns = {
       width: 310,
     },
     { headerName: "Points", field: "points", filter: true, width: 310 },
+    {
+      headerName: "No of Assignment",
+      field: "lesson_assignment.length",
+      filter: true,
+    },
+    {
+      headerName: "No of Attachment",
+      field: "lesson_attachments.length",
+      filter: true,
+    },
+    {
+      headerName: "No of Quiz",
+      field: "quiz_questions.length",
+      filter: true,
+    },
   ],
   "Exam Block": [
     { headerName: "No.", field: "no", width: 150 },
@@ -144,7 +159,7 @@ const ViewGamification = ({ content, activeTab }) => {
   useEffect(() => {
     const endpoints = {
       "Flash Card": `/gamification/flashcard/`,
-      Lesson: `/lessonview/`,
+      "Lesson": `/lesson-get/`,
       "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,block_type`,
       "Full Length Test": `/get/flt/`,
       "Practice Test": `/moduleListView/`,

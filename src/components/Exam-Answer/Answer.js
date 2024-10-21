@@ -37,8 +37,16 @@ const Answer = () => {
           8000
         );
         if (response.status === 200) {
-          setCorrectAnswer(response.data?.correct_answers);
-          setStudentAnswers(response.data?.student_answers);
+          setCorrectAnswer(
+            response.data?.correct_answers?.sort(
+              (a, b) => a.question_number - b.question_number
+            )
+          );
+          setStudentAnswers(
+            response.data?.student_answers?.sort(
+              (a, b) => a.question_number - b.question_number
+            )
+          );
           setExamName(response.data?.exam_name);
           setBand(response.data?.band);
           setExamType(response.data?.exam_type);

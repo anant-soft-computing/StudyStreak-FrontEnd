@@ -7,6 +7,7 @@ import SmallModal from "../../../UI/Modal";
 import EditLesson from "./EditLesson";
 
 const ViewLesson = ({ activeTab }) => {
+  const [refresh, setRefresh] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [lessonList, setLessonList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -58,7 +59,7 @@ const ViewLesson = ({ activeTab }) => {
         }
       })();
     }
-  }, [activeTab, authData?.accessToken]);
+  }, [refresh, activeTab, authData?.accessToken]);
 
   const columns = [
     {
@@ -91,17 +92,17 @@ const ViewLesson = ({ activeTab }) => {
       cellRenderer: (params) => <ViewButton url={params.value} />,
     },
     {
-      headerName: "Lesson Assignment",
+      headerName: "No of Assignment",
       field: "lesson_assignment.length",
       filter: true,
     },
     {
-      headerName: "Lesson Attachment",
+      headerName: "No of Attachment",
       field: "lesson_attachments.length",
       filter: true,
     },
     {
-      headerName: "Lesson Quiz",
+      headerName: "No of Quiz",
       field: "quiz_questions.length",
       filter: true,
     },
@@ -126,6 +127,7 @@ const ViewLesson = ({ activeTab }) => {
         {selectedLesson && (
           <EditLesson
             lesson={selectedLesson}
+            setRefresh={setRefresh}
             onClose={() => setIsModalOpen(false)}
           />
         )}

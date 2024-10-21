@@ -6,7 +6,7 @@ import Table from "../../../UI/Table";
 
 const specificColumns = {
   Lesson: [
-    { headerName: "No.", field: "no", width: 120 },
+    { headerName: "No.", field: "no", width: 80 },
     {
       headerName: "Lesson Title",
       field: "Lesson_Title",
@@ -23,9 +23,8 @@ const specificColumns = {
       headerName: "Duration",
       field: "Lesson_Duration",
       filter: true,
-      width: 310,
     },
-    { headerName: "Points", field: "points", filter: true, width: 310 },
+    { headerName: "Points", field: "points", filter: true },
     {
       headerName: "No of Assignment",
       field: "lesson_assignment.length",
@@ -55,9 +54,9 @@ const specificColumns = {
       headerName: "Flash Card Items",
       field: "flash_card_items.length",
       filter: true,
-      width: 220,
+      width: 260,
     },
-    { headerName: "Point", field: "points", filter: true, width: 220 },
+    { headerName: "Point", field: "points", filter: true, width: 260 },
   ],
   "Live Class": [
     { headerName: "Meeting Title", field: "meeting_title" },
@@ -114,9 +113,9 @@ const specificColumns = {
       headerName: "No Of Questions",
       field: "no_of_questions",
       filter: true,
-      width: 200,
+      width: 245,
     },
-    { headerName: "Point", field: "points", filter: true, width: 200 },
+    { headerName: "Point", field: "points", filter: true, width: 245 },
   ],
   "Practice Test": [
     { headerName: "No.", field: "no", width: 220 },
@@ -127,11 +126,11 @@ const specificColumns = {
       filter: true,
       width: 450,
     },
-    { headerName: "Point", field: "points", filter: true, width: 250 },
+    { headerName: "Point", field: "points", filter: true, width: 330 },
   ],
   "Full Length Test": [
-    { headerName: "No.", field: "no", width: 160 },
-    { headerName: "Exam Name", field: "name", filter: true },
+    { headerName: "No.", field: "no", width: 80 },
+    { headerName: "Exam Name", field: "name", filter: true,width: 370 },
     {
       headerName: "Reading Set",
       field: "reading_set.Reading.length",
@@ -166,7 +165,7 @@ const options = [
 ];
 
 const endpoints = {
-  "Lesson": `/lesson-get/`,
+  Lesson: `/lesson-get/`,
   "Flash Card": `/gamification/flashcard/`,
   "Live Class": `/liveclass_list_view/`,
   "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,no_of_questions`,
@@ -174,7 +173,7 @@ const endpoints = {
   "Practice Test": `/moduleListView/`,
 };
 
-const PointHistory = ({ setTotalPoints }) => {
+const PointHistory = ({ totalPoints, setTotalPoints }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState("Flash Card");
   const [dataList, setDataList] = useState([]);
@@ -267,23 +266,26 @@ const PointHistory = ({ setTotalPoints }) => {
 
   return (
     <div>
-      <div className="d-flex flex-wrap justify-content-end">
-        <div className="col-2 mb-3">
-          <div className="dashboard__form__wraper">
-            <div className="dashboard__form__input">
-              <select
-                className="form-select"
-                aria-label="Default select example"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-              >
-                {options.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+      <div className="dashboard__section__title">
+        <h4 className="sidebar__title">Point History</h4>
+      </div>
+      <h4 className="text-end">Total Points : {totalPoints}</h4>
+      <div className="col-2 mb-3">
+        <div className="dashboard__form__wraper">
+          <div className="dashboard__form__input">
+            <label>Contents :</label>
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            >
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>

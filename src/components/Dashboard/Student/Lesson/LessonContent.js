@@ -12,11 +12,7 @@ import Tab from "../../../UI/Tab";
 
 const tabs = [{ name: "Attachment" }, { name: "Assignment" }, { name: "Quiz" }];
 
-const LessonContent = ({
-  activeLesson,
-  activeContentType,
-  setLessonStatus,
-}) => {
+const LessonContent = ({ activeLesson, setLessonStatus }) => {
   const videoRef = useRef(null);
   const { courseId } = useParams();
   const [isFloatingNotes, setIsFloatingNotes] = useState(false);
@@ -27,6 +23,10 @@ const LessonContent = ({
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+
+  const startTime = activeLesson?.timestamp
+    ? parseFloat(activeLesson?.timestamp)
+    : 0;
 
   const updateWatchedUpto = async (watchedTime) => {
     if (watchedTime < 1) return;
@@ -114,7 +114,7 @@ const LessonContent = ({
       setIsLessonComplete(true);
       setLessonStatus("Complete");
       gamificationSubmit(activeLesson?.id);
-      toast.success("Your lesson is Complete.");
+      toast.success("Lesson Completed Successfully!");
     } else {
       console.log("error");
     }
@@ -138,37 +138,31 @@ const LessonContent = ({
     }
   };
 
-  const handleContextMenu = (e) => {
-    e.preventDefault();
-  };
-
   return (
-    <div className="lesson__content__main">
-      {activeContentType === "video" && (
+    <div
+      className="lesson__content__main"
+      onContextMenu={(e) => e.preventDefault()}
+    >
+      {
         <div>
           <div className="plyr__video-embed rbtplayer">
             <ReactPlayer
               ref={videoRef}
-              url={
-                activeLesson?.timestamp !== undefined &&
-                `${activeLesson?.Lesson_Video?.replace(
-                  "watch?v=",
-                  "embed/"
-                )}?start=${activeLesson?.timestamp}`
-              }
+              url={activeLesson?.Lesson_Video}
               onProgress={handleProgress}
               controls
-              height={"590px"}
-              width={"100%"}
+              height="100%"
+              width="100%"
               config={{
                 file: {
                   attributes: {
-                    controlsList: "nodownload noremoteplayback",
+                    controlsList: "nodownload",
                     disablePictureInPicture: true,
-                    onContextMenu: handleContextMenu,
                   },
                 },
               }}
+              progressInterval={1000}
+              onStart={() => videoRef.current.seekTo(startTime, "seconds")}
             />
             <div className="floating-notes-container-icon">
               <img
@@ -223,11 +217,11 @@ const LessonContent = ({
             </div>
           )}
         </div>
-      )}
+      }
       {isFloatingNotes && (
         <FloatingNote
-          setIsFloatingNotes={setIsFloatingNotes}
           lessonId={activeLesson?.id}
+          setIsFloatingNotes={setIsFloatingNotes}
           lessonName={activeLesson?.Lesson_Title}
         />
       )}

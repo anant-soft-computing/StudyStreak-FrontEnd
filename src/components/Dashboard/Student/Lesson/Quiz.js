@@ -37,7 +37,7 @@ const Quiz = ({ activeLesson }) => {
           {activeLesson.map((question, questionIndex) => (
             <div className="quiz__single__attemp" key={questionIndex}>
               <li className="card__title">{`Question : ${questionIndex + 1}/${
-                question.quiz_options.length
+                activeLesson.length
               }`}</li>
               <hr />
               <h3>{question.Question}</h3>

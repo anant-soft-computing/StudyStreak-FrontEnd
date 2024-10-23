@@ -43,18 +43,18 @@ const NextLesson = () => {
       </div>
       <hr />
       {lessonData ? (
-        <>
+        <div>
           <div>{lessonData?.lesson?.Lesson_Title}</div>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>{lessonData?.course?.Course_Title}</div>
+          <div>{lessonData?.course?.Course_Title}</div>
+          <div className="mt-2">
             <Link
               to={`/courseLessons/${lessonData?.course?.id}`}
-              className="text-decoration-none"
+              className="text-decoration-none text-end"
             >
               <div>View Lesson {">>"}</div>
             </Link>
           </div>
-        </>
+        </div>
       ) : (
         <div className="text-center text-danger">No Lesson Available !!</div>
       )}

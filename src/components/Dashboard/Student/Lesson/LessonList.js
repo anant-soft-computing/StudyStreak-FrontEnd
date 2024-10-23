@@ -8,7 +8,6 @@ const LessonList = ({
   lessonStatus,
   setActiveIndex,
   setActiveLesson,
-  handleContentChange,
 }) => {
   const [courselessons, setCourseLessons] = useState([]);
   const [studentLessons, setStudentLessons] = useState([]);
@@ -112,7 +111,6 @@ const LessonList = ({
                             <div
                               onClick={() => {
                                 setActiveLesson(lesson);
-                                handleContentChange("video");
                               }}
                             >
                               <Link>

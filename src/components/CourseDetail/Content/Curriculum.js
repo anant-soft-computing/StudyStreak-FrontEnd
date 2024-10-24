@@ -55,10 +55,10 @@ const Curriculum = ({ courseDetail }) => {
                     {sectionItem?.lessons
                       ?.sort((a, b) => {
                         const lessonA = parseInt(
-                          a?.Lesson_Title.match(/\d+/)[0]
+                          a?.Lesson_Title.match(/\d+/)?.[0]
                         );
                         const lessonB = parseInt(
-                          b?.Lesson_Title.match(/\d+/)[0]
+                          b?.Lesson_Title.match(/\d+/)?.[0]
                         );
                         return lessonA - lessonB;
                       })

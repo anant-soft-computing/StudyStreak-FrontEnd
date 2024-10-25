@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import ajaxCall from "../../helpers/ajaxCall";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const BatchSelection = (props) => {
   const [batches, setBatches] = useState([]);
   const [selectedBatchIds, setSelectedBatchIds] = useState([]);
-  const authData = useSelector((state) => state.authStore);
   const navigate = useNavigate();
 
   const {
@@ -29,9 +27,6 @@ const BatchSelection = (props) => {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
           },
           method: "GET",
         },
@@ -52,10 +47,6 @@ const BatchSelection = (props) => {
   }, [packageId]);
 
   const handleEnrollButton = () => {
-    if (!authData.loggedIn) {
-      navigate("/login");
-      return;
-    }
     navigate("/checkout", {
       state: {
         courseId,

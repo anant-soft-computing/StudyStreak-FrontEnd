@@ -293,7 +293,7 @@ const DiagnosticTestAnswer = () => {
                       </div>
                       <div className="row">
                         <div className="col-xl-12">
-                          <div className="dashboard__table table-responsive table__height">
+                          <div className="dashboard__table table-responsive">
                             <table>
                               <thead>
                                 <tr>
@@ -370,7 +370,7 @@ const DiagnosticTestAnswer = () => {
                       </div>
                       <div className="row">
                         <div className="col-xl-12">
-                          <div className="dashboard__table table-responsive table__height">
+                          <div className="dashboard__table table-responsive">
                             <table>
                               <thead>
                                 <tr>

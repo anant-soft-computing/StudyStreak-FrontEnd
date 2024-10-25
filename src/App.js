@@ -151,8 +151,6 @@ const App = () => {
           <Route path="/resources" element={<SResources />} />
           <Route path="/studentSettings" element={<SSettings />} />
 
-          <Route path="/courseDetail/:courseId" element={<CourseDetail />} />
-
           <Route path="/exam-create" element={<DragDrop />} />
           <Route path="/Reading" element={<ExamReading />} />
           <Route path="/Listening" element={<ExamListening />} />
@@ -196,10 +194,7 @@ const App = () => {
         <Route element={<StudentNavBarRoute isProtected={false} />}>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
-          <Route
-            path="/contactUs"
-            element={<ProtectedRoute element={ContactUs} />}
-          />
+          <Route path="/contactUs" element={<ContactUs />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route
             path="/privacy-policy"
@@ -210,6 +205,7 @@ const App = () => {
             element={<ProtectedRoute element={TermsAndService} />}
           />
           <Route path="/courses" element={<Courses />} />
+          <Route path="/courseDetail/:courseId" element={<CourseDetail />} />
 
           <Route path="*" element={<ErrorPage />} />
         </Route>

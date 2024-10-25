@@ -63,7 +63,7 @@ const Checkout = () => {
           },
           8000
         );
-  
+
         if (response?.status === 200) {
           setNoCoupon("");
           setDiscount(response.data[0].discount);
@@ -86,7 +86,7 @@ const Checkout = () => {
     });
     try {
       const response = await ajaxCall(
-        `/student/enrollment/`,
+        "/student/enrollment/",
         {
           headers: {
             Accept: "application/json",
@@ -111,17 +111,13 @@ const Checkout = () => {
   };
 
   const handleEnroll = async () => {
-    if (!authData.loggedIn) {
-      navigate("/login");
-      return;
-    }
     const data = JSON.stringify({
       package_ids: [packageId],
       course_ids: [parseInt(courseId)],
     });
     try {
       const response = await ajaxCall(
-        `/enrollpackagestudentview/`,
+        "/enrollpackagestudentview/",
         {
           headers: {
             Accept: "application/json",
@@ -150,10 +146,6 @@ const Checkout = () => {
   };
 
   const handleEnrollNow = async () => {
-    if (!authData.loggedIn) {
-      navigate("/login");
-      return;
-    }
     const data = JSON.stringify({
       package_id: packageId,
       batch_ids: selectedBatchIds,
@@ -161,7 +153,7 @@ const Checkout = () => {
     });
     try {
       const response = await ajaxCall(
-        `/enroll-package/`,
+        "/enroll-package/",
         {
           headers: {
             Accept: "application/json",
@@ -190,6 +182,11 @@ const Checkout = () => {
   };
 
   const handleEnrollButton = async () => {
+    if (!authData.loggedIn) {
+      toast.error("Please Do Login For Enroll Course");
+      navigate("/login");
+      return;
+    }
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
@@ -294,7 +291,7 @@ const Checkout = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/studentview/`,
+          "/studentview/",
           {
             headers: {
               Accept: "application/json",

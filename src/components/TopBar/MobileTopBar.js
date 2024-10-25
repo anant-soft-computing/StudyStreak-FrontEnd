@@ -46,24 +46,26 @@ const MobileTopBar = () => {
           </div>
           <div className="col-6">
             <div className="header-right-wrap">
-              <div className="headerarea__right">
-                <div className="header__cart">
-                  <Link className="text-decoration-none">
-                    <i
-                      className="icofont-notification"
-                      style={{ color: "#01579b", fontSize: "22px" }}
-                    />
-                    <span className="notification-badge">{1}</span>
-                  </Link>
-                  <div className="header__right__dropdown__wrapper">
-                    <div className="header__right__dropdown__inner">
-                      <h6 className="text-center text-danger">
-                        Coming Soon !!
-                      </h6>
+              {token && (
+                <div className="headerarea__right">
+                  <div className="header__cart">
+                    <Link className="text-decoration-none">
+                      <i
+                        className="icofont-notification"
+                        style={{ color: "#01579b", fontSize: "22px" }}
+                      />
+                      <span className="notification-badge">{1}</span>
+                    </Link>
+                    <div className="header__right__dropdown__wrapper">
+                      <div className="header__right__dropdown__inner">
+                        <h6 className="text-center text-danger">
+                          Coming Soon !!
+                        </h6>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
               <div className="mobile-off-canvas">
                 <button
                   className="mobile-aside-button"

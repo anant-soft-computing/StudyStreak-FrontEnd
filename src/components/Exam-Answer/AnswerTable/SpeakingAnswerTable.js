@@ -25,7 +25,7 @@ const SpeakingAnswerTable = ({ data, viewAIA, viewTA }) => {
                   <td>
                     <audio controls>
                       <source
-                        src={`https://studystreak.in/${item.answer_audio}`}
+                        src={item.answer_audio}
                         type="audio/mpeg"
                       />
                     </audio>

@@ -8,6 +8,7 @@ import myCourse from "../../../../img/icon/myCourse.svg";
 import assignment from "../../../../img/icon/assignment.svg";
 import practiceTest from "../../../../img/icon/practiceTest.svg";
 import fullLengthTest from "../../../../img/icon/notebook.svg";
+import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import recordedClass from "../../../../img/icon/webinar.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
@@ -87,6 +88,14 @@ const DSSidebar = () => {
             },
           },
           {
+            name: "Diagnostic Test",
+            icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
+            link: "/diagnosticTest",
+            state: {
+              packageCount: count?.count,
+            },
+          },
+          {
             name: "Live Classes",
             icon: <img src={liveClass} alt="Live Classes" />,
             link: "/studentLiveClasses",
@@ -162,6 +171,14 @@ const DSSidebar = () => {
             link: "/practiceTest",
             state: {
               count: count?.practice_test_count,
+              packageCount: count?.count,
+            },
+          },
+          {
+            name: "Diagnostic Test",
+            icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
+            link: "/diagnosticTest",
+            state: {
               packageCount: count?.count,
             },
           },

@@ -127,15 +127,27 @@ const PracticeTest = () => {
         if (response.status === 200) {
           const { data } = response;
           const filteredData = {
-            Reading: data.filter(({ exam_type }) => exam_type === "Reading"),
-            Writing: data.filter(({ exam_type }) => exam_type === "Writing"),
-            Listening: data.filter(
-              ({ exam_type }) => exam_type === "Listening"
+            Reading: data.filter(
+              ({ exam_type, IELTS }) =>
+                exam_type === "Reading" && !IELTS?.Name?.includes("Diagnostic")
             ),
-            Speaking: data.filter(({ exam_type }) => exam_type === "Speaking"),
+            Writing: data.filter(
+              ({ exam_type, IELTS }) =>
+                exam_type === "Writing" && !IELTS?.Name?.includes("Diagnostic")
+            ),
+            Listening: data.filter(
+              ({ exam_type, IELTS }) =>
+                exam_type === "Listening" &&
+                !IELTS?.Name?.includes("Diagnostic")
+            ),
+            Speaking: data.filter(
+              ({ exam_type, IELTS }) =>
+                exam_type === "Speaking" && !IELTS?.Name?.includes("Diagnostic")
+            ),
             General: data.filter(
               ({ exam_type, IELTS }) =>
                 exam_type === "General" &&
+                !IELTS?.Name?.includes("Diagnostic") &&
                 studentCourses?.some((item) => IELTS?.Name?.includes(item))
             ),
           };

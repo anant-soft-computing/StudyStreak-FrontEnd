@@ -79,6 +79,7 @@ import LiveAssignment from "./components/LiveAssignment/LiveAssignment";
 import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTest";
+import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -145,6 +146,7 @@ const App = () => {
           <Route path="/mockTest" element={<MockTest />} />
           <Route path="/practiceTest" element={<PracticeTest />} />
           <Route path="/fullLengthTest" element={<FullLengthTest />} />
+          <Route path="/diagnosticTest" element={<EnglishLevelTest />} />
           <Route path="/studentLiveClasses" element={<SLiveClass />} />
           <Route path="/recordedClasses" element={<RecordedClasses />} />
           <Route path="/flashcard" element={<SFlashCard />} />

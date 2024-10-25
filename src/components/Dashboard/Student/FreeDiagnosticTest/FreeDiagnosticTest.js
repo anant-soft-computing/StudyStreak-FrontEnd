@@ -12,7 +12,7 @@ const FreeDiagnosticTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flt/`,
+          "/get/flt",
           {
             headers: {
               Accept: "application/json",
@@ -27,7 +27,10 @@ const FreeDiagnosticTest = () => {
         );
         if (response.status === 200) {
           setFreeDiagnosticTest(
-            response?.data?.filter(({ name }) => name?.includes("Diagnostic"))
+            response?.data?.filter(
+              ({ name }) =>
+                name?.includes("Diagnostic") && name?.includes("Quick")
+            )
           );
         }
       } catch (error) {

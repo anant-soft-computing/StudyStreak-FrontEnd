@@ -15,7 +15,7 @@ const LevelOfStudent = () => {
       <button
         className="take-test"
         onClick={() => {
-          window.open(`/exam-fulllength-answer/${params.data.id}`, "_blank");
+          window.open(`/diagnostic-test-answer/${params.data.id}`, "_blank");
         }}
         style={{ backgroundColor: "#01579b", border: "1px solid #01579b" }}
       >
@@ -28,7 +28,7 @@ const LevelOfStudent = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student-stats/`,
+          "/student-stats/",
           {
             headers: {
               Accept: "application/json",
@@ -56,7 +56,7 @@ const LevelOfStudent = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flt/`,
+          "/get/flt/",
           {
             headers: {
               Accept: "application/json",

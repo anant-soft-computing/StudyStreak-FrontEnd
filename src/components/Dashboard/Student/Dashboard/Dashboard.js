@@ -12,6 +12,7 @@ import progress from "../../../../img/icon/progress.svg";
 import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
 import recordedClasses from "../../../../img/icon/gamification.svg";
+import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
 import Loading from "../../../UI/Loading";
 import UpcomingLiveClasses from "./UpcomingLiveClasses/UpcomingLiveClasses";
 import LeaderBoard from "./LeaderBoard/LeaderBoard";
@@ -293,6 +294,34 @@ const Dashboard = () => {
                         <div className="online__course__wrap mt-0">
                           <div className="row instructor__slider__active row__custom__class">
                             <ScoreCard course={selectedCourse} />
+                          </div>
+                        </div>
+                        <div className="online__course__wrap mt-0">
+                          <div className="row instructor__slider__active row__custom__class">
+                            <div className="col-xl-12 column__custom__class">
+                              <div className="gridarea__wraper card-background">
+                                <div className="gridarea__content">
+                                  <div className="gridarea__content p-2 m-2">
+                                    <Link
+                                      to="/diagnosticTest"
+                                      className="text-decoration-none"
+                                    >
+                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                        <img
+                                          src={diagnosticTest}
+                                          alt="Recorded Classes"
+                                          height={35}
+                                          width={35}
+                                        />
+                                        <h2 className="mt-2">
+                                          Diagnostic Test
+                                        </h2>
+                                      </div>
+                                    </Link>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                         <div className="row">

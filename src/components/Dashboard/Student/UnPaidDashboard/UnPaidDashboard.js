@@ -56,7 +56,6 @@ const UnPaidDashboard = () => {
   const [demoClass, setDemoClass] = useState([]);
   const [masterClass, setMasterClass] = useState([]);
 
-  const authData = useSelector((state) => state.authStore);
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
   useEffect(() => {
@@ -68,7 +67,9 @@ const UnPaidDashboard = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
@@ -98,7 +99,7 @@ const UnPaidDashboard = () => {
     };
 
     fetchClasses();
-  }, [authData?.accessToken]);
+  }, []);
 
   return (
     <div className="body__wrapper">

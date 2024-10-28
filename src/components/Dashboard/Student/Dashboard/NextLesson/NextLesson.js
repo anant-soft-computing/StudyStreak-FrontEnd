@@ -46,14 +46,12 @@ const NextLesson = () => {
         <div>
           <div>{lessonData?.lesson?.Lesson_Title}</div>
           <div>{lessonData?.course?.Course_Title}</div>
-          <div className="mt-2">
-            <Link
-              to={`/courseLessons/${lessonData?.course?.id}`}
-              className="text-decoration-none text-end"
-            >
-              <div>View Lesson {">>"}</div>
-            </Link>
-          </div>
+          <Link
+            to={`/courseLessons/${lessonData?.course?.id}`}
+            className="text-decoration-none text-end"
+          >
+            <div>View Lesson {">>"}</div>
+          </Link>
         </div>
       ) : (
         <div className="text-center text-danger">No Lesson Available !!</div>

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import {useNavigate, useParams } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import LessonList from "./LessonList";
 import LessonContent from "./LessonContent";
@@ -16,8 +15,33 @@ const Lesson = () => {
   const [courseLessons, setCourseLessons] = useState([]);
   const [currentLesson, setCurrentLesson] = useState({});
   const [lessonStatus, setLessonStatus] = useState("Pending");
+  const [completedLessons, setCompletedLessons] = useState([]);
 
-  const authData = useSelector((state) => state.authStore);
+  const getNextLesson = useCallback(
+    (currentLessonId) => {
+      let foundNext = false;
+      for (const section of courseLessons[0]?.section || []) {
+        for (let i = 0; i < section.lessons.length; i++) {
+          if (foundNext) {
+            return section.lessons[i];
+          }
+          if (section.lessons[i].id === currentLessonId) {
+            foundNext = true;
+            // If this is the last lesson in the section, look in the next section
+            if (i === section.lessons.length - 1) {
+              const nextSectionIndex =
+                courseLessons[0].section.indexOf(section) + 1;
+              if (nextSectionIndex < courseLessons[0].section.length) {
+                return courseLessons[0].section[nextSectionIndex].lessons[0];
+              }
+            }
+          }
+        }
+      }
+      return null;
+    },
+    [courseLessons]
+  );
 
   useEffect(() => {
     (async () => {
@@ -40,7 +64,6 @@ const Lesson = () => {
           setCurrentLesson(response?.data);
         } else {
           setCurrentLesson({});
-          console.log("error");
         }
       } catch (error) {
         console.log("error", error);
@@ -86,10 +109,13 @@ const Lesson = () => {
         const tempCourse = [{ ...response?.data, section: tempSessions }];
         setCourseLessons(tempCourse);
 
-        // Find And Set The Active Lesson Based On CurrentLesson
-        const lessonToActivate = response?.data?.lessons.find(
-          (lesson) => lesson.id === currentLesson.lesson?.id
-        );
+        // Find And Set The Active Lesson Based On CurrentLesson or Default to First Lesson
+        const lessonToActivate = currentLesson.lesson?.id
+          ? response?.data?.lessons.find(
+              (lesson) => lesson.id === currentLesson.lesson?.id
+            )
+          : tempCourse[0].section[0].lessons[0]; // Default to first lesson if no current lesson
+
         if (lessonToActivate) {
           setActiveLesson(lessonToActivate);
           const sectionIndex = tempCourse[0].section.findIndex(
@@ -98,9 +124,6 @@ const Lesson = () => {
           if (sectionIndex !== -1) {
             setActiveIndex(sectionIndex);
           }
-        } else {
-          // If No Matching Lesson Found, Set The First Lesson As Active
-          setActiveLesson(tempCourse[0].section[0].lessons[0]);
         }
       }
     } catch (error) {
@@ -116,13 +139,8 @@ const Lesson = () => {
       navigate("/");
       return;
     }
-    if (!authData.authLoading && !authData.loggedIn) {
-      toast.error("You are not authorized to access this location");
-      navigate("/login");
-      return;
-    }
     getCourseLessons();
-  }, [courseId, getCourseLessons]);
+  }, [courseId, getCourseLessons, navigate]);
 
   return (
     <div className="body__wrapper">
@@ -141,6 +159,8 @@ const Lesson = () => {
                       lessonStatus={lessonStatus}
                       setActiveIndex={setActiveIndex}
                       setActiveLesson={setActiveLesson}
+                      activeLesson={activeLesson}
+                      completedLessons={completedLessons}
                     />
                   </div>
                   <div className="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 course__videos">

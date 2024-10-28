@@ -8,6 +8,8 @@ const LessonList = ({
   lessonStatus,
   setActiveIndex,
   setActiveLesson,
+  activeLesson,
+  completedLessons,
 }) => {
   const [courselessons, setCourseLessons] = useState([]);
   const [studentLessons, setStudentLessons] = useState([]);
@@ -60,7 +62,37 @@ const LessonList = ({
   }, [lessons]);
 
   const isLessonCompleted = (lessonId) => {
-    return studentLessons?.some((item) => item.id === lessonId);
+    return (
+      studentLessons?.some((item) => item.id === lessonId) ||
+      completedLessons.includes(lessonId)
+    );
+  };
+
+  const isLessonAccessible = (lesson, sectionIndex, lessonIndex) => {
+    // First lesson is always accessible
+    if (sectionIndex === 0 && lessonIndex === 0) return true;
+
+    // If it's the active lesson, it's accessible
+    if (lesson.id === activeLesson.id) return true;
+
+    // Check if the previous lesson is completed
+    const previousLesson = getPreviousLesson(sectionIndex, lessonIndex);
+    return previousLesson ? isLessonCompleted(previousLesson.id) : true;
+  };
+
+  const getPreviousLesson = (sectionIndex, lessonIndex) => {
+    const sections = courselessons[0]?.section;
+    if (!sections) return null;
+
+    if (lessonIndex > 0) {
+      // Return previous lesson in the same section
+      return sections[sectionIndex].lessons[lessonIndex - 1];
+    } else if (sectionIndex > 0) {
+      // Return last lesson of the previous section
+      const previousSection = sections[sectionIndex - 1];
+      return previousSection.lessons[previousSection.lessons.length - 1];
+    }
+    return null;
   };
 
   return (
@@ -101,16 +133,29 @@ const LessonList = ({
                 })
                 ?.map((lesson, lessonIndex) => {
                   const completed = isLessonCompleted(lesson.id);
-                  console.log("completed", completed);
+                  const accessible = isLessonAccessible(
+                    lesson,
+                    index,
+                    lessonIndex
+                  );
+
                   return (
                     <div key={lessonIndex}>
-                      <div className="scc__wrap">
+                      <div
+                        className={`scc__wrap ${!accessible ? "disabled" : ""}`}
+                      >
                         <div className="scc__info align-items-center">
                           <i className="icofont-video-alt"></i>
                           <h5>
                             <div
                               onClick={() => {
-                                setActiveLesson(lesson);
+                                if (accessible) {
+                                  setActiveLesson(lesson);
+                                }
+                              }}
+                              style={{
+                                cursor: accessible ? "pointer" : "not-allowed",
+                                opacity: accessible ? 1 : 0.5,
                               }}
                             >
                               <Link>
@@ -139,6 +184,11 @@ const LessonList = ({
                               <i className="icofont-close-circled" />
                             )}{" "}
                             {completed ? "Complete" : "Pending"}
+                          </span>
+                          <span className="time" style={{ marginLeft: "10px" }}>
+                            {!accessible && (
+                              <i className="icofont-lock icofont-md" />
+                            )}
                           </span>
                         </div>
                       </div>

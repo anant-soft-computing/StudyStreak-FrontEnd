@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import ajaxCall from "../../../../../helpers/ajaxCall";
+import moment from "moment";
 import Table from "../../../../UI/Table";
+import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const LevelOfStudent = () => {
-  const [fltData, setFLTData] = useState([]);
-  const [givenTest, setGivenTest] = useState([]);
-
-  const reportData = fltData
-    ?.filter((item) => givenTest?.some((index) => index === item.id))
-    ?.map((item, index) => ({ ...item, no: index + 1 }));
+  const [givenDiagnosticTest, setGivenDiagnosticTest] = useState([]);
 
   const viewReport = (params) => {
     return (
@@ -28,7 +24,7 @@ const LevelOfStudent = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/student-stats/",
+          "/given-diagnostic/",
           {
             headers: {
               Accept: "application/json",
@@ -42,40 +38,14 @@ const LevelOfStudent = () => {
           8000
         );
         if (response.status === 200) {
-          setGivenTest(response?.data?.student_flt);
+          setGivenDiagnosticTest(
+            response?.data?.map((item, index) => ({ ...item, no: index + 1 }))
+          );
         } else {
           console.log("error");
         }
       } catch (error) {
         console.log("error:", error);
-      }
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/get/flt/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setFLTData(
-            response?.data?.filter(({ name }) => name?.includes("Diagnostic"))
-          );
-        }
-      } catch (error) {
-        console.log("error", error);
       }
     })();
   }, []);
@@ -95,6 +65,15 @@ const LevelOfStudent = () => {
       field: "name",
       width: 300,
       filter: true,
+    },
+    {
+      headerName: "Given Date",
+      field: "date",
+      width: 300,
+      filter: true,
+      valueGetter: (params) => {
+        return moment(params.data.date).format("ll");
+      },
     },
     {
       headerName: "Reading Set",
@@ -125,7 +104,7 @@ const LevelOfStudent = () => {
   ];
 
   return (
-    reportData?.length > 0 && (
+    givenDiagnosticTest?.length > 0 && (
       <div>
         <h4
           className="sidebar__title"
@@ -135,7 +114,7 @@ const LevelOfStudent = () => {
         </h4>
         <div className="col-xl-12 mt-4">
           <div className="dashboard__table table-responsive">
-            <Table rowData={reportData} columnDefs={columns} />
+            <Table rowData={givenDiagnosticTest} columnDefs={columns} />
           </div>
         </div>
       </div>

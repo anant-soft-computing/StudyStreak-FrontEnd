@@ -286,6 +286,7 @@ const DiagnosticTestAnswer = () => {
                         <div className="text-center">{percentage} %</div>
                       </div>
                     </div>
+                    
                     {/* Reading */}
                     <div className="writing__exam">
                       <div className="dashboard__section__title">
@@ -366,7 +367,7 @@ const DiagnosticTestAnswer = () => {
                     {/* Listening */}
                     <div className="writing__exam">
                       <div className="dashboard__section__title">
-                        <h4 className="sidebar__title">Reading</h4>
+                        <h4 className="sidebar__title">Listening</h4>
                       </div>
                       <div className="row">
                         <div className="col-xl-12">

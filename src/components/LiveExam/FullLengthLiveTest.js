@@ -1008,12 +1008,18 @@ const FullLengthLiveExam = () => {
     if (synth.speaking) {
       synth.cancel();
     }
-    // Update the status to stopped
-    setExamAnswer((prev) =>
-      prev.map((item) =>
+    // Update the state to mark the specific question as stopped (status: 3)
+    setExamAnswer((prev) => {
+      const updatedAnswers = [...prev];
+      const currentData = updatedAnswers[next].data.map((item) =>
         item.id === questionId ? { ...item, status: 3 } : item
-      )
-    );
+      );
+      updatedAnswers[next].data = currentData;
+      return updatedAnswers;
+    });
+  
+    // Optionally, clear the active recording index to allow new recordings
+    setActiveRecordingIndex(null);
   };
 
   const handleReplay = (speakingContent, questionId) => {

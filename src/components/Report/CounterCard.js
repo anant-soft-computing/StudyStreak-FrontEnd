@@ -4,7 +4,6 @@ import CancelIcon from "../UI/CancelIcon";
 import SkipIcon from "../UI/SkipIcon";
 
 const CounterCard = ({
-  type,
   band,
   correct,
   skipped,

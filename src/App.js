@@ -188,8 +188,8 @@ const App = () => {
             path="/practice-assessment/:examId"
             element={<ViewPTAssessment />}
           />
-          <Route path="/praticeTest-report" element={<PracticeTestReport />} />
-          <Route path="/full-length-test-report" element={<FLTReport />} />
+          <Route path="/praticeTestReport" element={<PracticeTestReport />} />
+          <Route path="/fullLengthTestReport" element={<FLTReport />} />
           <Route path="/checkout" element={<Checkout />} />
         </Route>
 

@@ -183,7 +183,7 @@ const TestReport = ({
       width: 110,
       filter: true,
       cellRenderer: (params) => {
-        return <div>{`(${params.data.no}).`}</div>;
+        return <div>{`${params.data.no}`}</div>;
       },
     },
     {

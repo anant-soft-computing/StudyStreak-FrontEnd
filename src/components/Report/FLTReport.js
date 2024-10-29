@@ -37,7 +37,7 @@ const FLTReport = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student-stats/`,
+          "/student-stats/",
           {
             headers: {
               Accept: "application/json",
@@ -66,7 +66,7 @@ const FLTReport = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flt/`,
+          "/get/flt/",
           {
             headers: {
               Accept: "application/json",
@@ -121,16 +121,17 @@ const FLTReport = () => {
     {
       headerName: "No",
       field: "no",
-      width: 110,
+      width: 80,
       filter: true,
       cellRenderer: (params) => {
-        return <div>{`(${params.data.no}).`}</div>;
+        return <div>{`${params.data.no}`}</div>;
       },
     },
     {
       headerName: "Name",
       field: "name",
       filter: true,
+      width: 300,
     },
     {
       headerName: "Reading Set",

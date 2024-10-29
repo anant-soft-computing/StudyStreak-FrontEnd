@@ -1199,11 +1199,11 @@ Header Area
   font-weight: 500;
   line-height: 15px;
   position: absolute;
-  top: 0;
-  right: -10px;
-  width: 15px;
+  top: -2px;
+  right: -8px;
+  width: 25px;
   height: 15px;
-  padding: 0 4px;
+  padding: 0 3px;
   text-align: center;
   border-radius: 100%;
   background-color: red;
@@ -1212,8 +1212,8 @@ Header Area
 
 @media (min-width: 992px) and (max-width: 1365px) {
   .notification-badge {
-    top: 7px;
-    right: 11px;
+    top: 0px;
+    right: 0px;
   }
 }
 
@@ -1262,6 +1262,9 @@ Header Area
   .header__right__dropdown__inner {
   border-bottom: 1px solid var(--borderColor);
   margin-bottom: 30px;
+  max-height: 500px;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .headerarea__right
@@ -1358,7 +1361,7 @@ Header Area
   .header__right__dropdown__content
   p
   span {
-  color: var(--secondaryColor);
+  color: #01579b;
 }
 
 .headerarea__right
@@ -1417,7 +1420,7 @@ Header Area
   .header__right__dropdown__wrapper
   .header__right__dropdown__button
   a.blue__color {
-  background: var(--darkblack);
+  background: #01579b;
   color: var(--whiteColor);
 }
 
@@ -1426,7 +1429,9 @@ Header Area
   .header__right__dropdown__wrapper
   .header__right__dropdown__button
   a.blue__color:hover {
-  background: var(--secondaryColor);
+  color: #01579b;
+  background: white;
+  border: 1px solid #01579b;
 }
 
 .headerarea__login {

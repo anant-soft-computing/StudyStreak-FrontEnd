@@ -108,6 +108,7 @@ const DiagnosticTest = () => {
     if (timer === 0) {
       setTimerRunning(false);
       toast.error("Time's up! Your exam has ended.");
+      handleRLSubmit();
     }
   }, [timer]);
 

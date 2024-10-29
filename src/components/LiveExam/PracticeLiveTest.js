@@ -71,8 +71,17 @@ const PracticeLiveExam = () => {
     if (timer === 0) {
       setTimerRunning(false);
       toast.error("Time's up! Your exam has ended.");
+
+      if (
+        examData?.exam_type === "Reading" ||
+        examData?.exam_type === "Listening"
+      ) {
+        handleRLSubmit();
+      } else if (examData?.exam_type === "Writing") {
+        handleWritingSubmit();
+      }
     }
-  }, [timer]);
+  }, [timer, examData?.exam_type]);
 
   useEffect(() => {
     (async () => {

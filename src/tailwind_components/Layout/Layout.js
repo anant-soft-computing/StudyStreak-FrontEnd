@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { User, Menu, X } from "lucide-react";
 import "../tailwind.css";
+import TidioChat from "../ChatBot/TidioChat";
 
-const Layout = ({ children }) => {
+const Layout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -158,7 +159,7 @@ const Layout = ({ children }) => {
 
       {/* Main Content */}
       <main className="flex-grow">
-        {children}
+        <Outlet />
       </main>
 
       {/* Footer */}
@@ -266,6 +267,8 @@ const Layout = ({ children }) => {
           </div>
         </footer>
       )}
+      
+      <TidioChat />
     </div>
   );
 };

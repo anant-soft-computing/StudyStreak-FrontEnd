@@ -5,6 +5,9 @@ import MobileTopBar from "../components/TopBar/MobileTopBar";
 import { Box } from "@mui/material";
 import DALeftDrawer from "../components/Dashboard/Admin/DASideBar/DALeftDrawer";
 
+// CSS individual files to be loaded in all the Layout files
+import "../css/style.css";
+
 const AdminNavBarRoute = ({ isProtected }) => {
   return (
     <>

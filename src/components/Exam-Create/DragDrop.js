@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
-import "../../css/index.css";
 import ajaxCall from "../../helpers/ajaxCall";
 import { toast } from "react-toastify";
 import {

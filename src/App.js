@@ -5,21 +5,38 @@ import "react-toastify/dist/ReactToastify.css";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import Checkout from "./components/Checkout/Checkout";
-import CourseDetail from "./components/CourseDetail/CourseDetail";
+// import CourseDetail from "./components/CourseDetail/CourseDetail";
 
 //-------------------------> pages <--------------------------------------------
 
-import Main from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import ContactUs from "./pages/ContactUs/ContactUs";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import TermsAndService from "./pages/TermsAndService/TermsAndService";
-import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
-import Courses from "./pages/Courses/Courses";
+// import Main from "./pages/Home/Home";
+// import Login from "./pages/Login/Login";
+// import ContactUs from "./pages/ContactUs/ContactUs";
+// import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+// import TermsAndService from "./pages/TermsAndService/TermsAndService";
+// import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+// import Courses from "./pages/Courses/Courses";
+
+// Tailwind components
+import HomePage from "./tailwind_components/HomePage";
+import Layout from "./tailwind_components/Layout/Layout";
+import CoursesPage from "./tailwind_components/Course/CoursesPage";
+import AboutUsPage from "./tailwind_components/AboutUs/AboutUsPage";
+import WhyChooseUsPage from "./tailwind_components/WhyChooseUs/WhyChooseUsPage";
+import BlogsPage from "./tailwind_components/Blog/BlogsPage";
+import TalkToUsPage from "./tailwind_components/ContactUs/TalkToUsPage";
+import BecomeAPartnerPage from "./tailwind_components/BecomePartner/BecomeAPartnerPage";
+import CourseDetailPage from "./tailwind_components/Course/CourseDetailPage";
+import IELTSCoursePage from "./tailwind_components/Ielts/IELTSCoursePage";
+import EnglishTest from "./tailwind_components/EnglishTest/EnglishTest";
+import AuthPage from "./tailwind_components/Login/AuthPage";
+import BlogDetails from "./tailwind_components/Blog/BlogDetail";
+import IeltsCourseDetail from "./tailwind_components/Ielts/IeltsCourseDetails";
+import TidioChat from "./tailwind_components/ChatBot/TidioChat";
 
 //-------------------------> Error Page <----------------------------------
 
-import ErrorPage from "./pages/ErrorPage/ErrorPage";
+// import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 //-------------------------> layout <--------------------------------------
 
@@ -32,7 +49,7 @@ import Dashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
 import SProfile from "./components/Dashboard/Student/Profile";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
-import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
+// import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
 import SPaperTest from "./components/Dashboard/Student/PaperTest/PaperTest";
 import FreeDiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/FreeDiagnosticTest";
 import FreeMiniTest from "./components/Dashboard/Student/FreeMiniTest/FreeMiniTest";
@@ -96,104 +113,119 @@ import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssess
 import PracticeTestReport from "./components/Report/PracticeTestReport";
 import FLTReport from "./components/Report/FLTReport";
 import Progress from "./components/Dashboard/Student/Progress/Progress";
+import withBootstrap from "./layout/BootstrapStyles";
 
 const App = () => {
   return (
-    <div>
-      <ToastContainer
-        limit={1}
-        theme="colored"
-        position="top-center"
-        autoClose={3000}
-        className="toast-container"
-      />
-      <Routes>
-        <Route element={<AdminNavBarRoute isProtected={true} />}>
-          <Route
-            path="/admin-dashboard"
-            element={<ProtectedRoute element={ADashboard} />}
+    <>
+      {withBootstrap(
+        <div>
+          <ToastContainer
+            limit={1}
+            theme="colored"
+            position="top-center"
+            autoClose={3000}
+            className="toast-container"
           />
-          <Route path="/admin-student" element={<Student />} />
-          <Route path="/admin-package" element={<Package />} />
-          <Route path="/admin-course" element={<Course />} />
-          <Route path="/admin-exam" element={<Exam />} />
-          <Route path="/admin-liveClass" element={<LiveClass />} />
-          <Route path="/admin-batch" element={<Batch />} />
-          <Route path="/admin-badges" element={<Badge />} />
-          <Route path="/admin-flashCard" element={<FlashCard />} />
-          <Route path="/admin-paperTest" element={<PaperTest />} />
-          <Route path="/admin-gamification" element={<Gamification />} />
-          <Route path="/admin-notice" element={<Notice />} />
-          <Route path="/admin-resources" element={<Resources />} />
-          <Route path="/admin-lesson" element={<ALesson />} />
-          <Route path="/admin-coupon" element={<Coupon />} />
-          <Route path="/admin-testimonial" element={<Testimonial />} />
-          <Route path="/admin-profile" element={<AProfile />} />
-          <Route path="/admin-exam/:examType" element={<Exam />} />
-          <Route path="/admin-exam/:examType/:examForm" element={<Exam />} />
-        </Route>
+          <Routes>
+            <Route element={<AdminNavBarRoute isProtected={true} />}>
+              <Route
+                path="/admin-dashboard"
+                element={<ProtectedRoute element={ADashboard} />}
+              />
+              <Route path="/admin-student" element={<Student />} />
+              <Route path="/admin-package" element={<Package />} />
+              <Route path="/admin-course" element={<Course />} />
+              <Route path="/admin-exam" element={<Exam />} />
+              <Route path="/admin-liveClass" element={<LiveClass />} />
+              <Route path="/admin-batch" element={<Batch />} />
+              <Route path="/admin-badges" element={<Badge />} />
+              <Route path="/admin-flashCard" element={<FlashCard />} />
+              <Route path="/admin-paperTest" element={<PaperTest />} />
+              <Route path="/admin-gamification" element={<Gamification />} />
+              <Route path="/admin-notice" element={<Notice />} />
+              <Route path="/admin-resources" element={<Resources />} />
+              <Route path="/admin-lesson" element={<ALesson />} />
+              <Route path="/admin-coupon" element={<Coupon />} />
+              <Route path="/admin-testimonial" element={<Testimonial />} />
+              <Route path="/admin-profile" element={<AProfile />} />
+              <Route path="/admin-exam/:examType" element={<Exam />} />
+              <Route
+                path="/admin-exam/:examType/:examForm"
+                element={<Exam />}
+              />
+            </Route>
 
-        <Route element={<StudentNavBarRoute isProtected={true} />}>
-          <Route path="/freeDiagnosticTest" element={<FreeDiagnosticTest />} />
-          <Route path="/freeMiniTest" element={<FreeMiniTest />} />
-          <Route path="/studentDashboard" element={<Dashboard />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/studentProfile" element={<SProfile />} />
-          <Route path="/studentMyCourse" element={<MyCourse />} />
-          <Route path="/courseLessons/:courseId" element={<Lesson />} />
-          <Route path="/course/:courseId" element={<CourseContent />} />
-          <Route path="/paperTest" element={<SPaperTest />} />
-          <Route path="/mockTest" element={<MockTest />} />
-          <Route path="/practiceTest" element={<PracticeTest />} />
-          <Route path="/fullLengthTest" element={<FullLengthTest />} />
-          <Route path="/diagnosticTest" element={<EnglishLevelTest />} />
-          <Route path="/studentLiveClasses" element={<SLiveClass />} />
-          <Route path="/recordedClasses" element={<RecordedClasses />} />
-          <Route path="/flashcard" element={<SFlashCard />} />
-          <Route path="/resources" element={<SResources />} />
-          <Route path="/studentSettings" element={<SSettings />} />
+            <Route element={<StudentNavBarRoute isProtected={true} />}>
+              <Route
+                path="/freeDiagnosticTest"
+                element={<FreeDiagnosticTest />}
+              />
+              <Route path="/freeMiniTest" element={<FreeMiniTest />} />
+              <Route path="/studentDashboard" element={<Dashboard />} />
+              <Route path="/progress" element={<Progress />} />
+              <Route path="/studentProfile" element={<SProfile />} />
+              <Route path="/studentMyCourse" element={<MyCourse />} />
+              <Route path="/courseLessons/:courseId" element={<Lesson />} />
+              {/* <Route path="/course/:courseId" element={<CourseContent />} /> */}
+              <Route path="/paperTest" element={<SPaperTest />} />
+              <Route path="/mockTest" element={<MockTest />} />
+              <Route path="/practiceTest" element={<PracticeTest />} />
+              <Route path="/fullLengthTest" element={<FullLengthTest />} />
+              <Route path="/diagnosticTest" element={<EnglishLevelTest />} />
+              <Route path="/studentLiveClasses" element={<SLiveClass />} />
+              <Route path="/recordedClasses" element={<RecordedClasses />} />
+              <Route path="/flashcard" element={<SFlashCard />} />
+              <Route path="/resources" element={<SResources />} />
+              <Route path="/studentSettings" element={<SSettings />} />
 
-          <Route path="/exam-create" element={<DragDrop />} />
-          <Route path="/Reading" element={<ExamReading />} />
-          <Route path="/Listening" element={<ExamListening />} />
-          <Route path="/Writing" element={<ExamWriting />} />
-          <Route path="/Speaking" element={<ExamSpeaking />} />
-          <Route
-            path="/diagnostic-test-answer/:examId"
-            element={<DiagnosticTestAnswer />}
-          />
-          <Route
-            path="/live-assignment-answer/:examId"
-            element={<LiveAssignmentAnswer />}
-          />
-          <Route
-            path="/general-practice-test-answer/:examId"
-            element={<GeneralPTAnswer />}
-          />
-          <Route
-            path="/general-exam-answer/:examId"
-            element={<GeneralMTAnswer />}
-          />
-          <Route path="/exam-answer/:examId" element={<Answer />} />
-          <Route
-            path="/exam-practice-test-answer/:examId"
-            element={<PracticeTestAnswer />}
-          />
-          <Route
-            path="/exam-fulllength-answer/:examId"
-            element={<FullLengthTestAnswer />}
-          />
-          <Route path="/assessment/:examId" element={<ViewMTAAssessment />} />
-          <Route
-            path="/practice-assessment/:examId"
-            element={<ViewPTAssessment />}
-          />
-          <Route path="/praticeTestReport" element={<PracticeTestReport />} />
-          <Route path="/fullLengthTestReport" element={<FLTReport />} />
-          <Route path="/checkout" element={<Checkout />} />
-        </Route>
+              <Route path="/exam-create" element={<DragDrop />} />
+              <Route path="/Reading" element={<ExamReading />} />
+              <Route path="/Listening" element={<ExamListening />} />
+              <Route path="/Writing" element={<ExamWriting />} />
+              <Route path="/Speaking" element={<ExamSpeaking />} />
+              <Route
+                path="/diagnostic-test-answer/:examId"
+                element={<DiagnosticTestAnswer />}
+              />
+              <Route
+                path="/live-assignment-answer/:examId"
+                element={<LiveAssignmentAnswer />}
+              />
+              <Route
+                path="/general-practice-test-answer/:examId"
+                element={<GeneralPTAnswer />}
+              />
+              <Route
+                path="/general-exam-answer/:examId"
+                element={<GeneralMTAnswer />}
+              />
+              <Route path="/exam-answer/:examId" element={<Answer />} />
+              <Route
+                path="/exam-practice-test-answer/:examId"
+                element={<PracticeTestAnswer />}
+              />
+              <Route
+                path="/exam-fulllength-answer/:examId"
+                element={<FullLengthTestAnswer />}
+              />
+              <Route
+                path="/assessment/:examId"
+                element={<ViewMTAAssessment />}
+              />
+              <Route
+                path="/practice-assessment/:examId"
+                element={<ViewPTAssessment />}
+              />
+              <Route
+                path="/praticeTestReport"
+                element={<PracticeTestReport />}
+              />
+              <Route path="/fullLengthTestReport" element={<FLTReport />} />
+              <Route path="/checkout" element={<Checkout />} />
+            </Route>
 
-        <Route element={<StudentNavBarRoute isProtected={false} />}>
+            {/* <Route element={<StudentNavBarRoute isProtected={false} />}>
           <Route path="/" element={<Main />} />
           <Route path="/login" element={<Login />} />
           <Route path="/contactUs" element={<ContactUs />} />
@@ -210,39 +242,68 @@ const App = () => {
           <Route path="/courseDetail/:courseId" element={<CourseDetail />} />
 
           <Route path="*" element={<ErrorPage />} />
-        </Route>
-        <Route path="/diagnostic-test/:examId" element={<DiagnosticTest />} />
-        <Route
-          path="/general-practice-live-exam/:examType/:examForm/:examId"
-          element={<GeneralPTExam />}
+        </Route> */}
+
+            <Route
+              path="/diagnostic-test/:examId"
+              element={<DiagnosticTest />}
+            />
+            <Route
+              path="/general-practice-live-exam/:examType/:examForm/:examId"
+              element={<GeneralPTExam />}
+            />
+            <Route
+              path="/general-exam/:examType/:examId"
+              element={<GeneralMTExam />}
+            />
+            <Route
+              path="/assignment/:examType/:examId"
+              element={<LiveAssignment />}
+            />
+            <Route
+              path="/fulllength-live-exam/:examId"
+              element={<FullLengthLiveExam />}
+            />
+            <Route path="/live-exam/:examType/:examId" element={<LiveExam />} />
+            <Route
+              path="/live-speaking-exam/:examType/:examId"
+              element={<LiveSpeakingExam />}
+            />
+            <Route
+              path="/practice-live-exam/:examType/:examForm/:examId"
+              element={<PracticeLiveExam />}
+            />
+            <Route
+              path="/practice-speaking-live-exam/:examType/:examForm/:examId"
+              element={<PracticeSpeakingLiveExam />}
+            />
+          </Routes>
+        </div>
+      )}
+      <Layout>
+        <ToastContainer
+          theme="colored"
+          position="top-center"
+          autoClose={3000}
         />
-        <Route
-          path="/general-exam/:examType/:examId"
-          element={<GeneralMTExam />}
-        />
-        <Route
-          path="/assignment/:examType/:examId"
-          element={<LiveAssignment />}
-        />
-        <Route
-          path="/fulllength-live-exam/:examId"
-          element={<FullLengthLiveExam />}
-        />
-        <Route path="/live-exam/:examType/:examId" element={<LiveExam />} />
-        <Route
-          path="/live-speaking-exam/:examType/:examId"
-          element={<LiveSpeakingExam />}
-        />
-        <Route
-          path="/practice-live-exam/:examType/:examForm/:examId"
-          element={<PracticeLiveExam />}
-        />
-        <Route
-          path="/practice-speaking-live-exam/:examType/:examForm/:examId"
-          element={<PracticeSpeakingLiveExam />}
-        />
-      </Routes>
-    </div>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/course/:courseId" element={<CourseDetailPage />} />
+          <Route path="/ielts" element={<IELTSCoursePage />} />
+          <Route path="/ielts/:id" element={<IeltsCourseDetail />} />
+          <Route path="/about-us" element={<AboutUsPage />} />
+          <Route path="/why-choose-us" element={<WhyChooseUsPage />} />
+          <Route path="/blogs" element={<BlogsPage />} />
+          <Route path="/blogs/:id" element={<BlogDetails />} />
+          <Route path="/talk-to-us" element={<TalkToUsPage />} />
+          <Route path="/become-a-partner" element={<BecomeAPartnerPage />} />
+          <Route path="/login" element={<AuthPage />} />
+          <Route path="/english-test" element={<EnglishTest />} />
+        </Routes>
+        <TidioChat />
+      </Layout>
+    </>
   );
 };
 

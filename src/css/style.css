@@ -61,6 +61,7 @@
 
 ***************************************************************/
 @import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap");
+@import url("https://cdn.jsdelivr.net/npm/@icon/icofont@1.0.1-alpha.1/icofont.min.css");
 
 :root {
   --bodyColor: #222222;

@@ -17,6 +17,8 @@ const Progress = () => {
   const [studentLessons, setStudentLessons] = useState([]);
   const [practiceTestData, setPracticeTestData] = useState([]);
 
+  const category = localStorage.getItem("category");
+
   const completeLesson = lessons?.filter((item) =>
     studentLessons?.some((i) => i === item?.id)
   );
@@ -38,41 +40,70 @@ const Progress = () => {
     counselling: 0,
   });
 
-  const examList = [
-    {
-      name: "Mini Test",
-      lastScore: miniTestData[0]?.band,
-      count: studentExams?.miniTest,
-    },
-    {
-      name: "Practice Test",
-      lastScore: band.toFixed(1),
-      count: studentExams?.practiceTest,
-    },
-    {
-      name: "Full Length Test",
-      lastScore: fltBand,
-      count: studentExams?.fullLengthTest,
-    },
-  ];
+  const examList =
+    category === "IELTS"
+      ? [
+          {
+            name: "Mini Test",
+            lastScore: miniTestData[0]?.band,
+            count: studentExams?.miniTest,
+          },
+          {
+            name: "Practice Test",
+            lastScore: band.toFixed(1),
+            count: studentExams?.practiceTest,
+          },
+          {
+            name: "Full Length Test",
+            lastScore: fltBand,
+            count: studentExams?.fullLengthTest,
+          },
+        ]
+      : [
+          {
+            name: "Mini Test",
+            lastScore: miniTestData[0]?.band,
+            count: studentExams?.miniTest,
+          },
+          {
+            name: "Practice Test",
+            lastScore: band.toFixed(1),
+            count: studentExams?.practiceTest,
+          },
+        ];
 
-  const classList = [
-    {
-      name: "Speaking Practice",
-      count: studentExams?.speakingPracticeClass,
-    },
-    {
-      name: "Group Doubt Solving",
-      count: studentExams?.groupDoubtSolvingClass,
-    },
-    {
-      name: "One To One Doubt Solving",
-      count: studentExams?.oneToOneDoubtSolvingClass,
-    },
-    { name: "Tutor Support", count: studentExams?.tutorSupport },
-    { name: "Webinar", count: studentExams?.webinar },
-    { name: "Counselling", count: studentExams?.counselling },
-  ];
+  const classList =
+    category === "IELTS"
+      ? [
+          {
+            name: "Speaking Practice",
+            count: studentExams?.speakingPracticeClass,
+          },
+          {
+            name: "Group Doubt Solving",
+            count: studentExams?.groupDoubtSolvingClass,
+          },
+          {
+            name: "One To One Doubt Solving",
+            count: studentExams?.oneToOneDoubtSolvingClass,
+          },
+          { name: "Tutor Support", count: studentExams?.tutorSupport },
+          { name: "Webinar", count: studentExams?.webinar },
+          { name: "Counselling", count: studentExams?.counselling },
+        ]
+      : [
+          {
+            name: "Group Doubt Solving",
+            count: studentExams?.groupDoubtSolvingClass,
+          },
+          {
+            name: "One To One Doubt Solving",
+            count: studentExams?.oneToOneDoubtSolvingClass,
+          },
+          { name: "Tutor Support", count: studentExams?.tutorSupport },
+          { name: "Webinar", count: studentExams?.webinar },
+          { name: "Counselling", count: studentExams?.counselling },
+        ];
 
   const fetchTestData = async (url, setData) => {
     try {

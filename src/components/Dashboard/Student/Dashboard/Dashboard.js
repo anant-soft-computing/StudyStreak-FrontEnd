@@ -314,7 +314,9 @@ const Dashboard = () => {
                                           width={35}
                                         />
                                         <h2 className="mt-2">
-                                          Diagnostic Test
+                                          {selectedCourse === "IELTS"
+                                            ? "Diagnostic Test"
+                                            : "English Diagnostic Test"}
                                         </h2>
                                       </div>
                                     </Link>

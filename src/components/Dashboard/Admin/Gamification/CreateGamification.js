@@ -1,9 +1,10 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SingleSelection from "../../../UI/SingleSelect";
+import SelectSearch from "react-select-search";
 
 const initialGamificationData = {
   model: "Flash Card",
@@ -29,6 +30,16 @@ const options = [
   "Live Class",
 ];
 
+const liveClassType = [
+  "Regular Class",
+  "Speaking-Practice",
+  "One-To-One-Doubt-Solving",
+  "Group-Doubt Solving",
+  "Webinar",
+  "Counselling",
+  "Tutor Support",
+];
+
 const validateForm = (gamificationData, setFormError) => {
   if (!gamificationData.model) {
     setFormError("Content Type is Required");
@@ -46,6 +57,8 @@ const CreateGamification = ({ setActiveTab }) => {
     reducerGamification,
     initialGamificationData
   );
+  const [liveClass, setLiveClass] = useState("Regular Class");
+  const [allLiveClass, setAllLiveClass] = useState([]);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
 
@@ -56,6 +69,34 @@ const CreateGamification = ({ setActiveTab }) => {
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
+
+  useEffect(() => {
+    const fetchLiveClasses = async () => {
+      try {
+        const response = await ajaxCall(
+          "/gamification/objects/?model=Live Class",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          const classData = response?.data?.filter(
+            (item) => item.liveClassType === liveClass
+          );
+          setAllLiveClass(classData);
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchLiveClasses();
+  }, [liveClass, authData?.accessToken]);
 
   const createGamification = async (e) => {
     e.preventDefault();
@@ -94,6 +135,7 @@ const CreateGamification = ({ setActiveTab }) => {
       setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
+
   return (
     <div className="row">
       <div className="col-xl-12">
@@ -122,25 +164,72 @@ const CreateGamification = ({ setActiveTab }) => {
               </select>
             </div>
           </div>
-          <div className="col-xl-6">
-            <div className="dashboard__select__heading">
-              <span>Content</span>
+          {gamificationData.model === "Live Class" && (
+            <div className="col-xl-6">
+              <div className="dashboard__select__heading">
+                <span>Live Class Type</span>
+              </div>
+              <div className="dashboard__selector">
+                <select
+                  className="form-select"
+                  aria-label="Default select example"
+                  onChange={(e) => {
+                    setLiveClass(e.target.value);
+                  }}
+                >
+                  {liveClassType.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div className="dashboard__selector">
-              <SingleSelection
-                value={gamificationData?.object_id}
-                onChange={(val) => {
-                  dispatchGamification({
-                    type: "object_id",
-                    value: val,
-                  });
-                }}
-                isSearch={true}
-                url={`/gamification/objects/?model=${gamificationData.model}`}
-                objKey={["rep_name"]}
-              />
+          )}
+          {gamificationData.model === "Live Class" && (
+            <div className="col-xl-6 mt-4">
+              <div className="dashboard__select__heading">
+                <span>Content</span>
+              </div>
+              <div className="dashboard__selector">
+                <SelectSearch
+                  search
+                  options={allLiveClass.map((item) => ({
+                    value: item.object_id,
+                    name: item.rep_name,
+                  }))}
+                  value={gamificationData.object_id}
+                  onChange={(value) =>
+                    dispatchGamification({
+                      type: "object_id",
+                      value,
+                    })
+                  }
+                />
+              </div>
             </div>
-          </div>
+          )}
+          {gamificationData.model !== "Live Class" && (
+            <div className="col-xl-6 ">
+              <div className="dashboard__select__heading">
+                <span>Content</span>
+              </div>
+              <div className="dashboard__selector">
+                <SingleSelection
+                  value={gamificationData?.object_id}
+                  onChange={(val) => {
+                    dispatchGamification({
+                      type: "object_id",
+                      value: val,
+                    });
+                  }}
+                  isSearch={true}
+                  url={`/gamification/objects/?model=${gamificationData.model}`}
+                  objKey={["rep_name"]}
+                />
+              </div>
+            </div>
+          )}
           <div className="col-xl-6 mt-4">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">

@@ -93,6 +93,22 @@ const PackageDetails = ({
             </h1>
           </div>
         </div>
+        <div className="d-flex justify-content-between mb-3">
+          {courseType === "TAUGHT" && (
+            <div
+              className="pricingarea__list__content p-2"
+              style={{ backgroundColor: "#20ad20", borderRadius: "10px" }}
+            >
+              Live Classes Available
+            </div>
+          )}
+          <div
+            className="pricingarea__list__content p-2"
+            style={{ backgroundColor: "#20ad20", borderRadius: "10px" }}
+          >
+            Lessons Available
+          </div>
+        </div>
         <div className="pricingarea__list">
           <div className="pricingarea__list__content">Tests</div>
           <ul className="mt-4">

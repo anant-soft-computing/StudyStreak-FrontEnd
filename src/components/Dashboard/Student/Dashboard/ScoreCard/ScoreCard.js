@@ -362,18 +362,18 @@ const ScoreCard = ({ course }) => {
                     className="gridarea__bottom"
                     onClick={() => {
                       if (
-                        miniTestData?.[0]?.exam_type === "Speaking" ||
-                        miniTestData?.[0]?.exam_type === "Writing"
+                        miniTestData[0]?.exam_type === "Speaking" ||
+                        miniTestData[0]?.exam_type === "Writing"
                       ) {
-                        navigate(`/assessment/${miniTestData?.[0]?.exam_block}`, {
-                          state: { examType: miniTestData?.[0]?.exam_type },
+                        navigate(`/assessment/${miniTestData[0]?.exam_block}`, {
+                          state: { examType: miniTestData[0]?.exam_type },
                         });
-                      } else if (miniTestData?.[0]?.exam_type === "General") {
+                      } else if (miniTestData[0]?.exam_type === "General") {
                         navigate(
-                          `/general-exam-answer/${miniTestData?.[0]?.exam_block}`
+                          `/general-exam-answer/${miniTestData[0]?.exam_block}`
                         );
                       } else {
-                        navigate(`/exam-answer/${miniTestData?.[0]?.exam_block}`);
+                        navigate(`/exam-answer/${miniTestData[0]?.exam_block}`);
                       }
                     }}
                   >
@@ -410,20 +410,48 @@ const ScoreCard = ({ course }) => {
                     {band.toFixed(1)}
                   </h4>
                 </div>
-                <div className="gridarea__bottom">
+                <div
+                  className="gridarea__bottom"
+                  onClick={() => {
+                    if (
+                      practiceTestData[0]?.practise_set_type === "Writing" ||
+                      practiceTestData[0]?.practise_set_type === "Speaking"
+                    ) {
+                      navigate(
+                        `/practice-assessment/${practiceTestData[0]?.practise_set}`,
+                        {
+                          state: {
+                            examType: practiceTestData[0]?.practise_set_type,
+                          },
+                        }
+                      );
+                    } else if (
+                      practiceTestData[0]?.practise_set_type === "General"
+                    ) {
+                      navigate(
+                        `/general-practice-test-answer/${practiceTestData[0]?.practise_set}`,
+                        {
+                          state: {
+                            fullPaper: practiceTestData[0]?.practise_set,
+                            examForm: practiceTestData[0]?.practise_set_type,
+                          },
+                        }
+                      );
+                    } else {
+                      navigate(
+                        `/exam-practice-test-answer/${practiceTestData[0]?.practise_set}`,
+                        {
+                          state: {
+                            fullPaper: practiceTestData[0]?.practise_set,
+                            examForm: practiceTestData[0]?.practise_set_type,
+                          },
+                        }
+                      );
+                    }
+                  }}
+                >
                   <div className="gridarea__small__content">
-                    <Link
-                      to={
-                        practiceTestData?.[0]?.practise_set_name &&
-                        "/praticeTestReport"
-                      }
-                      state={{
-                        latestBand: band?.toFixed(1),
-                        practiceTestID: practiceTestData?.[0]?.practise_set,
-                        practiceTestType:
-                          practiceTestData?.[0]?.practise_set_type,
-                      }}
-                    >
+                    <Link>
                       <h6>View Full Report {">>"}</h6>
                     </Link>
                   </div>
@@ -451,17 +479,14 @@ const ScoreCard = ({ course }) => {
                       {fltData?.[0]?.flt_set_name}, Band : {fltBand}
                     </h4>
                   </div>
-                  <div className="gridarea__bottom">
+                  <div
+                    className="gridarea__bottom"
+                    onClick={() => {
+                      navigate(`/exam-fulllength-answer/${fltData[0]?.flt}`);
+                    }}
+                  >
                     <div className="gridarea__small__content">
-                      <Link
-                        to={
-                          fltData?.[0]?.flt_set_name && "/fullLengthTestReport"
-                        }
-                        state={{
-                          latestBand: fltBand,
-                          FullLengthTestID: fltData?.[0]?.flt,
-                        }}
-                      >
+                      <Link>
                         <h6>View Full Report {">>"}</h6>
                       </Link>
                     </div>

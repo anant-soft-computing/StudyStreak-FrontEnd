@@ -44,6 +44,7 @@ import RecordedClasses from "./components/Dashboard/Student/RecordedClasses/Reco
 import SFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
 import SSettings from "./components/Dashboard/Student/Setting/Settings";
 import SResources from "./components/Dashboard/Student/Resources/Resources";
+import Report from "./components/Dashboard/Student/Report/Report";
 
 //-----------------> Admin <-----------------------------------------------------
 
@@ -151,6 +152,7 @@ const App = () => {
           <Route path="/recordedClasses" element={<RecordedClasses />} />
           <Route path="/flashcard" element={<SFlashCard />} />
           <Route path="/resources" element={<SResources />} />
+          <Route path="/reports" element={<Report />} />
           <Route path="/studentSettings" element={<SSettings />} />
 
           <Route path="/exam-create" element={<DragDrop />} />

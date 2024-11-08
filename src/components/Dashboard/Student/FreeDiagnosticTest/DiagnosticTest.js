@@ -1225,10 +1225,10 @@ const DiagnosticTest = () => {
                         >
                           {examAnswer[next].data?.[speakingIndex]?.status === 2
                             ? "Replay"
-                            : "Start"}
+                            : "Play"}
                         </button>
                         <button
-                          className="lv-speaking-button lv-stop-button"
+                          className="lv-speaking-button lv-speaking-button"
                           onClick={() => stopSpeaking(item.id)}
                           disabled={
                             examAnswer[next].data?.[speakingIndex]?.status !== 1
@@ -1246,7 +1246,7 @@ const DiagnosticTest = () => {
                                 : "not-allowed",
                           }}
                         >
-                          Stop
+                          Pause
                         </button>
                         <hr />
                         {recorderContainer(item, speakingIndex)}

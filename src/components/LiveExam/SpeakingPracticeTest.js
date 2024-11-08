@@ -451,10 +451,10 @@ const PracticeSpeakingLiveExam = () => {
                     >
                       {speaking?.[speakingIndex]?.status === 2
                         ? "Replay"
-                        : "Start"}
+                        : "Play"}
                     </button>
                     <button
-                      className="lv-speaking-button lv-stop-button"
+                      className="lv-speaking-button lv-speaking-button"
                       onClick={() => stopSpeaking(item.id)}
                       disabled={speaking?.[speakingIndex]?.status !== 1}
                       style={{
@@ -466,7 +466,7 @@ const PracticeSpeakingLiveExam = () => {
                             : "not-allowed",
                       }}
                     >
-                      Stop
+                      Pause
                     </button>
                     <hr />
                     {recorderContainer(item, speakingIndex)}

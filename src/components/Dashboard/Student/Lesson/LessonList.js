@@ -69,6 +69,9 @@ const LessonList = ({
   };
 
   const isLessonAccessible = (lesson, sectionIndex, lessonIndex) => {
+    // If the lesson is marked as active, it's always accessible
+    if (lesson.active === true) return true;
+    
     // First lesson is always accessible
     if (sectionIndex === 0 && lessonIndex === 0) return true;
 
@@ -93,6 +96,11 @@ const LessonList = ({
       return previousSection.lessons[previousSection.lessons.length - 1];
     }
     return null;
+  };
+
+  const showLock = (lesson, accessible) => {
+    // Don't show lock if lesson is active or if it's accessible
+    return !lesson.active && !accessible;
   };
 
   return (
@@ -142,20 +150,24 @@ const LessonList = ({
                   return (
                     <div key={lessonIndex}>
                       <div
-                        className={`scc__wrap ${!accessible ? "disabled" : ""}`}
+                        className={`${!accessible && !lesson.active ? "disabled" : ""}`}
+                        style={{
+                          borderBottom: "1px solid #01579b",
+                          padding: "15px 0px",
+                        }}
                       >
                         <div className="scc__info align-items-center">
-                          <i className="icofont-video-alt"></i>
+                          <i className="icofont-video-alt" />
                           <h5>
                             <div
                               onClick={() => {
-                                if (accessible) {
+                                if (accessible || lesson.active) {
                                   setActiveLesson(lesson);
                                 }
                               }}
                               style={{
-                                cursor: accessible ? "pointer" : "not-allowed",
-                                opacity: accessible ? 1 : 0.5,
+                                cursor: (accessible || lesson.active) ? "pointer" : "not-allowed",
+                                opacity: (accessible || lesson.active) ? 1 : 0.5,
                               }}
                             >
                               <Link>
@@ -164,8 +176,8 @@ const LessonList = ({
                             </div>
                           </h5>
                         </div>
-                        <div className="scc__meta">
-                          <span className="time">
+                        <div className="scc__meta d-flex flex-wrap align-items-center gap-2 mt-2">
+                          <span>
                             <i
                               className="icofont-clock-time"
                               style={{ color: "black" }}
@@ -173,8 +185,10 @@ const LessonList = ({
                             {lesson?.Lesson_Duration}
                           </span>
                           <span
-                            className="question"
                             style={{
+                              color: "white",
+                              padding: "5px 5px",
+                              borderRadius: "10px",
                               backgroundColor: completed ? "green" : "red",
                             }}
                           >
@@ -185,8 +199,8 @@ const LessonList = ({
                             )}{" "}
                             {completed ? "Complete" : "Pending"}
                           </span>
-                          <span className="time" style={{ marginLeft: "10px" }}>
-                            {!accessible && (
+                          <span>
+                            {showLock(lesson, accessible) && (
                               <i className="icofont-lock icofont-md" />
                             )}
                           </span>

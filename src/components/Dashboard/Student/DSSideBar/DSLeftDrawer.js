@@ -14,6 +14,7 @@ import liveClass from "../../../../img/icon/liveClass.svg";
 import recordedClass from "../../../../img/icon/webinar.svg";
 import flashcard from "../../../../img/icon/flashCard.svg";
 import resources from "../../../../img/icon/support.svg";
+import report from "../../../../img/icon/coupon.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import { styled } from "@mui/material/styles";
@@ -208,6 +209,11 @@ const DSLeftDrawer = () => {
             state: { packageCount: count?.count },
           },
           {
+            name: "Reports",
+            icon: <img src={report} alt="Reports" />,
+            link: "/reports",
+          },
+          {
             name: "Settings",
             icon: <img src={settings} alt="Settings" />,
             link: "/studentSettings",
@@ -291,6 +297,11 @@ const DSLeftDrawer = () => {
               <img src={resources} alt="Resources" height={20} width={20} />
             ),
             link: "/resources",
+          },
+          {
+            name: "Reports",
+            icon: <img src={report} alt="Reports" />,
+            link: "/reports",
           },
           {
             name: "Settings",

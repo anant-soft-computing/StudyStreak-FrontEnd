@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
+import moment from "moment";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { Spinner } from "react-bootstrap";
@@ -57,8 +58,11 @@ const CreateGamification = ({ setActiveTab }) => {
     reducerGamification,
     initialGamificationData
   );
-  const [liveClass, setLiveClass] = useState("Regular Class");
+  const [noData, setNoData] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [allLiveClass, setAllLiveClass] = useState([]);
+  const [liveClass, setLiveClass] = useState("Regular Class");
+
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const authData = useSelector((state) => state.authStore);
 
@@ -71,7 +75,8 @@ const CreateGamification = ({ setActiveTab }) => {
   };
 
   useEffect(() => {
-    const fetchLiveClasses = async () => {
+    (async () => {
+      setIsLoading(true);
       try {
         const response = await ajaxCall(
           "/gamification/objects/?model=Live Class",
@@ -86,16 +91,23 @@ const CreateGamification = ({ setActiveTab }) => {
           8000
         );
         if (response?.status === 200) {
-          const classData = response?.data?.filter(
-            (item) => item.liveClassType === liveClass
-          );
+          const classData = response?.data?.filter((item) => {
+            const startTime = moment(item.start_time);
+            const currentTime = moment();
+            return (
+              item.liveClassType === liveClass &&
+              startTime.isSameOrAfter(currentTime)
+            );
+          });
           setAllLiveClass(classData);
+          setNoData(classData.length === 0);
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
-    };
-    fetchLiveClasses();
+    })();
   }, [liveClass, authData?.accessToken]);
 
   const createGamification = async (e) => {
@@ -194,10 +206,16 @@ const CreateGamification = ({ setActiveTab }) => {
               <div className="dashboard__selector">
                 <SelectSearch
                   search
-                  options={allLiveClass.map((item) => ({
-                    value: item.object_id,
-                    name: item.rep_name,
-                  }))}
+                  options={
+                    isLoading
+                      ? [{ value: "", name: "Loading..." }]
+                      : noData
+                      ? [{ value: "", name: "No Data Available" }]
+                      : allLiveClass.map((item) => ({
+                          value: item.object_id,
+                          name: item.rep_name,
+                        }))
+                  }
                   value={gamificationData.object_id}
                   onChange={(value) =>
                     dispatchGamification({

@@ -365,10 +365,10 @@ const LiveSpeakingExam = () => {
                           : "pointer",
                     }}
                   >
-                    {speaking[i].status === 2 ? "Replay" : "Start"}
+                    {speaking[i].status === 2 ? "Replay" : "Play"}
                   </button>
                   <button
-                    className="lv-footer-button lv-stop-button"
+                    className="lv-footer-button lv-speaking-button"
                     onClick={() => stopSpeaking(i)}
                     disabled={speaking?.[i]?.status !== 1}
                     style={{
@@ -377,7 +377,7 @@ const LiveSpeakingExam = () => {
                         speaking?.[i]?.status === 1 ? "pointer" : "not-allowed",
                     }}
                   >
-                    Stop
+                    Pause
                   </button>
                   <hr />
                   {recorderContainer(item, i)}

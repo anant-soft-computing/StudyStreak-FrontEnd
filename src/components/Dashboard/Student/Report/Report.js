@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import DASideBar from "../DASideBar/DASideBar";
 import Tab from "../../../UI/Tab";
-import UploadLesson from "./UploadLesson";
-import ViewLesson from "./ViewLesson";
-import CreateSection from "./CreateSection";
-import CreateLesson from "./CreateLesson";
+import DASideBar from "../../Admin/DASideBar/DASideBar";
+import MiniTestReport from "./MiniTestReport/MiniTestReport";
+import PracticeTestReport from "./PracticeTestReport/PracticeTestReport";
+import FullLengthTestReport from "./FullLengthTestReport/FullLengthTestReport";
 
-const tabs = [
-  { name: "Upload Lesson" },
-  { name: "View Lesson" },
-  { name: "Create Section" },
-  { name: "Create Lesson" },
-];
+const Report = () => {
+  const category = localStorage.getItem("category");
+  const [activeTab, setActiveTab] = useState("Mini Test");
 
-const Lesson = () => {
-  const [activeTab, setActiveTab] = useState("Upload Lesson");
+  const tabs =
+    category === "GENERAL"
+      ? [{ name: "Mini Test" }, { name: "Practice Test" }]
+      : [
+          { name: "Mini Test" },
+          { name: "Practice Test" },
+          { name: "Full Length Test" },
+        ];
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -31,7 +33,8 @@ const Lesson = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <h4>Lesson</h4>
+                      <h4>Reports</h4>
+                      {category && <h5>Course : {category}</h5>}
                     </div>
                     <div className="row">
                       <Tab
@@ -42,41 +45,31 @@ const Lesson = () => {
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "Upload Lesson" ? "show active" : ""
+                            activeTab === "Mini Test" ? "show active" : ""
                           }`}
                         >
                           <div className="row">
-                            <UploadLesson />
+                            <MiniTestReport activeTab={activeTab} />
                           </div>
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "View Lesson" ? "show active" : ""
+                            activeTab === "Practice Test" ? "show active" : ""
                           }`}
                         >
                           <div className="row">
-                            <ViewLesson activeTab={activeTab} />
+                            <PracticeTestReport activeTab={activeTab} />
                           </div>
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "Create Section" ? "show active" : ""
+                            activeTab === "Full Length Test"
+                              ? "show active"
+                              : ""
                           }`}
                         >
                           <div className="row">
-                            <CreateSection />
-                          </div>
-                        </div>
-                        <div
-                          className={`tab-pane fade ${
-                            activeTab === "Create Lesson" ? "show active" : ""
-                          }`}
-                        >
-                          <div className="row">
-                            <CreateLesson
-                              parentActiveTab={activeTab}
-                              parentSetActiveTab={setActiveTab}
-                            />
+                            <FullLengthTestReport activeTab={activeTab} />
                           </div>
                         </div>
                       </div>
@@ -92,4 +85,4 @@ const Lesson = () => {
   );
 };
 
-export default Lesson;
+export default Report;

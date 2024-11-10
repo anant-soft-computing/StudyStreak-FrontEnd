@@ -133,7 +133,7 @@ const ViewMTAAssessment = () => {
                         backgroundColor: getBackgroundColor(band),
                       }}
                     >
-                      Score : {band.toFixed(1)}
+                      Score : {band || band.toFixed(1)}
                     </h4>
                   </div>
                   {examType === "Writing" ? (

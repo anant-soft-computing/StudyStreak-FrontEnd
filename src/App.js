@@ -60,6 +60,7 @@ import RecordedClasses from "./components/Dashboard/Student/RecordedClasses/Reco
 import SFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
 import SSettings from "./components/Dashboard/Student/Setting/Settings";
 import SResources from "./components/Dashboard/Student/Resources/Resources";
+import Report from "./components/Dashboard/Student/Report/Report";
 
 //-----------------> Admin <-----------------------------------------------------
 
@@ -190,7 +191,6 @@ const App = () => {
               Component={withBootstrap(Exam)}
             />
           </Route>
-
           <Route element={<StudentNavBarRoute isProtected={true} />}>
             <Route
               path="/freeDiagnosticTest"

@@ -3,10 +3,19 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { User, Menu, X } from "lucide-react";
 import "../tailwind.css";
 import TidioChat from "../ChatBot/TidioChat";
+import { useCheckAuth } from "../../hooks/useCheckAuth";
 
 const Layout = () => {
+  const { logoutUser } = useCheckAuth();
+  const token = localStorage.getItem("loginInfo");
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+
+  const logout = (event) => {
+    event.preventDefault();
+    logoutUser();
+  };
 
   const hideFooterPaths = ["/login"];
 
@@ -98,17 +107,32 @@ const Layout = () => {
               </div>
 
               {/* Actions */}
-              <div className="hidden lg:flex items-center gap-3">
-                {/* Login/Register Button */}
-                <Link
-                  to="/login"
-                  className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl 
+              {token ? (
+                <div className="hidden lg:flex items-center gap-3">
+                  {/* Login/Register Button */}
+                  <Link
+                    to="/studentDashboard"
+                    // onClick={logout}
+                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl 
               hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
-                >
-                  <User size={16} />
-                  <span>Login / Register</span>
-                </Link>
-              </div>
+                  >
+                    <User size={16} />
+                    <span>Dashboard</span>
+                  </Link>
+                </div>
+              ) : (
+                <div className="hidden lg:flex items-center gap-3">
+                  {/* Login/Register Button */}
+                  <Link
+                    to="/login"
+                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl 
+              hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
+                  >
+                    <User size={16} />
+                    <span>Login / Register</span>
+                  </Link>
+                </div>
+              )}
 
               {/* Mobile Menu Button */}
               <button
@@ -140,17 +164,32 @@ const Layout = () => {
                     {item.name}
                   </Link>
                 ))}
-                <div className="pt-4 mt-2 border-t border-neutral-200">
-                  <Link
-                    to="/login"
-                    className="flex items-center justify-center gap-2 bg-primary-600 text-white 
-                px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <User size={16} />
-                    <span>Login / Register</span>
-                  </Link>
-                </div>
+
+                {token ? (
+                  <div className="pt-4 mt-2 border-t border-neutral-200">
+                    <Link
+                      to="/studentDashboard"
+                      className="flex items-center justify-center gap-2 bg-primary-600 text-white 
+                  px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300"
+                      onClick={logout}
+                    >
+                      <User size={16} />
+                      <span>Dashboard</span>
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="pt-4 mt-2 border-t border-neutral-200">
+                    <Link
+                      to="/login"
+                      className="flex items-center justify-center gap-2 bg-primary-600 text-white 
+                    px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <User size={16} />
+                      <span>Login / Register</span>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -207,7 +246,7 @@ const Layout = () => {
                     ["Home", "/"],
                     ["Courses", "/courses"],
                     ["About Us", "/about-us"],
-                    ["Contact", "/contact"],
+                    ["Contact", "/talk-to-us"],
                     ["Blog", "/blog"],
                   ].map(([name, path], index) => (
                     <li key={index}>
@@ -267,7 +306,7 @@ const Layout = () => {
           </div>
         </footer>
       )}
-      
+
       <TidioChat />
     </div>
   );

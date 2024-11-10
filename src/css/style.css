@@ -13650,8 +13650,14 @@ Breadcrumb Area
   color: var(--whiteColor);
 }
 
-.dashboard {
-  padding-top: 130px;
+.main_wrapper {
+  padding-top: 10px;
+}
+
+@media (min-width: 990px) {
+  .main_wrapper {
+    padding-top: 140px;
+  }
 }
 
 .dashboard__inner {
@@ -16519,6 +16525,9 @@ div.gridarea__wraper {
 
 .admin__menu__icon {
   width: 10%;
+}
+.MuiPaper-root:not(:hover) .admin__menu__icon {
+  width: 56px;
 }
 
 .admin__menu__title {

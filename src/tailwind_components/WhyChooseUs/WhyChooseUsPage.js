@@ -272,7 +272,7 @@ const WhyChooseUsPage = () => {
               Browse Courses
             </Link>
             <Link
-              to="/contact"
+              to="/talk-to-us"
               className="bg-primary-700 text-white px-8 py-3 rounded-xl 
                 hover:bg-primary-800 transition-all duration-300 font-medium 
                 border border-primary-500"

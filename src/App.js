@@ -242,6 +242,7 @@ const App = () => {
               path="/studentSettings"
               Component={withBootstrap(SSettings)}
             />
+            <Route path="/reports" Component={withBootstrap(Report)} />
 
             <Route path="/exam-create" Component={withBootstrap(DragDrop)} />
             <Route path="/Reading" Component={withBootstrap(ExamReading)} />
@@ -298,7 +299,7 @@ const App = () => {
           <Route element={<StudentNavBarRoute isProtected={false} />}>
             {/* <Route path="/" element={<Main />} /> */}
             <Route path="/login" Component={withBootstrap(Login)} />
-            <Route path="/contactUs" element={withBootstrap(ContactUs)} />
+            <Route path="/talk-to-us" element={withBootstrap(ContactUs)} />
             <Route
               path="/forgot-password"
               element={withBootstrap(ForgotPassword)}

@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { setToLocalStorage } from "../../helpers/helperFunction";
 import { authAction } from "../../store/authStore";
 import ajaxCall from "../../helpers/ajaxCall";
-import { useCheckAuth } from "../hooks/useCheckAuth";
+import { useCheckAuth } from "../../hooks/useCheckAuth";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin } from "@react-oauth/google";
 

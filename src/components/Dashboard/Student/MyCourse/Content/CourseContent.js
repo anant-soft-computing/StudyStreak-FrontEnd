@@ -18,7 +18,7 @@ const CourseContent = () => {
               <div className="row">
                 <DSSidebar />
                 <div className="col-xl-12 col-lg-12 col-md-12">
-                  <div className="dashboard__content__wraper common-background-color-across-app">
+                  <div className="dashboard__content__wraper">
                     <div className="row">
                       <Tab tabs={tabs} activeTab="Downloads" />
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">

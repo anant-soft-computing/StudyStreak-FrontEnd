@@ -378,15 +378,6 @@ body {
   color: #01579b;
 } */
 
-.common-background-color-across-app {
-  background-color: #ebf2f5 !important;
-}
-
-.navbarWrap {
-  background-color: #ebf2f5;
-  border-bottom: 1px solid #ddd;
-}
-
 .fixing-navbar-at-top-side {
   position: fixed;
   top: 0;

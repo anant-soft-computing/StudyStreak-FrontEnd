@@ -28,7 +28,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import NavBar from "../../../NavBar/NavBar";
-import TopBar from "../../../TopBar/TopBar";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
 
 const drawerWidth = 280;
@@ -377,7 +376,6 @@ const DSLeftDrawer = () => {
       <CssBaseline />
       <AppBar position="fixed">
         <div className="fixing-navbar-at-top-side">
-          <TopBar />
           <NavBar
             showNavBar={true}
             handleMouseEnter={handleMouseEnter}
@@ -396,7 +394,7 @@ const DSLeftDrawer = () => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <Box sx={{ overflow: "auto", mt: 14 }}>
+        <Box sx={{ overflow: "auto", mt: 8 }}>
           <List>
             {menuList.map((item, index) => (
               <ListItem

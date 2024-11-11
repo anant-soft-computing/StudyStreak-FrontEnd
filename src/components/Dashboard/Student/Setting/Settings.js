@@ -12,7 +12,7 @@ const Settings = () => {
               <div className='row'>
                 <DSSidebar />
                 <div className='col-xl-12 col-lg-12 col-md-12'>
-                  <div className='dashboard__content__wraper common-background-color-across-app'>
+                  <div className='dashboard__content__wraper'>
                     <div className='dashboard__section__title'>
                       <h4>Settings</h4>
                     </div>
@@ -25,7 +25,7 @@ const Settings = () => {
                         >
                           <li className='nav-item' role='presentation'>
                             <button
-                              className='single__tab__link active common-background-color-across-app'
+                              className='single__tab__link active'
                               data-bs-toggle='tab'
                               data-bs-target='#projects__one'
                               type='button'

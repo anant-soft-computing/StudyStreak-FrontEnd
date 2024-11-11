@@ -69,163 +69,160 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
   };
 
   return (
-    <header className="navbarWrap">
-      <div className="headerarea headerarea__3 header__sticky header__area">
-        <div className="container desktop__menu__wrapper">
-          <div className="row">
-            <div className="col-xl-2 col-lg-2 col-md-6">
-              <div className="headerarea__left">
-                <div className="headerarea__left__logo d-flex justify-content-center align-items-center">
-                  {showNavBar && token && (
-                    <div className="headerarea__left">
-                      <IconButton
-                        aria-label="open drawer"
-                        onMouseEnter={handleMouseEnter}
-                        onMouseLeave={handleMouseLeave}
-                        edge="start"
-                        sx={{
-                          marginRight: 2,
-                          ":hover": {
-                            border: "none",
-                          },
-                        }}
-                        disableRipple
-                      >
-                        <img src={menuIcon} alt="menu" width="18px" />
-                      </IconButton>
-                    </div>
-                  )}
-                  <Link to="/">
-                    <img className="logoSize" src={logo} alt="logo" />
-                  </Link>
-                </div>
+    <div
+      className="headerarea headerarea__3 header__sticky header__area"
+      style={{ backgroundColor: "#ebf2f5" }}
+    >
+      <div className="container desktop__menu__wrapper">
+        <div className="row">
+          <div className="col-xl-2 col-lg-2 col-md-6">
+            <div className="headerarea__left">
+              <div className="headerarea__left__logo d-flex justify-content-center align-items-center">
+                {showNavBar && token && (
+                  <div className="headerarea__left">
+                    <IconButton
+                      aria-label="open drawer"
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
+                      edge="start"
+                      sx={{
+                        marginRight: 2,
+                        ":hover": {
+                          border: "none",
+                        },
+                      }}
+                      disableRipple
+                    >
+                      <img src={menuIcon} alt="menu" width="18px" />
+                    </IconButton>
+                  </div>
+                )}
+                <Link to="/">
+                  <img className="logoSize" src={logo} alt="logo" />
+                </Link>
               </div>
             </div>
-            <div className="col-xl-7 col-lg-7 main_menu_wrap">
-              <div className="headerarea__main__menu">
-                <nav>
-                  <ul>
-                    <li className="mega__menu position-static">
-                      <Link className="headerarea__has__dropdown" to="/">
-                        Home
-                      </Link>
-                    </li>
-                    <li className="mega__menu position-static">
-                      <Link className="headerarea__has__dropdown" to="/courses">
-                        Courses
-                      </Link>
-                    </li>
-                    {token && (
-                      <li className="mega__menu position-static">
-                        <Link
-                          className="headerarea__has__dropdown"
-                          to={
-                            role === "admin"
-                              ? "/admin-dashboard"
-                              : "/studentDashboard"
-                          }
-                        >
-                          Dashboard
-                        </Link>
-                      </li>
-                    )}
+          </div>
+          <div className="col-xl-7 col-lg-7 main_menu_wrap">
+            <div className="headerarea__main__menu">
+              <nav>
+                <ul>
+                  <li className="mega__menu position-static">
+                    <Link className="headerarea__has__dropdown" to="/">
+                      Home
+                    </Link>
+                  </li>
+                  <li className="mega__menu position-static">
+                    <Link className="headerarea__has__dropdown" to="/courses">
+                      Courses
+                    </Link>
+                  </li>
+                  {token && (
                     <li className="mega__menu position-static">
                       <Link
                         className="headerarea__has__dropdown"
-                        to="/talk-to-us"
+                        to={
+                          role === "admin"
+                            ? "/admin-dashboard"
+                            : "/studentDashboard"
+                        }
                       >
-                        Contact Us
+                        Dashboard
                       </Link>
                     </li>
-                  </ul>
-                </nav>
-              </div>
-            </div>
-            <div className="col-xl-3 col-lg-3 col-md-6">
-              <div className="headerarea__right">
-                {token && role === "student" && (
-                  <div className="header__cart">
-                    <Link className="text-decoration-none">
-                      <i
-                        className="icofont-notification"
-                        style={{ color: "#01579b", fontSize: "22px" }}
-                      />
-                      {unreadCount > 0 && (
-                        <span className="notification-badge">
-                          {unreadCount}
-                        </span>
-                      )}
+                  )}
+                  <li className="mega__menu position-static">
+                    <Link
+                      className="headerarea__has__dropdown"
+                      to="/talk-to-us"
+                    >
+                      Contact Us
                     </Link>
-                    <div className="header__right__dropdown__wrapper">
-                      <div className="header__right__dropdown__inner">
-                        {notifications.length > 0 ? (
-                          <>
-                            {notifications.map((notification, index) => (
-                              <div
-                                className="single__header__right__dropdown"
-                                key={index}
-                              >
-                                <div className="header__right__dropdown__content">
-                                  <Link>{notification.title}</Link>
-                                  <p>
-                                    {notification.description}
-                                    <br />
-                                    <span className="price">
-                                      {moment(
-                                        notification.created_at
-                                      ).fromNow()}
-                                    </span>
-                                  </p>
-                                </div>
-                                <Link
-                                  className="text-decoration-none"
-                                  onClick={() => clearNotification(index)}
-                                >
-                                  <i className="icofont-close-line" />
-                                </Link>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div className="col-xl-3 col-lg-3 col-md-6">
+            <div className="headerarea__right">
+              {token && role === "student" && (
+                <div className="header__cart">
+                  <Link className="text-decoration-none">
+                    <i
+                      className="icofont-notification"
+                      style={{ color: "#01579b", fontSize: "22px" }}
+                    />
+                    {unreadCount > 0 && (
+                      <span className="notification-badge">{unreadCount}</span>
+                    )}
+                  </Link>
+                  <div className="header__right__dropdown__wrapper">
+                    <div className="header__right__dropdown__inner">
+                      {notifications.length > 0 ? (
+                        <>
+                          {notifications.map((notification, index) => (
+                            <div
+                              className="single__header__right__dropdown"
+                              key={index}
+                            >
+                              <div className="header__right__dropdown__content">
+                                <Link>{notification.title}</Link>
+                                <p>
+                                  {notification.description}
+                                  <br />
+                                  <span className="price">
+                                    {moment(notification.created_at).fromNow()}
+                                  </span>
+                                </p>
                               </div>
-                            ))}
-                          </>
-                        ) : (
-                          <div className="single__header__right__dropdown">
-                            <div className="header__right__dropdown__content">
-                              <p className="text-center text-danger">
-                                No New Notifications
-                              </p>
+                              <Link
+                                className="text-decoration-none"
+                                onClick={() => clearNotification(index)}
+                              >
+                                <i className="icofont-close-line" />
+                              </Link>
                             </div>
+                          ))}
+                        </>
+                      ) : (
+                        <div className="single__header__right__dropdown">
+                          <div className="header__right__dropdown__content">
+                            <p className="text-center text-danger">
+                              No New Notifications
+                            </p>
                           </div>
-                        )}
-                      </div>
-                      {notifications.length > 0 && (
-                        <div className="header__right__dropdown__button">
-                          <Link
-                            className="blue__color"
-                            onClick={clearAllNotifications}
-                          >
-                            Clear All
-                          </Link>
                         </div>
                       )}
                     </div>
+                    {notifications.length > 0 && (
+                      <div className="header__right__dropdown__button">
+                        <Link
+                          className="blue__color"
+                          onClick={clearAllNotifications}
+                        >
+                          Clear All
+                        </Link>
+                      </div>
+                    )}
                   </div>
-                )}
-                <div className="headerarea__login">
-                  {token ? (
-                    <Link to="/login" onClick={logout}>
-                      <div>Logout</div>
-                    </Link>
-                  ) : (
-                    <Link to="/login">
-                      <div>Login | Register</div>
-                    </Link>
-                  )}
                 </div>
+              )}
+              <div className="headerarea__login">
+                {token ? (
+                  <Link to="/login" onClick={logout}>
+                    <div>Logout</div>
+                  </Link>
+                ) : (
+                  <Link to="/login">
+                    <div>Login | Register</div>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </header>
+    </div>
   );
 };
 

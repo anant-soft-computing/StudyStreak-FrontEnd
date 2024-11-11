@@ -132,7 +132,7 @@ const FreeMiniTest = () => {
               <div className="row">
                 <DSSidebar />
                 <div className="col-xl-12 col-lg-12 col-md-12">
-                  <div className="dashboard__content__wraper common-background-color-across-app">
+                  <div className="dashboard__content__wraper">
                     <div className="dashboard__section__title">
                       <h4>Free Mini Test</h4>
                       <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">

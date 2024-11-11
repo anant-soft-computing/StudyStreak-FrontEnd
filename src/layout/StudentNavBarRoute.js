@@ -42,7 +42,6 @@ const StudentNavBarRoute = ({ isProtected }) => {
       ) : (
         <>
           <div className="fixing-navbar-at-top-side">
-            <TopBar />
             <NavBar showNavBar={false} />
             <MobileTopBar />
           </div>

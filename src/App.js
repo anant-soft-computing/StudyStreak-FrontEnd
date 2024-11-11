@@ -321,39 +321,39 @@ const App = () => {
 
           <Route
             path="/diagnostic-test/:examId"
-            element={withBootstrap(DiagnosticTest)}
+            Component={withBootstrap(DiagnosticTest)}
           />
           <Route
             path="/general-practice-live-exam/:examType/:examForm/:examId"
-            element={withBootstrap(GeneralPTExam)}
+            Component={withBootstrap(GeneralPTExam)}
           />
           <Route
             path="/general-exam/:examType/:examId"
-            element={withBootstrap(GeneralMTExam)}
+            Component={withBootstrap(GeneralMTExam)}
           />
           <Route
             path="/assignment/:examType/:examId"
-            element={withBootstrap(LiveAssignment)}
+            Component={withBootstrap(LiveAssignment)}
           />
           <Route
             path="/fulllength-live-exam/:examId"
-            element={withBootstrap(FullLengthLiveExam)}
+            Component={withBootstrap(FullLengthLiveExam)}
           />
           <Route
             path="/live-exam/:examType/:examId"
-            element={withBootstrap(LiveExam)}
+            Component={withBootstrap(LiveExam)}
           />
           <Route
             path="/live-speaking-exam/:examType/:examId"
-            element={withBootstrap(LiveSpeakingExam)}
+            Component={withBootstrap(LiveSpeakingExam)}
           />
           <Route
             path="/practice-live-exam/:examType/:examForm/:examId"
-            element={withBootstrap(PracticeLiveExam)}
+            Component={withBootstrap(PracticeLiveExam)}
           />
           <Route
             path="/practice-speaking-live-exam/:examType/:examForm/:examId"
-            element={withBootstrap(PracticeSpeakingLiveExam)}
+            Component={withBootstrap(PracticeSpeakingLiveExam)}
           />
         </Routes>
       </div>

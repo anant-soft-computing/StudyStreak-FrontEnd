@@ -30,9 +30,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import NavBar from "../../../NavBar/NavBar";
-import TopBar from "../../../TopBar/TopBar";
 
-const drawerWidth = 280;
+const drawerWidth = 300;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -51,7 +50,7 @@ const closedMixin = (theme) => ({
   overflowX: "hidden",
   width: `calc(${theme.spacing(7)} + 1px)`,
   [theme.breakpoints.up("sm")]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(8)} + 20px)`,
   },
 });
 
@@ -210,7 +209,6 @@ const DALeftDrawer = () => {
         <CssBaseline />
         <AppBar position="fixed">
           <div className="fixing-navbar-at-top-side">
-            <TopBar />
             <NavBar
               showNavBar={true}
               handleMouseEnter={handleMouseEnter}
@@ -229,7 +227,7 @@ const DALeftDrawer = () => {
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <Box sx={{ mt: 14 }}>
+          <Box sx={{ mt: 10 }}>
             <List>
               {menuList.map((item, index) => (
                 <ListItem

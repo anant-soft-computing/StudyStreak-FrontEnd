@@ -11,7 +11,7 @@ const Tab = ({ tabs, activeTab, handleTabChange }) => {
         {tabs.map((tab, index) => (
           <li className="nav-item" role="presentation" key={index}>
             <button
-              className={`single__tab__link common-background-color-across-app ${
+              className={`single__tab__link ${
                 activeTab === tab.name ? "active" : ""
               }`}
               onClick={() => handleTabChange(tab.name)}

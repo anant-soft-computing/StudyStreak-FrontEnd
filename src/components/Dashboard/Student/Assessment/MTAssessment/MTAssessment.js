@@ -44,7 +44,7 @@ const MTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
   ];
 
   return (
-    <div className="dashboard__content__wraper common-background-color-across-app">
+    <div className="dashboard__content__wraper">
       <div className="dashboard__section__title">
         <h4>Assessment</h4>
       </div>

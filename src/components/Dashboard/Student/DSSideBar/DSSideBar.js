@@ -309,12 +309,9 @@ const DSSidebar = () => {
     <>
       <div
         className="col-xl-3 col-lg-3 col-md-12"
-        style={{
-          marginTop: "70px",
-          display: showMobileNavBtn ? "block" : "none",
-        }}
+        style={{ display: showMobileNavBtn ? "block" : "none" }}
       >
-        <div className="dashboard__inner sticky-top common-background-color-across-app">
+        <div className="dashboard__inner sticky-top">
           <div className="dashboard__nav__title">
             <h6>Welcome, {userData?.username}</h6>
             {showMobileNavBtn && (

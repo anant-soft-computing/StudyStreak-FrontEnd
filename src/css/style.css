@@ -61,6 +61,7 @@
 
 ***************************************************************/
 @import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap");
+@import url("https://cdn.jsdelivr.net/npm/@icon/icofont@1.0.1-alpha.1/icofont.min.css");
 
 :root {
   --bodyColor: #222222;
@@ -13649,8 +13650,14 @@ Breadcrumb Area
   color: var(--whiteColor);
 }
 
-.dashboard {
-  padding-top: 30px;
+.main_wrapper {
+  padding-top: 10px;
+}
+
+@media (min-width: 990px) {
+  .main_wrapper {
+    padding-top: 140px;
+  }
 }
 
 .dashboard__inner {
@@ -16518,6 +16525,9 @@ div.gridarea__wraper {
 
 .admin__menu__icon {
   width: 10%;
+}
+.MuiPaper-root:not(:hover) .admin__menu__icon {
+  width: 56px;
 }
 
 .admin__menu__title {

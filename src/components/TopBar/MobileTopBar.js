@@ -18,7 +18,7 @@ const menu = [
   },
   {
     name: "Contact Us",
-    link: "/contactUs",
+    link: "/talk-to-us",
   },
 ];
 

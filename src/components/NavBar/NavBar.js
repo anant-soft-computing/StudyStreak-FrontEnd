@@ -132,7 +132,7 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
                     <li className="mega__menu position-static">
                       <Link
                         className="headerarea__has__dropdown"
-                        to="/contactUs"
+                        to="/talk-to-us"
                       >
                         Contact Us
                       </Link>

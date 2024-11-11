@@ -17,6 +17,7 @@ import TestimonialSection from "./Testimonial/TestimonialSection";
 import { Link, useNavigate } from "react-router-dom";
 import CourseList from "./Course/CourseList";
 import ajaxCall from "../helpers/ajaxCall";
+import banner from "../img/about/about_10.png";
 
 const HomePage = () => {
   const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
@@ -166,7 +167,7 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-full md:w-1/2 space-y-6">
               <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-                Achieve your dream of overseas Education with ESPI.
+                Achieve your dream of overseas Education with StudyStreak.
               </h1>
               <p className="text-primary-100 text-lg">
                 Focuses courses to develop your potential to score high.
@@ -190,7 +191,7 @@ const HomePage = () => {
             <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
               <div className="w-full md:w-1/2 relative">
                 <img
-                  src="https://studystreak.in/static/media/about_10.c6fba820cc5e8886a5dd.png"
+                  src={banner}
                   alt="Students studying"
                   className="rounded-2xl shadow-soft"
                 />
@@ -250,7 +251,7 @@ const HomePage = () => {
               <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
                 PTE Academic Courses
               </h2>
-              <p className="text-neutral-600 mt-2">
+              <p className="text-neutral-800 mt-2">
                 Specialized courses for PTE success
               </p>
             </div>
@@ -261,7 +262,7 @@ const HomePage = () => {
               >
                 <ChevronLeft
                   size={20}
-                  className="text-neutral-600 group-hover:text-primary-600"
+                  className="text-neutral-800 group-hover:text-primary-600"
                 />
               </button>
               <button
@@ -270,7 +271,7 @@ const HomePage = () => {
               >
                 <ChevronRight
                   size={20}
-                  className="text-neutral-600 group-hover:text-primary-600"
+                  className="text-neutral-800 group-hover:text-primary-600"
                 />
               </button>
             </div>
@@ -288,8 +289,8 @@ const HomePage = () => {
                 <div
                   key={index}
                   className="group bg-white rounded-xl overflow-hidden border border-neutral-200 
-                  shadow-card hover:shadow-card-hover hover:border-primary-200 
-                  transition-all duration-300 transform hover:-translate-y-1"
+                    shadow-card hover:shadow-card-hover hover:border-primary-200 
+                    transition-all duration-300 transform hover:-translate-y-1"
                 >
                   <div
                     className={`h-48 relative overflow-hidden ${
@@ -312,11 +313,11 @@ const HomePage = () => {
                   <div className="p-6">
                     <h3
                       className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 
-                      transition-colors duration-300"
+                        transition-colors duration-300"
                     >
                       {course.title}
                     </h3>
-                    <div className="flex items-center text-sm text-neutral-600 mb-4">
+                    <div className="flex items-center text-sm text-neutral-800 mb-4">
                       <Clock size={16} className="mr-2" />
                       <span>{course.duration}</span>
                       <span className="mx-2">•</span>
@@ -325,7 +326,7 @@ const HomePage = () => {
                     <Link
                       to={`/course/${course.id}`}
                       className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl
-                      hover:bg-primary-100 transition-colors duration-300 font-medium"
+                        hover:bg-primary-100 transition-colors duration-300 font-medium"
                     >
                       View Details
                     </Link>

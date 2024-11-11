@@ -10,12 +10,11 @@ import {
   Globe,
   BookOpen,
   GraduationCap,
-  CheckCircle,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import { useSelector } from "react-redux";
-import { useCheckAuth } from "../hooks/useCheckAuth";
+import { useCheckAuth } from "../../hooks/useCheckAuth";
 import { useNavigate, useParams } from "react-router-dom";
 import moment from "moment/moment";
 import PackageDetails from "./PackageDetails";

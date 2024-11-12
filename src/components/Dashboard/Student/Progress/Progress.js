@@ -32,12 +32,21 @@ const Progress = () => {
     practiceTest: 0,
     fullLengthTest: 0,
     assignments: 0,
+
     speakingPracticeClass: 0,
     groupDoubtSolvingClass: 0,
     oneToOneDoubtSolvingClass: 0,
     tutorSupport: 0,
     webinar: 0,
     counselling: 0,
+
+    regularClassesJoin: 0,
+    speakingPracticeJoin: 0,
+    groupDoubtSolvingJoin: 0,
+    oneToOneDoubtSolvingJoin: 0,
+    tutorSupportJoin: 0,
+    webinarJoin: 0,
+    counsellingJoin: 0,
   });
 
   const examList =
@@ -76,33 +85,70 @@ const Progress = () => {
     category === "IELTS"
       ? [
           {
+            name: "Regular Class",
+            join: studentExams?.regularClassesJoin,
+          },
+          {
             name: "Speaking Practice",
             count: studentExams?.speakingPracticeClass,
+            join: studentExams?.speakingPracticeJoin,
           },
           {
             name: "Group Doubt Solving",
             count: studentExams?.groupDoubtSolvingClass,
+            join: studentExams?.groupDoubtSolvingJoin,
           },
           {
             name: "One To One Doubt Solving",
             count: studentExams?.oneToOneDoubtSolvingClass,
+            join: studentExams?.oneToOneDoubtSolvingJoin,
           },
-          { name: "Tutor Support", count: studentExams?.tutorSupport },
-          { name: "Webinar", count: studentExams?.webinar },
-          { name: "Counselling", count: studentExams?.counselling },
+          {
+            name: "Tutor Support",
+            count: studentExams?.tutorSupport,
+            join: studentExams?.tutorSupportJoin,
+          },
+          {
+            name: "Webinar",
+            count: studentExams?.webinar,
+            join: studentExams?.webinarJoin,
+          },
+          {
+            name: "Counselling",
+            count: studentExams?.counselling,
+            join: studentExams?.counsellingJoin,
+          },
         ]
       : [
           {
+            name: "Regular Class",
+            join: studentExams?.regularClassesJoin,
+          },
+          {
             name: "Group Doubt Solving",
             count: studentExams?.groupDoubtSolvingClass,
+            join: studentExams?.groupDoubtSolvingJoin,
           },
           {
             name: "One To One Doubt Solving",
             count: studentExams?.oneToOneDoubtSolvingClass,
+            join: studentExams?.oneToOneDoubtSolvingJoin,
           },
-          { name: "Tutor Support", count: studentExams?.tutorSupport },
-          { name: "Webinar", count: studentExams?.webinar },
-          { name: "Counselling", count: studentExams?.counselling },
+          {
+            name: "Tutor Support",
+            count: studentExams?.tutorSupport,
+            join: studentExams?.tutorSupportJoin,
+          },
+          {
+            name: "Webinar",
+            count: studentExams?.webinar,
+            join: studentExams?.webinarJoin,
+          },
+          {
+            name: "Counselling",
+            count: studentExams?.counselling,
+            join: studentExams?.counsellingJoin,
+          },
         ];
 
   const fetchTestData = async (url, setData) => {
@@ -464,6 +510,7 @@ const Progress = () => {
             practiceTest: response?.data?.student_pt?.length,
             fullLengthTest: response?.data?.student_flt?.length,
             assignments: response?.data?.student_assignment?.length,
+
             speakingPracticeClass:
               response?.data?.student_speaking_practice?.length,
             groupDoubtSolvingClass:
@@ -473,6 +520,18 @@ const Progress = () => {
             tutorSupport: response?.data?.student_tutor_support?.length,
             webinar: response?.data?.student_webinar?.length,
             counselling: response?.data?.student_counselling?.length,
+
+            regularClassesJoin: response?.data?.student_regular_join?.length,
+            speakingPracticeJoin:
+              response?.data?.student_speaking_practice_join?.length,
+            groupDoubtSolvingJoin:
+              response?.data?.student_group_doubt_solving_join?.length,
+            oneToOneDoubtSolvingJoin:
+              response?.data?.student_one_to_one_solving_join?.length,
+            tutorSupportJoin:
+              response?.data?.student_tutor_support_join?.length,
+            webinarJoin: response?.data?.student_webinar_join?.length,
+            counsellingJoin: response?.data?.student_counselling_join?.length,
           });
         }
       } catch (error) {
@@ -545,7 +604,7 @@ const Progress = () => {
                       </h4>
                     </div>
                     <div className="row">
-                      {classList.map(({ name, count }, index) => (
+                      {classList.map(({ name, count, join }, index) => (
                         <div
                           key={index}
                           className="col-xl-4 col-lg-4 col-md-6 col-sm-6 column__custom__class"
@@ -553,8 +612,11 @@ const Progress = () => {
                           <div className="gridarea__wraper text-center card-background">
                             <div className="gridarea__content p-2 m-2">
                               <div className="gridarea__heading">
-                                <h3>No. of Attempt : {name}</h3>
-                                <h3>{count}</h3>
+                                <h3>{name}</h3>
+                                {name !== "Regular Class" && (
+                                  <h3>No. of Attempt : {count}</h3>
+                                )}
+                                <h3>No. of Join : {join}</h3>
                               </div>
                             </div>
                           </div>

@@ -21,6 +21,7 @@ import {
   MultipleCheckboxChoiceQue,
 } from "../../utils/HTMLContent";
 import MultipleChoicesAnswer from "../../utils/HTMLContent/MultipleChoicesAnswer";
+import "../../css/index.css"
 
 const Cheerio = require("cheerio");
 

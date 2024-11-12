@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Clock } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Clock } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
-import moment from "moment/moment";
 
 const IeltsList = ({ selectedCategory = "IELTS" }) => {
   const [courseList, setCouresList] = useState([]);
@@ -94,10 +93,6 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
                   </div>
 
                   <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
-                    <span className="text-sm text-neutral-600 ml-2">
-                      Valid Up To:{" "}
-                      {moment(course?.EnrollmentEndDate).format("ll")}
-                    </span>
                     <span className="text-sm text-neutral-600 ml-2">
                       Language: {course.Language?.name || "N/A"}
                     </span>

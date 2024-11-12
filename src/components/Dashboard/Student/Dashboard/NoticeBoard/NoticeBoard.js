@@ -37,8 +37,8 @@ const NoticeBoard = () => {
           const filterNotice = response?.data?.filter((item) => {
             const student = item?.student?.some((s) => s?.id === studentId);
             const batch = item?.batch?.some((b) => batchIds?.includes(b?.id));
-            const course = item?.course?.some((c) =>
-              courseIds?.includes(c?.id) && c?.category === category
+            const course = item?.course?.some(
+              (c) => courseIds?.includes(c?.id) && c?.category === category
             );
             return student || batch || course;
           });

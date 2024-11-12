@@ -11,6 +11,8 @@ const Layout = () => {
   const token = localStorage.getItem("loginInfo");
   const role = JSON.parse(localStorage.getItem("loginInfo"))?.user_role || "";
 
+  console.log("---role---->", role);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -113,7 +115,11 @@ const Layout = () => {
                 <div className="hidden lg:flex items-center gap-3">
                   {/* Login/Register Button */}
                   <Link
-                    to="/studentDashboard"
+                    to={
+                      role === "admin"
+                        ? "/admin-dashboard"
+                        : "/studentDashboard"
+                    }
                     className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
                   >
                     <User size={16} />
@@ -207,7 +213,10 @@ const Layout = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
               {/* About */}
               <div className="space-y-4">
-                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>
+                <h3
+                  className="text-xl font-heading font-bold"
+                  style={{ color: "white" }}
+                >
                   About StudyStreak
                 </h3>
                 <p className="text-neutral-400 leading-relaxed">
@@ -217,8 +226,11 @@ const Layout = () => {
               </div>
 
               {/* Exams */}
-              <div className="space-y-4"> 
-                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>
+              <div className="space-y-4">
+                <h3
+                  className="text-xl font-heading font-bold"
+                  style={{ color: "white" }}
+                >
                   Exams We Cover
                 </h3>
                 <ul className="space-y-3">
@@ -239,7 +251,12 @@ const Layout = () => {
 
               {/* Quick Links */}
               <div className="space-y-4">
-                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>Quick Links</h3>
+                <h3
+                  className="text-xl font-heading font-bold"
+                  style={{ color: "white" }}
+                >
+                  Quick Links
+                </h3>
                 <ul className="space-y-3">
                   {[
                     ["Home", "/"],
@@ -262,7 +279,12 @@ const Layout = () => {
 
               {/* Contact */}
               <div className="space-y-4">
-                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>Contact Us</h3>
+                <h3
+                  className="text-xl font-heading font-bold"
+                  style={{ color: "white" }}
+                >
+                  Contact Us
+                </h3>
                 <div className="space-y-3 text-neutral-400">
                   <p className="text-neutral-400">
                     1st and 2nd Floor, Galav Chambers, Dairy Den Circle,

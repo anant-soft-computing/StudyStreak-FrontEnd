@@ -460,12 +460,12 @@ li {
   color: var(--whiteColor);
 }
 
-@media (min-width: 1500px) and (max-width: 1920px),
+/* @media (min-width: 1500px) and (max-width: 1920px),
   (min-width: 1366px) and (max-width: 1499px) {
   .container {
     max-width: 1200px;
   }
-}
+} */
 
 .default__small__button {
   padding: 5px 23px;
@@ -13654,11 +13654,11 @@ Breadcrumb Area
   padding-top: 10px;
 }
 
-@media (min-width: 990px) {
+/* @media (min-width: 990px) {
   .main_wrapper {
     padding-top: 140px;
   }
-}
+} */
 
 .dashboard__inner {
   padding: 20px 30px 30px;

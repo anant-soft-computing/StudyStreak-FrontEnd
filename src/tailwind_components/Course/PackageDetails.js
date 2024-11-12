@@ -1,7 +1,7 @@
-import { CheckCircle } from "lucide-react";
+import { BookOpen, CheckCircle, Clock } from "lucide-react";
 import React, { useState } from "react";
 
-const PackageDetails = ({ courseType, courseId, packages, courseName }) => {
+const PackageDetails = ({ packages }) => {
   const [selectedPackage, setSelectedPackage] = useState(null);
 
   return (
@@ -43,12 +43,22 @@ const PackageDetails = ({ courseType, courseId, packages, courseName }) => {
 
               {/* Feature Chips */}
               <div className="flex flex-wrap gap-2 mt-4">
+                {pkg.duration && (
+                  <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                    <Clock size={14} />
+                    Validity : {pkg.duration} Months
+                  </div>
+                )}
                 {pkg.live_classes_membership && (
                   <div className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 px-3 py-1 rounded-full text-sm font-medium">
                     <div className="w-2 h-2 bg-success-500 rounded-full animate-pulse" />
                     Live Classes Available
                   </div>
                 )}
+                <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <BookOpen size={14} />
+                  Interactive Lessons
+                </div>
                 {pkg.practice_test && (
                   <div className="inline-flex items-center gap-1.5 bg-info-100 text-info-700 px-3 py-1 rounded-full text-sm font-medium">
                     <CheckCircle size={14} />
@@ -63,42 +73,61 @@ const PackageDetails = ({ courseType, courseId, packages, courseName }) => {
               {[
                 {
                   label: "Counselling",
-                  count: pkg.counselling_count,
+                  count:
+                    pkg.counselling_count !== -1 ? pkg.counselling_count : null,
                   enabled: pkg.counselling,
                 },
                 {
                   label: "Group Doubt Solving",
-                  count: pkg.group_doubt_solving_count,
+                  count:
+                    pkg.group_doubt_solving_count !== -1
+                      ? pkg.group_doubt_solving_count
+                      : null,
                   enabled: pkg.group_doubt_solving,
                 },
                 {
                   label: "One-to-One Doubt Solving",
-                  count: pkg.one_to_one_doubt_solving_count,
+                  count:
+                    pkg.one_to_one_doubt_solving_count !== -1
+                      ? pkg.one_to_one_doubt_solving_count
+                      : null,
                   enabled: pkg.one_to_one_doubt_solving,
                 },
                 {
                   label: "Practice Test",
-                  count: pkg.practice_test_count,
+                  count:
+                    pkg.practice_test_count !== -1
+                      ? pkg.practice_test_count
+                      : null,
                   enabled: pkg.practice_test,
                 },
                 {
                   label: "Writing Evaluation",
-                  count: pkg.writing_evaluation_count,
+                  count:
+                    pkg.writing_evaluation_count !== -1
+                      ? pkg.writing_evaluation_count
+                      : null,
                   enabled: pkg.writing_evaluation,
                 },
                 {
                   label: "Speaking Practice",
-                  count: pkg.speaking_practice_count,
+                  count:
+                    pkg.speaking_practice_count !== -1
+                      ? pkg.speaking_practice_count
+                      : null,
                   enabled: pkg.speaking_practice,
                 },
                 {
                   label: "Webinar",
-                  count: pkg.webinar_count,
+                  count: pkg.webinar_count !== -1 ? pkg.webinar_count : null,
                   enabled: pkg.webinar,
                 },
                 {
                   label: "Tutor Support",
-                  count: pkg.tutor_support_count,
+                  count:
+                    pkg.tutor_support_count !== -1
+                      ? pkg.tutor_support_count
+                      : null,
                   enabled: pkg.tutor_support,
                 },
               ].map(

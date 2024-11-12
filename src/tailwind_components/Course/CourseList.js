@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Clock } from "lucide-react";
-import { Link } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
-import moment from "moment/moment";
 
 const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
+  const location = useLocation();
+  const category = selectedCategory || location.state?.category || "";
   const [courseList, setCouresList] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/courselistview/?search=${searchTerm}&Category__name=${selectedCategory}`,
+          `/courselistview/?search=${searchTerm}&Category__name=${category}`,
           {
             headers: {
               Accept: "application/json",
@@ -31,7 +32,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
         console.log("error", error);
       }
     })();
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, category]);
 
   const getGradientClass = (index) => {
     const gradients = [
@@ -62,12 +63,12 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
   return (
     <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
               Popular Exam Courses
             </h2>
-            <p className="text-neutral-600 mt-2">
+            <p className="text-neutral-800 mt-2 mb-3">
               Choose from our highly-rated exam preparation courses
             </p>
           </div>
@@ -97,7 +98,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   <h3 className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
                     {course.Course_Title}
                   </h3>
-                  <div className="flex items-center text-sm text-neutral-600 mb-3">
+                  <div className="flex items-center text-sm text-neutral-800 mb-3">
                     <Clock size={16} className="mr-2" />
                     <span>{calculateTotalDuration(course.lessons)}</span>
                     <span className="mx-2">•</span>
@@ -105,11 +106,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   </div>
 
                   <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
-                    <span className="text-sm text-neutral-600 ml-2">
-                      Valid Up To:{" "}
-                      {moment(course?.EnrollmentEndDate).format("ll")}
-                    </span>
-                    <span className="text-sm text-neutral-600 ml-2">
+                    <span className="text-sm text-neutral-800 ml-2">
                       Language: {course.Language?.name || "N/A"}
                     </span>
                   </div>
@@ -122,14 +119,29 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                       View Details
                     </Link>
                   </div>
+                  <div className="flex mt-2 gap-2">
+                    <Link
+                      to="/login"
+                      className="block w-full text-center bg-primary-50 text-primary-700 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small"
+                    >
+                      Free Practice Test
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="block w-full text-center bg-primary-50 text-primary-700 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small"
+                    >
+                      Diagnostic Test
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-lg text-neutral-600">
-              No courses available for {selectedCategory || "selected category"}
+            <p className="text-lg font-semibold text-red-600">
+              Courses Coming Soon for{" "}
+              <span className="italic text-red-700">{selectedCategory}</span>
             </p>
           </div>
         )}

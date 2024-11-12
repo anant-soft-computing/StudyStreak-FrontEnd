@@ -9,6 +9,7 @@ import logo from "../../img/logo/Logo.png";
 const Layout = () => {
   const { logoutUser } = useCheckAuth();
   const token = localStorage.getItem("loginInfo");
+  const role = JSON.parse(localStorage.getItem("loginInfo"))?.user_role || "";
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
@@ -24,8 +25,6 @@ const Layout = () => {
     { name: "Home", path: "/" },
     { name: "Courses", path: "/courses" },
     { name: "IELTS", path: "/ielts" },
-
-    // { name: 'About Us', path: '/about-us' },
     { name: "Why Choose Us", path: "/why-choose-us" },
     { name: "Blogs", path: "/blogs" },
     { name: "Podcast", path: "/podcast" },
@@ -47,12 +46,13 @@ const Layout = () => {
             <div className="flex justify-between items-center text-sm">
               <div className="flex items-center gap-4">
                 <span>📧 reachus@studystreak.io</span>
-                <span>📞 +91 91069 95326</span>
+                <span>📞 +91 88496 50924</span>
               </div>
               <div className="hidden md:flex items-center gap-4">
                 <Link
                   to="/talk-to-us"
                   className="hover:text-white transition-colors duration-300"
+                  style={{ color: "white" }}
                 >
                   Talk to Us
                 </Link>
@@ -60,6 +60,7 @@ const Layout = () => {
                 <Link
                   to="/become-a-partner"
                   className="hover:text-white transition-colors duration-300"
+                  style={{ color: "white" }}
                 >
                   Become a Partner
                 </Link>
@@ -164,7 +165,11 @@ const Layout = () => {
                 {token ? (
                   <div className="pt-4 mt-2 border-t border-neutral-200">
                     <Link
-                      to="/studentDashboard"
+                      to={
+                        role === "admin"
+                          ? "/admin-dashboard"
+                          : "/studentDashboard"
+                      }
                       className="flex items-center justify-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300"
                       onClick={logout}
                     >
@@ -202,7 +207,7 @@ const Layout = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
               {/* About */}
               <div className="space-y-4">
-                <h3 className="text-xl font-heading font-bold">
+                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>
                   About StudyStreak
                 </h3>
                 <p className="text-neutral-400 leading-relaxed">
@@ -212,14 +217,14 @@ const Layout = () => {
               </div>
 
               {/* Exams */}
-              <div className="space-y-4">
-                <h3 className="text-xl font-heading font-bold">
+              <div className="space-y-4"> 
+                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>
                   Exams We Cover
                 </h3>
                 <ul className="space-y-3">
                   {["IELTS", "GRE", "GMAT", "TOEFL", "PTE Academic"].map(
                     (exam, index) => (
-                      <li key={index}>
+                      <li key={index} style={{ display: "block" }}>
                         <Link
                           to={`/courses/${exam.toLowerCase()}`}
                           className="text-neutral-400 hover:text-white transition-colors duration-300"
@@ -234,7 +239,7 @@ const Layout = () => {
 
               {/* Quick Links */}
               <div className="space-y-4">
-                <h3 className="text-xl font-heading font-bold">Quick Links</h3>
+                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>Quick Links</h3>
                 <ul className="space-y-3">
                   {[
                     ["Home", "/"],
@@ -243,7 +248,7 @@ const Layout = () => {
                     ["Contact", "/talk-to-us"],
                     ["Blog", "/blog"],
                   ].map(([name, path], index) => (
-                    <li key={index}>
+                    <li key={index} style={{ display: "block" }}>
                       <Link
                         to={path}
                         className="text-neutral-400 hover:text-white transition-colors duration-300"
@@ -257,14 +262,16 @@ const Layout = () => {
 
               {/* Contact */}
               <div className="space-y-4">
-                <h3 className="text-xl font-heading font-bold">Contact Us</h3>
+                <h3 className="text-xl font-heading font-bold" style={{ color: "white" }}>Contact Us</h3>
                 <div className="space-y-3 text-neutral-400">
-                  <p>
+                  <p className="text-neutral-400">
                     1st and 2nd Floor, Galav Chambers, Dairy Den Circle,
                     Sayajigunj, Vadodara, Gujarat, India - 390020
                   </p>
-                  <p>Phone: (+91) 8849650924</p>
-                  <p>Email: reachus@studystreak.io</p>
+                  <p className="text-neutral-400">Phone: (+91) 8849650924</p>
+                  <p className="text-neutral-400">
+                    Email: reachus@studystreak.io
+                  </p>
                 </div>
 
                 {/* Social Links */}
@@ -325,7 +332,9 @@ const Layout = () => {
 
             {/* Copyright */}
             <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-neutral-400">
-              <p>© 2024 StudyStreak. All rights reserved.</p>
+              <p className="text-neutral-400">
+                © 2024 StudyStreak. All rights reserved.
+              </p>
             </div>
           </div>
         </footer>

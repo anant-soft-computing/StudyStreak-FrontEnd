@@ -7,6 +7,7 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 
 const UpcomingClass = ({ isLoading, classes, message }) => {
   const [currentTime, setCurrentTime] = useState(moment());
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,6 +34,7 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
         onClick={() => {
           window.open(join_url, "__blank");
           gamificationSubmit(id);
+          studentJoinNow(id);
         }}
         disabled={!isButtonEnabled}
         style={{ opacity: isButtonEnabled ? 1 : 0.5 }}
@@ -67,6 +69,37 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
       );
       if (response.status === 201) {
         toast.success("Points Updated Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const studentJoinNow = async (classID) => {
+    const data = JSON.stringify({
+      live_class_id: classID,
+      student_id: studentId,
+    });
+    try {
+      const response = await ajaxCall(
+        "/students-join-live-class/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Join Successfully");
       } else {
         console.log("error");
       }

@@ -70,7 +70,6 @@ const WhyChooseUsPage = () => {
       name: "Sarah Johnson",
       score: "8.5",
       university: "University of Toronto",
-      image: "/student-1.jpg",
       quote:
         "StudyStreak's methodology and expert guidance helped me achieve my dream score in just 2 months!",
     },
@@ -225,15 +224,9 @@ const WhyChooseUsPage = () => {
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover 
-                  transition-all duration-300 transform hover:-translate-y-1"
+                className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="flex items-start gap-4 mb-4">
-                  <img
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
                   <div>
                     <h4 className="font-semibold text-neutral-800">
                       {testimonial.name}

@@ -335,38 +335,26 @@ const Dashboard = () => {
                               >
                                 <div className="gridarea__wraper text-center card-background">
                                   <div
-                                    className="gridarea__content p-2 m-2"
+                                    className="gridarea__content p-3 m-2"
                                     style={{
                                       cursor: link ? "pointer" : "default",
                                     }}
                                   >
-                                    {link ? (
-                                      <Link
-                                        to={link}
-                                        className="text-decoration-none"
-                                        state={state}
-                                      >
-                                        <div className="gridarea__heading">
-                                          <img
-                                            src={icon}
-                                            alt={name}
-                                            height={50}
-                                            width={50}
-                                          />
-                                          <h3 className="mt-2">{name}</h3>
-                                        </div>
-                                      </Link>
-                                    ) : (
-                                      <div className="gridarea__heading">
+                                    <Link
+                                      to={link}
+                                      className="text-decoration-none"
+                                      state={state}
+                                    >
+                                      <div className="gridarea__heading  d-flex justify-content-center align-items-center gap-4">
                                         <img
                                           src={icon}
                                           alt={name}
-                                          height={50}
-                                          width={50}
+                                          height={35}
+                                          width={35}
                                         />
                                         <h3 className="mt-2">{name}</h3>
                                       </div>
-                                    )}
+                                    </Link>
                                   </div>
                                 </div>
                               </div>

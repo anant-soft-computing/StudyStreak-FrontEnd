@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
+import { CreditCard, Package, Tag, User } from "lucide-react";
 import logo from "../../img/logo/Logo.png";
 import ajaxCall from "../../helpers/ajaxCall";
 
@@ -316,71 +317,115 @@ const Checkout = () => {
   }, []);
 
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="checkoutarea sp_bottom_100 sp_top_100">
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-6 col-lg-6 col-md-12"></div>
-              <div className="col-lg-6 col-md-12 col-12">
-                <div className="checkoutarea__payment__wraper">
-                  <div className="checkoutarea__total">
-                    <h3>Your order</h3>
-                    <div className="checkoutarea__table__wraper">
-                      <table className="checkoutarea__table">
-                        <thead>
-                          <tr className="checkoutarea__item">
-                            <td className="checkoutarea__ctg__type">Course</td>
-                            <td className="checkoutarea__cgt__des">
-                              {courseName}
-                            </td>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr className="checkoutarea__item prd-name">
-                            <td className="checkoutarea__ctg__type">Package</td>
-                            <td className="checkoutarea__cgt__des">
-                              {packageName}
-                            </td>
-                          </tr>
-                          <tr className="checkoutarea__item">
-                            <td className="checkoutarea__ctg__type">Total</td>
-                            <td className="checkoutarea__cgt__des">
-                              <i className="icofont-rupee"></i>
-                              {package_amount}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                      <div className="col-xl-6">
-                        <div className="dashboard__form__wraper">
-                          <div className="dashboard__form__input">
-                            <label>Have a Coupon Code ?</label>
-                            <input
-                              type="text"
-                              placeholder="Coupon Code"
-                              value={couponCode}
-                              onChange={(e) => setCouponCode(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                        <div className="text-danger">{noCoupon}</div>
-                      </div>
+    <div className="min-h-screen bg-neutral-50 py-12 mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-card animate-fade-in-up">
+
+            <div className="border-b border-neutral-200 p-6">
+              <h1 className="text-2xl font-heading font-semibold text-neutral-900">
+                Checkout
+              </h1>
+            </div>
+            
+            <div className="p-6 space-y-8">
+              <div className="space-y-4">
+                <h2 className="text-xl font-heading font-medium text-neutral-800">
+                  Order Summary
+                </h2>
+                <div className="bg-neutral-50 rounded-xl p-6 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Package className="w-5 h-5 text-primary-500" />
+                      <span className="text-sm font-medium text-neutral-700">
+                        Course
+                      </span>
+                    </div>
+                    <span className="text-sm text-neutral-900">
+                      {courseName}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <CreditCard className="w-5 h-5 text-primary-500" />
+                      <span className="text-sm font-medium text-neutral-700">
+                        Package
+                      </span>
+                    </div>
+                    <span className="text-sm text-neutral-900">
+                      {packageName}
+                    </span>
+                  </div>
+                  <div className="pt-4 border-t border-neutral-200">
+                    <div className="flex items-center justify-between">
+                      <span className="text-base font-medium text-neutral-900">
+                        Total Amount
+                      </span>
+                      <span className="text-lg font-semibold text-primary-600">
+                        ₹{package_amount}
+                      </span>
                     </div>
                   </div>
-                  <div className="checkoutarea__payment clearfix">
-                    <div className="checkoutarea__payment__toggle">
-                      <div className="checkoutarea__payment__input__box">
-                        <button
-                          className="default__button"
-                          onClick={handleEnrollButton}
-                        >
-                          Buy
-                        </button>
+                </div>
+              </div>
+
+              <div className="my-4 space-y-4">
+                <h2 className="text-xl font-heading font-medium text-neutral-800">
+                  Apply Coupon
+                </h2>
+                <div className="flex space-x-4">
+                  <div className="flex-1">
+                    <div className="relative">
+                      <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
+                      <input
+                        type="text"
+                        placeholder="Enter coupon code"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 border border-neutral-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-sm transition-all duration-200"
+                      />
+                    </div>
+                    {noCoupon && (
+                      <div className="mt-4 bg-error-50 text-error-500 px-4 py-2 rounded-lg text-sm animate-fade-in">
+                        {noCoupon}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {discount > 0 && (
+                  <div className="bg-success-50 text-success-700 px-4 py-2 rounded-lg text-sm animate-fade-in">
+                    Coupon Applied Successfully! You Saved ₹{discount}
+                  </div>
+                )}
+              </div>
+
+              {userDetails?.user && (
+                <div className="space-y-4">
+                  <h2 className="text-xl font-heading font-medium text-neutral-800">
+                    User Details
+                  </h2>
+                  <div className="bg-neutral-50 rounded-xl p-6 space-y-4 mb-4">
+                    <div className="flex items-center space-x-3">
+                      <User className="w-5 h-5 text-primary-500" />
+                      <div>
+                        <p className="text-sm font-medium text-neutral-900">
+                          {userDetails.user.first_name}{" "}
+                          {userDetails.user.last_name} -{" "}
+                          {userDetails.user.email}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
+              )}
+
+              <div className="pt-6">
+                <button
+                  onClick={handleEnrollButton}
+                  className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-soft"
+                >
+                  Proceed to Payment
+                </button>
               </div>
             </div>
           </div>

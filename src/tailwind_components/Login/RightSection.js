@@ -1,10 +1,9 @@
 import React from "react";
 
-// Shared right side component
 const RightSection = () => (
   <div className="hidden lg:flex flex-1 bg-primary-600 p-8 items-center justify-center">
     <div className="max-w-lg text-center text-white">
-      <h2 className="text-3xl font-bold mb-4">
+      <h2 className="text-3xl font-bold mb-4" style={{ color: "white" }}>
         Start Your Journey With StudyStreak
       </h2>
       <p className="text-primary-100 text-lg mb-4">

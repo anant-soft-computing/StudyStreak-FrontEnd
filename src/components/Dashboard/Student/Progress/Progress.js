@@ -14,6 +14,7 @@ const Progress = () => {
   const [fltData, setFltData] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [miniTestData, setMiniTestData] = useState([]);
+  const [expectedScore, setExpectedScore] = useState([]);
   const [studentLessons, setStudentLessons] = useState([]);
   const [practiceTestData, setPracticeTestData] = useState([]);
 
@@ -150,6 +151,38 @@ const Progress = () => {
             join: studentExams?.counsellingJoin,
           },
         ];
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/expected-score/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setExpectedScore(
+            response.data.filter(
+              (item) => item?.course?.Category?.name === category
+            )
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, [category]);
 
   const fetchTestData = async (url, setData) => {
     try {
@@ -552,6 +585,11 @@ const Progress = () => {
                   <div className="dashboard__content__wraper">
                     <div className="dashboard__section__title">
                       <h4>Progress Report</h4>
+                      {category && (
+                        <h5>
+                          Expected Score : {expectedScore?.[0]?.expected_score}
+                        </h5>
+                      )}
                     </div>
                     {availableBadges?.length > 0 && (
                       <div className="d-flex justify-content-center">

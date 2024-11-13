@@ -2,42 +2,40 @@ import React, { useState } from "react";
 
 const packagesDetails = [
   {
-    package_name: "IELTS-Demo",
+    package_name: "IELTS/PTE/TOEFL/DUOLINGO - Demo",
     image:
       "https://ieltsonlinetests.com/sites/default/files/styles/webinar_375x215/public/2020-11/shutterstock_583424317.jpg",
     exam_options: ["IELTS", "PTE", "TOEFL"],
     features: [
-      "All about 4 Modules",
-      "Paper Style",
-      "IELTS Test Settings",
-      "IDP Certified Faculties",
-      "Anytime Demo",
-      "Flexible Timings",
-      "60+ hours video lessons",
-      "Free",
+      "All Modules",
+      "Exam Fees & Test Date",
+      "Certified Faculties",
+      "Test Prep Overview",
+      "On-Demand Demo Sessions",
+      "Available in English/Hindi",
+      "Absolutely Free Demo",
     ],
     badge: "Orientation",
   },
   {
-    package_name: "Master Class",
+    package_name: "IELTS Master Class - 7-Point Strategy",
     image:
       "https://ieltsonlinetests.com/sites/default/files/styles/webinar_375x215/public/2020-10/charts-data-desk-669615.jpg",
     additional_options: ["IELTS Master Class"],
 
     features: [
-      "Eligibility Assessment",
-      "Admission Process",
-      "About Country",
-      "Documents Required",
-      "Upcoming Intakes",
-      "Costs and Scholarships",
-      "English/Gujarati/Hindi",
-      "Free",
+      "Listening Strategy",
+      "Reading Strategy",
+      "Writing Strategy",
+      "Speaking Strategy",
+      "Mock Test Insights",
+      "Personalized Feedback",
+      "Free Master Class",
     ],
-    badge: "Study Abroad Counseling",
+    badge: "Orientation",
   },
   {
-    package_name: "Study Abroad Counselling",
+    package_name: "Uk/Canada/USA/Aus/NZ",
     image:
       "https://ieltsonlinetests.com/sites/default/files/styles/webinar_375x215/public/2020-11/shutterstock_583424317.jpg",
     country_options: ["UK", "NZ", "USA", "Canada", "Australia", "Europe"],
@@ -52,7 +50,7 @@ const packagesDetails = [
       "English/Gujarati/Hindi",
       "Free",
     ],
-    badge: "Orientation",
+    badge: "Study Abroad Counselling",
   },
 ];
 
@@ -82,8 +80,6 @@ const Packages = () => {
   };
 
   const handleSubmit = () => {
-    // Handle form submission logic here (e.g., send data to the backend)
-    console.log("Form Submitted:", formData);
     handleClose();
   };
 
@@ -108,7 +104,6 @@ const Packages = () => {
             key={index}
             className="w-96 bg-white border border-neutral-200 rounded-xl shadow-soft p-6 hover:shadow-hover transition-shadow duration-300 relative"
           >
-            {/* Badge / Title */}
             {pkg.badge && (
               <div className="absolute top-4 left-4 bg-primary-600 text-white py-1 px-3 rounded-full text-sm font-medium">
                 {pkg.badge}
@@ -148,7 +143,6 @@ const Packages = () => {
               ))}
             </ul>
 
-            {/* Join Button */}
             <button
               onClick={() => handleJoinClick(pkg.package_name)}
               className="bg-primary-600 hover:bg-primary-700 text-white py-2 px-6 w-full rounded-full font-medium transition-colors duration-300"
@@ -158,7 +152,6 @@ const Packages = () => {
           </div>
         ))}
 
-        {/* Dialog for Join Form */}
         {open && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-elevated">

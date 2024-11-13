@@ -28,7 +28,7 @@ const features = [
     iconColor: "text-primary-500",
   },
   {
-    title: "Expert Instruction",
+    title: "Expert Instructor",
     description: "Learn from certified professionals",
     icon: GraduationCap,
     iconBgColor: "bg-secondary-50",

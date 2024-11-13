@@ -1,8 +1,39 @@
-import { BookOpen, CheckCircle, Clock } from "lucide-react";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { BookOpen, CheckCircle, Clock } from "lucide-react";
+import BatchSelection from "./BatchSelection";
 
-const PackageDetails = ({ packages }) => {
-  const [selectedPackage, setSelectedPackage] = useState(null);
+const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
+  const navigate = useNavigate();
+  const [selectedPackage, setSelectedPackage] = useState("");
+  const [packageName, setPackageName] = useState("");
+  const [packagePrice, setPackagePrice] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleEnroll = (packageId, packageName, packagePrice) => {
+    if (courseType === "TAUGHT") {
+      setIsModalOpen(true);
+      setSelectedPackage(packageId);
+      setPackageName(packageName);
+      setPackagePrice(packagePrice);
+    } else {
+      navigate("/checkout", {
+        state: {
+          courseId,
+          packageId,
+          courseName,
+          packageName,
+          packagePrice,
+          courseType,
+        },
+      });
+    }
+  };
+
+  const onClose = () => {
+    setSelectedPackage("");
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="mb-12">
@@ -20,7 +51,6 @@ const PackageDetails = ({ packages }) => {
                 : "border border-neutral-200 shadow-card hover:shadow-card-hover hover:scale-[1.01]"
             }`}
           >
-            {/* Package Header */}
             <div className="space-y-4 mb-8">
               <div className="flex justify-between items-start">
                 <div className="space-y-2">
@@ -41,7 +71,6 @@ const PackageDetails = ({ packages }) => {
                 )}
               </div>
 
-              {/* Feature Chips */}
               <div className="flex flex-wrap gap-2 mt-4">
                 {pkg.duration && (
                   <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
@@ -49,7 +78,7 @@ const PackageDetails = ({ packages }) => {
                     Validity : {pkg.duration} Months
                   </div>
                 )}
-                {pkg.live_classes_membership && (
+                {courseType === "TAUGHT" && (
                   <div className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 px-3 py-1 rounded-full text-sm font-medium">
                     <div className="w-2 h-2 bg-success-500 rounded-full animate-pulse" />
                     Live Classes Available
@@ -60,7 +89,7 @@ const PackageDetails = ({ packages }) => {
                   Interactive Lessons
                 </div>
                 {pkg.practice_test && (
-                  <div className="inline-flex items-center gap-1.5 bg-info-100 text-info-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <div className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 px-3 py-1 rounded-full text-sm font-medium">
                     <CheckCircle size={14} />
                     Free Practice Test
                   </div>
@@ -68,7 +97,6 @@ const PackageDetails = ({ packages }) => {
               </div>
             </div>
 
-            {/* Features List */}
             <div className="space-y-6 mb-8">
               {[
                 {
@@ -166,9 +194,9 @@ const PackageDetails = ({ packages }) => {
                                 : "bg-neutral-400"
                             }`}
                             style={{
-                              width: `${Math.max(
+                              width: `${Math.min(
                                 (parseInt(feature.count) / 10) * 100,
-                                10
+                                100
                               )}%`,
                             }}
                           />
@@ -179,9 +207,14 @@ const PackageDetails = ({ packages }) => {
               )}
             </div>
 
-            {/* Action Button */}
             <button
-              onClick={() => setSelectedPackage(index)}
+              onClick={() => {
+                handleEnroll(
+                  pkg?.package_id,
+                  pkg?.package_name,
+                  pkg?.package_price
+                );
+              }}
               className={`w-full py-4 rounded-xl font-semibold transition-all duration-300
               ${
                 selectedPackage === index
@@ -194,7 +227,6 @@ const PackageDetails = ({ packages }) => {
                 : "Select Package"}
             </button>
 
-            {/* Popular Badge */}
             {pkg.package_name === "IELTS Gold" && (
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <div className="bg-primary-600 text-white px-4 py-1 rounded-full text-sm font-medium">
@@ -205,6 +237,16 @@ const PackageDetails = ({ packages }) => {
           </div>
         ))}
       </div>
+      <BatchSelection
+        open={isModalOpen}
+        onClose={onClose}
+        courseId={courseId}
+        courseName={courseName}
+        courseType={courseType}
+        packageName={packageName}
+        packagePrice={packagePrice}
+        packageId={selectedPackage}
+      />
     </div>
   );
 };

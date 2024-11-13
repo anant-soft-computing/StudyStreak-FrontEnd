@@ -7,14 +7,11 @@ import { useCheckAuth } from "../../hooks/useCheckAuth";
 import logo from "../../img/logo/Logo.png";
 
 const Layout = () => {
+  const location = useLocation();
   const { logoutUser } = useCheckAuth();
   const token = localStorage.getItem("loginInfo");
   const role = JSON.parse(localStorage.getItem("loginInfo"))?.user_role || "";
-
-  console.log("---role---->", role);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
 
   const logout = (event) => {
     event.preventDefault();
@@ -42,7 +39,6 @@ const Layout = () => {
   return (
     <div className="flex flex-col min-h-screen bg-neutral-50">
       <nav className="sticky top-0 z-50">
-        {/* Top Bar */}
         <div className="bg-primary-900 text-primary-100 py-1.5">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center text-sm">
@@ -74,7 +70,6 @@ const Layout = () => {
         <div className="bg-white border-b border-neutral-200 shadow-soft">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center h-16">
-              {/* Logo */}
               <Link to="/" className="flex items-center">
                 <img
                   src={logo}
@@ -83,7 +78,6 @@ const Layout = () => {
                 />
               </Link>
 
-              {/* Desktop Navigation */}
               <div className="hidden lg:flex items-center">
                 {navigationItems.slice(0, 7).map((item, index) => (
                   <Link
@@ -110,10 +104,8 @@ const Layout = () => {
                 ))}
               </div>
 
-              {/* Actions */}
               {token ? (
                 <div className="hidden lg:flex items-center gap-3">
-                  {/* Login/Register Button */}
                   <Link
                     to={
                       role === "admin"
@@ -128,7 +120,6 @@ const Layout = () => {
                 </div>
               ) : (
                 <div className="hidden lg:flex items-center gap-3">
-                  {/* Login/Register Button */}
                   <Link
                     to="/login"
                     className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
@@ -201,17 +192,15 @@ const Layout = () => {
         )}
       </nav>
 
-      {/* Main Content */}
       <main className="flex-grow">
         <Outlet />
       </main>
 
-      {/* Footer */}
       {!hideFooterPaths.includes(location.pathname) && (
         <footer className="bg-primary-900 text-white py-16">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-              {/* About */}
+            
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"
@@ -225,7 +214,6 @@ const Layout = () => {
                 </p>
               </div>
 
-              {/* Exams */}
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"
@@ -249,7 +237,6 @@ const Layout = () => {
                 </ul>
               </div>
 
-              {/* Quick Links */}
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"
@@ -277,7 +264,6 @@ const Layout = () => {
                 </ul>
               </div>
 
-              {/* Contact */}
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"
@@ -296,7 +282,6 @@ const Layout = () => {
                   </p>
                 </div>
 
-                {/* Social Links */}
                 <div className="flex space-x-4 pt-4">
                   {[
                     {
@@ -352,7 +337,6 @@ const Layout = () => {
               </div>
             </div>
 
-            {/* Copyright */}
             <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-neutral-400">
               <p className="text-neutral-400">
                 © 2024 StudyStreak. All rights reserved.

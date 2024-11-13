@@ -92,12 +92,6 @@ const TalkToUsPage = () => {
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Logo */}
-            <img
-              src="https://studystreak.in/static/media/Logo.d84254f8c0966763bb8d.png"
-              alt="StudyStreak Logo"
-              className="h-20 object-contain mx-auto mb-8"
-            />
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
               Get in Touch
             </h1>

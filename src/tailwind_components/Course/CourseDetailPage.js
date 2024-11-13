@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment/moment";
+import moment from "moment";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,11 +23,10 @@ const CourseDetailPage = () => {
   const { checkAuth } = useCheckAuth();
 
   const [batchData, setBatchData] = useState([]);
+  const [openSection, setOpenSection] = useState("");
   const [courseDetail, setCourseDetail] = useState();
   const [coursePackages, setCoursePackages] = useState();
-  const [openSection, setOpenSection] = useState(
-    "Section 1: Introduction to IELTS"
-  );
+
   const authData = useSelector((state) => state.authStore);
 
   const packageIds = coursePackages?.packages?.map((item) => item?.package_id);
@@ -147,7 +146,6 @@ const CourseDetailPage = () => {
 
   return (
     <div className="bg-neutral-50 min-h-screen relative">
-      {/* Course Banner */}
       <div
         className="relative h-[400px] bg-cover bg-center"
         style={{ backgroundImage: `url(${courseDetail?.Course_Thumbnail})` }}
@@ -186,7 +184,6 @@ const CourseDetailPage = () => {
       </div>
 
       <div className="container mx-auto px-4 py-12">
-        {/* Course Information */}
         <div className="bg-white rounded-2xl shadow-card border border-neutral-200 p-8 mb-12">
           <h2 className="text-2xl font-bold text-neutral-800 mb-8">
             Course Details
@@ -222,14 +219,16 @@ const CourseDetailPage = () => {
                 <div>
                   <p className="text-sm text-neutral-500 mb-1">
                     {" "}
-                    Batch Start Time :{" "}
+                    Batch Time :{" "}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {batches.map(({ batch_start_timing }) => (
+                    {batches.map(({ batch_start_timing, batch_end_timing }) => (
                       <span className="bg-accent-50 text-accent-600 px-3 py-1 rounded-lg text-sm">
                         {moment(batch_start_timing, "HH:mm:ss").format(
                           "hh:mm A"
-                        )}
+                        )}{" "}
+                        -{" "}
+                        {moment(batch_end_timing, "HH:mm:ss").format("hh:mm A")}
                       </span>
                     ))}
                   </div>
@@ -253,7 +252,7 @@ const CourseDetailPage = () => {
                   <Users className="w-6 h-6 text-warning-500" />
                 </div>
                 <div>
-                  <p className="text-sm text-neutral-500 mb-1">Batch Type</p>
+                  <p className="text-sm text-neutral-500 mb-1">Batch</p>
                   {batches?.map(({ batch_name }) => {
                     return (
                       <p className="text-neutral-800 font-medium">
@@ -278,7 +277,6 @@ const CourseDetailPage = () => {
           </div>
         </div>
 
-        {/* Packages */}
         {coursePackages?.packages?.length >= 1 ? (
           <PackageDetails
             courseId={courseId}
@@ -294,7 +292,6 @@ const CourseDetailPage = () => {
           </div>
         )}
 
-        {/* Curriculum Section */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold text-neutral-800 mb-8">
             Course Curriculum

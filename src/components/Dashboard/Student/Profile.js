@@ -7,9 +7,45 @@ import DSSidebar from "./DSSideBar/DSSideBar";
 import ajaxCall from "../../../helpers/ajaxCall";
 
 const Profile = () => {
+  const navigate = useNavigate();
+  const category = localStorage.getItem("category");
+
   const [isLoading, setIsLoading] = useState(true);
   const [profileData, setProfileData] = useState({});
-  const navigate = useNavigate();
+  const [expectedScore, setExpectedScore] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/expected-score/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setExpectedScore(
+            response.data.filter(
+              (item) => item?.course?.Category?.name === category
+            )
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, [category]);
+
   const updateProfile = () => {
     navigate("/studentSettings", { state: { profileData } });
   };
@@ -19,7 +55,7 @@ const Profile = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/studentview/`,
+          "/studentview/",
           {
             headers: {
               Accept: "application/json",
@@ -145,6 +181,16 @@ const Profile = () => {
                           <div className="col-lg-8 col-md-8">
                             <div className="dashboard__form dashboard__form__margin">
                               {profileData?.biography}
+                            </div>
+                          </div>
+                          <div className="col-lg-4 col-md-4">
+                            <div className="dashboard__form dashboard__form__margin">
+                              Expected Score:
+                            </div>
+                          </div>
+                          <div className="col-lg-8 col-md-8">
+                            <div className="dashboard__form dashboard__form__margin">
+                              {expectedScore?.[0]?.expected_score}
                             </div>
                           </div>
                         </div>

@@ -3,21 +3,19 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import ProtectedRoute from "./components/ProtectedRoute";
-import Checkout from "./components/Checkout/Checkout";
-
 //-------------------------> pages <--------------------------------------------
 
 // import Main from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import ContactUs from "./pages/ContactUs/ContactUs";
-import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import TermsAndService from "./pages/TermsAndService/TermsAndService";
-import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
+// import Login from "./pages/Login/Login";
+// import ContactUs from "./pages/ContactUs/ContactUs";
+// import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+// import TermsAndService from "./pages/TermsAndService/TermsAndService";
+// import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
 // import Courses from "./pages/Courses/Courses";
 // import CourseDetail from "./components/CourseDetail/CourseDetail";
+import Checkout from "./components/Checkout/Checkout";
 
-// Tailwind components
+//-------------------------> Tailwind components <--------------------------------------------
 import HomePage from "./tailwind_components/HomePage";
 import Layout from "./tailwind_components/Layout/Layout";
 import CoursesPage from "./tailwind_components/Course/CoursesPage";
@@ -32,6 +30,7 @@ import EnglishTest from "./tailwind_components/EnglishTest/EnglishTest";
 import AuthPage from "./tailwind_components/Login/AuthPage";
 import BlogDetails from "./tailwind_components/Blog/BlogDetail";
 import IeltsCourseDetail from "./tailwind_components/Ielts/IeltsCourseDetails";
+import ForgotPasswordPage from "./tailwind_components/Login/ForgotPassword";
 
 //-------------------------> Error Page <----------------------------------
 
@@ -141,6 +140,7 @@ const App = () => {
             <Route path="/become-a-partner" element={<BecomeAPartnerPage />} />
             <Route path="/login" element={<AuthPage />} />
             <Route path="/english-test" element={<EnglishTest />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           </Route>
 
           <Route element={<AdminNavBarRoute isProtected={true} />}>
@@ -293,29 +293,10 @@ const App = () => {
               path="/fullLengthTestReport"
               Component={withBootstrap(FLTReport)}
             />
-            <Route path="/checkout" Component={withBootstrap(Checkout)} />
           </Route>
 
           <Route element={<StudentNavBarRoute isProtected={false} />}>
-            {/* <Route path="/" element={<Main />} /> */}
-            <Route path="/login" Component={withBootstrap(Login)} />
-            <Route path="/talk-to-us" element={withBootstrap(ContactUs)} />
-            <Route
-              path="/forgot-password"
-              element={withBootstrap(ForgotPassword)}
-            />
-            <Route
-              path="/privacy-policy"
-              element={
-                <ProtectedRoute element={withBootstrap(PrivacyPolicy)} />
-              }
-            />
-            <Route
-              path="/terms-of-service"
-              element={
-                <ProtectedRoute element={withBootstrap(TermsAndService)} />
-              }
-            />
+            <Route path="/checkout" Component={withBootstrap(Checkout)} />
             <Route path="*" element={withBootstrap(ErrorPage)} />
           </Route>
 

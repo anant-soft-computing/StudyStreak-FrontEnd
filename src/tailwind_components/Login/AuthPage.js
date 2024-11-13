@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import LoginForm from "./LoginForm";
+import Login from "./Login";
+import SignUp from "./SignUp";
 import RightSection from "./RightSection";
-import SignUpForm from "./SignUpForm";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -55,7 +55,7 @@ const AuthPage = () => {
               </button>
             </div>
 
-            {isLogin ? <LoginForm /> : <SignUpForm />}
+            {isLogin ? <Login /> : <SignUp />}
           </div>
         </div>
       </div>

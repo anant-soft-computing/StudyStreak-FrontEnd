@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Tab from "../../../UI/Tab";
-import DASideBar from "../../Admin/DASideBar/DASideBar";
+import DSSidebar from "../DSSideBar/DSSideBar";
 import MiniTestReport from "./MiniTestReport/MiniTestReport";
 import PracticeTestReport from "./PracticeTestReport/PracticeTestReport";
 import FullLengthTestReport from "./FullLengthTestReport/FullLengthTestReport";
@@ -29,7 +29,7 @@ const Report = () => {
           <div className="dashboard">
             <div className="container-fluid full__width__padding">
               <div className="row">
-                <DASideBar />
+                <DSSidebar />
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper">
                     <div className="dashboard__section__title">

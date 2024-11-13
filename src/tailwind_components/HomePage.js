@@ -151,7 +151,6 @@ const HomePage = () => {
 
   return (
     <div className="bg-neutral-50 min-h-screen">
-      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white py-12 md:py-16 overflow-hidden">
         <div
           className="absolute inset-0 bg-grid-pattern opacity-10"
@@ -237,7 +236,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      {/* Features Section */}
+
       <section className="py-8 md:py-8 bg-neutral-100">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -279,7 +278,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* cta for free practice test and Diagnostic test  */}
       <section className="py-16 bg-gradient-to-br from-primary-300 to-primary-800 relative overflow-hidden">
         <div
           className="absolute inset-0 bg-grid-pattern opacity-10"
@@ -301,7 +299,7 @@ const HomePage = () => {
             onClick={handlestartJourney}
             className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
-            transform hover:-translate-y-0.5"
+            transform hover:-translate-y-0.5 mt-3"
           >
             Free Practice Test
           </button>
@@ -309,17 +307,15 @@ const HomePage = () => {
             onClick={handlestartJourney}
             className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
-            transform hover:-translate-y-0.5 ml-2"
+            transform hover:-translate-y-0.5 ml-2 mt-3"
           >
             Free Diagnostic Test
           </button>
         </div>
       </section>
 
-      {/* Exam Courses Section */}
       <CourseList />
 
-      {/* PTE Courses Section */}
       <section className="py-12 md:py-16 bg-neutral-100">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -414,12 +410,10 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
       <TestimonialSection />
 
       <Packages />
 
-      {/* Webinars Section */}
       <section className="py-12 md:py-16">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -431,7 +425,6 @@ const HomePage = () => {
             </p>
           </div>
 
-          {/* Check if webinars exist */}
           {Array.isArray(webinars) && webinars.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {webinars.slice(0, 3).map((webinar) => {
@@ -487,15 +480,13 @@ const HomePage = () => {
               })}
             </div>
           ) : (
-            // Fallback if no webinars available
             <div className="text-center text-neutral-600">
-              No upcoming webinars at the moment. Please check back later.
+              No Upcoming Webinars At The Moment. Please Check Back Later.
             </div>
           )}
         </div>
       </section>
 
-      {/* Call to Action */}
       <section className="py-16 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
         <div
           className="absolute inset-0 bg-grid-pattern opacity-10"

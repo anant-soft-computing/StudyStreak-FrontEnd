@@ -34,7 +34,7 @@ const initialSubmit = {
   isSubmitting: false,
 };
 
-const LoginForm = () => {
+const Login = () => {
   const [loginData, dispatchLogin] = useReducer(reducerLogin, initialLoginData);
   const controller = useRef(null);
   const [credentials, setCredentials] = useState(null);
@@ -223,12 +223,6 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {formStatus.isError && (
-        <div className="p-3 bg-red-100 text-red-700 rounded-xl text-sm">
-          {formStatus.errMsg}
-        </div>
-      )}
-
       <div className="space-y-2">
         <label className="text-sm font-medium text-neutral-700">Username</label>
         <div className="relative">
@@ -287,6 +281,12 @@ const LoginForm = () => {
         </Link>
       </div>
 
+      {formStatus.isError && (
+        <div className="p-3 bg-red-100 text-red-700 rounded-xl text-sm">
+          {formStatus.errMsg}
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={formStatus.isSubmitting}
@@ -331,4 +331,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default Login;

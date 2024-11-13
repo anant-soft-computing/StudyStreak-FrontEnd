@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CreditCard, Package, Tag, User } from "lucide-react";
+import { CreditCard, Package, Tag, User, Cpu } from "lucide-react";
 import logo from "../../img/logo/Logo.png";
 import ajaxCall from "../../helpers/ajaxCall";
-
 const Checkout = () => {
   const [discount, setDiscount] = useState(0);
   const [couponCode, setCouponCode] = useState("");
@@ -317,17 +316,16 @@ const Checkout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-12 mt-16">
+    <div className="min-h-screen bg-neutral-50 py-12" style={{marginTop: "-70px"}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl shadow-card animate-fade-in-up">
-
             <div className="border-b border-neutral-200 p-6">
               <h1 className="text-2xl font-heading font-semibold text-neutral-900">
                 Checkout
               </h1>
             </div>
-            
+
             <div className="p-6 space-y-8">
               <div className="space-y-4">
                 <h2 className="text-xl font-heading font-medium text-neutral-800">
@@ -356,6 +354,30 @@ const Checkout = () => {
                       {packageName}
                     </span>
                   </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <Cpu className="w-5 h-5 text-primary-500" />
+                      <span className="text-sm font-medium text-neutral-700">
+                        Package Price
+                      </span>
+                    </div>
+                    <span className="text-sm text-neutral-900">
+                      ₹ {packagePrice}
+                    </span>
+                  </div>
+                  {discount > 0 && (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <Tag className="w-5 h-5 text-primary-500" />
+                        <span className="text-sm font-medium text-neutral-700">
+                          Coupon Price
+                        </span>
+                      </div>
+                      <span className="text-sm text-neutral-900">
+                        ₹ {discount}
+                      </span>
+                    </div>
+                  )}
                   <div className="pt-4 border-t border-neutral-200">
                     <div className="flex items-center justify-between">
                       <span className="text-base font-medium text-neutral-900">

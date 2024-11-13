@@ -360,6 +360,12 @@ const SignUpForm = () => {
       </div>
       {renderError("acceptTerm")}
 
+      {formStatus.isError && !formStatus.errMsg && (
+        <div className="p-3 bg-red-100 text-red-700 rounded-xl text-sm">
+          {formStatus.errMsg}
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={formStatus.isSubmitting}
@@ -374,12 +380,6 @@ const SignUpForm = () => {
           className="transition-transform duration-300 group-hover:translate-x-1"
         />
       </button>
-
-      {formStatus.isError && !formStatus.errMsg && (
-        <div className="text-red-500 text-sm text-center">
-          {formStatus.errMsg}
-        </div>
-      )}
     </form>
   );
 };

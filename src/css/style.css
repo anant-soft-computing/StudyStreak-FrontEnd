@@ -14065,13 +14065,8 @@ Breadcrumb Area
 
 .dashboard__selector div {
   width: 100%;
-  border-width: 1px;
   border-radius: 6px;
   border-color: #01579b;
-}
-
-.dashboard__selector div:hover {
-  --select-search-selected: #01579b !important;
 }
 
 .dashboard__selector select {

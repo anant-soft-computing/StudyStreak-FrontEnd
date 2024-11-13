@@ -18,7 +18,7 @@ const Layout = () => {
     logoutUser();
   };
 
-  const hideFooterPaths = ["/login"];
+  const hideFooterPaths = ["/login", "/forgot-password"];
 
   const navigationItems = [
     { name: "Home", path: "/" },
@@ -26,7 +26,7 @@ const Layout = () => {
     { name: "IELTS", path: "/ielts" },
     { name: "Why Choose Us", path: "/why-choose-us" },
     { name: "Blogs", path: "/blogs" },
-    { name: "Podcast", path: "/podcast" },
+    { name: "Podcast" },
     { name: "Contact Us", path: "/talk-to-us" },
     { name: "Become a Partner", path: "/become-a-partner" },
     { name: "Talk to Us", path: "/talk-to-us" },
@@ -200,7 +200,6 @@ const Layout = () => {
         <footer className="bg-primary-900 text-white py-16">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-            
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"

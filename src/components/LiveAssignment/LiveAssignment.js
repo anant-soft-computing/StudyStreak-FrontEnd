@@ -416,8 +416,8 @@ const LiveAssignment = () => {
         </div>
 
         <div className="lv-navbar-title-mobile">
-          <div className="username-mobile">
-            <h2>{examData?.exam_category}</h2>
+          <div>
+            <h2 style={{ color: "red" }}>{examData?.exam_category}</h2>
             <div className="mobile-breadcumb">
               <div className="lv-userName">{userData?.username}</div>
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
@@ -432,7 +432,7 @@ const LiveAssignment = () => {
         <div className="lv-main-container">
           {/* Right Container */}
           <div
-            className="lv-right-container"
+            className="lv-assignment-right-container"
             id="right-container"
             ref={containerRef}
           >

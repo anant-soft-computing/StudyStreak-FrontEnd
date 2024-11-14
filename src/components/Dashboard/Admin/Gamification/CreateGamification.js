@@ -19,6 +19,14 @@ const reducerGamification = (state, action) => {
   if (action.type === "reset") {
     return action.payload || initialGamificationData;
   }
+  if (action.type === "model") {
+    if (action.value === "Live Class") {
+      return { ...state, [action.type]: action.value, points: 50 };
+    }
+    if (action.value !== "Live Class") {
+      return { ...state, [action.type]: action.value, points: 0 };
+    }
+  }
   return { ...state, [action.type]: action.value };
 };
 
@@ -262,6 +270,7 @@ const CreateGamification = ({ setActiveTab }) => {
                       value: e.target.value,
                     })
                   }
+                  disabled={gamificationData.model === "Live Class"}
                 />
               </div>
             </div>

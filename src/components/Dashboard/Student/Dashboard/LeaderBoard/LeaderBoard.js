@@ -42,7 +42,10 @@ const LeaderBoard = ({ studentID }) => {
         <h6>Leaderboard</h6>
       </div>
       <hr />
-      <div className="dashboard__table table-responsive">
+      <div
+        className="dashboard__table table-responsive"
+        style={{ maxHeight: "264px" }}
+      >
         <table>
           <thead>
             <tr>

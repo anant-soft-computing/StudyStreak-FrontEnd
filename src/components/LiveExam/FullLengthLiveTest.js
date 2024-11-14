@@ -739,7 +739,7 @@ const FullLengthLiveExam = () => {
               messages: [
                 {
                   role: "user",
-                  content: `Analyse The Package For IELTS Writing Task With Following Criteria
+                  content: `Analyze the following IELTS Writing Task With response according to the official IELTS assessment criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
           
                   Assessment Criteria:
           

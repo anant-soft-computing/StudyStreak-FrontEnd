@@ -92,7 +92,7 @@ const AudioRecorder = ({
         messages: [
           {
             role: "user",
-            content: `Analyse The Package For IELTS Speaking Task With Following Criteria
+            content: `Analyse The Package For IELTS Speaking Task With Following Criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
     
             Assessment Criteria:
     

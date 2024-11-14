@@ -35,7 +35,7 @@ const packagesDetails = [
     badge: "Orientation",
   },
   {
-    package_name: "Uk/Canada/USA/Aus/NZ",
+    package_name: "UK/Canada/USA/Aus/NZ",
     image:
       "https://ieltsonlinetests.com/sites/default/files/styles/webinar_375x215/public/2020-11/shutterstock_583424317.jpg",
     country_options: ["UK", "NZ", "USA", "Canada", "Australia", "Europe"],
@@ -203,7 +203,7 @@ const Packages = () => {
                     required
                   />
                 </div>
-                {selectedPackage === "IELTS-Demo" && (
+                {selectedPackage === "IELTS/PTE/TOEFL/DUOLINGO - Demo" && (
                   <div className="mb-6">
                     <label className="block text-neutral-700 font-medium mb-2">
                       Exam
@@ -223,7 +223,8 @@ const Packages = () => {
                     </select>
                   </div>
                 )}
-                {selectedPackage === "Master Class" && (
+                {selectedPackage ===
+                  "IELTS Master Class - 7-Point Strategy" && (
                   <div className="mb-6">
                     <label className="block text-neutral-700 font-medium mb-2">
                       Additional Options
@@ -245,7 +246,7 @@ const Packages = () => {
                     </select>
                   </div>
                 )}
-                {selectedPackage === "Study Abroad Counselling" && (
+                {selectedPackage === "UK/Canada/USA/Aus/NZ" && (
                   <div className="mb-6">
                     <label className="block text-neutral-700 font-medium mb-2">
                       Country

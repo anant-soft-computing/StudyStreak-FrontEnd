@@ -121,9 +121,12 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     const { id, start_time } = params.data;
     const currentDate = moment();
     const sixHoursBeforeStart = moment(start_time).subtract(6, "hours");
+    const eventStartTime = moment(start_time);
 
-    // Enable the button if currentDate is after or equal to sixHoursBeforeStart
-    const isWithinRange = currentDate.isSameOrAfter(sixHoursBeforeStart);
+    // Enable the button if currentDate is after or equal to sixHoursBeforeStart and before eventStartTime
+    const isWithinRange =
+      currentDate.isSameOrAfter(sixHoursBeforeStart) &&
+      currentDate.isBefore(eventStartTime);
 
     return (
       <button

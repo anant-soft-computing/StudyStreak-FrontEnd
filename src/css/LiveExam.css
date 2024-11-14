@@ -121,6 +121,21 @@
   margin: 10px;
 }
 
+.lv-assignment-right-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #01579b;
+  border-radius: 8px;
+  margin: 10px;
+}
+
+@media (max-width: 767px) {
+  .lv-assignment-right-container {
+    margin-top: 50px;
+  }
+}
+
 .lv-question-pagination,
 .lv-part-pagination {
   display: flex;
@@ -210,8 +225,10 @@
   margin-right: 2px;
   width: max-content;
   text-align: center;
-  background: white;
+  background: #01579b;
   border-radius: 2px;
+  color: white;
+  border: solid 1px #01579b;
 }
 
 .lv-userName {

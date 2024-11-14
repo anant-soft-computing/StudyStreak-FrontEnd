@@ -9,7 +9,7 @@ import { authAction } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 
 export function useCheckAuth() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const authData = useSelector((state) => state.authStore);
 

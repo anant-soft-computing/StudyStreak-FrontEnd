@@ -1,3 +1,32 @@
+select {
+  color: #444;
+  background: #fcfcfc;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px;
+  margin: 0;
+}
+
+select > option {
+  font-size: 15px;
+  background: #fcfcfc;
+}
+
+textarea {
+  color: #444;
+  background: #fcfcfc;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px;
+  margin: 0;
+}
+
+input {
+  color: #444;
+  background: #fcfcfc;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px;
+  margin: 0;
+}
+
 .box-left {
   width: 15rem;
   height: 100%;
@@ -5,7 +34,6 @@
   margin: 0;
   padding: 0.5rem;
 }
-
 
 .header2Class {
   background: #01579b36;
@@ -75,4 +103,22 @@
 .body__wrapper {
   margin-top: 110px;
   min-height: calc(100vh - 260px);
+}
+
+@media (min-width: 1365px) and (max-width: 1499px) {
+  .body__wrapper {
+    margin-top: 160px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1365px) {
+  .body__wrapper {
+    margin-top: 140px;
+  }
+}
+
+@media (min-width: 1px) and (max-width: 992px) {
+  .body__wrapper {
+    margin-top: 0px;
+  }
 }

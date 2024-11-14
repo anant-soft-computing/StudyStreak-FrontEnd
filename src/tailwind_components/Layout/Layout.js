@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { User, Menu, X } from "lucide-react";
+import { User, Menu, X, LogOut } from "lucide-react";
 import "../tailwind.css";
 import TidioChat from "../ChatBot/TidioChat";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
@@ -117,6 +117,13 @@ const Layout = () => {
                     <User size={16} />
                     <span>Dashboard</span>
                   </Link>
+                  <Link
+                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
+                    onClick={logout}
+                  >
+                    <LogOut size={16} />
+                    <span>Logout</span>
+                  </Link>
                 </div>
               ) : (
                 <div className="hidden lg:flex items-center gap-3">
@@ -168,10 +175,16 @@ const Layout = () => {
                           : "/studentDashboard"
                       }
                       className="flex items-center justify-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300"
-                      onClick={logout}
                     >
                       <User size={16} />
                       <span>Dashboard</span>
+                    </Link>
+                    <Link
+                      className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
+                      onClick={logout}
+                    >
+                      <LogOut size={16} />
+                      <span>Logout</span>
                     </Link>
                   </div>
                 ) : (

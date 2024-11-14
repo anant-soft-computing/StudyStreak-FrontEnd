@@ -190,6 +190,7 @@ const App = () => {
               path="/admin-exam/:examType/:examForm"
               Component={withBootstrap(Exam)}
             />
+            <Route path="/exam-create" Component={withBootstrap(DragDrop)} />
           </Route>
           <Route element={<StudentNavBarRoute isProtected={true} />}>
             <Route
@@ -243,8 +244,6 @@ const App = () => {
               Component={withBootstrap(SSettings)}
             />
             <Route path="/reports" Component={withBootstrap(Report)} />
-
-            <Route path="/exam-create" Component={withBootstrap(DragDrop)} />
             <Route path="/Reading" Component={withBootstrap(ExamReading)} />
             <Route path="/Listening" Component={withBootstrap(ExamListening)} />
             <Route path="/Writing" Component={withBootstrap(ExamWriting)} />

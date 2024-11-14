@@ -11,13 +11,14 @@ import {
   Laptop2Icon,
   PenBoxIcon,
 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import TestimonialSection from "./Testimonial/TestimonialSection";
-import { Link, useNavigate } from "react-router-dom";
-import CourseList from "./Course/CourseList";
+import banner from "../img/about/about_10.png";
 import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
+import CourseList from "./Course/CourseList";
+import TestimonialSection from "./Testimonial/TestimonialSection";
 
 const features = [
   {
@@ -227,8 +228,8 @@ const HomePage = () => {
             <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
               <div className="w-full md:w-1/2 relative">
                 <img
-                  src="https://studystreak.in/static/media/about_10.c6fba820cc5e8886a5dd.png"
-                  alt="Students studying"
+                  src={banner}
+                  alt="Study Streak"
                   className="rounded-2xl shadow-soft"
                 />
               </div>

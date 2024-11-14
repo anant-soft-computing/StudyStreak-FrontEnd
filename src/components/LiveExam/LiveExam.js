@@ -201,19 +201,19 @@ const LiveExam = () => {
       messages: [
         {
           role: "user",
-          content: `Analyse The Package For IELTS Writing Task With Following Criteria
+          content: `Analyze the following IELTS Writing Task 1 response according to the official IELTS assessment criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
   
           Assessment Criteria:
   
           Task 1:
   
-          Task Achievement: Does the response address all parts of the task and provide a well-developed description, summary, or explanation of the information presented?
+          Task Achievement: Does the response fully address all parts of the task with a clear overview and well-developed details?
   
-          Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately?
+          Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately and accurately?
   
-          Lexical Resource: Is a wide range of vocabulary used with precision and accuracy?
+          Lexical Resource: Is a wide range of vocabulary used accurately and appropriately, including less common lexical items?
   
-          Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy?`,
+          Grammatical Range and Accuracy: Are a variety of complex grammatical structures used accurately? Is punctuation used correctly?`,
         },
         {
           role: "user",

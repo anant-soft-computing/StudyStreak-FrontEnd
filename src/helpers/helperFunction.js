@@ -69,6 +69,13 @@ async function authenticateUser(timeInMs, refreshToken) {
       },
       8000
     );
+
+    if (response.status === 401) {
+      localStorage.clear();
+      window.location.href = "/login";
+      return;
+    }
+
     return response;
   } else {
     return true;
@@ -78,37 +85,80 @@ async function authenticateUser(timeInMs, refreshToken) {
 const getAndSetRefreshToken = async () => {
   const { refreshToken, timeOfLogin, userId, user_role, user_type, username } =
     getFromLocalStorage("loginInfo", true) || {};
+
   if (refreshToken) {
-    const response = await fetch("https://studystreak.in/api/token/refresh/", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-      body: JSON.stringify({ refresh: refreshToken }),
-    });
+    try {
+      const response = await fetch(
+        "https://studystreak.in/api/token/refresh/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({ refresh: refreshToken }),
+        }
+      );
 
-    const data = await response.json();
+      if (response.status === 401) {
+        store.dispatch(
+          authAction.setAuthStatus({
+            username: "",
+            authLoading: false,
+            loggedIn: false,
+            accessToken: null,
+            refreshToken: null,
+            userId: null,
+            user_type: null,
+            user_role: null,
+            timeOfLogin: null,
+            logInOperation: 0,
+          })
+        );
+        localStorage.clear();
+        window.location.href = "/login";
+        return;
+      }
 
-    if (response?.status === 200 && data?.access) {
-      const localObj = {
-        //update access token and set existing data as it is
-        user_type,
-        userId,
-        user_role,
-        timeOfLogin,
-        username,
-        refreshToken,
-        accessToken: data?.access,
-      };
-      setToLocalStorage("loginInfo", localObj, true); //set data to local storage
-      //update data to the store
+      const data = await response.json();
+
+      if (response?.status === 200 && data?.access) {
+        const localObj = {
+          //update access token and set existing data as it is
+          user_type,
+          userId,
+          user_role,
+          timeOfLogin,
+          username,
+          refreshToken,
+          accessToken: data.access,
+        };
+        setToLocalStorage("loginInfo", localObj, true); //set data to local storage
+        //update data to the store
+        store.dispatch(
+          authAction.setRefreshTokenAuthStatus({
+            accessToken: data?.access,
+          })
+        );
+        return data?.access;
+      }
+    } catch (error) {
       store.dispatch(
-        authAction.setRefreshTokenAuthStatus({
-          accessToken: data?.access,
+        authAction.setAuthStatus({
+          username: "",
+          authLoading: false,
+          loggedIn: false,
+          accessToken: null,
+          refreshToken: null,
+          userId: null,
+          user_type: null,
+          user_role: null,
+          timeOfLogin: null,
+          logInOperation: 0,
         })
       );
-      return data?.access;
+      localStorage.clear();
+      window.location.href = "/login";
     }
   }
   return "";

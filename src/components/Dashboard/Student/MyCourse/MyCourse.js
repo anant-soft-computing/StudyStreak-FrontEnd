@@ -121,7 +121,7 @@ const MyCourse = () => {
               <div className="row">
                 <DSSidebar />
                 <div className="col-xl-12 col-lg-12 col-md-12">
-                  <div className="dashboard__content__wraper">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title flex-wrap gap-2">
                       <h4>Courses</h4>
                       <h5 className="text-danger">
@@ -187,7 +187,7 @@ const MyCourse = () => {
                                   </button>
                                   <button
                                     onClick={() =>
-                                      navigate(`/course/${course?.id}`)
+                                      navigate(`/courseMaterials/${course?.id}`)
                                     }
                                     className="default__button"
                                   >

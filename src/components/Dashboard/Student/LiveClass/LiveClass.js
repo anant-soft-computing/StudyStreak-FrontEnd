@@ -288,7 +288,7 @@ const LiveClass = () => {
                   </div>
                 )}
                 <div className="col">
-                  <div className="dashboard__content__wraper">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title gap-2 flex-column flex-md-row align-items-start align-items-md-center">
                       <h4 className="flex-fill">Live Classes</h4>
                       {location?.state?.packageCount !== 0 && (

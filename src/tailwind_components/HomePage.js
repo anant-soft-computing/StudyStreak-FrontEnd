@@ -171,7 +171,7 @@ const HomePage = () => {
                 Achieve your dream of overseas Education with StudyStreak.
               </h1>
               <p className="text-primary-100 text-lg">
-                Focuses courses to develop your potential to score high.
+                Focused courses to develop your potential to score high.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button

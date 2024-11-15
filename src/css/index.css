@@ -94,6 +94,10 @@ input {
   background: #333;
 }
 
+.common-background-color-across-app {
+  background-color: #ebf2f5 !important;
+}
+
 .global-neomorphism-card-styling {
   border-radius: 10px;
   background: #ebf2f5 !important;

@@ -284,7 +284,6 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
             },
             8000
           );
-          console.log("Response from API: ", response);
           if (response?.status === 200) {
             const result = response?.data?.files?.map((item) => ({
               name: item?.url?.slice(62),

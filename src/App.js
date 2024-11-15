@@ -47,7 +47,7 @@ import Dashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
 import SProfile from "./components/Dashboard/Student/Profile";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
-// import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
+import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
 import SPaperTest from "./components/Dashboard/Student/PaperTest/PaperTest";
 import FreeDiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/FreeDiagnosticTest";
 import FreeMiniTest from "./components/Dashboard/Student/FreeMiniTest/FreeMiniTest";
@@ -214,6 +214,10 @@ const App = () => {
             <Route
               path="/courseLessons/:courseId"
               Component={withBootstrap(Lesson)}
+            />
+            <Route
+              path="/courseMaterials/:courseId"
+              Component={withBootstrap(CourseContent)}
             />
             <Route path="/paperTest" Component={withBootstrap(SPaperTest)} />
             <Route path="/mockTest" Component={withBootstrap(MockTest)} />

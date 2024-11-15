@@ -8,14 +8,17 @@ const Attachment = ({ activeLesson }) => {
       no: index + 1,
     };
   });
+
   const doDownload = (params) => {
-    return (
+    return params.value !== null ? (
       <button
         className="take-test"
-        onClick={() => window.open(`http://studystreak.in${params.value}`)}
+        onClick={() => window.open(params.value)}
       >
         <i className="icofont-download" /> Download
       </button>
+    ) : (
+      "-"
     );
   };
 

@@ -64,7 +64,11 @@ const Exam = () => {
     examType: "",
     examForm: "",
   });
-  const [activeTab, setActiveTab] = useState("View Exam");
+  
+  const [activeTab, setActiveTab] = useState(() => {
+    const examTab = localStorage.getItem("examTab");
+    return examTab || "View Exam";
+  });
 
   const examTypes =
     screenContent?.examType === "GRE" || screenContent?.examType === "GMAT"
@@ -127,6 +131,10 @@ const Exam = () => {
       });
     }
   }, [location]);
+
+  useEffect(() => {
+    localStorage.setItem("examTab", activeTab);
+  }, [activeTab]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -381,7 +389,10 @@ const Exam = () => {
                                 </div>
                               ))}
                             {screenContent.examType && (
-                              <FLT activeTab={activeTab} setActiveTab={setActiveTab} />
+                              <FLT
+                                activeTab={activeTab}
+                                setActiveTab={setActiveTab}
+                              />
                             )}
                           </div>
                         </div>

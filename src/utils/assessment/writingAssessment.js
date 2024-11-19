@@ -9,6 +9,8 @@ export const writingAssessment = (assessment) => {
     titles?.forEach((title, index) => {
       sections[title.trim()] = matches[index + 1]?.trim() || "No data";
     });
+  } else {
+    sections[""] = assessment.trim();
   }
   return sections;
 };

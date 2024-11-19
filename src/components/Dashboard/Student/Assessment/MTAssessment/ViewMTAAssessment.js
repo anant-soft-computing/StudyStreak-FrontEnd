@@ -59,7 +59,7 @@ const ViewMTAAssessment = () => {
       (sum, item) => sum + (parseFloat(item.band) || 0),
       0
     );
-    return totalBand / data.student_answers?.length;
+    return (totalBand / data.student_answers?.length).toFixed(1);
   };
 
   const handleAIAssessment = (content) => {
@@ -133,7 +133,7 @@ const ViewMTAAssessment = () => {
                         backgroundColor: getBackgroundColor(band),
                       }}
                     >
-                      Score : {band || band.toFixed(1)}
+                      Score : {band}
                     </h4>
                   </div>
                   {examType === "Writing" ? (

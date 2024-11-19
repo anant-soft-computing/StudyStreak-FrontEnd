@@ -298,7 +298,7 @@ const Dashboard = () => {
                         </div>
                         <div className="online__course__wrap mt-0">
                           <div className="row instructor__slider__active row__custom__class">
-                            <div className="col-xl-12 column__custom__class">
+                            <div className="col-xl-6 column__custom__class">
                               <div className="gridarea__wraper card-background">
                                 <div className="gridarea__content">
                                   <div className="gridarea__content p-2 m-2">
@@ -324,6 +324,36 @@ const Dashboard = () => {
                                 </div>
                               </div>
                             </div>
+                            {lesson?.length > 0 &&
+                              lesson.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className="col-xl-6 column__custom__class"
+                                >
+                                  <div className="gridarea__wraper card-background">
+                                    <div className="gridarea__content">
+                                      <div className="gridarea__content p-2 m-2">
+                                        <Link
+                                          to={`/courseLessons/${item.course_id}`}
+                                          className="text-decoration-none"
+                                        >
+                                          <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                            <img
+                                              src={recordedClasses}
+                                              alt="Start Lesson"
+                                              height={35}
+                                              width={35}
+                                            />
+                                            <h2 className="mt-2">
+                                              Start Lesson
+                                            </h2>
+                                          </div>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
                           </div>
                         </div>
                         <div className="row">
@@ -345,7 +375,7 @@ const Dashboard = () => {
                                       className="text-decoration-none"
                                       state={state}
                                     >
-                                      <div className="gridarea__heading  d-flex justify-content-center align-items-center gap-4">
+                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
                                         <img
                                           src={icon}
                                           alt={name}
@@ -360,7 +390,7 @@ const Dashboard = () => {
                               </div>
                             )
                           )}
-                          <div className="col-xl-6 column__custom__class">
+                          <div className="col-xl-12 column__custom__class">
                             <div className="gridarea__wraper card-background">
                               <div className="gridarea__content">
                                 <div className="gridarea__content p-2 m-2">
@@ -382,34 +412,6 @@ const Dashboard = () => {
                               </div>
                             </div>
                           </div>
-                          {lesson?.length > 0 &&
-                            lesson.map((item, index) => (
-                              <div
-                                key={index}
-                                className="col-xl-6 column__custom__class"
-                              >
-                                <div className="gridarea__wraper card-background">
-                                  <div className="gridarea__content">
-                                    <div className="gridarea__content p-2 m-2">
-                                      <Link
-                                        to={`/courseLessons/${item.course_id}`}
-                                        className="text-decoration-none"
-                                      >
-                                        <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                          <img
-                                            src={recordedClasses}
-                                            alt="Start Lesson"
-                                            height={35}
-                                            width={35}
-                                          />
-                                          <h2 className="mt-2">Start Lesson</h2>
-                                        </div>
-                                      </Link>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
                         </div>
                       </div>
                     </div>

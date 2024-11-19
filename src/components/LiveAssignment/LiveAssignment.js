@@ -4,7 +4,6 @@ import "../../css/LiveExam.css";
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
 import { toast } from "react-toastify";
-import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 const Cheerio = require("cheerio");
 
 const LiveAssignment = () => {
@@ -109,33 +108,12 @@ const LiveAssignment = () => {
         const correctAnswer = examData?.answers[index]?.answer_text.trim();
         const studentAnswer = answer.answer.trim();
 
-        if (correctAnswer?.includes(" OR ")) {
-          const correctOptions = correctAnswer
-            .split(" OR ")
-            .map((option) => option.trim());
-          if (correctOptions.includes(studentAnswer)) {
-            totalCorrect++;
-          }
-        } else if (correctAnswer?.includes(" AND ")) {
-          const correctOptions = correctAnswer
-            .split(" AND ")
-            .map((option) => option.trim());
-          if (
-            correctOptions.every((option) => studentAnswer.includes(option))
-          ) {
-            totalCorrect++;
-          }
-        } else {
-          const correctAnswer = examData?.answers[index]?.answer_text;
-          if (answer.answer === correctAnswer) {
-            totalCorrect++;
-          }
+        if (studentAnswer === correctAnswer) {
+          totalCorrect++;
         }
       });
 
-      if (examData?.exam_type === "General") {
-        bandValue = readingBandValues[totalCorrect];
-      }
+      bandValue = totalCorrect;
     }
 
     try {

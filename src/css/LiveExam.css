@@ -225,10 +225,8 @@
   margin-right: 2px;
   width: max-content;
   text-align: center;
-  background: #01579b;
+  background: white;
   border-radius: 2px;
-  color: white;
-  border: solid 1px #01579b;
 }
 
 .lv-userName {

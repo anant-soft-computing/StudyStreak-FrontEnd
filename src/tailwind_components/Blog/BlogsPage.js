@@ -2,79 +2,74 @@ import React, { useState, useEffect } from "react";
 import { Search, Clock, ArrowRight, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+const categories = [
+  "All",
+  "IELTS",
+  "TOEFL",
+  "GRE",
+  "GMAT",
+  "Study Abroad",
+  "Test Preparation",
+  "Student Life",
+];
+
+const blogPosts = [
+  {
+    id: 1,
+    title: "Master IELTS Writing Task 2: A Comprehensive Guide",
+    excerpt:
+      "Learn the essential strategies and techniques to excel in IELTS Writing Task 2. This comprehensive guide covers everything from understanding the question types to structuring your essay effectively.",
+    author: "Dr. Emma Watson",
+    category: "IELTS",
+    date: "2024-03-25",
+    image:
+      "https://www.shutterstock.com/image-photo/blogging-blog-word-coder-coding-260nw-520314613.jpg",
+    tags: ["IELTS Writing", "Study Tips", "Essay Writing"],
+  },
+  {
+    id: 2,
+    title: "GRE vs GMAT: Which Test Should You Take?",
+    excerpt:
+      "A detailed comparison of GRE and GMAT to help you choose the right test for your graduate school journey. Understand the key differences, scoring systems, and university preferences.",
+    author: "Prof. Robert Chen",
+    category: "Test Preparation",
+    date: "2024-03-22",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6zs5Noz8Xlz1aWOkwIZDKT1OHyD5wz31jvg&s",
+    tags: ["GRE", "GMAT", "Graduate School"],
+  },
+  {
+    id: 3,
+    title: "5 Essential TOEFL Speaking Strategies",
+    excerpt:
+      "Improve your TOEFL Speaking score with these proven strategies. Learn how to manage your time effectively and deliver confident, structured responses.",
+    author: "Sarah Johnson",
+    category: "TOEFL",
+    date: "2024-03-20",
+    image:
+      "https://img.freepik.com/free-photo/online-blog_53876-123696.jpg?semt=ais_hybrid",
+    tags: ["TOEFL Speaking", "English Practice", "Test Tips"],
+  },
+  {
+    id: 3,
+    title: "5 Essential TOEFL Speaking Strategies",
+    excerpt:
+      "Improve your TOEFL Speaking score with these proven strategies. Learn how to manage your time effectively and deliver confident, structured responses.",
+    author: "Sarah Johnson",
+    category: "TOEFL",
+    date: "2024-03-20",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqSqXhi28x5BbE898u8Wo4O-bM_TYaQ9KoXtJiYAujDrVE1QhydqEKB1BQSLM4vpRfAAU&usqp=CAU",
+    tags: ["TOEFL Speaking", "English Practice", "Test Tips"],
+  },
+];
+
 const BlogsPage = () => {
   const navigate = useNavigate();
   const blogId = 1;
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
-
-  // Sample categories
-  const categories = [
-    "All",
-    "IELTS",
-    "TOEFL",
-    "GRE",
-    "GMAT",
-    "Study Abroad",
-    "Test Preparation",
-    "Student Life",
-  ];
-
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Master IELTS Writing Task 2: A Comprehensive Guide",
-      excerpt:
-        "Learn the essential strategies and techniques to excel in IELTS Writing Task 2. This comprehensive guide covers everything from understanding the question types to structuring your essay effectively.",
-      author: "Dr. Emma Watson",
-      category: "IELTS",
-      readTime: "8 min read",
-      date: "2024-03-25",
-      image:
-        "https://www.shutterstock.com/image-photo/blogging-blog-word-coder-coding-260nw-520314613.jpg",
-      tags: ["IELTS Writing", "Study Tips", "Essay Writing"],
-    },
-    {
-      id: 2,
-      title: "GRE vs GMAT: Which Test Should You Take?",
-      excerpt:
-        "A detailed comparison of GRE and GMAT to help you choose the right test for your graduate school journey. Understand the key differences, scoring systems, and university preferences.",
-      author: "Prof. Robert Chen",
-      category: "Test Preparation",
-      readTime: "12 min read",
-      date: "2024-03-22",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6zs5Noz8Xlz1aWOkwIZDKT1OHyD5wz31jvg&s",
-      tags: ["GRE", "GMAT", "Graduate School"],
-    },
-    {
-      id: 3,
-      title: "5 Essential TOEFL Speaking Strategies",
-      excerpt:
-        "Improve your TOEFL Speaking score with these proven strategies. Learn how to manage your time effectively and deliver confident, structured responses.",
-      author: "Sarah Johnson",
-      category: "TOEFL",
-      readTime: "6 min read",
-      date: "2024-03-20",
-      image:
-        "https://img.freepik.com/free-photo/online-blog_53876-123696.jpg?semt=ais_hybrid",
-      tags: ["TOEFL Speaking", "English Practice", "Test Tips"],
-    },
-    {
-      id: 3,
-      title: "5 Essential TOEFL Speaking Strategies",
-      excerpt:
-        "Improve your TOEFL Speaking score with these proven strategies. Learn how to manage your time effectively and deliver confident, structured responses.",
-      author: "Sarah Johnson",
-      category: "TOEFL",
-      readTime: "6 min read",
-      date: "2024-03-20",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqSqXhi28x5BbE898u8Wo4O-bM_TYaQ9KoXtJiYAujDrVE1QhydqEKB1BQSLM4vpRfAAU&usqp=CAU",
-      tags: ["TOEFL Speaking", "English Practice", "Test Tips"],
-    },
-  ];
 
   useEffect(() => {
     const filtered = blogPosts.filter((post) => {
@@ -98,7 +93,7 @@ const BlogsPage = () => {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Header Section */}
+    
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -128,7 +123,7 @@ const BlogsPage = () => {
         </div>
       </header>
 
-      {/* Category Filter */}
+     
       <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center py-4 overflow-x-auto hide-scrollbar">
@@ -150,7 +145,7 @@ const BlogsPage = () => {
         </div>
       </div>
 
-      {/* Main Content */}
+     
       <main className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-4 gap-8">
           {filteredPosts.map((post) => (
@@ -160,7 +155,6 @@ const BlogsPage = () => {
                 shadow-card hover:shadow-card-hover transition-all duration-300 
                 transform hover:-translate-y-1"
             >
-              {/* Article Image */}
               <div className="relative h-48 overflow-hidden">
                 <img
                   src={post.image}
@@ -177,7 +171,6 @@ const BlogsPage = () => {
                 </div>
               </div>
 
-              {/* Article Content */}
               <div className="p-6">
                 <h2
                   className="text-xl font-bold text-neutral-800 mb-3 line-clamp-2 
@@ -189,7 +182,6 @@ const BlogsPage = () => {
                   {post.excerpt}
                 </p>
 
-                {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {post.tags.map((tag) => (
                     <span
@@ -202,7 +194,6 @@ const BlogsPage = () => {
                   ))}
                 </div>
 
-                {/* Meta Information */}
                 <div
                   className="flex items-center justify-between pt-4 
                   border-t border-neutral-100"
@@ -211,10 +202,6 @@ const BlogsPage = () => {
                     <div className="flex items-center text-neutral-500 text-sm">
                       <User size={16} className="mr-1" />
                       <span>{post.author}</span>
-                    </div>
-                    <div className="flex items-center text-neutral-500 text-sm">
-                      <Clock size={16} className="mr-1" />
-                      <span>{post.readTime}</span>
                     </div>
                   </div>
                   <button
@@ -230,7 +217,6 @@ const BlogsPage = () => {
           ))}
         </div>
 
-        {/* Newsletter Section */}
         <div className="mt-16">
           <div
             className="bg-gradient-to-br from-primary-500 to-primary-700 

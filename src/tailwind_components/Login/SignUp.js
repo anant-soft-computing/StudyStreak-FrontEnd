@@ -4,26 +4,28 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 
-const SignUpForm = () => {
+const initialFormData = {
+  firstName: "",
+  lastName: "",
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const initialFormStatus = {
+  isError: false,
+  errMsg: null,
+  isSubmitting: false,
+};
+
+const SignUp = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [acceptTerm, setAcceptTerm] = useState(false);
-
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const [formStatus, setFormStatus] = useState({
-    isError: false,
-    errMsg: null,
-    isSubmitting: false,
-  });
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState(initialFormData);
+  const [formStatus, setFormStatus] = useState(initialFormStatus);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -68,17 +70,22 @@ const SignUpForm = () => {
     if (!formData.password) {
       setFormError("password", "Password is Required");
       isValid = false;
-    }
-    if (formData.password.length < 8) {
-      setFormError("password", "Password must be at least 8 characters long");
-      isValid = false;
+    } else {
+      const passwordRegex =
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      if (!passwordRegex.test(formData.password)) {
+        setFormError(
+          "password",
+          "Password must contain at least 8 characters, including uppercase, lowercase, number, and special character"
+        );
+        isValid = false;
+      }
     }
     if (!formData.confirmPassword) {
       setFormError("confirmPassword", "Confirm Password is Required");
       isValid = false;
-    }
-    if (formData.password !== formData.confirmPassword) {
-      setFormError("password", "Passwords Do Not Match");
+    } else if (formData.password !== formData.confirmPassword) {
+      setFormError("confirmPassword", "Passwords Do Not Match");
       isValid = false;
     }
     if (!acceptTerm) {
@@ -108,29 +115,31 @@ const SignUpForm = () => {
     };
 
     try {
-      const response = await ajaxCall("/registration/", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+      const response = await ajaxCall(
+        "/registration/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(submitData),
         },
-        body: JSON.stringify(submitData),
-      });
-
-      const data = await response.json();
-
+        8000
+      );
       if (response.status === 201) {
-        toast.success(data?.msg);
+        toast.success(response.data?.msg);
+        setFormData(initialFormData);
         setFormStatus({
           isError: false,
-          errMsg: data?.msg,
+          errMsg: response.data?.msg,
           isSubmitting: false,
         });
         navigate("/login");
       } else if (response.status === 400) {
         setFormStatus({
           isError: true,
-          errMsg: data,
+          errMsg: response.data,
           isSubmitting: false,
         });
       }
@@ -384,4 +393,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignUp;

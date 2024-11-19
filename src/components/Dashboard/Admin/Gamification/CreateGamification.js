@@ -19,13 +19,12 @@ const reducerGamification = (state, action) => {
   if (action.type === "reset") {
     return action.payload || initialGamificationData;
   }
-  if (action.type === "model") {
-    if (action.value === "Live Class") {
-      return { ...state, [action.type]: action.value, points: 50 };
-    }
-    if (action.value !== "Live Class") {
-      return { ...state, [action.type]: action.value, points: 0 };
-    }
+  if (action.type === "liveClassType") {
+    let defaultPoints = 10;
+    if (action.value === "Regular Class") defaultPoints = 5;
+    if (action.value === "Counselling") defaultPoints = 100;
+
+    return { ...state, [action.type]: action.value, points: defaultPoints };
   }
   return { ...state, [action.type]: action.value };
 };
@@ -122,6 +121,11 @@ const CreateGamification = ({ setActiveTab }) => {
     e.preventDefault();
     if (!validateForm(gamificationData, setFormError)) return;
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
+    const data = {
+      model: gamificationData.model,
+      object_id: gamificationData.object_id,
+      points: gamificationData.points,
+    }
     try {
       const response = await ajaxCall(
         "/gamification/",
@@ -132,7 +136,7 @@ const CreateGamification = ({ setActiveTab }) => {
             Authorization: `Bearer ${authData?.accessToken}`,
           },
           method: "POST",
-          body: JSON.stringify(gamificationData),
+          body: JSON.stringify(data),
         },
         8000
       );
@@ -193,8 +197,13 @@ const CreateGamification = ({ setActiveTab }) => {
                 <select
                   className="form-select"
                   aria-label="Default select example"
+                  value={liveClass}
                   onChange={(e) => {
                     setLiveClass(e.target.value);
+                    dispatchGamification({
+                      type: "liveClassType",
+                      value: e.target.value,
+                    });
                   }}
                 >
                   {liveClassType.map((option) => (

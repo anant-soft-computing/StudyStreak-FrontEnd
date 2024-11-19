@@ -100,7 +100,6 @@ const pteCourses = [
 const HomePage = () => {
   const navigate = useNavigate();
   const [webinars, setWebinars] = useState([]);
-  const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
 
   const handlestartJourney = () => {
     navigate("/login");
@@ -110,25 +109,30 @@ const HomePage = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/courselistview/",
+          "/liveclass_list_view/",
           {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${loginInfo?.accessToken}`,
             },
             method: "GET",
           },
           8000
         );
         if (response.status === 200) {
-          setWebinars(response.data);
+          setWebinars(
+            response.data.filter(
+              ({ liveclasstype, meeting_title }) =>
+                liveclasstype === "Webinar" &&
+                meeting_title.startsWith("Introduction")
+            )
+          );
         }
       } catch (error) {
         console.log("error", error);
       }
     })();
-  }, [loginInfo?.accessToken]);
+  }, []);
 
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
@@ -426,7 +430,7 @@ const HomePage = () => {
             </p>
           </div>
 
-          {Array.isArray(webinars) && webinars.length > 0 ? (
+          {webinars.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {webinars.slice(0, 3).map((webinar) => {
                 const { date, time } = formatDateTime(webinar.start_time);

@@ -5,16 +5,16 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
-import { toast } from "react-toastify";
-import { setToLocalStorage } from "../../helpers/helperFunction";
-import { authAction } from "../../store/authStore";
-import ajaxCall from "../../helpers/ajaxCall";
-import { useCheckAuth } from "../../hooks/useCheckAuth";
 import { jwtDecode } from "jwt-decode";
+import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+import { useCheckAuth } from "../../hooks/useCheckAuth";
+import { authAction } from "../../store/authStore";
 import { GoogleLogin } from "@react-oauth/google";
+import { setToLocalStorage } from "../../helpers/helperFunction";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const initialLoginData = {
   username: "",
@@ -45,6 +45,11 @@ const Login = () => {
   const navigate = useNavigate();
   const authData = useSelector((state) => state.authStore);
   const { checkAuth } = useCheckAuth();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    dispatchLogin({ type: name, value });
+  };
 
   const resetReducerForm = () => {
     dispatchLogin({ type: "reset" });
@@ -137,10 +142,10 @@ const Login = () => {
     [dispatch, loginData.username, navigate]
   );
 
-  const handleSubmit = useCallback(
+  const doLogin = useCallback(
     async (e) => {
-      e.preventDefault();
       resetReducerForm();
+      if (e) e.preventDefault();
       if (!credentials && !validateForm()) return;
 
       setFormStatus({
@@ -167,7 +172,6 @@ const Login = () => {
       const timeOutFunction = () => {
         controller.current.abort();
       };
-
       try {
         const response = await ajaxCall(
           credentials ? "/auth/google/" : "/login/",
@@ -191,7 +195,7 @@ const Login = () => {
         } else {
           setFormStatus({
             isError: true,
-            errMsg: response.data?.errors,
+            errMsg: response.data?.errors || response.data?.error,
             isSubmitting: false,
           });
         }
@@ -206,23 +210,18 @@ const Login = () => {
     [credentials, formStatus, handleLoginSuccess, loginData, validateForm]
   );
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    dispatchLogin({ type: name, value });
-  };
-
   useEffect(() => {
     if (credentials) {
-      handleSubmit();
+      doLogin();
     }
-  }, [credentials, handleSubmit]);
+  }, [credentials]);
 
   if (authData.authLoading) {
-    return null;
+    return <></>;
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={doLogin} className="space-y-4">
       <div className="space-y-2">
         <label className="text-sm font-medium text-neutral-700">Username</label>
         <div className="relative">

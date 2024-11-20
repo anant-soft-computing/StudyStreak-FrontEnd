@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Clock } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
+import Loading from "../../components/UI/Loading";
 
 const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
   const location = useLocation();
   const category = selectedCategory || location.state?.category || "";
   const [courseList, setCouresList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -30,6 +33,8 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [searchTerm, category]);
@@ -60,7 +65,9 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
     }${minutes} Minute${minutes !== 1 ? "s" : ""}`;
   };
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <section className="py-8 md:py-12">
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -140,8 +147,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
         ) : (
           <div className="text-center py-12">
             <p className="text-lg font-semibold text-red-600">
-              Courses Coming Soon for{" "}
-              <span className="italic text-red-700">{selectedCategory}</span>
+              No Courses Available
             </p>
           </div>
         )}

@@ -118,22 +118,34 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
   };
 
   const handleBook = (params) => {
-    const { id, start_time } = params.data;
+    const { id, start_time, end_time } = params.data;
     const currentDate = moment();
-    const sixHoursBeforeStart = moment(start_time).subtract(6, "hours");
-    const eventStartTime = moment(start_time);
+    const classStartTime = moment(start_time);
 
-    // Enable the button if currentDate is after or equal to sixHoursBeforeStart and before eventStartTime
-    const isWithinRange =
-      currentDate.isSameOrAfter(sixHoursBeforeStart) &&
-      currentDate.isBefore(eventStartTime);
+    // Get today's class time 
+    const todayClassTime = moment().set({
+      hour: classStartTime.hour(),
+      minute: classStartTime.minute(),
+      second: 0,
+    });
+
+    // Check if current date is within the class date range
+    const isWithinDateRange =
+      currentDate.isSameOrAfter(moment(start_time).startOf("day")) &&
+      currentDate.isSameOrBefore(moment(end_time).startOf("day"));
+
+    // If we're within the date range, check if we haven't passed today's class time
+    const isBeforeClassTime = currentDate.isBefore(todayClassTime);
+
+    // Button is active if we're within date range and before today's class time
+    const canBook = isWithinDateRange && isBeforeClassTime;
 
     return (
       <button
         className="take-test"
         onClick={() => bookCount(id)}
-        disabled={!isWithinRange || (isBooking && bookingSlotId === id)}
-        style={{ opacity: !isWithinRange ? 0.5 : 1 }}
+        disabled={!canBook || (isBooking && bookingSlotId === id)}
+        style={{ opacity: !canBook ? 0.5 : 1 }}
       >
         {isBooking && bookingSlotId === id ? "Booking..." : "Book Slot"}
       </button>

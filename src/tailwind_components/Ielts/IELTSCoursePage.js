@@ -1,50 +1,38 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BookOpen, User, Award, Target } from "lucide-react";
-import EnglishTest from "../EnglishTest/EnglishTest";
 import IeltsList from "./IeltsList";
+import EnglishTest from "../EnglishTest/EnglishTest";
+import TestimonialSection from "../Testimonial/TestimonialSection";
+
+const ieltsModules = ["All", "Listening", "Reading", "Writing", "Speaking"];
+
+const keyFeatures = [
+  {
+    title: "Expert Instructors",
+    description: "Learn from IELTS experts with proven track records",
+    icon: User,
+  },
+  {
+    title: "Comprehensive Material",
+    description: "Complete study material covering all IELTS modules",
+    icon: BookOpen,
+  },
+  {
+    title: "Practice Tests",
+    description: "Regular mock tests with detailed performance analysis",
+    icon: Target,
+  },
+  {
+    title: "Band Guarantee",
+    description: "Guaranteed band improvement or your money back",
+    icon: Award,
+  },
+];
 
 const IELTSPage = () => {
-  const [selectedFilter, setSelectedFilter] = useState("All");
   const navigate = useNavigate();
-
-  // IELTS-specific courses data
-  const ieltsModules = ["All", "Listening", "Reading", "Writing", "Speaking"];
-
-  const successStories = [
-    {
-      name: "John Smith",
-      score: "8.5",
-      country: "India",
-      university: "University of Toronto",
-      quote:
-        "The IELTS course at StudyStreak helped me achieve my dream score. The personalized feedback was invaluable.",
-    },
-    // Add more success stories...
-  ];
-
-  const keyFeatures = [
-    {
-      title: "Expert Instructors",
-      description: "Learn from IELTS experts with proven track records",
-      icon: User,
-    },
-    {
-      title: "Comprehensive Material",
-      description: "Complete study material covering all IELTS modules",
-      icon: BookOpen,
-    },
-    {
-      title: "Practice Tests",
-      description: "Regular mock tests with detailed performance analysis",
-      icon: Target,
-    },
-    {
-      title: "Band Guarantee",
-      description: "Guaranteed band improvement or your money back",
-      icon: Award,
-    },
-  ];
+  const [selectedFilter, setSelectedFilter] = useState("All");
 
   const handleTakeTest = () => {
     navigate("/english-test");
@@ -55,7 +43,6 @@ const IELTSPage = () => {
 
   return (
     <div className="bg-neutral-50 min-h-screen">
-      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 py-20 overflow-hidden">
         <div
           className="absolute inset-0 bg-grid-pattern opacity-10"
@@ -82,7 +69,6 @@ const IELTSPage = () => {
                 who have achieved their dreams with us.
               </p>
 
-              {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-8 pt-8">
                 <div>
                   <div className="text-3xl font-bold">8.5+</div>
@@ -119,15 +105,10 @@ const IELTSPage = () => {
                 </button>
               </div>
             </div>
-
-            <div className="w-full md:w-1/2">
-              {/* Add an IELTS-specific illustration or image here */}
-            </div>
           </div>
         </div>
       </section>
 
-      {/* Key Features Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
@@ -163,10 +144,8 @@ const IELTSPage = () => {
         </div>
       </section>
 
-      {/* Course Filter and Grid */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          {/* Module Filters */}
           <div className="mb-12">
             <div className="flex flex-wrap gap-3">
               {ieltsModules.map((module) => (
@@ -185,8 +164,6 @@ const IELTSPage = () => {
               ))}
             </div>
           </div>
-
-          {/* Course Grid */}
           <IeltsList />
         </div>
       </section>
@@ -199,52 +176,8 @@ const IELTSPage = () => {
         </div>
       </section>
 
-      {/* Success Stories */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-neutral-800 mb-4">
-              Success Stories
-            </h2>
-            <p className="text-neutral-600 max-w-2xl mx-auto">
-              Join thousands of students who have achieved their target IELTS
-              scores with us
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {successStories.map((story, index) => (
-              <div
-                key={index}
-                className="bg-neutral-50 rounded-2xl p-6 shadow-card"
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div
-                    className="w-12 h-12 rounded-full bg-primary-100 flex items-center 
-                    justify-center text-primary-600 font-bold text-lg"
-                  >
-                    {story.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-neutral-800">
-                      {story.name}
-                    </h3>
-                    <p className="text-sm text-primary-600">
-                      Band Score: {story.score}
-                    </p>
-                    <p className="text-sm text-neutral-500">
-                      {story.university}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-neutral-600 italic">"{story.quote}"</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Study Resources */}
+      <TestimonialSection/>
+      
       <section className="py-16 bg-neutral-100">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-neutral-800 mb-12 text-center">
@@ -282,7 +215,6 @@ const IELTSPage = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
       <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-800">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">

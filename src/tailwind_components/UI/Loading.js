@@ -1,5 +1,5 @@
 import React from "react";
-import studyStreak from "../img/logo/Logo1.png";
+import studyStreak from "../../img/logo/Logo1.png";
 
 const Loading = () => {
   return (

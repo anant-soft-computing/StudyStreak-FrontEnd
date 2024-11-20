@@ -1,119 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Clock, Star, Calendar, ArrowRight } from "lucide-react";
+import { Search, Clock, Calendar, ArrowRight } from "lucide-react";
 import CourseList from "./CourseList";
-
-const TestimonialCarousel = () => {
-  const testimonials = [
-    {
-      name: "John Doe",
-      exam: "IELTS",
-      score: "8.5",
-      quote:
-        "StudyStreak's approach to IELTS prep is revolutionary. The instructors break down complex topics into easily digestible pieces.",
-    },
-    {
-      name: "Jane Smith",
-      exam: "GRE",
-      score: "335",
-      quote:
-        "I was struggling with the Quantitative section, but StudyStreak's GRE course changed the game for me.",
-    },
-    {
-      name: "Alex Johnson",
-      exam: "GMAT",
-      score: "760",
-      quote:
-        "The GMAT course at StudyStreak is intense but incredibly effective. The instructors don't just teach you the material, they teach you how to think.",
-    },
-    {
-      name: "Emily Chen",
-      exam: "TOEFL",
-      score: "118",
-      quote:
-        "As a non-native English speaker, I was terrified of the TOEFL. StudyStreak's course not only prepared me for the exam but also improved my English skills.",
-    },
-    {
-      name: "Mohammed Al-Fayed",
-      exam: "PTE",
-      score: "89",
-      quote:
-        "The PTE Academic course at StudyStreak is top-notch. The personalized feedback on speaking and writing tasks was particularly helpful.",
-    },
-  ];
-
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const scrollRef = useRef(null);
-
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const scrollWidth = scrollContainer.scrollWidth;
-    const containerWidth = scrollContainer.offsetWidth;
-
-    const animateScroll = () => {
-      setScrollPosition((prevPosition) => {
-        if (prevPosition >= scrollWidth - containerWidth) {
-          return 0;
-        }
-        return prevPosition + 1;
-      });
-    };
-
-    const scrollInterval = setInterval(animateScroll, 50);
-    return () => clearInterval(scrollInterval);
-  }, []);
-
-  return (
-    <div className="relative overflow-hidden">
-      <div
-        ref={scrollRef}
-        className="flex transition-transform duration-1000 ease-linear"
-        style={{ transform: `translateX(-${scrollPosition}px)` }}
-      >
-        {[...testimonials, ...testimonials].map((testimonial, index) => (
-          <div key={index} className="w-[300px] flex-shrink-0 mx-3">
-            <div
-              className="group bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover 
-              transition-all duration-300 h-full flex flex-col transform hover:-translate-y-1"
-            >
-              <div className="flex items-center mb-4">
-                <div
-                  className="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center
-                  text-primary-600 font-bold text-lg mr-4 group-hover:bg-primary-200 transition-colors"
-                >
-                  {testimonial.name.charAt(0)}
-                </div>
-                <div>
-                  <h4 className="font-semibold text-lg text-neutral-800">
-                    {testimonial.name}
-                  </h4>
-                  <p className="text-primary-600 text-sm">
-                    {testimonial.exam} Score:{" "}
-                    <span className="font-bold">{testimonial.score}</span>
-                  </p>
-                </div>
-              </div>
-              <p className="text-neutral-600 text-sm flex-grow">
-                {testimonial.quote}
-              </p>
-              <div className="flex mt-4 justify-end">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    size={16}
-                    className="text-warning-400 fill-current"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+import TestimonialSection from "../Testimonial/TestimonialSection";
 
 const CoursesPage = () => {
   const navigate = useNavigate();
@@ -280,14 +169,8 @@ const CoursesPage = () => {
         </section>
 
         {/* Testimonials Section */}
-        <section className="mt-16 bg-neutral-100 py-16">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold text-neutral-800 mb-8 text-center">
-              What Our Students Say
-            </h2>
-            <TestimonialCarousel />
-          </div>
-        </section>
+
+        <TestimonialSection />
 
         {/* Blog Section */}
         <section className="container mx-auto px-4 mt-16">

@@ -29,7 +29,6 @@ import IELTSCoursePage from "./tailwind_components/Ielts/IELTSCoursePage";
 import EnglishTest from "./tailwind_components/EnglishTest/EnglishTest";
 import AuthPage from "./tailwind_components/Login/AuthPage";
 import BlogDetails from "./tailwind_components/Blog/BlogDetail";
-import IeltsCourseDetail from "./tailwind_components/Ielts/IeltsCourseDetails";
 import ForgotPasswordPage from "./tailwind_components/Login/ForgotPassword";
 
 //-------------------------> Error Page <----------------------------------
@@ -131,7 +130,6 @@ const App = () => {
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/course/:courseId" element={<CourseDetailPage />} />
             <Route path="/ielts" element={<IELTSCoursePage />} />
-            <Route path="/ielts/:id" element={<IeltsCourseDetail />} />
             <Route path="/about-us" element={<AboutUsPage />} />
             <Route path="/why-choose-us" element={<WhyChooseUsPage />} />
             <Route path="/blogs" element={<BlogsPage />} />

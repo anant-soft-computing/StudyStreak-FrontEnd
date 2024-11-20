@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Clock } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
+import Loading from "../../components/UI/Loading";
 
 const IeltsList = ({ selectedCategory = "IELTS" }) => {
   const [courseList, setCouresList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -28,6 +31,8 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [selectedCategory]);
@@ -58,7 +63,9 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
     }${minutes} Minute${minutes !== 1 ? "s" : ""}`;
   };
 
-  return (
+  return isLoading ? (
+    <Loading />
+  ) : (
     <section className="py-8 md:py-2">
       <div className="container mx-auto px-4">
         {courseList && courseList.length > 0 ? (
@@ -112,8 +119,8 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-lg text-neutral-600">
-              No courses available for {selectedCategory || "selected category"}
+            <p className="text-lg font-semibold text-red-600">
+              No Courses Available For {selectedCategory}
             </p>
           </div>
         )}

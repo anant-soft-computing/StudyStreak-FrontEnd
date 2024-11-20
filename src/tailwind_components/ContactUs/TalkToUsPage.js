@@ -47,7 +47,7 @@ const TalkToUsPage = () => {
       icon: <Phone className="w-6 h-6" />,
       title: "Call Us",
       description: "Talk to our team",
-      info: "+91-91069 95326",
+      info: "+91-88496 50924",
       action: "call",
     },
     {
@@ -80,7 +80,7 @@ const TalkToUsPage = () => {
       city: "Vadodara",
       address:
         "1st and 2nd Floor, Galav Chambers, Dairy Den Circle, Sayajigunj, Vadodara, Gujarat, India - 390020",
-      phone: "+91-91069 95326",
+      phone: "+91-88496 50924",
       email: "reachus@studystreak.io",
       timing: "Mon-Sat: 9:00 AM - 6:00 PM",
     },
@@ -88,7 +88,7 @@ const TalkToUsPage = () => {
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Hero Section */}
+
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -102,7 +102,6 @@ const TalkToUsPage = () => {
         </div>
       </header>
 
-      {/* Contact Options */}
       <div className="container mx-auto px-4 -mt-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {contactOptions.map((option, index) => (
@@ -111,7 +110,6 @@ const TalkToUsPage = () => {
               className="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover
           transition-all duration-300 transform hover:-translate-y-1"
             >
-              {/* Flex container for icon and title */}
               <div className="flex items-center gap-4 mb-4">
                 <div
                   className="bg-primary-100 w-12 h-12 rounded-xl flex items-center 
@@ -138,10 +136,8 @@ const TalkToUsPage = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="container mx-auto px-4 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Contact Form */}
           <div>
             <div className="bg-white rounded-2xl shadow-card p-8">
               <h2 className="text-2xl font-bold text-neutral-800 mb-6">
@@ -265,7 +261,6 @@ const TalkToUsPage = () => {
             </div>
           </div>
 
-          {/* Office Locations */}
           <div>
             <h2 className="text-2xl font-bold text-neutral-800 mb-4">
               Visit Our Office
@@ -302,7 +297,6 @@ const TalkToUsPage = () => {
               ))}
             </div>
 
-            {/* Social Media */}
             <div className="mt-8">
               <h3 className="text-lg font-bold text-neutral-800 mb-4">
                 Connect With Us
@@ -330,7 +324,6 @@ const TalkToUsPage = () => {
         </div>
       </div>
 
-      {/* Map Section */}
       <div className="bg-neutral-100 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
@@ -343,7 +336,6 @@ const TalkToUsPage = () => {
             </p>
           </div>
 
-          {/* Placeholder for Map */}
           <div className="bg-white rounded-2xl overflow-hidden h-60 shadow-card">
             <div className="w-full h-full bg-neutral-200 flex items-center justify-center">
               <iframe

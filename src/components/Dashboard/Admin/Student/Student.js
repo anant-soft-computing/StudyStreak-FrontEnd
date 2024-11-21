@@ -49,7 +49,7 @@ const Student = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student_list_view_dashboard/`,
+          "/student_list_view_dashboard/",
           {
             headers: {
               Accept: "application/json",

@@ -10,7 +10,7 @@ export const writingAssessment = (assessment) => {
       sections[title.trim()] = matches[index + 1]?.trim() || "No data";
     });
   } else {
-    sections[""] = assessment.trim();
+    sections[""] = assessment?.trim();
   }
   return sections;
 };

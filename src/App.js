@@ -63,6 +63,7 @@ import Report from "./components/Dashboard/Student/Report/Report";
 //-----------------> Admin <-----------------------------------------------------
 
 import ADashboard from "./components/Dashboard/Admin/Dashboard";
+import Users from "./components/Dashboard/Admin/Users/Users";
 import Student from "./components/Dashboard/Admin/Student/Student";
 import Package from "./components/Dashboard/Admin/Package/Package";
 import Course from "./components/Dashboard/Admin/Course/Course";
@@ -146,6 +147,7 @@ const App = () => {
               path="/admin-dashboard"
               Component={withBootstrap(ADashboard)}
             />
+            <Route path="/admin-users" Component={withBootstrap(Users)} />
             <Route path="/admin-student" Component={withBootstrap(Student)} />
             <Route path="/admin-package" Component={withBootstrap(Package)} />
             <Route path="/admin-course" Component={withBootstrap(Course)} />

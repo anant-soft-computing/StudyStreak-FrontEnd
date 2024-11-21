@@ -193,10 +193,8 @@ const BlogsPage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-lg font-semibold text-red-600">
-              No Blogs Available
-            </p>
+          <div className="text-center text-lg font-semibold text-red-600">
+            No Blogs Available
           </div>
         )}
 

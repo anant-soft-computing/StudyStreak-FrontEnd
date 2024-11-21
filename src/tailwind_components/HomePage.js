@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import moment from "moment";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
   ChevronRight,
@@ -11,7 +13,6 @@ import {
   Laptop2Icon,
   PenBoxIcon,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import banner from "../img/about/about_10.png";
@@ -19,6 +20,7 @@ import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
 import CourseList from "./Course/CourseList";
 import TestimonialSection from "./Testimonial/TestimonialSection";
+import Loading from "../components/UI/Loading";
 
 const features = [
   {
@@ -100,16 +102,18 @@ const pteCourses = [
 const HomePage = () => {
   const navigate = useNavigate();
   const [webinars, setWebinars] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handlestartJourney = () => {
     navigate("/login");
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
-          "/liveclass_list_view/",
+          "/liveclass-webinar/",
           {
             headers: {
               Accept: "application/json",
@@ -120,36 +124,16 @@ const HomePage = () => {
           8000
         );
         if (response.status === 200) {
-          setWebinars(
-            response.data.filter(
-              ({ liveclasstype, meeting_title }) =>
-                liveclasstype === "Webinar" &&
-                meeting_title.startsWith("Introduction")
-            )
-          );
+          setWebinars(response.data);
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
 
-  const formatDateTime = (dateString) => {
-    const date = new Date(dateString);
-    return {
-      date: date.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
-      time: date.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      }),
-    };
-  };
   const handleCategory = (category) => {
     navigate("/courses", { state: { category } });
   };
@@ -430,15 +414,14 @@ const HomePage = () => {
             </p>
           </div>
 
-          {webinars.length > 0 ? (
+          {isLoading ? (
+            <Loading />
+          ) : webinars?.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {webinars.slice(0, 3).map((webinar) => {
-                const { date, time } = formatDateTime(webinar.start_time);
-                const courseTitle = webinar.Course_Title || "N/A";
-
+              {webinars?.map((item) => {
                 return (
                   <div
-                    key={webinar.id}
+                    key={item.id}
                     className="group bg-white rounded-xl border border-neutral-200 overflow-hidden
                   shadow-card hover:shadow-card-hover hover:border-primary-200 
                   transition-all duration-300 transform hover:-translate-y-1"
@@ -451,31 +434,33 @@ const HomePage = () => {
                         className="font-semibold text-xl mb-3 text-neutral-800 group-hover:text-primary-600 
                     transition-colors duration-300"
                       >
-                        {webinar.meeting_title}
+                        {item.meeting_title}
                       </h3>
                       <p className="text-neutral-600 mb-4">
-                        <span className="font-medium">Course:</span>{" "}
-                        {courseTitle}
+                        <span className="font-medium">Description :</span>{" "}
+                        {item.meeting_description}
                       </p>
                       <div className="flex items-center text-sm text-neutral-600 mb-3">
                         <Calendar size={16} className="mr-2" />
-                        <span>{date}</span>
+                        <span>
+                          {moment(item.start_time).format("L")} -{" "}
+                          {moment(item.end_time).format("L")}
+                        </span>
                       </div>
                       <div className="flex items-center text-sm text-neutral-600 mb-3">
                         <Clock size={16} className="mr-2" />
                         <span>
-                          {time} ({webinar.other_fields?.duration || "N/A"}{" "}
-                          minutes)
+                          {moment(item.start_time).format("LTS")} -{" "}
+                          {moment(item.end_time).format("LTS")}
                         </span>
-                      </div>
-                      <div className="text-sm text-neutral-600 mb-6">
-                        <span className="font-medium">Class Type:</span>{" "}
-                        {webinar.liveclasstype || "N/A"}
                       </div>
                       <button
                         className="w-full bg-primary-600 text-white py-3 rounded-xl
                     hover:bg-primary-700 transition-colors duration-300 font-medium
                     shadow-soft hover:shadow-hover transform hover:-translate-y-0.5"
+                        onClick={() => {
+                          window.open(item.join_url, "_blank");
+                        }}
                       >
                         Join Webinar
                       </button>
@@ -485,7 +470,7 @@ const HomePage = () => {
               })}
             </div>
           ) : (
-            <div className="text-center text-neutral-600">
+            <div className="text-center text-lg font-semibold text-red-600">
               No Upcoming Webinars At The Moment. Please Check Back Later.
             </div>
           )}

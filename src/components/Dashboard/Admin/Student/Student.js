@@ -18,6 +18,12 @@ const Student = () => {
   const [openLiveClass, setOpenLiveClass] = useState(false);
   const [liveClassList, setLiveClassList] = useState([]);
 
+  const [openJoinClass, setOpenJoinClass] = useState(false);
+  const [joinClassList, setJoinClassList] = useState([]);
+
+  const [openPackages, setOpenPackages] = useState(false);
+  const [packages, setPackages] = useState([]);
+
   const handleBatch = (batch) => {
     setOpenBatch(batch);
     setBatchList(batch);
@@ -26,6 +32,16 @@ const Student = () => {
   const handleLiveClass = (liveClass) => {
     setOpenLiveClass(liveClass);
     setLiveClassList(liveClass);
+  };
+
+  const handleJoinClass = (joinClass) => {
+    setOpenJoinClass(joinClass);
+    setJoinClassList(joinClass);
+  };
+
+  const handlePackages = (packages) => {
+    setOpenPackages(packages);
+    setPackages(packages);
   };
 
   useEffect(() => {
@@ -135,7 +151,6 @@ const Student = () => {
     {
       headerName: "Book Live Class",
       field: "live_classes",
-      filter: true,
       cellRenderer: (params) => {
         return params.value.length > 0 ? (
           <button
@@ -150,14 +165,45 @@ const Student = () => {
       },
     },
     {
+      headerName: "Join Live Class",
+      field: "live_classes_join",
+      cellRenderer: (params) => {
+        return params.value.length > 0 ? (
+          <button
+            className="take-test"
+            onClick={() => handleJoinClass(params.value)}
+          >
+            View
+          </button>
+        ) : (
+          "-"
+        );
+      },
+    },
+    {
       headerName: "Batch",
       field: "batches",
-      filter: true,
       cellRenderer: (params) => {
         return params.value.length > 0 ? (
           <button
             className="take-test"
             onClick={() => handleBatch(params.value)}
+          >
+            View
+          </button>
+        ) : (
+          "-"
+        );
+      },
+    },
+    {
+      headerName: "Package & Course (Without Batch)",
+      field: "packages",
+      cellRenderer: (params) => {
+        return params.value.length > 0 ? (
+          <button
+            className="take-test"
+            onClick={() => handlePackages(params.value)}
           >
             View
           </button>
@@ -204,23 +250,43 @@ const Student = () => {
       <SmallModal
         size="lg"
         centered
-        title={"Batch"}
+        title="Batch Details"
         isOpen={openBatch}
         onClose={() => setOpenBatch(false)}
       >
         <div className="row">
           {batchList?.map((item, index) => (
-            <div className="dashboard__recent__course__single" key={item?.id}>
-              <div className="me-3">({index + 1})</div>
-              <div className="dashboard__recent__course__content">
-                <div className="dashboard__recent__course__heading">
-                  <h3>{item?.batch_name}</h3>
+            <div
+              className="col-md-6 col-sm-12 mb-4 dashboard__recent__course__single"
+              key={index}
+            >
+              <div className="card shadow-sm h-100">
+                <div className="card-header text-white d-flex justify-content-between align-items-center">
+                  <h5 className="mb-0">{`(${index + 1}) ${
+                    item?.batch_name
+                  }`}</h5>
                 </div>
-                <div className="dashboard__recent__course__meta text-xl-center">
-                  <ul className="ps-0">
+                <div className="card-body">
+                  <ul className="list-unstyled mb-3">
                     <li>
-                      <i className="icofont-calendar" /> <b>Date & Time</b> :{" "}
-                      {`${item?.batch_start_timing} To ${item?.batch_end_timing}`}
+                      <i className="icofont-calendar" /> <b>Date:</b>{" "}
+                      {`${item?.batch_startdate} to ${item?.batch_enddate}`}
+                    </li>
+                    <li>
+                      <i className="icofont-clock-time" /> <b>Time:</b>{" "}
+                      {`${item?.batch_start_timing} to ${item?.batch_end_timing}`}
+                    </li>
+                  </ul>
+                  <ul className="list-unstyled">
+                    <li>
+                      <b>Package : </b> {item?.add_packages?.package_name}
+                    </li>
+                    <li>
+                      <b>Course : </b> {item?.add_packages?.select_courses}
+                    </li>
+                    <br />
+                    <li>
+                      <b>Category : </b> {item?.add_packages?.coursecategory}
                     </li>
                   </ul>
                 </div>
@@ -232,13 +298,13 @@ const Student = () => {
       <SmallModal
         size="lg"
         centered
-        title={"Book Live Class"}
+        title="Book Live Class"
         isOpen={openLiveClass}
         onClose={() => setOpenLiveClass(false)}
       >
         <div className="row">
           {liveClassList?.map((item, index) => (
-            <div className="dashboard__recent__course__single" key={item?.id}>
+            <div className="dashboard__recent__course__single" key={index}>
               <div className="me-3">({index + 1})</div>
               <div className="dashboard__recent__course__content">
                 <div className="dashboard__recent__course__heading">
@@ -253,6 +319,66 @@ const Student = () => {
                       {`${moment(item?.start_time).format("lll")} To ${moment(
                         item?.end_time
                       ).format("lll")}`}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SmallModal>
+      <SmallModal
+        size="lg"
+        centered
+        title="Join Live Class"
+        isOpen={openJoinClass}
+        onClose={() => setOpenJoinClass(false)}
+      >
+        <div className="row">
+          {joinClassList?.map((item, index) => (
+            <div className="dashboard__recent__course__single" key={index}>
+              <div className="me-3">({index + 1})</div>
+              <div className="dashboard__recent__course__content">
+                <div className="dashboard__recent__course__heading">
+                  <h3>{item?.meeting_title}</h3>
+                </div>
+                <div className="dashboard__recent__course__meta text-xl-center">
+                  <ul className="ps-0">
+                    <li className="text-start">
+                      <i className="icofont-tag" style={{ color: "#01579b" }} />{" "}
+                      <b>Type</b> : {item?.liveclasstype} <br />
+                      <i className="icofont-calendar" /> <b>Date & Time</b> :{" "}
+                      {`${moment(item?.start_time).format("lll")} To ${moment(
+                        item?.end_time
+                      ).format("lll")}`}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SmallModal>
+      <SmallModal
+        size="lg"
+        centered
+        title="Package & Course (Without Batch)"
+        isOpen={openPackages}
+        onClose={() => setOpenPackages(false)}
+      >
+        <div className="row">
+          {packages?.map((item, index) => (
+            <div className="dashboard__recent__course__single" key={index}>
+              <div className="me-3">({index + 1})</div>
+              <div className="dashboard__recent__course__content">
+                <div className="dashboard__recent__course__meta text-xl-center">
+                  <ul className="ps-0">
+                    <li className="text-start">
+                      <b>Package</b> : {item?.package_name}
+                      <br />
+                      <b>Course</b> : {item?.select_courses}
+                      <br />
+                      <b>Category</b> : {item?.coursecategory}
                     </li>
                   </ul>
                 </div>

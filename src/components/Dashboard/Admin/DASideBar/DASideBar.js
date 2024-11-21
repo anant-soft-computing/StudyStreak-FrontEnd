@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 import dashBoard from "../../../../img/icon/dashboard.svg";
+import users from "../../../../img/icon/users.svg";
 import student from "../../../../img/icon/profile.svg";
 import packageIcon from "../../../../img/icon/package.svg";
 import course from "../../../../img/icon/course.svg";
@@ -36,6 +37,11 @@ const DASideBar = () => {
       name: "Dashboard",
       icon: <img src={dashBoard} alt="Dashboard" />,
       link: "/admin-dashboard",
+    },
+    {
+      name: "Users",
+      icon: <img src={users} alt="Users" height={20} width={20} />,
+      link: "/admin-users",
     },
     {
       name: "Student",

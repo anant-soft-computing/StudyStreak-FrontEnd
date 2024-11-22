@@ -25,7 +25,15 @@ const quickLinkes = [
   ["Courses", "/courses"],
   ["About Us", "/about-us"],
   ["Contact", "/talk-to-us"],
-  ["Blog", "/blog"],
+  ["Blog", "/blogs"],
+];
+
+const exams = [
+  ["IELTS", "/ielts"],
+  ["GRE", ""],
+  ["GMAT", ""],
+  ["TOEFL", ""],
+  ["PTE", ""],
 ];
 
 const icons = [
@@ -62,7 +70,7 @@ const Layout = () => {
   const location = useLocation();
   const { logoutUser } = useCheckAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
+
   const token = localStorage.getItem("loginInfo");
   const role = JSON.parse(localStorage.getItem("loginInfo"))?.user_role || "";
 
@@ -273,18 +281,16 @@ const Layout = () => {
                   Exams We Cover
                 </h3>
                 <ul className="space-y-3">
-                  {["IELTS", "GRE", "GMAT", "TOEFL", "PTE Academic"].map(
-                    (exam, index) => (
-                      <li key={index} style={{ display: "block" }}>
-                        <Link
-                          to={`/courses/${exam.toLowerCase()}`}
-                          className="text-neutral-400 hover:text-white transition-colors duration-300"
-                        >
-                          {exam}
-                        </Link>
-                      </li>
-                    )
-                  )}
+                  {exams.map(([exam, path], index) => (
+                    <li key={index} style={{ display: "block" }}>
+                      <Link
+                        to={path}
+                        className="text-neutral-400 hover:text-white transition-colors duration-300"
+                      >
+                        {exam}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
 

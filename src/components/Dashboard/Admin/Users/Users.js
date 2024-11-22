@@ -14,13 +14,7 @@ const Users = () => {
   const [userList, setUserList] = useState([]);
   const [filteredUserList, setFilteredUserList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [dateRange, setDateRange] = useState([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+  const [dateRange, setDateRange] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const authData = useSelector((state) => state.authStore);
 
@@ -57,13 +51,17 @@ const Users = () => {
   }, [authData?.accessToken]);
 
   useEffect(() => {
-    const startDate = moment(dateRange[0].startDate);
-    const endDate = moment(dateRange[0].endDate);
-    const filtered = userList.filter((user) => {
-      const userDate = moment(user.date_joined);
-      return userDate.isBetween(startDate, endDate, "day", "[]");
-    });
-    setFilteredUserList(filtered);
+    if (!dateRange) {
+      setFilteredUserList(userList);
+    } else {
+      const startDate = moment(dateRange[0].startDate);
+      const endDate = moment(dateRange[0].endDate);
+      const filtered = userList.filter((user) => {
+        const userDate = moment(user.date_joined);
+        return userDate.isBetween(startDate, endDate, "day", "[]");
+      });
+      setFilteredUserList(filtered);
+    }
   }, [dateRange, userList]);
 
   const columns = [
@@ -158,7 +156,16 @@ const Users = () => {
           isOpen={isModalOpen}
           title="Select Date"
           footer={
-            <div className="d-flex justify-content-end">
+            <div className="d-flex gap-2">
+              <button
+                className="default__button"
+                onClick={() => {
+                  setDateRange(null);
+                  setIsModalOpen(false);
+                }}
+              >
+                Reset
+              </button>
               <button
                 className="default__button"
                 onClick={() => setIsModalOpen(false)}
@@ -170,7 +177,15 @@ const Users = () => {
           onClose={() => setIsModalOpen(false)}
         >
           <DateRangePicker
-            ranges={dateRange}
+            ranges={
+              dateRange || [
+                {
+                  startDate: new Date(),
+                  endDate: new Date(),
+                  key: "selection",
+                },
+              ]
+            }
             onChange={(item) => setDateRange([item.selection])}
             rangeColors={["#3d91ff"]}
           />

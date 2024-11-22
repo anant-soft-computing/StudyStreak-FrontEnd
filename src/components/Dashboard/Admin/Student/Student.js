@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { DateRangePicker } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import DASideBar from "../DASideBar/DASideBar";
@@ -9,8 +12,12 @@ import SmallModal from "../../../UI/Modal";
 
 const Student = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [dateRange, setDateRange] = useState(null);
   const [studentList, setStudentList] = useState([]);
+  const [filteredStudentList, setFilteredStudentList] = useState([]);
   const authData = useSelector((state) => state.authStore);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [openBatch, setOpenBatch] = useState(false);
   const [batchList, setBatchList] = useState([]);
@@ -66,6 +73,7 @@ const Student = () => {
             no: index + 1,
           }));
           setStudentList(studentWithNumbers);
+          setFilteredStudentList(studentWithNumbers);
         }
       } catch (error) {
         console.log("error", error);
@@ -74,6 +82,20 @@ const Student = () => {
       }
     })();
   }, [authData?.accessToken]);
+
+  useEffect(() => {
+    if (!dateRange) {
+      setFilteredStudentList(studentList);
+    } else {
+      const startDate = moment(dateRange[0].startDate);
+      const endDate = moment(dateRange[0].endDate);
+      const filtered = studentList.filter((student) => {
+        const studentDate = moment(student.date_joined);
+        return studentDate.isBetween(startDate, endDate, "day", "[]");
+      });
+      setFilteredStudentList(filtered);
+    }
+  }, [dateRange, studentList]);
 
   const columns = [
     {
@@ -143,6 +165,46 @@ const Student = () => {
     {
       headerName: "Country",
       field: "country_name",
+      filter: true,
+      cellRenderer: (params) => {
+        return params.value ? <div>{params.value}</div> : "-";
+      },
+    },
+    {
+      headerName: "No. of Complete Lesson",
+      field: "lesson_count",
+      filter: true,
+      cellRenderer: (params) => {
+        return params.value ? <div>{params.value}</div> : "-";
+      },
+    },
+    {
+      headerName: "No. Of Given Assignment",
+      field: "student_assignment_count",
+      filter: true,
+      cellRenderer: (params) => {
+        return params.value ? <div>{params.value}</div> : "-";
+      },
+    },
+    {
+      headerName: "No. Of Given Mini Test",
+      field: "student_mock_count",
+      filter: true,
+      cellRenderer: (params) => {
+        return params.value ? <div>{params.value}</div> : "-";
+      },
+    },
+    {
+      headerName: "No. Of Given Practice Test",
+      field: "student_pt_count",
+      filter: true,
+      cellRenderer: (params) => {
+        return params.value ? <div>{params.value}</div> : "-";
+      },
+    },
+    {
+      headerName: "No. Of Given Full Length Test",
+      field: "student_flt_count",
       filter: true,
       cellRenderer: (params) => {
         return params.value ? <div>{params.value}</div> : "-";
@@ -227,12 +289,23 @@ const Student = () => {
                     <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
                         <h4>Student</h4>
+                        <i
+                          className="icofont-calendar"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => setIsModalOpen(true)}
+                        >
+                          {" "}
+                          Select Date
+                        </i>
                       </div>
                       <div className="row">
                         {isLoading ? (
                           <Loading />
-                        ) : studentList.length > 0 ? (
-                          <Table rowData={studentList} columnDefs={columns} />
+                        ) : filteredStudentList.length > 0 ? (
+                          <Table
+                            rowData={filteredStudentList}
+                            columnDefs={columns}
+                          />
                         ) : (
                           <h5 className="text-center text-danger">
                             No Students Available !!
@@ -387,6 +460,48 @@ const Student = () => {
           ))}
         </div>
       </SmallModal>
+      {isModalOpen && (
+        <SmallModal
+          size="lg"
+          centered
+          isOpen={isModalOpen}
+          title="Select Date"
+          footer={
+            <div className="d-flex gap-2">
+              <button
+                className="default__button"
+                onClick={() => {
+                  setDateRange(null);
+                  setIsModalOpen(false);
+                }}
+              >
+                Reset
+              </button>
+              <button
+                className="default__button"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Apply
+              </button>
+            </div>
+          }
+          onClose={() => setIsModalOpen(false)}
+        >
+          <DateRangePicker
+            ranges={
+              dateRange || [
+                {
+                  startDate: new Date(),
+                  endDate: new Date(),
+                  key: "selection",
+                },
+              ]
+            }
+            onChange={(item) => setDateRange([item.selection])}
+            rangeColors={["#3d91ff"]}
+          />
+        </SmallModal>
+      )}
     </>
   );
 };

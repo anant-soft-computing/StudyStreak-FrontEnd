@@ -1,67 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, Clock, Calendar, ArrowRight } from "lucide-react";
 import CourseList from "./CourseList";
 import TestimonialSection from "../Testimonial/TestimonialSection";
+import ajaxCall from "../../helpers/ajaxCall";
+
+const exams = ["All", "IELTS", "GRE", "GMAT", "TOEFL", "PTE", "GENERAL"];
 
 const CoursesPage = () => {
   const navigate = useNavigate();
-  const [selectedExam, setSelectedExam] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedExam, setSelectedExam] = useState("");
 
-  const exams = ["All", "IELTS", "GRE", "GMAT", "TOEFL", "PTE", "GENERAL"];
+  const [blogs, setBlogs] = useState([]);
+  const [webinars, setWebinars] = useState([]);
 
-  const webinars = [
-    {
-      title: "IELTS Writing Task 2 Strategies",
-      date: "2024-10-15",
-      time: "14:00 UTC",
-      instructor: "Dr. Emma Watson",
-    },
-    {
-      title: "GRE Quantitative Reasoning Tips",
-      date: "2024-10-18",
-      time: "18:00 UTC",
-      instructor: "Prof. Robert Chen",
-    },
-    {
-      title: "TOEFL Speaking Section Mastery",
-      date: "2024-10-20",
-      time: "16:00 UTC",
-      instructor: "Michael Brown, PhD",
-    },
-  ];
-
-  const blogPosts = [
-    {
-      title: "5 Essential IELTS Writing Tips",
-      excerpt: "Improve your IELTS writing score with these expert tips...",
-      author: "Dr. Emma Watson",
-      date: "2024-09-30",
-    },
-    {
-      title: "Mastering GRE Vocabulary",
-      excerpt: "Effective strategies to build your GRE vocabulary quickly...",
-      author: "Prof. Robert Chen",
-      date: "2024-09-25",
-    },
-    {
-      title: "TOEFL vs IELTS: Which Should You Take?",
-      excerpt:
-        "A comprehensive comparison to help you choose the right English proficiency test...",
-      author: "Michael Brown, PhD",
-      date: "2024-09-20",
-    },
-  ];
-
-  // Handle assessment button click
   const handleAssessmentClick = () => {
     navigate("/english-test");
   };
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/liveclass-webinar/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setWebinars(response.data);
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/blog-list/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response.status === 200) {
+          setBlogs(response.data.filter((item) => item.status === "published"));
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="bg-neutral-50 min-h-screen">
-      {/* Header Section */}
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 pb-6">
         <div className="container mx-auto px-4 pt-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -101,12 +108,11 @@ const CoursesPage = () => {
         </div>
       </header>
 
-      {/* Filter Bar */}
       <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 shadow-soft">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between py-4">
             <div className="flex gap-3 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-              {exams.map((exam) => (
+              {exams?.map((exam) => (
                 <button
                   key={exam}
                   onClick={() => setSelectedExam(exam === "All" ? "" : exam)}
@@ -125,54 +131,60 @@ const CoursesPage = () => {
         </div>
       </div>
 
-      {/* Main Content */}
       <main className="py-8">
-        {/* Course Grid */}
         <CourseList selectedCategory={selectedExam} searchTerm={searchTerm} />
 
-        {/* Webinars Section */}
-        <section className="container mx-auto px-4 mt-8">
+        <section className="container mx-auto px-4 mt-8 mb-8">
           <h2 className="text-2xl font-bold text-neutral-800 mb-8">
             Upcoming Webinars
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-3 gap-6">
-            {webinars.map((webinar, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {webinars?.length > 0 ? (
+              webinars?.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover 
                   transition-all duration-300 border border-neutral-200 
                   hover:border-primary-200 transform hover:-translate-y-1"
-              >
-                <h3 className="text-lg font-bold text-neutral-800 mb-3">
-                  {webinar.title}
-                </h3>
-                <p className="text-primary-600 mb-4">{webinar.instructor}</p>
-                <div className="flex items-center text-sm text-neutral-600 mb-6 gap-4">
-                  <div className="flex items-center gap-2">
-                    <Calendar size={16} />
-                    <span>{new Date(webinar.date).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock size={16} />
-                    <span>{webinar.time}</span>
-                  </div>
-                </div>
-                <button
-                  className="w-full bg-primary-600 text-white py-2.5 rounded-xl 
-                  hover:bg-primary-700 transition-colors duration-300"
                 >
-                  Register Now
-                </button>
+                  <h3 className="text-lg font-bold text-neutral-800 mb-3">
+                    {item?.meeting_title}
+                  </h3>
+                  <p className="text-primary-600 mb-4">
+                    <span className="font-medium">Description :</span>{" "}
+                    {item?.meeting_description}
+                  </p>
+                  <div className="flex items-center text-sm text-neutral-600 mb-6 gap-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar size={16} />
+                      {moment(item?.start_time).format("L")} -{" "}
+                      {moment(item?.end_time).format("L")}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock size={16} />
+                      {moment(item?.start_time).format("LTS")} -{" "}
+                      {moment(item?.end_time).format("LTS")}
+                    </div>
+                  </div>
+                  <button
+                    className="w-full bg-primary-600 text-white py-2.5 rounded-xl 
+                    hover:bg-primary-700 transition-colors duration-300"
+                    onClick={() => window.open(item?.join_url, "_blank")}
+                  >
+                    Join Webinar
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-lg font-semibold text-red-600">
+                No Upcoming Webinars At The Moment. Please Check Back Later.
               </div>
-            ))}
+            )}
           </div>
         </section>
 
-        {/* Testimonials Section */}
-
         <TestimonialSection />
 
-        {/* Blog Section */}
         <section className="container mx-auto px-4 mt-16">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold text-neutral-800">
@@ -186,32 +198,42 @@ const CoursesPage = () => {
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogPosts.map((post, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover 
+            {blogs?.length > 0 ? (
+              blogs?.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover 
                   transition-all duration-300 border border-neutral-200 hover:border-primary-200"
-              >
-                <div className="p-6">
-                  <h3 className="text-lg font-bold text-neutral-800 mb-3">
-                    {post.title}
-                  </h3>
-                  <p className="text-neutral-600 mb-6">{post.excerpt}</p>
-                  <div className="flex justify-between items-center text-sm text-neutral-500">
-                    <span>{post.author}</span>
-                    <span>{post.date}</span>
+                >
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-neutral-800 mb-3">
+                      {item?.title}
+                    </h3>
+                    <p className="text-neutral-600 mb-6">
+                      {item?.excerpt.length > 100
+                        ? `${item?.excerpt.substring(0, 100)}...`
+                        : item?.excerpt}
+                    </p>
+                    <div className="flex justify-between items-center text-sm text-neutral-500">
+                      <span>{item?.author}</span>
+                      <span>{moment(item?.published_at).format("lll")}</span>
+                    </div>
+                  </div>
+                  <div className="bg-primary-600 p-4 hover:bg-primary-700 transition-colors duration-300">
+                    <Link
+                      to={`/blogs/${item?.id}`}
+                      className="text-white flex items-center justify-center gap-2"
+                    >
+                      Read More <ArrowRight size={16} />
+                    </Link>
                   </div>
                 </div>
-                <div className="bg-primary-600 p-4 hover:bg-primary-700 transition-colors duration-300">
-                  <Link
-                    to="/blogs"
-                    className="text-white flex items-center justify-center gap-2"
-                  >
-                    Read More <ArrowRight size={16} />
-                  </Link>
-                </div>
+              ))
+            ) : (
+              <div className="text-center text-lg font-semibold text-red-600">
+                No Blogs Available
               </div>
-            ))}
+            )}
           </div>
         </section>
       </main>

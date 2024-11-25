@@ -16,17 +16,29 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
     return () => clearInterval(interval);
   }, []);
 
-  // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
+  // Button is enable before 7 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
-    const { join_url, start_time, id } = params.data;
+    const { id, start_time, join_url, liveclasstype } = params.data;
+
+    const classType = liveclasstype?.name;
 
     const now = currentTime.format("HH:mm:ss");
     const classStartTime = moment(start_time).format("HH:mm:ss");
 
     const isButtonEnabled = moment(now, "HH:mm:ss").isBetween(
-      moment(classStartTime, "HH:mm:ss").subtract(5, "minutes"),
-      moment(classStartTime, "HH:mm:ss").add(5, "minutes")
+      moment(classStartTime, "HH:mm:ss").subtract(7, "minutes"),
+      moment(classStartTime, "HH:mm:ss").add(7, "minutes")
     );
+
+    const shouldDisableButton =
+      classType !== "Webinar" && classType !== "Counselling"
+        ? !isButtonEnabled
+        : false;
+
+    const buttonStyle =
+      classType !== "Webinar" && classType !== "Counselling"
+        ? { opacity: isButtonEnabled ? 1 : 0.5 }
+        : undefined;
 
     return (
       <button
@@ -36,8 +48,8 @@ const UpcomingClass = ({ isLoading, classes, message }) => {
           gamificationSubmit(id);
           studentJoinNow(id);
         }}
-        disabled={!isButtonEnabled}
-        style={{ opacity: isButtonEnabled ? 1 : 0.5 }}
+        disabled={shouldDisableButton}
+        style={buttonStyle}
       >
         Join Now
       </button>

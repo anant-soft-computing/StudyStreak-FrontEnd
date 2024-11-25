@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import TopBar from "../components/TopBar/TopBar";
+import "../css/style.css";
 import NavBar from "../components/NavBar/NavBar";
 import MobileTopBar from "../components/TopBar/MobileTopBar";
 import { Box } from "@mui/material";

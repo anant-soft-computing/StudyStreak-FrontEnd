@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Search, ArrowRight, User } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
-import Loading from "../UI/Loading";
+import Loading from "../../components/UI/Loading";
 
 const categories = [
   "All",

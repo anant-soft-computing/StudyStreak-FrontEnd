@@ -123,8 +123,13 @@ const HomePage = () => {
           },
           8000
         );
+        
         if (response.status === 200) {
-          setWebinars(response.data);
+          const now = moment();
+          const data = response.data
+            .filter((item) => moment(item.end_time).isAfter(now))
+            .sort((a, b) => moment(a.start_time).diff(moment(b.start_time)));
+          setWebinars(data);
         }
       } catch (error) {
         console.log("error", error);

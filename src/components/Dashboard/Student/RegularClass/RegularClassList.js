@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
 import Table from "../../../UI/Table";
@@ -6,32 +6,14 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const RegularClassList = ({ isLoading, regularClass }) => {
-  const [currentTime, setCurrentTime] = useState(moment());
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(moment());
-    }, 60000);
-    return () => clearInterval(interval);
-  }, []);
 
   const joinNow = (url) => {
     window.open(url, "__blank");
   };
 
-  // Button is enable before 5 minutes from the start_time and disabled after 5 minutes by default
   const handleJoinNow = (params) => {
-    const { join_url, start_time, id } = params.data;
-
-    const now = currentTime.format("HH:mm:ss");
-    const classStartTime = moment(start_time).format("HH:mm:ss");
-
-    const isButtonEnabled = moment(now, "HH:mm:ss").isBetween(
-      moment(classStartTime, "HH:mm:ss").subtract(5, "minutes"),
-      moment(classStartTime, "HH:mm:ss").add(5, "minutes")
-    );
-
+    const { join_url, id } = params.data;
     return (
       <button
         className="take-test"
@@ -40,8 +22,6 @@ const RegularClassList = ({ isLoading, regularClass }) => {
           gamificationSubmit(id);
           studentJoinNow(id);
         }}
-        disabled={!isButtonEnabled}
-        style={{ opacity: isButtonEnabled ? 1 : 0.5 }}
       >
         Join Now
       </button>

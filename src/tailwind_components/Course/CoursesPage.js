@@ -5,6 +5,7 @@ import { Search, Clock, Calendar, ArrowRight } from "lucide-react";
 import CourseList from "./CourseList";
 import TestimonialSection from "../Testimonial/TestimonialSection";
 import ajaxCall from "../../helpers/ajaxCall";
+import Loading from "../../components/UI/Loading";
 
 const exams = ["All", "IELTS", "GRE", "GMAT", "TOEFL", "PTE", "GENERAL"];
 
@@ -15,12 +16,14 @@ const CoursesPage = () => {
 
   const [blogs, setBlogs] = useState([]);
   const [webinars, setWebinars] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleAssessmentClick = () => {
     navigate("/english-test");
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -34,16 +37,24 @@ const CoursesPage = () => {
           },
           8000
         );
+
         if (response.status === 200) {
-          setWebinars(response.data);
+          const now = moment();
+          const data = response.data
+            .filter((item) => moment(item.end_time).isAfter(now))
+            .sort((a, b) => moment(a.start_time).diff(moment(b.start_time)));
+          setWebinars(data);
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -63,6 +74,8 @@ const CoursesPage = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []);
@@ -138,14 +151,18 @@ const CoursesPage = () => {
           <h2 className="text-2xl font-bold text-neutral-800 mb-8">
             Upcoming Webinars
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {webinars?.length > 0 ? (
-              webinars?.map((item, index) => (
+          {isLoading ? (
+            <div className="flex justify-center items-center h-40">
+              <Loading />
+            </div>
+          ) : webinars?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {webinars?.map((item, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover 
-                  transition-all duration-300 border border-neutral-200 
-                  hover:border-primary-200 transform hover:-translate-y-1"
+          transition-all duration-300 border border-neutral-200 
+          hover:border-primary-200 transform hover:-translate-y-1"
                 >
                   <h3 className="text-lg font-bold text-neutral-800 mb-3">
                     {item?.meeting_title}
@@ -168,19 +185,21 @@ const CoursesPage = () => {
                   </div>
                   <button
                     className="w-full bg-primary-600 text-white py-2.5 rounded-xl 
-                    hover:bg-primary-700 transition-colors duration-300"
+            hover:bg-primary-700 transition-colors duration-300"
                     onClick={() => window.open(item?.join_url, "_blank")}
                   >
                     Join Webinar
                   </button>
                 </div>
-              ))
-            ) : (
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-40">
               <div className="text-center text-lg font-semibold text-red-600">
                 No Upcoming Webinars At The Moment. Please Check Back Later.
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </section>
 
         <TestimonialSection />
@@ -197,9 +216,13 @@ const CoursesPage = () => {
               View All <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs?.length > 0 ? (
-              blogs?.map((item, index) => (
+          {isLoading ? (
+            <div className="flex justify-center items-center h-40">
+              <Loading />
+            </div>
+          ) : blogs?.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {blogs?.map((item, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover 
@@ -228,13 +251,15 @@ const CoursesPage = () => {
                     </Link>
                   </div>
                 </div>
-              ))
-            ) : (
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-40">
               <div className="text-center text-lg font-semibold text-red-600">
                 No Blogs Available
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </section>
       </main>
     </div>

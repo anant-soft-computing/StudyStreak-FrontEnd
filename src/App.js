@@ -65,6 +65,7 @@ import Report from "./components/Dashboard/Student/Report/Report";
 import ADashboard from "./components/Dashboard/Admin/Dashboard";
 import Users from "./components/Dashboard/Admin/Users/Users";
 import Student from "./components/Dashboard/Admin/Student/Student";
+import LiveClassReport from "./components/Dashboard/Admin/LiveClassReport/LiveClassReport";
 import Package from "./components/Dashboard/Admin/Package/Package";
 import Course from "./components/Dashboard/Admin/Course/Course";
 import Exam from "./components/Dashboard/Admin/Exam/Exam";
@@ -149,6 +150,10 @@ const App = () => {
             />
             <Route path="/admin-users" Component={withBootstrap(Users)} />
             <Route path="/admin-student" Component={withBootstrap(Student)} />
+            <Route
+              path="/admin-live-class-report"
+              Component={withBootstrap(LiveClassReport)}
+            />
             <Route path="/admin-package" Component={withBootstrap(Package)} />
             <Route path="/admin-course" Component={withBootstrap(Course)} />
             <Route path="/admin-exam" Component={withBootstrap(Exam)} />

@@ -67,7 +67,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
         // Update the booked count by fetching the latest count
         fetchBookedCount();
       } else if (response.status === 400) {
-        toast.error(response?.data?.Message);
+        toast.error(response?.data?.message);
       }
     } catch (error) {
       console.log("error", error);
@@ -119,33 +119,37 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
 
   const handleBook = (params) => {
     const { id, start_time, end_time } = params.data;
-    const currentDate = moment();
-    const classStartTime = moment(start_time);
+    const startDate = moment(start_time).startOf("day"); // Start Of start_time Day
+    const endDate = moment(end_time).endOf("day"); // End Of end_time Day
+    const currentDate = moment().startOf("day"); // Current Date Without Time
+    const currentDateTime = moment(); // Current Date and Time
+    const startDateTime = moment(start_time); // Exact start time
 
-    // Get today's class time 
-    const todayClassTime = moment().set({
-      hour: classStartTime.hour(),
-      minute: classStartTime.minute(),
-      second: 0,
-    });
+    let isWithinRange;
+    let isTimeValid = true;
 
-    // Check if current date is within the class date range
-    const isWithinDateRange =
-      currentDate.isSameOrAfter(moment(start_time).startOf("day")) &&
-      currentDate.isSameOrBefore(moment(end_time).startOf("day"));
+    // Check if current time is past start_time on the same day
+    if (currentDate.isSame(startDate, "day")) {
+      isTimeValid = currentDateTime.isSameOrBefore(startDateTime);
+    }
 
-    // If we're within the date range, check if we haven't passed today's class time
-    const isBeforeClassTime = currentDate.isBefore(todayClassTime);
+    // Check If start_time and end_time Are On The Same Day
+    if (startDate.isSame(endDate, "day")) {
+      // Button Active On The start date
+      isWithinRange = currentDate.isSame(startDate, "day");
+    } else {
+      // Button Active From start_date Up To end_date
+      isWithinRange = currentDate.isBetween(startDate, endDate, null, "[]");
+    }
 
-    // Button is active if we're within date range and before today's class time
-    const canBook = isWithinDateRange && isBeforeClassTime;
+    const isButtonEnabled = isWithinRange && isTimeValid;
 
     return (
       <button
         className="take-test"
         onClick={() => bookCount(id)}
-        disabled={!canBook || (isBooking && bookingSlotId === id)}
-        style={{ opacity: !canBook ? 0.5 : 1 }}
+        disabled={!isButtonEnabled || (isBooking && bookingSlotId === id)}
+        style={{ opacity: !isButtonEnabled ? 0.5 : 1 }}
       >
         {isBooking && bookingSlotId === id ? "Booking..." : "Book Slot"}
       </button>

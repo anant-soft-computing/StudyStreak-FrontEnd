@@ -1,10 +1,14 @@
-import moment from "moment";
 import React from "react";
+import moment from "moment";
 
 const UnPaidClasses = ({ classData, title, message }) => {
   const now = moment();
   const classes = classData.filter((item) =>
     moment(item.end_time).isAfter(now)
+  );
+
+  const sortedClasses = classes.sort((a, b) =>
+    moment(a.start_time).diff(moment(b.start_time))
   );
 
   const displayDate = (start_time, end_time) => {
@@ -29,7 +33,7 @@ const UnPaidClasses = ({ classData, title, message }) => {
         <h6>{title}</h6>
       </div>
       <hr />
-      {classes.length > 0 ? (
+      {sortedClasses.length > 0 ? (
         <div className="dashboard__table table-responsive">
           <table>
             <thead>
@@ -40,7 +44,7 @@ const UnPaidClasses = ({ classData, title, message }) => {
               </tr>
             </thead>
             <tbody>
-              {classes.map(
+              {sortedClasses.map(
                 (
                   { id, meeting_title, start_time, end_time, join_url },
                   index
@@ -54,7 +58,7 @@ const UnPaidClasses = ({ classData, title, message }) => {
                     <td>
                       <button
                         className="take-test"
-                        onClick={() => window.open(join_url)}
+                        onClick={() => window.open(join_url, "_blank")}
                       >
                         Join Now
                       </button>

@@ -46,7 +46,7 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
             key={index}
             className={`group bg-white rounded-3xl p-8 transition-all duration-300 relative
             ${
-              selectedPackage === index
+              selectedPackage === pkg?.package_id
                 ? "border-2 border-primary-600 shadow-elevated scale-[1.02]"
                 : "border border-neutral-200 shadow-card hover:shadow-card-hover hover:scale-[1.01]"
             }`}
@@ -64,7 +64,7 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                     <span className="text-sm text-neutral-600">/package</span>
                   </div>
                 </div>
-                {selectedPackage === index && (
+                {selectedPackage === pkg?.package_id && (
                   <div className="bg-primary-100 p-2 rounded-xl">
                     <CheckCircle className="w-6 h-6 text-primary-700" />
                   </div>
@@ -164,7 +164,7 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                     <div key={i} className="flex items-start gap-3">
                       <div
                         className={`p-1 rounded-full ${
-                          selectedPackage === index
+                          selectedPackage === pkg?.package_id
                             ? "bg-primary-200 text-primary-700"
                             : "bg-neutral-200 text-neutral-700"
                         }`}
@@ -178,7 +178,7 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                           </span>
                           <span
                             className={`font-semibold ${
-                              selectedPackage === index
+                              selectedPackage === pkg?.package_id
                                 ? "text-primary-700"
                                 : "text-neutral-700"
                             }`}
@@ -189,7 +189,7 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                         <div className="w-full bg-neutral-200 rounded-full h-1.5">
                           <div
                             className={`h-1.5 rounded-full transition-all duration-300 ${
-                              selectedPackage === index
+                              selectedPackage === pkg?.package_id
                                 ? "bg-primary-600"
                                 : "bg-neutral-400"
                             }`}
@@ -217,14 +217,14 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
               }}
               className={`w-full py-4 rounded-xl font-semibold transition-all duration-300
               ${
-                selectedPackage === index
+                selectedPackage === pkg?.package_id
                   ? "bg-primary-600 text-white hover:bg-primary-700 shadow-soft"
                   : "bg-primary-100 text-primary-700 hover:bg-primary-200"
               } transform hover:-translate-y-0.5`}
             >
-              {selectedPackage === index
+              {selectedPackage === pkg?.package_id
                 ? "Selected Package"
-                : "Select Package"}
+                : "Buy Package"}
             </button>
 
             {pkg.package_name === "IELTS Gold" && (

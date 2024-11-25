@@ -4,6 +4,7 @@ import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 import dashBoard from "../../../../img/icon/dashboard.svg";
 import users from "../../../../img/icon/users.svg";
 import student from "../../../../img/icon/profile.svg";
+import report from "../../../../img/icon/coupon.svg";
 import packageIcon from "../../../../img/icon/package.svg";
 import course from "../../../../img/icon/course.svg";
 import exam from "../../../../img/icon/assignment.svg";
@@ -126,6 +127,11 @@ const DALeftDrawer = () => {
       name: "Student",
       icon: <img src={student} alt="Student" />,
       link: "/admin-student",
+    },
+    {
+      name: "Live Class Report",
+      icon: <img src={report} alt="Live Class Report" />,
+      link: "/admin-live-class-report",
     },
     {
       name: "Package",

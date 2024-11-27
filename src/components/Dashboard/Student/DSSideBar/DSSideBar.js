@@ -26,7 +26,9 @@ const DSSidebar = () => {
 
   const [count, setCount] = useState({
     count: 0,
+    all_pt_count: 0,
     practice_test_count: 0,
+    all_flt_count: 0,
     full_length_test_count: 0,
   });
   const [givenPTCount, setGivenPTCount] = useState(0);
@@ -274,7 +276,9 @@ const DSSidebar = () => {
 
           setCount({
             count: data?.count,
+            all_pt_count: totalPracticeTests,
             practice_test_count: totalPracticeTests - givenPTCount,
+            all_flt_count: totalFullLengthTests,
             full_length_test_count: totalFullLengthTests - givenFLTCount,
           });
 
@@ -342,8 +346,10 @@ const DSSidebar = () => {
                       {item.name}
                     </div>
                     {item.name === "Practice Test" ? (
-                      givenPTCount >=
-                      count?.practice_test_count + givenPTCount ? (
+                      count?.practice_test_count === -1 ? (
+                        <span className="dashboard__label bg-success">All</span>
+                      ) : givenPTCount ===
+                        count?.practice_test_count + givenPTCount ? (
                         <span className="dashboard__label bg-danger">N/A</span>
                       ) : (
                         <span className="dashboard__label">
@@ -351,8 +357,10 @@ const DSSidebar = () => {
                         </span>
                       )
                     ) : item.name === "Full Length Test" ? (
-                      givenFLTCount >=
-                      count?.full_length_test_count + givenFLTCount ? (
+                      count?.full_length_test_count === -1 ? (
+                        <span className="dashboard__label bg-success">All</span>
+                      ) : givenFLTCount ===
+                        count?.full_length_test_count + givenFLTCount ? (
                         <span className="dashboard__label bg-danger">N/A</span>
                       ) : (
                         <span className="dashboard__label">

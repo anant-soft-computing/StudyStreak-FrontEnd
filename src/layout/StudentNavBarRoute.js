@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import "../css/style.css";
+import "react-icofont";
 import NavBar from "../components/NavBar/NavBar";
 import MobileTopBar from "../components/TopBar/MobileTopBar";
 import { Box } from "@mui/material";

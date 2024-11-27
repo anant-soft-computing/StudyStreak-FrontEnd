@@ -44,7 +44,7 @@ const Dashboard = () => {
     selectedCourse === "IELTS"
       ? [
           {
-            name: "Book Speaking Slot",
+            name: "Speaking Slot",
             icon: bookSpeakingSlot,
             link: "/studentLiveClasses",
             state: { activeTab: "Speaking Practice" },

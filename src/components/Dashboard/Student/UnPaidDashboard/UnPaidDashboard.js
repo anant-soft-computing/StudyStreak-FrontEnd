@@ -157,12 +157,15 @@ const UnPaidDashboard = () => {
                           </div>
                         </div>
                       </div>
-                      <div
-                        className="col-xl-12 d-flex justify-content-center align-items-center"
-                        onClick={() => navigate("/freeDiagnosticTest")}
-                      >
-                        <div className="gridarea__wraper text-center card-background">
-                          <div className="gridarea__content p-2 m-2">
+                      <div className="col-xl-12 d-flex justify-content-center align-items-center">
+                        <div
+                          className="gridarea__wraper text-center card-background"
+                          style={{ width: "1000px" }}
+                        >
+                          <div
+                            className="gridarea__content p-4 m-2"
+                            onClick={() => navigate("/freeDiagnosticTest")}
+                          >
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
                               <img
                                 src={practiceTest}
@@ -171,12 +174,7 @@ const UnPaidDashboard = () => {
                                 width={35}
                               />
                               <Link className="text-decoration-none">
-                                <h5 className="mt-2">
-                                  Take A free Diagnostic Test <br />
-                                  With This Test,You can Determine Which Kind of
-                                  Course and Package and You need for your
-                                  Preparation
-                                </h5>
+                                <h2 className="mt-2">Free Diagnostic Test</h2>
                               </Link>
                             </div>
                           </div>

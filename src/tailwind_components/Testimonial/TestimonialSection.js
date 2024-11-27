@@ -8,10 +8,10 @@ const TestimonialSection = () => {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    const fetchTestimonials = async () => {
+    (async () => {
       try {
         const response = await ajaxCall(
-          `/testimonial/`,
+          "/testimonial/",
           {
             headers: {
               Accept: "application/json",
@@ -29,8 +29,7 @@ const TestimonialSection = () => {
       } catch (error) {
         console.error("Error fetching testimonials:", error);
       }
-    };
-    fetchTestimonials();
+    })();
   }, []);
 
   useEffect(() => {
@@ -72,12 +71,25 @@ const TestimonialSection = () => {
               transition-all duration-300 h-full flex flex-col"
                 >
                   <div className="flex items-center mb-4">
-                    <div
-                      className="w-12 h-12 rounded-full bg-primary-100 flex items-center 
+                    {testimonial?.image ? (
+                      <div
+                        className="w-12 h-12 rounded-full bg-primary-100 flex items-center 
                   justify-center text-primary-600 font-bold text-lg mr-4"
-                    >
-                      {testimonial.name.charAt(0)}
-                    </div>
+                      >
+                        <img
+                          className="w-full h-full object-cover rounded-full"
+                          src={testimonial?.image}
+                          alt={testimonial.name}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className="w-12 h-12 rounded-full bg-primary-100 flex items-center 
+                  justify-center text-primary-600 font-bold text-lg mr-4"
+                      >
+                        {testimonial.name.charAt(0)}
+                      </div>
+                    )}
                     <div>
                       <h4 className="font-semibold text-lg text-neutral-800">
                         {testimonial.name}

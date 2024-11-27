@@ -141,8 +141,16 @@ const LiveSpeakingExam = () => {
     if (recordedFilePath) {
       const { recorderIndex, filePath } = recordedFilePath;
       const tempSpeaking = [...speaking];
-      tempSpeaking[recorderIndex].status = 1;
+
+      // Mark current question as completed
+      tempSpeaking[recorderIndex].status = 2;
       tempSpeaking[recorderIndex].filePath = filePath;
+
+      // If there's a next question, prepare it for play
+      if (recorderIndex + 1 < tempSpeaking.length) {
+        tempSpeaking[recorderIndex + 1].status = 0;
+      }
+
       setSpeaking(tempSpeaking);
       setRecordedFilePath(null);
     }
@@ -228,6 +236,7 @@ const LiveSpeakingExam = () => {
     });
     setSpeaking(updatedSpeaking);
   };
+  
   useEffect(() => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
@@ -275,6 +284,33 @@ const LiveSpeakingExam = () => {
     },
     [speaking, examData, userData, activeRecordingIndex]
   );
+
+  // disable/enable play buttons based on status
+  const renderPlayButton = (item, i) => {
+    const isDisabled =
+      speaking[i].status === 1 || // Currently speaking
+      speaking.some((s, index) => index !== i && s.status === 1) || // Another question is speaking
+      (i > 0 && speaking[i - 1].status !== 2) || // Previous question not completed
+      activeRecordingIndex !== null; // Recording is active
+
+    return (
+      <button
+        className="lv-footer-button lv-speaking-button"
+        onClick={() =>
+          speaking[i].status === 2
+            ? handleReplay(item.question, i)
+            : speak(item.question, i)
+        }
+        disabled={isDisabled}
+        style={{
+          opacity: isDisabled ? 0.5 : 1,
+          cursor: isDisabled ? "not-allowed" : "pointer",
+        }}
+      >
+        {speaking[i].status === 2 ? "Replay" : "Play"}
+      </button>
+    );
+  };
 
   return !instructionCompleted ? (
     <div className="test-instruction">
@@ -332,41 +368,7 @@ const LiveSpeakingExam = () => {
                   />
                 </div>
                 <div className="d-flex align-items-center lv-btn-mic-container">
-                  <button
-                    className="lv-footer-button lv-speaking-button"
-                    onClick={() =>
-                      speaking[i].status === 2
-                        ? handleReplay(item.question, i)
-                        : speak(item.question, i)
-                    }
-                    disabled={
-                      speaking[i].status === 1 ||
-                      speaking.some(
-                        (item, index) => index !== i && item.status === 1
-                      ) ||
-                      activeRecordingIndex !== null
-                    }
-                    style={{
-                      opacity:
-                        speaking[i].status === 1 ||
-                        speaking.some(
-                          (item, index) => index !== i && item.status === 1
-                        ) ||
-                        activeRecordingIndex !== null
-                          ? 0.5
-                          : 1,
-                      cursor:
-                        speaking[i].status === 1 ||
-                        speaking.some(
-                          (item, index) => index !== i && item.status === 1
-                        ) ||
-                        activeRecordingIndex !== null
-                          ? "not-allowed"
-                          : "pointer",
-                    }}
-                  >
-                    {speaking[i].status === 2 ? "Replay" : "Play"}
-                  </button>
+                  {renderPlayButton(item, i)}
                   <button
                     className="lv-footer-button lv-speaking-button"
                     onClick={() => stopSpeaking(i)}

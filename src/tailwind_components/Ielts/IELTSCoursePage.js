@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BookOpen, User, Award, Target } from "lucide-react";
 import IeltsList from "./IeltsList";
 import EnglishTest from "../EnglishTest/EnglishTest";
 import TestimonialSection from "../Testimonial/TestimonialSection";
-
-const ieltsModules = ["All", "Listening", "Reading", "Writing", "Speaking"];
 
 const keyFeatures = [
   {
@@ -32,7 +30,6 @@ const keyFeatures = [
 
 const IELTSPage = () => {
   const navigate = useNavigate();
-  const [selectedFilter, setSelectedFilter] = useState("All");
 
   const handleTakeTest = () => {
     navigate("/english-test");
@@ -146,22 +143,11 @@ const IELTSPage = () => {
 
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="mb-12">
-            <div className="flex flex-wrap gap-3">
-              {ieltsModules.map((module) => (
-                <button
-                  key={module}
-                  onClick={() => setSelectedFilter(module)}
-                  className={`px-6 py-2.5 rounded-xl transition-all duration-300 
-                    ${
-                      selectedFilter === module
-                        ? "bg-primary-600 text-white shadow-soft"
-                        : "bg-white text-neutral-600 hover:bg-primary-50 hover:text-primary-600"
-                    }`}
-                >
-                  {module}
-                </button>
-              ))}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
+                Popular IELTS Courses
+              </h2>
             </div>
           </div>
           <IeltsList />
@@ -176,8 +162,8 @@ const IELTSPage = () => {
         </div>
       </section>
 
-      <TestimonialSection/>
-      
+      <TestimonialSection />
+
       <section className="py-16 bg-neutral-100">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-neutral-800 mb-12 text-center">

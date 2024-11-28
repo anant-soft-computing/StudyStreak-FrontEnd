@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, ArrowRight, User } from "lucide-react";
+import {
+  Search,
+  ArrowRight,
+  User,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
 
@@ -25,6 +31,17 @@ const BlogsPage = () => {
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const blogsPerPage = 4;
+
+  const indexOfLastBlog = currentPage * blogsPerPage;
+  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+  const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
+
   useEffect(() => {
     setIsLoading(true);
     (async () => {
@@ -42,7 +59,13 @@ const BlogsPage = () => {
         );
 
         if (response.status === 200) {
-          setBlogs(response.data.filter((item) => item.status === "published"));
+          setBlogs(
+            response.data
+              .filter((item) => item.status === "published")
+              .sort(
+                (a, b) => new Date(b.published_at) - new Date(a.published_at)
+              )
+          );
         }
       } catch (error) {
         console.log("error", error);
@@ -122,9 +145,9 @@ const BlogsPage = () => {
       <main className="container mx-auto px-4 py-12">
         {isLoading ? (
           <Loading />
-        ) : filteredBlogs?.length > 0 ? (
+        ) : currentBlogs?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-4 gap-8">
-            {filteredBlogs?.map((blog) => (
+            {currentBlogs?.map((blog) => (
               <article
                 key={blog.id}
                 className="bg-white rounded-2xl overflow-hidden border border-neutral-200 
@@ -151,6 +174,11 @@ const BlogsPage = () => {
                   <h2
                     className="text-xl font-bold text-neutral-800 mb-3 line-clamp-2 
                   hover:text-primary-600 transition-colors"
+                    onClick={() =>
+                      navigate(`/blogs/${blog?.slug}`, {
+                        state: { id: blog?.id },
+                      })
+                    }
                   >
                     {blog?.title}
                   </h2>
@@ -183,7 +211,11 @@ const BlogsPage = () => {
                     <button
                       className="text-primary-600 hover:text-primary-700 
                     flex items-center gap-1 text-sm font-medium"
-                      onClick={() => navigate(`/blogs/${blog?.id}`)}
+                      onClick={() =>
+                        navigate(`/blogs/${blog?.slug}`, {
+                          state: { id: blog?.id },
+                        })
+                      }
                     >
                       Read More <ArrowRight size={16} />
                     </button>
@@ -198,7 +230,43 @@ const BlogsPage = () => {
           </div>
         )}
 
-        <div className="mt-12">
+        {filteredBlogs.length > blogsPerPage && (
+          <div className="flex justify-center items-center space-x-4 mt-8">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="p-2 rounded-full bg-white shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-600" />
+            </button>
+
+            <div className="flex space-x-2">
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => paginate(index + 1)}
+                  className={`w-10 h-10 rounded-full ${
+                    currentPage === index + 1
+                      ? "bg-primary-600 text-white"
+                      : "bg-white text-gray-600 hover:bg-primary-50"
+                  } shadow-md`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-full bg-white shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-600" />
+            </button>
+          </div>
+        )}
+
+        <div className="mt-8">
           <div
             className="bg-gradient-to-br from-primary-500 to-primary-700 
             rounded-2xl p-8 relative overflow-hidden"

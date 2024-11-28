@@ -135,7 +135,7 @@ const App = () => {
             <Route path="/about-us" element={<AboutUsPage />} />
             <Route path="/why-choose-us" element={<WhyChooseUsPage />} />
             <Route path="/blogs" element={<BlogsPage />} />
-            <Route path="/blogs/:id" element={<BlogDetails />} />
+            <Route path="/blogs/:slug" element={<BlogDetails />} />
             <Route path="/talk-to-us" element={<TalkToUsPage />} />
             <Route path="/become-a-partner" element={<BecomeAPartnerPage />} />
             <Route path="/login" element={<AuthPage />} />

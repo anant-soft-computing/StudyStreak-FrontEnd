@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Clock, User } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
 
 const BlogDetails = () => {
-  const { id } = useParams();
+  const location = useLocation();
   const [blog, setBlog] = useState({});
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/blog-list/${id}/`,
+          `/blog-list/${location?.state?.id}/`,
           {
             headers: {
               Accept: "application/json",
@@ -32,7 +32,7 @@ const BlogDetails = () => {
         console.log("error", error);
       }
     })();
-  }, [id]);
+  }, [location?.state?.id]);
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -49,7 +49,7 @@ const BlogDetails = () => {
           </div>
         </div>
       </header>
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-2xl shadow-card border border-neutral-200 p-8 mb-12">
           <header className="mb-8">
             <div className="flex items-center space-x-2 text-sm text-primary-600 mb-4">
@@ -63,9 +63,7 @@ const BlogDetails = () => {
                 <div className="w-10 h-10 bg-neutral-200 rounded-full flex items-center justify-center mr-3">
                   <User className="w-5 h-5 text-neutral-500" />
                 </div>
-                <p className="font-medium text-neutral-800">
-                  {blog?.author}
-                </p>
+                <p className="font-medium text-neutral-800">{blog?.author}</p>
               </div>
               <div className="flex items-center">
                 <Clock className="w-5 h-5 mr-2" />
@@ -85,7 +83,10 @@ const BlogDetails = () => {
           </div>
 
           <article className="prose max-w-none mb-4">
-            <div className="bg-neutral-50 p-6 rounded-xl my-8" dangerouslySetInnerHTML={{ __html: blog?.content }} />
+            <div
+              className="bg-neutral-50 p-6 rounded-xl my-8"
+              dangerouslySetInnerHTML={{ __html: blog?.content }}
+            />
           </article>
         </div>
       </main>

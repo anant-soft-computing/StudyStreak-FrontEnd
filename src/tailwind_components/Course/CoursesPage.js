@@ -38,9 +38,9 @@ const CoursesPage = () => {
           8000
         );
 
-        if (response.status === 200) {
+        if (response?.status === 200) {
           const now = moment();
-          const data = response.data
+          const data = response?.data
             .filter((item) => moment(item.end_time).isAfter(now))
             .sort((a, b) => moment(a.start_time).diff(moment(b.start_time)));
           setWebinars(data);
@@ -69,8 +69,15 @@ const CoursesPage = () => {
           8000
         );
 
-        if (response.status === 200) {
-          setBlogs(response.data.filter((item) => item.status === "published"));
+        if (response?.status === 200) {
+          setBlogs(
+            response?.data
+              .filter((item) => item.status === "published")
+              .sort(
+                (a, b) => new Date(b.published_at) - new Date(a.published_at)
+              )
+              .slice(0, 3)
+          );
         }
       } catch (error) {
         console.log("error", error);
@@ -229,7 +236,14 @@ const CoursesPage = () => {
                   transition-all duration-300 border border-neutral-200 hover:border-primary-200"
                 >
                   <div className="p-6">
-                    <h3 className="text-lg font-bold text-neutral-800 mb-3">
+                    <h3
+                      className="text-lg font-bold text-neutral-800 mb-3"
+                      onClick={() =>
+                        navigate(`/blogs/${item?.slug}`, {
+                          state: { id: item?.id },
+                        })
+                      }
+                    >
                       {item?.title}
                     </h3>
                     <p className="text-neutral-600 mb-6">
@@ -243,12 +257,16 @@ const CoursesPage = () => {
                     </div>
                   </div>
                   <div className="bg-primary-600 p-4 hover:bg-primary-700 transition-colors duration-300">
-                    <Link
-                      to={`/blogs/${item?.id}`}
+                    <div
                       className="text-white flex items-center justify-center gap-2"
+                      onClick={() =>
+                        navigate(`/blogs/${item?.slug}`, {
+                          state: { id: item?.id },
+                        })
+                      }
                     >
                       Read More <ArrowRight size={16} />
-                    </Link>
+                    </div>
                   </div>
                 </div>
               ))}

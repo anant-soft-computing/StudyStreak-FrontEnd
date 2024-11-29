@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Clock, User } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
 
 const BlogDetails = () => {
-  const location = useLocation();
+  const { slug } = useParams();
   const [blog, setBlog] = useState({});
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/blog-list/${location?.state?.id}/`,
+          `/blog-list/${slug}/`,
           {
             headers: {
               Accept: "application/json",
@@ -32,7 +32,7 @@ const BlogDetails = () => {
         console.log("error", error);
       }
     })();
-  }, [location?.state?.id]);
+  }, [slug]);
 
   return (
     <div className="min-h-screen bg-neutral-50">

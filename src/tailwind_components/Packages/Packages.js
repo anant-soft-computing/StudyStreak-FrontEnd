@@ -32,7 +32,7 @@ const packagesDetails = [
       "Personalized Feedback",
       "Free Master Class",
     ],
-    badge: "Orientation",
+    badge: "Master Class",
   },
   {
     package_name: "UK/Canada/USA/Aus/NZ",

@@ -123,7 +123,7 @@ const HomePage = () => {
           },
           8000
         );
-        
+
         if (response.status === 200) {
           const now = moment();
           const data = response.data
@@ -290,15 +290,15 @@ const HomePage = () => {
             StudyStreak.
           </p>
           <button
-            onClick={handlestartJourney}
+            onClick={() => navigate("/login")}
             className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5 mt-3"
           >
-            Free Practice Test
+            Free Test
           </button>
           <button
-            onClick={handlestartJourney}
+            onClick={() => navigate("/english-test")}
             className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5 ml-2 mt-3"

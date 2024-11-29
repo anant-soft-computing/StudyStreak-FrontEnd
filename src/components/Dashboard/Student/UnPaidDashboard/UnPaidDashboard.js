@@ -140,20 +140,25 @@ const UnPaidDashboard = () => {
                     </div>
                     <div className="overlay-container d-flex flex-column justify-content-center">
                       <div className="col-xl-12 d-flex justify-content-center align-items-center">
-                        <div className="gridarea__wraper text-center card-background">
-                          <div className="gridarea__content p-2 m-2">
+                        <div
+                          className="gridarea__wraper text-center card-background"
+                          style={{ width: "1000px" }}
+                        >
+                          <div
+                            className="gridarea__content p-4 m-2"
+                            onClick={() => navigate("/freeMiniTest")}
+                          >
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                              <h3 className="mt-2">
-                                You Have Not purchased Any Package. <br />
-                                Click below to view available plans
-                              </h3>
+                              <img
+                                src={fullLengthTest}
+                                alt="Recorded Classes"
+                                height={35}
+                                width={35}
+                              />
+                              <Link className="text-decoration-none">
+                                <h2 className="mt-2">Free Mini Test</h2>
+                              </Link>
                             </div>
-                            <button
-                              className="default__button"
-                              onClick={() => navigate("/courses")}
-                            >
-                              View Plans
-                            </button>
                           </div>
                         </div>
                       </div>
@@ -181,25 +186,20 @@ const UnPaidDashboard = () => {
                         </div>
                       </div>
                       <div className="col-xl-12 d-flex justify-content-center align-items-center">
-                        <div
-                          className="gridarea__wraper text-center card-background"
-                          style={{ width: "1000px" }}
-                        >
-                          <div
-                            className="gridarea__content p-4 m-2"
-                            onClick={() => navigate("/freeMiniTest")}
-                          >
+                        <div className="gridarea__wraper text-center card-background">
+                          <div className="gridarea__content p-2 m-2">
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                              <img
-                                src={fullLengthTest}
-                                alt="Recorded Classes"
-                                height={35}
-                                width={35}
-                              />
-                              <Link className="text-decoration-none">
-                                <h2 className="mt-2">Free Mini Test</h2>
-                              </Link>
+                              <h3 className="mt-2">
+                                You Have Not purchased Any Package. <br />
+                                Click below to view available plans
+                              </h3>
                             </div>
+                            <button
+                              className="default__button"
+                              onClick={() => navigate("/courses")}
+                            >
+                              View Plans
+                            </button>
                           </div>
                         </div>
                       </div>

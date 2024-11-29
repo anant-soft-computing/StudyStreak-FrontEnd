@@ -237,12 +237,8 @@ const CoursesPage = () => {
                 >
                   <div className="p-6">
                     <h3
-                      className="text-lg font-bold text-neutral-800 mb-3"
-                      onClick={() =>
-                        navigate(`/blogs/${item?.slug}`, {
-                          state: { id: item?.id },
-                        })
-                      }
+                      className="text-lg font-bold text-neutral-800 mb-3 cursor-pointer"
+                      onClick={() => navigate(`/blogs/${item?.slug}`)}
                     >
                       {item?.title}
                     </h3>
@@ -258,12 +254,8 @@ const CoursesPage = () => {
                   </div>
                   <div className="bg-primary-600 p-4 hover:bg-primary-700 transition-colors duration-300">
                     <div
-                      className="text-white flex items-center justify-center gap-2"
-                      onClick={() =>
-                        navigate(`/blogs/${item?.slug}`, {
-                          state: { id: item?.id },
-                        })
-                      }
+                      className="text-white flex items-center justify-center gap-2 cursor-pointer"
+                      onClick={() => navigate(`/blogs/${item?.slug}`)}
                     >
                       Read More <ArrowRight size={16} />
                     </div>

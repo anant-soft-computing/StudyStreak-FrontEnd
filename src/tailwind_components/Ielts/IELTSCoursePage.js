@@ -2,7 +2,6 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BookOpen, User, Award, Target } from "lucide-react";
 import IeltsList from "./IeltsList";
-import EnglishTest from "../EnglishTest/EnglishTest";
 import TestimonialSection from "../Testimonial/TestimonialSection";
 
 const keyFeatures = [
@@ -154,14 +153,6 @@ const IELTSPage = () => {
         </div>
       </section>
 
-      <section className="py-4 bg-neutral-100">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <EnglishTest />
-          </div>
-        </div>
-      </section>
-
       <TestimonialSection />
 
       <section className="py-16 bg-neutral-100">
@@ -221,6 +212,7 @@ const IELTSPage = () => {
               className="bg-primary-700 text-white px-8 py-3 rounded-xl 
               hover:bg-primary-800 transition-all duration-300 font-medium 
               border border-primary-500"
+              onClick={() => navigate("/")}
             >
               Schedule Free Demo
             </button>

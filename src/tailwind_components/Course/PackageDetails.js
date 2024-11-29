@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, CheckCircle, Clock } from "lucide-react";
+import { BookOpen, CheckCircle, Clock, LibraryBig } from "lucide-react";
 import BatchSelection from "./BatchSelection";
 
 const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
@@ -87,6 +87,10 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                 <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
                   <BookOpen size={14} />
                   Interactive Lessons
+                </div>
+                <div className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 px-3 py-1 rounded-full text-sm font-medium">
+                  <LibraryBig size={14} />
+                  E-Librarary
                 </div>
                 {pkg.practice_test && (
                   <div className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 px-3 py-1 rounded-full text-sm font-medium">

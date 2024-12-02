@@ -4,7 +4,7 @@ const TidioChat = () => {
   
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "//code.tidio.co/l4otkjmkeqnqu0g5wnjg17ibrfhfnxqw.js";
+    script.src = "//code.tidio.co/dud7zkgb1lvp0wedmcglyarism3gszye.js";
     script.async = true;
 
     document.body.appendChild(script);

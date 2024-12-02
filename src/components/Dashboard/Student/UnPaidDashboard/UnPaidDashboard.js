@@ -51,8 +51,8 @@ const cardList = [
 const UnPaidDashboard = () => {
   const navigate = useNavigate();
 
-  const [webinar, setWebinar] = useState([]);
   const [demoClass, setDemoClass] = useState([]);
+  const [counselling, setCounselling] = useState([]);
   const [masterClass, setMasterClass] = useState([]);
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
@@ -79,10 +79,10 @@ const UnPaidDashboard = () => {
           setMasterClass(
             classes.filter(({ liveclasstype }) => liveclasstype === "Master")
           );
-          setWebinar(
+          setCounselling(
             classes.filter(
               ({ liveclasstype, meeting_title }) =>
-                liveclasstype === "Webinar" &&
+                liveclasstype === "Counselling" &&
                 meeting_title.startsWith("Introduction")
             )
           );
@@ -233,19 +233,19 @@ const UnPaidDashboard = () => {
                   </div>
                 </div>
                 <UnPaidClasses
+                  classData={demoClass}
+                  title="Free Demo Class"
+                  message="No Demo Class Available !!"
+                />
+                <UnPaidClasses
                   classData={masterClass}
                   title="Free Master Class"
                   message="No MasterClass Available !!"
                 />
                 <UnPaidClasses
-                  classData={webinar}
-                  title="Free Webinar"
-                  message="No Webinar Available !!"
-                />
-                <UnPaidClasses
-                  classData={demoClass}
-                  title="Free Demo Class"
-                  message="No Demo Class Available !!"
+                  classData={counselling}
+                  title="Free Counselling Class"
+                  message="No Counselling Available !!"
                 />
               </div>
             </div>

@@ -107,7 +107,8 @@ const FlashCardModal = ({
             flipDirection="horizontal"
           >
             <div
-              className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
+              className="gridarea__wraper gridarea__wraper__2"
+              style={{ backgroundColor: "#01579b33" }}
               onClick={() => handleClick(currentCardIndex)}
             >
               <div>
@@ -115,7 +116,8 @@ const FlashCardModal = ({
               </div>
             </div>
             <div
-              className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling"
+              className="gridarea__wraper gridarea__wraper__2 "
+              style={{ backgroundColor: "#fb980645" }}
               onClick={() => handleClick(currentCardIndex)}
             >
               <div>

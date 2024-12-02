@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ChevronLeft,
@@ -15,7 +16,7 @@ import {
 } from "lucide-react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import banner from "../img/about/about_10.png";
+import banner from "../img/herobanner/about_10.png";
 import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
 import CourseList from "./Course/CourseList";
@@ -104,8 +105,59 @@ const HomePage = () => {
   const [webinars, setWebinars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const [open, setOpen] = useState(false);
+  const [selectWebinar, setSelectWebinar] = useState({ name: "", link: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
+
+  const handleOpen = (webinarName) => {
+    setSelectWebinar(webinarName);
+    setOpen(true);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone);
+    data.append("webinarName", selectWebinar.name);
+
+    try {
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbyjr-_IRyNF7bbf5LckTBiFOhp7eEnj_Th4UrociWgS4wyGDSaQpAecY-DJF9UE88Rh/exec",
+        {
+          method: "POST",
+          body: data,
+          muteHttpExceptions: true,
+        }
+      );
+      if (response.ok) {
+        setFormData({ name: "", email: "", phone: "" });
+        toast.success("Form submitted successfully.");
+        setOpen(false);
+        window.open(selectWebinar.link, "_blank");
+      } else {
+        toast.error("Submission failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting survey:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handlestartJourney = () => {
     navigate("/login");
+  };
+
+  const handleCategory = (category) => {
+    navigate("/courses", { state: { category } });
   };
 
   useEffect(() => {
@@ -139,377 +191,445 @@ const HomePage = () => {
     })();
   }, []);
 
-  const handleCategory = (category) => {
-    navigate("/courses", { state: { category } });
-  };
-
   return (
-    <div className="bg-neutral-50 min-h-screen">
-      <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white py-12 md:py-16 overflow-hidden">
-        <div
-          className="absolute inset-0 bg-grid-pattern opacity-10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-full md:w-1/2 space-y-6">
-              <h1
-                className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
-                style={{ color: "white" }}
-              >
-                Achieve your dream of overseas Education with StudyStreak.
-              </h1>
-              <p className="text-primary-100 text-lg">
-                Focused courses to develop your potential to score high.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button
-                  onClick={() => handleCategory("IELTS")}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-2 rounded-xl 
+    <>
+      <div className="bg-neutral-50 min-h-screen">
+        <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white py-12 md:py-16 overflow-hidden">
+          <div
+            className="absolute inset-0 bg-grid-pattern opacity-10"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+              backgroundSize: "32px 32px",
+            }}
+          />
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="w-full md:w-1/2 space-y-6">
+                <h1
+                  className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+                  style={{ color: "white" }}
+                >
+                  Achieve your dream of overseas Education with StudyStreak.
+                </h1>
+                <p className="text-primary-100 text-lg">
+                  Focused courses to develop your potential to score high.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={() => handleCategory("IELTS")}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-2 rounded-xl 
                   shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  IELTS
-                </button>
-                <button
-                  onClick={() => handleCategory("PTE")}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  PTE
-                </button>
-                <button
-                  onClick={() => handleCategory("TOEFL")}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  TOEFL
-                </button>
-                <button
-                  onClick={() => handleCategory("GMAT")}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  GMAT
-                </button>
-                <button
-                  onClick={() => handleCategory("GRE")}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  GRE
-                </button>
-                <button
-                  onClick={() => handleCategory("SAT")}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  SAT
-                </button>
-                <button
-                  onClick={() => handleCategory("GENERAL")}
-                  className="bg-accent-500 hover:bg-accent-600 text-white px-5 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  GENERAL
-                </button>
-              </div>
-            </div>
-            <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
-              <div className="w-full md:w-1/2 relative">
-                <img
-                  src={banner}
-                  alt="Study Streak"
-                  className="rounded-2xl shadow-soft"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-8 md:py-8 bg-neutral-100">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => {
-              const IconComponent = feature.icon;
-              return (
-                <div
-                  key={index}
-                  className="group bg-white rounded-xl p-4 border border-neutral-200 shadow-card
-                hover:shadow-card-hover hover:border-primary-200 transition-all duration-300
-                transform hover:-translate-y-1"
-                >
-                  <div className="flex items-start space-x-6">
-                    <div
-                      className={`${feature.iconBgColor} rounded-xl 
-                    group-hover:scale-110 transition-all duration-300 mt-3`}
-                    >
-                      <IconComponent
-                        className={`w-6 h-6 ${feature.iconColor}`}
-                        strokeWidth={1.5}
-                      />
-                    </div>
-                    <div>
-                      <h3
-                        className="font-semibold text-lg text-neutral-800 
-                      group-hover:text-primary-600 transition-colors duration-300"
-                      >
-                        {feature.title}
-                      </h3>
-                      <p className="text-small text-neutral-700">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 bg-gradient-to-br from-primary-300 to-primary-800 relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-grid-pattern opacity-10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of students who have achieved their dream scores with
-            StudyStreak.
-          </p>
-          <button
-            onClick={() => navigate("/login")}
-            className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
-            transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
-            transform hover:-translate-y-0.5 mt-3"
-          >
-            Free Test
-          </button>
-          <button
-            onClick={() => navigate("/english-test")}
-            className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
-            transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
-            transform hover:-translate-y-0.5 ml-2 mt-3"
-          >
-            Free Diagnostic Test
-          </button>
-        </div>
-      </section>
-
-      <CourseList />
-
-      <section className="py-12 md:py-16 bg-neutral-100">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
-                PTE Academic Courses
-              </h2>
-              <p className="text-neutral-800 mt-2">
-                Specialized courses for PTE success
-              </p>
-            </div>
-            <div className="flex space-x-3">
-              <button
-                className="p-2 rounded-full bg-white border border-neutral-200 hover:bg-primary-50 
-                hover:border-primary-200 transition-colors duration-300 group shadow-soft hover:shadow-hover"
-              >
-                <ChevronLeft
-                  size={20}
-                  className="text-neutral-800 group-hover:text-primary-600"
-                />
-              </button>
-              <button
-                className="p-2 rounded-full bg-white border border-neutral-200 hover:bg-primary-50 
-                hover:border-primary-200 transition-colors duration-300 group shadow-soft hover:shadow-hover"
-              >
-                <ChevronRight
-                  size={20}
-                  className="text-neutral-800 group-hover:text-primary-600"
-                />
-              </button>
-            </div>
-          </div>
-
-          <Carousel
-            showThumbs={false}
-            showStatus={false}
-            showIndicators={false}
-            infiniteLoop={true}
-            className="pte-carousel"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {pteCourses.map((course, index) => (
-                <div
-                  key={index}
-                  className="group bg-white rounded-xl overflow-hidden border border-neutral-200 
-                    shadow-card hover:shadow-card-hover hover:border-primary-200 
-                    transition-all duration-300 transform hover:-translate-y-1"
-                >
-                  <div
-                    className={`h-48 relative overflow-hidden ${
-                      [
-                        "bg-gradient-to-br from-primary-400 to-primary-600",
-                        "bg-gradient-to-br from-accent-400 to-accent-600",
-                        "bg-gradient-to-br from-secondary-400 to-secondary-600",
-                        "bg-gradient-to-br from-success-400 to-success-600",
-                      ][index]
-                    }`}
                   >
-                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
-                    <img
-                      src={`https://www.visasolutions4u.com/front_assets/images/icons/ielts-coaching.webp`}
-                      alt={course.title}
-                      className="w-full h-full object-cover absolute top-0 left-0 group-hover:scale-110 transition-transform duration-300"
-                    />
-                  </div>
-
-                  <div className="p-6">
-                    <h3
-                      className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 
-                        transition-colors duration-300"
-                    >
-                      {course.title}
-                    </h3>
-                    <div className="flex items-center text-sm text-neutral-800 mb-4">
-                      <Clock size={16} className="mr-2" />
-                      <span>{course.duration}</span>
-                      <span className="mx-2">•</span>
-                      <span>{course.level}</span>
-                    </div>
-                    <Link
-                      to={`/course/${course.id}`}
-                      className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl
-                        hover:bg-primary-100 transition-colors duration-300 font-medium"
-                    >
-                      View Details
-                    </Link>
-                  </div>
+                    IELTS
+                  </button>
+                  <button
+                    onClick={() => handleCategory("PTE")}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    PTE
+                  </button>
+                  <button
+                    onClick={() => handleCategory("TOEFL")}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    TOEFL
+                  </button>
+                  <button
+                    onClick={() => handleCategory("GMAT")}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    GMAT
+                  </button>
+                  <button
+                    onClick={() => handleCategory("GRE")}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    GRE
+                  </button>
+                  <button
+                    onClick={() => handleCategory("SAT")}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    SAT
+                  </button>
+                  <button
+                    onClick={() => handleCategory("GENERAL")}
+                    className="bg-accent-500 hover:bg-accent-600 text-white px-5 py-1 rounded-xl 
+                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    GENERAL
+                  </button>
                 </div>
-              ))}
+              </div>
+              <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
+                <div className="w-full md:w-1/2 relative">
+                  <img
+                    src={banner}
+                    alt="Study Streak"
+                    className="rounded-2xl shadow-soft"
+                  />
+                </div>
+              </div>
             </div>
-          </Carousel>
-        </div>
-      </section>
-
-      <TestimonialSection />
-
-      <Packages />
-
-      <section className="py-12 md:py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-3">
-              Upcoming Free Webinars
-            </h2>
-            <p className="text-neutral-600">
-              Join our expert instructors for free learning sessions
-            </p>
           </div>
+        </section>
 
-          {isLoading ? (
-            <Loading />
-          ) : webinars?.length > 0 ? (
+        <section className="py-8 md:py-8 bg-neutral-100">
+          <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {webinars?.map((item) => {
+              {features.map((feature, index) => {
+                const IconComponent = feature.icon;
                 return (
                   <div
-                    key={item.id}
-                    className="group bg-white rounded-xl border border-neutral-200 overflow-hidden
-                  shadow-card hover:shadow-card-hover hover:border-primary-200 
-                  transition-all duration-300 transform hover:-translate-y-1"
+                    key={index}
+                    className="group bg-white rounded-xl p-4 border border-neutral-200 shadow-card
+                hover:shadow-card-hover hover:border-primary-200 transition-all duration-300
+                transform hover:-translate-y-1"
                   >
-                    <div className="p-6">
-                      <div className="bg-primary-50 rounded-lg p-3 mb-4 w-fit">
-                        <Clock size={24} className="text-primary-500" />
-                      </div>
-                      <h3
-                        className="font-semibold text-xl mb-3 text-neutral-800 group-hover:text-primary-600 
-                    transition-colors duration-300"
+                    <div className="flex items-start space-x-6">
+                      <div
+                        className={`${feature.iconBgColor} rounded-xl 
+                    group-hover:scale-110 transition-all duration-300 mt-3`}
                       >
-                        {item.meeting_title}
-                      </h3>
-                      <p className="text-neutral-600 mb-4">
-                        <span className="font-medium">Description :</span>{" "}
-                        {item.meeting_description}
-                      </p>
-                      <div className="flex items-center text-sm text-neutral-600 mb-3">
-                        <Calendar size={16} className="mr-2" />
-                        <span>
-                          {moment(item.start_time).format("L")} -{" "}
-                          {moment(item.end_time).format("L")}
-                        </span>
+                        <IconComponent
+                          className={`w-6 h-6 ${feature.iconColor}`}
+                          strokeWidth={1.5}
+                        />
                       </div>
-                      <div className="flex items-center text-sm text-neutral-600 mb-3">
-                        <Clock size={16} className="mr-2" />
-                        <span>
-                          {moment(item.start_time).format("LTS")} -{" "}
-                          {moment(item.end_time).format("LTS")}
-                        </span>
+                      <div>
+                        <h3
+                          className="font-semibold text-lg text-neutral-800 
+                      group-hover:text-primary-600 transition-colors duration-300"
+                        >
+                          {feature.title}
+                        </h3>
+                        <p className="text-small text-neutral-700">
+                          {feature.description}
+                        </p>
                       </div>
-                      <button
-                        className="w-full bg-primary-600 text-white py-3 rounded-xl
-                    hover:bg-primary-700 transition-colors duration-300 font-medium
-                    shadow-soft hover:shadow-hover transform hover:-translate-y-0.5"
-                        onClick={() => {
-                          window.open(item.join_url, "_blank");
-                        }}
-                      >
-                        Join Webinar
-                      </button>
                     </div>
                   </div>
                 );
               })}
             </div>
-          ) : (
-            <div className="text-center text-lg font-semibold text-red-600">
-              No Upcoming Webinars At The Moment. Please Check Back Later.
-            </div>
-          )}
-        </div>
-      </section>
+          </div>
+        </section>
 
-      <section className="py-16 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-grid-pattern opacity-10"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-            backgroundSize: "32px 32px",
-          }}
-        />
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of students who have achieved their dream scores with
-            StudyStreak.
-          </p>
-          <button
-            onClick={handlestartJourney}
-            className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
+        <section className="py-16 bg-gradient-to-br from-primary-300 to-primary-800 relative overflow-hidden">
+          <div
+            className="absolute inset-0 bg-grid-pattern opacity-10"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+              backgroundSize: "32px 32px",
+            }}
+          />
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">
+              Join thousands of students who have achieved their dream scores
+              with StudyStreak.
+            </p>
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
+            transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
+            transform hover:-translate-y-0.5 mt-3"
+            >
+              Free Test
+            </button>
+            <button
+              onClick={() => navigate("/english-test")}
+              className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
+            transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
+            transform hover:-translate-y-0.5 ml-2 mt-3"
+            >
+              Free Diagnostic Test
+            </button>
+          </div>
+        </section>
+
+        <CourseList />
+
+        <section className="py-12 md:py-16 bg-neutral-100">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
+                  PTE Academic Courses
+                </h2>
+                <p className="text-neutral-800 mt-2">
+                  Specialized courses for PTE success
+                </p>
+              </div>
+              <div className="flex space-x-3">
+                <button
+                  className="p-2 rounded-full bg-white border border-neutral-200 hover:bg-primary-50 
+                hover:border-primary-200 transition-colors duration-300 group shadow-soft hover:shadow-hover"
+                >
+                  <ChevronLeft
+                    size={20}
+                    className="text-neutral-800 group-hover:text-primary-600"
+                  />
+                </button>
+                <button
+                  className="p-2 rounded-full bg-white border border-neutral-200 hover:bg-primary-50 
+                hover:border-primary-200 transition-colors duration-300 group shadow-soft hover:shadow-hover"
+                >
+                  <ChevronRight
+                    size={20}
+                    className="text-neutral-800 group-hover:text-primary-600"
+                  />
+                </button>
+              </div>
+            </div>
+
+            <Carousel
+              showThumbs={false}
+              showStatus={false}
+              showIndicators={false}
+              infiniteLoop={true}
+              className="pte-carousel"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {pteCourses.map((course, index) => (
+                  <div
+                    key={index}
+                    className="group bg-white rounded-xl overflow-hidden border border-neutral-200 
+                    shadow-card hover:shadow-card-hover hover:border-primary-200 
+                    transition-all duration-300 transform hover:-translate-y-1"
+                  >
+                    <div
+                      className={`h-48 relative overflow-hidden ${
+                        [
+                          "bg-gradient-to-br from-primary-400 to-primary-600",
+                          "bg-gradient-to-br from-accent-400 to-accent-600",
+                          "bg-gradient-to-br from-secondary-400 to-secondary-600",
+                          "bg-gradient-to-br from-success-400 to-success-600",
+                        ][index]
+                      }`}
+                    >
+                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
+                      <img
+                        src={`https://www.visasolutions4u.com/front_assets/images/icons/ielts-coaching.webp`}
+                        alt={course.title}
+                        className="w-full h-full object-cover absolute top-0 left-0 group-hover:scale-110 transition-transform duration-300"
+                      />
+                    </div>
+
+                    <div className="p-6">
+                      <h3
+                        className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 
+                        transition-colors duration-300"
+                      >
+                        {course.title}
+                      </h3>
+                      <div className="flex items-center text-sm text-neutral-800 mb-4">
+                        <Clock size={16} className="mr-2" />
+                        <span>{course.duration}</span>
+                        <span className="mx-2">•</span>
+                        <span>{course.level}</span>
+                      </div>
+                      <Link
+                        to={`/course/${course.id}`}
+                        className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl
+                        hover:bg-primary-100 transition-colors duration-300 font-medium"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Carousel>
+          </div>
+        </section>
+
+        <TestimonialSection />
+
+        <Packages />
+
+        <section className="py-12 md:py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-3xl font-bold text-neutral-800 mb-3">
+                Upcoming Free Webinars
+              </h2>
+              <p className="text-neutral-600">
+                Join our expert instructors for free learning sessions
+              </p>
+            </div>
+
+            {isLoading ? (
+              <Loading />
+            ) : webinars?.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {webinars?.map((item) => {
+                  return (
+                    <div
+                      key={item.id}
+                      className="group bg-white rounded-xl border border-neutral-200 overflow-hidden
+                  shadow-card hover:shadow-card-hover hover:border-primary-200 
+                  transition-all duration-300 transform hover:-translate-y-1"
+                    >
+                      <div className="p-6">
+                        <div className="bg-primary-50 rounded-lg p-3 mb-4 w-fit">
+                          <Clock size={24} className="text-primary-500" />
+                        </div>
+                        <h3
+                          className="font-semibold text-xl mb-3 text-neutral-800 group-hover:text-primary-600 
+                    transition-colors duration-300"
+                        >
+                          {item.meeting_title}
+                        </h3>
+                        <p className="text-neutral-600 mb-4">
+                          <span className="font-medium">Description :</span>{" "}
+                          {item.meeting_description}
+                        </p>
+                        <div className="flex items-center text-sm text-neutral-600 mb-3">
+                          <Calendar size={16} className="mr-2" />
+                          <span>
+                            {moment(item.start_time).format("L")} -{" "}
+                            {moment(item.end_time).format("L")}
+                          </span>
+                        </div>
+                        <div className="flex items-center text-sm text-neutral-600 mb-3">
+                          <Clock size={16} className="mr-2" />
+                          <span>
+                            {moment(item.start_time).format("LTS")} -{" "}
+                            {moment(item.end_time).format("LTS")}
+                          </span>
+                        </div>
+                        <button
+                          className="w-full bg-primary-600 text-white py-3 rounded-xl
+                    hover:bg-primary-700 transition-colors duration-300 font-medium
+                    shadow-soft hover:shadow-hover transform hover:-translate-y-0.5"
+                          onClick={() =>
+                            handleOpen({
+                              name: item?.meeting_title,
+                              link: item?.join_url,
+                            })
+                          }
+                        >
+                          Join
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center text-lg font-semibold text-red-600">
+                No Upcoming Webinars At The Moment. Please Check Back Later.
+              </div>
+            )}
+          </div>
+        </section>
+
+        <section className="py-16 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
+          <div
+            className="absolute inset-0 bg-grid-pattern opacity-10"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
+              backgroundSize: "32px 32px",
+            }}
+          />
+          <div className="container mx-auto px-4 text-center relative z-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="text-lg text-primary-100 mb-8 max-w-2xl mx-auto">
+              Join thousands of students who have achieved their dream scores
+              with StudyStreak.
+            </p>
+            <button
+              onClick={handlestartJourney}
+              className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5"
-          >
-            Get Started Today
-          </button>
+            >
+              Get Started Today
+            </button>
+          </div>
+        </section>
+      </div>
+
+      {open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-elevated">
+            <h2 className="text-2xl font-semibold mb-6">
+              Join for {selectWebinar?.name}
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-6">
+                <label className="block text-neutral-700 font-medium mb-2">
+                  Name
+                </label>
+                <input
+                  required
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+              <div className="mb-6">
+                <label className="block text-neutral-700 font-medium mb-2">
+                  Email
+                </label>
+                <input
+                  required
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+              <div className="mb-6">
+                <label className="block text-neutral-700 font-medium mb-2">
+                  Phone
+                </label>
+                <input
+                  required
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                />
+              </div>
+
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="px-6 py-2 bg-neutral-300 hover:bg-neutral-400 rounded-full font-medium transition-colors duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-full font-medium transition-colors duration-300"
+                >
+                  {isLoading ? "Submitting" : "Submit"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </section>
-    </div>
+      )}
+    </>
   );
 };
 

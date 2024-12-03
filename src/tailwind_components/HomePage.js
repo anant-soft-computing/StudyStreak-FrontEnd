@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import banner from "../img/herobanner/about_10.png";
+import banner from "../img/herobanner/woman.png";
 import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
 import CourseList from "./Course/CourseList";
@@ -146,7 +146,7 @@ const HomePage = () => {
         toast.error("Submission failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error submitting survey:", error);
+      console.error("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -195,14 +195,6 @@ const HomePage = () => {
     <>
       <div className="bg-neutral-50 min-h-screen">
         <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white py-12 md:py-16 overflow-hidden">
-          <div
-            className="absolute inset-0 bg-grid-pattern opacity-10"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-              backgroundSize: "32px 32px",
-            }}
-          />
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="w-full md:w-1/2 space-y-6">
@@ -212,68 +204,64 @@ const HomePage = () => {
                 >
                   Achieve your dream of overseas Education with StudyStreak.
                 </h1>
-                <p className="text-primary-100 text-lg">
+                <p className="text-orange-500 text-lg">
                   Focused courses to develop your potential to score high.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => handleCategory("IELTS")}
-                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-2 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-2 rounded-xl 
+      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     IELTS
                   </button>
                   <button
                     onClick={() => handleCategory("PTE")}
-                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
+      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     PTE
                   </button>
                   <button
                     onClick={() => handleCategory("TOEFL")}
-                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
+      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     TOEFL
                   </button>
                   <button
                     onClick={() => handleCategory("GMAT")}
-                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
+      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     GMAT
                   </button>
                   <button
                     onClick={() => handleCategory("GRE")}
-                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
+      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     GRE
                   </button>
                   <button
                     onClick={() => handleCategory("SAT")}
-                    className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
+      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     SAT
                   </button>
                   <button
                     onClick={() => handleCategory("GENERAL")}
-                    className="bg-accent-500 hover:bg-accent-600 text-white px-5 py-1 rounded-xl 
-                  shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-5 py-1 rounded-xl 
+      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                   >
                     GENERAL
                   </button>
                 </div>
               </div>
-              <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
-                <div className="w-full md:w-1/2 relative">
-                  <img
-                    src={banner}
-                    alt="Study Streak"
-                    className="rounded-2xl shadow-soft"
-                  />
+              <div className="w-full md:w-1/3 relative flex justify-center">
+                <div className="w-full md:w-1/2 relative ">
+                  <img src={banner} alt="Study Streak" />
                 </div>
               </div>
             </div>
@@ -321,16 +309,8 @@ const HomePage = () => {
           </div>
         </section>
 
-        <section className="py-16 bg-gradient-to-br from-primary-300 to-primary-800 relative overflow-hidden">
-          <div
-            className="absolute inset-0 bg-grid-pattern opacity-10"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-          <div className="container mx-auto px-4 text-center relative z-10">
+        <section className="py-16 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
+          <div className="container mx-auto px-4 text-center relative">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Start Your Journey?
             </h2>
@@ -339,7 +319,7 @@ const HomePage = () => {
               with StudyStreak.
             </p>
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/english-test")}
               className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5 mt-3"
@@ -347,7 +327,7 @@ const HomePage = () => {
               Free Test
             </button>
             <button
-              onClick={() => navigate("/english-test")}
+              onClick={() => navigate("/login")}
               className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5 ml-2 mt-3"
@@ -535,15 +515,7 @@ const HomePage = () => {
         </section>
 
         <section className="py-16 bg-gradient-to-br from-primary-600 to-primary-800 relative overflow-hidden">
-          <div
-            className="absolute inset-0 bg-grid-pattern opacity-10"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-              backgroundSize: "32px 32px",
-            }}
-          />
-          <div className="container mx-auto px-4 text-center relative z-10">
+          <div className="container mx-auto px-4 text-center relative">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Start Your Journey?
             </h2>

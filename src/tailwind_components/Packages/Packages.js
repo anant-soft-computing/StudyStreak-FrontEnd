@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 const packagesDetails = [
   {
     package_name: "IELTS/PTE/TOEFL/DUOLINGO - Demo",
@@ -55,7 +56,9 @@ const packagesDetails = [
 ];
 
 const Packages = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState("");
   const [formData, setFormData] = useState({
     name: "",
@@ -79,8 +82,55 @@ const Packages = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    handleClose();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    const data = new FormData();
+    let url = "";
+    let resetFields = {};
+
+    if (selectedPackage === "IELTS/PTE/TOEFL/DUOLINGO - Demo") {
+      url =
+        "https://script.google.com/macros/s/AKfycbxyvun_eByGcO5Q4Nj9Rs8kItU68su9Ih-xJpP0elOVtuV7t1-jYYGeOQQTWAcKWkT9/exec";
+      resetFields = { name: "", email: "", phone: "", exam: "" };
+      data.append("exam", formData.exam);
+    } else if (selectedPackage === "IELTS Master Class - 7-Point Strategy") {
+      url =
+        "https://script.google.com/macros/s/AKfycbyWq8gMKEZt3TzDNAuqHAXTXJ01oYYwPVadBFnNYB9mWilBsxHRlovJC3mUmllJ_x9nfQ/exec";
+      resetFields = { name: "", email: "", phone: "", additional: "" };
+      data.append("additional", formData.additional);
+    } else {
+      url =
+        "https://script.google.com/macros/s/AKfycbyyUWxbUSFL-WSD843PxKajllKCaOFz6eACr7SCXAkvCf3ZiQG0jk01YPLA084QQdGW/exec";
+      resetFields = { name: "", email: "", phone: "", country: "" };
+      data.append("country", formData.country);
+    }
+
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone);
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: data,
+        muteHttpExceptions: true,
+      });
+
+      if (response.ok) {
+        setFormData(resetFields);
+        toast.success("Form submitted successfully.");
+        setOpen(false);
+        navigate("/login");
+      } else {
+        toast.error("Submission failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -151,19 +201,13 @@ const Packages = () => {
             </button>
           </div>
         ))}
-
         {open && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
             <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-elevated">
               <h2 className="text-2xl font-semibold mb-6">
                 Join {selectedPackage}
               </h2>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSubmit();
-                }}
-              >
+              <form onSubmit={handleSubmit}>
                 <div className="mb-6">
                   <label className="block text-neutral-700 font-medium mb-2">
                     Name
@@ -278,7 +322,7 @@ const Packages = () => {
                     type="submit"
                     className="px-6 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-full font-medium transition-colors duration-300"
                   >
-                    Submit
+                    {isLoading ? "Submitting..." : "Submit"}
                   </button>
                 </div>
               </form>

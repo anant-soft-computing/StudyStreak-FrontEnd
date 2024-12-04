@@ -16,6 +16,7 @@ const Progress = () => {
   const [miniTestData, setMiniTestData] = useState([]);
   const [studentLessons, setStudentLessons] = useState([]);
   const [practiceTestData, setPracticeTestData] = useState([]);
+  const [expectedScore, setExpectedScore] = useState({});
 
   const category = localStorage.getItem("category");
 
@@ -176,6 +177,36 @@ const Progress = () => {
       console.error("Error fetching data", error);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/get-student-course/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setExpectedScore(
+            response?.data.find((item) => item.course_category === category)
+          );
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, [category]);
 
   useEffect(() => {
     fetchTestData("/gamification/badges/", setBadges);
@@ -552,6 +583,11 @@ const Progress = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Progress Report</h4>
+                      {category && (
+                        <h5>
+                          Expected Score : {expectedScore?.expected_score}
+                        </h5>
+                      )}
                     </div>
                     {availableBadges?.length > 0 && (
                       <div className="d-flex justify-content-center">

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import emailjs from "emailjs-com";
+
 const packagesDetails = [
   {
     package_name: "IELTS/PTE/TOEFL/DUOLINGO - Demo",
@@ -82,6 +84,24 @@ const Packages = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleSendMail = async (formDetails) => {
+    try {
+      await emailjs.send(
+        process.env.REACT_APP_EMAIL_JS_SERVICE_ID,
+        process.env.REACT_APP_EMAIL_JS_TEMPLATE_ID,
+        {
+          name: formDetails.name,
+          email: formDetails.email,
+          phone: formDetails.phone,
+          message: formDetails.selectedPackage,
+        },
+        process.env.REACT_APP_EMAIL_JS_PUBLIC_KEY
+      );
+    } catch (error) {
+      console.error("Email sending failed:", error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -119,6 +139,13 @@ const Packages = () => {
       });
 
       if (response.ok) {
+        await handleSendMail({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          selectedPackage,
+        });
+
         setFormData(resetFields);
         toast.success("Form submitted successfully.");
         setOpen(false);

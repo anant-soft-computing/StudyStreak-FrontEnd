@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import banner from "../img/herobanner/woman.png";
+import banner from "../img/herobanner/about_10.png";
 import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
 import CourseList from "./Course/CourseList";
@@ -198,69 +198,34 @@ const HomePage = () => {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="w-full md:w-1/2 space-y-6">
-                <h1
-                  className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
-                  style={{ color: "white" }}
-                >
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
                   Achieve your dream of overseas Education with StudyStreak.
                 </h1>
-                <p className="text-orange-500 text-lg">
+                <p className="text-orange-400 text-lg">
                   Focused courses to develop your potential to score high.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <button
-                    onClick={() => handleCategory("IELTS")}
-                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-2 rounded-xl 
-      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    IELTS
-                  </button>
-                  <button
-                    onClick={() => handleCategory("PTE")}
-                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
-      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    PTE
-                  </button>
-                  <button
-                    onClick={() => handleCategory("TOEFL")}
-                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
-      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    TOEFL
-                  </button>
-                  <button
-                    onClick={() => handleCategory("GMAT")}
-                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
-      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    GMAT
-                  </button>
-                  <button
-                    onClick={() => handleCategory("GRE")}
-                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
-      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    GRE
-                  </button>
-                  <button
-                    onClick={() => handleCategory("SAT")}
-                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-6 py-1 rounded-xl 
-      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    SAT
-                  </button>
-                  <button
-                    onClick={() => handleCategory("GENERAL")}
-                    className="bg-orange-500 hover:bg-orange-600 font-bold text-white px-5 py-1 rounded-xl 
-      shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                  >
-                    GENERAL
-                  </button>
+                  {[
+                    "IELTS",
+                    "PTE",
+                    "TOEFL",
+                    "GMAT",
+                    "GRE",
+                    "SAT",
+                    "GENERAL",
+                  ].map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => handleCategory(category)}
+                      className="bg-orange-400 hover:bg-orange-600 font-bold text-white px-6 py-2 rounded-xl shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
+                    >
+                      {category}
+                    </button>
+                  ))}
                 </div>
               </div>
-              <div className="w-full md:w-1/3 relative flex justify-center">
-                <div className="w-full md:w-1/2 relative ">
+              <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
+                <div className="w-full md:w-1/2 relative">
                   <img src={banner} alt="Study Streak" />
                 </div>
               </div>

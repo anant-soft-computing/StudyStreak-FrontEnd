@@ -31,7 +31,7 @@ const IELTSPage = () => {
   const navigate = useNavigate();
 
   const handleTakeTest = () => {
-    navigate("/english-test");
+    navigate("/login");
   };
   const handleCourse = () => {
     navigate("/courses");

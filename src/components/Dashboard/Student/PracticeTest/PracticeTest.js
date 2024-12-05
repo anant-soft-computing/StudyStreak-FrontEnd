@@ -20,6 +20,7 @@ const PracticeTest = () => {
   const [givenTest, setGivenTest] = useState([]);
   const [studentCourses, setStudentCourses] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
+  const [ieltsCategory, setIeltsCategory] = useState("Academic");
   const category = localStorage.getItem("category");
 
   const tabs =
@@ -126,23 +127,39 @@ const PracticeTest = () => {
         );
         if (response.status === 200) {
           const { data } = response;
+          const isGeneral = ieltsCategory === "General";
           const filteredData = {
             Reading: data.filter(
               ({ exam_type, IELTS }) =>
-                exam_type === "Reading" && !IELTS?.Name?.includes("Diagnostic")
+                exam_type === "Reading" &&
+                !IELTS?.Name?.includes("Diagnostic") &&
+                (isGeneral
+                  ? IELTS?.Name?.includes("General")
+                  : !IELTS?.Name?.includes("General"))
             ),
             Writing: data.filter(
               ({ exam_type, IELTS }) =>
-                exam_type === "Writing" && !IELTS?.Name?.includes("Diagnostic")
+                exam_type === "Writing" &&
+                !IELTS?.Name?.includes("Diagnostic") &&
+                (isGeneral
+                  ? IELTS?.Name?.includes("General")
+                  : !IELTS?.Name?.includes("General"))
             ),
             Listening: data.filter(
               ({ exam_type, IELTS }) =>
                 exam_type === "Listening" &&
-                !IELTS?.Name?.includes("Diagnostic")
+                !IELTS?.Name?.includes("Diagnostic") &&
+                (isGeneral
+                  ? IELTS?.Name?.includes("General")
+                  : !IELTS?.Name?.includes("General"))
             ),
             Speaking: data.filter(
               ({ exam_type, IELTS }) =>
-                exam_type === "Speaking" && !IELTS?.Name?.includes("Diagnostic")
+                exam_type === "Speaking" &&
+                !IELTS?.Name?.includes("Diagnostic") &&
+                (isGeneral
+                  ? IELTS?.Name?.includes("General")
+                  : !IELTS?.Name?.includes("General"))
             ),
             General: data.filter(
               ({ exam_type, IELTS }) =>
@@ -160,7 +177,7 @@ const PracticeTest = () => {
       }
     };
     fetchData();
-  }, [activeTab, category, studentCourses]);
+  }, [activeTab, category, ieltsCategory, studentCourses]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -182,7 +199,18 @@ const PracticeTest = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <h4>Practice Test</h4>
+                      <div className="d-flex gap-3">
+                        <h4>Practice Test</h4>
+                        {category === "IELTS" && (
+                          <select
+                            value={ieltsCategory}
+                            onChange={(e) => setIeltsCategory(e.target.value)}
+                          >
+                            <option value="Academic">Academic</option>
+                            <option value="General">General</option>
+                          </select>
+                        )}
+                      </div>
                       {category && <h5>Course : {category}</h5>}
                     </div>
                     {packageCount === 0 ? (

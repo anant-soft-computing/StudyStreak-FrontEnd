@@ -32,6 +32,7 @@ const SignUp = () => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+      ...(name === "email" && { username: value }),
     }));
   };
 
@@ -108,7 +109,7 @@ const SignUp = () => {
     const submitData = {
       first_name: formData.firstName,
       last_name: formData.lastName,
-      username: formData.username,
+      username: formData.email,
       email: formData.email,
       password: formData.password,
       password2: formData.confirmPassword,
@@ -225,34 +226,6 @@ const SignUp = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label className="text-sm font-medium text-neutral-700">
-            Username
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-2.5 rounded-xl border
-                ${
-                  formStatus.errMsg?.username
-                    ? "border-red-500"
-                    : "border-neutral-300"
-                }
-                focus:ring-2 focus:ring-primary-300 focus:border-primary-300
-                pl-10 transition-all duration-300 bg-white`}
-              placeholder="Username"
-            />
-            <User
-              className="absolute left-3 top-2.5 text-neutral-400"
-              size={20}
-            />
-          </div>
-          {renderError("username")}
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-neutral-700">
             Email Address
           </label>
           <div className="relative">
@@ -277,6 +250,33 @@ const SignUp = () => {
             />
           </div>
           {renderError("email")}
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-neutral-700">
+            Username
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              name="username"
+              value={formData.email}
+              className={`w-full px-4 py-2.5 rounded-xl border
+                ${
+                  formStatus.errMsg?.username
+                    ? "border-red-500"
+                    : "border-neutral-300"
+                }
+                focus:ring-2 focus:ring-primary-300 focus:border-primary-300
+                pl-10 transition-all duration-300 bg-white`}
+              placeholder="Username"
+            />
+            <User
+              className="absolute left-3 top-2.5 text-neutral-400"
+              size={20}
+            />
+          </div>
+          {renderError("username")}
         </div>
       </div>
 

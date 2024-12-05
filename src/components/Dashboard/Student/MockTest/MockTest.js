@@ -16,6 +16,7 @@ const MockTest = () => {
   const [givenSpeakingTest, setGivenSpeakingTest] = useState([]);
   const [allMockTestData, setAllMockTestData] = useState([]);
   const [allSpeakingData, setAllSpeakingData] = useState([]);
+  const [ieltsCategory, setIeltsCategory] = useState("Academic");
   const category = localStorage.getItem("category");
 
   const tabs =
@@ -148,6 +149,7 @@ const MockTest = () => {
             8000
           );
           if (examBlocksResponse.status === 200) {
+            const isGeneral = ieltsCategory === "General";
             if (category === "GENERAL") {
               const mockTestData = examBlocksResponse.data.filter(
                 ({ exam_name, block_type, exam_category }) =>
@@ -159,8 +161,12 @@ const MockTest = () => {
               setAllMockTestData(mockTestData);
             } else {
               const mockTestData = examBlocksResponse.data.filter(
-                ({ block_type, exam_category }) =>
-                  block_type === "Assignments" && exam_category === category
+                ({ block_type, exam_category, exam_name }) =>
+                  block_type === "Assignments" &&
+                  exam_category === category &&
+                  (isGeneral
+                    ? exam_name.includes("General")
+                    : !exam_name.includes("General"))
               );
               setAllMockTestData(mockTestData);
             }
@@ -173,7 +179,7 @@ const MockTest = () => {
       }
     };
     fetchData();
-  }, [activeTab, category, studentCourses]);
+  }, [activeTab, category, ieltsCategory, studentCourses]);
 
   const testByExamType = (examType) =>
     allMockTestData.filter(({ exam_type }) => exam_type === examType);
@@ -199,7 +205,18 @@ const MockTest = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <h4>Mini Test</h4>
+                      <div className="d-flex gap-3">
+                        <h4>Mini Test</h4>
+                        {category === "IELTS" && (
+                          <select
+                            value={ieltsCategory}
+                            onChange={(e) => setIeltsCategory(e.target.value)}
+                          >
+                            <option value="Academic">Academic</option>
+                            <option value="General">General</option>
+                          </select>
+                        )}
+                      </div>
                       {category && <h5>Course : {category}</h5>}
                     </div>
                     {count === 0 ? (

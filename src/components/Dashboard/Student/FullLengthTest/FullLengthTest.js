@@ -13,6 +13,8 @@ const FullLengthTest = () => {
   const [givenTest, setGivenTest] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
+  const [ieltsCategory, setIeltsCategory] = useState("Academic");
+  const category = localStorage.getItem("category");
 
   const sortedFLT = fullLengthTestData.sort((a, b) => {
     const getNumber = (name) => {
@@ -71,8 +73,11 @@ const FullLengthTest = () => {
           8000
         );
         if (response.status === 200) {
+          const isGeneral = ieltsCategory === "General";
           const fullLengthTest = response.data.filter(
-            ({ name }) => !name.includes("Diagnostic")
+            ({ name }) =>
+              !name.includes("Diagnostic") &&
+              (isGeneral ? name.includes("General") : !name.includes("General"))
           );
           setFullLengthTestData(fullLengthTest);
         }
@@ -82,7 +87,7 @@ const FullLengthTest = () => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [ieltsCategory]);
 
   const handleFullLengthTest = (examId) => {
     if (count === 0) {
@@ -187,6 +192,24 @@ const FullLengthTest = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Full Length Test</h4>
+                      {category === "IELTS" && (
+                        <div className="col-xl-2">
+                          <div className="dashboard__select__heading">
+                            <span>IELTS Category</span>
+                          </div>
+                          <div className="dashboard__selector">
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={ieltsCategory}
+                              onChange={(e) => setIeltsCategory(e.target.value)}
+                            >
+                              <option value="Academic">Academic</option>
+                              <option value="General">General</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     {packageCount === 0 ? (
                       <BuyCourse message="No Full Length Test Available, Please Buy a Course !!" />

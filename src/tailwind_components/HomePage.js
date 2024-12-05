@@ -106,7 +106,12 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [open, setOpen] = useState(false);
-  const [selectWebinar, setSelectWebinar] = useState({ name: "", link: "" });
+  const [selectWebinar, setSelectWebinar] = useState({
+    name: "",
+    link: "",
+    start_time: "",
+    end_time: "",
+  });
   const [formData, setFormData] = useState({ name: "", email: "", phone: "" });
 
   const handleOpen = (webinarName) => {
@@ -127,10 +132,17 @@ const HomePage = () => {
     data.append("email", formData.email);
     data.append("phone", formData.phone);
     data.append("webinarName", selectWebinar.name);
+    data.append(
+      "startDate",
+      moment(selectWebinar.start_time).format("YYYY-MM-DD")
+    );
+    data.append("startTime", moment(selectWebinar.start_time).format("HH:mm"));
+    data.append("endDate", moment(selectWebinar.end_time).format("YYYY-MM-DD"));
+    data.append("endTime", moment(selectWebinar.end_time).format("HH:mm"));
 
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbyjr-_IRyNF7bbf5LckTBiFOhp7eEnj_Th4UrociWgS4wyGDSaQpAecY-DJF9UE88Rh/exec",
+        "https://script.google.com/macros/s/AKfycbzHwV-ilWm2xjasK9NGPKanyt_fHBW5eY3UPJoMUP244MKXHyOkkgHoJJT5cLYbP7-4/exec",
         {
           method: "POST",
           body: data,
@@ -180,6 +192,10 @@ const HomePage = () => {
           const now = moment();
           const data = response.data
             .filter((item) => moment(item.end_time).isAfter(now))
+            .map((item) => ({
+              ...item,
+              meeting_title: item.meeting_title.replace(/Introduction\s?/i, ""),
+            }))
             .sort((a, b) => moment(a.start_time).diff(moment(b.start_time)));
           setWebinars(data);
         }
@@ -461,6 +477,8 @@ const HomePage = () => {
                             handleOpen({
                               name: item?.meeting_title,
                               link: item?.join_url,
+                              start_time: item?.start_time,
+                              end_time: item?.end_time,
                             })
                           }
                         >

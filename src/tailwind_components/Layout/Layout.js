@@ -157,6 +157,8 @@ const Layout = () => {
                     to={
                       role === "admin"
                         ? "/admin-dashboard"
+                        : role === "Tutor"
+                        ? "/tutor-dashboard"
                         : "/studentDashboard"
                     }
                     className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"

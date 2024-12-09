@@ -2,6 +2,21 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
+import {
+  Box,
+  List,
+  styled,
+  ListItem,
+  CssBaseline,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+} from "@mui/material";
+import MuiDrawer from "@mui/material/Drawer";
+import MuiAppBar from "@mui/material/AppBar";
+import NavBar from "../../../NavBar/NavBar";
+import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
+
 import dashBoard from "../../../../img/icon/dashboard.svg";
 import profile from "../../../../img/icon/profile.svg";
 import myCourse from "../../../../img/icon/myCourse.svg";
@@ -17,18 +32,6 @@ import resources from "../../../../img/icon/support.svg";
 import report from "../../../../img/icon/coupon.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import NavBar from "../../../NavBar/NavBar";
-import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
 
 const drawerWidth = 280;
 

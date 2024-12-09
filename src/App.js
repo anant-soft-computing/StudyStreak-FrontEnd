@@ -39,11 +39,12 @@ import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 import StudentNavBarRoute from "./layout/StudentNavBarRoute";
 import AdminNavBarRoute from "./layout/AdminNavBarRoute";
+import TutorNavBarRoute from "./layout/TutorNavBarRoute";
 
 //-----------------------> Student <----------------------------------------------
 
 import Dashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
-import SProfile from "./components/Dashboard/Student/Profile";
+import SProfile from "./components/Dashboard/Student/Profile/Profile";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
 import CourseContent from "./components/Dashboard/Student/MyCourse/Content/CourseContent";
@@ -62,7 +63,7 @@ import Report from "./components/Dashboard/Student/Report/Report";
 
 //-----------------> Admin <-----------------------------------------------------
 
-import ADashboard from "./components/Dashboard/Admin/Dashboard";
+import ADashboard from "./components/Dashboard/Admin/Dashboard/Dashboard";
 import Users from "./components/Dashboard/Admin/Users/Users";
 import Student from "./components/Dashboard/Admin/Student/Student";
 import LiveClassReport from "./components/Dashboard/Admin/LiveClassReport/LiveClassReport";
@@ -76,11 +77,16 @@ import FlashCard from "./components/Dashboard/Admin/FlashCard/FlashCard";
 import PaperTest from "./components/Dashboard/Admin/PaperTest/PaperTest";
 import Gamification from "./components/Dashboard/Admin/Gamification/Gamification";
 import Notice from "./components/Dashboard/Admin/Notice/Notice";
-import AProfile from "./components/Dashboard/Admin/Profile";
+import AProfile from "./components/Dashboard/Admin/Profile/Profile";
 import Resources from "./components/Dashboard/Admin/Resources/Resources";
 import Testimonial from "./components/Dashboard/Admin/Testimonial/Testimonial";
 import Coupon from "./components/Dashboard/Admin/Coupon/Coupon";
 import ALesson from "./components/Dashboard/Admin/Lesson/Lesson";
+
+//------------------------> Tutor <------------------------------------------
+
+import TDashboard from "./components/Dashboard/Tutor/Dashboard/Dashborad";
+import TLiveClass from "./components/Dashboard/Tutor/LiveClass/LiveClass";
 
 //------------------------> Exam <------------------------------------------
 
@@ -197,6 +203,12 @@ const App = () => {
             />
             <Route path="/exam-create" Component={withBootstrap(DragDrop)} />
           </Route>
+
+          <Route element={<TutorNavBarRoute isProtected={true} />}>
+            <Route path="/tutor-dashboard" Component={withBootstrap(TDashboard)} />
+            <Route path="/tutor-liveClass" Component={withBootstrap(TLiveClass)} />
+          </Route>
+          
           <Route element={<StudentNavBarRoute isProtected={true} />}>
             <Route
               path="/freeDiagnosticTest"

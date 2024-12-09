@@ -32,22 +32,22 @@ const Student = () => {
   const [packages, setPackages] = useState([]);
 
   const handleBatch = (batch) => {
-    setOpenBatch(batch);
+    setOpenBatch(true);
     setBatchList(batch);
   };
 
   const handleLiveClass = (liveClass) => {
-    setOpenLiveClass(liveClass);
+    setOpenLiveClass(true);
     setLiveClassList(liveClass);
   };
 
   const handleJoinClass = (joinClass) => {
-    setOpenJoinClass(joinClass);
+    setOpenJoinClass(true);
     setJoinClassList(joinClass);
   };
 
   const handlePackages = (packages) => {
-    setOpenPackages(packages);
+    setOpenPackages(true);
     setPackages(packages);
   };
 

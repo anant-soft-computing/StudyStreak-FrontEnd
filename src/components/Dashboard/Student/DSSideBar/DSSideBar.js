@@ -310,82 +310,79 @@ const DSSidebar = () => {
   }, []);
 
   return (
-    <>
-      <div
-        className="col-xl-3 col-lg-3 col-md-12"
-        style={{ display: showMobileNavBtn ? "block" : "none" }}
-      >
-        <div className="dashboard__inner sticky-top">
-          <div className="dashboard__nav__title">
-            <h6>Welcome, {userData?.username}</h6>
-            {showMobileNavBtn && (
-              <button
-                className="mobile-aside-button"
-                onClick={() => setOpenMobileMenu(!openMobileMenu)}
-              >
-                <i className="icofont-navigation-menu"></i>
-              </button>
-            )}
-          </div>
-          <div className={`dashboard__nav ${openMobileMenu && "active"}`}>
-            <ul>
-              {menuList.map((item, index) => (
-                <li key={index}>
-                  <Link
-                    className={
-                      location === item.link
-                        ? "active admin__menu"
-                        : "admin__menu"
-                    }
-                    to={item.link}
-                    onClick={item.name === "Logout" ? logout : () => {}}
-                    state={item?.state}
-                  >
-                    <div className="admin__menu__icon">{item.icon}</div>
-                    <div className="side-navbar-rexr-color-common admin__menu__title">
-                      {item.name}
-                    </div>
-                    {item.name === "Practice Test" ? (
-                      count?.practice_test_count === -1 ? (
-                        <span className="dashboard__label bg-success">All</span>
-                      ) : givenPTCount ===
-                        count?.practice_test_count + givenPTCount ? (
-                        <span className="dashboard__label bg-danger">N/A</span>
-                      ) : (
-                        <span className="dashboard__label">
-                          {count?.practice_test_count}
-                        </span>
-                      )
-                    ) : item.name === "Full Length Test" ? (
-                      count?.full_length_test_count === -1 ? (
-                        <span className="dashboard__label bg-success">All</span>
-                      ) : givenFLTCount ===
-                        count?.full_length_test_count + givenFLTCount ? (
-                        <span className="dashboard__label bg-danger">N/A</span>
-                      ) : (
-                        <span className="dashboard__label">
-                          {count?.full_length_test_count}
-                        </span>
-                      )
+    <div
+      className="col-xl-3 col-lg-3 col-md-12"
+      style={{ display: showMobileNavBtn ? "block" : "none" }}
+    >
+      <div className="dashboard__inner sticky-top">
+        <div className="dashboard__nav__title">
+          <h6>Welcome, {userData?.username}</h6>
+          {showMobileNavBtn && (
+            <button
+              className="mobile-aside-button"
+              onClick={() => setOpenMobileMenu(!openMobileMenu)}
+            >
+              <i className="icofont-navigation-menu"></i>
+            </button>
+          )}
+        </div>
+        <div className={`dashboard__nav ${openMobileMenu && "active"}`}>
+          <ul>
+            {menuList.map((item, index) => (
+              <li key={index}>
+                <Link
+                  className={
+                    location === item.link
+                      ? "active admin__menu"
+                      : "admin__menu"
+                  }
+                  to={item.link}
+                  onClick={item.name === "Logout" ? logout : () => {}}
+                  state={item?.state}
+                >
+                  <div className="admin__menu__icon">{item.icon}</div>
+                  <div className="side-navbar-rexr-color-common admin__menu__title">
+                    {item.name}
+                  </div>
+                  {item.name === "Practice Test" ? (
+                    count?.practice_test_count === -1 ? (
+                      <span className="dashboard__label bg-success">All</span>
+                    ) : givenPTCount ===
+                      count?.practice_test_count + givenPTCount ? (
+                      <span className="dashboard__label bg-danger">N/A</span>
                     ) : (
                       <span className="dashboard__label">
-                        {
-                          count[
-                            item.name.replace(/ /g, "_").toLowerCase() +
-                              "_count"
-                          ]
-                        }
+                        {count?.practice_test_count}
                       </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <NoticeBoard />
-          </div>
+                    )
+                  ) : item.name === "Full Length Test" ? (
+                    count?.full_length_test_count === -1 ? (
+                      <span className="dashboard__label bg-success">All</span>
+                    ) : givenFLTCount ===
+                      count?.full_length_test_count + givenFLTCount ? (
+                      <span className="dashboard__label bg-danger">N/A</span>
+                    ) : (
+                      <span className="dashboard__label">
+                        {count?.full_length_test_count}
+                      </span>
+                    )
+                  ) : (
+                    <span className="dashboard__label">
+                      {
+                        count[
+                          item.name.replace(/ /g, "_").toLowerCase() + "_count"
+                        ]
+                      }
+                    </span>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <NoticeBoard />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

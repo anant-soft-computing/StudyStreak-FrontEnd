@@ -1,13 +1,11 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import "../css/style.css";
-import "react-icofont";
 import { Box } from "@mui/material";
 import NavBar from "../components/NavBar/NavBar";
 import MobileTopBar from "../components/TopBar/MobileTopBar";
-import DSLeftDrawer from "../components/Dashboard/Student/DSSideBar/DSLeftDrawer";
+import DTLeftDrawer from "../components/Dashboard/Tutor/DTSideBar/DTLeftDrawer";
 
-const StudentNavBarRoute = ({ isProtected }) => {
+const TutorNavBarRoute = ({ isProtected }) => {
   return isProtected ? (
     <Box
       sx={(theme) => ({
@@ -23,7 +21,7 @@ const StudentNavBarRoute = ({ isProtected }) => {
           },
         })}
       >
-        <DSLeftDrawer />
+        <DTLeftDrawer />
       </Box>
       <Box
         className="fixing-navbar-at-top-side"
@@ -52,4 +50,4 @@ const StudentNavBarRoute = ({ isProtected }) => {
   );
 };
 
-export default StudentNavBarRoute;
+export default TutorNavBarRoute;

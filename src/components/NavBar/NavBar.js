@@ -124,6 +124,8 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
                         to={
                           role === "admin"
                             ? "/admin-dashboard"
+                            : role === "Tutor"
+                            ? "/tutor-dashboard"
                             : "/studentDashboard"
                         }
                       >

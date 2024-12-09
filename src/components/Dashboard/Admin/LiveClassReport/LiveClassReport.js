@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
 import { useSelector } from "react-redux";
+import moment from "moment";
 import * as XLSX from "xlsx";
 import DASideBar from "../DASideBar/DASideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
@@ -21,7 +21,7 @@ const LiveClassReport = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [studentData, setStudentData] = useState([]);
   const [filters, setFilters] = useState({
-    liveClass: "",
+    liveClass: "Regular Class",
     start: "",
     end: "",
   });
@@ -47,17 +47,19 @@ const LiveClassReport = () => {
         );
 
         if (response?.status === 200) {
-          const data = response?.data?.flatMap((item, index) =>
+          const data = response?.data?.flatMap((item) =>
             item.students.map((student) => ({
-              no: index + 1,
-              "First Name": student.first_name,
-              "Last Name": student.last_name,
-              Email: student.email,
-              "Live Class": item.meeting_title,
-              "Live Class Start Date & Time": moment(item.start_time).format(
-                "lll"
-              ),
-              "Live Class End Date & Time": moment(item.end_time).format("lll"),
+              "First Name": student.first_name || "-",
+              "Last Name": student.last_name || "-",
+              Email: student.email || "-",
+              "Phone No": student.phone_no || "-",
+              "Tutor Name":
+                item.tutor.first_name + " " + item.tutor.last_name || "-",
+              "Live Class": item.meeting_title || "-",
+              "Live Class Start Date & Time":
+                moment(item.start_time).format("lll") || "-",
+              "Live Class End Date & Time":
+                moment(item.end_time).format("lll") || "-",
               Course:
                 item.select_course
                   .map((course) => course.Course_Title)
@@ -117,10 +119,11 @@ const LiveClassReport = () => {
   };
 
   const columns = [
-    { headerName: "No.", field: "no", resizable: false, width: 75 },
     { headerName: "First Name", field: "First Name", filter: true },
     { headerName: "Last Name", field: "Last Name", filter: true },
     { headerName: "Email", field: "Email", filter: true },
+    { headerName: "Phone No.", field: "Phone No", filter: true },
+    { headerName: "Tutor Name", field: "Tutor Name", filter: true },
     { headerName: "Live Class", field: "Live Class", filter: true },
     {
       headerName: "Live Class Start Date & Time",
@@ -168,7 +171,6 @@ const LiveClassReport = () => {
                               value={filters.liveClass}
                               onChange={handleFilterChange}
                             >
-                              <option value="">All</option>
                               {liveClass.map((item) => (
                                 <option key={item.value} value={item.value}>
                                   {item.name}

@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../../UI/Loading";
-import CheckIcon from "../../UI/CheckIcon";
-import CancelIcon from "../../UI/CancelIcon";
-import DSSidebar from "./DSSideBar/DSSideBar";
-import ajaxCall from "../../../helpers/ajaxCall";
-import SmallModal from "../../UI/Modal";
+import Loading from "../../../UI/Loading";
+import CheckIcon from "../../../UI/CheckIcon";
+import CancelIcon from "../../../UI/CancelIcon";
+import DSSidebar from "../DSSideBar/DSSideBar";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import SmallModal from "../../../UI/Modal";
 
 const Profile = () => {
   const navigate = useNavigate();

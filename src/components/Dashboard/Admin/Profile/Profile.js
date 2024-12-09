@@ -1,5 +1,5 @@
 import React from "react";
-import DASideBar from "./DASideBar/DASideBar";
+import DASideBar from "../DASideBar/DASideBar";
 
 const Profile = () => {
   return (

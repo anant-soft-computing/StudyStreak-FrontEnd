@@ -13,8 +13,8 @@ const initialLiveClassData = {
   select_batchId: [],
   select_course: [],
   select_courseId: [],
-  topic: "",
-  agenda: "",
+  meeting_title: "",
+  meeting_description: "",
   start_time: "",
   end_time: "",
   registration_limit: null,
@@ -34,11 +34,11 @@ const validateForm = (createLiveClassData, setFormError) => {
     setFormError("Live Class Type is Required");
     return false;
   }
-  if (!createLiveClassData.topic) {
+  if (!createLiveClassData.meeting_title) {
     setFormError("Meeting Title is Required");
     return false;
   }
-  if (!createLiveClassData.agenda) {
+  if (!createLiveClassData.meeting_description) {
     setFormError("Meeting Description Required");
     return false;
   }
@@ -133,8 +133,8 @@ const CreateLiveClass = ({ setActiveTab }) => {
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
 
     const data = {
-      topic: createLiveClassData.topic,
-      agenda: createLiveClassData.agenda,
+      meeting_title: createLiveClassData.meeting_title,
+      meeting_description: createLiveClassData.meeting_description,
       select_batch: createLiveClassData.select_batchId,
       select_course: createLiveClassData.select_courseId,
       liveclasstype: createLiveClassData.liveclasstype,
@@ -282,10 +282,10 @@ const CreateLiveClass = ({ setActiveTab }) => {
                   <input
                     type="text"
                     placeholder="Meeting Title"
-                    value={createLiveClassData.topic}
+                    value={createLiveClassData.meeting_title}
                     onChange={(e) => {
                       dispatchCreateLiveClass({
-                        type: "topic",
+                        type: "meeting_title",
                         value: e.target.value,
                       });
                     }}
@@ -300,10 +300,10 @@ const CreateLiveClass = ({ setActiveTab }) => {
                   <input
                     type="text"
                     placeholder="Meeting Description"
-                    value={createLiveClassData.agenda}
+                    value={createLiveClassData.meeting_description}
                     onChange={(e) => {
                       dispatchCreateLiveClass({
-                        type: "agenda",
+                        type: "meeting_description",
                         value: e.target.value,
                       });
                     }}

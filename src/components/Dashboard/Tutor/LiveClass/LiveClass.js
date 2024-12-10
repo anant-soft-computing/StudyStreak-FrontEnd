@@ -12,6 +12,7 @@ const LiveClass = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
+  
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">

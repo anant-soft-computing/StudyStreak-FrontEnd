@@ -10,17 +10,6 @@ import {
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
 
-const categories = [
-  "All",
-  "IELTS",
-  "TOEFL",
-  "PTE",
-  "DUOLINGO",
-  "GRE",
-  "GMAT",
-  "GENERAL",
-];
-
 const BlogsPage = () => {
   const navigate = useNavigate();
 
@@ -29,6 +18,8 @@ const BlogsPage = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredBlogs, setFilteredBlogs] = useState([]);
+
+  const [category, setCategory] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -41,6 +32,33 @@ const BlogsPage = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const totalPages = Math.ceil(filteredBlogs.length / blogsPerPage);
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/categoryview/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setCategory([{ id: 0, name: "All" }, ...response.data]);
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -124,18 +142,18 @@ const BlogsPage = () => {
       <div className="sticky top-0 z-40 bg-white border-b border-neutral-200 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex items-center py-4 overflow-x-auto hide-scrollbar">
-            {categories?.map((item) => (
+            {category?.map(({ name }, index) => (
               <button
-                key={item}
-                onClick={() => setSelectedCategory(item)}
+                key={index}
+                onClick={() => setSelectedCategory(name)}
                 className={`px-4 py-2 rounded-full whitespace-nowrap mr-2 transition-all 
                   duration-300 ${
-                    selectedCategory === item
+                    selectedCategory === name
                       ? "bg-primary-600 text-white"
                       : "bg-neutral-100 text-neutral-600 hover:bg-primary-50"
                   }`}
               >
-                {item}
+                {name}
               </button>
             ))}
           </div>
@@ -217,8 +235,8 @@ const BlogsPage = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-lg font-semibold text-red-600">
-            No Blogs Available
+          <div className="bg-white rounded-2xl p-6 text-center border border-neutral-200 shadow-card text-neutral-800">
+            No Blogs Available !!
           </div>
         )}
 

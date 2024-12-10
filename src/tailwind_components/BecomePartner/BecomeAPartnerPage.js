@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import {
   Users,
   Laptop,
@@ -14,10 +15,16 @@ import {
 const purposes = [
   "Be a Counselor",
   "Be an IELTS, PTE, or TOEFL Faculty",
-  " Be a Study Abroad Consultant",
+  "Be a Study Abroad Consultant",
   "Be a StudyStreak Partner",
 ];
 
+const stats = [
+  { number: "500+", label: "Partner Institutions" },
+  { number: "50k+", label: "Students Enrolled" },
+  { number: "95%", label: "Partner Satisfaction" },
+  { number: "₹2Cr+", label: "Partner Earnings" },
+];
 const partnerTypes = [
   {
     title: "Be a Counselor",
@@ -116,39 +123,64 @@ const benefits = [
 ];
 
 const BecomeAPartnerPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    instituteName: "",
-    instituteType: "",
-    contactPerson: "",
+    name: "",
     email: "",
     phone: "",
-    city: "",
-    state: "",
-    country: "",
-    websiteUrl: "",
-    yearEstablished: "",
-    currentStudents: "",
+    purpose: "Be a Counselor",
     message: "",
-    acceptTerms: false,
   });
 
-  const submitted = false;
-
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone);
+    data.append("purpose", formData.purpose);
+    data.append("message", formData.message);
+
+    try {
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbzE3sXvwXTNFUp6lAL1ymgVihVSMgk-rtg3sbPNchti7sZ9zgbsIQa_AoDKV5YfBUjE_g/exec",
+        {
+          method: "POST",
+          body: data,
+          muteHttpExceptions: true,
+        }
+      );
+      if (response.ok) {
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          purpose: "Be a Counselor",
+          message: "",
+        });
+        toast.success("Form submitted successfully.");
+      } else {
+        toast.error("Submission failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("error", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-neutral-50">
-      {/* Hero Section */}
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -178,28 +210,21 @@ const BecomeAPartnerPage = () => {
         </div>
       </header>
 
-      {/* Stats Section */}
       <div className="bg-white border-b border-neutral-200">
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {[
-              { number: "500+", label: "Partner Institutions" },
-              { number: "50k+", label: "Students Enrolled" },
-              { number: "95%", label: "Partner Satisfaction" },
-              { number: "₹2Cr+", label: "Partner Earnings" },
-            ].map((stat, index) => (
+            {stats.map(({ number, label }, index) => (
               <div key={index} className="text-center">
                 <div className="text-3xl font-bold text-primary-600 mb-2">
-                  {stat.number}
+                  {number}
                 </div>
-                <div className="text-neutral-600">{stat.label}</div>
+                <div className="text-neutral-600">{label}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Benefits Section */}
       <section id="benefits" className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -213,7 +238,7 @@ const BecomeAPartnerPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => (
+            {benefits.map(({ icon, title, description }, index) => (
               <div
                 key={index}
                 className="bg-white p-6 rounded-xl border border-neutral-200 shadow-card
@@ -223,19 +248,18 @@ const BecomeAPartnerPage = () => {
                   className="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center
                   text-primary-600 mb-4"
                 >
-                  {benefit.icon}
+                  {icon}
                 </div>
                 <h3 className="text-xl font-bold text-neutral-800 mb-2">
-                  {benefit.title}
+                  {title}
                 </h3>
-                <p className="text-neutral-600">{benefit.description}</p>
+                <p className="text-neutral-600">{description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Partnership Types */}
       <section className="bg-neutral-100 py-4">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -249,40 +273,41 @@ const BecomeAPartnerPage = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {partnerTypes.map((type, index) => (
-              <div
-                key={index}
-                className="bg-white p-8 rounded-xl border border-neutral-200 shadow-card
-                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
-              >
+            {partnerTypes.map(
+              ({ icon, title, description, features }, index) => (
                 <div
-                  className="bg-primary-100 w-16 h-16 rounded-xl flex items-center justify-center
-                  text-primary-600 mb-4"
+                  key={index}
+                  className="bg-white p-8 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
                 >
-                  {type.icon}
+                  <div
+                    className="bg-primary-100 w-16 h-16 rounded-xl flex items-center justify-center
+                  text-primary-600 mb-4"
+                  >
+                    {icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-neutral-800 mb-2">
+                    {title}
+                  </h3>
+                  <p className="text-neutral-600 mb-6">{description}</p>
+                  <ul className="space-y-3">
+                    {features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <CheckCircle
+                          size={18}
+                          className="text-primary-600 mt-1 flex-shrink-0"
+                        />
+                        <span className="text-neutral-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-xl font-bold text-neutral-800 mb-2">
-                  {type.title}
-                </h3>
-                <p className="text-neutral-600 mb-6">{type.description}</p>
-                <ul className="space-y-3">
-                  {type.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <CheckCircle
-                        size={18}
-                        className="text-primary-600 mt-1 flex-shrink-0"
-                      />
-                      <span className="text-neutral-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              )
+            )}
           </div>
         </div>
       </section>
 
-      {/* Contact Form */}
       <div className="container mx-auto px-4 py-4">
         <div className="container mx-auto px-4">
           <div className="bg-white rounded-2xl shadow-card p-8">
@@ -347,7 +372,7 @@ const BecomeAPartnerPage = () => {
                         focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
                   >
                     {purposes.map((purpose) => (
-                      <option key={purpose} value={purpose.toLowerCase()}>
+                      <option key={purpose} value={purpose}>
                         {purpose}
                       </option>
                     ))}
@@ -376,17 +401,8 @@ const BecomeAPartnerPage = () => {
                     hover:bg-primary-700 transition-all duration-300 font-medium
                     flex items-center justify-center gap-2"
               >
-                {submitted ? (
-                  <>
-                    Message Sent
-                    <CheckCircle size={18} />
-                  </>
-                ) : (
-                  <>
-                    Send Message
-                    <Send size={18} />
-                  </>
-                )}
+                {isLoading ? "Sending..." : "Send Message"}
+                <Send size={18} />
               </button>
             </form>
           </div>

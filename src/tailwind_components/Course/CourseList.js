@@ -145,8 +145,21 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-lg font-semibold text-red-600">
-            No Courses Available
+          <div className="bg-white rounded-2xl p-6 text-center border border-neutral-200 shadow-card">
+            {["GRE", "GMAT", "PTE", "DUOLINGO", "TOEFL"].includes(category) ? (
+              <div>
+                <h2 className="text-2xl font-bold text-neutral-800 mb-2">
+                  Coming Soon <span className="text-primary-800">🚀</span>
+                </h2>
+                <p className="text-neutral-800 text-lg">
+                  Exciting content is on its way! Stay tuned for updates.
+                </p>
+              </div>
+            ) : (
+              <div className="text-center text-lg font-semibold text-red-600">
+                No Courses Available !!
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -2,16 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
 
-import dashBoard from "../../../../img/icon/dashboard.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import logOut from "../../../../img/icon/logout.svg";
 
 const menuList = [
-  {
-    name: "Dashboard",
-    icon: <img src={dashBoard} alt="Dashboard" />,
-    link: "/tutor-dashboard",
-  },
   {
     name: "Live Class",
     icon: <img src={liveClass} alt="Live Class" />,

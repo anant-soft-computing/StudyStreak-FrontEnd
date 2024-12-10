@@ -156,7 +156,7 @@ const UnPaidDashboard = () => {
                                 width={35}
                               />
                               <Link className="text-decoration-none">
-                                <h2 className="mt-2">Free Test</h2>
+                                <h2 className="mt-2">Free Mini Test</h2>
                               </Link>
                             </div>
                           </div>

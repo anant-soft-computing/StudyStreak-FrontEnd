@@ -97,7 +97,7 @@ const IELTSPage = () => {
                   hover:bg-primary-800 transition-all duration-300 font-medium border border-primary-500"
                   onClick={handleTakeTest}
                 >
-                  Take Free Test
+                  Take Diagnostic Test
                 </button>
               </div>
             </div>

@@ -14,7 +14,6 @@ const navigationItems = [
   { name: "IELTS", path: "/ielts" },
   { name: "Why Choose Us", path: "/why-choose-us" },
   { name: "Blogs", path: "/blogs" },
-  { name: "Podcast" },
   { name: "Contact Us", path: "/talk-to-us" },
   { name: "Become a Partner", path: "/become-a-partner" },
   { name: "Talk to Us", path: "/talk-to-us" },
@@ -158,7 +157,7 @@ const Layout = () => {
                       role === "admin"
                         ? "/admin-dashboard"
                         : role === "Tutor"
-                        ? "/tutor-dashboard"
+                        ? "/tutor-liveClass"
                         : "/studentDashboard"
                     }
                     className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"

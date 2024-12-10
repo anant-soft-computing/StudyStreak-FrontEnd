@@ -18,6 +18,7 @@ const initialLiveClassData = {
   start_time: "",
   end_time: "",
   registration_limit: null,
+  attachments: [{ attachment: null, file_name: "" }],
 };
 
 const initialSubmit = { isError: false, errMsg: null, isSubmitting: false };
@@ -117,6 +118,27 @@ const CreateLiveClass = ({ setActiveTab }) => {
     });
   };
 
+  const addContent = () => {
+    const updatedAttachments = [
+      ...createLiveClassData.attachments,
+      { attachment: null, file_name: "" },
+    ];
+    dispatchCreateLiveClass({
+      type: "attachments",
+      value: updatedAttachments,
+    });
+  };
+
+  const removeContent = (index) => {
+    const updatedAttachments = createLiveClassData.attachments.filter(
+      (_, i) => i !== index
+    );
+    dispatchCreateLiveClass({
+      type: "attachments",
+      value: updatedAttachments,
+    });
+  };
+
   const createLiveClass = async (e) => {
     e.preventDefault();
     const currentTime = moment();
@@ -170,9 +192,38 @@ const CreateLiveClass = ({ setActiveTab }) => {
       );
 
       if (response.status === 201) {
-        resetReducerForm();
-        setActiveTab("View LiveClass");
-        toast.success("Live Class Created Successfully");
+        const liveClassId = response?.data?.id;
+
+        const formData = new FormData();
+
+        // Append LiveClass Attachments
+        createLiveClassData.attachments.forEach((item, index) => {
+          if (item.attachment) {
+            formData.append(`attachments[${index}]attachment`, item.attachment);
+          }
+          formData.append(`attachments[${index}]file_name`, item.file_name);
+        });
+
+        const attachmentResponse = await ajaxCall(
+          `/liveclass/attachment/${liveClassId}`,
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "POST",
+            body: formData,
+          },
+          8000
+        );
+
+        if (attachmentResponse.status === 201) {
+          resetReducerForm();
+          setActiveTab("View LiveClass");
+          toast.success("Live Class Created Successfully");
+        } else {
+          toast.error("Some Problem Occurred. Please try again.");
+        }
       } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -368,6 +419,79 @@ const CreateLiveClass = ({ setActiveTab }) => {
                   </div>
                 </div>
               )}
+            {createLiveClassData.attachments.map((_, index) => (
+              <div className="row" key={index}>
+                <div className="col-xl-6">
+                  <div className="dashboard__form__wraper">
+                    <div className="dashboard__form__input">
+                      <label htmlFor={`attachment-${index}`}>Document</label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          id={`attachment-${index}`}
+                          type="file"
+                          className="form-control"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            const updatedAttachments = [
+                              ...createLiveClassData.attachments,
+                            ];
+                            updatedAttachments[index].attachment = file;
+                            dispatchCreateLiveClass({
+                              type: "attachments",
+                              value: updatedAttachments,
+                            });
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-xl-6">
+                  <div className="dashboard__form__wraper">
+                    <div className="dashboard__form__input">
+                      <label htmlFor={`description-${index}`}>
+                        Description
+                      </label>
+                      <div className="d-flex align-items-center">
+                        <input
+                          id={`description-${index}`}
+                          type="text"
+                          className="form-control"
+                          placeholder="Description of Live Class Attachment"
+                          value={
+                            createLiveClassData.attachments[index].file_name
+                          }
+                          onChange={(e) => {
+                            const updatedAttachments = [
+                              ...createLiveClassData.attachments,
+                            ];
+                            updatedAttachments[index].file_name =
+                              e.target.value;
+                            dispatchCreateLiveClass({
+                              type: "attachments",
+                              value: updatedAttachments,
+                            });
+                          }}
+                        />
+                        {createLiveClassData.attachments.length > 1 && (
+                          <button
+                            className="dashboard__small__btn__2 flash-card__remove__btn"
+                            onClick={() => removeContent(index)}
+                          >
+                            <i className="icofont-ui-delete" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div className="col-xl-12">
+              <button className="dashboard__small__btn__2" onClick={addContent}>
+                + Attachments
+              </button>
+            </div>
             <div className="col-xl-12 mt-3">
               <div className="dashboard__form__button text-center mt-4">
                 {formStatus.isError && (

@@ -6,6 +6,40 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
 
+const attachmentsColumns = [
+  {
+    headerName: "No.",
+    field: "no",
+    filter: true,
+    cellRenderer: (params) => params.rowIndex + 1,
+    width: 110,
+  },
+  {
+    headerName: "Description",
+    field: "file_name",
+    filter: true,
+    width: 450,
+  },
+  {
+    headerName: "Download",
+    field: "attachment",
+    filter: true,
+    width: 200,
+    cellRenderer: (params) => {
+      return params.value !== null ? (
+        <button
+          className="take-test"
+          onClick={() => window.open(params.value)}
+        >
+          <i className="icofont-download" /> Download
+        </button>
+      ) : (
+        "-"
+      );
+    },
+  },
+];
+
 const ViewLiveClasses = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [liveClassList, setLiveClassList] = useState([]);
@@ -55,7 +89,33 @@ const ViewLiveClasses = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken]);
 
   const columns = [
-    { headerName: "No.", field: "no", resizable: false, width: 110 },
+    { headerName: "No.", field: "no", resizable: false, width: 60 },
+    {
+      headerName: "Meeting Name",
+      field: "meeting_title",
+      filter: true,
+      width: 280,
+    },
+    {
+      headerName: "Live Class Type",
+      field: "liveclasstype",
+      filter: true,
+      width: 280,
+    },
+    {
+      headerName: "Start Date",
+      field: "start_time",
+      filter: true,
+      valueFormatter: ({ value }) => moment(value).format("lll"),
+      width: 200,
+    },
+    {
+      headerName: "End Date",
+      field: "end_time",
+      filter: true,
+      valueFormatter: ({ value }) => moment(value).format("lll"),
+      width: 200,
+    },
     {
       headerName: "Batch",
       field: "select_batch",
@@ -80,32 +140,6 @@ const ViewLiveClasses = ({ activeTab }) => {
       ),
     },
     {
-      headerName: "Live Class Type",
-      field: "liveclasstype",
-      filter: true,
-      width: 280,
-    },
-    {
-      headerName: "Meeting Name",
-      field: "meeting_title",
-      filter: true,
-      width: 280,
-    },
-    {
-      headerName: "Start Date",
-      field: "start_time",
-      filter: true,
-      valueFormatter: ({ value }) => moment(value).format("lll"),
-      width: 250,
-    },
-    {
-      headerName: "End Date",
-      field: "end_time",
-      filter: true,
-      valueFormatter: ({ value }) => moment(value).format("lll"),
-      width: 250,
-    },
-    {
       headerName: "Attachments",
       field: "attachments",
       cellRenderer: (params) => {
@@ -115,40 +149,6 @@ const ViewLiveClasses = ({ activeTab }) => {
             onClick={() => handleAttachment(params.value)}
           >
             View
-          </button>
-        ) : (
-          "-"
-        );
-      },
-    },
-  ];
-
-  const attachmentsColumns = [
-    {
-      headerName: "No.",
-      field: "no",
-      filter: true,
-      cellRenderer: (params) => params.rowIndex + 1,
-      width: 110,
-    },
-    {
-      headerName: "Description",
-      field: "file_name",
-      filter: true,
-      width: 450,
-    },
-    {
-      headerName: "Download",
-      field: "attachment",
-      filter: true,
-      width: 200,
-      cellRenderer: (params) => {
-        return params.value !== null ? (
-          <button
-            className="take-test"
-            onClick={() => window.open(params.value)}
-          >
-            <i className="icofont-download" /> Download
           </button>
         ) : (
           "-"

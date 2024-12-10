@@ -5,6 +5,7 @@ import * as XLSX from "xlsx";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
+import SmallModal from "../../../UI/Modal";
 
 const liveClass = [
   { name: "Regular Class", value: "Regular Class" },
@@ -16,33 +17,68 @@ const liveClass = [
   { name: "Counselling", value: "Counselling" },
 ];
 
-const columns = [
-  { headerName: "First Name", field: "First Name", filter: true },
-  { headerName: "Last Name", field: "Last Name", filter: true },
-  { headerName: "Email", field: "Email", filter: true },
-  { headerName: "Phone No.", field: "Phone No", filter: true },
-  { headerName: "Live Class", field: "Live Class", filter: true },
+const studentsColumns = [
   {
-    headerName: "Live Class Start Date & Time",
-    field: "Live Class Start Date & Time",
+    headerName: "No.",
+    field: "no",
     filter: true,
+    cellRenderer: (params) => params.rowIndex + 1,
+    width: 75,
   },
   {
-    headerName: "Live Class End Date & Time",
-    field: "Live Class End Date & Time",
+    headerName: "First Name",
+    field: "first_name",
     filter: true,
-  },
-  { headerName: "Course ", field: "Course", filter: true },
-  { headerName: "Batch", field: "Batch", filter: true },
-  {
-    headerName: "Batch Start Date & Time",
-    field: "Batch Start Date & Time",
-    filter: true,
+    width: 150,
   },
   {
-    headerName: "Batch End Date & Time",
-    field: "Batch End Date & Time",
+    headerName: "Last Name",
+    field: "last_name",
     filter: true,
+    width: 150,
+  },
+  {
+    headerName: "Email",
+    field: "email",
+    filter: true,
+    width: 240,
+  },
+  {
+    headerName: "Phone",
+    field: "phone_no",
+    filter: true,
+    width: 140,
+  },
+];
+
+const attachmentsColumns = [
+  {
+    headerName: "No.",
+    field: "no",
+    filter: true,
+    cellRenderer: (params) => params.rowIndex + 1,
+    width: 110,
+  },
+  {
+    headerName: "Description",
+    field: "file_name",
+    filter: true,
+    width: 450,
+  },
+  {
+    headerName: "Download",
+    field: "attachment",
+    filter: true,
+    width: 200,
+    cellRenderer: (params) => {
+      return params.value !== null ? (
+        <button className="take-test" onClick={() => window.open(params.value)}>
+          <i className="icofont-download" /> Download
+        </button>
+      ) : (
+        "-"
+      );
+    },
   },
 ];
 
@@ -53,6 +89,22 @@ const TutorLiveClass = ({ activeTab }) => {
   const [filters, setFilters] = useState({
     liveClass: "Regular Class",
   });
+
+  const [openStudents, setOpenStudents] = useState(false);
+  const [students, setStudents] = useState([]);
+
+  const [openAttachments, setOpenAttachments] = useState(false);
+  const [attachments, setAttachments] = useState([]);
+
+  const handleViewStudent = (student) => {
+    setOpenStudents(true);
+    setStudents(student);
+  };
+
+  const handleViewAttachment = (attachment) => {
+    setOpenAttachments(true);
+    setAttachments(attachment);
+  };
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -92,81 +144,25 @@ const TutorLiveClass = ({ activeTab }) => {
           8000
         );
         if (response?.status === 200) {
-          const data = response?.data?.flatMap((item) =>
-            item.students.length > 0
-              ? item.students.map((student) => ({
-                  "First Name": student.first_name || "-",
-                  "Last Name": student.last_name || "-",
-                  Email: student.email || "-",
-                  "Phone No": student.phone_no || "-",
-                  "Live Class": item.meeting_title || "-",
-                  "Live Class Start Date & Time":
-                    moment(item.start_time).format("lll") || "-",
-                  "Live Class End Date & Time":
-                    moment(item.end_time).format("lll") || "-",
-                  Course:
-                    item.select_course
-                      .map((course) => course.Course_Title)
-                      .join(", ") || "-",
-                  Batch:
-                    item.select_batch
-                      .map((batch) => batch.batch_name)
-                      .join(", ") || "-",
-                  "Batch Start Date & Time":
-                    item.select_batch && item.select_batch.length > 0
-                      ? moment(
-                          item.select_batch[0].batch_startdate +
-                            " " +
-                            item.select_batch[0].batch_start_timing
-                        ).format("lll")
-                      : "-",
-                  "Batch End Date & Time":
-                    item.select_batch && item.select_batch.length > 0
-                      ? moment(
-                          item.select_batch[0].batch_enddate +
-                            " " +
-                            item.select_batch[0].batch_end_timing
-                        ).format("lll")
-                      : "-",
-                }))
-              : [
-                  {
-                    "First Name": "-",
-                    "Last Name": "-",
-                    Email: "-",
-                    "Phone No": "-",
-                    "Live Class": item.meeting_title || "-",
-                    "Live Class Start Date & Time":
-                      moment(item.start_time).format("lll") || "-",
-                    "Live Class End Date & Time":
-                      moment(item.end_time).format("lll") || "-",
-                    Course:
-                      item.select_course
-                        .map((course) => course.Course_Title)
-                        .join(", ") || "-",
-                    Batch:
-                      item.select_batch
-                        .map((batch) => batch.batch_name)
-                        .join(", ") || "-",
-                    "Batch Start Date & Time":
-                      item.select_batch && item.select_batch.length > 0
-                        ? moment(
-                            item.select_batch[0].batch_startdate +
-                              " " +
-                              item.select_batch[0].batch_start_timing
-                          ).format("lll")
-                        : "-",
-                    "Batch End Date & Time":
-                      item.select_batch && item.select_batch.length > 0
-                        ? moment(
-                            item.select_batch[0].batch_enddate +
-                              " " +
-                              item.select_batch[0].batch_end_timing
-                          ).format("lll")
-                        : "-",
-                  },
-                ]
-          );
+          const data = response?.data?.map((item, index) => {
+            return {
+              no: index + 1,
+              Action: item.start_url || "-",
+              Name: item.meeting_title || "-",
+              Description: item.meeting_description || "-",
+              "Start Date & Time": moment(item.start_time).format("lll") || "-",
+              "End Date & Time": moment(item.end_time).format("lll") || "-",
+              Course:
+                item.select_course
+                  .map((course) => course.Course_Title)
+                  .join(", ") || "-",
+              Batch:
+                item.select_batch.map((batch) => batch.batch_name).join(", ") ||
+                "-",
+              Student: item.students || "-",
+              Attachments: item.attachments || "-",
+            };
+          });
           setLiveClassList(data);
         } else {
           setLiveClassList([]);
@@ -179,6 +175,68 @@ const TutorLiveClass = ({ activeTab }) => {
     };
     fetchLiveClasses();
   }, [activeTab, authData?.accessToken, filters]);
+
+  const columns = [
+    { headerName: "No.", field: "no", filter: true, width: 75 },
+    {
+      headerName: "Action",
+      field: "Action",
+      filter: true,
+      cellRenderer: (params) => (
+        <button className="take-test" onClick={() => window.open(params.value)}>
+          Start Class
+        </button>
+      ),
+    },
+    { headerName: "Live Class", field: "Name", filter: true },
+    { headerName: "Description", field: "Description", filter: true },
+    {
+      headerName: "Live Class Start Date & Time",
+      field: "Start Date & Time",
+      filter: true,
+    },
+    {
+      headerName: "Live Class End Date & Time",
+      field: "End Date & Time",
+      filter: true,
+    },
+    { headerName: "Course ", field: "Course", filter: true },
+    { headerName: "Batch", field: "Batch", filter: true },
+    {
+      headerName: "Student",
+      field: "Student",
+      filter: true,
+      cellRenderer: (params) => {
+        return params.value.length > 0 ? (
+          <button
+            className="take-test"
+            onClick={() => handleViewStudent(params.value)}
+          >
+            View
+          </button>
+        ) : (
+          "-"
+        );
+      },
+    },
+    {
+      headerName: "Attachments",
+      field: "Attachments",
+      filter: true,
+      cellRenderer: (params) => {
+        return params.value.length > 0 ? (
+          <button
+            className="take-test"
+            onClick={() => handleViewAttachment(params.value)}
+          >
+            View
+          </button>
+        ) : (
+          "-"
+        );
+      },
+    },
+  ];
 
   if (isLoading) {
     return <Loading />;
@@ -223,6 +281,24 @@ const TutorLiveClass = ({ activeTab }) => {
           </h5>
         )}
       </div>
+      <SmallModal
+        size="lg"
+        centered
+        isOpen={openStudents}
+        onClose={() => setOpenStudents(false)}
+        title="Students"
+      >
+        <Table columnDefs={studentsColumns} rowData={students} />
+      </SmallModal>
+      <SmallModal
+        size="lg"
+        centered
+        isOpen={openAttachments}
+        onClose={() => setOpenAttachments(false)}
+        title="Attachments"
+      >
+        <Table columnDefs={attachmentsColumns} rowData={attachments} />
+      </SmallModal>
     </div>
   );
 };

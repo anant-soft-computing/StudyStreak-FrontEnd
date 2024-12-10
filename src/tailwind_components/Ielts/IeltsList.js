@@ -4,7 +4,7 @@ import { Clock } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
 
-const IeltsList = ({ selectedCategory = "IELTS" }) => {
+const IeltsList = () => {
   const [courseList, setCouresList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -13,7 +13,7 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/courselistview/?Category__name=${selectedCategory}`,
+          "/courselistview/?Category__name=IELTS",
           {
             headers: {
               Accept: "application/json",
@@ -35,7 +35,7 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
         setIsLoading(false);
       }
     })();
-  }, [selectedCategory]);
+  }, []);
 
   const getGradientClass = (index) => {
     const gradients = [
@@ -82,26 +82,26 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
                 >
                   <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
                   <img
-                    src={course.Course_Thumbnail}
-                    alt={course.Course_Title}
+                    src={course?.Course_Thumbnail}
+                    alt={course?.Course_Title}
                     className="w-full h-full object-cover absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
 
                 <div className="p-6">
                   <h3 className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
-                    {course.Course_Title}
+                    {course?.Course_Title}
                   </h3>
                   <div className="flex items-center text-sm text-neutral-600 mb-3">
                     <Clock size={16} className="mr-2" />
-                    <span>{calculateTotalDuration(course.lessons)}</span>
+                    <span>{calculateTotalDuration(course?.lessons)}</span>
                     <span className="mx-2">•</span>
                     <span>{course?.lessons?.length} Lessons</span>
                   </div>
 
                   <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
                     <span className="text-sm text-neutral-600 ml-2">
-                      Language: {course.Language?.name || "N/A"}
+                      Language: {course.Language?.name}
                     </span>
                   </div>
 
@@ -119,7 +119,7 @@ const IeltsList = ({ selectedCategory = "IELTS" }) => {
           </div>
         ) : (
           <div className="text-center text-lg font-semibold text-red-600">
-            No Courses Available For {selectedCategory}
+            No Courses Available !!
           </div>
         )}
       </div>

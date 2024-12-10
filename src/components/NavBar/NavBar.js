@@ -125,7 +125,7 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
                           role === "admin"
                             ? "/admin-dashboard"
                             : role === "Tutor"
-                            ? "/tutor-dashboard"
+                            ? "/tutor-liveClass"
                             : "/studentDashboard"
                         }
                       >

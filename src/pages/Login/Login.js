@@ -136,7 +136,7 @@ const Login = () => {
       response.data.user_role === "admin"
         ? navigate("/admin-dashboard")
         : response.data.user_role === "Tutor"
-        ? navigate("/tutor-dashboard")
+        ? navigate("/tutor-liveClass")
         : navigate("/studentDashboard");
     },
     [dispatch, loginData.username, navigate]

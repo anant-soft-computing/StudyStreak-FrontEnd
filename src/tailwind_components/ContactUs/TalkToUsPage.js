@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import {
   Phone,
   Mail,
@@ -11,20 +12,69 @@ import {
   Facebook,
   Instagram,
   Twitter,
-  CheckCircle,
 } from "lucide-react";
 
+const contactOptions = [
+  {
+    icon: <Phone className="w-6 h-6" />,
+    title: "Call Us",
+    description: "Talk to our team",
+    info: "+91-88496 50924",
+    action: "call",
+  },
+  {
+    icon: <Mail className="w-6 h-6" />,
+    title: "Email Us",
+    description: "Send us an email",
+    info: "reachus@studystreak.io",
+    action: "email",
+  },
+  {
+    icon: <MessageSquare className="w-6 h-6" />,
+    title: "Live Chat",
+    description: "Chat with support",
+    info: "Available 24/7",
+    action: "chat",
+  },
+];
+
+const icons = [
+  { icon: <Linkedin size={24} />, name: "LinkedIn" },
+  { icon: <Facebook size={24} />, name: "Facebook" },
+  { icon: <Instagram size={24} />, name: "Instagram" },
+  { icon: <Twitter size={24} />, name: "Twitter" },
+];
+
+const purposes = [
+  "General Inquiry",
+  "Technical Support",
+  "Course Information",
+  "Partnership",
+  "Careers",
+  "Other",
+];
+
+const offices = [
+  {
+    city: "Vadodara",
+    address:
+      "1st and 2nd Floor, Galav Chambers, Dairy Den Circle, Sayajigunj, Vadodara, Gujarat, India - 390020",
+    phone: "+91-88496 50924",
+    email: "reachus@studystreak.io",
+    timing: "Mon-Sat: 9:00 AM - 6:00 PM",
+  },
+];
+
 const TalkToUsPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
+    purpose: "General Inquiry",
     subject: "",
     message: "",
-    purpose: "general",
   });
-
-  const [submitted, setSubmitted] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -34,61 +84,49 @@ const TalkToUsPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log(formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setIsLoading(true);
+
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone);
+    data.append("purpose", formData.purpose);
+    data.append("subject", formData.subject);
+    data.append("message", formData.message);
+
+    try {
+      const response = await fetch(
+        "https://script.google.com/macros/s/AKfycbzr8CCq6szvobVy0_aVTVijZTzI_YBQAsbv8ZiPY5Pp3ZKFHwwx_xM4kvYRHZ4TrJJf/exec",
+        {
+          method: "POST",
+          body: data,
+          muteHttpExceptions: true,
+        }
+      );
+      if (response.ok) {
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          purpose: "General Inquiry",
+          subject: "",
+          message: "",
+        });
+        toast.success("Form submitted successfully.");
+      } else {
+        toast.error("Submission failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("error", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
-
-  const contactOptions = [
-    {
-      icon: <Phone className="w-6 h-6" />,
-      title: "Call Us",
-      description: "Talk to our team",
-      info: "+91-88496 50924",
-      action: "call",
-    },
-    {
-      icon: <Mail className="w-6 h-6" />,
-      title: "Email Us",
-      description: "Send us an email",
-      info: "reachus@studystreak.io",
-      action: "email",
-    },
-    {
-      icon: <MessageSquare className="w-6 h-6" />,
-      title: "Live Chat",
-      description: "Chat with support",
-      info: "Available 24/7",
-      action: "chat",
-    },
-  ];
-
-  const purposes = [
-    "General Inquiry",
-    "Technical Support",
-    "Course Information",
-    "Partnership",
-    "Careers",
-    "Other",
-  ];
-
-  const offices = [
-    {
-      city: "Vadodara",
-      address:
-        "1st and 2nd Floor, Galav Chambers, Dairy Den Circle, Sayajigunj, Vadodara, Gujarat, India - 390020",
-      phone: "+91-88496 50924",
-      email: "reachus@studystreak.io",
-      timing: "Mon-Sat: 9:00 AM - 6:00 PM",
-    },
-  ];
 
   return (
     <div className="min-h-screen bg-neutral-50">
-
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -104,7 +142,7 @@ const TalkToUsPage = () => {
 
       <div className="container mx-auto px-4 -mt-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {contactOptions.map((option, index) => (
+          {contactOptions.map(({ icon, title, description, info }, index) => (
             <div
               key={index}
               className="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover
@@ -115,18 +153,14 @@ const TalkToUsPage = () => {
                   className="bg-primary-100 w-12 h-12 rounded-xl flex items-center 
             justify-center text-primary-600"
                 >
-                  {option.icon}
+                  {icon}
                 </div>
-                <h3 className="text-xl font-bold text-neutral-800">
-                  {option.title}
-                </h3>
+                <h3 className="text-xl font-bold text-neutral-800">{title}</h3>
               </div>
 
-              <p className="text-neutral-600 mb-4">{option.description}</p>
+              <p className="text-neutral-600 mb-4">{description}</p>
               <div className="flex items-center justify-between">
-                <span className="font-medium text-primary-600">
-                  {option.info}
-                </span>
+                <span className="font-medium text-primary-600">{info}</span>
                 <button className="text-primary-600 hover:text-primary-700 flex items-center gap-2">
                   Contact <ArrowRight size={16} />
                 </button>
@@ -201,7 +235,7 @@ const TalkToUsPage = () => {
                         focus:ring-2 focus:ring-primary-300 focus:border-primary-300"
                     >
                       {purposes.map((purpose) => (
-                        <option key={purpose} value={purpose.toLowerCase()}>
+                        <option key={purpose} value={purpose}>
                           {purpose}
                         </option>
                       ))}
@@ -245,17 +279,8 @@ const TalkToUsPage = () => {
                     hover:bg-primary-700 transition-all duration-300 font-medium
                     flex items-center justify-center gap-2"
                 >
-                  {submitted ? (
-                    <>
-                      Message Sent
-                      <CheckCircle size={18} />
-                    </>
-                  ) : (
-                    <>
-                      Send Message
-                      <Send size={18} />
-                    </>
-                  )}
+                  {isLoading ? "Sending..." : "Send Message"}
+                  <Send size={18} />
                 </button>
               </form>
             </div>
@@ -266,31 +291,31 @@ const TalkToUsPage = () => {
               Visit Our Office
             </h2>
             <div className="space-y-6">
-              {offices.map((office, index) => (
+              {offices.map(({ city, address, phone, email, timing }, index) => (
                 <div
                   key={index}
                   className="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover
                     transition-all duration-300"
                 >
                   <h3 className="text-xl font-bold text-neutral-800 mb-4">
-                    {office.city}
+                    {city}
                   </h3>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <MapPin className="text-primary-600 flex-shrink-0 mt-1" />
-                      <p className="text-neutral-600">{office.address}</p>
+                      <p className="text-neutral-600">{address}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <Phone className="text-primary-600 flex-shrink-0" />
-                      <p className="text-neutral-600">{office.phone}</p>
+                      <p className="text-neutral-600">{phone}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <Mail className="text-primary-600 flex-shrink-0" />
-                      <p className="text-neutral-600">{office.email}</p>
+                      <p className="text-neutral-600">{email}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <Clock className="text-primary-600 flex-shrink-0" />
-                      <p className="text-neutral-600">{office.timing}</p>
+                      <p className="text-neutral-600">{timing}</p>
                     </div>
                   </div>
                 </div>
@@ -302,20 +327,15 @@ const TalkToUsPage = () => {
                 Connect With Us
               </h3>
               <div className="flex gap-4">
-                {[
-                  { icon: <Linkedin size={24} />, name: "LinkedIn" },
-                  { icon: <Facebook size={24} />, name: "Facebook" },
-                  { icon: <Instagram size={24} />, name: "Instagram" },
-                  { icon: <Twitter size={24} />, name: "Twitter" },
-                ].map((social, index) => (
+                {icons.map(({ name, icon }, index) => (
                   <button
                     key={index}
                     className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center
                       text-neutral-600 hover:bg-primary-100 hover:text-primary-600
                       transition-all duration-300"
-                    aria-label={social.name}
+                    aria-label={name}
                   >
-                    {social.icon}
+                    {icon}
                   </button>
                 ))}
               </div>

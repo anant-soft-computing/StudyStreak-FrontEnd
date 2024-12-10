@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  ChevronLeft,
-  ChevronRight,
   Clock,
   Calendar,
   BookOpen,
@@ -14,8 +12,6 @@ import {
   Laptop2Icon,
   PenBoxIcon,
 } from "lucide-react";
-import { Carousel } from "react-responsive-carousel";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
 import banner from "../img/herobanner/about_10.png";
 import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
@@ -68,42 +64,11 @@ const features = [
   },
 ];
 
-const pteCourses = [
-  {
-    id: 5,
-    title: "PTE Academic Exam Prep",
-    icon: "pte",
-    duration: "4 weeks",
-    level: "All Levels",
-    image: "http://localhost:3001/static/media/course.519b3df106ae19415253.jpg",
-  },
-  {
-    id: 6,
-    title: "PTE Speaking Mastery",
-    icon: "pte-speaking",
-    duration: "2 weeks",
-    level: "Intermediate",
-  },
-  {
-    id: 7,
-    title: "PTE Writing Skills",
-    icon: "pte-writing",
-    duration: "2 weeks",
-    level: "Advanced",
-  },
-  {
-    id: 8,
-    title: "PTE Reading Techniques",
-    icon: "pte-reading",
-    duration: "2 weeks",
-    level: "Beginner",
-  },
-];
-
 const HomePage = () => {
   const navigate = useNavigate();
   const [webinars, setWebinars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [category, setCategory] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [selectWebinar, setSelectWebinar] = useState({
@@ -177,6 +142,33 @@ const HomePage = () => {
     (async () => {
       try {
         const response = await ajaxCall(
+          "/categoryview/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setCategory(response.data);
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
           "/liveclass-webinar/",
           {
             headers: {
@@ -221,21 +213,13 @@ const HomePage = () => {
                   Focused courses to develop your potential to score high.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  {[
-                    "IELTS",
-                    "PTE",
-                    "TOEFL",
-                    "GMAT",
-                    "GRE",
-                    "SAT",
-                    "GENERAL",
-                  ].map((category) => (
+                  {category?.map(({ name }, index) => (
                     <button
-                      key={category}
-                      onClick={() => handleCategory(category)}
+                      key={index}
+                      onClick={() => handleCategory(name)}
                       className="bg-orange-400 hover:bg-orange-600 font-bold text-white px-6 py-2 rounded-xl shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
                     >
-                      {category}
+                      {name}
                     </button>
                   ))}
                 </div>
@@ -300,119 +284,25 @@ const HomePage = () => {
               with StudyStreak.
             </p>
             <button
-              onClick={() => navigate("/english-test")}
+              onClick={() => navigate("/login")}
               className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5 mt-3"
             >
-              Free Test
+              Free Mini Test
             </button>
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/english-test")}
               className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5 ml-2 mt-3"
             >
-              Free Diagnostic Test
+              Free English Test
             </button>
           </div>
         </section>
 
         <CourseList />
-
-        <section className="py-12 md:py-16 bg-neutral-100">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-neutral-800">
-                  PTE Academic Courses
-                </h2>
-                <p className="text-neutral-800 mt-2">
-                  Specialized courses for PTE success
-                </p>
-              </div>
-              <div className="flex space-x-3">
-                <button
-                  className="p-2 rounded-full bg-white border border-neutral-200 hover:bg-primary-50 
-                hover:border-primary-200 transition-colors duration-300 group shadow-soft hover:shadow-hover"
-                >
-                  <ChevronLeft
-                    size={20}
-                    className="text-neutral-800 group-hover:text-primary-600"
-                  />
-                </button>
-                <button
-                  className="p-2 rounded-full bg-white border border-neutral-200 hover:bg-primary-50 
-                hover:border-primary-200 transition-colors duration-300 group shadow-soft hover:shadow-hover"
-                >
-                  <ChevronRight
-                    size={20}
-                    className="text-neutral-800 group-hover:text-primary-600"
-                  />
-                </button>
-              </div>
-            </div>
-
-            <Carousel
-              showThumbs={false}
-              showStatus={false}
-              showIndicators={false}
-              infiniteLoop={true}
-              className="pte-carousel"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {pteCourses.map((course, index) => (
-                  <div
-                    key={index}
-                    className="group bg-white rounded-xl overflow-hidden border border-neutral-200 
-                    shadow-card hover:shadow-card-hover hover:border-primary-200 
-                    transition-all duration-300 transform hover:-translate-y-1"
-                  >
-                    <div
-                      className={`h-48 relative overflow-hidden ${
-                        [
-                          "bg-gradient-to-br from-primary-400 to-primary-600",
-                          "bg-gradient-to-br from-accent-400 to-accent-600",
-                          "bg-gradient-to-br from-secondary-400 to-secondary-600",
-                          "bg-gradient-to-br from-success-400 to-success-600",
-                        ][index]
-                      }`}
-                    >
-                      <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors duration-300" />
-                      <img
-                        src={`https://www.visasolutions4u.com/front_assets/images/icons/ielts-coaching.webp`}
-                        alt={course.title}
-                        className="w-full h-full object-cover absolute top-0 left-0 group-hover:scale-110 transition-transform duration-300"
-                      />
-                    </div>
-
-                    <div className="p-6">
-                      <h3
-                        className="font-semibold text-lg mb-3 text-neutral-800 group-hover:text-primary-600 
-                        transition-colors duration-300"
-                      >
-                        {course.title}
-                      </h3>
-                      <div className="flex items-center text-sm text-neutral-800 mb-4">
-                        <Clock size={16} className="mr-2" />
-                        <span>{course.duration}</span>
-                        <span className="mx-2">•</span>
-                        <span>{course.level}</span>
-                      </div>
-                      <Link
-                        to={`/course/${course.id}`}
-                        className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl
-                        hover:bg-primary-100 transition-colors duration-300 font-medium"
-                      >
-                        View Details
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Carousel>
-          </div>
-        </section>
 
         <TestimonialSection />
 
@@ -490,7 +380,7 @@ const HomePage = () => {
                 })}
               </div>
             ) : (
-              <div className="text-center text-lg font-semibold text-red-600">
+              <div className="bg-white rounded-2xl p-6 text-center border border-neutral-200 shadow-card text-neutral-800">
                 No Upcoming Webinars At The Moment. Please Check Back Later.
               </div>
             )}

@@ -15,16 +15,10 @@ import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import NavBar from "../../../NavBar/NavBar";
 
-import dashBoard from "../../../../img/icon/dashboard.svg";
 import liveClass from "../../../../img/icon/liveClass.svg";
 import logOut from "../../../../img/icon/logout.svg";
 
 const menuList = [
-  {
-    name: "Dashboard",
-    icon: <img src={dashBoard} alt="Dashboard" />,
-    link: "/tutor-dashboard",
-  },
   {
     name: "Live Class",
     icon: <img src={liveClass} alt="Live Class" />,

@@ -85,7 +85,6 @@ import ALesson from "./components/Dashboard/Admin/Lesson/Lesson";
 
 //------------------------> Tutor <------------------------------------------
 
-import TDashboard from "./components/Dashboard/Tutor/Dashboard/Dashborad";
 import TLiveClass from "./components/Dashboard/Tutor/LiveClass/LiveClass";
 
 //------------------------> Exam <------------------------------------------
@@ -205,7 +204,6 @@ const App = () => {
           </Route>
 
           <Route element={<TutorNavBarRoute isProtected={true} />}>
-            <Route path="/tutor-dashboard" Component={withBootstrap(TDashboard)} />
             <Route path="/tutor-liveClass" Component={withBootstrap(TLiveClass)} />
           </Route>
           

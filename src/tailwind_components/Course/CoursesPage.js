@@ -8,12 +8,11 @@ import TestimonialSection from "../Testimonial/TestimonialSection";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
 
-const exams = ["All", "IELTS", "GRE", "GMAT", "TOEFL", "PTE", "GENERAL"];
-
 const CoursesPage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedExam, setSelectedExam] = useState("");
+  const [category, setCategory] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const [blogs, setBlogs] = useState([]);
   const [webinars, setWebinars] = useState([]);
@@ -81,6 +80,33 @@ const CoursesPage = () => {
   const handleAssessmentClick = () => {
     navigate("/english-test");
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/categoryview/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        if (response?.status === 200) {
+          setCategory([{ id: 0, name: "All" }, ...response.data]);
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     setIsLoading(true);
@@ -197,18 +223,20 @@ const CoursesPage = () => {
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between py-4">
               <div className="flex gap-3 overflow-x-auto pb-2 md:pb-0 hide-scrollbar">
-                {exams?.map((exam) => (
+                {category?.map(({ name }, index) => (
                   <button
-                    key={exam}
-                    onClick={() => setSelectedExam(exam === "All" ? "" : exam)}
+                    key={index}
+                    onClick={() =>
+                      setSelectedCategory(name === "All" ? " " : name)
+                    }
                     className={`px-6 py-2 rounded-full whitespace-nowrap transition-all duration-300
                     ${
-                      selectedExam === exam
+                      selectedCategory === name
                         ? "bg-primary-500 text-white shadow-soft transform -translate-y-0.5"
                         : "bg-neutral-100 text-primary-600 hover:bg-primary-50 hover:-translate-y-0.5"
                     }`}
                   >
-                    {exam}
+                    {name}
                   </button>
                 ))}
               </div>
@@ -217,7 +245,10 @@ const CoursesPage = () => {
         </div>
 
         <main className="py-8">
-          <CourseList selectedCategory={selectedExam} searchTerm={searchTerm} />
+          <CourseList
+            searchTerm={searchTerm}
+            selectedCategory={selectedCategory}
+          />
 
           <section className="container mx-auto px-4 mt-8 mb-8">
             <h2 className="text-2xl font-bold text-neutral-800 mb-8">
@@ -273,10 +304,8 @@ const CoursesPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex justify-center items-center h-40">
-                <div className="text-center text-lg font-semibold text-red-600">
-                  No Upcoming Webinars At The Moment. Please Check Back Later.
-                </div>
+              <div className="bg-white rounded-2xl p-6 text-center border border-neutral-200 shadow-card text-neutral-800">
+                No Upcoming Webinars At The Moment. Please Check Back Later.
               </div>
             )}
           </section>
@@ -336,10 +365,8 @@ const CoursesPage = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex justify-center items-center h-40">
-                <div className="text-center text-lg font-semibold text-red-600">
-                  No Blogs Available
-                </div>
+              <div className="bg-white rounded-2xl p-6 text-center border border-neutral-200 shadow-card text-neutral-800">
+                No Blogs Available !!
               </div>
             )}
           </section>

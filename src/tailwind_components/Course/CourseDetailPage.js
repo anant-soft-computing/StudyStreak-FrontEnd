@@ -16,6 +16,7 @@ import {
 import ajaxCall from "../../helpers/ajaxCall";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
 import PackageDetails from "./PackageDetails";
+import CourseBanner from "./CourseBanner";
 
 const CourseDetailPage = () => {
   const navigate = useNavigate();
@@ -163,43 +164,7 @@ const CourseDetailPage = () => {
   return (
     <>
       <div className="bg-neutral-50 min-h-screen relative">
-        <div
-          className="relative h-[400px] bg-cover bg-center"
-          style={{ backgroundImage: `url(${courseDetail?.Course_Thumbnail})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-900/90 to-primary-900/50"></div>
-          <div className="absolute inset-0 flex flex-col justify-center">
-            <div className="container mx-auto px-4">
-              <div className="max-w-4xl">
-                <div
-                  className="text-primary-100 mb-4 inline-flex items-center 
-                bg-primary-800/30 rounded-full px-4 py-1"
-                >
-                  {courseDetail?.Category?.name}
-                </div>
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                  {courseDetail?.Course_Title}
-                </h1>
-                <p className="text-primary-100 text-lg mb-8 max-w-2xl">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: courseDetail?.Short_Description,
-                    }}
-                  ></div>
-                </p>
-                <div className="flex flex-wrap gap-6">
-                  <div className="flex items-center text-white">
-                    <Users size={20} className="mr-2" />
-                    <span>
-                      Max Enrollment : {courseDetail?.max_enrollments}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <CourseBanner courseDetail={courseDetail} />
         <div className="container mx-auto px-4 py-12">
           <div className="bg-white rounded-2xl shadow-card border border-neutral-200 p-8 mb-12">
             <div className="flex flex-wrap items-center justify-between mb-8">

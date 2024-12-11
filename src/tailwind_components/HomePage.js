@@ -12,7 +12,7 @@ import {
   Laptop2Icon,
   PenBoxIcon,
 } from "lucide-react";
-import banner from "../img/herobanner/about_10.png";
+import Banner from "./Banner/Banner";
 import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
 import CourseList from "./Course/CourseList";
@@ -68,7 +68,6 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [webinars, setWebinars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [category, setCategory] = useState([]);
 
   const [open, setOpen] = useState(false);
   const [selectWebinar, setSelectWebinar] = useState({
@@ -133,37 +132,6 @@ const HomePage = () => {
     navigate("/login");
   };
 
-  const handleCategory = (category) => {
-    navigate("/courses", { state: { category } });
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/categoryview/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          },
-          8000
-        );
-
-        if (response?.status === 200) {
-          setCategory(response.data);
-        }
-      } catch (error) {
-        console.log("error", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
-
   useEffect(() => {
     setIsLoading(true);
     (async () => {
@@ -202,37 +170,7 @@ const HomePage = () => {
   return (
     <>
       <div className="bg-neutral-50 min-h-screen">
-        <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 text-white py-12 md:py-16 overflow-hidden">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="w-full md:w-1/2 space-y-6">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight text-white">
-                  Achieve your dream of overseas Education with StudyStreak.
-                </h1>
-                <p className="text-orange-400 text-lg">
-                  Focused courses to develop your potential to score high.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  {category?.map(({ name }, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleCategory(name)}
-                      className="bg-orange-400 hover:bg-orange-600 font-bold text-white px-6 py-2 rounded-xl shadow-soft hover:shadow-hover transform hover:-translate-y-0.5 transition-all duration-300"
-                    >
-                      {name}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="w-full md:w-1/2 relative mt-8 md:mt-0">
-                <div className="w-full md:w-1/2 relative">
-                  <img src={banner} alt="Study Streak" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        <Banner />
         <section className="py-8 md:py-8 bg-neutral-100">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

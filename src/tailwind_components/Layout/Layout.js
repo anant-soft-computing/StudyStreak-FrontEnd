@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { User, Menu, X, LogOut } from "lucide-react";
+import {
+  User,
+  Menu,
+  X,
+  LogOut,
+  Linkedin,
+  Facebook,
+  Instagram,
+} from "lucide-react";
 import "../tailwind.css";
 import TidioChat from "../ChatBot/TidioChat";
-import { useCheckAuth } from "../../hooks/useCheckAuth";
 import logo from "../../img/logo/Logo.png";
+import { useCheckAuth } from "../../hooks/useCheckAuth";
 
 const hideFooterPaths = ["/login", "/forgot-password"];
 
@@ -37,31 +45,19 @@ const exams = [
 
 const icons = [
   {
-    name: "facebook",
-    url: "https://www.facebook.com",
-    icon: (
-      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-        <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.065 3.766 9.26 8.625 9.897v-6.99H8.1v-2.907h2.525v-2.202c0-2.5 1.492-3.876 3.777-3.876 1.094 0 2.236.195 2.236.195v2.475h-1.259c-1.241 0-1.628.772-1.628 1.562v1.846h2.771l-.442 2.907h-2.329v6.99C18.234 21.26 22 17.065 22 12z" />
-      </svg>
-    ),
+    name: "Facebook",
+    url: "https://www.facebook.com/profile.php?id=61569408541625",
+    icon: <Facebook size={24} />,
   },
   {
-    name: "twitter",
-    url: "https://www.twitter.com",
-    icon: (
-      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-        <path d="M24 4.557a9.953 9.953 0 0 1-2.828.775 4.932 4.932 0 0 0 2.165-2.724 9.865 9.865 0 0 1-3.127 1.184A4.918 4.918 0 0 0 16.846 3c-2.728 0-4.941 2.213-4.941 4.942 0 .39.043.766.128 1.129-4.104-.206-7.744-2.173-10.179-5.165a4.916 4.916 0 0 0-.669 2.481 4.925 4.925 0 0 0 2.188 4.1A4.903 4.903 0 0 1 1.67 9.72v.062a4.942 4.942 0 0 0 3.957 4.837 4.937 4.937 0 0 1-2.22.085 4.946 4.946 0 0 0 4.604 3.417A9.868 9.868 0 0 1 0 19.54a13.94 13.94 0 0 0 7.548 2.212c9.054 0 14.002-7.496 14.002-13.986 0-.213-.004-.426-.014-.637A10.016 10.016 0 0 0 24 4.557z" />
-      </svg>
-    ),
+    name: "Instagram",
+    url: "https://www.instagram.com/studystreak6/",
+    icon: <Instagram size={24} />,
   },
   {
-    name: "linkedin",
-    url: "https://www.linkedin.com",
-    icon: (
-      <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-        <path d="M4.983 3.5C3.34 3.5 2 4.815 2 6.423c0 1.587 1.311 2.923 3.011 2.923h.033C6.66 9.346 8 8.01 8 6.423 8 4.815 6.66 3.5 4.983 3.5zM2.49 21.5h5.019V9.625H2.49V21.5zM18.852 9.5c-2.237 0-3.249 1.207-3.811 2.057V9.625h-5.016c.067 1.55 0 11.875 0 11.875h5.016v-6.6c0-.357.025-.71.131-.963.287-.707.94-1.437 2.034-1.437 1.435 0 2.007 1.085 2.007 2.675v6.325h5.015v-6.787c0-3.626-1.935-5.313-4.476-5.313z" />
-      </svg>
-    ),
+    name: "Linkedin",
+    url: "https://www.linkedin.com/in/studystreak-studystreak-b0390433a/",
+    icon: <Linkedin size={24} />,
   },
 ];
 
@@ -160,13 +156,13 @@ const Layout = () => {
                         ? "/tutor-liveClass"
                         : "/studentDashboard"
                     }
-                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
+                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:text-white hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
                   >
                     <User size={16} />
                     <span>Dashboard</span>
                   </Link>
                   <Link
-                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
+                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:text-white hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
                     onClick={logout}
                   >
                     <LogOut size={16} />
@@ -177,7 +173,7 @@ const Layout = () => {
                 <div className="hidden lg:flex items-center gap-3">
                   <Link
                     to="/login"
-                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
+                    className="flex items-center gap-2 bg-primary-600 text-white px-4 py-2 rounded-xl hover:text-white hover:bg-primary-700 transition-all duration-300 text-sm font-medium"
                   >
                     <User size={16} />
                     <span>Login / Register</span>
@@ -220,6 +216,8 @@ const Layout = () => {
                       to={
                         role === "admin"
                           ? "/admin-dashboard"
+                          : role === "Tutor"
+                          ? "/tutor-liveClass"
                           : "/studentDashboard"
                       }
                       className="flex items-center justify-center gap-2 bg-primary-600 text-white mt-2 px-4 py-2 rounded-xl hover:bg-primary-700 transition-all duration-300"

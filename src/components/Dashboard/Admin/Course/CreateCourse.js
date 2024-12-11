@@ -34,6 +34,7 @@ const initialCourseData = {
   Course_Overview_Provider: "",
   Course_Overview_URL: "",
   Course_Thumbnail: "",
+  course_banner: "",
   SEO_Meta_Keywords: "",
   Meta_Description: "",
   lessons: [],
@@ -115,6 +116,10 @@ const validateForm = (createCourseData, setFormError) => {
     setFormError("Course Thumbnail is Required");
     return false;
   }
+  if (!createCourseData.course_banner) {
+    setFormError("Course Banner is Required");
+    return false;
+  }
   if (!createCourseData.SEO_Meta_Keywords) {
     setFormError("SEO Meta Keywords URL is Required");
     return false;
@@ -194,6 +199,7 @@ const CreateCourse = ({ setMainTab }) => {
         createCourseData.Course_Overview_URL
       );
       formData.append("Course_Thumbnail", createCourseData.Course_Thumbnail);
+      formData.append("course_banner", createCourseData.course_banner);
       formData.append("SEO_Meta_Keywords", createCourseData.SEO_Meta_Keywords);
       formData.append("Meta_Description", createCourseData.Meta_Description);
       createCourseData.lessonsId.forEach((id) => {
@@ -683,12 +689,29 @@ const CreateCourse = ({ setMainTab }) => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Course Thumbnail</label>
+                  <label>Course Thumbnail (1483 pixels x 800 pixels)</label>
                   <input
                     type="file"
                     onChange={(e) => {
                       dispatchCreateCourse({
                         type: "Course_Thumbnail",
+                        value: e.target.files[0],
+                      });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+              <div className="dashboard__form__wraper">
+                <div className="dashboard__form__input">
+                  <label>Course Banner (2000 pixels x 477 pixels)</label>
+                  <input
+                    type="file"
+                    placeholder=""
+                    onChange={(e) => {
+                      dispatchCreateCourse({
+                        type: "course_banner",
                         value: e.target.files[0],
                       });
                     }}

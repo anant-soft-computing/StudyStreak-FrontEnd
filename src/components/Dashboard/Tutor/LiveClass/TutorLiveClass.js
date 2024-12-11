@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import * as XLSX from "xlsx";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import Table from "../../../UI/Table";
@@ -109,20 +108,6 @@ const TutorLiveClass = ({ activeTab }) => {
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const exportToExcel = () => {
-    const exportData = liveClassList.map(({ no, ...rest }) => rest);
-
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Live Class Report");
-
-    XLSX.writeFile(
-      workbook,
-      `Live_Class_Report_${moment().format("lll")}.xlsx`
-    );
   };
 
   useEffect(() => {
@@ -244,30 +229,23 @@ const TutorLiveClass = ({ activeTab }) => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between">
-        <div className="col-xl-2">
-          <div className="dashboard__form__wraper">
-            <div className="dashboard__form__input">
-              <label>Select Live Class Type</label>
-              <select
-                className="form-select"
-                name="liveClass"
-                value={filters.liveClass}
-                onChange={handleFilterChange}
-              >
-                {liveClass.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+      <div className="col-xl-2">
         <div className="dashboard__form__wraper">
-          <button className="btn btn-primary" onClick={exportToExcel}>
-            Export
-          </button>
+          <div className="dashboard__form__input">
+            <label>Select Live Class Type</label>
+            <select
+              className="form-select"
+              name="liveClass"
+              value={filters.liveClass}
+              onChange={handleFilterChange}
+            >
+              {liveClass.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
       <div className="row mt-3">

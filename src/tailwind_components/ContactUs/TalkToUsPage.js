@@ -11,7 +11,6 @@ import {
   Linkedin,
   Facebook,
   Instagram,
-  Twitter,
 } from "lucide-react";
 
 const contactOptions = [
@@ -39,10 +38,21 @@ const contactOptions = [
 ];
 
 const icons = [
-  { icon: <Linkedin size={24} />, name: "LinkedIn" },
-  { icon: <Facebook size={24} />, name: "Facebook" },
-  { icon: <Instagram size={24} />, name: "Instagram" },
-  { icon: <Twitter size={24} />, name: "Twitter" },
+  {
+    icon: <Linkedin size={24} />,
+    name: "LinkedIn",
+    link: "https://www.linkedin.com/in/studystreak-studystreak-b0390433a/",
+  },
+  {
+    icon: <Facebook size={24} />,
+    name: "Facebook",
+    link: "https://www.facebook.com/profile.php?id=61569408541625",
+  },
+  {
+    icon: <Instagram size={24} />,
+    name: "Instagram",
+    link: "https://www.instagram.com/studystreak6/",
+  },
 ];
 
 const purposes = [
@@ -327,13 +337,14 @@ const TalkToUsPage = () => {
                 Connect With Us
               </h3>
               <div className="flex gap-4">
-                {icons.map(({ name, icon }, index) => (
+                {icons.map(({ name, icon, link }, index) => (
                   <button
                     key={index}
                     className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center
                       text-neutral-600 hover:bg-primary-100 hover:text-primary-600
                       transition-all duration-300"
                     aria-label={name}
+                    onClick={() => window.open(link)}
                   >
                     {icon}
                   </button>

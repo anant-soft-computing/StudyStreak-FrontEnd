@@ -114,7 +114,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
 
                   <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">
                     <span className="text-sm text-neutral-800 ml-2">
-                      Language: {course.Language?.name || "N/A"}
+                      Language: {course.Language?.name}
                     </span>
                   </div>
 

@@ -8,7 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const teamMembers = [
   {
@@ -91,29 +91,33 @@ const partnerTypes = [
 ];
 
 const AboutUsPage = () => {
-  const navigate = useNavigate();
-  const handleExplorecourses = () => {
-    navigate("/courses");
-  };
-
   return (
     <div className="bg-gray-100 min-h-screen">
-      <header className="bg-purple-600 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">About StudyStreak</h1>
-          <p className="text-xl">
-            Empowering students to achieve their dreams through expert-led test
-            preparation
-          </p>
+      <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              About StudyStreak
+            </h1>
+            <p className="text-xl text-primary-100 mb-8">
+              Empowering students to achieve their dreams through expert-led
+              test preparation
+            </p>
+          </div>
         </div>
       </header>
 
       <section className="py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h3 className="text-3xl font-bold mb-4">About Us</h3>
-            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
-              <p className="text-md p-4">
+            <h3 className="text-3xl font-bold text-neutral-800 mb-4">
+              About Us
+            </h3>
+            <div
+              className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+            >
+              <p className="text-neutral-600 text-lg">
                 Welcome to StudyStreak.in, your dedicated partner in achieving
                 your dreams of studying abroad. We are a premier Learning
                 Management System (LMS) designed to help students prepare for
@@ -121,8 +125,11 @@ const AboutUsPage = () => {
                 toefl, oet, duolingo, gre, gmat, sat, and more.
               </p>
             </div>
-            <div className="bg-white rounded-lg shadow-md overflow-hidden mb-4">
-              <p className="p-4">
+            <div
+              className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+            >
+              <p className="text-neutral-600 text-lg">
                 At StudyStreak.in, we understand the challenges and complexities
                 involved in preparing for higher education abroad. Our mission
                 is to simplify this journey by providing comprehensive,
@@ -131,10 +138,15 @@ const AboutUsPage = () => {
               </p>
             </div>
           </div>
-          <div className="max-w-3xl mx-auto text-center mt-4">
-            <h3 className="text-3xl font-bold mb-4">Our Vision</h3>
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <p className="p-4">
+          <div className="max-w-3xl mx-auto text-center mt-8">
+            <h3 className="text-3xl font-bold text-neutral-800 mb-4">
+              Our Vision
+            </h3>
+            <div
+              className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+            >
+              <p className="text-neutral-600 text-lg">
                 To be the leading platform for international education
                 preparation, empowering students to achieve their academic and
                 career goals with confidence and excellence.
@@ -146,16 +158,21 @@ const AboutUsPage = () => {
 
       <section className="py-4">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 text-center">Our Mission</h2>
+          <h2 className="text-3xl text-center font-bold text-neutral-800 mb-4">
+            Our Mission
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member, index) => (
               <div
                 key={index}
-                className="bg-white rounded-lg shadow-md overflow-hidden"
+                className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
               >
                 <div className="p-4 text-center">
-                  <h3 className="font-semibold text-lg mb-1">{member.name}</h3>
-                  <p className="text-gray-600">{member.role}</p>
+                  <h3 className="text-xl font-bold text-neutral-800 mb-2">
+                    {member.name}
+                  </h3>
+                  <p className="text-neutral-600">{member.role}</p>
                 </div>
               </div>
             ))}
@@ -236,21 +253,24 @@ const AboutUsPage = () => {
         </div>
       </section>
 
-      <section className="bg-purple-100 py-16">
+      <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-800">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-3xl font-bold text-white mb-6">
             Ready to Start Your Journey?
           </h2>
-          <p className="text-xl mb-8">
+          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
             Join thousands of successful students who have achieved their dreams
             with StudyStreak
           </p>
-          <button
-            onClick={handleExplorecourses}
-            className="bg-green-500 text-white px-8 py-3 rounded-md hover:bg-green-600 transition text-lg font-semibold"
-          >
-            Explore Our Courses
-          </button>
+          <div className="flex justify-center gap-4">
+            <Link
+              to="/courses"
+              className="bg-white text-primary-600 px-8 py-3 rounded-xl 
+                hover:bg-primary-50 transition-all duration-300 font-medium"
+            >
+              Explore Our Courses
+            </Link>
+          </div>
         </div>
       </section>
     </div>

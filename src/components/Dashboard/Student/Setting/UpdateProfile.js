@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Country, State, City } from "country-state-city";
 import Tab from "../../../UI/Tab";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
@@ -14,37 +15,72 @@ const tabs = [
 const UpdateProfile = () => {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(0);
-  const [profileData, setProfileData] = useState();
+  const [profileData, setProfileData] = useState({});
   const [activeTab, setActiveTab] = useState("Personal Information");
+
+  const [countries, setCountries] = useState([]);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  const [countryInterests, setCountryInterests] = useState([]);
+
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+
+  useEffect(() => {
+    const allCountries = Country.getAllCountries();
+    setCountries(allCountries);
+  }, []);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const getStudentId = async () => {
-    try {
-      const response = await ajaxCall(
-        `/studentview/`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "GET",
-        },
-        8000
-      );
-      if (response.status === 200) {
-        setUserId(response?.data?.id);
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("Error:", error);
+  const handleCountryChange = (e) => {
+    const countryName = e.target.value;
+    setSelectedCountry(countryName);
+
+    setProfileData((prevData) => ({
+      ...prevData,
+      country: countryName,
+    }));
+
+    const country = countries.find((c) => c.name === countryName);
+    if (country) {
+      const states = State.getStatesOfCountry(country.isoCode);
+      setStates(states);
+    } else {
+      setStates([]);
     }
+    setCities([]);
+  };
+
+  const handleStateChange = (e) => {
+    const stateName = e.target.value;
+    setSelectedState(stateName);
+
+    setProfileData((prevData) => ({
+      ...prevData,
+      state: stateName,
+    }));
+
+    const state = states.find((s) => s.name === stateName);
+    const country = countries.find((c) => c.name === selectedCountry);
+    if (state && country) {
+      const cities = City.getCitiesOfState(country.isoCode, state.isoCode);
+      setCities(cities);
+    } else {
+      setCities([]);
+    }
+  };
+
+  const handleCityChange = (e) => {
+    const cityName = e.target.value;
+
+    setProfileData((prevData) => ({
+      ...prevData,
+      city: cityName,
+    }));
   };
 
   const handleInputChange = (e) => {
@@ -63,7 +99,38 @@ const UpdateProfile = () => {
     });
   };
 
+  const getStudentId = async () => {
+    try {
+      const response = await ajaxCall(
+        "/studentview/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+      if (response.status === 200) {
+        setUserId(response?.data?.id);
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const handleUpdateInfo = async () => {
+    if (!profileData.user_image) {
+      toast.error("Profile image Is Required.");
+      return;
+    }
+
     try {
       const formData = new FormData();
 
@@ -96,7 +163,7 @@ const UpdateProfile = () => {
         toast.error("Something went wrong. Please try again later.");
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.log("error", error);
     }
   };
 
@@ -119,12 +186,40 @@ const UpdateProfile = () => {
       if (response.status === 200) {
         setProfileData(response?.data);
       } else {
-        console.log("---error---->");
+        console.log("error");
       }
     } catch (error) {
-      console.log("Error:", error);
+      console.log("error", error);
     }
-  },[userId]);
+  }, [userId]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/country-list/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setCountryInterests(response.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error:", error);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     getStudentId();
@@ -159,7 +254,7 @@ const UpdateProfile = () => {
                     placeholder="First Name"
                     value={profileData?.user?.first_name}
                     name="user.first_name"
-                    onChange={handleInputChange}
+                    disabled
                   />
                 </div>
               </div>
@@ -173,21 +268,7 @@ const UpdateProfile = () => {
                     placeholder="Last Name"
                     value={profileData?.user?.last_name}
                     onChange={handleInputChange}
-                    name="user.last_name"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-xl-6">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label>User Name</label>
-                  <input
-                    type="text"
-                    placeholder="User Name"
-                    value={profileData?.user?.username}
-                    onChange={handleInputChange}
-                    name="user.username"
+                    disabled
                   />
                 </div>
               </div>
@@ -208,10 +289,7 @@ const UpdateProfile = () => {
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Gender</label>
-                  <select
-                    className="form-select"
-                    aria-label="Default select example"
-                  >
+                  <select className="form-select">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
@@ -266,14 +344,18 @@ const UpdateProfile = () => {
             <div className="col-xl-6">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>City</label>
+                  <label>Country</label>
                   <select
                     className="form-select"
-                    aria-label="Default select example"
+                    onChange={handleCountryChange}
+                    value={selectedCountry}
                   >
-                    <option value="Vadodara">Vadodara</option>
-                    <option value="Ahmedabad">Ahmedabad</option>
-                    <option value="Surat">Surat</option>
+                    <option value="">Select Country</option>
+                    {countries.map((country) => (
+                      <option key={country.isoCode} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -284,24 +366,35 @@ const UpdateProfile = () => {
                   <label>State</label>
                   <select
                     className="form-select"
-                    aria-label="Default select example"
+                    onChange={handleStateChange}
+                    value={selectedState}
+                    disabled={!states.length}
                   >
-                    <option value="Gujarat">Gujarat</option>
-                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="">Select State</option>
+                    {states.map((state) => (
+                      <option key={state.isoCode} value={state.name}>
+                        {state.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 mt-4">
+            <div className="col-xl-6  mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Country</label>
+                  <label>City</label>
                   <select
                     className="form-select"
-                    aria-label="Default select example"
+                    value={profileData.city || ""}
+                    onChange={handleCityChange}
                   >
-                    <option value="India">India</option>
-                    <option value="USA">USA</option>
+                    <option value="">Select City</option>
+                    {cities.map((city) => (
+                      <option key={city.name} value={city.name}>
+                        {city.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -312,10 +405,24 @@ const UpdateProfile = () => {
                   <label>Country Interested In</label>
                   <select
                     className="form-select"
-                    aria-label="Default select example"
+                    name="country_interested_in"
+                    value={profileData?.country_interested_in?.name}
+                    onChange={(e) => {
+                      const { value } = e.target;
+                      setProfileData((prevData) => ({
+                        ...prevData,
+                        country_interested_in: {
+                          ...prevData.country_interested_in,
+                          name: value,
+                        },
+                      }));
+                    }}
                   >
-                    <option value="India">India</option>
-                    <option value="USA">USA</option>
+                    {countryInterests.map((country) => (
+                      <option key={country.id} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -348,7 +455,6 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-
             <div className="col-xl-6">
               <strong>Exams Taken Before</strong>
               <div className="d-flex flex-wrap gap-4">
@@ -416,7 +522,7 @@ const UpdateProfile = () => {
           }`}
         >
           <div className="row">
-          <div className="col-xl-12">
+            <div className="col-xl-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Biography</label>

@@ -54,7 +54,7 @@ const EnglishLevelTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/get/flt/",
+          "/diagnostic-list/",
           {
             headers: {
               Accept: "application/json",

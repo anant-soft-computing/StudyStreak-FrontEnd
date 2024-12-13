@@ -273,7 +273,7 @@ const Profile = () => {
                             </div>
                             <div className="col-lg-8 col-md-8">
                               <div className="dashboard__form dashboard__form__margin">
-                                {profileData?.city?.name}
+                                {profileData?.city}
                               </div>
                             </div>
                             <div className="col-lg-4 col-md-4">
@@ -283,7 +283,7 @@ const Profile = () => {
                             </div>
                             <div className="col-lg-8 col-md-8">
                               <div className="dashboard__form dashboard__form__margin">
-                                {profileData?.state?.name}
+                                {profileData?.state}
                               </div>
                             </div>
                             <div className="col-lg-4 col-md-4">
@@ -293,7 +293,7 @@ const Profile = () => {
                             </div>
                             <div className="col-lg-8 col-md-8">
                               <div className="dashboard__form dashboard__form__margin">
-                                {profileData?.country?.name}
+                                {profileData?.country}
                               </div>
                             </div>
                             <div className="col-lg-4 col-md-4">

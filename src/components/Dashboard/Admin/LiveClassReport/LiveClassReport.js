@@ -164,7 +164,7 @@ const LiveClassReport = () => {
     { headerName: "Batch", field: "Batch", filter: true },
     {
       headerName: "Attachments",
-      field: "attachments",
+      field: "Attachments",
       cellRenderer: (params) => {
         return params.value.length > 0 ? (
           <button

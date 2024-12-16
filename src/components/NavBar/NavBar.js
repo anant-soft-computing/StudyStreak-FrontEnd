@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import moment from "moment";
 import logo from "../../img/logo/Logo.png";
 import menuIcon from "../../img/icon/icon-menu.svg";
@@ -31,8 +32,7 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
     logoutUser();
   };
 
-  // Encrypt the user ID
-  const secretKey = process.env.REACT_APP_SECRET_KEY; // Replace with a secure secret key
+  const secretKey = process.env.REACT_APP_SECRET_KEY;
 
   useEffect(() => {
     if (token && role === "student") {
@@ -56,14 +56,48 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
     }
   }, [role, secretKey, token, userId]);
 
-  // Clear a specific notification
+  const readNotification = async (notificationIds) => {
+    try {
+      const response = await fetch(
+        "https://studystreak.in/api/notification/mark-read/",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          body: JSON.stringify({ ids: notificationIds }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      if (data.status === true) {
+        toast.success("Notification Read Successfully");
+      } else {
+        toast.error("Something went wrong, please try again later");
+      }
+      return data;
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   const clearNotification = (index) => {
+    const notificationId = notifications[index].id;
+    readNotification([notificationId]);
     setNotifications((prev) => prev.filter((_, i) => i !== index));
     setUnreadCount((prev) => Math.max(prev - 1, 0));
   };
 
-  // Clear all notifications
   const clearAllNotifications = () => {
+    const notificationIds = notifications.map(
+      (notification) => notification.id
+    );
+    readNotification(notificationIds);
     setNotifications([]);
     setUnreadCount(0);
   };
@@ -189,9 +223,9 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
                       ) : (
                         <div className="single__header__right__dropdown">
                           <div className="header__right__dropdown__content">
-                            <p className="text-center text-danger">
+                            <h6 className="text-center text-danger">
                               No New Notifications
-                            </p>
+                            </h6>
                           </div>
                         </div>
                       )}

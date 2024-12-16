@@ -127,19 +127,53 @@ const UpdateProfile = () => {
 
   const handleUpdateInfo = async () => {
     if (!profileData.user_image) {
-      toast.error("Profile image Is Required.");
+      toast.error("Profile image is required.");
       return;
     }
 
     try {
       const formData = new FormData();
 
-      Object.entries(profileData).forEach(([key, value]) => {
-        formData.append(key, value);
-      });
+      formData.append("first_name", profileData.user.first_name);
+      formData.append("last_name", profileData.user.last_name);
+      formData.append("phone_no", profileData.phone_no);
+      formData.append("whatsapp_no", profileData.whatsapp_no);
+      formData.append("country", profileData.country);
+      formData.append("state", profileData.state);
+      formData.append("city", profileData.city);
+      formData.append(
+        "country_interested_in",
+        profileData?.country_interested_in?.id ||
+          profileData?.country_interested_in
+      );
+      formData.append("last_education", profileData.last_education);
+      formData.append(
+        "interested_in_visa_counselling",
+        profileData.interested_in_visa_counselling
+      );
+      formData.append("ielts_taken_before", profileData.ielts_taken_before);
+      formData.append(
+        "duolingo_taken_before",
+        profileData.duolingo_taken_before
+      );
+      formData.append("pte_taken_before", profileData.pte_taken_before);
+      formData.append("toefl_taken_before", profileData.toefl_taken_before);
+      formData.append("gre_taken_before", profileData.gre_taken_before);
+      formData.append("gmat_taken_before", profileData.gmat_taken_before);
+      formData.append("biography", profileData.biography);
+      formData.append("reference_by", profileData.reference_by);
+      formData.append("remark", profileData.remark);
 
-      if (profileData.imageFile) {
-        formData.append("user_image", profileData.imageFile);
+      if (
+        typeof profileData.user_image === "string" &&
+        profileData.user_image.startsWith("http")
+      ) {
+        const response = await fetch(profileData.user_image);
+        if (!response.ok) throw new Error("Failed to fetch the profile image.");
+        const blob = await response.blob();
+        formData.append("user_image", blob, "profile_image.png");
+      } else if (profileData.user_image instanceof File) {
+        formData.append("user_image", profileData.user_image);
       }
 
       const response = await ajaxCall(
@@ -156,8 +190,9 @@ const UpdateProfile = () => {
         },
         8000
       );
+
       if (response.status === 200) {
-        toast.success("Profile Updated Successfully");
+        toast.success("Profile updated successfully.");
         navigate("/studentProfile");
       } else {
         toast.error("Something went wrong. Please try again later.");
@@ -279,7 +314,7 @@ const UpdateProfile = () => {
                   <label>Image</label>
                   <input
                     type="file"
-                    name="imageFile"
+                    name="user_image"
                     onChange={handleInputChange}
                   />
                 </div>
@@ -289,7 +324,12 @@ const UpdateProfile = () => {
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Gender</label>
-                  <select className="form-select">
+                  <select
+                    className="form-select"
+                    name="gender"
+                    value={profileData?.gender}
+                    onChange={handleInputChange}
+                  >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
@@ -406,20 +446,20 @@ const UpdateProfile = () => {
                   <select
                     className="form-select"
                     name="country_interested_in"
-                    value={profileData?.country_interested_in?.name}
+                    value={
+                      profileData?.country_interested_in?.id ||
+                      profileData?.country_interested_in
+                    }
                     onChange={(e) => {
-                      const { value } = e.target;
-                      setProfileData((prevData) => ({
-                        ...prevData,
-                        country_interested_in: {
-                          ...prevData.country_interested_in,
-                          name: value,
-                        },
+                      const value = e.target.value;
+                      setProfileData((prev) => ({
+                        ...prev,
+                        country_interested_in: { id: value },
                       }));
                     }}
                   >
                     {countryInterests.map((country) => (
-                      <option key={country.id} value={country.name}>
+                      <option key={country.id} value={country.id}>
                         {country.name}
                       </option>
                     ))}
@@ -447,7 +487,9 @@ const UpdateProfile = () => {
                   <label>Interested In Visa Counselling</label>
                   <select
                     className="form-select"
-                    aria-label="Default select example"
+                    name="interested_in_visa_counselling"
+                    value={profileData?.interested_in_visa_counselling}
+                    onChange={handleInputChange}
                   >
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>

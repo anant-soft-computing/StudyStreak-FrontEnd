@@ -52,7 +52,7 @@ const Profile = () => {
       }
     })();
   }, []);
-  
+
   const fetchCourses = useCallback(async () => {
     try {
       const response = await ajaxCall(
@@ -80,24 +80,24 @@ const Profile = () => {
     } finally {
       setIsLoading(false);
     }
-  },[category]);
-  
+  }, [category]);
+
   useEffect(() => {
     fetchCourses();
   }, [category, fetchCourses]);
-  
+
   const addExpectedScore = async (e) => {
     e.preventDefault();
-  
+
     if (!selectedCourse || !expectedScore) {
       toast.error("Please select a course and enter the expected score.");
       return;
     }
-  
+
     const data = {
       expected_score: expectedScore,
     };
-  
+
     try {
       const response = await ajaxCall(
         `/update-expected-course/${selectedCourse}/`,
@@ -114,7 +114,7 @@ const Profile = () => {
         },
         8000
       );
-  
+
       if (response.status === 200) {
         toast.success("Score Updated Successfully");
         await fetchCourses();
@@ -128,7 +128,6 @@ const Profile = () => {
       setIsLoading(false);
     }
   };
-  
 
   return (
     <>
@@ -142,7 +141,35 @@ const Profile = () => {
                   <div className="col-xl-12 col-lg-12 col-md-12">
                     <div className="dashboard__content__wraper common-background-color-across-app">
                       <div className="dashboard__section__title">
-                        <h4>My Profile</h4>
+                        <div className="d-flex align-items-center gap-2">
+                          {profileData?.user_image ? (
+                            <img
+                              className="w-12 h-12 object-cover rounded-full"
+                              src={profileData?.user_image}
+                              alt={profileData?.user?.first_name}
+                            />
+                          ) : (
+                            <div
+                              class="rounded-circle bg-primary-100 d-flex align-items-center justify-content-center"
+                              style={{
+                                width: 48,
+                                height: 48,
+                                color: "#01579b",
+                                fontWeight: "bold",
+                                fontSize: "1.25rem",
+                                border: "2px solid #01579b",
+                              }}
+                            >
+                              {profileData?.user?.first_name.charAt(0) +
+                                profileData?.user?.last_name.charAt(0)}
+                            </div>
+                          )}
+                          <h4>
+                            {profileData?.user?.first_name +
+                              " " +
+                              profileData?.user?.last_name}
+                          </h4>
+                        </div>
                         <button
                           className="default__button"
                           onClick={updateProfile}
@@ -242,7 +269,7 @@ const Profile = () => {
                             </div>
                             <div className="col-lg-8 col-md-8">
                               <div className="dashboard__form dashboard__form__margin">
-                                {score.expected_score === "0.0" ? (
+                                {score?.expected_score === "0.0" ? (
                                   <button
                                     className="default__button"
                                     onClick={() => setOpen(true)}
@@ -250,7 +277,7 @@ const Profile = () => {
                                     Set Score
                                   </button>
                                 ) : (
-                                  score.expected_score
+                                  score?.expected_score
                                 )}
                               </div>
                             </div>
@@ -318,16 +345,6 @@ const Profile = () => {
                             </div>
                             <div className="col-lg-4 col-md-4">
                               <div className="dashboard__form dashboard__form__margin">
-                                Referal Code:
-                              </div>
-                            </div>
-                            <div className="col-lg-8 col-md-8">
-                              <div className="dashboard__form dashboard__form__margin">
-                                {profileData?.referal_code}
-                              </div>
-                            </div>
-                            <div className="col-lg-4 col-md-4">
-                              <div className="dashboard__form dashboard__form__margin">
                                 Interested In Visa Counselling:
                               </div>
                             </div>
@@ -339,6 +356,16 @@ const Profile = () => {
                                 ) : (
                                   <CancelIcon />
                                 )}
+                              </div>
+                            </div>
+                            <div className="col-lg-4 col-md-4">
+                              <div className="dashboard__form dashboard__form__margin">
+                                Interested Country:
+                              </div>
+                            </div>
+                            <div className="col-lg-8 col-md-8">
+                              <div className="dashboard__form dashboard__form__margin">
+                                {profileData?.country_interested_in?.name}
                               </div>
                             </div>
                           </div>

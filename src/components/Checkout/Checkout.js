@@ -316,7 +316,10 @@ const Checkout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-12" style={{marginTop: "-70px"}}>
+    <div
+      className="min-h-screen bg-neutral-50 py-12"
+      style={{ marginTop: "-70px" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl shadow-card animate-fade-in-up">
@@ -325,7 +328,6 @@ const Checkout = () => {
                 Checkout
               </h1>
             </div>
-
             <div className="p-6 space-y-8">
               <div className="space-y-4">
                 <h2 className="text-xl font-heading font-medium text-neutral-800">
@@ -390,7 +392,6 @@ const Checkout = () => {
                   </div>
                 </div>
               </div>
-
               <div className="my-4 space-y-4">
                 <h2 className="text-xl font-heading font-medium text-neutral-800">
                   Apply Coupon
@@ -420,7 +421,6 @@ const Checkout = () => {
                   </div>
                 )}
               </div>
-
               {userDetails?.user && (
                 <div className="space-y-4">
                   <h2 className="text-xl font-heading font-medium text-neutral-800">
@@ -440,7 +440,6 @@ const Checkout = () => {
                   </div>
                 </div>
               )}
-
               <div className="pt-6">
                 <button
                   onClick={handleEnrollButton}

@@ -60,6 +60,7 @@ import SFlashCard from "./components/Dashboard/Student/FlashCard/FlashCard";
 import SSettings from "./components/Dashboard/Student/Setting/Settings";
 import SResources from "./components/Dashboard/Student/Resources/Resources";
 import Report from "./components/Dashboard/Student/Report/Report";
+import PTEReading from "./components/Dashboard/Student/PTE/Reading/Reading";
 
 //-----------------> Admin <-----------------------------------------------------
 
@@ -102,6 +103,7 @@ import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTest";
 import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
+import LivePTEReadingExam from "./components/Dashboard/Student/PTE/Reading/LivePTEReading/LivePTEReadingExam";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -204,9 +206,12 @@ const App = () => {
           </Route>
 
           <Route element={<TutorNavBarRoute isProtected={true} />}>
-            <Route path="/tutor-liveClass" Component={withBootstrap(TLiveClass)} />
+            <Route
+              path="/tutor-liveClass"
+              Component={withBootstrap(TLiveClass)}
+            />
           </Route>
-          
+
           <Route element={<StudentNavBarRoute isProtected={true} />}>
             <Route
               path="/freeDiagnosticTest"
@@ -267,6 +272,9 @@ const App = () => {
             <Route path="/Listening" Component={withBootstrap(ExamListening)} />
             <Route path="/Writing" Component={withBootstrap(ExamWriting)} />
             <Route path="/Speaking" Component={withBootstrap(ExamSpeaking)} />
+
+            <Route path="/PTE/Reading" Component={withBootstrap(PTEReading)} />
+
             <Route
               path="/diagnostic-test-answer/:examId"
               Component={withBootstrap(DiagnosticTestAnswer)}
@@ -349,6 +357,10 @@ const App = () => {
           <Route
             path="/practice-live-exam/:examType/:examForm/:examId"
             Component={withBootstrap(PracticeLiveExam)}
+          />
+          <Route
+            path="/PTE-Reading/:examType/:examForm/:examId"
+            Component={withBootstrap(LivePTEReadingExam)}
           />
           <Route
             path="/practice-speaking-live-exam/:examType/:examForm/:examId"

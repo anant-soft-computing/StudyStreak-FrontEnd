@@ -18,6 +18,8 @@ import paperTest from "../../../../img/icon/paperTest.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
+import mic from "../../../../img/icon/mic.svg";
+import headPhone from "../../../../img/icon/headphones.svg";
 
 const DSSidebar = () => {
   const location = useLocation().pathname;
@@ -46,6 +48,109 @@ const DSSidebar = () => {
   const menuList =
     category === "IELTS" || count?.count === 0
       ? [
+        {
+          name: "Dashboard",
+          icon: <img src={dashBoard} alt="Dashboard" />,
+          link: "/studentDashboard",
+        },
+        {
+          name: "My Profile",
+          icon: <img src={profile} alt="Profile" />,
+          link: "/studentProfile",
+        },
+        {
+          name: "My Course",
+          icon: <img src={myCourse} alt="My Course" />,
+          link: "/studentMyCourse",
+        },
+        {
+          name: "Paper Test",
+          icon: <img src={paperTest} alt="My Course" />,
+          link: "/paperTest",
+          state: { packageCount: count?.count },
+        },
+        {
+          name: "Mini Test",
+          icon: <img src={assignment} alt="Mini Test" />,
+          link: "/mockTest",
+        },
+        {
+          name: "Practice Test",
+          icon: <img src={practiceTest} alt="Practice Test" />,
+          link: "/practiceTest",
+          state: {
+            count: count?.practice_test_count,
+            packageCount: count?.count,
+          },
+        },
+        {
+          name: "Full Length Test",
+          icon: <img src={fullLengthTest} alt="Full Length Test" />,
+          link: "/fullLengthTest",
+          state: {
+            count: count?.full_length_test_count,
+            packageCount: count?.count,
+          },
+        },
+        {
+          name: "Diagnostic Test",
+          icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
+          link: "/diagnosticTest",
+          state: {
+            packageCount: count?.count,
+          },
+        },
+        {
+          name: "Live Classes",
+          icon: <img src={liveClass} alt="Live Classes" />,
+          link: "/studentLiveClasses",
+          state: { packageCount: count?.count },
+        },
+        {
+          name: "Recorded Classes",
+          icon: (
+            <img
+              src={recordedClass}
+              alt="Recorded Classes"
+              height={18}
+              width={18}
+            />
+          ),
+          link: "/recordedClasses",
+          state: { packageCount: count?.count },
+        },
+        {
+          name: "Flash Card",
+          icon: <img src={flashcard} alt="Flash Card" />,
+          link: "/flashCard",
+          state: { packageCount: count?.count },
+        },
+        {
+          name: "Resources",
+          icon: (
+            <img src={resources} alt="Resources" height={20} width={20} />
+          ),
+          link: "/resources",
+          state: { packageCount: count?.count },
+        },
+        {
+          name: "Reports",
+          icon: <img src={report} alt="Reports" />,
+          link: "/reports",
+        },
+        {
+          name: "Settings",
+          icon: <img src={settings} alt="Settings" />,
+          link: "/studentSettings",
+        },
+        {
+          name: "Logout",
+          icon: <img src={logOut} alt="Logout" />,
+          link: "/login",
+        },
+      ]
+      : category === "PTE"
+        ? [
           {
             name: "Dashboard",
             icon: <img src={dashBoard} alt="Dashboard" />,
@@ -63,40 +168,26 @@ const DSSidebar = () => {
           },
           {
             name: "Paper Test",
-            icon: <img src={paperTest} alt="My Course" />,
+            icon: <img src={paperTest} alt="Paper Test" />,
             link: "/paperTest",
             state: { packageCount: count?.count },
           },
           {
-            name: "Mini Test",
-            icon: <img src={assignment} alt="Mini Test" />,
-            link: "/mockTest",
+            name: "PTE Speaking",
+            icon: <img src={mic} alt="PTE Speaking" />,
           },
           {
-            name: "Practice Test",
-            icon: <img src={practiceTest} alt="Practice Test" />,
-            link: "/practiceTest",
-            state: {
-              count: count?.practice_test_count,
-              packageCount: count?.count,
-            },
+            name: "PTE Writing",
+            icon: <img src={practiceTest} alt="PTE Writing" />,
           },
           {
-            name: "Full Length Test",
-            icon: <img src={fullLengthTest} alt="Full Length Test" />,
-            link: "/fullLengthTest",
-            state: {
-              count: count?.full_length_test_count,
-              packageCount: count?.count,
-            },
+            name: "PTE Reading",
+            icon: <img src={fullLengthTest} alt="PTE Reading" />,
+            link: "/PTE/Reading",
           },
           {
-            name: "Diagnostic Test",
-            icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
-            link: "/diagnosticTest",
-            state: {
-              packageCount: count?.count,
-            },
+            name: "PTE Listening",
+            icon: <img src={headPhone} alt="PTE Listening" />,
           },
           {
             name: "Live Classes",
@@ -147,7 +238,7 @@ const DSSidebar = () => {
             link: "/login",
           },
         ]
-      : [
+        : [
           {
             name: "Dashboard",
             icon: <img src={dashBoard} alt="Dashboard" />,
@@ -245,9 +336,8 @@ const DSSidebar = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
             },
             method: "GET",
           },
@@ -309,6 +399,34 @@ const DSSidebar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const getLabel = (itemName, count, givenCount) => {
+    const countKey = itemName.replace(/ /g, "_").toLowerCase() + "_count";
+
+    if (itemName === "Practice Test") {
+      if (count?.all_pt_count === -1)
+        return <span className="dashboard__label bg-success">All</span>;
+      if (givenCount === count?.practice_test_count + givenCount)
+        return <span className="dashboard__label bg-danger">N/A</span>;
+      return (
+        <span className="dashboard__label">{count?.practice_test_count}</span>
+      );
+    }
+
+    if (itemName === "Full Length Test") {
+      if (count?.all_flt_count === -1)
+        return <span className="dashboard__label bg-success">All</span>;
+      if (givenCount === count?.full_length_test_count + givenCount)
+        return <span className="dashboard__label bg-danger">N/A</span>;
+      return (
+        <span className="dashboard__label">
+          {count?.full_length_test_count}
+        </span>
+      );
+    }
+
+    return <span className="dashboard__label">{count?.[countKey]}</span>;
+  };
+
   return (
     <div
       className="col-xl-3 col-lg-3 col-md-12"
@@ -337,43 +455,19 @@ const DSSidebar = () => {
                       : "admin__menu"
                   }
                   to={item.link}
-                  onClick={item.name === "Logout" ? logout : () => {}}
+                  onClick={item.name === "Logout" ? logout : () => { }}
                   state={item?.state}
                 >
                   <div className="admin__menu__icon">{item.icon}</div>
                   <div className="side-navbar-rexr-color-common admin__menu__title">
                     {item.name}
                   </div>
-                  {item.name === "Practice Test" ? (
-                    count?.practice_test_count === -1 ? (
-                      <span className="dashboard__label bg-success">All</span>
-                    ) : givenPTCount ===
-                      count?.practice_test_count + givenPTCount ? (
-                      <span className="dashboard__label bg-danger">N/A</span>
-                    ) : (
-                      <span className="dashboard__label">
-                        {count?.practice_test_count}
-                      </span>
-                    )
-                  ) : item.name === "Full Length Test" ? (
-                    count?.full_length_test_count === -1 ? (
-                      <span className="dashboard__label bg-success">All</span>
-                    ) : givenFLTCount ===
-                      count?.full_length_test_count + givenFLTCount ? (
-                      <span className="dashboard__label bg-danger">N/A</span>
-                    ) : (
-                      <span className="dashboard__label">
-                        {count?.full_length_test_count}
-                      </span>
-                    )
-                  ) : (
-                    <span className="dashboard__label">
-                      {
-                        count[
-                          item.name.replace(/ /g, "_").toLowerCase() + "_count"
-                        ]
-                      }
-                    </span>
+                  {getLabel(
+                    item.name,
+                    count,
+                    item.name === "Practice Test"
+                      ? givenPTCount
+                      : givenFLTCount
                   )}
                 </Link>
               </li>

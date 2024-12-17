@@ -32,6 +32,8 @@ import resources from "../../../../img/icon/support.svg";
 import report from "../../../../img/icon/coupon.svg";
 import settings from "../../../../img/icon/settings.svg";
 import logOut from "../../../../img/icon/logout.svg";
+import mic from "../../../../img/icon/mic.svg";
+import headPhone from "../../../../img/icon/headphones.svg";
 
 const drawerWidth = 280;
 
@@ -178,6 +180,95 @@ const DSLeftDrawer = () => {
             state: {
               packageCount: count?.count,
             },
+          },
+          {
+            name: "Live Classes",
+            icon: <img src={liveClass} alt="Live Classes" />,
+            link: "/studentLiveClasses",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Recorded Classes",
+            icon: (
+              <img
+                src={recordedClass}
+                alt="Recorded Classes"
+                height={18}
+                width={18}
+              />
+            ),
+            link: "/recordedClasses",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Flash Card",
+            icon: <img src={flashcard} alt="Flash Card" />,
+            link: "/flashCard",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Resources",
+            icon: (
+              <img src={resources} alt="Resources" height={20} width={20} />
+            ),
+            link: "/resources",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Reports",
+            icon: <img src={report} alt="Reports" />,
+            link: "/reports",
+          },
+          {
+            name: "Settings",
+            icon: <img src={settings} alt="Settings" />,
+            link: "/studentSettings",
+          },
+          {
+            name: "Logout",
+            icon: <img src={logOut} alt="Logout" />,
+            link: "/login",
+          },
+        ]
+      : category === "PTE"
+      ? [
+          {
+            name: "Dashboard",
+            icon: <img src={dashBoard} alt="Dashboard" />,
+            link: "/studentDashboard",
+          },
+          {
+            name: "My Profile",
+            icon: <img src={profile} alt="Profile" />,
+            link: "/studentProfile",
+          },
+          {
+            name: "My Course",
+            icon: <img src={myCourse} alt="My Course" />,
+            link: "/studentMyCourse",
+          },
+          {
+            name: "Paper Test",
+            icon: <img src={paperTest} alt="Paper Test" />,
+            link: "/paperTest",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "PTE Speaking",
+            icon: <img src={mic} alt="PTE Speaking" />,
+          },
+          {
+            name: "PTE Writing",
+            icon: <img src={practiceTest} alt="PTE Writing" />,
+          },
+          {
+            name: "PTE Reading",
+            icon: <img src={fullLengthTest} alt="PTE Reading" />,
+            link: "/PTE/Reading",
+          },
+          {
+            name: "PTE Listening",
+            icon: <img src={headPhone} alt="PTE Listening" />,
           },
           {
             name: "Live Classes",
@@ -378,6 +469,34 @@ const DSLeftDrawer = () => {
     })();
   }, [givenFLTCount, givenPTCount, open]);
 
+  const getLabel = (itemName, count, givenCount) => {
+    const countKey = itemName.replace(/ /g, "_").toLowerCase() + "_count";
+
+    if (itemName === "Practice Test") {
+      if (count?.all_pt_count === -1)
+        return <span className="dashboard__label bg-success">All</span>;
+      if (givenCount === count?.practice_test_count + givenCount)
+        return <span className="dashboard__label bg-danger">N/A</span>;
+      return (
+        <span className="dashboard__label">{count?.practice_test_count}</span>
+      );
+    }
+
+    if (itemName === "Full Length Test") {
+      if (count?.all_flt_count === -1)
+        return <span className="dashboard__label bg-success">All</span>;
+      if (givenCount === count?.full_length_test_count + givenCount)
+        return <span className="dashboard__label bg-danger">N/A</span>;
+      return (
+        <span className="dashboard__label">
+          {count?.full_length_test_count}
+        </span>
+      );
+    }
+
+    return <span className="dashboard__label">{count?.[countKey]}</span>;
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -452,45 +571,12 @@ const DSLeftDrawer = () => {
                           className="side-navbar-rexr-color-common admin__menu__title"
                           primary={item.name}
                         />
-                        {item.name === "Practice Test" ? (
-                          count?.all_pt_count === -1 ? (
-                            <span className="dashboard__label bg-success">
-                              All
-                            </span>
-                          ) : givenPTCount ===
-                            count?.practice_test_count + givenPTCount ? (
-                            <span className="dashboard__label bg-danger">
-                              N/A
-                            </span>
-                          ) : (
-                            <span className="dashboard__label">
-                              {count?.practice_test_count}
-                            </span>
-                          )
-                        ) : item.name === "Full Length Test" ? (
-                          count?.all_flt_count === -1 ? (
-                            <span className="dashboard__label bg-success">
-                              All
-                            </span>
-                          ) : givenFLTCount ===
-                            count?.full_length_test_count + givenFLTCount ? (
-                            <span className="dashboard__label bg-danger">
-                              N/A
-                            </span>
-                          ) : (
-                            <span className="dashboard__label">
-                              {count?.full_length_test_count}
-                            </span>
-                          )
-                        ) : (
-                          <span className="dashboard__label">
-                            {
-                              count[
-                                item.name.replace(/ /g, "_").toLowerCase() +
-                                  "_count"
-                              ]
-                            }
-                          </span>
+                        {getLabel(
+                          item.name,
+                          count,
+                          item.name === "Practice Test"
+                            ? givenPTCount
+                            : givenFLTCount
                         )}
                       </>
                     )}

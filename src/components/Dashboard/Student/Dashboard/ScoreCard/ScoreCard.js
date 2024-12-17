@@ -470,7 +470,7 @@ const ScoreCard = ({ course }) => {
           <div className="gridarea__wraper card-background">
             <div className="gridarea__content">
               <div className="gridarea__heading">
-                <h6>Your Latest Full Length Test</h6>
+                <h6>Your Latest Given Full Length Test</h6>
               </div>
               {fltData?.length > 0 ? (
                 <div>

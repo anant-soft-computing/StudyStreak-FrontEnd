@@ -610,6 +610,36 @@ const DiagnosticTest = () => {
     }
   };
 
+  const latestDiagnosticSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            flt: examId,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Diagnostic Exam Submitted");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const diagnosticTestSubmit = async () => {
     const data = {
       student_id: studentId,
@@ -632,6 +662,7 @@ const DiagnosticTest = () => {
         8000
       );
       if (response.status === 201) {
+        latestDiagnosticSubmit();
         toast.success("Your Diagnostic Test Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");

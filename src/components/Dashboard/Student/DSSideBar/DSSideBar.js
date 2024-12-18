@@ -188,44 +188,7 @@ const DSSidebar = () => {
           {
             name: "PTE Listening",
             icon: <img src={headPhone} alt="PTE Listening" />,
-          },
-          {
-            name: "Live Classes",
-            icon: <img src={liveClass} alt="Live Classes" />,
-            link: "/studentLiveClasses",
-            state: { packageCount: count?.count },
-          },
-          {
-            name: "Recorded Classes",
-            icon: (
-              <img
-                src={recordedClass}
-                alt="Recorded Classes"
-                height={18}
-                width={18}
-              />
-            ),
-            link: "/recordedClasses",
-            state: { packageCount: count?.count },
-          },
-          {
-            name: "Flash Card",
-            icon: <img src={flashcard} alt="Flash Card" />,
-            link: "/flashCard",
-            state: { packageCount: count?.count },
-          },
-          {
-            name: "Resources",
-            icon: (
-              <img src={resources} alt="Resources" height={20} width={20} />
-            ),
-            link: "/resources",
-            state: { packageCount: count?.count },
-          },
-          {
-            name: "Reports",
-            icon: <img src={report} alt="Reports" />,
-            link: "/reports",
+            link: "/PTE/Listening",
           },
           {
             name: "Settings",

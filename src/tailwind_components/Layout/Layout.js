@@ -69,6 +69,9 @@ const Layout = () => {
   const token = localStorage.getItem("loginInfo");
   const role = JSON.parse(localStorage.getItem("loginInfo"))?.user_role || "";
 
+  const tidioRoutes = ["/"];
+  const showTidio = tidioRoutes.includes(location.pathname);
+
   const logout = (event) => {
     event.preventDefault();
     logoutUser();
@@ -359,7 +362,7 @@ const Layout = () => {
         </footer>
       )}
 
-      <TidioChat />
+      {showTidio && <TidioChat />}
     </div>
   );
 };

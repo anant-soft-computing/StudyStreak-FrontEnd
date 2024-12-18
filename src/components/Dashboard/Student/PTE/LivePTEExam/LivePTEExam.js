@@ -1,17 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import "../../../../../../css/LiveExam.css";
+import "../../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import ajaxCall from "../../../../../../helpers/ajaxCall";
-import SmallModal from "../../../../../UI/Modal";
-import ReadingInstruction from "../../../../../Instruction/ReadingInstruction";
-import readingBandValues from "../../../../../../utils/bandValues/ReadingBandValues";
-import listeningBandValues from "../../../../../../utils/bandValues/listeningBandValues";
-import ListeningInstruction from "../../../../../Instruction/ListeningInstruction";
-import WritingInstruction from "../../../../../Instruction/WritingInstruction";
+import SmallModal from "../../../../UI/Modal";
+import Loading from "../../../../UI/Loading";
+import ajaxCall from "../../../../../helpers/ajaxCall";
+import ReadingInstruction from "../../../../Instruction/ReadingInstruction";
+import WritingInstruction from "../../../../Instruction/WritingInstruction";
+import ListeningInstruction from "../../../../Instruction/ListeningInstruction";
 const Cheerio = require("cheerio");
 
-const LivePTEReadingExam = () => {
+const LivePTEExam = () => {
   const containerRef = useRef(null);
   const navigate = useNavigate();
   const examType = useLocation()?.pathname?.split("/")?.[2];
@@ -22,10 +21,10 @@ const LivePTEReadingExam = () => {
   const [htmlContents, setHtmlContents] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
-  const [correctAnswer, setCorrectAnswer] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
   const [reRenderAudio, setReRenderAudio] = useState(false);
@@ -73,17 +72,7 @@ const LivePTEReadingExam = () => {
   }, [timer]);
 
   useEffect(() => {
-    if (
-      examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Writing"
-    ) {
-      setTimer(60 * 60);
-    } else if (examData?.exam_type === "Listening") {
-      setTimer(30 * 60);
-    }
-  }, [examData?.exam_type, examId]);
-
-  useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -127,9 +116,11 @@ const LivePTEReadingExam = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
-  }, [examId]);
+  }, [examForm, examId]);
 
   useEffect(() => {
     if (fullPaper?.length !== 0) {
@@ -143,7 +134,7 @@ const LivePTEReadingExam = () => {
       setExamBlock(examBlockWithNumbers);
       setExamData(examBlockWithNumbers[next]);
     }
-  }, [fullPaper, next]);
+  }, [examForm, examType, fullPaper, next]);
 
   const handleAnswerLinking = (e, questionId, next) => {
     const { value, id, name, checked } = e.target;
@@ -233,22 +224,14 @@ const LivePTEReadingExam = () => {
   }, [linkAnswer, next, instructionCompleted]);
 
   const renderAudio = (audio_file) => {
-    // Replace this with your actual implementation
     if (audio_file && reRenderAudio) {
       return (
-        <div>
-          <audio
-            controls
-            autoPlay
-            controlsList="nodownload noplaybackrate noplay"
-            className="hidden-controls"
-          >
+        <div className="mt-2 mb-2">
+          <audio controls autoPlay>
             <source src={audio_file} type="audio/mpeg" />
           </audio>
         </div>
       );
-    } else {
-      return <p></p>;
     }
   };
 
@@ -432,48 +415,6 @@ const LivePTEReadingExam = () => {
         setHtmlContents(tempHtmlContents);
         setExamAnswer(tempExamAnswer);
         setLinkAnswer(!linkAnswer);
-
-        // fetch correct answers
-        try {
-          const response = await ajaxCall(
-            `/practice-answers/${fullPaper[0].IELTS.id}/`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
-              },
-              method: "GET",
-            },
-            8000
-          );
-          if (response.status === 200) {
-            let correctAnswer;
-            if (examForm === "Reading") {
-              correctAnswer = response.data?.correct_answers.Reading.map(
-                (item) => ({
-                  exam_id: item.block_id,
-                  data: item.answers,
-                })
-              );
-            } else if (examForm === "Listening") {
-              correctAnswer = response.data?.correct_answers.Listening.map(
-                (item) => ({
-                  exam_id: item.block_id,
-                  data: item.answers,
-                })
-              );
-            }
-
-            setCorrectAnswer(correctAnswer);
-          } else {
-            console.log("error");
-          }
-        } catch (error) {
-          console.log("error", error);
-        }
       }
     })();
   }, [fullPaper]);
@@ -588,46 +529,6 @@ const LivePTEReadingExam = () => {
       answersArray.push(tempObj);
     });
 
-    if (examForm === "Reading" || examForm === "Listening") {
-      let correct = 0;
-
-      answersArray.forEach((answerObj) => {
-        answerObj.data.forEach((studentAnswer, index) => {
-          const correctAnswerText = correctAnswer[index]?.answer_text?.trim();
-          const studentAnswerText = studentAnswer.answer_text?.trim();
-          if (correctAnswerText?.includes(" OR ")) {
-            const correctOptions = correctAnswerText
-              .split(" OR ")
-              .map((option) => option.trim());
-            if (correctOptions?.includes(studentAnswerText)) {
-              correct++;
-            }
-          } else if (correctAnswerText?.includes(" AND ")) {
-            const correctOptions = correctAnswerText
-              .split(" AND ")
-              .map((option) => option.trim());
-            if (
-              correctOptions.every((option) =>
-                studentAnswerText?.includes(option)
-              )
-            ) {
-              correct++;
-            }
-          } else {
-            if (correctAnswerText === studentAnswerText) {
-              correct++;
-            }
-          }
-        });
-      });
-
-      if (examForm === "Reading") {
-        bandValue = readingBandValues[correct];
-      } else if (examForm === "Listening") {
-        bandValue = listeningBandValues[correct];
-      }
-    }
-
     try {
       const data = JSON.stringify({
         answer_data: answersArray,
@@ -638,7 +539,7 @@ const LivePTEReadingExam = () => {
       });
 
       const response = await ajaxCall(
-        `/answer/practice-test/`,
+        "/answer/practice-test/",
         {
           headers: {
             Accept: "application/json",
@@ -812,7 +713,7 @@ const LivePTEReadingExam = () => {
       });
 
       const response = await ajaxCall(
-        `/answer/practice-test/`,
+        "/answer/practice-test/",
         {
           headers: {
             Accept: "application/json",
@@ -890,7 +791,11 @@ const LivePTEReadingExam = () => {
     setNumberOfWord(words.length);
   };
 
-  return !instructionCompleted ? (
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : !instructionCompleted ? (
     <div className="test-instruction">
       {examData?.exam_type === "Reading" && (
         <ReadingInstruction
@@ -941,14 +846,11 @@ const LivePTEReadingExam = () => {
       </div>
       <div className="lv-container">
         {/* Main Container */}
-        {renderAudio(examData?.audio_file)}
         <div className="lv-main-container">
-          <div
-            className="lv-right-container"
-            id="right-container"
-            ref={containerRef}
-          >
+          <div className="lv-right-container" ref={containerRef}>
             <div className="lv-box-right">
+              {examData?.exam_type === "Listening" &&
+                renderAudio(examData?.audio_file)}
               {(examData?.exam_type === "Reading" ||
                 examData?.exam_type === "Listening") && (
                 <div
@@ -1083,4 +985,4 @@ const LivePTEReadingExam = () => {
   );
 };
 
-export default LivePTEReadingExam;
+export default LivePTEExam;

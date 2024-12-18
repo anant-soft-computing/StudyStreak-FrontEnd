@@ -1,30 +1,15 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-import Table from "../../../../UI/Table";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const LevelOfStudent = () => {
   const [givenDiagnosticTest, setGivenDiagnosticTest] = useState([]);
 
-  const viewReport = (params) => {
-    return (
-      <button
-        className="take-test"
-        onClick={() => {
-          window.open(`/diagnostic-test-answer/${params.data.id}`, "_blank");
-        }}
-        style={{ backgroundColor: "#01579b", border: "1px solid #01579b" }}
-      >
-        View Report
-      </button>
-    );
-  };
-
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          "/given-diagnostic/",
+          "/given-diagnostic/?name=Diagnostic",
           {
             headers: {
               Accept: "application/json",
@@ -38,70 +23,17 @@ const LevelOfStudent = () => {
           8000
         );
         if (response.status === 200) {
-          setGivenDiagnosticTest(
-            response?.data?.map((item, index) => ({ ...item, no: index + 1 }))
-          );
+          setGivenDiagnosticTest(response?.data);
         } else {
           console.log("error");
         }
       } catch (error) {
         console.log("error:", error);
       }
-    })();
-  }, []);
+    };
 
-  const columns = [
-    {
-      headerName: "No",
-      field: "no",
-      width: 95,
-      filter: true,
-      cellRenderer: (params) => {
-        return <div>{params.data.no}</div>;
-      },
-    },
-    {
-      headerName: "Name",
-      field: "name",
-      width: 300,
-      filter: true,
-    },
-    {
-      headerName: "Given Date",
-      field: "date",
-      width: 300,
-      filter: true,
-      valueGetter: (params) => {
-        return moment(params.data.date).format("ll");
-      },
-    },
-    {
-      headerName: "Reading Set",
-      field: "reading_set.Reading.length",
-      filter: true,
-    },
-    {
-      headerName: "Writing Set",
-      field: "writing_set.Writing.length",
-      filter: true,
-    },
-    {
-      headerName: "Listening Set",
-      field: "listening_set.Listening.length",
-      filter: true,
-    },
-    {
-      headerName: "Speaking Set",
-      field: "speaking_set.Speaking.length",
-      filter: true,
-    },
-    {
-      headerName: "View Report",
-      field: "button",
-      cellRenderer: viewReport,
-      width: 260,
-    },
-  ];
+    fetchData();
+  }, []);
 
   return (
     givenDiagnosticTest?.length > 0 && (
@@ -112,10 +44,39 @@ const LevelOfStudent = () => {
         >
           Level Of Student
         </h4>
-        <div className="col-xl-12 mt-4">
-          <div className="dashboard__table table-responsive">
-            <Table rowData={givenDiagnosticTest} columnDefs={columns} />
-          </div>
+        <div className="row">
+          {givenDiagnosticTest.map((data, index) => (
+            <div
+              key={index}
+              className="col-xl-4 col-lg-4 col-md-6 col-sm-6 column__custom__class"
+            >
+              <div className="gridarea__wraper text-center card-background">
+                <div className="gridarea__content p-2 m-2">
+                  <div className="gridarea__heading">
+                    <h3>{data?.flt_name}</h3>
+                    <h3>
+                      Given Date : {moment(data?.submitted_date).format("lll")}
+                    </h3>
+                  </div>
+                </div>
+                <div>
+                  <div className="d-flex justify-content-center mt-2 mb-3">
+                    <button
+                      className="default__button"
+                      onClick={() =>
+                        window.open(
+                          `/diagnostic-test-answer/${data?.flt_id}`,
+                          "_blank"
+                        )
+                      }
+                    >
+                      View Test
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     )

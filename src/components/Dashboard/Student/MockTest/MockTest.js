@@ -124,8 +124,16 @@ const MockTest = () => {
             8000
           );
           if (speakingBlocksResponse.status === 200) {
+            const isGeneral = ieltsCategory === "General";
             const allSpeakingData = speakingBlocksResponse.data
-              .filter((item) => item.block_threshold === 0)
+              .filter(
+                (item) =>
+                  item.block_threshold === 0 &&
+                  item.exam_category === category &&
+                  (isGeneral
+                    ? item.name.includes("General")
+                    : !item.name.includes("General"))
+              )
               .map((item) => ({
                 ...item,
                 exam_name: item.name,

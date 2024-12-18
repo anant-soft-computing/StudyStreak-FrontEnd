@@ -61,6 +61,7 @@ import SSettings from "./components/Dashboard/Student/Setting/Settings";
 import SResources from "./components/Dashboard/Student/Resources/Resources";
 import Report from "./components/Dashboard/Student/Report/Report";
 import PTEReading from "./components/Dashboard/Student/PTE/Reading/Reading";
+import PTEListening from "./components/Dashboard/Student/PTE/Listening/Listening";
 
 //-----------------> Admin <-----------------------------------------------------
 
@@ -103,7 +104,7 @@ import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTest";
 import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
-import LivePTEReadingExam from "./components/Dashboard/Student/PTE/Reading/LivePTEReading/LivePTEReadingExam";
+import LivePTEExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTEExam";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -274,6 +275,10 @@ const App = () => {
             <Route path="/Speaking" Component={withBootstrap(ExamSpeaking)} />
 
             <Route path="/PTE/Reading" Component={withBootstrap(PTEReading)} />
+            <Route
+              path="/PTE/Listening"
+              Component={withBootstrap(PTEListening)}
+            />
 
             <Route
               path="/diagnostic-test-answer/:examId"
@@ -359,8 +364,8 @@ const App = () => {
             Component={withBootstrap(PracticeLiveExam)}
           />
           <Route
-            path="/PTE-Reading/:examType/:examForm/:examId"
-            Component={withBootstrap(LivePTEReadingExam)}
+            path="/PTE/:examType/:examForm/:examId"
+            Component={withBootstrap(LivePTEExam)}
           />
           <Route
             path="/practice-speaking-live-exam/:examType/:examForm/:examId"

@@ -106,7 +106,8 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
                 exam_type === type && block_type === "Mock Test"
             ),
             Speaking: speakingData.filter(
-              ({ block_threshold }) => block_threshold === 1
+              ({ block_threshold, exam_category }) =>
+                block_threshold === 1 && exam_category === category
             ),
             General: examData.filter(
               ({ exam_type, block_type }) =>

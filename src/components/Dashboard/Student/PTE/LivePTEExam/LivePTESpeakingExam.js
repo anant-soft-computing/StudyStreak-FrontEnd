@@ -1,67 +1,40 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder2";
 import { convert } from "html-to-text";
-import SpeakingInstruction from "../Instruction/SpeakingInstruction";
+import "../../../../../css/LiveExam.css";
+import Loading from "../../../../UI/Loading";
+import ajaxCall from "../../../../../helpers/ajaxCall";
+import AudioRecorder from "../../../../Exam-Create/AudioRecorder2";
+import SpeakingInstruction from "../../../../Instruction/SpeakingInstruction";
 
-const initialSpeakingSingleQuestionState = {
+const initialState = {
   // 0 for incoming, 1 for instruction on screen, 2 for completed
   status: 0,
   filePath: "",
 };
 
-const PracticeSpeakingLiveExam = () => {
+const LivePTESpeakingExam = () => {
   const navigate = useNavigate();
+  const containerRef = useRef(null);
+  const synth = window.speechSynthesis;
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[4];
-  const synth = window.speechSynthesis;
   const [examData, setExamData] = useState([]);
-  const [timer, setTimer] = useState(3600);
   const [voices, setVoices] = useState([]);
-  const [timerRunning, setTimerRunning] = useState(true);
   const [fullPaper, setFullPaper] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeRecordingIndex, setActiveRecordingIndex] = useState(null);
   const [instructionCompleted, setInstructionCompleted] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
-  const [speaking, setSpeaking] = useState([
-    initialSpeakingSingleQuestionState,
-  ]);
+  const [speaking, setSpeaking] = useState([initialState]);
   const [next, setNext] = useState(0);
   const [recordedFilePath, setRecordedFilePath] = useState("");
-  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
-  const containerRef = useRef(null);
-  let highlightedElement = null;
 
   const handleCompleteInstruction = () => setInstructionCompleted(true);
-
-  useEffect(() => {
-    setTimer(15 * 60);
-  }, [examId]);
-
-  useEffect(() => {
-    let interval;
-    if (timerRunning) {
-      interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-      }, 1000);
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  }, [timerRunning]);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setTimerRunning(false);
-      toast.error("Time's up! Your exam has ended.");
-    }
-  }, [timer]);
 
   function generateRandomId(length) {
     let characters =
@@ -141,6 +114,7 @@ const PracticeSpeakingLiveExam = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -186,7 +160,7 @@ const PracticeSpeakingLiveExam = () => {
           const tempSpeakingQuestions = tempSpeaking.IELTS.Speaking.map(
             (item) =>
               item.questions.map((question) => ({
-                ...initialSpeakingSingleQuestionState,
+                ...initialState,
                 id: question.id,
               }))
           );
@@ -196,6 +170,8 @@ const PracticeSpeakingLiveExam = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [examId]);
@@ -338,21 +314,11 @@ const PracticeSpeakingLiveExam = () => {
     ]
   );
 
-  const scrollToQuestion = (index) => {
-    if (containerRef.current) {
-      const questionElement = containerRef.current.children[index];
-      if (questionElement) {
-        if (highlightedElement) {
-          highlightedElement.style.backgroundColor = ""; // Reset the background color of the previously highlighted element
-        }
-        questionElement.scrollIntoView({ behavior: "smooth", block: "start" });
-        questionElement.style.backgroundColor = "#ffffcc"; // Set a light background color to highlight the current element
-        highlightedElement = questionElement; // Update the highlighted element
-      }
-    }
-  };
-
-  return !instructionCompleted ? (
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : !instructionCompleted ? (
     <div className="test-instruction">
       <SpeakingInstruction
         testType="Practice"
@@ -368,9 +334,6 @@ const PracticeSpeakingLiveExam = () => {
           <div style={{ marginLeft: "10px" }}>/</div>
           <div className="lv-userName">{`${examData?.name}`}</div>
         </div>
-        <span className="lv-navbar-title">
-          Time Taken :<span className="lv-userName">{timeTaken}</span>
-        </span>
         <div className="lv-navbar-title-mobile">
           <div className="username-mobile">
             <h2>{examData?.exam_category}</h2>
@@ -379,11 +342,6 @@ const PracticeSpeakingLiveExam = () => {
               <div style={{ margin: "15px 0px 0 10px" }}>/</div>
               <div className="lv-userName">{`${examData?.name}`}</div>
             </div>
-          </div>
-          <div className="lv-navbar-footer">
-            <span>
-              Time Taken :<span className="lv-userName">{timeTaken}</span>
-            </span>
           </div>
         </div>
       </div>
@@ -403,18 +361,10 @@ const PracticeSpeakingLiveExam = () => {
                 (element) => element.id === item.id
               );
               return (
-                <div className="lv-question-container" key={item.id}>
-                  <div className="lv-speaking-question" style={{ flex: 1 }}>
-                    <p> {i + 1} :</p>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: item.question,
-                      }}
-                    />
-                  </div>
-                  <div className="d-flex align-items-center lv-btn-mic-container">
+                <div key={item.id} className="p-4">
+                  <div className="d-flex justify-content-center">
                     <button
-                      className="lv-speaking-button lv-speaking-button"
+                      className="lv-speaking-button"
                       onClick={() =>
                         speaking?.[speakingIndex]?.status === 2
                           ? handleReplay(item.question, item.id)
@@ -468,69 +418,55 @@ const PracticeSpeakingLiveExam = () => {
                     >
                       Pause
                     </button>
-                    <hr />
+                  </div>
+                  <hr />
+                  <div className="d-flex justify-content-center">
                     {recorderContainer(item, speakingIndex)}
                   </div>
                 </div>
               );
             })}
         </div>
-        <div className="d-flex justify-content-between align-items-center p-2">
-          <div className="lv-section-pagination">
-            {Object.keys(examData).length > 0 &&
-              examData.questions.map((_, index) => {
-                return (
-                  <div
-                    className="lv-footer-item"
-                    onClick={() => scrollToQuestion(index)}
-                    key={index}
-                  >
-                    {index + 1}
-                  </div>
-                );
-              })}
-          </div>
-          <div className="d-flex justify-content-between mb-2">
-            <div className="lv-question-pagination" />
-            <div className="lv-footer-btn">
-              <button
-                className="lv-footer-button"
-                style={{
-                  display: next === 0 ? "none" : "block",
-                }}
-                onClick={() => {
-                  setNext(next - 1);
-                }}
-              >
-                <span>Back</span>
-              </button>
-              <button
-                className="lv-footer-button"
-                style={{
-                  display:
-                    next === fullPaper?.[examType].Speaking?.length - 1
-                      ? "none"
-                      : "block",
-                }}
-                onClick={() => {
-                  setNext(next + 1);
-                }}
-              >
-                <span>&#10152;</span>
-              </button>
-              <button
-                className="lv-footer-button"
-                style={{
-                  display:
-                    next === fullPaper?.[examType].Speaking?.length - 1
-                      ? "block"
-                      : "none",
-                }}
-                onClick={practiceTestSubmit}
-              >
-                Submit
-              </button>
-            </div>
+        <div className="d-flex justify-content-between mb-2">
+          <div className="lv-question-pagination" />
+          <div className="lv-footer-btn">
+            <button
+              className="lv-footer-button"
+              style={{
+                display: next === 0 ? "none" : "block",
+              }}
+              onClick={() => {
+                setNext(next - 1);
+              }}
+            >
+              <span>Back</span>
+            </button>
+            <button
+              className="lv-footer-button"
+              style={{
+                display:
+                  next === fullPaper?.[examType].Speaking?.length - 1
+                    ? "none"
+                    : "block",
+              }}
+              onClick={() => {
+                setNext(next + 1);
+              }}
+            >
+              <span>&#10152;</span>
+            </button>
+            <button
+              className="lv-footer-button"
+              style={{
+                display:
+                  next === fullPaper?.[examType].Speaking?.length - 1
+                    ? "block"
+                    : "none",
+              }}
+              onClick={practiceTestSubmit}
+            >
+              Submit
+            </button>
           </div>
         </div>
       </div>
@@ -538,4 +474,4 @@ const PracticeSpeakingLiveExam = () => {
   );
 };
 
-export default PracticeSpeakingLiveExam;
+export default LivePTESpeakingExam;

@@ -57,7 +57,7 @@ const Listening = () => {
           className="take-test"
           onClick={() => {
             navigate(`/exam-practice-test-answer/${examId}`, {
-              state: { fullPaper: paperId, examForm: "Reading" },
+              state: { fullPaper: paperId, examForm: "Listening" },
             });
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
@@ -79,7 +79,7 @@ const Listening = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=Listening&category=PTE`,
+          "/createexamview/?exam_type=Listening&category=PTE",
           {
             headers: {
               Accept: "application/json",

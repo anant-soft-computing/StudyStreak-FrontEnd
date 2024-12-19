@@ -192,37 +192,41 @@ const CreateLiveClass = ({ setActiveTab }) => {
       );
 
       if (response.status === 201) {
-        const liveClassId = response?.data?.id;
+        resetReducerForm();
+        setActiveTab("View LiveClass");
+        toast.success("Live Class Created Successfully");
 
-        const formData = new FormData();
+        if (
+          createLiveClassData?.attachments?.some((item) => item?.attachment)
+        ) {
+          const formData = new FormData();
 
-        // Append LiveClass Attachments
-        createLiveClassData.attachments.forEach((item, index) => {
-          if (item.attachment) {
-            formData.append(`attachments[${index}]attachment`, item.attachment);
-          }
-          formData.append(`attachments[${index}]file_name`, item.file_name);
-        });
+          // Append LiveClass Attachments
+          createLiveClassData.attachments.forEach((item, index) => {
+            if (item.attachment) {
+              formData.append(
+                `attachments[${index}]attachment`,
+                item.attachment
+              );
+              formData.append(
+                `attachments[${index}]file_name`,
+                item.file_name || ""
+              );
+            }
+          });
 
-        const attachmentResponse = await ajaxCall(
-          `/liveclass/attachment/${liveClassId}`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${authData?.accessToken}`,
+          await ajaxCall(
+            `/liveclass/attachment/${response?.data?.id}`,
+            {
+              headers: {
+                Accept: "application/json",
+                Authorization: `Bearer ${authData?.accessToken}`,
+              },
+              method: "POST",
+              body: formData,
             },
-            method: "POST",
-            body: formData,
-          },
-          8000
-        );
-
-        if (attachmentResponse.status === 201) {
-          resetReducerForm();
-          setActiveTab("View LiveClass");
-          toast.success("Live Class Created Successfully");
-        } else {
-          toast.error("Some Problem Occurred. Please try again.");
+            8000
+          );
         }
       } else if ([400, 404].includes(response.status)) {
         toast.error("Some Problem Occurred. Please try again.");

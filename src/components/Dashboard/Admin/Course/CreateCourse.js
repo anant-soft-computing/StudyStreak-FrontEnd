@@ -35,8 +35,8 @@ const initialCourseData = {
   Course_Overview_URL: "",
   Course_Thumbnail: "",
   course_banner: "",
-  SEO_Meta_Keywords: "",
-  Meta_Description: "",
+  SEO_Meta_Keywords: [""],
+  Meta_Description: [""],
   lessons: [],
   lessonsId: [],
 };
@@ -44,15 +44,6 @@ const initialCourseData = {
 const reducerCreateCourse = (state, action) => {
   if (action.type === "reset") {
     return action.payload || initialCourseData;
-  }
-  if (
-    action.type === "SEO_Meta_Keywords" ||
-    action.type === "Meta_Description"
-  ) {
-    return {
-      ...state,
-      [action.type]: [action.value],
-    };
   }
   return { ...state, [action.type]: action.value };
 };
@@ -120,12 +111,16 @@ const validateForm = (createCourseData, setFormError) => {
     setFormError("Course Banner is Required");
     return false;
   }
-  if (!createCourseData.SEO_Meta_Keywords) {
+  if (createCourseData.SEO_Meta_Keywords.length === 0) {
     setFormError("SEO Meta Keywords URL is Required");
     return false;
   }
-  if (!createCourseData.Meta_Description) {
+  if (createCourseData.Meta_Description.length === 0) {
     setFormError("Meta Description is Required");
+    return false;
+  }
+  if (createCourseData.lessonsId.length === 0) {
+    setFormError("Lessons is Required");
     return false;
   }
   return true;
@@ -200,8 +195,12 @@ const CreateCourse = ({ setMainTab }) => {
       );
       formData.append("Course_Thumbnail", createCourseData.Course_Thumbnail);
       formData.append("course_banner", createCourseData.course_banner);
-      formData.append("SEO_Meta_Keywords", createCourseData.SEO_Meta_Keywords);
-      formData.append("Meta_Description", createCourseData.Meta_Description);
+      createCourseData.SEO_Meta_Keywords.forEach((item, index) => {
+        formData.append(`SEO_Meta_Keywords[${index}]`, item);
+      });
+      createCourseData.Meta_Description.forEach((item, index) => {
+        formData.append(`Meta_Description[${index}]`, item);
+      });
       createCourseData.lessonsId.forEach((id) => {
         formData.append(`lessons`, id);
       });
@@ -734,11 +733,13 @@ const CreateCourse = ({ setMainTab }) => {
                   <input
                     type="text"
                     placeholder="SEO Meta Keywords"
-                    value={createCourseData.SEO_Meta_Keywords[0]}
+                    value={createCourseData.SEO_Meta_Keywords.join(", ")}
                     onChange={(e) => {
                       dispatchCreateCourse({
                         type: "SEO_Meta_Keywords",
-                        value: e.target.value,
+                        value: e.target.value
+                          .split(",")
+                          .map((keyword) => keyword.trim()),
                       });
                     }}
                   />
@@ -752,11 +753,13 @@ const CreateCourse = ({ setMainTab }) => {
                   <input
                     type="text"
                     placeholder="Meta Description"
-                    value={createCourseData.Meta_Description[0]}
+                    value={createCourseData.Meta_Description.join(", ")}
                     onChange={(e) => {
                       dispatchCreateCourse({
                         type: "Meta_Description",
-                        value: e.target.value,
+                        value: e.target.value
+                          .split(",")
+                          .map((desc) => desc.trim()),
                       });
                     }}
                   />

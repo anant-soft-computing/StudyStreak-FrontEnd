@@ -256,10 +256,12 @@ const DSLeftDrawer = () => {
           {
             name: "PTE Speaking",
             icon: <img src={mic} alt="PTE Speaking" />,
+            link: "/PTE/Speaking",
           },
           {
             name: "PTE Writing",
             icon: <img src={practiceTest} alt="PTE Writing" />,
+            link: "/PTE/Writing",
           },
           {
             name: "PTE Reading",

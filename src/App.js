@@ -62,6 +62,8 @@ import SResources from "./components/Dashboard/Student/Resources/Resources";
 import Report from "./components/Dashboard/Student/Report/Report";
 import PTEReading from "./components/Dashboard/Student/PTE/Reading/Reading";
 import PTEListening from "./components/Dashboard/Student/PTE/Listening/Listening";
+import PTEWriting from "./components/Dashboard/Student/PTE/Writing/Writing";
+import PTESpeaking from "./components/Dashboard/Student/PTE/Speaking/Speaking";
 
 //-----------------> Admin <-----------------------------------------------------
 
@@ -105,6 +107,7 @@ import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTest";
 import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
 import LivePTEExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTEExam";
+import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTESpeakingExam";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -279,7 +282,12 @@ const App = () => {
               path="/PTE/Listening"
               Component={withBootstrap(PTEListening)}
             />
-
+            <Route path="/PTE/Writing" Component={withBootstrap(PTEWriting)} />
+            <Route
+              path="/PTE/Speaking"
+              Component={withBootstrap(PTESpeaking)}
+            />
+            
             <Route
               path="/diagnostic-test-answer/:examId"
               Component={withBootstrap(DiagnosticTestAnswer)}
@@ -366,6 +374,10 @@ const App = () => {
           <Route
             path="/PTE/:examType/:examForm/:examId"
             Component={withBootstrap(LivePTEExam)}
+          />
+          <Route
+            path="/PTE-Speaking/:examType/:examForm/:examId"
+            Component={withBootstrap(LivePTESpeakingExam)}
           />
           <Route
             path="/practice-speaking-live-exam/:examType/:examForm/:examId"

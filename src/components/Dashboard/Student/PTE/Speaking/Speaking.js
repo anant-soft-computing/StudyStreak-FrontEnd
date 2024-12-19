@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Table from "../../../../UI/Table";
-import Loading from "../../../../UI/Loading";
-import DSSidebar from "../../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../../helpers/ajaxCall";
+import DSSidebar from "../../DSSideBar/DSSideBar";
+import Loading from "../../../../UI/Loading";
+import Table from "../../../../UI/Table";
 
-const Reading = () => {
+const Speaking = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
-  const [readingData, setReadingData] = useState([]);
+  const [speakingData, setSpeakingData] = useState([]);
 
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
       if (Array.isArray(data?.IELTS[key])) {
         if (data?.IELTS[key].length > 0) {
-          window.open(`/PTE/IELTS/${key}/${data.id}`, "_blank");
+          window.open(`/PTE-Speaking/IELTS/${key}/${data.id}`, "_blank");
         }
       }
     });
@@ -56,8 +56,8 @@ const Reading = () => {
         <button
           className="take-test"
           onClick={() => {
-            navigate(`/exam-practice-test-answer/${examId}`, {
-              state: { fullPaper: paperId, examForm: "Reading" },
+            navigate(`/practice-assessment/${paperId}`, {
+              state: { examType: "Speaking" },
             });
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
@@ -79,7 +79,7 @@ const Reading = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          "/createexamview/?exam_type=Reading&category=PTE",
+          "/createexamview/?exam_type=Speaking&category=PTE",
           {
             headers: {
               Accept: "application/json",
@@ -93,7 +93,7 @@ const Reading = () => {
           8000
         );
         if (response.status === 200) {
-          setReadingData(response?.data);
+          setSpeakingData(response?.data);
         }
       } catch (error) {
         console.error("error", error);
@@ -124,7 +124,7 @@ const Reading = () => {
       headerName: "Questions",
       field: "questions",
       cellRenderer: (params) => {
-        return params.data.IELTS?.Reading.length;
+        return params.data.IELTS?.Speaking.length;
       },
       filter: true,
       width: 300,
@@ -133,7 +133,7 @@ const Reading = () => {
       headerName: "Time",
       field: "time",
       cellRenderer: () => {
-        return "60 Minutes";
+        return "15 Minutes";
       },
       filter: true,
       width: 300,
@@ -174,16 +174,16 @@ const Reading = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <h4>PTE Reading</h4>
+                      <h4>PTE Speaking</h4>
                     </div>
                     <div className="row">
                       {isLoading ? (
                         <Loading />
-                      ) : readingData.length > 0 ? (
-                        <Table rowData={readingData} columnDefs={columns} />
+                      ) : speakingData.length > 0 ? (
+                        <Table rowData={speakingData} columnDefs={columns} />
                       ) : (
                         <h5 className="text-center text-danger">
-                          No Reading Tests Available !!
+                          No Speaking Tests Available !!
                         </h5>
                       )}
                     </div>
@@ -198,4 +198,4 @@ const Reading = () => {
   );
 };
 
-export default Reading;
+export default Speaking;

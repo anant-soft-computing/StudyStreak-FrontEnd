@@ -21,8 +21,6 @@ const LivePTEExam = () => {
   const [htmlContents, setHtmlContents] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
-  const [timer, setTimer] = useState(3600);
-  const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -33,43 +31,10 @@ const LivePTEExam = () => {
   const [next, setNext] = useState(0);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
-  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   const handleCompleteInstruction = () => setInstructionCompleted(true);
-
-  useEffect(() => {
-    if (
-      examData?.exam_type === "Reading" ||
-      examData?.exam_type === "Writing"
-    ) {
-      setTimer(60 * 60);
-    } else if (examData?.exam_type === "Listening") {
-      setTimer(30 * 60);
-    }
-  }, [examData?.exam_type, examId]);
-
-  useEffect(() => {
-    let interval;
-
-    if (timerRunning) {
-      interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-      }, 1000);
-    }
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [timerRunning]);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setTimerRunning(false);
-      toast.error("Time's up! Your exam has ended.");
-    }
-  }, [timer]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -233,6 +198,29 @@ const LivePTEExam = () => {
         </div>
       );
     }
+  };
+
+  const renderPassage = (passage, image) => {
+    return (
+      <>
+        {image && (
+          <div className="text-center">
+            <img
+              className="mb-2"
+              src={image}
+              alt="Study Streak"
+              height={250}
+              width={250}
+            />
+          </div>
+        )}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: passage,
+          }}
+        ></div>
+      </>
+    );
   };
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
@@ -555,7 +543,6 @@ const LivePTEExam = () => {
       );
 
       if (response.status === 201) {
-        setTimerRunning(false);
         practiceTestSubmit();
         navigate(`/exam-practice-test-answer/${examId}`, {
           state: { examForm, fullPaper: fullPaper[0].IELTS.id },
@@ -729,7 +716,6 @@ const LivePTEExam = () => {
       );
 
       if (response.status === 201) {
-        setTimerRunning(false);
         practiceTestSubmit();
         navigate(`/exam-practice-test-answer/${examId}`, {
           state: { examForm, fullPaper: fullPaper[0].IELTS.id },
@@ -825,9 +811,6 @@ const LivePTEExam = () => {
           <div style={{ marginLeft: "10px" }}>/</div>
           <div className="lv-userName">{`${examData?.exam_name}`}</div>
         </div>
-        <span className="lv-navbar-title">
-          Time Taken :<span className="lv-userName">{timeTaken}</span>
-        </span>
         <div className="lv-navbar-title-mobile">
           <div className="username-mobile">
             <h2>{examData?.exam_category}</h2>
@@ -837,16 +820,18 @@ const LivePTEExam = () => {
               <div className="lv-userName">{`${examData?.exam_name}`}</div>
             </div>
           </div>
-          <div className="lv-navbar-footer">
-            <span>
-              Time Taken :<span className="lv-userName">{timeTaken}</span>
-            </span>
-          </div>
         </div>
       </div>
       <div className="lv-container">
         {/* Main Container */}
         <div className="lv-main-container">
+          {/* Left Container */}
+          {examData?.exam_type === "Writing" && (
+            <div className="lv-left-container">
+              {renderPassage(examData?.passage, examData?.passage_image)}
+            </div>
+          )}
+          {/* Right Container */}
           <div className="lv-right-container" ref={containerRef}>
             <div className="lv-box-right">
               {examData?.exam_type === "Listening" &&

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import ajaxCall from "../../../../helpers/ajaxCall";
+import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
-import Table from "../../../UI/Table";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const FullLengthTest = () => {
   const navigate = useNavigate();
@@ -26,11 +26,30 @@ const FullLengthTest = () => {
     return nameA - nameB;
   });
 
+  const filterByIELTSCategory = (item, category) => {
+    switch (category) {
+      case "General":
+        return item.name.includes("General");
+      case "Foundation":
+        return item.name.includes("Foundation");
+      case "Grammar":
+        return item.name.includes("Grammar");
+      case "Academic":
+        return (
+          !item.name.includes("General") &&
+          !item.name.includes("Foundation") &&
+          !item.name.includes("Grammar")
+        );
+      default:
+        return false;
+    }
+  };
+
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student-stats/`,
+          "/student-stats/",
           {
             headers: {
               Accept: "application/json",
@@ -59,7 +78,7 @@ const FullLengthTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flt/`,
+          "/get/flt/",
           {
             headers: {
               Accept: "application/json",
@@ -73,11 +92,10 @@ const FullLengthTest = () => {
           8000
         );
         if (response.status === 200) {
-          const isGeneral = ieltsCategory === "General";
           const fullLengthTest = response.data.filter(
             ({ name }) =>
               !name.includes("Diagnostic") &&
-              (isGeneral ? name.includes("General") : !name.includes("General"))
+              filterByIELTSCategory({ name }, ieltsCategory)
           );
           setFullLengthTestData(fullLengthTest);
         }
@@ -193,19 +211,19 @@ const FullLengthTest = () => {
                     <div className="dashboard__section__title">
                       <h4>Full Length Test</h4>
                       {category === "IELTS" && (
-                        <div className="col-xl-2">
-                          <div className="dashboard__select__heading">
-                            <span>IELTS Category</span>
-                          </div>
-                          <div className="dashboard__selector">
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>IELTS Type</label>
                             <select
                               className="form-select"
-                              aria-label="Default select example"
+                              name="ieltsCategory"
                               value={ieltsCategory}
                               onChange={(e) => setIeltsCategory(e.target.value)}
                             >
                               <option value="Academic">Academic</option>
                               <option value="General">General</option>
+                              <option value="Foundation">Foundation</option>
+                              <option value="Grammer">Grammer</option>
                             </select>
                           </div>
                         </div>

@@ -392,6 +392,7 @@ const Exam = () => {
                               <FLT
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
+                                category={screenContent.examType}
                               />
                             )}
                           </div>

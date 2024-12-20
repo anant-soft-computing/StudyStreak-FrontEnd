@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { toast } from "react-toastify";
+import Loading from "../../UI/Loading";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import ajaxCall from "../../../helpers/ajaxCall";
-import Loading from "../../UI/Loading";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 const initialPT = {
   Name: "",
@@ -43,6 +43,115 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
   const [createPT, dispatchPT] = useReducer(reducerPT, initialPT);
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [totalQuestions, setTotalQuestions] = useState(0);
+
+  const examSubCategory =
+    category === "IELTS"
+      ? [
+          { name: "Academic", value: "Academic" },
+          { name: "General", value: "General" },
+          { name: "Foundation", value: "Foundation" },
+          { name: "Grammer", value: "Grammer" },
+        ]
+      : category === "PTE"
+      ? type === "Reading"
+        ? [
+            {
+              name: "R&W: Fill in the blanks [RWFIB]",
+              value: "R&W: Fill in the blanks [RWFIB]",
+            },
+            {
+              name: "MC, choose multiple answers",
+              value: "MC, choose multiple answers",
+            },
+            { name: "Re-order paragraphs", value: "Re-order paragraphs" },
+            {
+              name: "R: Fill in the blanks [RFIB]",
+              value: "R: Fill in the blanks [RFIB]",
+            },
+            {
+              name: "MC, choose single answer",
+              value: "MC, choose single answer",
+            },
+          ]
+        : type === "Writing"
+        ? [
+            {
+              name: "Summarize written text [SWT]",
+              value: "Summarize written text [SWT]",
+            },
+            {
+              name: "Write essay [WE]",
+              value: "Write essay [WE]",
+            },
+          ]
+        : type === "Listening"
+        ? [
+            {
+              name: "Summarize spoken text [SST]",
+              value: "Summarize spoken text [SST]",
+            },
+            {
+              name: "MC, choose multiple answers",
+              value: "MC, choose multiple answers",
+            },
+            {
+              name: "Fill in the blanks [LFIB]",
+              value: "Fill in the blanks [LFIB]",
+            },
+            {
+              name: "Highlight correct summar",
+              value: "Highlight correct summar",
+            },
+            {
+              name: "MC, choose single answer",
+              value: "MC, choose single answer",
+            },
+            {
+              name: "Select missing words [SMW]",
+              value: "Select missing words [SMW]",
+            },
+            {
+              name: "Highlight incorrect words",
+              value: "Highlight incorrect words",
+            },
+            {
+              name: "Write from diction [WFD]",
+              value: "Write from diction [WFD]",
+            },
+          ]
+        : type === "Speaking"
+        ? [
+            {
+              name: "Read aloud [RA]",
+              value: "Read aloud [RA]",
+            },
+            {
+              name: "Repeat sentence [RS]",
+              value: "Repeat sentence [RS]",
+            },
+            {
+              name: "Describe image [DI]",
+              value: "Describe image [DI]",
+            },
+            {
+              name: "Re-tell lecture [RL]",
+              value: "Re-tell lecture [RL]",
+            },
+            {
+              name: "Answer short question [ASQ]",
+              value: "Answer short question [ASQ]",
+            },
+            {
+              name: "Respond to a sitution [RTS]",
+              value: "Respond to a sitution [RTS]",
+            },
+            {
+              name: "Summarize group discussion [SGD]",
+              value: "Summarize group discussion [SGD]",
+            },
+          ]
+        : []
+      : [];
 
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
@@ -294,6 +403,22 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
           </div>
         </div>
       </div>
+      {(category === "IELTS" || category === "PTE") && (
+        <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+          <div className="dashboard__select__heading">
+            <span>Exam category</span>
+          </div>
+          <div className="dashboard__selector">
+            <select className="form-select">
+              {examSubCategory.map((item, index) => (
+                <option key={index} value={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
       {exams[type]?.length > 0 && (
         <div className="dashboard__form__wraper">
           <div className="dashboard__form__input">

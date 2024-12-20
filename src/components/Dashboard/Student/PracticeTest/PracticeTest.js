@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import ajaxCall from "../../../../helpers/ajaxCall";
+import Tab from "../../../UI/Tab";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
-import Tab from "../../../UI/Tab";
+import ajaxCall from "../../../../helpers/ajaxCall";
 import PracticeTestTable from "./PracticeTestTable";
 import PTAssessment from "../Assessment/PTAssessment/PTAssessment";
 
@@ -32,6 +32,25 @@ const PracticeTest = () => {
           { name: "Speaking" },
         ]
       : [{ name: "General" }];
+
+  const filterByIELTSCategory = (item, category) => {
+    switch (category) {
+      case "General":
+        return item.name.includes("General");
+      case "Foundation":
+        return item.name.includes("Foundation");
+      case "Grammar":
+        return item.name.includes("Grammar");
+      case "Academic":
+        return (
+          !item.name.includes("General") &&
+          !item.name.includes("Foundation") &&
+          !item.name.includes("Grammar")
+        );
+      default:
+        return false;
+    }
+  };
 
   useEffect(() => {
     if (category !== "GENERAL") {
@@ -85,7 +104,7 @@ const PracticeTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student-stats/`,
+          "/student-stats/",
           {
             headers: {
               Accept: "application/json",
@@ -127,39 +146,30 @@ const PracticeTest = () => {
         );
         if (response.status === 200) {
           const { data } = response;
-          const isGeneral = ieltsCategory === "General";
           const filteredData = {
             Reading: data.filter(
               ({ exam_type, IELTS }) =>
                 exam_type === "Reading" &&
                 !IELTS?.Name?.includes("Diagnostic") &&
-                (isGeneral
-                  ? IELTS?.Name?.includes("General")
-                  : !IELTS?.Name?.includes("General"))
+                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
             ),
             Writing: data.filter(
               ({ exam_type, IELTS }) =>
                 exam_type === "Writing" &&
                 !IELTS?.Name?.includes("Diagnostic") &&
-                (isGeneral
-                  ? IELTS?.Name?.includes("General")
-                  : !IELTS?.Name?.includes("General"))
+                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
             ),
             Listening: data.filter(
               ({ exam_type, IELTS }) =>
                 exam_type === "Listening" &&
                 !IELTS?.Name?.includes("Diagnostic") &&
-                (isGeneral
-                  ? IELTS?.Name?.includes("General")
-                  : !IELTS?.Name?.includes("General"))
+                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
             ),
             Speaking: data.filter(
               ({ exam_type, IELTS }) =>
                 exam_type === "Speaking" &&
                 !IELTS?.Name?.includes("Diagnostic") &&
-                (isGeneral
-                  ? IELTS?.Name?.includes("General")
-                  : !IELTS?.Name?.includes("General"))
+                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
             ),
             General: data.filter(
               ({ exam_type, IELTS }) =>
@@ -199,19 +209,27 @@ const PracticeTest = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <div className="d-flex gap-3">
-                        <h4>Practice Test</h4>
-                        {category === "IELTS" && (
-                          <select
-                            value={ieltsCategory}
-                            onChange={(e) => setIeltsCategory(e.target.value)}
-                          >
-                            <option value="Academic">Academic</option>
-                            <option value="General">General</option>
-                          </select>
-                        )}
-                      </div>
-                      {category && <h5>Course : {category}</h5>}
+                      <h4>
+                        Practice Test {category && ` (Course: ${category})`}
+                      </h4>
+                      {category === "IELTS" && (
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>IELTS Type</label>
+                            <select
+                              className="form-select"
+                              name="ieltsCategory"
+                              value={ieltsCategory}
+                              onChange={(e) => setIeltsCategory(e.target.value)}
+                            >
+                              <option value="Academic">Academic</option>
+                              <option value="General">General</option>
+                              <option value="Foundation">Foundation</option>
+                              <option value="Grammer">Grammer</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     {packageCount === 0 ? (
                       <BuyCourse message="No Practice Test Available, Please Buy a Course !!" />

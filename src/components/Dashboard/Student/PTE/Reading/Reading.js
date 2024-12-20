@@ -175,6 +175,31 @@ const Reading = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>PTE Reading</h4>
+                      <div className="dashboard__form__wraper">
+                        <div className="dashboard__form__input">
+                          <label>Reading Exam Type</label>
+                          <select
+                            className="form-select"
+                            name="readingExamType"
+                          >
+                            <option value="R&W: Fill in the blanks [RWFIB]">
+                              R&W: Fill in the blanks [RWFIB]
+                            </option>
+                            <option value="MC, choose multiple answers">
+                              MC, choose multiple answers
+                            </option>
+                            <option value="Re-order paragraphs">
+                              Re-order paragraphs
+                            </option>
+                            <option value="R: Fill in the blanks [RFIB]">
+                              R: Fill in the blanks [RFIB]
+                            </option>
+                            <option value="MC, choose single answer">
+                              MC, choose single answer
+                            </option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                     <div className="row">
                       {isLoading ? (

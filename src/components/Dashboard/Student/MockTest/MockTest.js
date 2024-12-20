@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ajaxCall from "../../../../helpers/ajaxCall";
-import DSSidebar from "../DSSideBar/DSSideBar";
+import { useLocation } from "react-router-dom";
 import Tab from "../../../UI/Tab";
 import TestTable from "./TestTable";
-import MTAssessment from "../Assessment/MTAssessment/MTAssessment";
-import { useLocation } from "react-router-dom";
+import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import MTAssessment from "../Assessment/MTAssessment/MTAssessment";
 
 const MockTest = () => {
   const { count } = useLocation().state || {};
@@ -28,6 +28,25 @@ const MockTest = () => {
           { name: "Speaking" },
         ]
       : [{ name: "General" }];
+
+  const filterByIELTSCategory = (item, category) => {
+    switch (category) {
+      case "General":
+        return item.name.includes("General");
+      case "Foundation":
+        return item.name.includes("Foundation");
+      case "Grammar":
+        return item.name.includes("Grammar");
+      case "Academic":
+        return (
+          !item.name.includes("General") &&
+          !item.name.includes("Foundation") &&
+          !item.name.includes("Grammar")
+        );
+      default:
+        return false;
+    }
+  };
 
   useEffect(() => {
     if (category !== "GENERAL") {
@@ -81,7 +100,7 @@ const MockTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/student-stats/`,
+          "/student-stats/",
           {
             headers: {
               Accept: "application/json",
@@ -124,15 +143,12 @@ const MockTest = () => {
             8000
           );
           if (speakingBlocksResponse.status === 200) {
-            const isGeneral = ieltsCategory === "General";
             const allSpeakingData = speakingBlocksResponse.data
               .filter(
                 (item) =>
                   item.block_threshold === 0 &&
                   item.exam_category === category &&
-                  (isGeneral
-                    ? item.name.includes("General")
-                    : !item.name.includes("General"))
+                  filterByIELTSCategory({ name: item.name }, ieltsCategory)
               )
               .map((item) => ({
                 ...item,
@@ -157,7 +173,6 @@ const MockTest = () => {
             8000
           );
           if (examBlocksResponse.status === 200) {
-            const isGeneral = ieltsCategory === "General";
             if (category === "GENERAL") {
               const mockTestData = examBlocksResponse.data.filter(
                 ({ exam_name, block_type, exam_category }) =>
@@ -172,9 +187,7 @@ const MockTest = () => {
                 ({ block_type, exam_category, exam_name }) =>
                   block_type === "Assignments" &&
                   exam_category === category &&
-                  (isGeneral
-                    ? exam_name.includes("General")
-                    : !exam_name.includes("General"))
+                  filterByIELTSCategory({ name: exam_name }, ieltsCategory)
               );
               setAllMockTestData(mockTestData);
             }
@@ -213,19 +226,25 @@ const MockTest = () => {
                 <div className="col-xl-12 col-lg-12 col-md-12">
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
-                      <div className="d-flex gap-3">
-                        <h4>Mini Test</h4>
-                        {category === "IELTS" && (
-                          <select
-                            value={ieltsCategory}
-                            onChange={(e) => setIeltsCategory(e.target.value)}
-                          >
-                            <option value="Academic">Academic</option>
-                            <option value="General">General</option>
-                          </select>
-                        )}
-                      </div>
-                      {category && <h5>Course : {category}</h5>}
+                      <h4>Mini Test {category && ` (Course: ${category})`}</h4>
+                      {category === "IELTS" && (
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>IELTS Type</label>
+                            <select
+                              className="form-select"
+                              name="ieltsCategory"
+                              value={ieltsCategory}
+                              onChange={(e) => setIeltsCategory(e.target.value)}
+                            >
+                              <option value="Academic">Academic</option>
+                              <option value="General">General</option>
+                              <option value="Foundation">Foundation</option>
+                              <option value="Grammer">Grammer</option>
+                            </select>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     {count === 0 ? (
                       <BuyCourse message="No Mini Test Available, Please Buy a Course !!" />

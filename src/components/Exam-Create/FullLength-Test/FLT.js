@@ -1,10 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react";
-import ajaxCall from "../../../helpers/ajaxCall";
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
 import { toast } from "react-toastify";
 import Loading from "../../UI/Loading";
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-community/styles/ag-grid.css";
+import ajaxCall from "../../../helpers/ajaxCall";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 const intialFLTData = {
   name: "",
@@ -27,7 +27,7 @@ const reducerFLT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const FLT = ({ activeTab, setActiveTab }) => {
+const FLT = ({ category, activeTab, setActiveTab }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -37,6 +37,16 @@ const FLT = ({ activeTab, setActiveTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [createFLT, dispatchFLT] = useReducer(reducerFLT, intialFLTData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
+
+  const examSubCategory =
+    category === "IELTS"
+      ? [
+          { name: "Academic", value: "Academic" },
+          { name: "General", value: "General" },
+          { name: "Foundation", value: "Foundation" },
+          { name: "Grammer", value: "Grammer" },
+        ]
+      : [];
 
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
@@ -234,6 +244,22 @@ const FLT = ({ activeTab, setActiveTab }) => {
             </div>
           </div>
         </div>
+        {category === "IELTS" && (
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+            <div className="dashboard__select__heading">
+              <span>Exam category</span>
+            </div>
+            <div className="dashboard__selector">
+              <select className="form-select">
+                {examSubCategory.map((item, index) => (
+                  <option key={index} value={item.value}>
+                    {item.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
         <div className="col-xl-12 col-lg-12 col-md-12 col-12">
           <div className="d-flex flex-wrap gap-3">
             <div className="dashboard__form__input">

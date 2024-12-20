@@ -1,10 +1,10 @@
 import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { toast } from "react-toastify";
-import ajaxCall from "../../helpers/ajaxCall";
 import Tab from "../UI/Tab";
+import ajaxCall from "../../helpers/ajaxCall";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const initialSpeakingField = {
   name: "",
@@ -26,13 +26,54 @@ const reducerSpeaking = (state, action) => {
 const tabs = [{ name: "Details" }, { name: "Question" }];
 
 const ExamSpeaking = ({ category }) => {
+  const navigate = useNavigate();
   const [SpeakingData, dispatchSpeakingData] = useReducer(
     reducerSpeaking,
     initialSpeakingField
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("Details");
-  const navigate = useNavigate();
+
+  const examSubCategory =
+    category === "IELTS"
+      ? [
+          { name: "Academmic", value: "Academmic" },
+          { name: "General", value: "General" },
+          { name: "Foundation", value: "Foundation" },
+          { name: "Grammer", value: "Grammer" },
+        ]
+      : category === "PTE"
+      ? [
+          {
+            name: "Read aloud [RA]",
+            value: "Read aloud [RA]",
+          },
+          {
+            name: "Repeat sentence [RS]",
+            value: "Repeat sentence [RS]",
+          },
+          {
+            name: "Describe image [DI]",
+            value: "Describe image [DI]",
+          },
+          {
+            name: "Re-tell lecture [RL]",
+            value: "Re-tell lecture [RL]",
+          },
+          {
+            name: "Answer short question [ASQ]",
+            value: "Answer short question [ASQ]",
+          },
+          {
+            name: "Respond to a sitution [RTS]",
+            value: "Respond to a sitution [RTS]",
+          },
+          {
+            name: "Summarize group discussion [SGD]",
+            value: "Summarize group discussion [SGD]",
+          },
+        ]
+      : [];
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -174,6 +215,22 @@ const ExamSpeaking = ({ category }) => {
                 </div>
               </div>
             </div>
+            {(category === "IELTS" || category === "PTE") && (
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                <div className="dashboard__select__heading">
+                  <span>Exam category</span>
+                </div>
+                <div className="dashboard__selector">
+                  <select className="form-select">
+                    {examSubCategory.map((item, index) => (
+                      <option key={index} value={item.value}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div

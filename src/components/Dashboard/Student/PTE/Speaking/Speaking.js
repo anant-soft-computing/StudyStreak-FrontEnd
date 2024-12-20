@@ -175,6 +175,37 @@ const Speaking = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>PTE Speaking</h4>
+                      <div className="dashboard__form__wraper">
+                        <div className="dashboard__form__input">
+                          <label>Speaking Exam Type</label>
+                          <select
+                            className="form-select"
+                            name="speakingExamType"
+                          >
+                            <option value="Read aloud [RA]">
+                              Read aloud [RA]
+                            </option>
+                            <option value="Repeat sentence [RS]">
+                              Repeat sentence [RS]
+                            </option>
+                            <option value="Describe image [DI]">
+                              Describe image [DI]
+                            </option>
+                            <option value="Re-tell lecture [RL]">
+                              Re-tell lecture [RL]
+                            </option>
+                            <option value="Answer short question [ASQ]">
+                              Answer short question [ASQ]
+                            </option>
+                            <option value="Respond to a sitution [RTS]">
+                              Respond to a sitution [RTS]
+                            </option>
+                            <option value="Summarize group discussion [SGD]">
+                              Summarize group discussion [SGD]
+                            </option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                     <div className="row">
                       {isLoading ? (

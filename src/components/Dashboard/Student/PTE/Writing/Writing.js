@@ -175,6 +175,22 @@ const Writing = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>PTE Writing</h4>
+                      <div className="dashboard__form__wraper">
+                        <div className="dashboard__form__input">
+                          <label>Writing Exam Type</label>
+                          <select
+                            className="form-select"
+                            name="writingExamType"
+                          >
+                            <option value="Summarize written text [SWT]">
+                              Summarize written text [SWT]
+                            </option>
+                            <option value="Write essay [WE]">
+                              Write essay [WE]
+                            </option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                     <div className="row">
                       {isLoading ? (

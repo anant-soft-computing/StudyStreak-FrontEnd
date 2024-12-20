@@ -175,6 +175,40 @@ const Listening = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>PTE Listening</h4>
+                      <div className="dashboard__form__wraper">
+                        <div className="dashboard__form__input">
+                          <label>Listening Exam Type</label>
+                          <select
+                            className="form-select"
+                            name="listeningExamType"
+                          >
+                            <option value="Summarize spoken text [SST]">
+                              Summarize spoken text [SST]
+                            </option>
+                            <option value="MC, choose multiple answers">
+                              MC, choose multiple answers
+                            </option>
+                            <option value="Fill in the blanks [LFIB]">
+                              Fill in the blanks [LFIB]
+                            </option>
+                            <option value="Highlight correct summary">
+                              Highlight correct summary
+                            </option>
+                            <option value="MC, choose single answer">
+                              MC, choose single answer
+                            </option>
+                            <option value="Select missing words [SMW]">
+                              Select missing words [SMW]
+                            </option>
+                            <option value="Highlight incorrect words">
+                              Highlight incorrect words
+                            </option>
+                            <option value="Write from diction [WFD]">
+                              Write from diction [WFD]
+                            </option>
+                          </select>
+                        </div>
+                      </div>
                     </div>
                     <div className="row">
                       {isLoading ? (

@@ -1,8 +1,8 @@
 import React, { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Tab from "../UI/Tab";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const intialListeningField = {
   no_of_questions: "10",
@@ -35,6 +35,51 @@ const ExamListening = ({ category }) => {
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeTab, setActiveTab] = useState("Details");
+
+  const examSubCategory =
+    category === "IELTS"
+      ? [
+          { name: "Academmic", value: "Academmic" },
+          { name: "General", value: "General" },
+          { name: "Foundation", value: "Foundation" },
+          { name: "Grammer", value: "Grammer" },
+        ]
+      : category === "PTE"
+      ? [
+          {
+            name: "Summarize spoken text [SST]",
+            value: "Summarize spoken text [SST]",
+          },
+          {
+            name: "MC, choose multiple answers",
+            value: "MC, choose multiple answers",
+          },
+          {
+            name: "Fill in the blanks [LFIB]",
+            value: "Fill in the blanks [LFIB]",
+          },
+          {
+            name: "Highlight correct summar",
+            value: "Highlight correct summar",
+          },
+          {
+            name: "MC, choose single answer",
+            value: "MC, choose single answer",
+          },
+          {
+            name: "Select missing words [SMW]",
+            value: "Select missing words [SMW]",
+          },
+          {
+            name: "Highlight incorrect words",
+            value: "Highlight incorrect words",
+          },
+          {
+            name: "Write from diction [WFD]",
+            value: "Write from diction [WFD]",
+          },
+        ]
+      : [];
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -152,6 +197,22 @@ const ExamListening = ({ category }) => {
                 </select>
               </div>
             </div>
+            {(category === "IELTS" || category === "PTE") && (
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+                <div className="dashboard__select__heading">
+                  <span>Exam category</span>
+                </div>
+                <div className="dashboard__selector">
+                  <select className="form-select">
+                    {examSubCategory.map((item, index) => (
+                      <option key={index} value={item.value}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <div

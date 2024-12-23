@@ -16,7 +16,7 @@ const MockTest = () => {
   const [givenSpeakingTest, setGivenSpeakingTest] = useState([]);
   const [allMockTestData, setAllMockTestData] = useState([]);
   const [allSpeakingData, setAllSpeakingData] = useState([]);
-  const [ieltsCategory, setIeltsCategory] = useState("Academic");
+  const [ieltsCategory, setIeltsCategory] = useState("");
   const category = localStorage.getItem("category");
 
   const tabs =
@@ -53,6 +53,14 @@ const MockTest = () => {
       setActiveTab("Reading");
     } else {
       setActiveTab("General");
+    }
+  }, [category]);
+
+  useEffect(() => {
+    if (category === "IELTS") {
+      setIeltsCategory("Academic");
+    } else {
+      setIeltsCategory("");
     }
   }, [category]);
 
@@ -159,7 +167,7 @@ const MockTest = () => {
           }
         } else {
           const examBlocksResponse = await ajaxCall(
-            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${activeTab}&exam_category=${category}`,
+            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type,sub_category&exam_type=${activeTab}&exam_category=${category}&sub_category=${ieltsCategory}`,
             {
               headers: {
                 Accept: "application/json",
@@ -175,19 +183,15 @@ const MockTest = () => {
           if (examBlocksResponse.status === 200) {
             if (category === "GENERAL") {
               const mockTestData = examBlocksResponse.data.filter(
-                ({ exam_name, block_type, exam_category }) =>
+                ({ exam_name, block_type }) =>
                   block_type === "Assignments" &&
-                  exam_category === category &&
                   !exam_name.includes("Assignment") &&
                   studentCourses?.some((item) => exam_name.includes(item))
               );
               setAllMockTestData(mockTestData);
             } else {
               const mockTestData = examBlocksResponse.data.filter(
-                ({ block_type, exam_category, exam_name }) =>
-                  block_type === "Assignments" &&
-                  exam_category === category &&
-                  filterByIELTSCategory({ name: exam_name }, ieltsCategory)
+                ({ block_type }) => block_type === "Assignments"
               );
               setAllMockTestData(mockTestData);
             }
@@ -240,7 +244,7 @@ const MockTest = () => {
                               <option value="Academic">Academic</option>
                               <option value="General">General</option>
                               <option value="Foundation">Foundation</option>
-                              <option value="Grammer">Grammer</option>
+                              <option value="Grammar">Grammar</option>
                             </select>
                           </div>
                         </div>

@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Tab from "../UI/Tab";
@@ -11,6 +11,7 @@ const intialWritingField = {
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
+  sub_category: "",
   block_threshold: 0,
   passage: "",
   exam_type: "Writing",
@@ -40,10 +41,10 @@ const ExamWriting = ({ category }) => {
   const examSubCategory =
     category === "IELTS"
       ? [
-          { name: "Academmic", value: "Academmic" },
+          { name: "Academic", value: "Academic" },
           { name: "General", value: "General" },
           { name: "Foundation", value: "Foundation" },
-          { name: "Grammer", value: "Grammer" },
+          { name: "Grammar", value: "Grammar" },
         ]
       : category === "PTE"
       ? [
@@ -57,6 +58,19 @@ const ExamWriting = ({ category }) => {
           },
         ]
       : [];
+
+  useEffect(() => {
+    if (category === "IELTS") {
+      dispatchWritingData({ type: "sub_category", value: "Academic" });
+    } else if (category === "PTE") {
+      dispatchWritingData({
+        type: "sub_category",
+        value: "Summarize written text [SWT]",
+      });
+    } else {
+      dispatchWritingData({ type: "sub_category", value: "" });
+    }
+  }, [category]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -118,6 +132,7 @@ const ExamWriting = ({ category }) => {
       answers: writingData.answers,
       question_structure: witingQuestionStrucutre,
       exam_category: category,
+      sub_category: writingData.sub_category,
     };
 
     try {
@@ -228,7 +243,16 @@ const ExamWriting = ({ category }) => {
                   <span>Exam category</span>
                 </div>
                 <div className="dashboard__selector">
-                  <select className="form-select">
+                  <select
+                    className="form-select"
+                    value={writingData.sub_category}
+                    onChange={(e) =>
+                      dispatchWritingData({
+                        type: "sub_category",
+                        value: e.target.value,
+                      })
+                    }
+                  >
                     {examSubCategory.map((item, index) => (
                       <option key={index} value={item.value}>
                         {item.name}

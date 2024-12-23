@@ -36,7 +36,7 @@ const LessonContent = ({ activeLesson, setLessonStatus }) => {
       lesson: activeLesson?.id,
     };
     const response = await ajaxCall(
-      `/save-video-data/`,
+      "/save-video-data/",
       {
         body: JSON.stringify(body),
         headers: {

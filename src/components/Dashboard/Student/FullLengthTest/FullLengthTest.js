@@ -223,7 +223,7 @@ const FullLengthTest = () => {
                               <option value="Academic">Academic</option>
                               <option value="General">General</option>
                               <option value="Foundation">Foundation</option>
-                              <option value="Grammer">Grammer</option>
+                              <option value="Grammar">Grammar</option>
                             </select>
                           </div>
                         </div>

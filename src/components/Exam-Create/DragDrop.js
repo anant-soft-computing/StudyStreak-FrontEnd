@@ -809,6 +809,7 @@ const DragDrop = () => {
     });
     formData.append("question_structure", JSON.stringify(questionStructure));
     formData.append("exam_category", category);
+    formData.append("sub_category", readingData?.sub_category);
 
     try {
       const response = await ajaxCall(
@@ -867,6 +868,7 @@ const DragDrop = () => {
     formData.append("audio_file", listeningData.audio_file);
     formData.append("question_structure", JSON.stringify(questionStructure));
     formData.append("exam_category", category);
+    formData.append("sub_category", listeningData?.sub_category);
     try {
       const response = await ajaxCall(
         "/exam-blocks/",

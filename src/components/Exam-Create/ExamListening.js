@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Tab from "../UI/Tab";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -9,6 +9,7 @@ const intialListeningField = {
   difficulty_level: "Easy",
   exam_name: "",
   block_type: "Mock Test",
+  sub_category: "",
   block_threshold: 0,
   audio_file: "",
   passage: "",
@@ -39,10 +40,10 @@ const ExamListening = ({ category }) => {
   const examSubCategory =
     category === "IELTS"
       ? [
-          { name: "Academmic", value: "Academmic" },
+          { name: "Academic", value: "Academic" },
           { name: "General", value: "General" },
           { name: "Foundation", value: "Foundation" },
-          { name: "Grammer", value: "Grammer" },
+          { name: "Grammar", value: "Grammar" },
         ]
       : category === "PTE"
       ? [
@@ -80,6 +81,19 @@ const ExamListening = ({ category }) => {
           },
         ]
       : [];
+
+  useEffect(() => {
+    if (category === "IELTS") {
+      dispatchListeningData({ type: "sub_category", value: "Academic" });
+    } else if (category === "PTE") {
+      dispatchListeningData({
+        type: "sub_category",
+        value: "Summarize spoken text [SST]",
+      });
+    } else {
+      dispatchListeningData({ type: "sub_category", value: "" });
+    }
+  }, [category]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -203,7 +217,16 @@ const ExamListening = ({ category }) => {
                   <span>Exam category</span>
                 </div>
                 <div className="dashboard__selector">
-                  <select className="form-select">
+                  <select
+                    className="form-select"
+                    value={listeningData.sub_category}
+                    onChange={(e) =>
+                      dispatchListeningData({
+                        type: "sub_category",
+                        value: e.target.value,
+                      })
+                    }
+                  >
                     {examSubCategory.map((item, index) => (
                       <option key={index} value={item.value}>
                         {item.name}

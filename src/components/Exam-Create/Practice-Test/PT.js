@@ -9,6 +9,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 const initialPT = {
   Name: "",
   difficulty_level: "Easy",
+  sub_category: "",
   exam_test: "Practice",
   practice_test_type: "",
   Reading: [],
@@ -153,6 +154,23 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
         : []
       : [];
 
+  useEffect(() => {
+    const defaultSubCategory =
+      category === "IELTS"
+        ? "Academic"
+        : type === "Reading"
+        ? "R&W: Fill in the blanks [RWFIB]"
+        : type === "Writing"
+        ? "Summarize written text [SWT]"
+        : type === "Listening"
+        ? "Summarize spoken text [SST]"
+        : type === "Speaking"
+        ? "Read aloud [RA]"
+        : "";
+
+    dispatchPT({ type: "sub_category", value: defaultSubCategory });
+  }, [category, type]);
+
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
@@ -168,7 +186,7 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
       try {
         const [examResponse, speakingResponse] = await Promise.all([
           ajaxCall(
-            `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,block_type,no_of_questions&exam_type=${type}&exam_category=${category}`,
+            `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,block_type,no_of_questions&exam_type=${type}&exam_category=${category}&sub_category=${createPT.sub_category}`,
             {
               headers: {
                 Accept: "application/json",
@@ -182,7 +200,7 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
             8000
           ),
           ajaxCall(
-            "/speaking-block/",
+            `/speaking-block/?exam_category=${category}&sub_category=${createPT.sub_category}`,
             {
               headers: {
                 Accept: "application/json",
@@ -215,8 +233,7 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
                 exam_type === type && block_type === "Mock Test"
             ),
             Speaking: speakingData.filter(
-              ({ block_threshold, exam_category }) =>
-                block_threshold === 1 && exam_category === category
+              ({ block_threshold }) => block_threshold === 1
             ),
             General: examData.filter(
               ({ exam_type, block_type }) =>
@@ -235,7 +252,7 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
     if (activeTab === "Create PT") {
       fetchExams();
     }
-  }, [activeTab, category, type]);
+  }, [activeTab, category, type, createPT.sub_category]);
 
   const validateForm = () => {
     if (!createPT.Name) {
@@ -270,6 +287,7 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
         Speaking: createPT.Speaking,
         General: createPT.General,
         category: category,
+        sub_category: createPT.sub_category,
         difficulty_level: createPT.difficulty_level,
       };
       const response = await ajaxCall(
@@ -409,7 +427,13 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
             <span>Exam category</span>
           </div>
           <div className="dashboard__selector">
-            <select className="form-select">
+            <select
+              className="form-select"
+              value={createPT.sub_category}
+              onChange={(e) =>
+                dispatchPT({ type: "sub_category", value: e.target.value })
+              }
+            >
               {examSubCategory.map((item, index) => (
                 <option key={index} value={item.value}>
                   {item.name}

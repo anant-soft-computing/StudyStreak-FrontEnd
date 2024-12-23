@@ -20,11 +20,10 @@ const PracticeTest = () => {
   const [givenTest, setGivenTest] = useState([]);
   const [studentCourses, setStudentCourses] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
-  const [ieltsCategory, setIeltsCategory] = useState("Academic");
+  const [ieltsCategory, setIeltsCategory] = useState("");
   const category = localStorage.getItem("category");
 
-  const tabs =
-    category !== "GENERAL"
+  const tabs =category !== "GENERAL"
       ? [
           { name: "Reading" },
           { name: "Writing" },
@@ -57,6 +56,14 @@ const PracticeTest = () => {
       setActiveTab("Reading");
     } else {
       setActiveTab("General");
+    }
+  }, [category]);
+
+  useEffect(() => {
+    if (category === "IELTS") {
+      setIeltsCategory("Academic");
+    } else {
+      setIeltsCategory("");
     }
   }, [category]);
 
@@ -131,7 +138,7 @@ const PracticeTest = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=${activeTab}&category=${category}`,
+          `/createexamview/?exam_type=${activeTab}&category=${category}&sub_category=${ieltsCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -225,7 +232,7 @@ const PracticeTest = () => {
                               <option value="Academic">Academic</option>
                               <option value="General">General</option>
                               <option value="Foundation">Foundation</option>
-                              <option value="Grammer">Grammer</option>
+                              <option value="Grammar">Grammar</option>
                             </select>
                           </div>
                         </div>

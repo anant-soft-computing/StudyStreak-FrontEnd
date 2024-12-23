@@ -44,7 +44,7 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
           { name: "Academic", value: "Academic" },
           { name: "General", value: "General" },
           { name: "Foundation", value: "Foundation" },
-          { name: "Grammer", value: "Grammer" },
+          { name: "Grammar", value: "Grammar" },
         ]
       : [];
 
@@ -63,7 +63,7 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            "/moduleListView/",
+            `/moduleListView/?category=${category}`,
             {
               headers: {
                 Accept: "application/json",
@@ -111,7 +111,7 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
         }
       })();
     }
-  }, [activeTab]);
+  }, [activeTab, category]);
 
   const validateForm = () => {
     const requiredFields = [

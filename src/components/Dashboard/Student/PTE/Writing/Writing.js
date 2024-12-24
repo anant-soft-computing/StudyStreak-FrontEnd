@@ -5,11 +5,17 @@ import Loading from "../../../../UI/Loading";
 import DSSidebar from "../../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
+const pteWritingCategory = [
+  { name: "Summarize written text [SWT]", value: "SWT" },
+  { name: "Write essay [WE]", value: "WE" },
+];
+
 const Writing = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
   const [writingData, setWritingData] = useState([]);
+  const [subCategory, setSubCategory] = useState(pteWritingCategory[0].value);
 
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
@@ -79,7 +85,7 @@ const Writing = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          "/createexamview/?exam_type=Writing&category=PTE",
+          `/createexamview/?exam_type=Writing&category=PTE&sub_category=${subCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -102,7 +108,7 @@ const Writing = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [subCategory]);
 
   const columns = [
     {
@@ -181,13 +187,14 @@ const Writing = () => {
                           <select
                             className="form-select"
                             name="writingExamType"
+                            value={subCategory}
+                            onChange={(e) => setSubCategory(e.target.value)}
                           >
-                            <option value="Summarize written text [SWT]">
-                              Summarize written text [SWT]
-                            </option>
-                            <option value="Write essay [WE]">
-                              Write essay [WE]
-                            </option>
+                            {pteWritingCategory.map((item, index) => (
+                              <option key={index} value={item.value}>
+                                {item.name}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>

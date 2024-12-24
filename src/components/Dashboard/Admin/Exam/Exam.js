@@ -64,11 +64,19 @@ const Exam = () => {
     examType: "",
     examForm: "",
   });
-  
+
   const [activeTab, setActiveTab] = useState(() => {
     const examTab = localStorage.getItem("examTab");
     return examTab || "View Exam";
   });
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+  };
+
+  const handleNavigate = (link) => {
+    if (link !== "") navigate(link);
+  };
 
   const examTypes =
     screenContent?.examType === "GRE" || screenContent?.examType === "GMAT"
@@ -117,6 +125,10 @@ const Exam = () => {
         ];
 
   useEffect(() => {
+    localStorage.setItem("examTab", activeTab);
+  }, [activeTab]);
+
+  useEffect(() => {
     const examType = location.pathname.split("/")[2];
     const examForm = location.pathname.split("/")[3];
     if (!examType && !examForm) {
@@ -132,18 +144,6 @@ const Exam = () => {
     }
   }, [location]);
 
-  useEffect(() => {
-    localStorage.setItem("examTab", activeTab);
-  }, [activeTab]);
-
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-  };
-
-  const handleNavigate = (link) => {
-    if (link !== "") navigate(link);
-  };
-
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -156,33 +156,30 @@ const Exam = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>Exam</h4>
-                      {activeTab !== "Create FLT" && (
-                        <nav aria-label="breadcrumb">
-                          <ol className="breadcrumb">
-                            {screenContent.exam && (
-                              <li className="breadcrumb-item">
-                                <Link to="/admin-exam">
-                                  {screenContent.exam}
-                                </Link>
-                              </li>
-                            )}
-                            {screenContent.examType && (
-                              <li className="breadcrumb-item">
-                                <Link
-                                  to={`/admin-exam/${screenContent.examType}`}
-                                >
-                                  {screenContent.examType}
-                                </Link>
-                              </li>
-                            )}
-                            {screenContent.examForm && (
-                              <li className="breadcrumb-item">
-                                {screenContent.examForm}
-                              </li>
-                            )}
-                          </ol>
-                        </nav>
-                      )}
+
+                      <nav aria-label="breadcrumb">
+                        <ol className="breadcrumb">
+                          {screenContent.exam && (
+                            <li className="breadcrumb-item">
+                              <Link to="/admin-exam">{screenContent.exam}</Link>
+                            </li>
+                          )}
+                          {screenContent.examType && (
+                            <li className="breadcrumb-item">
+                              <Link
+                                to={`/admin-exam/${screenContent.examType}`}
+                              >
+                                {screenContent.examType}
+                              </Link>
+                            </li>
+                          )}
+                          {screenContent.examForm && (
+                            <li className="breadcrumb-item">
+                              {screenContent.examForm}
+                            </li>
+                          )}
+                        </ol>
+                      </nav>
                     </div>
                     <div className="row">
                       <Tab
@@ -320,7 +317,6 @@ const Exam = () => {
                               screenContent.examForm === "Reading" && (
                                 <PT
                                   activeTab={activeTab}
-                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -328,7 +324,6 @@ const Exam = () => {
                               (screenContent.examForm === "Writing" && (
                                 <PT
                                   activeTab={activeTab}
-                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -336,7 +331,6 @@ const Exam = () => {
                               (screenContent.examForm === "Listening" && (
                                 <PT
                                   activeTab={activeTab}
-                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -344,7 +338,6 @@ const Exam = () => {
                               (screenContent.examForm === "Speaking" && (
                                 <PT
                                   activeTab={activeTab}
-                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -352,7 +345,6 @@ const Exam = () => {
                               (screenContent.examForm === "General" && (
                                 <PT
                                   activeTab={activeTab}
-                                  setActiveTab={setActiveTab}
                                   type={screenContent.examForm}
                                   category={screenContent.examType}
                                 />
@@ -391,7 +383,6 @@ const Exam = () => {
                             {screenContent.examType && (
                               <FLT
                                 activeTab={activeTab}
-                                setActiveTab={setActiveTab}
                                 category={screenContent.examType}
                               />
                             )}
@@ -402,7 +393,7 @@ const Exam = () => {
                             activeTab === "View Exam" ? "show active" : ""
                           }`}
                         >
-                          <ViewExam key={activeTab} activeTab={activeTab} />
+                          <ViewExam />
                         </div>
                       </div>
                     </div>

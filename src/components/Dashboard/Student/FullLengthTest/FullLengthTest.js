@@ -78,7 +78,7 @@ const FullLengthTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/get/flt/",
+          `/get/flt/?sub_category=${ieltsCategory}`,
           {
             headers: {
               Accept: "application/json",

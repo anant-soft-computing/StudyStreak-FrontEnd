@@ -4,6 +4,48 @@ import Tab from "../UI/Tab";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
+const ieltsSubCategory = [
+  { name: "Academic", value: "Academic" },
+  { name: "General", value: "General" },
+  { name: "Foundation", value: "Foundation" },
+  { name: "Grammar", value: "Grammar" },
+];
+
+const pteSubCategory = [
+  {
+    name: "Summarize spoken text [SST]",
+    value: "SST",
+  },
+  {
+    name: "MC, choose multiple answers [CMA]",
+    value: "CMA",
+  },
+  {
+    name: "Fill in the blanks [LFIB]",
+    value: "LFIB",
+  },
+  {
+    name: "Highlight correct summar [HCS]",
+    value: "HCS",
+  },
+  {
+    name: "MC, choose single answer [CSA]",
+    value: "CSA",
+  },
+  {
+    name: "Select missing words [SMW]",
+    value: "SMW",
+  },
+  {
+    name: "Highlight incorrect words [HIW]",
+    value: "HIW",
+  },
+  {
+    name: "Write from diction [WFD]",
+    value: "WFD",
+  },
+];
+
 const intialListeningField = {
   no_of_questions: "10",
   difficulty_level: "Easy",
@@ -39,47 +81,9 @@ const ExamListening = ({ category }) => {
 
   const examSubCategory =
     category === "IELTS"
-      ? [
-          { name: "Academic", value: "Academic" },
-          { name: "General", value: "General" },
-          { name: "Foundation", value: "Foundation" },
-          { name: "Grammar", value: "Grammar" },
-        ]
+      ? ieltsSubCategory
       : category === "PTE"
-      ? [
-          {
-            name: "Summarize spoken text [SST]",
-            value: "Summarize spoken text [SST]",
-          },
-          {
-            name: "MC, choose multiple answers",
-            value: "MC, choose multiple answers",
-          },
-          {
-            name: "Fill in the blanks [LFIB]",
-            value: "Fill in the blanks [LFIB]",
-          },
-          {
-            name: "Highlight correct summar",
-            value: "Highlight correct summar",
-          },
-          {
-            name: "MC, choose single answer",
-            value: "MC, choose single answer",
-          },
-          {
-            name: "Select missing words [SMW]",
-            value: "Select missing words [SMW]",
-          },
-          {
-            name: "Highlight incorrect words",
-            value: "Highlight incorrect words",
-          },
-          {
-            name: "Write from diction [WFD]",
-            value: "Write from diction [WFD]",
-          },
-        ]
+      ? pteSubCategory
       : [];
 
   useEffect(() => {
@@ -88,7 +92,7 @@ const ExamListening = ({ category }) => {
     } else if (category === "PTE") {
       dispatchListeningData({
         type: "sub_category",
-        value: "Summarize spoken text [SST]",
+        value: "SST",
       });
     } else {
       dispatchListeningData({ type: "sub_category", value: "" });

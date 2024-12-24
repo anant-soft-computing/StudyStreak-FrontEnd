@@ -6,6 +6,24 @@ import ajaxCall from "../../helpers/ajaxCall";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
+const ieltsSubCategory = [
+  { name: "Academic", value: "Academic" },
+  { name: "General", value: "General" },
+  { name: "Foundation", value: "Foundation" },
+  { name: "Grammar", value: "Grammar" },
+];
+
+const pteSubCategory = [
+  {
+    name: "Summarize written text [SWT]",
+    value: "SWT",
+  },
+  {
+    name: "Write essay [WE]",
+    value: "WE",
+  },
+];
+
 const intialWritingField = {
   no_of_questions: "",
   difficulty_level: "Easy",
@@ -40,23 +58,9 @@ const ExamWriting = ({ category }) => {
 
   const examSubCategory =
     category === "IELTS"
-      ? [
-          { name: "Academic", value: "Academic" },
-          { name: "General", value: "General" },
-          { name: "Foundation", value: "Foundation" },
-          { name: "Grammar", value: "Grammar" },
-        ]
+      ? ieltsSubCategory
       : category === "PTE"
-      ? [
-          {
-            name: "Summarize written text [SWT]",
-            value: "Summarize written text [SWT]",
-          },
-          {
-            name: "Write essay [WE]",
-            value: "Write essay [WE]",
-          },
-        ]
+      ? pteSubCategory
       : [];
 
   useEffect(() => {
@@ -65,7 +69,7 @@ const ExamWriting = ({ category }) => {
     } else if (category === "PTE") {
       dispatchWritingData({
         type: "sub_category",
-        value: "Summarize written text [SWT]",
+        value: "SWT",
       });
     } else {
       dispatchWritingData({ type: "sub_category", value: "" });

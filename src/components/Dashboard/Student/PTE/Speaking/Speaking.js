@@ -5,11 +5,22 @@ import DSSidebar from "../../DSSideBar/DSSideBar";
 import Loading from "../../../../UI/Loading";
 import Table from "../../../../UI/Table";
 
+const pteSpeakingCategory = [
+  { name: "Read aloud [RA]", value: "RA" },
+  { name: "Repeat sentence [RS]", value: "RS" },
+  { name: "Describe image [DI]", value: "DI" },
+  { name: "Re-tell lecture [RL]", value: "RL" },
+  { name: "Answer short question [ASQ]", value: "ASQ" },
+  { name: "Respond to a sitution [RTS]", value: "RTS" },
+  { name: "Summarize group discussion [SGD]", value: "SGD" },
+];
+
 const Speaking = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
+  const [subCategory, setSubCategory] = useState(pteSpeakingCategory[0].value);
 
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
@@ -79,7 +90,7 @@ const Speaking = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          "/createexamview/?exam_type=Speaking&category=PTE",
+          `/createexamview/?exam_type=Speaking&category=PTE&sub_category=${subCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -102,7 +113,7 @@ const Speaking = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [subCategory]);
 
   const columns = [
     {
@@ -181,28 +192,14 @@ const Speaking = () => {
                           <select
                             className="form-select"
                             name="speakingExamType"
+                            value={subCategory}
+                            onChange={(e) => setSubCategory(e.target.value)}
                           >
-                            <option value="Read aloud [RA]">
-                              Read aloud [RA]
-                            </option>
-                            <option value="Repeat sentence [RS]">
-                              Repeat sentence [RS]
-                            </option>
-                            <option value="Describe image [DI]">
-                              Describe image [DI]
-                            </option>
-                            <option value="Re-tell lecture [RL]">
-                              Re-tell lecture [RL]
-                            </option>
-                            <option value="Answer short question [ASQ]">
-                              Answer short question [ASQ]
-                            </option>
-                            <option value="Respond to a sitution [RTS]">
-                              Respond to a sitution [RTS]
-                            </option>
-                            <option value="Summarize group discussion [SGD]">
-                              Summarize group discussion [SGD]
-                            </option>
+                            {pteSpeakingCategory.map((item, index) => (
+                              <option key={index} value={item.value}>
+                                {item.name}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>

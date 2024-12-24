@@ -5,11 +5,20 @@ import Loading from "../../../../UI/Loading";
 import DSSidebar from "../../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
+const pteReadingCategory = [
+  { name: "R&W: Fill in the blanks [RWFIB]", value: "RWFIB" },
+  { name: "MC, choose multiple answers [CMA]", value: "CMA" },
+  { name: "Re-order paragraphs [ROP]", value: "ROP" },
+  { name: "R: Fill in the blanks [RFIB]", value: "RFIB" },
+  { name: "MC, choose single answer [CSA]", value: "CSA" },
+];
+
 const Reading = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
   const [readingData, setReadingData] = useState([]);
+  const [subCategory, setSubCategory] = useState(pteReadingCategory[0].value);
 
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
@@ -79,7 +88,7 @@ const Reading = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          "/createexamview/?exam_type=Reading&category=PTE",
+          `/createexamview/?exam_type=Reading&category=PTE&sub_category=${subCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -102,7 +111,7 @@ const Reading = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [subCategory]);
 
   const columns = [
     {
@@ -181,22 +190,14 @@ const Reading = () => {
                           <select
                             className="form-select"
                             name="readingExamType"
+                            value={subCategory}
+                            onChange={(e) => setSubCategory(e.target.value)}
                           >
-                            <option value="R&W: Fill in the blanks [RWFIB]">
-                              R&W: Fill in the blanks [RWFIB]
-                            </option>
-                            <option value="MC, choose multiple answers">
-                              MC, choose multiple answers
-                            </option>
-                            <option value="Re-order paragraphs">
-                              Re-order paragraphs
-                            </option>
-                            <option value="R: Fill in the blanks [RFIB]">
-                              R: Fill in the blanks [RFIB]
-                            </option>
-                            <option value="MC, choose single answer">
-                              MC, choose single answer
-                            </option>
+                            {pteReadingCategory.map((option, index) => (
+                              <option key={index} value={option.value}>
+                                {option.name}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>

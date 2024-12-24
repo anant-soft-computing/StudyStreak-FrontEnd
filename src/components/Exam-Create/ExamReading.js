@@ -4,6 +4,33 @@ import Tab from "../UI/Tab";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
+const ieltsSubCategory = [
+  { name: "Academic", value: "Academic" },
+  { name: "General", value: "General" },
+  { name: "Foundation", value: "Foundation" },
+  { name: "Grammar", value: "Grammar" },
+];
+
+const pteSubCategory = [
+  {
+    name: "R&W: Fill in the blanks [RWFIB]",
+    value: "RWFIB",
+  },
+  {
+    name: "MC, choose multiple answers [CMA]",
+    value: "CMA",
+  },
+  { name: "Re-order paragraphs [ROP]", value: "ROP" },
+  {
+    name: "R: Fill in the blanks [RFIB]",
+    value: "RFIB",
+  },
+  {
+    name: "MC, choose single answer [CSA]",
+    value: "CSA",
+  },
+];
+
 const intialReadingField = {
   no_of_questions: "10",
   difficulty_level: "Easy",
@@ -39,32 +66,9 @@ const ExamReading = ({ category, examType }) => {
 
   const examSubCategory =
     category === "IELTS"
-      ? [
-          { name: "Academic", value: "Academic" },
-          { name: "General", value: "General" },
-          { name: "Foundation", value: "Foundation" },
-          { name: "Grammar", value: "Grammar" },
-        ]
+      ? ieltsSubCategory
       : category === "PTE"
-      ? [
-          {
-            name: "R&W: Fill in the blanks [RWFIB]",
-            value: "R&W: Fill in the blanks [RWFIB]",
-          },
-          {
-            name: "MC, choose multiple answers",
-            value: "MC, choose multiple answers",
-          },
-          { name: "Re-order paragraphs", value: "Re-order paragraphs" },
-          {
-            name: "R: Fill in the blanks [RFIB]",
-            value: "R: Fill in the blanks [RFIB]",
-          },
-          {
-            name: "MC, choose single answer",
-            value: "MC, choose single answer",
-          },
-        ]
+      ? pteSubCategory
       : [];
 
   useEffect(() => {
@@ -73,7 +77,7 @@ const ExamReading = ({ category, examType }) => {
     } else if (category === "PTE") {
       dispatchReadingData({
         type: "sub_category",
-        value: "R&W: Fill in the blanks [RWFIB]",
+        value: "RWFIB",
       });
     } else {
       dispatchReadingData({ type: "sub_category", value: "" });

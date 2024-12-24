@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../../UI/Loading";
 import { AgGridReact } from "ag-grid-react";
@@ -8,6 +9,7 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 
 const intialFLTData = {
   name: "",
+  sub_category: "",
   difficulty_level: "Easy",
   Reading: "",
   Writing: "",
@@ -27,7 +29,8 @@ const reducerFLT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const FLT = ({ category, activeTab, setActiveTab }) => {
+const FLT = ({ category, activeTab }) => {
+  const navigate = useNavigate();
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -35,8 +38,8 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
     Speaking: [],
   });
   const [isLoading, setIsLoading] = useState(true);
-  const [createFLT, dispatchFLT] = useReducer(reducerFLT, intialFLTData);
   const [formStatus, setFormStatus] = useState(initialSubmit);
+  const [createFLT, dispatchFLT] = useReducer(reducerFLT, intialFLTData);
 
   const examSubCategory =
     category === "IELTS"
@@ -48,13 +51,20 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
         ]
       : [];
 
+  useEffect(() => {
+    if (category === "IELTS") {
+      dispatchFLT({ type: "sub_category", value: "Academic" });
+    } else {
+      dispatchFLT({ type: "sub_category", value: "" });
+    }
+  }, [category]);
+
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
   const resetReducerForm = () => {
     dispatchFLT({ type: "reset" });
-    setActiveTab("View Exam");
   };
 
   useEffect(() => {
@@ -63,7 +73,7 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/moduleListView/?category=${category}`,
+            `/moduleListView/?category=${category}&sub_category=${createFLT.sub_category}`,
             {
               headers: {
                 Accept: "application/json",
@@ -111,7 +121,7 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
         }
       })();
     }
-  }, [activeTab, category]);
+  }, [activeTab, category, createFLT.sub_category]);
 
   const validateForm = () => {
     const requiredFields = [
@@ -145,6 +155,7 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
         writing_set: createFLT.Writing,
         listening_set: createFLT.Listening,
         speaking_set: createFLT.Speaking,
+        sub_category: createFLT.sub_category,
         difficulty_level: createFLT.difficulty_level,
       };
       const response = await ajaxCall(
@@ -165,6 +176,7 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        navigate("/admin-exam");
         toast.success("Full Length Test Create Successfully");
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");
@@ -250,7 +262,13 @@ const FLT = ({ category, activeTab, setActiveTab }) => {
               <span>Exam category</span>
             </div>
             <div className="dashboard__selector">
-              <select className="form-select">
+              <select
+                className="form-select"
+                value={createFLT.sub_category}
+                onChange={(e) =>
+                  dispatchFLT({ type: "sub_category", value: e.target.value })
+                }
+              >
                 {examSubCategory.map((item, index) => (
                   <option key={index} value={item.value}>
                     {item.name}

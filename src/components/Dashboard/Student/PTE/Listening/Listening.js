@@ -5,11 +5,23 @@ import Loading from "../../../../UI/Loading";
 import DSSidebar from "../../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
+const pteListeningCategory = [
+  { name: "Summarize spoken text [SST]", value: "SST" },
+  { name: "MC, choose multiple answers [CMA]", value: "CMA" },
+  { name: "Fill in the blanks [LFIB]", value: "LFIB" },
+  { name: "Highlight correct summar [HCS]", value: "HCS" },
+  { name: "MC, choose single answer [CSA]", value: "CSA" },
+  { name: "Select missing words [SMW]", value: "SMW" },
+  { name: "Highlight incorrect words [HIW]", value: "HIW" },
+  { name: "Write from diction [WFD]", value: "WFD" },
+];
+
 const Listening = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
   const [listeningData, setListeningData] = useState([]);
+  const [subCategory, setSubCategory] = useState(pteListeningCategory[0].value);
 
   const handleClick = (data) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
@@ -79,7 +91,7 @@ const Listening = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          "/createexamview/?exam_type=Listening&category=PTE",
+          `/createexamview/?exam_type=Listening&category=PTE&sub_category=${subCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -102,7 +114,7 @@ const Listening = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [subCategory]);
 
   const columns = [
     {
@@ -181,31 +193,14 @@ const Listening = () => {
                           <select
                             className="form-select"
                             name="listeningExamType"
+                            value={subCategory}
+                            onChange={(e) => setSubCategory(e.target.value)}
                           >
-                            <option value="Summarize spoken text [SST]">
-                              Summarize spoken text [SST]
-                            </option>
-                            <option value="MC, choose multiple answers">
-                              MC, choose multiple answers
-                            </option>
-                            <option value="Fill in the blanks [LFIB]">
-                              Fill in the blanks [LFIB]
-                            </option>
-                            <option value="Highlight correct summary">
-                              Highlight correct summary
-                            </option>
-                            <option value="MC, choose single answer">
-                              MC, choose single answer
-                            </option>
-                            <option value="Select missing words [SMW]">
-                              Select missing words [SMW]
-                            </option>
-                            <option value="Highlight incorrect words">
-                              Highlight incorrect words
-                            </option>
-                            <option value="Write from diction [WFD]">
-                              Write from diction [WFD]
-                            </option>
+                            {pteListeningCategory.map((item, index) => (
+                              <option key={index} value={item.value}>
+                                {item.name}
+                              </option>
+                            ))}
                           </select>
                         </div>
                       </div>

@@ -118,31 +118,23 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
   };
 
   const handleBook = (params) => {
-    const { id, start_time, end_time } = params.data;
+    const { id, start_time } = params.data;
     const startDate = moment(start_time).startOf("day"); // Start Of start_time Day
-    const endDate = moment(end_time).endOf("day"); // End Of end_time Day
     const currentDate = moment().startOf("day"); // Current Date Without Time
     const currentDateTime = moment(); // Current Date and Time
     const startDateTime = moment(start_time); // Exact start time
 
-    let isWithinRange;
     let isTimeValid = true;
 
     // Check if current time is past start_time on the same day
     if (currentDate.isSame(startDate, "day")) {
       isTimeValid = currentDateTime.isSameOrBefore(startDateTime);
-    }
-
-    // Check If start_time and end_time Are On The Same Day
-    if (startDate.isSame(endDate, "day")) {
-      // Button Active On The start date
-      isWithinRange = currentDate.isSame(startDate, "day");
     } else {
-      // Button Active From start_date Up To end_date
-      isWithinRange = currentDate.isBetween(startDate, endDate, null, "[]");
+      // For future dates, button should be enabled
+      isTimeValid = currentDate.isBefore(startDate);
     }
 
-    const isButtonEnabled = isWithinRange && isTimeValid;
+    const isButtonEnabled = isTimeValid;
 
     return (
       <button

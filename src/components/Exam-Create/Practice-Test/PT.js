@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../../UI/Loading";
 import { AgGridReact } from "ag-grid-react";
@@ -32,7 +33,8 @@ const reducerPT = (state, action) => {
   return { ...state, [action.type]: action.value };
 };
 
-const PT = ({ category, type, activeTab, setActiveTab }) => {
+const PT = ({ category, type, activeTab }) => {
+  const navigate = useNavigate();
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -177,7 +179,6 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
 
   const resetReducerForm = () => {
     dispatchPT({ type: "reset" });
-    setActiveTab("View Exam");
   };
 
   useEffect(() => {
@@ -308,6 +309,7 @@ const PT = ({ category, type, activeTab, setActiveTab }) => {
       );
       if (response.status === 201) {
         resetReducerForm();
+        navigate("/admin-exam");
         toast.success("Practice Exam Create Successfully");
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");

@@ -6,6 +6,44 @@ import ajaxCall from "../../helpers/ajaxCall";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
+const ieltsSubCategory = [
+  { name: "Academic", value: "Academic" },
+  { name: "General", value: "General" },
+  { name: "Foundation", value: "Foundation" },
+  { name: "Grammar", value: "Grammar" },
+];
+
+const pteSubCategory = [
+  {
+    name: "Read aloud [RA]",
+    value: "RA",
+  },
+  {
+    name: "Repeat sentence [RS]",
+    value: "RS",
+  },
+  {
+    name: "Describe image [DI]",
+    value: "DI",
+  },
+  {
+    name: "Re-tell lecture [RL]",
+    value: "RL",
+  },
+  {
+    name: "Answer short question [ASQ]",
+    value: "ASQ",
+  },
+  {
+    name: "Respond to a sitution [RTS]",
+    value: "RTS",
+  },
+  {
+    name: "Summarize group discussion [SGD]",
+    value: "SGD",
+  },
+];
+
 const initialSpeakingField = {
   name: "",
   sub_category: "",
@@ -37,43 +75,9 @@ const ExamSpeaking = ({ category }) => {
 
   const examSubCategory =
     category === "IELTS"
-      ? [
-          { name: "Academic", value: "Academic" },
-          { name: "General", value: "General" },
-          { name: "Foundation", value: "Foundation" },
-          { name: "Grammar", value: "Grammar" },
-        ]
+      ? ieltsSubCategory
       : category === "PTE"
-      ? [
-          {
-            name: "Read aloud [RA]",
-            value: "Read aloud [RA]",
-          },
-          {
-            name: "Repeat sentence [RS]",
-            value: "Repeat sentence [RS]",
-          },
-          {
-            name: "Describe image [DI]",
-            value: "Describe image [DI]",
-          },
-          {
-            name: "Re-tell lecture [RL]",
-            value: "Re-tell lecture [RL]",
-          },
-          {
-            name: "Answer short question [ASQ]",
-            value: "Answer short question [ASQ]",
-          },
-          {
-            name: "Respond to a sitution [RTS]",
-            value: "Respond to a sitution [RTS]",
-          },
-          {
-            name: "Summarize group discussion [SGD]",
-            value: "Summarize group discussion [SGD]",
-          },
-        ]
+      ? pteSubCategory
       : [];
 
   useEffect(() => {
@@ -82,7 +86,7 @@ const ExamSpeaking = ({ category }) => {
     } else if (category === "PTE") {
       dispatchSpeakingData({
         type: "sub_category",
-        value: "Read aloud [RA]",
+        value: "RA",
       });
     } else {
       dispatchSpeakingData({ type: "sub_category", value: "" });

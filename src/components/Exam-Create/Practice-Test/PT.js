@@ -7,6 +7,67 @@ import "ag-grid-community/styles/ag-grid.css";
 import ajaxCall from "../../../helpers/ajaxCall";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 
+const ieltsSubCategory = [
+  { name: "Academic", value: "Academic" },
+  { name: "General", value: "General" },
+  { name: "Foundation", value: "Foundation" },
+  { name: "Grammer", value: "Grammer" },
+];
+
+const pteReadingSubCategory = [
+  { name: "R&W: Fill in the blanks [RWFIB]", value: "RWFIB" },
+  { name: "MC, choose multiple answers", value: "CMA" },
+  { name: "Re-order paragraphs", value: "ROP" },
+  { name: "R: Fill in the blanks [RFIB]", value: "RFIB" },
+  { name: "MC, choose single answer", value: "CSA" },
+];
+
+const pteWritingSubCategory = [
+  { name: "Summarize written text [SWT]", value: "SWT" },
+  { name: "Write essay [WE]", value: "WE" },
+];
+
+const pteListeningSubCategory = [
+  { name: "Summarize spoken text [SST]", value: "SST" },
+  { name: "MC, choose multiple answers", value: "CMA" },
+  { name: "Fill in the blanks [LFIB]", value: "LFIB" },
+  { name: "Highlight correct summar", value: "HCS" },
+  { name: "MC, choose single answer", value: "CSA" },
+  { name: "Select missing words [SMW]", value: "SMW" },
+  { name: "Highlight incorrect words", value: "HIW" },
+  { name: "Write from diction [WFD]", value: "WFD" },
+];
+
+const pteSpeakingSubCategory = [
+  { name: "Read aloud [RA]", value: "RA" },
+  { name: "Repeat sentence [RS]", value: "RS" },
+  { name: "Describe image [DI]", value: "DI" },
+  { name: "Re-tell lecture [RL]", value: "RL" },
+  { name: "Answer short question [ASQ]", value: "ASQ" },
+  { name: "Respond to a sitution [RTS]", value: "RTS" },
+  { name: "Summarize group discussion [SGD]", value: "SGD" },
+];
+
+const getDefaultSubCategory = (category, type) => {
+  if (category === "IELTS") return "Academic";
+
+  if (category === "PTE") {
+    switch (type) {
+      case "Reading":
+        return "RWFIB";
+      case "Writing":
+        return "SWT";
+      case "Listening":
+        return "SST";
+      case "Speaking":
+        return "RA";
+      default:
+        return "";
+    }
+  }
+  return "";
+};
+
 const initialPT = {
   Name: "",
   difficulty_level: "Easy",
@@ -49,128 +110,22 @@ const PT = ({ category, type, activeTab }) => {
 
   const examSubCategory =
     category === "IELTS"
-      ? [
-          { name: "Academic", value: "Academic" },
-          { name: "General", value: "General" },
-          { name: "Foundation", value: "Foundation" },
-          { name: "Grammer", value: "Grammer" },
-        ]
+      ? ieltsSubCategory
       : category === "PTE"
       ? type === "Reading"
-        ? [
-            {
-              name: "R&W: Fill in the blanks [RWFIB]",
-              value: "R&W: Fill in the blanks [RWFIB]",
-            },
-            {
-              name: "MC, choose multiple answers",
-              value: "MC, choose multiple answers",
-            },
-            { name: "Re-order paragraphs", value: "Re-order paragraphs" },
-            {
-              name: "R: Fill in the blanks [RFIB]",
-              value: "R: Fill in the blanks [RFIB]",
-            },
-            {
-              name: "MC, choose single answer",
-              value: "MC, choose single answer",
-            },
-          ]
+        ? pteReadingSubCategory
         : type === "Writing"
-        ? [
-            {
-              name: "Summarize written text [SWT]",
-              value: "Summarize written text [SWT]",
-            },
-            {
-              name: "Write essay [WE]",
-              value: "Write essay [WE]",
-            },
-          ]
+        ? pteWritingSubCategory
         : type === "Listening"
-        ? [
-            {
-              name: "Summarize spoken text [SST]",
-              value: "Summarize spoken text [SST]",
-            },
-            {
-              name: "MC, choose multiple answers",
-              value: "MC, choose multiple answers",
-            },
-            {
-              name: "Fill in the blanks [LFIB]",
-              value: "Fill in the blanks [LFIB]",
-            },
-            {
-              name: "Highlight correct summar",
-              value: "Highlight correct summar",
-            },
-            {
-              name: "MC, choose single answer",
-              value: "MC, choose single answer",
-            },
-            {
-              name: "Select missing words [SMW]",
-              value: "Select missing words [SMW]",
-            },
-            {
-              name: "Highlight incorrect words",
-              value: "Highlight incorrect words",
-            },
-            {
-              name: "Write from diction [WFD]",
-              value: "Write from diction [WFD]",
-            },
-          ]
+        ? pteListeningSubCategory
         : type === "Speaking"
-        ? [
-            {
-              name: "Read aloud [RA]",
-              value: "Read aloud [RA]",
-            },
-            {
-              name: "Repeat sentence [RS]",
-              value: "Repeat sentence [RS]",
-            },
-            {
-              name: "Describe image [DI]",
-              value: "Describe image [DI]",
-            },
-            {
-              name: "Re-tell lecture [RL]",
-              value: "Re-tell lecture [RL]",
-            },
-            {
-              name: "Answer short question [ASQ]",
-              value: "Answer short question [ASQ]",
-            },
-            {
-              name: "Respond to a sitution [RTS]",
-              value: "Respond to a sitution [RTS]",
-            },
-            {
-              name: "Summarize group discussion [SGD]",
-              value: "Summarize group discussion [SGD]",
-            },
-          ]
+        ? pteSpeakingSubCategory
         : []
       : [];
 
   useEffect(() => {
-    const defaultSubCategory =
-      category === "IELTS"
-        ? "Academic"
-        : type === "Reading"
-        ? "R&W: Fill in the blanks [RWFIB]"
-        : type === "Writing"
-        ? "Summarize written text [SWT]"
-        : type === "Listening"
-        ? "Summarize spoken text [SST]"
-        : type === "Speaking"
-        ? "Read aloud [RA]"
-        : "";
-
-    dispatchPT({ type: "sub_category", value: defaultSubCategory });
+    const defaultValue = getDefaultSubCategory(category, type);
+    dispatchPT({ type: "sub_category", value: defaultValue });
   }, [category, type]);
 
   const setFormError = (errMsg) => {
@@ -183,65 +138,40 @@ const PT = ({ category, type, activeTab }) => {
 
   useEffect(() => {
     const fetchExams = async () => {
+      if (activeTab !== "Create PT") return;
       setIsLoading(true);
       try {
-        const [examResponse, speakingResponse] = await Promise.all([
-          ajaxCall(
-            `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,block_type,no_of_questions&exam_type=${type}&exam_category=${category}&sub_category=${createPT.sub_category}`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
-              },
-              method: "GET",
+        const url =
+          type === "Speaking"
+            ? `/speaking-block/?exam_category=${category}&sub_category=${createPT.sub_category}`
+            : `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,block_type,no_of_questions&exam_type=${type}&exam_category=${category}&sub_category=${createPT.sub_category}`;
+        const response = await ajaxCall(
+          url,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
-            8000
-          ),
-          ajaxCall(
-            `/speaking-block/?exam_category=${category}&sub_category=${createPT.sub_category}`,
-            {
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
-              },
-              method: "GET",
-            },
-            8000
-          ),
-        ]);
-
-        if (examResponse.status === 200 && speakingResponse.status === 200) {
-          const { data: examData } = examResponse;
-          const { data: speakingData } = speakingResponse;
-
-          const updatedExams = {
-            Reading: examData.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
-            ),
-            Writing: examData.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
-            ),
-            Listening: examData.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
-            ),
-            Speaking: speakingData.filter(
-              ({ block_threshold }) => block_threshold === 1
-            ),
-            General: examData.filter(
-              ({ exam_type, block_type }) =>
-                exam_type === type && block_type === "Mock Test"
-            ),
-          };
-          setExams(updatedExams);
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          if (type === "Speaking") {
+            const filteredData = response.data.filter(
+              (item) => item.block_threshold === 1
+            );
+            setExams((prev) => ({ ...prev, Speaking: filteredData }));
+          } else {
+            const filteredData = response.data.filter(
+              (item) =>
+                item.exam_type === type && item.block_type === "Mock Test"
+            );
+            setExams((prev) => ({ ...prev, [type]: filteredData }));
+          }
         }
       } catch (error) {
         console.log("Error:", error);
@@ -250,9 +180,7 @@ const PT = ({ category, type, activeTab }) => {
       }
     };
 
-    if (activeTab === "Create PT") {
-      fetchExams();
-    }
+    fetchExams();
   }, [activeTab, category, type, createPT.sub_category]);
 
   const validateForm = () => {
@@ -260,13 +188,7 @@ const PT = ({ category, type, activeTab }) => {
       setFormError("Name is Required");
       return false;
     }
-    if (
-      (type === "Reading" && createPT.Reading.length === 0) ||
-      (type === "Writing" && createPT.Writing.length === 0) ||
-      (type === "Listening" && createPT.Listening.length === 0) ||
-      (type === "Speaking" && createPT.Speaking.length === 0) ||
-      (type === "General" && createPT.General.length === 0)
-    ) {
+    if (createPT[type].length === 0) {
       setFormError(`Please Choose at least one ${type} Exam`);
       return false;
     }
@@ -278,19 +200,6 @@ const PT = ({ category, type, activeTab }) => {
     e.preventDefault();
     if (!validateForm()) return;
     try {
-      const data = {
-        Name: createPT.Name,
-        exam_test: createPT.exam_test,
-        practice_test_type: type,
-        Reading: createPT.Reading,
-        Writing: createPT.Writing,
-        Listening: createPT.Listening,
-        Speaking: createPT.Speaking,
-        General: createPT.General,
-        category: category,
-        sub_category: createPT.sub_category,
-        difficulty_level: createPT.difficulty_level,
-      };
       const response = await ajaxCall(
         "/moduleListView/",
         {
@@ -302,7 +211,11 @@ const PT = ({ category, type, activeTab }) => {
             }`,
           },
           method: "POST",
-          body: JSON.stringify(data),
+          body: JSON.stringify({
+            ...createPT,
+            practice_test_type: type,
+            category,
+          }),
           withCredentials: true,
         },
         8000
@@ -310,7 +223,7 @@ const PT = ({ category, type, activeTab }) => {
       if (response.status === 201) {
         resetReducerForm();
         navigate("/admin-exam");
-        toast.success("Practice Exam Create Successfully");
+        toast.success("Practice Exam Created Successfully");
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -323,22 +236,22 @@ const PT = ({ category, type, activeTab }) => {
     }
   };
 
-  const rowSelection = "multiple";
-
   const handleRowSelection = (type) => (event) => {
-    const selectedNodes = event.api?.getSelectedNodes();
+    const selectedNodes = event.api?.getSelectedNodes() || [];
     const selectedIds = selectedNodes.map((node) => node?.data?.id);
     const total = selectedNodes.reduce((total, node) => {
       return (
-        total + (node.data.no_of_questions || node.data.questions.length || 0)
+        total + (node.data.no_of_questions || node.data.questions?.length || 0)
       );
     }, 0);
     setTotalQuestions(total);
     dispatchPT({ type, value: selectedIds });
   };
 
-  const gridOptions = (rowData, handleRowSelection) => {
-    let columnDefs = [
+  const gridOptions = (rowData, handleRowSelection) => ({
+    rowData,
+    onSelectionChanged: handleRowSelection,
+    columnDefs: [
       {
         headerCheckboxSelection: true,
         checkboxSelection: true,
@@ -347,64 +260,49 @@ const PT = ({ category, type, activeTab }) => {
       },
       {
         headerName: "Exam Name",
-        field: "exam_name" || "name",
+        field: "exam_name",
         filter: true,
-        valueGetter: (params) => {
-          return params.data?.exam_name || params.data?.name;
-        },
+        valueGetter: (params) => params.data?.exam_name || params.data?.name,
         width: 400,
       },
       {
         headerName: "Exam Category",
         field: "exam_category",
         filter: true,
-        valueGetter: (params) => {
-          return params.data?.exam_category || "-";
-        },
+        valueGetter: (params) => params.data?.exam_category || "-",
         width: 230,
       },
       {
         headerName: "Exam Type",
-        field: "exam_type" || "Speaking",
+        field: "exam_type",
         filter: true,
-        valueGetter: (params) => {
-          return params.data?.exam_type || "Speaking";
-        },
+        valueGetter: (params) => params.data?.exam_type || "Speaking",
         width: 230,
       },
       {
         headerName: "No. Of Questions",
-        field: "no_of_questions" || "questions.length",
+        field: "no_of_questions",
         filter: true,
-        valueGetter: (params) => {
-          return params.data?.no_of_questions || params.data?.questions?.length;
-        },
+        valueGetter: (params) =>
+          params.data?.no_of_questions || params.data?.questions?.length,
         width: 230,
       },
       {
         headerName: "Block Type",
-        field: "block_type" || "Mock Test",
+        field: "block_type",
         filter: true,
-        valueGetter: (params) => {
-          return params.data?.block_type || "Mock Test";
-        },
+        valueGetter: (params) => params.data?.block_type || "Mock Test",
         width: 230,
       },
-    ];
-
-    return {
-      rowData,
-      onSelectionChanged: handleRowSelection,
-      columnDefs,
-      pagination: true,
-      paginationPageSize: 20,
-      domLayout: "autoHeight",
-      defaultColDef: {
-        sortable: true,
-        resizable: true,
-      },
-    };
-  };
+    ],
+    pagination: true,
+    paginationPageSize: 20,
+    domLayout: "autoHeight",
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+    },
+  });
 
   return (
     <div className="row">
@@ -448,7 +346,7 @@ const PT = ({ category, type, activeTab }) => {
       {exams[type]?.length > 0 && (
         <div className="dashboard__form__wraper">
           <div className="dashboard__form__input">
-            <label>Total No. of Questions : {totalQuestions}</label>
+            <label>Total No. of Questions: {totalQuestions}</label>
           </div>
         </div>
       )}
@@ -460,11 +358,11 @@ const PT = ({ category, type, activeTab }) => {
             <div className="ag-theme-quartz">
               <AgGridReact
                 {...gridOptions(exams[type], handleRowSelection(type))}
-                rowSelection={rowSelection}
+                rowSelection="multiple"
               />
             </div>
           ) : (
-            <h5 className="text-center text-danger">{`No ${type} Exams Avaiable !!`}</h5>
+            <h5 className="text-center text-danger">{`No ${type} Exams Available!`}</h5>
           )}
         </div>
       </div>

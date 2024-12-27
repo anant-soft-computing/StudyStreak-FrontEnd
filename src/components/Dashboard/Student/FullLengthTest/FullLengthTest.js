@@ -118,7 +118,7 @@ const FullLengthTest = () => {
   };
 
   const viewFullLengthTest = (examId) => {
-    navigate(`/exam-fulllength-answer/${examId}`);
+    navigate(`/FullLengthTest/Answer/${examId}`);
   };
 
   const columns = [

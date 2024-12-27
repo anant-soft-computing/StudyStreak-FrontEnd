@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ajaxCall from "../../../../helpers/ajaxCall";
+import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
-import Loading from "../../../UI/Loading";
-import Table from "../../../UI/Table";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const EnglishLevelTest = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const EnglishLevelTest = () => {
   };
 
   const viewEnglishLevelTest = (examId) => {
-    navigate(`/diagnostic-test-answer/${examId}`);
+    navigate(`/DiagnosticTest/Answer/${examId}`);
   };
 
   useEffect(() => {

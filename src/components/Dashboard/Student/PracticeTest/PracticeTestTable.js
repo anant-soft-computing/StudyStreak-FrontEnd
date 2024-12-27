@@ -59,17 +59,11 @@ const PracticeTestTable = ({
           className="take-test"
           onClick={() => {
             if (testType === "Writing" || testType === "Speaking") {
-              navigate(`/practice-assessment/${paperId}`, {
-                state: { examType: testType },
-              });
+              navigate(`/PracticeTest/Assessment/${testType}/${paperId}`);
             } else if (testType === "General") {
-              navigate(`/general-practice-test-answer/${examId}`, {
-                state: { fullPaper: paperId, examForm: testType },
-              });
+              navigate(`/PracticeTest/Answer/GENERAL/${paperId}`);
             } else {
-              navigate(`/exam-practice-test-answer/${examId}`, {
-                state: { fullPaper: paperId, examForm: testType },
-              });
+              navigate(`/PracticeTest/Answer/${testType}/${paperId}`);
             }
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}

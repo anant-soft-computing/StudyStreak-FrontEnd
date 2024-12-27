@@ -121,8 +121,7 @@ import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest
 import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
 import DiagnosticTestAnswer from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTestAnswer";
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
-import PracticeTestReport from "./components/Report/PracticeTestReport";
-import FLTReport from "./components/Report/FLTReport";
+import PTEWritingAnswer from "./components/Dashboard/Student/PTE/PTEAnswer/PTEWritingAnswer";
 import Progress from "./components/Dashboard/Student/Progress/Progress";
 import withBootstrap from "./layout/BootstrapStyles";
 
@@ -272,6 +271,7 @@ const App = () => {
               Component={withBootstrap(SSettings)}
             />
             <Route path="/reports" Component={withBootstrap(Report)} />
+
             <Route path="/Reading" Component={withBootstrap(ExamReading)} />
             <Route path="/Listening" Component={withBootstrap(ExamListening)} />
             <Route path="/Writing" Component={withBootstrap(ExamWriting)} />
@@ -287,50 +287,48 @@ const App = () => {
               path="/PTE/Speaking"
               Component={withBootstrap(PTESpeaking)}
             />
-            
+
+            {/*------------------------ Answers Component --------------------- */}
+
             <Route
-              path="/diagnostic-test-answer/:examId"
+              path="/DiagnosticTest/Answer/:examId"
               Component={withBootstrap(DiagnosticTestAnswer)}
             />
             <Route
-              path="/live-assignment-answer/:examId"
+              path="/Assignment/Answer/:examId"
               Component={withBootstrap(LiveAssignmentAnswer)}
             />
             <Route
-              path="/general-practice-test-answer/:examId"
-              Component={withBootstrap(GeneralPTAnswer)}
-            />
-            <Route
-              path="/general-exam-answer/:examId"
-              Component={withBootstrap(GeneralMTAnswer)}
-            />
-            <Route
-              path="/exam-answer/:examId"
+              path="/MiniTest/Answer/:examId"
               Component={withBootstrap(Answer)}
             />
             <Route
-              path="/exam-practice-test-answer/:examId"
+              path="/MiniTest/Answer/GENERAL/:examId"
+              Component={withBootstrap(GeneralMTAnswer)}
+            />
+            <Route
+              path="/PracticeTest/Answer/:examType/:examId"
               Component={withBootstrap(PracticeTestAnswer)}
             />
             <Route
-              path="/exam-fulllength-answer/:examId"
+              path="/PracticeTest/Answer/GENERAL/:examId"
+              Component={withBootstrap(GeneralPTAnswer)}
+            />
+            <Route
+              path="/FullLengthTest/Answer/:examId"
               Component={withBootstrap(FullLengthTestAnswer)}
             />
             <Route
-              path="/assessment/:examId"
+              path="/MiniTest/Assessment/:examType/:examId"
               Component={withBootstrap(ViewMTAAssessment)}
             />
             <Route
-              path="/practice-assessment/:examId"
+              path="/PracticeTest/Assessment/:examType/:examId"
               Component={withBootstrap(ViewPTAssessment)}
             />
             <Route
-              path="/praticeTestReport"
-              Component={withBootstrap(PracticeTestReport)}
-            />
-            <Route
-              path="/fullLengthTestReport"
-              Component={withBootstrap(FLTReport)}
+              path="/PTE/Assessment/Writing/:examId"
+              Component={withBootstrap(PTEWritingAnswer)}
             />
           </Route>
 

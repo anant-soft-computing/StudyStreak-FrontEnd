@@ -5,7 +5,7 @@ import { convert } from "html-to-text";
 import "../../../../../css/LiveExam.css";
 import Loading from "../../../../UI/Loading";
 import ajaxCall from "../../../../../helpers/ajaxCall";
-import AudioRecorder from "../../../../Exam-Create/AudioRecorder2";
+import AudioRecorder from "../../../../Exam-Create/AudioRecorder";
 import SpeakingInstruction from "../../../../Instruction/SpeakingInstruction";
 
 const initialState = {
@@ -101,9 +101,7 @@ const LivePTESpeakingExam = () => {
       );
       if (response.status === 200) {
         examLatestSubmit();
-        navigate(`/practice-assessment/${fullPaper?.IELTS?.id}`, {
-          state: { examType: "Speaking" },
-        });
+        navigate(`/PracticeTest/Assessment/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");

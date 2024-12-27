@@ -303,7 +303,7 @@ const LiveExam = () => {
         if (response.status === 201) {
           setTimerRunning(false);
           examSubmit();
-          navigate(`/exam-answer/${examData?.id}`);
+          navigate(`/MiniTest/Answer/${examData?.id}`);
         } else if (response.status === 400) {
           toast.error("Please Submit Your Exam Answer");
         } else {
@@ -397,7 +397,7 @@ const LiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         examSubmit();
-        navigate(`/exam-answer/${examData?.id}`);
+        navigate(`/MiniTest/Answer/${examData?.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

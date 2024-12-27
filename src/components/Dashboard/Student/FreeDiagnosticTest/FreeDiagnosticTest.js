@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const FreeDiagnosticTest = () => {
@@ -42,7 +42,7 @@ const FreeDiagnosticTest = () => {
   }, []);
 
   const handleFullLengthTest = (examId) => {
-    window.open(`/diagnostic-test/${examId}`, "_blank");
+    window.open(`/DiagnosticTest/${examId}`, "_blank");
   };
 
   const columns = [

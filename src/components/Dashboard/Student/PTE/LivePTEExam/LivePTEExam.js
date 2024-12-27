@@ -544,9 +544,7 @@ const LivePTEExam = () => {
 
       if (response.status === 201) {
         practiceTestSubmit();
-        navigate(`/exam-practice-test-answer/${examId}`, {
-          state: { examForm, fullPaper: fullPaper[0].IELTS.id },
-        });
+        navigate(`/PracticeTest/Answer/${examForm}/${examId}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -589,7 +587,7 @@ const LivePTEExam = () => {
       await Promise.all(
         answersArray.map(async (item) => {
           let gptResponse = "";
-          let bandValue = null;
+          let scoreValue = null;
 
           const examItem = examBlock.find((exam) => exam.id === item.exam_id);
           const passage = examItem
@@ -601,19 +599,8 @@ const LivePTEExam = () => {
             messages: [
               {
                 role: "user",
-                content: `Analyze the following IELTS Writing Task With response according to the official IELTS assessment criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
-
-                Assessment Criteria:
-
-                Task 1:
-
-                Task Achievement: Does the response address all parts of the task and provide a well-developed description, summary, or explanation of the information presented?
-
-                Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately?
-
-                Lexical Resource: Is a wide range of vocabulary used with precision and accuracy?
-
-                Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy? `,
+                content:
+                  "You are an expert evaluator for the PTE Writing Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation and provide scores in 1-point increments (0-90).",
               },
               {
                 role: "user",
@@ -621,21 +608,47 @@ const LivePTEExam = () => {
               },
               {
                 role: "user",
-                content: `Answers: ${item.data[0].answer_text}`,
+                content: `Answer: ${item.data[0].answer_text}
+                  
+                  Question Type: Essay`,
               },
               {
                 role: "user",
-                content: `Give band explanation as #Explanation:  
+                content: `Evaluate based on:
+                  
+                  Content: Does the response address the task completely and appropriately? Score: (0-90)
+                  
+                  Form: Is the response within the required word count and format? Score: (0-90)
+                  
+                  Grammar: Is a wide range of grammatical structures used accurately? Score: (0-90)
+                  
+                  Vocabulary: Is a wide range of vocabulary used with precision and accuracy? Score: (0-90)
+                  
+                  Spelling: Are spelling and word choice appropriate? Score: (0-90)
                 
-                Task Achievement: 
-        
-                Coherence and Cohesion:
-        
-                Lexical Resource:
-        
-                Grammatical Range and Accuracy:
-                
-                as #Band:bandValue`,
+                  Provide an Overall Band Score (0-90) based on the individual criteria.
+  
+                  Additionally, include detailed explanations for each score, outlining the **strengths**, **weaknesses**, and **areas for improvement**.
+                  
+                  #Evaluation Format:
+                  Content: [Explanation]  
+                  Score: X/90
+  
+                  Form: [Explanation]  
+                  Score: X/90
+  
+                  Grammar: [Explanation]  
+                  Score: X/90
+  
+                  Vocabulary: [Explanation]  
+                  Score: X/90 
+  
+                  Spelling: [Explanation]  
+                  Score: X/90
+  
+                  #Overall Band Score:X/90
+  
+                  Respond only with the evaluation up to the #Overall Band Score. Do not include any additional text or explanation beyond this point.`,
               },
             ],
           };
@@ -657,29 +670,35 @@ const LivePTEExam = () => {
           if (data?.choices?.[0]?.message?.content) {
             gptResponse = data.choices[0].message.content;
 
-            // Use regex to extract the band value
-            const bandMatch = gptResponse.match(/Band:\s*(\d+(\.\d+)?)/);
-            bandValue = bandMatch ? bandMatch[1] : null;
+            // Use regex to extract the score value
+            const scoreMatch = gptResponse.match(/Overall Band Score:\s*(\d+)/);
+            scoreValue = scoreMatch ? scoreMatch[1] : null;
 
-            if (!bandValue) {
+            if (!scoreValue) {
               isError = true;
               toast.error(
-                "Band value could not be extracted. Please try again."
+                "Score value could not be extracted. Please try again."
               );
               return;
             }
+
+            // Convert gptResponse to HTML format
+            const formattedResponse = gptResponse
+              .split("\n")
+              .map((line) => `<p>${line}</p>`)
+              .join("");
+
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: scoreValue,
+              AI_Assessment: formattedResponse,
+              data: item.data,
+            });
           } else {
             isError = true;
             toast.error("AI response is empty. Please try again.");
             return;
           }
-
-          newAnswersArray.push({
-            exam_id: item.exam_id,
-            band: bandValue,
-            AI_Assessment: gptResponse,
-            data: item.data,
-          });
         })
       );
     } catch (error) {
@@ -717,9 +736,7 @@ const LivePTEExam = () => {
 
       if (response.status === 201) {
         practiceTestSubmit();
-        navigate(`/exam-practice-test-answer/${examId}`, {
-          state: { examForm, fullPaper: fullPaper[0].IELTS.id },
-        });
+        navigate(`/PTE/Assessment/Writing/${fullPaper[0].IELTS.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

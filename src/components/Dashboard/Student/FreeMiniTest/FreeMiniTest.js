@@ -17,10 +17,10 @@ const FreeMiniTest = () => {
           window.open(
             `${
               testType === "General"
-                ? "general-exam"
+                ? "/general-exam"
                 : testType !== "Speaking"
-                ? "live-exam"
-                : "live-speaking-exam"
+                ? "/live-exam"
+                : "/live-speaking-exam"
             }/${testType}/${params.data.id}`,
             "_blank"
           )

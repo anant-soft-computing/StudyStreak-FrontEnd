@@ -65,9 +65,7 @@ const Reading = () => {
         <button
           className="take-test"
           onClick={() => {
-            navigate(`/exam-practice-test-answer/${examId}`, {
-              state: { fullPaper: paperId, examForm: "Reading" },
-            });
+            navigate(`/PracticeTest/Answer/Reading/${paperId}`);
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >

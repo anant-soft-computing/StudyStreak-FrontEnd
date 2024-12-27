@@ -4,10 +4,39 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
+const examsCategory = [
+  { name: "IELTS", value: "IELTS" },
+  { name: "GRE", value: "GRE" },
+  { name: "GMAT", value: "GMAT" },
+  { name: "PTE", value: "PTE" },
+  { name: "GENERAL", value: "GENERAL" },
+  { name: "TOFEL", value: "TOFEL" },
+];
+
+const categoryToExamTypes = {
+  IELTS: ["Reading", "Writing", "Listening", "Speaking"],
+  PTE: ["Reading", "Writing", "Listening", "Speaking"],
+  TOFEL: ["Reading", "Writing", "Listening", "Speaking"],
+  GRE: [
+    "AWA",
+    "Integrated Reasoning",
+    "Quantitative Reasoning",
+    "Verbal Reasoning",
+  ],
+  GMAT: [
+    "AWA",
+    "Integrated Reasoning",
+    "Quantitative Reasoning",
+    "Verbal Reasoning",
+  ],
+  GENERAL: ["General"],
+};
+
 const ViewMT = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [examType, setExamType] = useState("Reading");
   const [mockTestData, setMockTestData] = useState([]);
+  const [examCategory, setExamCategory] = useState("IELTS");
   const authData = useSelector((state) => state.authStore);
 
   const fetchData = useCallback(
@@ -42,14 +71,24 @@ const ViewMT = ({ activeTab }) => {
     if (activeTab !== "View MT") return;
 
     if (examType === "Speaking") {
-      fetchData("/speaking-block/", setMockTestData);
+      fetchData(
+        `/speaking-block/?exam_category=${examCategory}`,
+        setMockTestData
+      );
     } else {
       fetchData(
-        `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type,sub_category&exam_type=${examType}`,
+        `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type,sub_category&exam_category=${examCategory}&exam_type=${examType}`,
         setMockTestData
       );
     }
-  }, [activeTab, authData.accessToken, examType, fetchData]);
+  }, [activeTab, authData.accessToken, examCategory, examType, fetchData]);
+
+  useEffect(() => {
+    const validExamTypes = categoryToExamTypes[examCategory];
+    if (!validExamTypes.includes(examType)) {
+      setExamType(validExamTypes[0]);
+    }
+  }, [examCategory, examType]);
 
   const miniTestData = mockTestData.map((item, index) => ({
     ...item,
@@ -57,69 +96,86 @@ const ViewMT = ({ activeTab }) => {
   }));
 
   const columns = [
-    { headerName: "No.", field: "no", resizable: false, width: 135 },
+    { headerName: "No.", field: "no", resizable: false, width: 68 },
     {
       headerName: "Exam Name",
       field: "exam_name",
       filter: true,
       valueGetter: (params) => params.data?.exam_name || params.data?.name,
-      width: 330,
-    },
-    {
-      headerName: "Exam Type",
-      field: "exam_type",
-      filter: true,
-      valueGetter: (params) => params.data?.exam_type || "Speaking",
-      width: 330,
+      width: 350,
     },
     {
       headerName: "Exam Category",
       field: "exam_category",
       filter: true,
       valueGetter: (params) => params.data?.exam_category || "Speaking",
-      width: 330,
+      width: 340,
     },
     {
-      headerName: "Block Type",
-      field: "block_type",
+      headerName: "Exam Sub Category",
+      field: "sub_category",
       filter: true,
-      valueGetter: (params) => params.data?.block_type || "Mock Test",
-      width: 330,
+      valueGetter: (params) => params.data?.sub_category || "-",
+      width: 340,
+    },
+    {
+      headerName: "Exam Type",
+      field: "exam_type",
+      filter: true,
+      valueGetter: (params) => params.data?.exam_type || "Speaking",
+      width: 340,
     },
   ];
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (miniTestData.length === 0) {
-    return (
-      <h5 className="text-center text-danger">No Mock Test Available !!</h5>
-    );
-  }
-
   return (
     <div>
-      <div className="col-xl-2 mb-4">
-        <div className="dashboard__select__heading">
-          <span>Exam Type</span>
+      <div className="row">
+        <div className="col-xl-2 mb-4">
+          <div className="dashboard__select__heading">
+            <span>Exam Category</span>
+          </div>
+          <div className="dashboard__selector">
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={examCategory}
+              onChange={(e) => setExamCategory(e.target.value)}
+            >
+              {examsCategory.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="dashboard__selector">
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            value={examType}
-            onChange={(e) => setExamType(e.target.value)}
-          >
-            <option>Reading</option>
-            <option>Writing</option>
-            <option>Listening</option>
-            <option>Speaking</option>
-            <option>General</option>
-          </select>
+        <div className="col-xl-2 mb-4">
+          <div className="dashboard__select__heading">
+            <span>Exam Type</span>
+          </div>
+          <div className="dashboard__selector">
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={examType}
+              onChange={(e) => setExamType(e.target.value)}
+            >
+              {categoryToExamTypes[examCategory].map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
-      <Table rowData={miniTestData} columnDefs={columns} />
+      {isLoading ? (
+        <Loading />
+      ) : miniTestData.length > 0 ? (
+        <Table rowData={miniTestData} columnDefs={columns} />
+      ) : (
+        <h5 className="text-center text-danger">No Mock Test Available !!</h5>
+      )}
     </div>
   );
 };

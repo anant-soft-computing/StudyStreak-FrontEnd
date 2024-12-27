@@ -202,7 +202,7 @@ const LevelOfStudent = () => {
                   className="default__button"
                   onClick={() =>
                     window.open(
-                      `/diagnostic-test-answer/${testData.givenDiagnosticTest?.flt_id}`,
+                      `/DiagnosticTest/Answer/${testData.givenDiagnosticTest?.flt_id}`,
                       "_blank"
                     )
                   }

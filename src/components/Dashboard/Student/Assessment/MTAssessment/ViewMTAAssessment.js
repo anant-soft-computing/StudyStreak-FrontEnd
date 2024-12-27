@@ -1,16 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
+import { useParams } from "react-router-dom";
 import SmallModal from "../../../../UI/Modal";
 import ajaxCall from "../../../../../helpers/ajaxCall";
+import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
+import { getBackgroundColor } from "../../../../../utils/background/background";
 import { writingAssessment } from "../../../../../utils/assessment/writingAssessment";
 import { speakingAssessment } from "../../../../../utils/assessment/speakingAssessment";
-import { getBackgroundColor } from "../../../../../utils/background/background";
 
 const ViewMTAAssessment = () => {
-  const { examId } = useParams();
-  const { examType } = useLocation().state || {};
-
+  const { examId, examType } = useParams();
   const [band, setBand] = useState(0);
   const [examData, setExamData] = useState({});
   const [assessment, setAssessment] = useState("");

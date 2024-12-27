@@ -143,7 +143,7 @@ const LiveAssignment = () => {
 
       if (response.status === 201) {
         assignmentSubmit();
-        navigate(`/live-assignment-answer/${examData?.id}`);
+        navigate(`/Assignment/Answer/${examData?.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Assignment Answer");
       } else {

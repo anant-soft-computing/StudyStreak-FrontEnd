@@ -559,9 +559,7 @@ const GeneralPTExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         practiceTestSubmit();
-        navigate(`/general-practice-test-answer/${examId}`, {
-          state: { examForm, fullPaper: fullPaper[0].IELTS.id },
-        });
+        navigate(`/PracticeTest/Answer/GENERAL/${fullPaper[0].IELTS.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

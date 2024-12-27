@@ -62,9 +62,7 @@ const Writing = () => {
         <button
           className="take-test"
           onClick={() => {
-            navigate(`/practice-assessment/${paperId}`, {
-              state: { examType: "Writing" },
-            });
+            navigate(`/PTE/Assessment/Writing/${paperId}`);
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >

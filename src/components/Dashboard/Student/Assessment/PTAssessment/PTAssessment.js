@@ -25,9 +25,7 @@ const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
       <button
         className="take-test"
         onClick={() =>
-          navigate(`/practice-assessment/${paperId}`, {
-            state: { examType: testType },
-          })
+          navigate(`/PracticeTest/Assessment/${testType}/${paperId}`)
         }
       >
         View

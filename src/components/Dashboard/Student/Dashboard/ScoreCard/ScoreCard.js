@@ -365,15 +365,17 @@ const ScoreCard = ({ course }) => {
                         miniTestData[0]?.exam_type === "Speaking" ||
                         miniTestData[0]?.exam_type === "Writing"
                       ) {
-                        navigate(`/assessment/${miniTestData[0]?.exam_block}`, {
-                          state: { examType: miniTestData[0]?.exam_type },
-                        });
+                        navigate(
+                          `/MiniTest/Assessment/${miniTestData[0]?.exam_type}/${miniTestData[0]?.exam_block}`
+                        );
                       } else if (miniTestData[0]?.exam_type === "General") {
                         navigate(
-                          `/general-exam-answer/${miniTestData[0]?.exam_block}`
+                          `/MiniTest/Answer/GENERAL/${miniTestData[0]?.exam_block}`
                         );
                       } else {
-                        navigate(`/exam-answer/${miniTestData[0]?.exam_block}`);
+                        navigate(
+                          `/MiniTest/Answer/${miniTestData[0]?.exam_block}`
+                        );
                       }
                     }}
                   >
@@ -418,34 +420,17 @@ const ScoreCard = ({ course }) => {
                       practiceTestData[0]?.practise_set_type === "Speaking"
                     ) {
                       navigate(
-                        `/practice-assessment/${practiceTestData[0]?.practise_set}`,
-                        {
-                          state: {
-                            examType: practiceTestData[0]?.practise_set_type,
-                          },
-                        }
+                        `/PracticeTest/Assessment/${practiceTestData[0]?.practise_set_type}/${practiceTestData[0]?.practise_set}`
                       );
                     } else if (
                       practiceTestData[0]?.practise_set_type === "General"
                     ) {
                       navigate(
-                        `/general-practice-test-answer/${practiceTestData[0]?.practise_set}`,
-                        {
-                          state: {
-                            fullPaper: practiceTestData[0]?.practise_set,
-                            examForm: practiceTestData[0]?.practise_set_type,
-                          },
-                        }
+                        `/PracticeTest/Answer/GENERAL/${practiceTestData[0]?.practise_set}`
                       );
                     } else {
                       navigate(
-                        `/exam-practice-test-answer/${practiceTestData[0]?.practise_set}`,
-                        {
-                          state: {
-                            fullPaper: practiceTestData[0]?.practise_set,
-                            examForm: practiceTestData[0]?.practise_set_type,
-                          },
-                        }
+                        `/PracticeTest/Answer/${practiceTestData[0]?.practise_set_type}/${practiceTestData[0]?.practise_set}`
                       );
                     }
                   }}
@@ -482,7 +467,7 @@ const ScoreCard = ({ course }) => {
                   <div
                     className="gridarea__bottom"
                     onClick={() => {
-                      navigate(`/exam-fulllength-answer/${fltData[0]?.flt}`);
+                      navigate(`/FullLengthTest/Answer/${fltData[0]?.flt}`);
                     }}
                   >
                     <div className="gridarea__small__content">

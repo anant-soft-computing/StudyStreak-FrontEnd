@@ -64,7 +64,7 @@ const FullLengthTestReport = ({ activeTab }) => {
           <button
             className="take-test"
             onClick={() =>
-              navigate(`/exam-fulllength-answer/${params.data.id}`)
+              navigate(`/FullLengthTest/Answer/${params.data.id}`)
             }
           >
             View

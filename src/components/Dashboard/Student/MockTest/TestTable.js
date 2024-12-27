@@ -1,6 +1,6 @@
 import React from "react";
-import Table from "../../../UI/Table";
 import { useNavigate } from "react-router-dom";
+import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 
 const TestTable = ({
@@ -23,13 +23,11 @@ const TestTable = ({
           className="take-test"
           onClick={() => {
             if (testType === "Speaking" || testType === "Writing") {
-              navigate(`/assessment/${examId}`, {
-                state: { examType: testType },
-              });
+              navigate(`/MiniTest/Assessment/${testType}/${examId}`);
             } else if (testType === "General") {
-              navigate(`/general-exam-answer/${examId}`);
+              navigate(`/MiniTest/Answer/GENERAL/${examId}`);
             } else {
-              navigate(`/exam-answer/${examId}`);
+              navigate(`/MiniTest/Answer/${examId}`);
             }
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
@@ -45,10 +43,10 @@ const TestTable = ({
             window.open(
               `${
                 testType === "General"
-                  ? "general-exam"
+                  ? "/general-exam"
                   : testType !== "Speaking"
-                  ? "live-exam"
-                  : "live-speaking-exam"
+                  ? "/live-exam"
+                  : "/live-speaking-exam"
               }/${testType}/${params.data.id}`,
               "_blank"
             )

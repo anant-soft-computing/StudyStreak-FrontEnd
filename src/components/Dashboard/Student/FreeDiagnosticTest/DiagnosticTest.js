@@ -9,15 +9,15 @@ import "../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { convert } from "html-to-text";
 import { useNavigate, useParams } from "react-router-dom";
-import ajaxCall from "../../../../helpers/ajaxCall";
-import AudioRecorder from "../../../Exam-Create/AudioRecorder2";
+import Loading from "../../../UI/Loading";
 import SmallModal from "../../../UI/Modal";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import DisplayLeftContainer from "../../../UI/DisplayPassage";
+import AudioRecorder from "../../../Exam-Create/AudioRecorder";
 import ReadingDTI from "../../../Instruction/DiagnosticTestInstruction/ReadingDTI";
 import WritingDTI from "../../../Instruction/DiagnosticTestInstruction/WritingDTI";
-import ListeningDTI from "../../../Instruction/DiagnosticTestInstruction/ListeningDTI";
 import SpeakingDTI from "../../../Instruction/DiagnosticTestInstruction/SpeakingDTI";
-import Loading from "../../../UI/Loading";
-import DisplayLeftContainer from "../../../UI/DisplayPassage";
+import ListeningDTI from "../../../Instruction/DiagnosticTestInstruction/ListeningDTI";
 const Cheerio = require("cheerio");
 
 const intialInstructionState = {
@@ -858,7 +858,7 @@ const DiagnosticTest = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         diagnosticTestSubmit();
-        navigate(`/diagnostic-test-answer/${examId}`);
+        navigate(`/DiagnosticTest/Answer/${examId}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

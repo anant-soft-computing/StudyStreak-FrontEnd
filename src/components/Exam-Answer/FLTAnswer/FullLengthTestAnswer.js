@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../helpers/ajaxCall";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import listeningBandValues from "../../../utils/bandValues/listeningBandValues";
 import readingBandValues from "../../../utils/bandValues/ReadingBandValues";
 import BandCard from "./BandCard";
@@ -14,7 +14,6 @@ import { speakingAssessment } from "../../../utils/assessment/speakingAssessment
 
 const FullLengthTestAnswer = () => {
   const { examId } = useParams();
-  const { fltId } = useLocation()?.state || {};
   const [examName, setExamName] = useState("");
   const [rStudentAnswers, setRStudentAnswers] = useState([]);
   const [rCorrectAnswers, setRCorrectAnswers] = useState([]);
@@ -63,7 +62,7 @@ const FullLengthTestAnswer = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/flt-answers/${examId || fltId}/`,
+          `/flt-answers/${examId}/`,
           {
             headers: {
               Accept: "application/json",

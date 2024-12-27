@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 import AnswerTable from "../../Exam-Answer/AnswerTable/AnswerTable";
 
 const GeneralPTAnswer = () => {
+  const { examId } = useParams();
   const [examName, setExamName] = useState("");
   const [percentage, setPercentage] = useState(0);
 
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
 
-  const { examForm, fullPaper } = useLocation()?.state || {};
-
   const [skipCount, setSkipCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
   const [incorrectCount, setIncorrectCount] = useState(0);
-
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/practice-answers/${fullPaper}/`,
+          `/practice-answers/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -41,7 +39,6 @@ const GeneralPTAnswer = () => {
           let correctAnswer = [];
 
           if (
-            examForm === "General" &&
             response.data?.student_answers?.General &&
             response.data?.correct_answers?.General
           ) {
@@ -96,7 +93,7 @@ const GeneralPTAnswer = () => {
         console.log("error", error);
       }
     })();
-  }, [examForm, fullPaper]);
+  }, [examId]);
 
   return (
     <div className="body__wrapper">

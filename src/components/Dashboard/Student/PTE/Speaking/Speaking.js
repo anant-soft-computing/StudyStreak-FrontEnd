@@ -67,9 +67,7 @@ const Speaking = () => {
         <button
           className="take-test"
           onClick={() => {
-            navigate(`/practice-assessment/${paperId}`, {
-              state: { examType: "Speaking" },
-            });
+            navigate(`/PracticeTest/Assessment/Speaking/${paperId}`);
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >

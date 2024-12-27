@@ -68,9 +68,7 @@ const Listening = () => {
         <button
           className="take-test"
           onClick={() => {
-            navigate(`/exam-practice-test-answer/${examId}`, {
-              state: { fullPaper: paperId, examForm: "Listening" },
-            });
+            navigate(`/PracticeTest/Answer/Listening/${paperId}`);
           }}
           style={{ backgroundColor: "green", border: "1px solid green" }}
         >

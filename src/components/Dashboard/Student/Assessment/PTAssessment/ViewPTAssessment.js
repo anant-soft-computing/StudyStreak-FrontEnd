@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
-import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
-import ajaxCall from "../../../../../helpers/ajaxCall";
+import { useParams } from "react-router-dom";
 import SmallModal from "../../../../UI/Modal";
+import ajaxCall from "../../../../../helpers/ajaxCall";
+import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
+import { getBackgroundColor } from "../../../../../utils/background/background";
 import { speakingAssessment } from "../../../../../utils/assessment/speakingAssessment";
 import WritingAnswerTable from "../../../../Exam-Answer/AnswerTable/WritingAnswerTable";
 import SpeakingAnswerTable from "../../../../Exam-Answer/AnswerTable/SpeakingAnswerTable";
-import { getBackgroundColor } from "../../../../../utils/background/background";
 
 const ViewPTAssessment = () => {
-  const { examId } = useParams();
-  const { examType } = useLocation().state || {};
+  const { examId, examType } = useParams();
   const [band, setBand] = useState(0);
   const [examName, setExamName] = useState("");
   const [assessment, setAssessment] = useState([]);

@@ -134,13 +134,11 @@ const MiniTestReport = ({ activeTab }) => {
             className="take-test"
             onClick={() => {
               if (testType === "Speaking" || testType === "Writing") {
-                navigate(`/assessment/${examId}`, {
-                  state: { examType: testType },
-                });
+                navigate(`/MiniTest/Assessment/${testType}/${examId}`);
               } else if (testType === "General") {
-                navigate(`/general-exam-answer/${examId}`);
+                navigate(`/MiniTest/Answer/GENERAL/${examId}`);
               } else {
-                navigate(`/exam-answer/${examId}`);
+                navigate(`/MiniTest/Answer/${examId}`);
               }
             }}
           >

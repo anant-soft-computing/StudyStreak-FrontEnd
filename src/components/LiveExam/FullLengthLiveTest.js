@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { convert } from "html-to-text";
 import { useNavigate, useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder2";
+import AudioRecorder from "../Exam-Create/AudioRecorder";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import SmallModal from "../UI/Modal";
@@ -892,9 +892,7 @@ const FullLengthLiveExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         fullLengthTestSubmit();
-        navigate(`/exam-fulllength-answer/${examId}`, {
-          state: { fltId: examId },
-        });
+        navigate(`/FullLengthTest/Answer/${examId}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -1017,7 +1015,7 @@ const FullLengthLiveExam = () => {
       updatedAnswers[next].data = currentData;
       return updatedAnswers;
     });
-  
+
     // Optionally, clear the active recording index to allow new recordings
     setActiveRecordingIndex(null);
   };

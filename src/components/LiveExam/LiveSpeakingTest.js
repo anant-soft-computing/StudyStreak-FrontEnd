@@ -3,7 +3,7 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder2";
+import AudioRecorder from "../Exam-Create/AudioRecorder";
 import { convert } from "html-to-text";
 import SpeakingMTInstruction from "../Instruction/MiniTestInstruction/SpeakingMTInstruction";
 import { formatTime } from "../../utils/timer/formateTime";
@@ -236,12 +236,12 @@ const LiveSpeakingExam = () => {
     });
     setSpeaking(updatedSpeaking);
   };
-  
+
   useEffect(() => {
     const isAllAnswered = speaking.every((item) => item.filePath !== "");
     if (isAllAnswered) {
       examSubmit();
-      navigate(`/assessment/${examId}`, { state: { examType: "Speaking" } });
+      navigate(`/MiniTest/Assessment/Speaking/${examId}`);
     }
   }, [speaking]);
 

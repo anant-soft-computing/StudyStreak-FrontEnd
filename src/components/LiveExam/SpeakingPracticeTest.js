@@ -3,7 +3,7 @@ import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder2";
+import AudioRecorder from "../Exam-Create/AudioRecorder";
 import { convert } from "html-to-text";
 import SpeakingInstruction from "../Instruction/SpeakingInstruction";
 
@@ -128,9 +128,7 @@ const PracticeSpeakingLiveExam = () => {
       );
       if (response.status === 200) {
         examLatestSubmit();
-        navigate(`/practice-assessment/${fullPaper?.IELTS?.id}`, {
-          state: { examType: "Speaking" },
-        });
+        navigate(`/PracticeTest/Assessment/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");

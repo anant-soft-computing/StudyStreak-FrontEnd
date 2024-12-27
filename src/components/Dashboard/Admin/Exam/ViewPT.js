@@ -4,10 +4,39 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
+const examsCategory = [
+  { name: "IELTS", value: "IELTS" },
+  { name: "GRE", value: "GRE" },
+  { name: "GMAT", value: "GMAT" },
+  { name: "PTE", value: "PTE" },
+  { name: "GENERAL", value: "GENERAL" },
+  { name: "TOFEL", value: "TOFEL" },
+];
+
+const categoryToExamTypes = {
+  IELTS: ["Reading", "Writing", "Listening", "Speaking"],
+  PTE: ["Reading", "Writing", "Listening", "Speaking"],
+  TOFEL: ["Reading", "Writing", "Listening", "Speaking"],
+  GRE: [
+    "AWA",
+    "Integrated Reasoning",
+    "Quantitative Reasoning",
+    "Verbal Reasoning",
+  ],
+  GMAT: [
+    "AWA",
+    "Integrated Reasoning",
+    "Quantitative Reasoning",
+    "Verbal Reasoning",
+  ],
+  GENERAL: ["General"],
+};
+
 const ViewPT = ({ activeTab }) => {
   const [ptList, setPtList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [examType, setExamType] = useState("Reading");
+  const [examCategory, setExamCategory] = useState("IELTS");
   const authData = useSelector((state) => state.authStore);
 
   const ptData = ptList.map((item, index) => ({
@@ -46,8 +75,18 @@ const ViewPT = ({ activeTab }) => {
   useEffect(() => {
     if (activeTab !== "View PT") return;
 
-    fetchData(`/moduleListView/?exam_type=${examType}`, setPtList);
-  }, [activeTab, authData.accessToken, examType, fetchData]);
+    fetchData(
+      `/moduleListView/?category=${examCategory}&exam_type=${examType}`,
+      setPtList
+    );
+  }, [activeTab, authData.accessToken, examCategory, examType, fetchData]);
+
+  useEffect(() => {
+    const validExamTypes = categoryToExamTypes[examCategory];
+    if (!validExamTypes.includes(examType)) {
+      setExamType(validExamTypes[0]);
+    }
+  }, [examCategory, examType]);
 
   const columns = [
     {
@@ -116,38 +155,57 @@ const ViewPT = ({ activeTab }) => {
       : []),
   ];
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (ptData.length === 0) {
-    return (
-      <h5 className="text-center text-danger">No Practice Test Available !!</h5>
-    );
-  }
-
   return (
     <div>
-      <div className="col-xl-2 mb-4">
-        <div className="dashboard__select__heading">
-          <span>Exam Type</span>
+      <div className="row">
+        <div className="col-xl-2 mb-4">
+          <div className="dashboard__select__heading">
+            <span>Exam Category</span>
+          </div>
+          <div className="dashboard__selector">
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={examCategory}
+              onChange={(e) => setExamCategory(e.target.value)}
+            >
+              {examsCategory.map((item) => (
+                <option key={item.value} value={item.value}>
+                  {item.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
-        <div className="dashboard__selector">
-          <select
-            className="form-select"
-            aria-label="Default select example"
-            value={examType}
-            onChange={(e) => setExamType(e.target.value)}
-          >
-            <option>Reading</option>
-            <option>Writing</option>
-            <option>Listening</option>
-            <option>Speaking</option>
-            <option>General</option>
-          </select>
+        <div className="col-xl-2 mb-4">
+          <div className="dashboard__select__heading">
+            <span>Exam Type</span>
+          </div>
+          <div className="dashboard__selector">
+            <select
+              className="form-select"
+              aria-label="Default select example"
+              value={examType}
+              onChange={(e) => setExamType(e.target.value)}
+            >
+              {categoryToExamTypes[examCategory].map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
-      <Table rowData={ptData} columnDefs={columns} />
+      {isLoading ? (
+        <Loading />
+      ) : ptData.length > 0 ? (
+        <Table rowData={ptData} columnDefs={columns} />
+      ) : (
+        <h5 className="text-center text-danger">
+          No Practice Test Available !!
+        </h5>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 import ScoreCard from "../ScoreCard/ScoreCard";
 import AnswerCard from "../AnswerCard";
@@ -9,14 +9,13 @@ import readingBandValues from "../../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../../utils/bandValues/listeningBandValues";
 
 const PracticeTestAnswer = () => {
+  const { examId, examType } = useParams();
   const [band, setBand] = useState(0);
   const [examName, setExamName] = useState("");
 
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
   const [writingAnswers, setWritingAnswers] = useState([]);
-
-  const { examForm, fullPaper } = useLocation()?.state || {};
 
   const [skipCount, setSkipCount] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -26,7 +25,7 @@ const PracticeTestAnswer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/practice-answers/${fullPaper}/`,
+          `/practice-answers/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -40,7 +39,7 @@ const PracticeTestAnswer = () => {
           8000
         );
         if (response.status === 200) {
-          if (examForm === "Writing") {
+          if (examType === "Writing") {
             const studentAnswers = response?.data?.student_answers?.Writing;
             const totalBand = studentAnswers?.reduce((sum, item) => {
               const bandValue = item.band !== null ? parseFloat(item.band) : 0;
@@ -55,7 +54,7 @@ const PracticeTestAnswer = () => {
           let correctAnswer = [];
 
           if (
-            examForm === "Reading" &&
+            examType === "Reading" &&
             response.data?.student_answers?.Reading &&
             response.data?.correct_answers?.Reading
           ) {
@@ -75,7 +74,7 @@ const PracticeTestAnswer = () => {
               );
             });
           } else if (
-            examForm === "Listening" &&
+            examType === "Listening" &&
             response.data?.student_answers?.Listening &&
             response.data?.correct_answers?.Listening
           ) {
@@ -139,9 +138,9 @@ const PracticeTestAnswer = () => {
             }
           });
 
-          if (examForm === "Reading") {
+          if (examType === "Reading") {
             setBand(readingBandValues[correct]);
-          } else if (examForm === "Listening") {
+          } else if (examType === "Listening") {
             setBand(listeningBandValues[correct]);
           }
 
@@ -155,7 +154,7 @@ const PracticeTestAnswer = () => {
         console.log("error", error);
       }
     })();
-  }, [examForm, fullPaper]);
+  }, [examType, examId]);
 
   return (
     <div className="body__wrapper">
@@ -166,10 +165,10 @@ const PracticeTestAnswer = () => {
               <div className="col-xl-8 col-lg-8 AnswerCard">
                 <div className="blog__details__content__wraper">
                   <h4 className="sidebar__title">Solution For : {examName}</h4>
-                  {examForm === "Writing" && (
+                  {examType === "Writing" && (
                     <h4 className="sidebar__title">Band : {band}</h4>
                   )}
-                  {examForm !== "Writing" && (
+                  {examType !== "Writing" && (
                     <AnswerCard
                       band={band}
                       skipCount={skipCount}
@@ -177,10 +176,10 @@ const PracticeTestAnswer = () => {
                       incorrectCount={incorrectCount}
                     />
                   )}
-                  {examForm === "Writing" && (
+                  {examType === "Writing" && (
                     <WritingAnswerTable data={writingAnswers} />
                   )}
-                  {(examForm === "Reading" || examForm === "Listening") && (
+                  {(examType === "Reading" || examType === "Listening") && (
                     <AnswerTable
                       correctAnswer={correctAnswer}
                       studentAnswer={studentAnswers}

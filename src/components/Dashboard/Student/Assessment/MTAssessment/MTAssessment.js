@@ -1,6 +1,7 @@
 import React from "react";
 import Table from "../../../../UI/Table";
 import { useNavigate } from "react-router-dom";
+
 const MTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
   const navigate = useNavigate();
   const viewAssessment = (params) => {
@@ -8,9 +9,7 @@ const MTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
       <button
         className="take-test"
         onClick={() =>
-          navigate(`/assessment/${params.data.id}`, {
-            state: { examType: testType },
-          })
+          navigate(`/MiniTest/Assessment/${testType}/${params.data.id}`)
         }
       >
         View

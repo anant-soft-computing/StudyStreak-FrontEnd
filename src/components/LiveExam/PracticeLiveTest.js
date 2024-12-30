@@ -791,10 +791,16 @@ const PracticeLiveExam = () => {
             return;
           }
 
+          // Convert gptResponse to HTML format
+          const formattedResponse = gptResponse
+            .split("\n")
+            .map((line) => `<p>${line}</p>`)
+            .join("");
+
           newAnswersArray.push({
             exam_id: item.exam_id,
             band: bandValue,
-            AI_Assessment: gptResponse,
+            AI_Assessment: formattedResponse,
             data: item.data,
           });
         })

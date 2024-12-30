@@ -274,11 +274,17 @@ const LiveExam = () => {
         return;
       }
 
+      // Convert gptResponse to HTML format
+      const formattedResponse = gptResponse
+        .split("\n")
+        .map((line) => `<p>${line}</p>`)
+        .join("");
+
       const data = JSON.stringify({
         student_exam: answersArray,
         user: userData?.userId,
         exam: parseInt(examId),
-        AI_Assessment: gptResponse,
+        AI_Assessment: formattedResponse,
         band: bandValue,
         exam_type: examData?.exam_type,
       });

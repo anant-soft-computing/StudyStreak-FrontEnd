@@ -77,13 +77,7 @@ const BlogsPage = () => {
         );
 
         if (response.status === 200) {
-          setBlogs(
-            response.data
-              .filter((item) => item.status === "published")
-              .sort(
-                (a, b) => new Date(b.published_at) - new Date(a.published_at)
-              )
-          );
+          setBlogs(response.data);
         }
       } catch (error) {
         console.log("error", error);

@@ -16,8 +16,8 @@ import Banner from "./Banner/Banner";
 import ajaxCall from "../helpers/ajaxCall";
 import Packages from "./Packages/Packages";
 import CourseList from "./Course/CourseList";
-import TestimonialSection from "./Testimonial/TestimonialSection";
 import Loading from "../components/UI/Loading";
+import Testimonial from "./Testimonial/Testimonial";
 
 const features = [
   {
@@ -242,7 +242,7 @@ const HomePage = () => {
 
         <CourseList />
 
-        <TestimonialSection />
+        <Testimonial />
 
         <Packages />
 

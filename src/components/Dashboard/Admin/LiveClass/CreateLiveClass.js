@@ -3,11 +3,12 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 import moment from "moment";
-import SingleSelection from "../../../UI/SingleSelect";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SelectionBox from "../../../UI/SelectionBox";
+import SingleSelection from "../../../UI/SingleSelect";
 
 const initialLiveClassData = {
+  is_public: false,
   liveclasstype: "",
   select_batch: [],
   select_batchId: [],
@@ -155,6 +156,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
 
     const data = {
+      is_public: createLiveClassData.is_public,
       meeting_title: createLiveClassData.meeting_title,
       meeting_description: createLiveClassData.meeting_description,
       select_batch: createLiveClassData.select_batchId,
@@ -265,6 +267,23 @@ const CreateLiveClass = ({ setActiveTab }) => {
       <div className="row">
         <div className="col-xl-12">
           <div className="row">
+            <div className="form__check mb-2">
+              <label
+                style={{ fontSize: "14px", fontWeight: "600", color: "black" }}
+              >
+                Public
+              </label>{" "}
+              <input
+                type="checkbox"
+                value={createLiveClassData.is_public}
+                onChange={(e) => {
+                  dispatchCreateLiveClass({
+                    type: "is_public",
+                    value: e.target.checked,
+                  });
+                }}
+              />
+            </div>
             <div className="col-xl-6">
               <div className="dashboard__select__heading">
                 <span>Live Class Type</span>

@@ -122,6 +122,7 @@ import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAsses
 import DiagnosticTestAnswer from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTestAnswer";
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
 import PTEWritingAnswer from "./components/Dashboard/Student/PTE/PTEAnswer/PTEWritingAnswer";
+import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/PTEAnswer/PTESpeakingAnswer";
 import Progress from "./components/Dashboard/Student/Progress/Progress";
 import withBootstrap from "./layout/BootstrapStyles";
 
@@ -330,6 +331,10 @@ const App = () => {
               path="/PTE/Assessment/Writing/:examId"
               Component={withBootstrap(PTEWritingAnswer)}
             />
+            <Route
+              path="/PTE/Assessment/Speaking/:examId"
+              Component={withBootstrap(PTESpeakingAnswer)}
+            />
           </Route>
 
           <Route element={<StudentNavBarRoute isProtected={false} />}>
@@ -337,37 +342,43 @@ const App = () => {
             <Route path="*" element={withBootstrap(ErrorPage)} />
           </Route>
 
+          {/*------------------------ Exams Component --------------------- */}
+
           <Route
-            path="/diagnostic-test/:examId"
+            path="/DiagnosticTest/:examId"
             Component={withBootstrap(DiagnosticTest)}
           />
           <Route
-            path="/general-practice-live-exam/:examType/:examForm/:examId"
-            Component={withBootstrap(GeneralPTExam)}
-          />
-          <Route
-            path="/general-exam/:examType/:examId"
-            Component={withBootstrap(GeneralMTExam)}
-          />
-          <Route
-            path="/assignment/:examType/:examId"
+            path="/Assignment/:examType/:examId"
             Component={withBootstrap(LiveAssignment)}
           />
           <Route
-            path="/fulllength-live-exam/:examId"
-            Component={withBootstrap(FullLengthLiveExam)}
-          />
-          <Route
-            path="/live-exam/:examType/:examId"
+            path="/MiniLiveExam/:examType/:examId"
             Component={withBootstrap(LiveExam)}
           />
           <Route
-            path="/live-speaking-exam/:examType/:examId"
+            path="/Speaking-MiniLiveExam/:examType/:examId"
             Component={withBootstrap(LiveSpeakingExam)}
           />
+           <Route
+            path="/GENERAL-MiniLiveExam/:examType/:examId"
+            Component={withBootstrap(GeneralMTExam)}
+          />
           <Route
-            path="/practice-live-exam/:examType/:examForm/:examId"
+            path="/PracticeLiveExam/:examType/:examForm/:examId"
             Component={withBootstrap(PracticeLiveExam)}
+          />
+          <Route
+            path="/Speaking-PracticeLiveExam/:examType/:examForm/:examId"
+            Component={withBootstrap(PracticeSpeakingLiveExam)}
+          />
+          <Route
+            path="/GENERAL-PracticeLiveExam/:examType/:examForm/:examId"
+            Component={withBootstrap(GeneralPTExam)}
+          />
+          <Route
+            path="/FullLengthLiveExam/:examId"
+            Component={withBootstrap(FullLengthLiveExam)}
           />
           <Route
             path="/PTE/:examType/:examForm/:examId"
@@ -376,10 +387,6 @@ const App = () => {
           <Route
             path="/PTE-Speaking/:examType/:examForm/:examId"
             Component={withBootstrap(LivePTESpeakingExam)}
-          />
-          <Route
-            path="/practice-speaking-live-exam/:examType/:examForm/:examId"
-            Component={withBootstrap(PracticeSpeakingLiveExam)}
           />
         </Routes>
       </div>

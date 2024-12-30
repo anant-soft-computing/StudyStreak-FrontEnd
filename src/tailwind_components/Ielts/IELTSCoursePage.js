@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BookOpen, User, Award, Target } from "lucide-react";
 import IeltsList from "./IeltsList";
-import TestimonialSection from "../Testimonial/TestimonialSection";
+import Testimonial from "../Testimonial/Testimonial";
 
 const keyFeatures = [
   {
@@ -153,7 +153,7 @@ const IELTSPage = () => {
         </div>
       </section>
 
-      <TestimonialSection />
+      <Testimonial />
 
       <section className="py-16 bg-neutral-100">
         <div className="container mx-auto px-4">

@@ -49,22 +49,6 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
     return gradients[index % gradients.length];
   };
 
-  const calculateTotalDuration = (lessons) => {
-    const totalMinutes = lessons.reduce((totalDuration, lesson) => {
-      const [minutes] = lesson?.Lesson_Duration.split(" ");
-      const [minPart, secPart] = minutes.split(".").map(Number);
-      const totalSeconds = minPart * 60 + (secPart || 0);
-      return totalDuration + totalSeconds;
-    }, 0);
-
-    const hours = Math.floor(totalMinutes / 3600);
-    const minutes = Math.floor((totalMinutes % 3600) / 60);
-
-    return `${
-      hours > 0 ? `${hours} Hr${hours > 1 ? "s" : ""} ` : ""
-    }${minutes} Minute${minutes !== 1 ? "s" : ""}`;
-  };
-
   return isLoading ? (
     <Loading />
   ) : (
@@ -107,9 +91,12 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   </h3>
                   <div className="flex items-center text-sm text-neutral-800 mb-3">
                     <Clock size={16} className="mr-2" />
-                    <span>{calculateTotalDuration(course.lessons)}</span>
+                    <span>
+                      {course?.total_duration ? course?.total_duration : 0}{" "}
+                      Minutes
+                    </span>
                     <span className="mx-2">•</span>
-                    <span>{course?.lessons?.length} Lessons</span>
+                    <span>{course?.total_lesson} Lessons</span>
                   </div>
 
                   <div className="flex items-center mb-4 pt-3 border-t border-neutral-100">

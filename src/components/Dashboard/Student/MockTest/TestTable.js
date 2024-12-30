@@ -43,10 +43,10 @@ const TestTable = ({
             window.open(
               `${
                 testType === "General"
-                  ? "/general-exam"
+                  ? "/GENERAL-MiniLiveExam"
                   : testType !== "Speaking"
-                  ? "/live-exam"
-                  : "/live-speaking-exam"
+                  ? "/MiniLiveExam"
+                  : "/Speaking-MiniLiveExam"
               }/${testType}/${params.data.id}`,
               "_blank"
             )

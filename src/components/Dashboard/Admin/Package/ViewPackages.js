@@ -1,10 +1,75 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import CheckIcon from "../../../UI/CheckIcon";
-import CancelIcon from "../../../UI/CancelIcon";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
+
+const columns = [
+  {
+    headerName: "No.",
+    field: "no",
+    resizable: false,
+    width: 80,
+  },
+  { headerName: "Name", field: "package_name", filter: true },
+  { headerName: "Price", field: "package_price", filter: true },
+  {
+    headerName: "Type",
+    field: "PackageType.name",
+    filter: true,
+  },
+  {
+    headerName: "Course",
+    field: "select_course.Course_Title",
+    filter: true,
+  },
+  { headerName: "Duration", field: "duration" },
+  {
+    headerName: "Total Full Length Test",
+    field: "full_length_test_count",
+    filter: true,
+  },
+  {
+    headerName: "Total Practice Test",
+    field: "practice_test_count",
+    filter: true,
+  },
+  {
+    headerName: "Speaking Test",
+    field: "speaking_test_count",
+    filter: true,
+  },
+  {
+    headerName: "Total Writing Evaluation",
+    field: "writing_evaluation_count",
+    filter: true,
+  },
+  {
+    headerName: "Total Group Doubt Solving",
+    field: "group_doubt_solving_count",
+    filter: true,
+  },
+  {
+    headerName: "Total One To One Doubt Solving",
+    field: "one_to_one_doubt_solving_count",
+    filter: true,
+  },
+  {
+    headerName: "Total Tutor Support Classes",
+    field: "tutor_support_count",
+    filter: true,
+  },
+  {
+    headerName: "Total Webianr Classes",
+    field: "webinar_count",
+    filter: true,
+  },
+  {
+    headerName: "Total Counselling Classes",
+    field: "counselling_count",
+    filter: true,
+  },
+];
 
 const ViewPackages = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,7 +82,7 @@ const ViewPackages = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/packagelistview/`,
+            "/packagelistview/",
             {
               headers: {
                 Accept: "application/json",
@@ -46,87 +111,6 @@ const ViewPackages = ({ activeTab }) => {
     }
   }, [authData?.accessToken, activeTab]);
 
-  const renderItemAvailable = ({ value }) => {
-    return value ? <CheckIcon /> : <CancelIcon />;
-  };
-
-  const columns = [
-    {
-      headerName: "No.",
-      field: "no",
-      resizable: false,
-      width: 80,
-    },
-    { headerName: "Name", field: "package_name", filter: true },
-    { headerName: "Price", field: "package_price", filter: true },
-    {
-      headerName: "Type",
-      field: "PackageType.name",
-      filter: true,
-    },
-    {
-      headerName: "Course",
-      field: "select_course.Course_Title",
-      filter: true,
-    },
-    { headerName: "Duration", field: "duration" },
-    {
-      headerName: "Soft Copy",
-      field: "soft_copy",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Hard Copy",
-      field: "hard_copy",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Full Length Test",
-      field: "full_length_test",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Practice Test",
-      field: "practice_test",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Speaking Test",
-      field: "speaking_test",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Writing Evaluation",
-      field: "writing_evaluation",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Live Classes Membership",
-      field: "live_classes_membership",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Online Membership",
-      field: "online_membership",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Offline Membership",
-      field: "offline_membership",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "Group Doubt Solving",
-      field: "group_doubt_solving",
-      cellRenderer: renderItemAvailable,
-    },
-    {
-      headerName: "One To One Doubt Solving",
-      field: "one_to_one_doubt_solving",
-      cellRenderer: renderItemAvailable,
-    },
-  ];
-
   return isLoading ? (
     <Loading />
   ) : packageList.length > 0 ? (
@@ -135,4 +119,5 @@ const ViewPackages = ({ activeTab }) => {
     <h5 className="text-center text-danger">No Packages Available !!</h5>
   );
 };
+
 export default ViewPackages;

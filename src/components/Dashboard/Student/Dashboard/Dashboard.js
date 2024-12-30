@@ -286,7 +286,7 @@ const Dashboard = () => {
                                     batch.batch_start_timing,
                                     "HH:mm:ss"
                                   ).format("hh:mm A")}{" "}
-                                  |{" "}
+                                  |*|{" "}
                                 </span>
                               ))}
                             </h5>

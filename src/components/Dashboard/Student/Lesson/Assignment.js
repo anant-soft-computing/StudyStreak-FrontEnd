@@ -22,7 +22,7 @@ const Assignment = ({ activeLesson }) => {
         className="take-test"
         onClick={() =>
           window.open(
-            `/assignment/${params.data.exam_type}/${params.data.id}`,
+            `/Assignment/${params.data.exam_type}/${params.data.id}`,
             "_blank"
           )
         }

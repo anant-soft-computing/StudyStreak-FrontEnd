@@ -14,7 +14,7 @@ const EnglishLevelTest = () => {
   const [englishLevelTestData, setEnglishLevelTestData] = useState([]);
 
   const handleEnglishLevelTest = (examId) => {
-    window.open(`/diagnostic-test/${examId}`, "_blank");
+    window.open(`/DiagnosticTest/${examId}`, "_blank");
   };
 
   const viewEnglishLevelTest = (examId) => {

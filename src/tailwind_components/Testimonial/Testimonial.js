@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { Star } from "lucide-react";
 import ajaxCall from "../../helpers/ajaxCall";
 
-const TestimonialSection = () => {
+const Testimonial = () => {
   const scrollRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [testimonials, setTestimonials] = useState([]);
@@ -118,4 +118,4 @@ const TestimonialSection = () => {
   );
 };
 
-export default TestimonialSection;
+export default Testimonial;

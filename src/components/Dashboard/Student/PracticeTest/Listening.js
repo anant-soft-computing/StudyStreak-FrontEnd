@@ -5,7 +5,7 @@ const Listening = ({ listeningData, givenTest }) => {
     Object?.keys(data?.IELTS)?.forEach((key) => {
       if (Array.isArray(data?.IELTS[key])) {
         if (data?.IELTS[key].length > 0) {
-          window.open(`/practice-live-exam/IELTS/${key}/${data.id}`, "_blank");
+          window.open(`/PracticeLiveExam/IELTS/${key}/${data.id}`, "_blank");
         }
       }
     });

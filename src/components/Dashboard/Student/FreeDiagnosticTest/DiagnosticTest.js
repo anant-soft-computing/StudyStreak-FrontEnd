@@ -779,10 +779,17 @@ const DiagnosticTest = () => {
                 toast.error("AI response is empty. Please try again.");
                 return;
               }
+
+              // Convert gptResponse to HTML format
+              const formattedResponse = gptResponse
+                .split("\n")
+                .map((line) => `<p>${line}</p>`)
+                .join("");
+
               newAnswersArray.push({
                 exam_id: item.exam_id,
                 band: bandValue,
-                AI_Assessment: gptResponse,
+                AI_Assessment: formattedResponse,
                 data: item.data,
               });
             } else {
@@ -981,7 +988,7 @@ const DiagnosticTest = () => {
       updatedAnswers[next].data = currentData;
       return updatedAnswers;
     });
-  
+
     // Optionally, clear the active recording index to allow new recordings
     setActiveRecordingIndex(null);
   };

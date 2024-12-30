@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, Clock, Calendar, ArrowRight } from "lucide-react";
 import CourseList from "./CourseList";
-import TestimonialSection from "../Testimonial/TestimonialSection";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
+import TestimonialSection from "../Testimonial/Testimonial";
 
 const CoursesPage = () => {
   const navigate = useNavigate();
@@ -160,14 +160,7 @@ const CoursesPage = () => {
         );
 
         if (response?.status === 200) {
-          setBlogs(
-            response?.data
-              .filter((item) => item.status === "published")
-              .sort(
-                (a, b) => new Date(b.published_at) - new Date(a.published_at)
-              )
-              .slice(0, 3)
-          );
+          setBlogs(response?.data.slice(0, 3));
         }
       } catch (error) {
         console.log("error", error);

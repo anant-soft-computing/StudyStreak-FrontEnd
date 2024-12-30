@@ -26,7 +26,7 @@ const PracticeTestTable = ({
         if (data?.IELTS[key].length > 0) {
           if (testType === "Speaking") {
             window.open(
-              `/practice-speaking-live-exam/IELTS/${key}/${data.id}`,
+              `/Speaking-PracticeLiveExam/IELTS/${key}/${data.id}`,
               "_blank"
             );
           } else if (
@@ -34,13 +34,10 @@ const PracticeTestTable = ({
             testType === "Writing" ||
             testType === "Listening"
           ) {
-            window.open(
-              `/practice-live-exam/IELTS/${key}/${data.id}`,
-              "_blank"
-            );
+            window.open(`/PracticeLiveExam/IELTS/${key}/${data.id}`, "_blank");
           } else {
             window.open(
-              `/general-practice-live-exam/IELTS/${key}/${data.id}`,
+              `/GENERAL-PracticeLiveExam/IELTS/${key}/${data.id}`,
               "_blank"
             );
           }

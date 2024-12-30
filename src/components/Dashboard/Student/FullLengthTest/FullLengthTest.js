@@ -113,7 +113,7 @@ const FullLengthTest = () => {
         "You Do Not Have Any Test Available, Please Upgrade Package !!"
       );
     } else {
-      window.open(`/fulllength-live-exam/${examId}`, "_blank");
+      window.open(`/FullLengthLiveExam/${examId}`, "_blank");
     }
   };
 

@@ -5,7 +5,7 @@ import { convert } from "html-to-text";
 import "../../../../../css/LiveExam.css";
 import Loading from "../../../../UI/Loading";
 import ajaxCall from "../../../../../helpers/ajaxCall";
-import AudioRecorder from "../../../../Exam-Create/AudioRecorder";
+import PTEAudioRecorder from "./PTEAudioRecorder/PTEAudioRecorder";
 import SpeakingInstruction from "../../../../Instruction/SpeakingInstruction";
 
 const initialState = {
@@ -101,7 +101,7 @@ const LivePTESpeakingExam = () => {
       );
       if (response.status === 200) {
         examLatestSubmit();
-        navigate(`/PracticeTest/Assessment/Speaking/${fullPaper?.IELTS?.id}`);
+        navigate(`/PTE/Assessment/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");
@@ -285,7 +285,7 @@ const LivePTESpeakingExam = () => {
   const recorderContainer = useCallback(
     (item, index) => {
       return (
-        <AudioRecorder
+        <PTEAudioRecorder
           setRecordedFilePath={setRecordedFilePath}
           next={next}
           exam={examData}

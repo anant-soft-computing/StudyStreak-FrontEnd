@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Loading from "../../../UI/Loading";
 import Table from "../../../UI/Table";
+import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const ViewNotice = ({ activeTab }) => {
@@ -48,18 +48,21 @@ const ViewNotice = ({ activeTab }) => {
       field: "student",
       resizable: true,
       filter: true,
+      width: 300,
     },
     {
       headerName: "Course",
       field: "course",
       resizable: true,
       filter: true,
+      width: 300,
     },
     {
       headerName: "Batch",
       field: "batch",
       resizable: true,
       filter: true,
+      width: 300,
     },
   ];
 

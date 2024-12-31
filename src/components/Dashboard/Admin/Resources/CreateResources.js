@@ -6,6 +6,7 @@ import SelectionBox from "../../../UI/SelectionBox";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const initialResourceData = {
+  is_paper: false,
   student: [],
   studentId: [],
   batch: [],
@@ -123,6 +124,8 @@ const CreateResourceLink = ({ setActiveTab }) => {
     setFormStatus({ isError: false, errMsg: null, isSubmitting: true });
     try {
       const formData = new FormData();
+
+      formData.append("is_paper", createRLData.is_paper);
 
       createRLData.studentId.forEach((id) => {
         formData.append(`student`, id);

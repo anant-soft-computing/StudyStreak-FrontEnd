@@ -70,6 +70,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
   );
   const [formStatus, setFormStatus] = useState(initialSubmit);
   const [activeButton, setActiveButton] = useState("batch");
+  const [attachmentDoc, setAttachmentDoc] = useState(false);
   const authData = useSelector((state) => state.authStore);
 
   const resetReducerForm = () => {
@@ -246,44 +247,30 @@ const CreateLiveClass = ({ setActiveTab }) => {
 
   return (
     <>
-      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
-        <button
-          className={`default__button ${
-            activeButton === "batch" ? "active bg-success" : ""
-          }`}
-          onClick={() => handleButtonClick("batch")}
-        >
-          Batch
-        </button>
-        <button
-          className={`default__button ${
-            activeButton === "course" ? "active bg-success" : ""
-          }`}
-          onClick={() => handleButtonClick("course")}
-        >
-          Course
-        </button>
-      </div>
+      {createLiveClassData.liveclasstype !== 9 &&
+        createLiveClassData.liveclasstype !== 8 && (
+          <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+            <button
+              className={`default__button ${
+                activeButton === "batch" ? "active bg-success" : ""
+              }`}
+              onClick={() => handleButtonClick("batch")}
+            >
+              Batch
+            </button>
+            <button
+              className={`default__button ${
+                activeButton === "course" ? "active bg-success" : ""
+              }`}
+              onClick={() => handleButtonClick("course")}
+            >
+              Course
+            </button>
+          </div>
+        )}
       <div className="row">
         <div className="col-xl-12">
           <div className="row">
-            <div className="form__check mb-2">
-              <label
-                style={{ fontSize: "14px", fontWeight: "600", color: "black" }}
-              >
-                Public
-              </label>{" "}
-              <input
-                type="checkbox"
-                value={createLiveClassData.is_public}
-                onChange={(e) => {
-                  dispatchCreateLiveClass({
-                    type: "is_public",
-                    value: e.target.checked,
-                  });
-                }}
-              />
-            </div>
             <div className="col-xl-6">
               <div className="dashboard__select__heading">
                 <span>Live Class Type</span>
@@ -303,53 +290,64 @@ const CreateLiveClass = ({ setActiveTab }) => {
                 />
               </div>
             </div>
-            {activeButton === "batch" && (
-              <div className="col-xl-6">
-                <div className="dashboard__select__heading">
-                  <span>Batch</span>
+            {activeButton === "batch" &&
+              createLiveClassData.liveclasstype !== 9 &&
+              createLiveClassData.liveclasstype !== 8 && (
+                <div className="col-xl-6">
+                  <div className="dashboard__select__heading">
+                    <span>Batch</span>
+                  </div>
+                  <div className="dashboard__selector">
+                    <SelectionBox
+                      value={createLiveClassData?.select_batch}
+                      onSelect={addedSelectVal.bind(
+                        null,
+                        "select_batch",
+                        "select_batchId",
+                        false
+                      )}
+                      url="/batchview/"
+                      name="batch_name"
+                      objKey={["batch_name"]}
+                      isSearch={true}
+                      multiple={true}
+                    />
+                  </div>
                 </div>
-                <div className="dashboard__selector">
-                  <SelectionBox
-                    value={createLiveClassData?.select_batch}
-                    onSelect={addedSelectVal.bind(
-                      null,
-                      "select_batch",
-                      "select_batchId",
-                      false
-                    )}
-                    url="/batchview/"
-                    name="batch_name"
-                    objKey={["batch_name"]}
-                    isSearch={true}
-                    multiple={true}
-                  />
+              )}
+            {activeButton === "course" &&
+              createLiveClassData.liveclasstype !== 9 &&
+              createLiveClassData.liveclasstype !== 8 && (
+                <div className="col-xl-6">
+                  <div className="dashboard__select__heading">
+                    <span>Course</span>
+                  </div>
+                  <div className="dashboard__selector">
+                    <SelectionBox
+                      value={createLiveClassData?.select_course}
+                      onSelect={addedSelectVal.bind(
+                        null,
+                        "select_course",
+                        "select_courseId",
+                        false
+                      )}
+                      url="/courselistforpackage/"
+                      name="Course_Title"
+                      objKey={["Course_Title"]}
+                      isSearch={true}
+                      multiple={true}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
-            {activeButton === "course" && (
-              <div className="col-xl-6">
-                <div className="dashboard__select__heading">
-                  <span>Course</span>
-                </div>
-                <div className="dashboard__selector">
-                  <SelectionBox
-                    value={createLiveClassData?.select_course}
-                    onSelect={addedSelectVal.bind(
-                      null,
-                      "select_course",
-                      "select_courseId",
-                      false
-                    )}
-                    url="/courselistforpackage/"
-                    name="Course_Title"
-                    objKey={["Course_Title"]}
-                    isSearch={true}
-                    multiple={true}
-                  />
-                </div>
-              </div>
-            )}
-            <div className="col-xl-6 mt-3">
+              )}
+            <div
+              className={`col-xl-6 ${
+                createLiveClassData.liveclasstype === 9 ||
+                createLiveClassData.liveclasstype === 8
+                  ? ""
+                  : "mt-3"
+              }`}
+            >
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Meeting Title</label>
@@ -367,7 +365,14 @@ const CreateLiveClass = ({ setActiveTab }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 mt-3">
+            <div
+              className={`col-xl-6 ${
+                createLiveClassData.liveclasstype === 9 ||
+                createLiveClassData.liveclasstype === 8
+                  ? ""
+                  : "mt-3"
+              }`}
+            >
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Meeting Description</label>
@@ -442,79 +447,127 @@ const CreateLiveClass = ({ setActiveTab }) => {
                   </div>
                 </div>
               )}
-            {createLiveClassData.attachments.map((_, index) => (
-              <div className="row" key={index}>
-                <div className="col-xl-6">
-                  <div className="dashboard__form__wraper">
-                    <div className="dashboard__form__input">
-                      <label htmlFor={`attachment-${index}`}>Document</label>
-                      <div className="d-flex align-items-center">
-                        <input
-                          id={`attachment-${index}`}
-                          type="file"
-                          className="form-control"
-                          onChange={(e) => {
-                            const file = e.target.files[0];
-                            const updatedAttachments = [
-                              ...createLiveClassData.attachments,
-                            ];
-                            updatedAttachments[index].attachment = file;
-                            dispatchCreateLiveClass({
-                              type: "attachments",
-                              value: updatedAttachments,
-                            });
-                          }}
-                        />
+            <div className="d-flex flex-wrap gap-4">
+              <div className="form__check">
+                <label
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "black",
+                  }}
+                >
+                  Public
+                </label>{" "}
+                <input
+                  type="checkbox"
+                  value={createLiveClassData.is_public}
+                  onChange={(e) => {
+                    dispatchCreateLiveClass({
+                      type: "is_public",
+                      value: e.target.checked,
+                    });
+                  }}
+                />
+              </div>
+              <div className="form__check">
+                <label
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: "600",
+                    color: "black",
+                  }}
+                >
+                  Attachment Document
+                </label>{" "}
+                <input
+                  type="checkbox"
+                  value={attachmentDoc}
+                  onChange={(e) => setAttachmentDoc(e.target.checked)}
+                />
+              </div>
+            </div>
+            {attachmentDoc && (
+              <div>
+                {createLiveClassData.attachments.map((_, index) => (
+                  <div className="row mt-3" key={index}>
+                    <div className="col-xl-6">
+                      <div className="dashboard__form__wraper">
+                        <div className="dashboard__form__input">
+                          <label htmlFor={`attachment-${index}`}>
+                            Document
+                          </label>
+                          <div className="d-flex align-items-center">
+                            <input
+                              id={`attachment-${index}`}
+                              type="file"
+                              className="form-control"
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                const updatedAttachments = [
+                                  ...createLiveClassData.attachments,
+                                ];
+                                updatedAttachments[index].attachment = file;
+                                dispatchCreateLiveClass({
+                                  type: "attachments",
+                                  value: updatedAttachments,
+                                });
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-xl-6">
+                      <div className="dashboard__form__wraper">
+                        <div className="dashboard__form__input">
+                          <label htmlFor={`description-${index}`}>
+                            Description
+                          </label>
+                          <div className="d-flex align-items-center">
+                            <input
+                              id={`description-${index}`}
+                              type="text"
+                              className="form-control"
+                              placeholder="Description of Live Class Attachment"
+                              value={
+                                createLiveClassData.attachments[index].file_name
+                              }
+                              onChange={(e) => {
+                                const updatedAttachments = [
+                                  ...createLiveClassData.attachments,
+                                ];
+                                updatedAttachments[index].file_name =
+                                  e.target.value;
+                                dispatchCreateLiveClass({
+                                  type: "attachments",
+                                  value: updatedAttachments,
+                                });
+                              }}
+                            />
+                            {createLiveClassData.attachments.length > 1 && (
+                              <button
+                                className="dashboard__small__btn__2 flash-card__remove__btn"
+                                onClick={() => removeContent(index)}
+                              >
+                                <i className="icofont-ui-delete" />
+                              </button>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-xl-6">
-                  <div className="dashboard__form__wraper">
-                    <div className="dashboard__form__input">
-                      <label htmlFor={`description-${index}`}>
-                        Description
-                      </label>
-                      <div className="d-flex align-items-center">
-                        <input
-                          id={`description-${index}`}
-                          type="text"
-                          className="form-control"
-                          placeholder="Description of Live Class Attachment"
-                          value={
-                            createLiveClassData.attachments[index].file_name
-                          }
-                          onChange={(e) => {
-                            const updatedAttachments = [
-                              ...createLiveClassData.attachments,
-                            ];
-                            updatedAttachments[index].file_name =
-                              e.target.value;
-                            dispatchCreateLiveClass({
-                              type: "attachments",
-                              value: updatedAttachments,
-                            });
-                          }}
-                        />
-                        {createLiveClassData.attachments.length > 1 && (
-                          <button
-                            className="dashboard__small__btn__2 flash-card__remove__btn"
-                            onClick={() => removeContent(index)}
-                          >
-                            <i className="icofont-ui-delete" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                ))}
+                <div className="col-xl-12">
+                  <button
+                    className="dashboard__small__btn__2"
+                    onClick={addContent}
+                  >
+                    + Attachments
+                  </button>
                 </div>
               </div>
-            ))}
-            <div className="col-xl-12">
-              <button className="dashboard__small__btn__2" onClick={addContent}>
-                + Attachments
-              </button>
-            </div>
+            )}
             <div className="col-xl-12 mt-3">
               <div className="dashboard__form__button text-center mt-4">
                 {formStatus.isError && (

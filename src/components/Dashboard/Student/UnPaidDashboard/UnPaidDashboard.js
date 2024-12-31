@@ -57,48 +57,41 @@ const UnPaidDashboard = () => {
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
-  useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const response = await ajaxCall(
-          "/liveclass_list_view/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
+  const useFetchClasses = (liveClassType, setClassData) => {
+    useEffect(() => {
+      const fetchClasses = async () => {
+        try {
+          const response = await ajaxCall(
+            `/liveclass_list_view/?live_class_type=${liveClassType}&is_public=1`,
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
             },
-            method: "GET",
-          },
-          8000
-        );
-        if (response?.status === 200) {
-          const classes = response?.data;
-          setMasterClass(
-            classes.filter(({ liveclasstype }) => liveclasstype === "Master")
+            8000
           );
-          setCounselling(
-            classes.filter(
-              ({ liveclasstype, meeting_title }) =>
-                liveclasstype === "Counselling" &&
-                meeting_title.startsWith("Introduction")
-            )
-          );
-          setDemoClass(
-            classes.filter(({ liveclasstype }) => liveclasstype === "Demo")
-          );
-        } else {
-          console.log("error");
+          if (response?.status === 200) {
+            setClassData(response?.data);
+          } else {
+            console.log(`Error fetching ${liveClassType} classes`);
+          }
+        } catch (error) {
+          console.log(`Error fetching ${liveClassType} classes`, error);
         }
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
+      };
 
-    fetchClasses();
-  }, []);
+      fetchClasses();
+    }, [liveClassType, setClassData]);
+  };
+
+  useFetchClasses("Demo", setDemoClass);
+  useFetchClasses("Master", setMasterClass);
+  useFetchClasses("Counselling", setCounselling);
 
   return (
     <div className="body__wrapper">

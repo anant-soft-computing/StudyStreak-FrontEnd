@@ -12,7 +12,7 @@ const initialPaperTestData = {
   batchId: [],
   course: [],
   courseId: [],
-  link: "",
+  is_paper: true,
   documents: [""],
   descriptions: [""],
 };
@@ -145,7 +145,7 @@ const CreatePaperTest = ({ setActiveTab }) => {
         formData.append(`batch`, id);
       });
 
-      formData.append("link", createPTData.link);
+      formData.append("is_paper", createPTData.is_paper);
 
       createPTData.documents.forEach((document, index) => {
         if (document) {
@@ -185,21 +185,6 @@ const CreatePaperTest = ({ setActiveTab }) => {
     } finally {
       setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
-  };
-
-  const handleDescriptionChange = (index, value) => {
-    const descriptionPrefix = "Paper Test - ";
-
-    if (!value.startsWith(descriptionPrefix)) {
-      value = descriptionPrefix;
-    }
-
-    const updatedDescriptions = [...createPTData.descriptions];
-    updatedDescriptions[index] = value;
-    dispatchCreatePT({
-      type: "descriptions",
-      value: updatedDescriptions,
-    });
   };
 
   return (
@@ -302,24 +287,6 @@ const CreatePaperTest = ({ setActiveTab }) => {
                 </div>
               </div>
             )}
-            <div className="col-xl-6">
-              <div className="dashboard__form__wraper">
-                <div className="dashboard__form__input">
-                  <label>Link</label>
-                  <input
-                    type="text"
-                    placeholder="Link"
-                    value={createPTData?.link}
-                    onChange={(e) => {
-                      dispatchCreatePT({
-                        type: "link",
-                        value: e.target.value,
-                      });
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
           </div>
           {createPTData.documents.map((_, index) => (
             <div className="row" key={index}>
@@ -357,9 +324,16 @@ const CreatePaperTest = ({ setActiveTab }) => {
                         className="form-control"
                         placeholder="Paper Test - Add your description here"
                         value={createPTData.descriptions[index]}
-                        onChange={(e) =>
-                          handleDescriptionChange(index, e.target.value)
-                        }
+                        onChange={(e) => {
+                          const updatedDescriptions = [
+                            ...createPTData.descriptions,
+                          ];
+                          updatedDescriptions[index] = e.target.value;
+                          dispatchCreatePT({
+                            type: "descriptions",
+                            value: updatedDescriptions,
+                          });
+                        }}
                       />
                       {createPTData.documents.length > 1 && (
                         <button

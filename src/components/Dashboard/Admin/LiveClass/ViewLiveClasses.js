@@ -6,6 +6,18 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
 
+const liveClass = [
+  { name: "Regular Class", value: "Regular Class" },
+  { name: "Speaking Practice", value: "Speaking-Practice" },
+  { name: "Group Doubt Solving", value: "Group-Doubt Solving" },
+  { name: "One To One Doubt Solving", value: "One-To-One-Doubt-Solving" },
+  { name: "Tutor Support", value: "Tutor Support" },
+  { name: "Webinar", value: "Webinar" },
+  { name: "Counselling", value: "Counselling" },
+  { name: "Demo", value: "Demo" },
+  { name: "Master", value: "Master" },
+];
+
 const attachmentsColumns = [
   {
     headerName: "No.",
@@ -27,10 +39,7 @@ const attachmentsColumns = [
     width: 200,
     cellRenderer: (params) => {
       return params.value !== null ? (
-        <button
-          className="take-test"
-          onClick={() => window.open(params.value)}
-        >
+        <button className="take-test" onClick={() => window.open(params.value)}>
           <i className="icofont-download" /> Download
         </button>
       ) : (
@@ -43,10 +52,12 @@ const attachmentsColumns = [
 const ViewLiveClasses = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [liveClassList, setLiveClassList] = useState([]);
-  const authData = useSelector((state) => state.authStore);
+  const [liveClassType, setLiveClassType] = useState("Regular Class");
 
-  const [openAttachments, setOpenAttachments] = useState(false);
   const [attachments, setAttachments] = useState([]);
+  const [openAttachments, setOpenAttachments] = useState(false);
+
+  const authData = useSelector((state) => state.authStore);
 
   const handleAttachment = (batch) => {
     setOpenAttachments(true);
@@ -59,7 +70,7 @@ const ViewLiveClasses = ({ activeTab }) => {
       setIsLoading(true);
       try {
         const response = await ajaxCall(
-          `/liveclass_list_view/`,
+          `/liveclass_list_view/?live_class_type=${liveClassType}`,
           {
             headers: {
               Accept: "application/json",
@@ -86,7 +97,7 @@ const ViewLiveClasses = ({ activeTab }) => {
       }
     };
     fetchLiveClasses();
-  }, [activeTab, authData?.accessToken]);
+  }, [activeTab, authData?.accessToken, liveClassType]);
 
   const columns = [
     { headerName: "No.", field: "no", resizable: false, width: 60 },
@@ -157,19 +168,36 @@ const ViewLiveClasses = ({ activeTab }) => {
     },
   ];
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (liveClassList.length === 0) {
-    return (
-      <h5 className="text-center text-danger">No Live Classes Available !!</h5>
-    );
-  }
-
   return (
     <div>
-      <Table columnDefs={columns} rowData={liveClassList} />
+      <div className="col-xl-2 mb-4">
+        <div className="dashboard__select__heading">
+          <span>Live Class Type</span>
+        </div>
+        <div className="dashboard__selector">
+          <select
+            className="form-select"
+            aria-label="Default select example"
+            value={liveClassType}
+            onChange={(e) => setLiveClassType(e.target.value)}
+          >
+            {liveClass.map((item) => (
+              <option key={item.value} value={item.value}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      {isLoading ? (
+        <Loading />
+      ) : liveClassList.length > 0 ? (
+        <Table columnDefs={columns} rowData={liveClassList} />
+      ) : (
+        <h5 className="text-center text-danger">
+          No Live Classes Available !!
+        </h5>
+      )}
       <SmallModal
         size="lg"
         centered

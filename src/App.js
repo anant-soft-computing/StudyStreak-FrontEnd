@@ -360,7 +360,7 @@ const App = () => {
             path="/Speaking-MiniLiveExam/:examType/:examId"
             Component={withBootstrap(LiveSpeakingExam)}
           />
-           <Route
+          <Route
             path="/GENERAL-MiniLiveExam/:examType/:examId"
             Component={withBootstrap(GeneralMTExam)}
           />

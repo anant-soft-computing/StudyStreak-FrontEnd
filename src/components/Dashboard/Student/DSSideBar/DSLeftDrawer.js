@@ -17,23 +17,23 @@ import MuiAppBar from "@mui/material/AppBar";
 import NavBar from "../../../NavBar/NavBar";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
 
-import dashBoard from "../../../../img/icon/dashboard.svg";
-import profile from "../../../../img/icon/profile.svg";
-import myCourse from "../../../../img/icon/myCourse.svg";
-import paperTest from "../../../../img/icon/paperTest.svg";
-import assignment from "../../../../img/icon/assignment.svg";
-import practiceTest from "../../../../img/icon/practiceTest.svg";
-import fullLengthTest from "../../../../img/icon/notebook.svg";
-import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
-import liveClass from "../../../../img/icon/liveClass.svg";
-import recordedClass from "../../../../img/icon/webinar.svg";
-import flashcard from "../../../../img/icon/flashCard.svg";
-import resources from "../../../../img/icon/support.svg";
-import report from "../../../../img/icon/coupon.svg";
-import settings from "../../../../img/icon/settings.svg";
-import logOut from "../../../../img/icon/logout.svg";
 import mic from "../../../../img/icon/mic.svg";
+import logOut from "../../../../img/icon/logout.svg";
+import report from "../../../../img/icon/coupon.svg";
+import profile from "../../../../img/icon/profile.svg";
+import resources from "../../../../img/icon/support.svg";
+import settings from "../../../../img/icon/settings.svg";
+import myCourse from "../../../../img/icon/myCourse.svg";
+import liveClass from "../../../../img/icon/liveClass.svg";
+import flashcard from "../../../../img/icon/flashCard.svg";
+import dashBoard from "../../../../img/icon/dashboard.svg";
+import paperTest from "../../../../img/icon/paperTest.svg";
 import headPhone from "../../../../img/icon/headphones.svg";
+import recordedClass from "../../../../img/icon/webinar.svg";
+import assignment from "../../../../img/icon/assignment.svg";
+import fullLengthTest from "../../../../img/icon/notebook.svg";
+import practiceTest from "../../../../img/icon/practiceTest.svg";
+import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
 
 const drawerWidth = 280;
 
@@ -246,12 +246,6 @@ const DSLeftDrawer = () => {
             name: "My Course",
             icon: <img src={myCourse} alt="My Course" />,
             link: "/studentMyCourse",
-          },
-          {
-            name: "Paper Test",
-            icon: <img src={paperTest} alt="Paper Test" />,
-            link: "/paperTest",
-            state: { packageCount: count?.count },
           },
           {
             name: "PTE Speaking",

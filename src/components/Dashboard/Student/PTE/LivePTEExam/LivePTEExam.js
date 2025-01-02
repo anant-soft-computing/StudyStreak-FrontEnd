@@ -16,6 +16,7 @@ const LivePTEExam = () => {
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[4];
+  
   const [examData, setExamData] = useState([]);
   const [examBlock, setExamBlock] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
@@ -41,7 +42,7 @@ const LivePTEExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=${examForm}`,
+          `/createexamview/?category=PTE&exam_type=${examForm}`,
           {
             headers: {
               Accept: "application/json",
@@ -843,7 +844,7 @@ const LivePTEExam = () => {
         {/* Main Container */}
         <div className="lv-main-container">
           {/* Left Container */}
-          {examData?.exam_type === "Writing" && (
+          {examData?.passage && (
             <div className="lv-left-container">
               {renderPassage(examData?.passage, examData?.passage_image)}
             </div>

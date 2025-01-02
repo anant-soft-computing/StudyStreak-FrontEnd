@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import liveClass from "../../../../img/icon/liveClass.svg";
-import assignment from "../../../../img/icon/assignment.svg";
-import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
-import practice from "../../../../img/icon/practiceTest.svg";
-import fullLengthTest from "../../../../img/icon/notebook.svg";
-import regularClass from "../../../../img/icon/liveClass.svg";
-import counselling from "../../../../img/icon/users.svg";
-import progress from "../../../../img/icon/progress.svg";
+
+import mic from "../../../../img/icon/mic.svg";
 import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
+import counselling from "../../../../img/icon/users.svg";
+import progress from "../../../../img/icon/progress.svg";
+import liveClass from "../../../../img/icon/liveClass.svg";
+import headphone from "../../../../img/icon/headphones.svg";
+import assignment from "../../../../img/icon/assignment.svg";
+import practice from "../../../../img/icon/practiceTest.svg";
+import regularClass from "../../../../img/icon/liveClass.svg";
+import fullLengthTest from "../../../../img/icon/notebook.svg";
+import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
 import recordedClasses from "../../../../img/icon/gamification.svg";
 import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
-import Loading from "../../../UI/Loading";
-import UpcomingLiveClasses from "./UpcomingLiveClasses/UpcomingLiveClasses";
-import LeaderBoard from "./LeaderBoard/LeaderBoard";
-import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
-import ajaxCall from "../../../../helpers/ajaxCall";
+
 import ScoreCard from "./ScoreCard/ScoreCard";
 import DSSidebar from "../DSSideBar/DSSideBar";
-import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
 import NextLesson from "./NextLesson/NextLesson";
+import ajaxCall from "../../../../helpers/ajaxCall";
+import LeaderBoard from "./LeaderBoard/LeaderBoard";
+import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
+import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
+import UpcomingLiveClasses from "./UpcomingLiveClasses/UpcomingLiveClasses";
 import UpcomingRegularLiveClass from "./UpcomingRegularLiveClass/UpCommingRegularLiveClass";
 
 const Dashboard = () => {
@@ -33,7 +36,6 @@ const Dashboard = () => {
   const [lesson, setLesson] = useState([]);
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [studentCourses, setStudentCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState("");
 
@@ -86,6 +88,29 @@ const Dashboard = () => {
           },
           { name: "Progress", icon: progress, link: "/progress" },
           { name: "Resources", icon: support, link: "/resources" },
+        ]
+      : selectedCourse === "PTE"
+      ? [
+          {
+            name: "Speaking",
+            icon: mic,
+            link: "/PTE/Speaking/",
+          },
+          {
+            name: "Writing",
+            icon: practice,
+            link: "/PTE/Writing/",
+          },
+          {
+            name: "Reading",
+            icon: fullLengthTest,
+            link: "/PTE/Reading/",
+          },
+          {
+            name: "Listening",
+            icon: headphone,
+            link: "/PTE/Listening/",
+          },
         ]
       : [
           {
@@ -169,7 +194,6 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchAllData = async () => {
-      setIsLoading(true);
       await Promise.all([
         fetchData("/batchview/", setBatchData),
         fetchData("/userwisepackagewithcourseid/", (data) => {
@@ -192,7 +216,6 @@ const Dashboard = () => {
           setStudentID(data?.student[0]?.student_id);
         }),
       ]);
-      setIsLoading(false);
     };
 
     fetchAllData();
@@ -256,10 +279,6 @@ const Dashboard = () => {
     fetchStudentCourses();
   }, [selectedCourse]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
   return (
     <>
       {count?.count !== 0 ? (
@@ -291,11 +310,14 @@ const Dashboard = () => {
                               ))}
                             </h5>
                           )}
-                        <div className="online__course__wrap mt-0">
-                          <div className="row instructor__slider__active row__custom__class">
-                            <ScoreCard course={selectedCourse} />
+                        {(selectedCourse === "IELTS" ||
+                          selectedCourse === "GENERAL") && (
+                          <div className="online__course__wrap mt-0">
+                            <div className="row instructor__slider__active row__custom__class">
+                              <ScoreCard course={selectedCourse} />
+                            </div>
                           </div>
-                        </div>
+                        )}
                         <div className="online__course__wrap mt-0">
                           <div className="row instructor__slider__active row__custom__class">
                             <div className="col-xl-6 column__custom__class">
@@ -390,28 +412,33 @@ const Dashboard = () => {
                               </div>
                             )
                           )}
-                          <div className="col-xl-12 column__custom__class">
-                            <div className="gridarea__wraper card-background">
-                              <div className="gridarea__content">
-                                <div className="gridarea__content p-2 m-2">
-                                  <Link
-                                    to="/recordedClasses"
-                                    className="text-decoration-none"
-                                  >
-                                    <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                      <img
-                                        src={recordedClasses}
-                                        alt="Recorded Classes"
-                                        height={35}
-                                        width={35}
-                                      />
-                                      <h2 className="mt-2">Recorded Classes</h2>
-                                    </div>
-                                  </Link>
+                          {(selectedCourse === "IELTS" ||
+                            selectedCourse === "GENERAL") && (
+                            <div className="col-xl-12 column__custom__class">
+                              <div className="gridarea__wraper card-background">
+                                <div className="gridarea__content">
+                                  <div className="gridarea__content p-2 m-2">
+                                    <Link
+                                      to="/recordedClasses"
+                                      className="text-decoration-none"
+                                    >
+                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                        <img
+                                          src={recordedClasses}
+                                          alt="Recorded Classes"
+                                          height={35}
+                                          width={35}
+                                        />
+                                        <h2 className="mt-2">
+                                          Recorded Classes
+                                        </h2>
+                                      </div>
+                                    </Link>
+                                  </div>
                                 </div>
                               </div>
                             </div>
-                          </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -436,10 +463,17 @@ const Dashboard = () => {
                         </div>
                       </div>
                       <LeaderBoard studentID={studentID} />
-                      <UpcomingRegularLiveClass />
-                      <NextLesson />
+                      {(selectedCourse === "IELTS" ||
+                        selectedCourse === "GENERAL") && (
+                        <UpcomingRegularLiveClass />
+                      )}
+                      {(selectedCourse === "IELTS" ||
+                        selectedCourse === "GENERAL") && <NextLesson />}
                       {selectedCourse === "IELTS" && <SpeakingSlots />}
-                      <UpcomingLiveClasses />
+                      {(selectedCourse === "IELTS" ||
+                        selectedCourse === "GENERAL") && (
+                        <UpcomingLiveClasses />
+                      )}
                     </div>
                   </div>
                 </div>

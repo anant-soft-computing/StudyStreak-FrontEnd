@@ -292,7 +292,7 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
             setOptions(result);
           }
         } catch (error) {
-          console.log("API Error: ", error);
+          console.log("error", error);
         } finally {
           setIsLoading(false);
         }

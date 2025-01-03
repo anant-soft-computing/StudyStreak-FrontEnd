@@ -70,7 +70,7 @@ const DragDrop = () => {
           // Do something with audioSource, for example, set it in state
           setAudioLink(audioSource);
         } catch (error) {
-          console.error("Error reading audio file:", error);
+          console.log("error", error);
         }
       }
     };

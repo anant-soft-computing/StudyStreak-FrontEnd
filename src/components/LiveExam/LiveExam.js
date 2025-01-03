@@ -257,9 +257,7 @@ const LiveExam = () => {
           body: JSON.stringify(gptBody),
         });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch from OpenAI API");
-        }
+        if (!res.ok) throw new Error("error");
 
         const data = await res.json();
         gptResponse = data?.choices?.[0]?.message?.content || "";

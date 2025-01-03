@@ -258,10 +258,10 @@ const Dashboard = () => {
           setStudentCourses(courses);
           handleCourseSelection(courses);
         } else {
-          console.error("Error fetching courses");
+          console.log("error");
         }
       } catch (error) {
-        console.error("Error:", error);
+        console.log("error", error);
       }
     };
 

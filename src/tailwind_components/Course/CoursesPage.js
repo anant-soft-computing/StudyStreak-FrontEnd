@@ -71,7 +71,7 @@ const CoursesPage = () => {
         toast.error("Submission failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error submitting survey:", error);
+      console.log("error", error);
     } finally {
       setIsLoading(false);
     }

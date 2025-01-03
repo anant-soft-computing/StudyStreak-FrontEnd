@@ -198,7 +198,7 @@ const MockTest = () => {
           }
         }
       } catch (error) {
-        console.error("Error", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

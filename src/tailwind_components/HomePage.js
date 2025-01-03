@@ -21,46 +21,34 @@ import Testimonial from "./Testimonial/Testimonial";
 
 const features = [
   {
+    icon: BookOpen,
     title: "All Major Test Preparations",
     description: "IELTS, GRE, GMAT, TOEFL, PTE",
-    icon: BookOpen,
-    iconBgColor: "bg-primary-50",
-    iconColor: "text-primary-500",
   },
   {
+    icon: GraduationCap,
     title: "Expert Instructor",
     description: "Learn from certified professionals",
-    icon: GraduationCap,
-    iconBgColor: "bg-secondary-50",
-    iconColor: "text-secondary-500",
   },
   {
+    icon: Target,
     title: "Guaranteed Results",
     description: "Improve your scores and Get your Dream Admission",
-    icon: Target,
-    iconColor: "text-accent-500",
-    iconBgColor: "bg-accent-50",
   },
   {
+    icon: Mic2Icon,
     title: "Live Practice Sessions",
     description: "Improve your scores with Daily Practice with Our Experts",
-    icon: Mic2Icon,
-    iconColor: "text-accent-500",
-    iconBgColor: "bg-accent-50",
   },
   {
+    icon: Laptop2Icon,
     title: "Live Classes",
     description: "Learn about each Topic indepth with Our Experts",
-    icon: Laptop2Icon,
-    iconColor: "text-accent-500",
-    iconBgColor: "bg-accent-50",
   },
   {
+    icon: PenBoxIcon,
     title: "More than 100 Tests to Practice from",
     description: "Learn about each Topic indepth with Our Experts",
-    icon: PenBoxIcon,
-    iconColor: "text-accent-500",
-    iconBgColor: "bg-accent-50",
   },
 ];
 
@@ -122,7 +110,7 @@ const HomePage = () => {
         toast.error("Submission failed. Please try again.");
       }
     } catch (error) {
-      console.error("error", error);
+      console.log("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -175,29 +163,20 @@ const HomePage = () => {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((feature, index) => {
-                const IconComponent = feature.icon;
                 return (
                   <div
                     key={index}
-                    className="group bg-white rounded-xl p-4 border border-neutral-200 shadow-card
-                hover:shadow-card-hover hover:border-primary-200 transition-all duration-300
-                transform hover:-translate-y-1"
+                    className="group bg-white rounded-xl p-4 border border-neutral-200 shadow-card hover:shadow-card-hover hover:border-primary-200 transition-all duration-300 transform hover:-translate-y-1"
                   >
                     <div className="flex items-start space-x-6">
-                      <div
-                        className={`${feature.iconBgColor} rounded-xl 
-                    group-hover:scale-110 transition-all duration-300 mt-3`}
-                      >
-                        <IconComponent
-                          className={`w-6 h-6 ${feature.iconColor}`}
+                      <div className="bg-primary-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors duration-300 mt-3">
+                        <feature.icon
+                          className="w-6 h-6 text-primary-600"
                           strokeWidth={1.5}
                         />
                       </div>
                       <div>
-                        <h3
-                          className="font-semibold text-lg text-neutral-800 
-                      group-hover:text-primary-600 transition-colors duration-300"
-                        >
+                        <h3 className="font-semibold text-lg text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
                           {feature.title}
                         </h3>
                         <p className="text-small text-neutral-700">
@@ -273,10 +252,7 @@ const HomePage = () => {
                         <div className="bg-primary-50 rounded-lg p-3 mb-4 w-fit">
                           <Clock size={24} className="text-primary-500" />
                         </div>
-                        <h3
-                          className="font-semibold text-xl mb-3 text-neutral-800 group-hover:text-primary-600 
-                    transition-colors duration-300"
-                        >
+                        <h3 className="font-semibold text-xl mb-3 text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
                           {item.meeting_title}
                         </h3>
                         <p className="text-neutral-600 mb-4">

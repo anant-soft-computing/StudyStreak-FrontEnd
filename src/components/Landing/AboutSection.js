@@ -36,12 +36,12 @@ const AboutSection = () => {
         if (response?.status === 200) {
           setTestimonialList(response?.data);
         } else {
-          console.error("Error");
+          console.log("error");
         }
       } catch (error) {
         console.log("error", error);
       } finally {
-        console.error("Error");
+        console.log("error");
       }
     })();
   }, []);

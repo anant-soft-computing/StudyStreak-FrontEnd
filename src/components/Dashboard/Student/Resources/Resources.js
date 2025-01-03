@@ -2,59 +2,27 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
-import SmallModal from "../../../UI/Modal";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import ajaxCall from "../../../../helpers/ajaxCall";
-
-const documentsColumns = [
-  {
-    headerName: "No.",
-    field: "no",
-    filter: true,
-    cellRenderer: (params) => params.rowIndex + 1,
-    width: 110,
-  },
-  {
-    headerName: "Description",
-    field: "description",
-    filter: true,
-    width: 450,
-  },
-  {
-    headerName: "Download",
-    field: "document",
-    filter: true,
-    width: 200,
-    cellRenderer: (params) => {
-      return params.value !== null ? (
-        <button className="take-test" onClick={() => window.open(params.value)}>
-          <i className="icofont-download" /> Download
-        </button>
-      ) : (
-        "-"
-      );
-    },
-  },
-];
 
 const Resources = () => {
   const { packageCount } = useLocation().state || {};
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
 
-  const [documents, setDocuments] = useState([]);
-  const [openDocuments, setOpenDocuments] = useState(false);
-
   const category = localStorage.getItem("category");
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
   const studentId = JSON?.parse(localStorage.getItem("StudentID"));
 
-  const handleDocuments = (document) => {
-    setOpenDocuments(true);
-    setDocuments(document);
-  };
+  const data = resourcesList.flatMap((item) => {
+    return item?.documents?.map((doc) => ({
+      link: item?.link,
+      document: doc?.document,
+      description: doc?.description,
+    }));
+  });
 
   const filterResources = useCallback(
     (data) => {
@@ -110,50 +78,18 @@ const Resources = () => {
       width: 85,
     },
     {
-      name: "Student",
-      field: "student",
-      filter: true,
-      width: 350,
-      cellRenderer: (params) =>
-        params?.value?.some(({ id }) => id === studentId)
-          ? `${
-              params?.value.find(({ id }) => id === studentId)?.user.first_name
-            } ${
-              params?.value.find(({ id }) => id === studentId)?.user.last_name
-            }`
-          : "-",
-    },
-    {
-      name: "Batch",
-      field: "batch",
-      filter: true,
-      width: 350,
-      cellRenderer: (params) =>
-        params?.value
-          ?.filter(({ id }) => batchIds?.includes(id))
-          ?.map(({ batch_name }) => batch_name)
-          ?.join(", ") || "-",
-    },
-    {
-      name: "Course",
-      field: "course",
-      filter: true,
-      width: 350,
-      cellRenderer: (params) =>
-        params?.value
-          ?.filter(
-            (item) =>
-              courseIds?.includes(item?.id) && item?.category === category
-          )
-          ?.map(({ Course_Title }) => Course_Title)
-          ?.join(", ") || "-",
+      headerName: "Description",
+      field: "description",
+      width: 570,
     },
     {
       headerName: "Video / Link",
       field: "link",
-      width: 160,
-      cellRenderer: (params) =>
-        params.value ? (
+      resizable: true,
+      filter: true,
+      width: 400,
+      cellRenderer: (params) => {
+        return params.value !== "" ? (
           <button
             className="take-test"
             onClick={() => window.open(params.value)}
@@ -162,19 +98,20 @@ const Resources = () => {
           </button>
         ) : (
           "-"
-        ),
+        );
+      },
     },
     {
       headerName: "Documents",
-      field: "documents",
-      width: 160,
+      field: "document",
+      width: 400,
       cellRenderer: (params) => {
-        return params.value.length > 0 ? (
+        return params.value !== "" ? (
           <button
             className="take-test"
-            onClick={() => handleDocuments(params.value)}
+            onClick={() => window.open(params.value)}
           >
-            View
+            <i className="icofont-download" /> Download
           </button>
         ) : (
           "-"
@@ -201,8 +138,8 @@ const Resources = () => {
                         <BuyCourse message="No Resources Available, Please Buy a Course !!" />
                       ) : isLoading ? (
                         <Loading />
-                      ) : resourcesList.length > 0 ? (
-                        <Table rowData={resourcesList} columnDefs={columns} />
+                      ) : data.length > 0 ? (
+                        <Table rowData={data} columnDefs={columns} />
                       ) : (
                         <h5 className="text-center text-danger">
                           No Resources Available !!
@@ -216,15 +153,6 @@ const Resources = () => {
           </div>
         </div>
       </div>
-      <SmallModal
-        size="lg"
-        centered
-        isOpen={openDocuments}
-        onClose={() => setOpenDocuments(false)}
-        title="Documents"
-      >
-        <Table columnDefs={documentsColumns} rowData={documents} />
-      </SmallModal>
     </div>
   );
 };

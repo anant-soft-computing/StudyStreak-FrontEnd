@@ -238,7 +238,7 @@ const PointHistory = ({ totalPoints, setTotalPoints }) => {
           setDataList(response?.data);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

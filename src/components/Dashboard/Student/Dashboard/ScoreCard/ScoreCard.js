@@ -31,10 +31,10 @@ const ScoreCard = ({ course }) => {
       if (response.status === 200) {
         setData(response?.data);
       } else {
-        console.error("Error fetching data");
+        console.log("error");
       }
     } catch (error) {
-      console.error("Error fetching data", error);
+      console.log("error", error);
     }
   };
 
@@ -317,10 +317,10 @@ const ScoreCard = ({ course }) => {
 
             setFltBand(averageBand);
           } else {
-            console.log("Error fetching data");
+            console.log("error");
           }
         } catch (error) {
-          console.log("Error", error);
+          console.log("error", error);
         }
       };
 

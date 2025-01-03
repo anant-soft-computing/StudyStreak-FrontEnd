@@ -103,7 +103,7 @@ const Reading = () => {
           setReadingData(response?.data);
         }
       } catch (error) {
-        console.error("error", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

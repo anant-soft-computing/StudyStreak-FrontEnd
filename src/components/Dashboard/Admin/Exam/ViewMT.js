@@ -59,7 +59,7 @@ const ViewMT = ({ activeTab }) => {
           setDataCallback(response.data);
         }
       } catch (error) {
-        console.error("Fetch error:", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

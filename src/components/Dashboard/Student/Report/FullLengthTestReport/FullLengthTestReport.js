@@ -42,7 +42,7 @@ const FullLengthTestReport = ({ activeTab }) => {
             setIsLoading(false);
           }
         } catch (error) {
-          console.error("Error fetching data", error);
+          console.log("error", error);
         }
       })();
     }
@@ -63,9 +63,7 @@ const FullLengthTestReport = ({ activeTab }) => {
         return (
           <button
             className="take-test"
-            onClick={() =>
-              navigate(`/FullLengthTest/Answer/${params.data.id}`)
-            }
+            onClick={() => navigate(`/FullLengthTest/Answer/${params.data.id}`)}
           >
             View
           </button>

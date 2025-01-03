@@ -92,7 +92,7 @@ const FreeMiniTest = () => {
           }
         }
       } catch (error) {
-        console.error("Error", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

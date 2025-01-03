@@ -173,7 +173,7 @@ const BecomeAPartnerPage = () => {
         toast.error("Submission failed. Please try again.");
       }
     } catch (error) {
-      console.error("error", error);
+      console.log("error", error);
     } finally {
       setIsLoading(false);
     }

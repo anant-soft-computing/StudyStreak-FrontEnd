@@ -77,6 +77,7 @@ const Packages = () => {
   };
 
   const handleClose = () => {
+    setSelectedPackage("");
     setOpen(false);
   };
 
@@ -98,7 +99,7 @@ const Packages = () => {
         process.env.REACT_APP_EMAIL_JS_PUBLIC_KEY
       );
     } catch (error) {
-      console.error("Email sending failed:", error);
+      console.log("error", error);
     }
   };
 
@@ -154,7 +155,7 @@ const Packages = () => {
         toast.error("Submission failed. Please try again.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.log("error", error);
     } finally {
       setIsLoading(false);
     }
@@ -179,7 +180,11 @@ const Packages = () => {
         {packagesDetails.map((pkg, index) => (
           <div
             key={index}
-            className="w-96 bg-white border border-neutral-200 rounded-xl shadow-soft p-6 hover:shadow-hover transition-shadow duration-300 relative"
+            className={`w-96 bg-white rounded-xl shadow-soft p-6 hover:shadow-hover transition-shadow duration-300 relative ${
+              selectedPackage === pkg.package_name
+                ? "border-2 border-primary-600 shadow-elevated scale-[1.02]"
+                : "border border-transparent shadow-card hover:shadow-card-hover hover:scale-[1.01]"
+            }`}
           >
             {pkg.badge && (
               <div className="absolute top-4 left-4 bg-primary-600 text-white py-1 px-3 rounded-full text-sm font-medium">

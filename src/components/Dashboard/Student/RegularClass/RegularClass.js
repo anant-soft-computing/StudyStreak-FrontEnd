@@ -65,7 +65,7 @@ const RegularClass = ({ selectedDate, onDataFetch }) => {
         onDataFetch(regularClassData);
         setRegularClass(regularClassData);
       } catch (error) {
-        console.error("error", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

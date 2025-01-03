@@ -78,10 +78,10 @@ const UnPaidDashboard = () => {
           if (response?.status === 200) {
             setClassData(response?.data);
           } else {
-            console.log(`Error fetching ${liveClassType} classes`);
+            console.log("error");
           }
         } catch (error) {
-          console.log(`Error fetching ${liveClassType} classes`, error);
+          console.log("error", error);
         }
       };
 

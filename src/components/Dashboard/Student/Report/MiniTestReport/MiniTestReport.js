@@ -48,7 +48,7 @@ const MiniTestReport = ({ activeTab }) => {
             setIsLoading(false);
           }
         } catch (error) {
-          console.error("Error fetching data", error);
+          console.log("error", error);
         }
       })();
     }
@@ -87,7 +87,7 @@ const MiniTestReport = ({ activeTab }) => {
             setIsLoading(false);
           }
         } catch (error) {
-          console.error("Error fetching data", error);
+          console.log("error", error);
         }
       })();
     }

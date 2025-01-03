@@ -174,7 +174,7 @@ const PT = ({ category, type, activeTab }) => {
           }
         }
       } catch (error) {
-        console.log("Error:", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

@@ -8,13 +8,11 @@ export const speakingApiService = async (formData) => {
       body: formData,
     });
 
-    if (!res.ok) {
-      throw new Error(`HTTP error! Status: ${res.status}`);
-    }
+    if (!res.ok) throw new Error("error");
 
     return res.json();
   } catch (error) {
-    console.error("Error occurred:", error);
+    console.log("error", error);
     throw error; // re-throw the error for the caller to handle
   }
 };
@@ -54,7 +52,7 @@ export const writingApiService = async (questions, answer) => {
     });
     return await res.json();
   } catch (error) {
-    console.error("Error occurred:", error);
+    console.log("error", error);
     throw error; // re-throw the error for the caller to handle
   }
 };

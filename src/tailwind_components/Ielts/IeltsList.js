@@ -47,6 +47,19 @@ const IeltsList = () => {
     return gradients[index % gradients.length];
   };
 
+  const formatDuration = (totalMinutes) => {
+    if (!totalMinutes) return "Invalid Duration";
+
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+
+    if (hours > 0) {
+      return `${hours} Hrs, ${minutes} Minutes`;
+    } else {
+      return `${minutes} Minutes`;
+    }
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -78,10 +91,7 @@ const IeltsList = () => {
                   </h3>
                   <div className="flex items-center text-sm text-neutral-600 mb-3">
                     <Clock size={16} className="mr-2" />
-                    <span>
-                      {course?.total_duration ? course?.total_duration : 0}{" "}
-                      Minutes
-                    </span>
+                    <span>{formatDuration(course?.total_duration)}</span>
                     <span className="mx-2">•</span>
                     <span>{course?.total_lesson} Lessons</span>
                   </div>
@@ -95,7 +105,7 @@ const IeltsList = () => {
                   <div className="flex flex-col space-y-2">
                     <Link
                       to={`/course/${course.id}`}
-                      className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium"
+                      className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium border border-primary-600"
                     >
                       View Details
                     </Link>

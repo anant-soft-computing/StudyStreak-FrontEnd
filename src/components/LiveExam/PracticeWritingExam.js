@@ -274,8 +274,7 @@ const PracticeLiveExam = () => {
             }
           );
 
-          if (!res.ok)
-            throw new Error("Some Problem Occurred. Please try again.");
+          if (!res.ok) throw new Error("error");
           const data = await res.json();
           bandValue = data?.choices?.[0]?.message?.content
             ?.split("#Band:")[1]

@@ -42,7 +42,7 @@ const PracticeTestReport = ({ activeTab }) => {
             setIsLoading(false);
           }
         } catch (error) {
-          console.error("Error fetching data", error);
+          console.log("error", error);
         }
       })();
     }

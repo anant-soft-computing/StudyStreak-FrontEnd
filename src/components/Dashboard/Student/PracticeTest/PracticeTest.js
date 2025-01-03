@@ -188,7 +188,7 @@ const PracticeTest = () => {
           setTestData(filteredData);
         }
       } catch (error) {
-        console.error("error", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }

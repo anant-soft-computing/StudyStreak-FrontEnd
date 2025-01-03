@@ -142,7 +142,7 @@ const ViewGamification = ({ content, activeTab }) => {
           setter(response?.data);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log("error", error);
       } finally {
         setIsLoading(false);
       }
@@ -159,7 +159,7 @@ const ViewGamification = ({ content, activeTab }) => {
   useEffect(() => {
     const endpoints = {
       "Flash Card": `/gamification/flashcard/`,
-      "Lesson": `/lesson-get/`,
+      Lesson: `/lesson-get/`,
       "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,block_type`,
       "Full Length Test": `/get/flt/`,
       "Practice Test": `/moduleListView/`,

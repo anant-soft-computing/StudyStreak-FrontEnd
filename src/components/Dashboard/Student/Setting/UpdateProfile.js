@@ -169,7 +169,7 @@ const UpdateProfile = () => {
         profileData.user_image.startsWith("http")
       ) {
         const response = await fetch(profileData.user_image);
-        if (!response.ok) throw new Error("Failed to fetch the profile image.");
+        if (!response.ok) throw new Error("error");
         const blob = await response.blob();
         formData.append("user_image", blob, "profile_image.png");
       } else if (profileData.user_image instanceof File) {

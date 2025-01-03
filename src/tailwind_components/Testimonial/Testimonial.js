@@ -24,10 +24,10 @@ const Testimonial = () => {
         if (response?.status === 200) {
           setTestimonials(response?.data);
         } else {
-          console.error("Error");
+          console.log("error");
         }
       } catch (error) {
-        console.error("Error fetching testimonials:", error);
+        console.log("error", error);
       }
     })();
   }, []);

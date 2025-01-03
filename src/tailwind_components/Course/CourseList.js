@@ -49,6 +49,17 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
     return gradients[index % gradients.length];
   };
 
+  const formatDuration = (totalMinutes) => {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = Math.floor(totalMinutes % 60);
+
+    if (hours > 0) {
+      return `${hours} Hrs, ${minutes} Minutes`;
+    } else {
+      return `${minutes} Minutes`;
+    }
+  };
+
   return isLoading ? (
     <Loading />
   ) : (
@@ -91,10 +102,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   </h3>
                   <div className="flex items-center text-sm text-neutral-800 mb-3">
                     <Clock size={16} className="mr-2" />
-                    <span>
-                      {course?.total_duration ? course?.total_duration : 0}{" "}
-                      Minutes
-                    </span>
+                    <span>{formatDuration(course?.total_duration)}</span>
                     <span className="mx-2">•</span>
                     <span>{course?.total_lesson} Lessons</span>
                   </div>
@@ -108,7 +116,7 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   <div className="flex flex-col space-y-2">
                     <Link
                       to={`/course/${course.id}`}
-                      className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium"
+                      className="block w-full text-center bg-primary-50 text-primary-600 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-medium border border-primary-600"
                     >
                       View Details
                     </Link>
@@ -116,13 +124,13 @@ const CourseList = ({ selectedCategory = "", searchTerm = "" }) => {
                   <div className="flex mt-2 gap-2">
                     <Link
                       to="/login"
-                      className="block w-full text-center bg-primary-50 text-primary-700 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small"
+                      className="block w-full text-center bg-primary-50 text-primary-700 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small border border-primary-600"
                     >
                       Free Practice Test
                     </Link>
                     <Link
                       to="/login"
-                      className="block w-full text-center bg-primary-50 text-primary-700 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small"
+                      className="block w-full text-center bg-primary-50 text-primary-700 py-2.5 rounded-xl hover:bg-primary-100 transition-colors duration-300 font-small border border-primary-600"
                     >
                       Diagnostic Test
                     </Link>

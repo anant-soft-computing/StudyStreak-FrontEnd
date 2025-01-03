@@ -2,59 +2,33 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
-import SmallModal from "../../../UI/Modal";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import BuyCourse from "../BuyCourse/BuyCourse";
 import ajaxCall from "../../../../helpers/ajaxCall";
-
-const documentsColumns = [
-  {
-    headerName: "No.",
-    field: "no",
-    filter: true,
-    cellRenderer: (params) => params.rowIndex + 1,
-    width: 110,
-  },
-  {
-    headerName: "Description",
-    field: "description",
-    filter: true,
-    width: 450,
-  },
-  {
-    headerName: "Download",
-    field: "document",
-    filter: true,
-    width: 200,
-    cellRenderer: (params) => {
-      return params.value !== null ? (
-        <button className="take-test" onClick={() => window.open(params.value)}>
-          <i className="icofont-download" /> Download
-        </button>
-      ) : (
-        "-"
-      );
-    },
-  },
-];
 
 const PaperTest = () => {
   const { packageCount } = useLocation().state || {};
   const [isLoading, setIsLoading] = useState(true);
   const [paperTestList, setPaperTestList] = useState([]);
 
-  const [documents, setDocuments] = useState([]);
-  const [openDocuments, setOpenDocuments] = useState(false);
-
   const category = localStorage.getItem("category");
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
   const studentId = JSON?.parse(localStorage.getItem("StudentID"));
 
-  const handleDocuments = (document) => {
-    setOpenDocuments(true);
-    setDocuments(document);
-  };
+  const data = paperTestList.flatMap((item) => {
+    return item?.documents?.map((doc) => ({
+      link: item?.link,
+      document: doc?.document,
+      description: doc?.description,
+    }));
+  });
+
+  const sortData = data.sort((a, b) => {
+    const numA = parseInt(a.description.match(/\d+/)?.[0]) || 0;
+    const numB = parseInt(b.description.match(/\d+/)?.[0]) || 0;
+    return numA - numB;
+  });
 
   const filterPaperTest = useCallback(
     (data) => {
@@ -109,55 +83,40 @@ const PaperTest = () => {
       width: 85,
     },
     {
-      name: "Student",
-      field: "student",
-      filter: true,
-      width: 350,
-      cellRenderer: (params) =>
-        params?.value?.some(({ id }) => id === studentId)
-          ? `${
-              params?.value.find(({ id }) => id === studentId)?.user.first_name
-            } ${
-              params?.value.find(({ id }) => id === studentId)?.user.last_name
-            }`
-          : "-",
+      headerName: "Description",
+      field: "description",
+      width: 570,
     },
     {
-      name: "Batch",
-      field: "batch",
+      headerName: "Video / Link",
+      field: "link",
+      resizable: true,
       filter: true,
-      width: 350,
-      cellRenderer: (params) =>
-        params?.value
-          ?.filter(({ id }) => batchIds?.includes(id))
-          ?.map(({ batch_name }) => batch_name)
-          ?.join(", ") || "-",
-    },
-    {
-      name: "Course",
-      field: "course",
-      filter: true,
-      width: 350,
-      cellRenderer: (params) =>
-        params?.value
-          ?.filter(
-            (item) =>
-              courseIds?.includes(item?.id) && item?.category === category
-          )
-          ?.map(({ Course_Title }) => Course_Title)
-          ?.join(", ") || "-",
+      width: 400,
+      cellRenderer: (params) => {
+        return params.value !== "" ? (
+          <button
+            className="take-test"
+            onClick={() => window.open(params.value)}
+          >
+            View
+          </button>
+        ) : (
+          "-"
+        );
+      },
     },
     {
       headerName: "Documents",
-      field: "documents",
-      width: 320,
+      field: "document",
+      width: 400,
       cellRenderer: (params) => {
-        return params.value.length > 0 ? (
+        return params.value !== "" ? (
           <button
             className="take-test"
-            onClick={() => handleDocuments(params.value)}
+            onClick={() => window.open(params.value)}
           >
-            View
+            <i className="icofont-download" /> Download
           </button>
         ) : (
           "-"
@@ -184,8 +143,8 @@ const PaperTest = () => {
                         <BuyCourse message="No Paper Test Available, Please Buy a Course !!" />
                       ) : isLoading ? (
                         <Loading />
-                      ) : paperTestList.length > 0 ? (
-                        <Table rowData={paperTestList} columnDefs={columns} />
+                      ) : sortData.length > 0 ? (
+                        <Table rowData={sortData} columnDefs={columns} />
                       ) : (
                         <h5 className="text-center text-danger">
                           No Paper Test Available !!
@@ -199,15 +158,6 @@ const PaperTest = () => {
           </div>
         </div>
       </div>
-      <SmallModal
-        size="lg"
-        centered
-        isOpen={openDocuments}
-        onClose={() => setOpenDocuments(false)}
-        title="Documents"
-      >
-        <Table columnDefs={documentsColumns} rowData={documents} />
-      </SmallModal>
     </div>
   );
 };

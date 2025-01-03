@@ -71,9 +71,8 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
           body: JSON.stringify({ ids: notificationIds }),
         }
       );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("error");
+
       const data = await response.json();
       if (data.status === true) {
         toast.success("Notification Read Successfully");
@@ -82,7 +81,7 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
       }
       return data;
     } catch (error) {
-      console.error("error", error);
+      console.log("error", error);
     }
   };
 

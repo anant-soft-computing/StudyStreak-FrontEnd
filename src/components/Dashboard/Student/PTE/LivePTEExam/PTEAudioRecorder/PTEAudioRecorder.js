@@ -59,7 +59,7 @@ const PTEAudioRecorder = ({
         SpeechRecognition.startListening({ continuous: true });
       })
       .catch((error) => {
-        console.error("Error accessing microphone:", error);
+        console.log("error", error);
       });
   };
 
@@ -174,7 +174,7 @@ const PTEAudioRecorder = ({
           );
 
           if (!gptResponse.ok) {
-            throw new Error("Failed to fetch from OpenAI API");
+            throw new Error("error");
           }
 
           const data = await gptResponse.json();

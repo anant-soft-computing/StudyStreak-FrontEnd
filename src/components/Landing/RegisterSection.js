@@ -98,8 +98,7 @@ const RegisterSection = () => {
             }
           },
           (error) => {
-            toast.error("Something went wrong. Please try again later");
-            console.error("FAILED...", error);
+            console.log("error", error);
           }
         );
     }

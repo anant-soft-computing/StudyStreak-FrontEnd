@@ -12,88 +12,83 @@ import {
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
+const statistics = [
+  { icon: Users, number: "15,000+", label: "Students Trained" },
+  { icon: Trophy, number: "95%", label: "Success Rate" },
+  { icon: Target, number: "8.5+", label: "Average Band Score" },
+  { icon: ThumbsUp, number: "100%", label: "Satisfaction Rate" },
+];
+
+const keyFeatures = [
+  {
+    icon: Users,
+    title: "Expert Instructors",
+    description:
+      "Learn from certified IELTS trainers with proven track records of helping students achieve band 8+",
+  },
+  {
+    icon: BookOpen,
+    title: "Comprehensive Study Material",
+    description:
+      "Access our extensive library of practice tests, study guides, and mock exams",
+  },
+  {
+    icon: Target,
+    title: "Personalized Learning",
+    description:
+      "Get customized study plans based on your current level and target score",
+  },
+  {
+    icon: BarChart,
+    title: "Track Progress",
+    description:
+      "Monitor your improvement with detailed analytics and performance tracking",
+  },
+  {
+    icon: Clock,
+    title: "Flexible Schedule",
+    description:
+      "Choose from multiple batch timings that suit your availability",
+  },
+  {
+    icon: Globe,
+    title: "Global Recognition",
+    description: "Our certificates are recognized by institutions worldwide",
+  },
+];
+
+const testimonials = [
+  {
+    name: "Sarah Johnson",
+    score: "8.5",
+    university: "University of Toronto",
+    quote:
+      "StudyStreak's methodology and expert guidance helped me achieve my dream score in just 2 months!",
+  },
+];
+
+const guarantees = [
+  "Band Score Improvement",
+  "Money Back Guarantee",
+  "Unlimited Practice Tests",
+  "24/7 Support",
+  "Free Demo Class",
+  "Course Completion Certificate",
+];
+
 const WhyChooseUsPage = () => {
   const navigate = useNavigate();
-  const statistics = [
-    { number: "15,000+", label: "Students Trained", icon: Users },
-    { number: "95%", label: "Success Rate", icon: Trophy },
-    { number: "8.5+", label: "Average Band Score", icon: Target },
-    { number: "100%", label: "Satisfaction Rate", icon: ThumbsUp },
-  ];
-
-  const keyFeatures = [
-    {
-      title: "Expert Instructors",
-      description:
-        "Learn from certified IELTS trainers with proven track records of helping students achieve band 8+",
-      icon: Users,
-      color: "primary",
-    },
-    {
-      title: "Comprehensive Study Material",
-      description:
-        "Access our extensive library of practice tests, study guides, and mock exams",
-      icon: BookOpen,
-      color: "secondary",
-    },
-    {
-      title: "Personalized Learning",
-      description:
-        "Get customized study plans based on your current level and target score",
-      icon: Target,
-      color: "accent",
-    },
-    {
-      title: "Track Progress",
-      description:
-        "Monitor your improvement with detailed analytics and performance tracking",
-      icon: BarChart,
-      color: "success",
-    },
-    {
-      title: "Flexible Schedule",
-      description:
-        "Choose from multiple batch timings that suit your availability",
-      icon: Clock,
-      color: "warning",
-    },
-    {
-      title: "Global Recognition",
-      description: "Our certificates are recognized by institutions worldwide",
-      icon: Globe,
-      color: "error",
-    },
-  ];
-
-  const testimonials = [
-    {
-      name: "Sarah Johnson",
-      score: "8.5",
-      university: "University of Toronto",
-      quote:
-        "StudyStreak's methodology and expert guidance helped me achieve my dream score in just 2 months!",
-    },
-  ];
-
-  const guarantees = [
-    "Band Score Improvement",
-    "Money Back Guarantee",
-    "Unlimited Practice Tests",
-    "24/7 Support",
-    "Free Demo Class",
-    "Course Completion Certificate",
-  ];
 
   const handleDemoClick = () => {
     navigate("/talk-to-us");
   };
+
   const handleCourseClick = () => {
     navigate("/courses");
   };
 
   return (
     <div className="bg-neutral-50 min-h-screen">
-      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 py-20 overflow-hidden">
         <div
           className="absolute inset-0 bg-grid-pattern opacity-10"
@@ -133,7 +128,6 @@ const WhyChooseUsPage = () => {
         </div>
       </section>
 
-      {/* Statistics Section */}
       <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -159,7 +153,6 @@ const WhyChooseUsPage = () => {
         </div>
       </section>
 
-      {/* Key Features Section */}
       <section className="py-12 bg-neutral-100">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-neutral-800 mb-12">
@@ -173,13 +166,8 @@ const WhyChooseUsPage = () => {
                   transition-all duration-300 transform hover:-translate-y-1 
                   border border-neutral-200 hover:border-primary-200"
               >
-                <div
-                  className={`w-12 h-12 rounded-xl mb-4 
-                  bg-${feature.color}-100 flex items-center justify-center`}
-                >
-                  <feature.icon
-                    className={`w-6 h-6 text-${feature.color}-600`}
-                  />
+                <div className="mb-4 bg-primary-100 w-12 h-12 rounded-xl flex items-center justify-center group-hover:bg-primary-200 transition-colors duration-300">
+                  <feature.icon className="w-6 h-6 text-primary-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-neutral-800 mb-3">
                   {feature.title}
@@ -191,7 +179,6 @@ const WhyChooseUsPage = () => {
         </div>
       </section>
 
-      {/* Guarantees Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-neutral-800 mb-12">
@@ -201,8 +188,7 @@ const WhyChooseUsPage = () => {
             {guarantees.map((guarantee, index) => (
               <div
                 key={index}
-                className="flex items-center gap-3 p-4 rounded-xl bg-primary-50 
-                  hover:bg-primary-100 transition-colors duration-300"
+                className="flex items-center gap-3 p-4 rounded-xl bg-primary-50 hover:bg-primary-100 transition-colors duration-300"
               >
                 <CheckCircle className="w-5 h-5 text-primary-600 flex-shrink-0" />
                 <span className="text-neutral-800 font-medium">
@@ -214,7 +200,6 @@ const WhyChooseUsPage = () => {
         </div>
       </section>
 
-      {/* Testimonial Section */}
       <section className="py-16 bg-neutral-100">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-neutral-800 mb-12">
@@ -246,7 +231,6 @@ const WhyChooseUsPage = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-800">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-6">

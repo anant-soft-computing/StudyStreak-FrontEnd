@@ -6,24 +6,24 @@ import Testimonial from "../Testimonial/Testimonial";
 
 const keyFeatures = [
   {
+    icon: User,
     title: "Expert Instructors",
     description: "Learn from IELTS experts with proven track records",
-    icon: User,
   },
   {
+    icon: BookOpen,
     title: "Comprehensive Material",
     description: "Complete study material covering all IELTS modules",
-    icon: BookOpen,
   },
   {
+    icon: Target,
     title: "Practice Tests",
     description: "Regular mock tests with detailed performance analysis",
-    icon: Target,
   },
   {
+    icon: Award,
     title: "Band Guarantee",
     description: "Guaranteed band improvement or your money back",
-    icon: Award,
   },
 ];
 

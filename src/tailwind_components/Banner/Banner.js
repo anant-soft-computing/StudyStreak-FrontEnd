@@ -31,7 +31,7 @@ const Banner = () => {
           setCategory(response.data);
         }
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.log("error", error);
       }
     })();
 

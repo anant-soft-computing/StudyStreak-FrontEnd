@@ -22,7 +22,7 @@ const MyCourse = () => {
   );
 
   const coursesWithExpiry = courses.map((course) => {
-    const expiry = expiryDate.find((exp) => exp.course.id === course.id);
+    const expiry = expiryDate.find((exp) => exp.course_id === course.id);
     return {
       ...course,
       expiryDate: expiry ? expiry.expiry_date : null,
@@ -59,7 +59,7 @@ const MyCourse = () => {
   const fetchExpiryDates = useCallback(async () => {
     try {
       const response = await ajaxCall(
-        "/student/enrollment/",
+        "/student/course-enrollment/",
         {
           headers: {
             Accept: "application/json",

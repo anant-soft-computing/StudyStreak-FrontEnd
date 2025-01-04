@@ -196,24 +196,24 @@ const Dashboard = () => {
     const fetchAllData = async () => {
       await Promise.all([
         fetchData("/batchview/", setBatchData),
-        fetchData("/userwisepackagewithcourseid/", (data) => {
-          const givenPTCount = data?.student[0]?.student_pt;
-          const givenFLTCount = data?.student[0]?.student_flt;
-          const totalPracticeTests = data?.package.reduce(
+        fetchData("/student/course-enrollment/details/", (data) => {
+          const givenPTCount = data?.student_details?.student_pt;
+          const givenFLTCount = data?.student_details?.student_flt;
+          const totalPracticeTests = data?.package_details?.reduce(
             (sum, pkg) => sum + pkg.practice_test_count,
             0
           );
 
-          const totalFullLengthTests = data?.package.reduce(
+          const totalFullLengthTests = data?.package_details?.reduce(
             (sum, pkg) => sum + pkg.full_length_test_count,
             0
           );
           setCount({
-            count: data?.count,
+            count: data?.course_count,
             practice_test_count: totalPracticeTests - givenPTCount,
             full_length_test_count: totalFullLengthTests - givenFLTCount,
           });
-          setStudentID(data?.student[0]?.student_id);
+          setStudentID(data?.student_details?.student_id);
         }),
       ]);
     };

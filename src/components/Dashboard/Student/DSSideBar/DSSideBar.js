@@ -49,109 +49,109 @@ const DSSidebar = () => {
   const menuList =
     category === "IELTS" || count?.count === 0
       ? [
-        {
-          name: "Dashboard",
-          icon: <img src={dashBoard} alt="Dashboard" />,
-          link: "/studentDashboard",
-        },
-        {
-          name: "My Profile",
-          icon: <img src={profile} alt="Profile" />,
-          link: "/studentProfile",
-        },
-        {
-          name: "My Course",
-          icon: <img src={myCourse} alt="My Course" />,
-          link: "/studentMyCourse",
-        },
-        {
-          name: "Paper Test",
-          icon: <img src={paperTest} alt="My Course" />,
-          link: "/paperTest",
-          state: { packageCount: count?.count },
-        },
-        {
-          name: "Mini Test",
-          icon: <img src={assignment} alt="Mini Test" />,
-          link: "/mockTest",
-        },
-        {
-          name: "Practice Test",
-          icon: <img src={practiceTest} alt="Practice Test" />,
-          link: "/practiceTest",
-          state: {
-            count: count?.practice_test_count,
-            packageCount: count?.count,
+          {
+            name: "Dashboard",
+            icon: <img src={dashBoard} alt="Dashboard" />,
+            link: "/studentDashboard",
           },
-        },
-        {
-          name: "Full Length Test",
-          icon: <img src={fullLengthTest} alt="Full Length Test" />,
-          link: "/fullLengthTest",
-          state: {
-            count: count?.full_length_test_count,
-            packageCount: count?.count,
+          {
+            name: "My Profile",
+            icon: <img src={profile} alt="Profile" />,
+            link: "/studentProfile",
           },
-        },
-        {
-          name: "Diagnostic Test",
-          icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
-          link: "/diagnosticTest",
-          state: {
-            packageCount: count?.count,
+          {
+            name: "My Course",
+            icon: <img src={myCourse} alt="My Course" />,
+            link: "/studentMyCourse",
           },
-        },
-        {
-          name: "Live Classes",
-          icon: <img src={liveClass} alt="Live Classes" />,
-          link: "/studentLiveClasses",
-          state: { packageCount: count?.count },
-        },
-        {
-          name: "Recorded Classes",
-          icon: (
-            <img
-              src={recordedClass}
-              alt="Recorded Classes"
-              height={18}
-              width={18}
-            />
-          ),
-          link: "/recordedClasses",
-          state: { packageCount: count?.count },
-        },
-        {
-          name: "Flash Card",
-          icon: <img src={flashcard} alt="Flash Card" />,
-          link: "/flashCard",
-          state: { packageCount: count?.count },
-        },
-        {
-          name: "Resources",
-          icon: (
-            <img src={resources} alt="Resources" height={20} width={20} />
-          ),
-          link: "/resources",
-          state: { packageCount: count?.count },
-        },
-        {
-          name: "Reports",
-          icon: <img src={report} alt="Reports" />,
-          link: "/reports",
-        },
-        {
-          name: "Settings",
-          icon: <img src={settings} alt="Settings" />,
-          link: "/studentSettings",
-        },
-        {
-          name: "Logout",
-          icon: <img src={logOut} alt="Logout" />,
-          link: "/login",
-        },
-      ]
+          {
+            name: "Paper Test",
+            icon: <img src={paperTest} alt="My Course" />,
+            link: "/paperTest",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Mini Test",
+            icon: <img src={assignment} alt="Mini Test" />,
+            link: "/mockTest",
+          },
+          {
+            name: "Practice Test",
+            icon: <img src={practiceTest} alt="Practice Test" />,
+            link: "/practiceTest",
+            state: {
+              count: count?.practice_test_count,
+              packageCount: count?.count,
+            },
+          },
+          {
+            name: "Full Length Test",
+            icon: <img src={fullLengthTest} alt="Full Length Test" />,
+            link: "/fullLengthTest",
+            state: {
+              count: count?.full_length_test_count,
+              packageCount: count?.count,
+            },
+          },
+          {
+            name: "Diagnostic Test",
+            icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
+            link: "/diagnosticTest",
+            state: {
+              packageCount: count?.count,
+            },
+          },
+          {
+            name: "Live Classes",
+            icon: <img src={liveClass} alt="Live Classes" />,
+            link: "/studentLiveClasses",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Recorded Classes",
+            icon: (
+              <img
+                src={recordedClass}
+                alt="Recorded Classes"
+                height={18}
+                width={18}
+              />
+            ),
+            link: "/recordedClasses",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Flash Card",
+            icon: <img src={flashcard} alt="Flash Card" />,
+            link: "/flashCard",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Resources",
+            icon: (
+              <img src={resources} alt="Resources" height={20} width={20} />
+            ),
+            link: "/resources",
+            state: { packageCount: count?.count },
+          },
+          {
+            name: "Reports",
+            icon: <img src={report} alt="Reports" />,
+            link: "/reports",
+          },
+          {
+            name: "Settings",
+            icon: <img src={settings} alt="Settings" />,
+            link: "/studentSettings",
+          },
+          {
+            name: "Logout",
+            icon: <img src={logOut} alt="Logout" />,
+            link: "/login",
+          },
+        ]
       : category === "PTE"
-        ? [
+      ? [
           {
             name: "Dashboard",
             icon: <img src={dashBoard} alt="Dashboard" />,
@@ -198,7 +198,7 @@ const DSSidebar = () => {
             link: "/login",
           },
         ]
-        : [
+      : [
           {
             name: "Dashboard",
             icon: <img src={dashBoard} alt="Dashboard" />,
@@ -291,13 +291,14 @@ const DSSidebar = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/userwisepackagewithcourseid/",
+          "/student/course-enrollment/details/",
           {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
@@ -305,34 +306,34 @@ const DSSidebar = () => {
         );
         if (response.status === 200) {
           const { data } = response;
-          const batchIds = data?.batch?.map((item) => item);
-          const courseIds = data?.course?.map((item) => item);
+          const batchIds = data?.batch_ids?.map((item) => item);
+          const courseIds = data?.course_ids?.map((item) => item);
 
-          const givenPTCount = data?.student[0]?.student_pt;
-          const givenFLTCount = data?.student[0]?.student_flt;
+          const givenPTCount = data?.student_details?.student_pt;
+          const givenFLTCount = data?.student_details?.student_flt;
 
           setGivenPTCount(givenPTCount);
           setGivenFLTCount(givenFLTCount);
 
-          const totalPracticeTests = data?.package.reduce(
+          const totalPracticeTests = data?.package_details?.reduce(
             (sum, pkg) => sum + pkg.practice_test_count,
             0
           );
 
-          const totalFullLengthTests = data?.package.reduce(
+          const totalFullLengthTests = data?.package_details?.reduce(
             (sum, pkg) => sum + pkg.full_length_test_count,
             0
           );
 
           setCount({
-            count: data?.count,
+            count: data?.course_count,
             all_pt_count: totalPracticeTests,
             practice_test_count: totalPracticeTests - givenPTCount,
             all_flt_count: totalFullLengthTests,
             full_length_test_count: totalFullLengthTests - givenFLTCount,
           });
 
-          localStorage.setItem("StudentID", data?.student[0]?.student_id);
+          localStorage.setItem("StudentID", data?.student_details?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
           localStorage.setItem("courses", JSON.stringify(courseIds));
         } else {
@@ -415,7 +416,7 @@ const DSSidebar = () => {
                       : "admin__menu"
                   }
                   to={item.link}
-                  onClick={item.name === "Logout" ? logout : () => { }}
+                  onClick={item.name === "Logout" ? logout : () => {}}
                   state={item?.state}
                 >
                   <div className="admin__menu__icon">{item.icon}</div>
@@ -425,9 +426,7 @@ const DSSidebar = () => {
                   {getLabel(
                     item.name,
                     count,
-                    item.name === "Practice Test"
-                      ? givenPTCount
-                      : givenFLTCount
+                    item.name === "Practice Test" ? givenPTCount : givenFLTCount
                   )}
                 </Link>
               </li>

@@ -80,107 +80,6 @@ const Checkout = () => {
     })();
   }, [couponCode]);
 
-  const handlePackgaeAdd = async () => {
-    const data = JSON.stringify({
-      package: packageId,
-    });
-    try {
-      const response = await ajaxCall(
-        "/student/enrollment/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-      if (response.status === 201) {
-        console.log("success");
-      } else if (response.status === 400 && response.isError) {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error");
-    }
-  };
-
-  const handleEnroll = async () => {
-    const data = JSON.stringify({
-      package_ids: [packageId],
-      course_ids: [parseInt(courseId)],
-    });
-    try {
-      const response = await ajaxCall(
-        "/enrollpackagestudentview/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-      if (response.status === 201) {
-        navigate("/studentDashboard");
-        toast.success(response?.data?.detail);
-        handlePackgaeAdd();
-      } else if (response.status === 400 && response.isError) {
-        toast.error(response?.data?.detail);
-      } else {
-        toast.error("Something went wrong, please try again later");
-      }
-    } catch (error) {
-      toast.error("Something went wrong, please try again later");
-    }
-  };
-
-  const handleEnrollNow = async () => {
-    const data = JSON.stringify({
-      package_id: packageId,
-      batch_ids: selectedBatchIds,
-      course_id: parseInt(courseId),
-    });
-    try {
-      const response = await ajaxCall(
-        "/enroll-package/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-      if (response.status === 201) {
-        navigate("/studentDashboard");
-        toast.success(response?.data?.detail);
-        handlePackgaeAdd();
-      } else if (response.status === 400 && response.isError) {
-        toast.error(response?.data?.detail);
-      } else {
-        toast.error("Something went wrong, please try again later");
-      }
-    } catch (error) {
-      toast.error("Something went wrong, please try again later");
-    }
-  };
-
   const handleEnrollButton = async () => {
     if (!authData.loggedIn) {
       toast.error("Please Do Login For Enroll Course");
@@ -197,11 +96,20 @@ const Checkout = () => {
     }
 
     // creating a new order
-
-    const body = {
-      amount: package_amount,
-      currency: "INR",
-    };
+    const body =
+      courseType === "TAUGHT"
+        ? {
+            amount: package_amount,
+            currency: "INR",
+            product_type: "batch",
+            product_id: selectedBatchIds[0],
+          }
+        : {
+            amount: package_amount,
+            currency: "INR",
+            product_type: "package",
+            product_id: packageId,
+          };
 
     // const result = await axios.post("http://localhost:5000/payment/orders");
 
@@ -241,12 +149,9 @@ const Checkout = () => {
       order_id: order_id,
       handler: async function (response) {
         const data = {
-          amount,
           order_id: response.razorpay_order_id,
           payment_id: response.razorpay_payment_id,
           signature_id: response.razorpay_signature,
-          user: userData?.userId,
-          product: [packageId],
         };
 
         const result = await ajaxCall(
@@ -267,7 +172,7 @@ const Checkout = () => {
 
         if (result?.status === 200) {
           toast.success("Payment Successful");
-          courseType === "TAUGHT" ? handleEnrollNow() : handleEnroll();
+          navigate("/studentDashboard");
         }
       },
       prefill: {

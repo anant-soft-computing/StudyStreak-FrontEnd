@@ -113,12 +113,12 @@ const LiveClass = () => {
 
   useEffect(() => {
     const calculateTotalCount = (data, key) =>
-      data?.package.reduce((sum, pkg) => sum + (pkg[key] || 0), 0);
+      data?.package_details?.reduce((sum, pkg) => sum + (pkg[key] || 0), 0);
 
     (async () => {
       try {
         const response = await ajaxCall(
-          "/userwisepackagewithcourseid/",
+          "/student/course-enrollment/details/",
           {
             headers: {
               Accept: "application/json",
@@ -157,7 +157,7 @@ const LiveClass = () => {
           };
 
           setCount(counts);
-          setSolvingClassBook(data?.student[0]?.Live_class_enroll);
+          setSolvingClassBook(data?.student_details?.Live_class_enroll);
         } else {
           console.log("error");
         }

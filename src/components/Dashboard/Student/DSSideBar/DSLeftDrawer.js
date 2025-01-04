@@ -373,7 +373,7 @@ const DSLeftDrawer = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/userwisepackagewithcourseid/",
+          "/student/course-enrollment/details/",
           {
             headers: {
               Accept: "application/json",
@@ -389,34 +389,34 @@ const DSLeftDrawer = () => {
 
         if (response.status === 200) {
           const { data } = response;
-          const batchIds = data?.batch?.map((item) => item);
-          const courseIds = data?.course?.map((item) => item);
+          const batchIds = data?.batch_ids?.map((item) => item);
+          const courseIds = data?.course_ids?.map((item) => item);
 
-          const givenPTCount = data?.student[0]?.student_pt;
-          const givenFLTCount = data?.student[0]?.student_flt;
+          const givenPTCount = data?.student_details?.student_pt;
+          const givenFLTCount = data?.student_details?.student_flt;
 
           setGivenPTCount(givenPTCount);
           setGivenFLTCount(givenFLTCount);
 
-          const totalPracticeTests = data?.package.reduce(
+          const totalPracticeTests = data?.package_details?.reduce(
             (sum, pkg) => sum + pkg.practice_test_count,
             0
           );
 
-          const totalFullLengthTests = data?.package.reduce(
+          const totalFullLengthTests = data?.package_details?.reduce(
             (sum, pkg) => sum + pkg.full_length_test_count,
             0
           );
 
           setCount({
-            count: data?.count,
+            count: data?.course_count,
             all_pt_count: totalPracticeTests,
             practice_test_count: totalPracticeTests - givenPTCount,
             all_flt_count: totalFullLengthTests,
             full_length_test_count: totalFullLengthTests - givenFLTCount,
           });
 
-          localStorage.setItem("StudentID", data?.student[0]?.student_id);
+          localStorage.setItem("StudentID", data?.student_details?.student_id);
           localStorage.setItem("BatchIds", JSON.stringify(batchIds));
           localStorage.setItem("courses", JSON.stringify(courseIds));
         } else {

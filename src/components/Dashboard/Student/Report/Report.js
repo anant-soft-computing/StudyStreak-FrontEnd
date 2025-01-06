@@ -6,8 +6,8 @@ import PracticeTestReport from "./PracticeTestReport/PracticeTestReport";
 import FullLengthTestReport from "./FullLengthTestReport/FullLengthTestReport";
 
 const Report = () => {
-  const category = localStorage.getItem("category");
   const [activeTab, setActiveTab] = useState("Mini Test");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const tabs =
     category === "GENERAL"

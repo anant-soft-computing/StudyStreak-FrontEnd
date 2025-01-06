@@ -24,7 +24,7 @@ import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
 
 const DSSidebar = () => {
   const location = useLocation().pathname;
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
   const { logoutUser } = useCheckAuth();
 
   const [count, setCount] = useState({

@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const NextLesson = () => {
-  const category = localStorage.getItem("category");
   const [lessonData, setLessonData] = useState(null);
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/getyoutubedataview/`,
+          "/getyoutubedataview/",
           {
             headers: {
               Accept: "application/json",

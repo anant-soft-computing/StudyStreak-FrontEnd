@@ -140,10 +140,6 @@ const HomePage = () => {
           const now = moment();
           const data = response.data
             .filter((item) => moment(item.end_time).isAfter(now))
-            .map((item) => ({
-              ...item,
-              meeting_title: item.meeting_title.replace(/Introduction\s?/i, ""),
-            }))
             .sort((a, b) => moment(a.start_time).diff(moment(b.start_time)));
           setWebinars(data);
         }

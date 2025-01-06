@@ -18,7 +18,7 @@ const Progress = () => {
   const [practiceTestData, setPracticeTestData] = useState([]);
   const [expectedScore, setExpectedScore] = useState({});
 
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const completeLesson = lessons?.filter((item) =>
     studentLessons?.some((i) => i === item?.id)

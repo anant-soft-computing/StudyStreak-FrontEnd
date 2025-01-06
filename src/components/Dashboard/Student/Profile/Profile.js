@@ -10,7 +10,7 @@ import SmallModal from "../../../UI/Modal";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const [score, setScore] = useState({});
   const [course, setCourse] = useState([]);

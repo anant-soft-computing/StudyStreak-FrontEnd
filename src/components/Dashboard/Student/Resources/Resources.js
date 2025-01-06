@@ -11,10 +11,10 @@ const Resources = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
 
-  const category = localStorage.getItem("category");
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const courseIds = JSON?.parse(localStorage.getItem("courses"));
   const studentId = JSON?.parse(localStorage.getItem("StudentID"));
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const data = resourcesList.flatMap((item) => {
     return item?.documents?.map((doc) => ({

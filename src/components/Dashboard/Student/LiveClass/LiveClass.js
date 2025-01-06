@@ -16,7 +16,7 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 
 const LiveClass = () => {
   const location = useLocation();
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const liveClasses = [
     "Regular",

@@ -12,7 +12,7 @@ import BuyCourse from "../BuyCourse/BuyCourse";
 
 const RecordedClasses = () => {
   const { packageCount } = useLocation().state || {};
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const liveClasses =
     category === "IELTS"

@@ -18,7 +18,7 @@ const FlashCard = () => {
   const [flashCardItems, setFlashCardItems] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
 
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
   const courseIds = JSON.parse(localStorage.getItem("courses"));
 
   useEffect(() => {

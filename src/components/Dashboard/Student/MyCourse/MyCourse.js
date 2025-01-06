@@ -12,8 +12,8 @@ const MyCourse = () => {
   const [expiryDate, setExpiryDate] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const category = localStorage.getItem("category");
   const courseIds = JSON.parse(localStorage.getItem("courses"));
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const courses = courseList.filter((course) =>
     courseIds.some(

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
-
 import mic from "../../../../img/icon/mic.svg";
 import webinar from "../../../../img/icon/webinar.svg";
 import support from "../../../../img/icon/support.svg";
@@ -17,6 +16,7 @@ import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
 import recordedClasses from "../../../../img/icon/gamification.svg";
 import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
 
+import Loading from "../../../UI/Loading";
 import ScoreCard from "./ScoreCard/ScoreCard";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import NextLesson from "./NextLesson/NextLesson";
@@ -36,14 +36,16 @@ const Dashboard = () => {
   const [lesson, setLesson] = useState([]);
   const [studentID, setStudentID] = useState(0);
   const [batchData, setBatchData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [studentCourses, setStudentCourses] = useState([]);
-  const [selectedCourse, setSelectedCourse] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState({});
 
+  const category = selectedCourse?.course_category;
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const userData = JSON?.parse(localStorage.getItem("loginInfo"));
 
   const cardList =
-    selectedCourse === "IELTS"
+    category === "IELTS"
       ? [
           {
             name: "Speaking Slot",
@@ -89,7 +91,7 @@ const Dashboard = () => {
           { name: "Progress", icon: progress, link: "/progress" },
           { name: "Resources", icon: support, link: "/resources" },
         ]
-      : selectedCourse === "PTE"
+      : category === "PTE"
       ? [
           {
             name: "Speaking",
@@ -161,9 +163,9 @@ const Dashboard = () => {
     batchIds?.includes(item?.id)
   );
 
-  const handleCourseCategory = (category) => {
-    setSelectedCourse(category);
-    localStorage.setItem("category", category);
+  const handleCourse = (course) => {
+    setSelectedCourse(course);
+    localStorage.setItem("course", JSON.stringify(course));
   };
 
   const fetchData = async (url, dataes) => {
@@ -194,6 +196,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchAllData = async () => {
+      setIsLoading(true);
       await Promise.all([
         fetchData("/batchview/", setBatchData),
         fetchData("/student/course-enrollment/details/", (data) => {
@@ -216,6 +219,7 @@ const Dashboard = () => {
           setStudentID(data?.student_details?.student_id);
         }),
       ]);
+      setIsLoading(false);
     };
 
     fetchAllData();
@@ -223,6 +227,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchStudentCourses = async () => {
+      setIsLoading(true);
       try {
         const response = await ajaxCall(
           "/get-student-course/",
@@ -240,48 +245,57 @@ const Dashboard = () => {
         );
 
         if (response.status === 200) {
-          const courseData = response?.data || [];
-          const courses = [
-            ...new Set(courseData.map((item) => item.course_category)),
-          ];
-
+          const courses_list = response?.data.map((item) => {
+            return {
+              course_id: item.course_id,
+              package_id: item.package_id,
+              course_category: item.course_category,
+            };
+          });
           setLesson(
-            courseData
-              .filter((lesson) => lesson.course_category === selectedCourse)
+            response?.data
+              .filter((lesson) => lesson.course_category === category)
               .filter(
                 (lesson, index, self) =>
                   self.findIndex((l) => l.course_id === lesson.course_id) ===
                   index
               )
           );
-
-          setStudentCourses(courses);
-          handleCourseSelection(courses);
+          setStudentCourses(courses_list);
+          handleCourseSelection(courses_list);
         } else {
           console.log("error");
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     const handleCourseSelection = (courses) => {
-      const savedCourse = localStorage.getItem("category");
+      const savedCourse = JSON.parse(localStorage.getItem("course"));
       if (!savedCourse && courses.length > 0) {
         const defaultCourse = courses[0];
         setSelectedCourse(defaultCourse);
-        localStorage.setItem("category", defaultCourse);
-      } else if (savedCourse) {
+        localStorage.setItem("course", JSON.stringify(defaultCourse));
+      } else {
         setSelectedCourse(savedCourse);
       }
     };
 
     fetchStudentCourses();
-  }, [selectedCourse]);
+  }, [category]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <>
-      {count?.count !== 0 ? (
+      {isLoading ? (
+        <Loading />
+      ) : count?.count !== 0 ? (
         <div className="body__wrapper">
           <div className="main_wrapper overflow-hidden">
             <div className="dashboardarea sp_bottom_100">
@@ -294,27 +308,25 @@ const Dashboard = () => {
                         <div className="course__details__heading">
                           <h3>Welcome, {userData?.username}</h3>
                         </div>
-                        {selectedCourse === "IELTS" &&
-                          studentBatch?.length > 0 && (
-                            <h5>
-                              Batch :{" "}
-                              {studentBatch?.map((batch) => (
-                                <span key={batch.id}>
-                                  {batch.batch_name} :{" "}
-                                  {moment(
-                                    batch.batch_start_timing,
-                                    "HH:mm:ss"
-                                  ).format("hh:mm A")}{" "}
-                                  |*|{" "}
-                                </span>
-                              ))}
-                            </h5>
-                          )}
-                        {(selectedCourse === "IELTS" ||
-                          selectedCourse === "GENERAL") && (
+                        {category === "IELTS" && studentBatch?.length > 0 && (
+                          <h5>
+                            Batch :{" "}
+                            {studentBatch?.map((batch) => (
+                              <span key={batch.id}>
+                                {batch.batch_name} :{" "}
+                                {moment(
+                                  batch.batch_start_timing,
+                                  "HH:mm:ss"
+                                ).format("hh:mm A")}{" "}
+                                |*|{" "}
+                              </span>
+                            ))}
+                          </h5>
+                        )}
+                        {(category === "IELTS" || category === "GENERAL") && (
                           <div className="online__course__wrap mt-0">
                             <div className="row instructor__slider__active row__custom__class">
-                              <ScoreCard course={selectedCourse} />
+                              <ScoreCard course={category} />
                             </div>
                           </div>
                         )}
@@ -336,7 +348,7 @@ const Dashboard = () => {
                                           width={35}
                                         />
                                         <h2 className="mt-2">
-                                          {selectedCourse === "IELTS"
+                                          {category === "IELTS"
                                             ? "Diagnostic Test"
                                             : "English Diagnostic Test"}
                                         </h2>
@@ -412,8 +424,7 @@ const Dashboard = () => {
                               </div>
                             )
                           )}
-                          {(selectedCourse === "IELTS" ||
-                            selectedCourse === "GENERAL") && (
+                          {(category === "IELTS" || category === "GENERAL") && (
                             <div className="col-xl-12 column__custom__class">
                               <div className="gridarea__wraper card-background">
                                 <div className="gridarea__content">
@@ -448,30 +459,32 @@ const Dashboard = () => {
                           <h5>Course</h5>
                           <select
                             className="form-select"
-                            aria-label="Default select example"
-                            value={selectedCourse}
+                            aria-label="Select a course"
+                            value={JSON.stringify(selectedCourse)}
                             onChange={(e) =>
-                              handleCourseCategory(e.target.value)
+                              handleCourse(JSON.parse(e.target.value))
                             }
                           >
                             {studentCourses?.map((item) => (
-                              <option key={item} value={item}>
-                                {item}
+                              <option
+                                key={item.course_id}
+                                value={JSON.stringify(item)}
+                              >
+                                {item.course_category}
                               </option>
                             ))}
                           </select>
                         </div>
                       </div>
                       <LeaderBoard studentID={studentID} />
-                      {(selectedCourse === "IELTS" ||
-                        selectedCourse === "GENERAL") && (
+                      {(category === "IELTS" || category === "GENERAL") && (
                         <UpcomingRegularLiveClass />
                       )}
-                      {(selectedCourse === "IELTS" ||
-                        selectedCourse === "GENERAL") && <NextLesson />}
-                      {selectedCourse === "IELTS" && <SpeakingSlots />}
-                      {(selectedCourse === "IELTS" ||
-                        selectedCourse === "GENERAL") && (
+                      {(category === "IELTS" || category === "GENERAL") && (
+                        <NextLesson />
+                      )}
+                      {category === "IELTS" && <SpeakingSlots />}
+                      {(category === "IELTS" || category === "GENERAL") && (
                         <UpcomingLiveClasses />
                       )}
                     </div>

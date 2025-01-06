@@ -17,7 +17,7 @@ const MockTest = () => {
   const [allMockTestData, setAllMockTestData] = useState([]);
   const [allSpeakingData, setAllSpeakingData] = useState([]);
   const [ieltsCategory, setIeltsCategory] = useState("");
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const tabs =
     category !== "GENERAL"

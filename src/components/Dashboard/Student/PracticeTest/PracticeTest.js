@@ -21,7 +21,7 @@ const PracticeTest = () => {
   const [studentCourses, setStudentCourses] = useState([]);
   const [activeTab, setActiveTab] = useState("Reading");
   const [ieltsCategory, setIeltsCategory] = useState("");
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const tabs =category !== "GENERAL"
       ? [

@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const LeaderBoard = ({ studentID }) => {
-  const category = localStorage.getItem("category");
+  const courseID = JSON.parse(localStorage.getItem("course"))?.course_id;
   const [tableData, setTableData] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/gamification/points/summary/",
+          `/gamification/points/summary/?course_id=${courseID}`,
           {
             headers: {
               Accept: "application/json",
@@ -23,10 +23,7 @@ const LeaderBoard = ({ studentID }) => {
           8000
         );
         if (response.status === 200) {
-          const data = response?.data?.filter((item) =>
-            item?.courses?.category?.includes(category)
-          );
-          setTableData(data);
+          setTableData(response?.data);
         } else {
           console.log("error");
         }
@@ -34,7 +31,7 @@ const LeaderBoard = ({ studentID }) => {
         console.log("error", error);
       }
     })();
-  }, [category]);
+  }, [courseID]);
 
   return (
     <div className="dashboard__inner card-background">

@@ -14,7 +14,7 @@ const FullLengthTest = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [fullLengthTestData, setFullLengthTestData] = useState([]);
   const [ieltsCategory, setIeltsCategory] = useState("Academic");
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const sortedFLT = fullLengthTestData.sort((a, b) => {
     const getNumber = (name) => {

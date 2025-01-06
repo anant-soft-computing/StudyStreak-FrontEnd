@@ -95,7 +95,7 @@ const Drawer = styled(MuiDrawer, {
 
 const DSLeftDrawer = () => {
   const location = useLocation().pathname;
-  const category = localStorage.getItem("category");
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
   const { logoutUser } = useCheckAuth();
 
   const [open, setOpen] = useState(false);

@@ -6,11 +6,7 @@ import { Box, List, ListItem, Typography } from "@mui/material";
 const NoticeBoard = () => {
   const currentDate = moment().startOf("day");
   const [noticeData, setNoticeData] = useState([]);
-
-  const category = localStorage.getItem("category");
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
-  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
+  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const activeNotice = noticeData?.filter((item) =>
     moment(item.expiry_date, "YYYY-MM-DD").isSameOrAfter(currentDate)
@@ -34,16 +30,7 @@ const NoticeBoard = () => {
           8000
         );
         if (response.status === 200) {
-          const filterNotice = response?.data?.filter((item) => {
-            const student = item?.student?.some((s) => s?.id === studentId);
-            const batch = item?.batch?.some((b) => batchIds?.includes(b?.id));
-            const course = item?.course?.some(
-              (c) => courseIds?.includes(c?.id) && c?.category === category
-            );
-            return student || batch || course;
-          });
-
-          const responseNotice = filterNotice?.map((item) => {
+          const responseNotice = response?.data?.map((item) => {
             return {
               notice: item?.notice,
               expiry_date: item?.expiry_date,

@@ -68,12 +68,8 @@ const Student = () => {
           8000
         );
         if (response?.status === 200) {
-          const studentWithNumbers = response?.data?.map((student, index) => ({
-            ...student,
-            no: index + 1,
-          }));
-          setStudentList(studentWithNumbers);
-          setFilteredStudentList(studentWithNumbers);
+          setStudentList(response?.data);
+          setFilteredStudentList(response?.data);
         }
       } catch (error) {
         console.log("error", error);
@@ -103,6 +99,7 @@ const Student = () => {
       field: "no",
       resizable: false,
       width: 75,
+      cellRenderer: (params) => params.rowIndex + 1,
     },
     { headerName: "User Name", field: "username", filter: true },
     { headerName: "Email", field: "email", filter: true },

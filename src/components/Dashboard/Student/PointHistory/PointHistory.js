@@ -6,7 +6,12 @@ import Table from "../../../UI/Table";
 
 const specificColumns = {
   Lesson: [
-    { headerName: "No.", field: "no", width: 80 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 80,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Lesson Title",
       field: "Lesson_Title",
@@ -42,7 +47,12 @@ const specificColumns = {
     },
   ],
   "Flash Card": [
-    { headerName: "No.", field: "no", width: 80 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 80,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Name", field: "title", filter: true, width: 400 },
     {
       headerName: "Description",
@@ -100,7 +110,12 @@ const specificColumns = {
     { headerName: "Points", field: "points", filter: true },
   ],
   "Exam Block": [
-    { headerName: "No.", field: "no", width: 80 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 80,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Exam Name", field: "exam_name", filter: true, width: 300 },
     { headerName: "Exam Type", field: "exam_type", filter: true, width: 300 },
     {
@@ -118,7 +133,12 @@ const specificColumns = {
     { headerName: "Point", field: "points", filter: true, width: 245 },
   ],
   "Practice Test": [
-    { headerName: "No.", field: "no", width: 220 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 220,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Exam Name", field: "Name", filter: true, width: 450 },
     {
       headerName: "Exam Type",
@@ -129,8 +149,13 @@ const specificColumns = {
     { headerName: "Point", field: "points", filter: true, width: 330 },
   ],
   "Full Length Test": [
-    { headerName: "No.", field: "no", width: 80 },
-    { headerName: "Exam Name", field: "name", filter: true,width: 370 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 80,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
+    { headerName: "Exam Name", field: "name", filter: true, width: 370 },
     {
       headerName: "Reading Set",
       field: "reading_set.Reading.length",
@@ -165,12 +190,13 @@ const options = [
 ];
 
 const endpoints = {
-  Lesson: `/lesson-get/`,
-  "Flash Card": `/gamification/flashcard/`,
-  "Live Class": `/liveclass_list_view/`,
-  "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,no_of_questions`,
-  "Full Length Test": `/get/flt/`,
-  "Practice Test": `/moduleListView/`,
+  Lesson: "/lesson-get/",
+  "Flash Card": "/gamification/flashcard/",
+  "Live Class": "/liveclass_list_view/",
+  "Exam Block":
+    "/exam-blocks/?fields=id,exam_name,exam_type,exam_category,no_of_questions",
+  "Full Length Test": "/get/flt/",
+  "Practice Test": "/moduleListView/",
 };
 
 const PointHistory = ({ totalPoints, setTotalPoints }) => {
@@ -183,7 +209,7 @@ const PointHistory = ({ totalPoints, setTotalPoints }) => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/gamification/points/`,
+          "/gamification/points/",
           {
             headers: {
               Accept: "application/json",
@@ -197,11 +223,7 @@ const PointHistory = ({ totalPoints, setTotalPoints }) => {
           8000
         );
         if (response?.status === 200) {
-          const points = response?.data?.map((item, index) => ({
-            ...item,
-            no: index + 1,
-          }));
-          setPointHistory(points);
+          setPointHistory(response?.data);
           setTotalPoints(response?.data?.reduce((a, b) => a + b.points, 0));
         } else {
           console.log("error");
@@ -254,7 +276,6 @@ const PointHistory = ({ totalPoints, setTotalPoints }) => {
       )
       .map((item, index) => ({
         ...item,
-        no: index + 1,
         points:
           pointHistory.find(
             (i) => i.object_id === item.id && i.model === content

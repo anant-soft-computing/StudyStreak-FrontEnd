@@ -9,11 +9,6 @@ const ViewFLT = ({ activeTab }) => {
   const [isLoading, setIsLoading] = useState(true);
   const authData = useSelector((state) => state.authStore);
 
-  const fltData = fltList.map((item, index) => ({
-    ...item,
-    no: index + 1,
-  }));
-
   const fetchData = useCallback(
     async (url, setDataCallback) => {
       setIsLoading(true);
@@ -52,7 +47,7 @@ const ViewFLT = ({ activeTab }) => {
     return <Loading />;
   }
 
-  if (fltData.length === 0) {
+  if (fltList.length === 0) {
     return (
       <h5 className="text-center text-danger">
         No Full Length Test Available !!
@@ -66,6 +61,7 @@ const ViewFLT = ({ activeTab }) => {
       field: "no",
       resizable: false,
       width: 110,
+      cellRenderer: (params) => params.rowIndex + 1,
     },
     {
       headerName: "Exam Name",
@@ -99,7 +95,7 @@ const ViewFLT = ({ activeTab }) => {
     },
   ];
 
-  return <Table rowData={fltData} columnDefs={columns} />;
+  return <Table rowData={fltList} columnDefs={columns} />;
 };
 
 export default ViewFLT;

@@ -34,7 +34,7 @@ const ViewLesson = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/lesson-get/`,
+            "/lesson-get/",
             {
               headers: {
                 Accept: "application/json",
@@ -46,11 +46,7 @@ const ViewLesson = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            const lessonWithNumbers = response?.data?.map((lesson, index) => ({
-              ...lesson,
-              no: index + 1,
-            }));
-            setLessonList(lessonWithNumbers);
+            setLessonList(response?.data);
           }
         } catch (error) {
           console.log("error", error);
@@ -76,7 +72,13 @@ const ViewLesson = ({ activeTab }) => {
         </button>
       ),
     },
-    { headerName: "No.", field: "no", resizable: false, width: 60 },
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 60,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Lesson Title", field: "Lesson_Title", filter: true },
     {
       headerName: "Lesson Description",

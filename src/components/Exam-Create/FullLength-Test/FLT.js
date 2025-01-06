@@ -91,26 +91,18 @@ const FLT = ({ category, activeTab }) => {
               ({ Name }) => !Name.includes("SPT")
             );
             const updatedExams = {
-              Reading: data
-                .filter(
-                  ({ practice_test_type }) => practice_test_type === "Reading"
-                )
-                .map((item, index) => ({ ...item, no: index + 1 })),
-              Writing: data
-                .filter(
-                  ({ practice_test_type }) => practice_test_type === "Writing"
-                )
-                .map((item, index) => ({ ...item, no: index + 1 })),
-              Listening: data
-                .filter(
-                  ({ practice_test_type }) => practice_test_type === "Listening"
-                )
-                .map((item, index) => ({ ...item, no: index + 1 })),
-              Speaking: data
-                .filter(
-                  ({ practice_test_type }) => practice_test_type === "Speaking"
-                )
-                .map((item, index) => ({ ...item, no: index + 1 })),
+              Reading: data.filter(
+                ({ practice_test_type }) => practice_test_type === "Reading"
+              ),
+              Writing: data.filter(
+                ({ practice_test_type }) => practice_test_type === "Writing"
+              ),
+              Listening: data.filter(
+                ({ practice_test_type }) => practice_test_type === "Listening"
+              ),
+              Speaking: data.filter(
+                ({ practice_test_type }) => practice_test_type === "Speaking"
+              ),
             };
             setExams(updatedExams);
           }
@@ -200,7 +192,13 @@ const FLT = ({ category, activeTab }) => {
     rowData,
     onSelectionChanged: handleRowSelection,
     columnDefs: [
-      { headerName: "No.", field: "no", resizable: false, width: 68 },
+      {
+        headerName: "No.",
+        field: "no",
+        resizable: false,
+        width: 68,
+        cellRenderer: (params) => params.rowIndex + 1,
+      },
       {
         headerCheckboxSelection: true,
         checkboxSelection: true,

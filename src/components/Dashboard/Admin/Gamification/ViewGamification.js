@@ -7,7 +7,12 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 
 const specificColumns = {
   "Flash Card": [
-    { headerName: "No.", field: "no", width: 120 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 120,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Name", field: "title", filter: true, width: 510 },
     {
       headerName: "Description",
@@ -18,7 +23,12 @@ const specificColumns = {
     { headerName: "Points", field: "points", filter: true, width: 310 },
   ],
   Lesson: [
-    { headerName: "No.", field: "no", width: 120 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 120,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Lesson Title",
       field: "Lesson_Title",
@@ -55,14 +65,25 @@ const specificColumns = {
     },
   ],
   "Exam Block": [
-    { headerName: "No.", field: "no", width: 150 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 150,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Exam Name", field: "exam_name", filter: true, width: 330 },
     { headerName: "Exam Type", field: "exam_type", filter: true, width: 330 },
     { headerName: "Block Type", field: "block_type", filter: true, width: 320 },
     { headerName: "Points", field: "points", filter: true, width: 320 },
   ],
   "Full Length Test": [
-    { headerName: "No.", field: "no", resizable: false, width: 68 },
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 68,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Exam Name", field: "name", filter: true },
     {
       headerName: "Reading Set",
@@ -87,7 +108,13 @@ const specificColumns = {
     { headerName: "Points", field: "points", filter: true },
   ],
   "Practice Test": [
-    { headerName: "No.", field: "no", resizable: false, width: 68 },
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 68,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Exam Name", field: "Name", filter: true },
     { headerName: "Reading Set", field: "reading_count", filter: true },
     { headerName: "Writing Set", field: "writing_count", filter: true },
@@ -96,6 +123,13 @@ const specificColumns = {
     { headerName: "Points", field: "points", filter: true },
   ],
   "Live Class": [
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 68,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Meeting Title", field: "meeting_title" },
     {
       headerName: "Start Date",
@@ -180,9 +214,8 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.title && i.model === content
             )
           )
-          .map((item, index) => ({
+          .map((item) => ({
             ...item,
-            no: index + 1,
             points:
               gamificationList.find(
                 (i) => i.name === item.title && i.model === content
@@ -195,9 +228,8 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.Lesson_Title && i.model === content
             )
           )
-          .map((item, index) => ({
+          .map((item) => ({
             ...item,
-            no: index + 1,
             points:
               gamificationList.find(
                 (i) => i.name === item.Lesson_Title && i.model === content
@@ -212,9 +244,8 @@ const ViewGamification = ({ content, activeTab }) => {
                 i.model === content
             )
           )
-          .map((item, index) => ({
+          .map((item) => ({
             ...item,
-            no: index + 1,
             points:
               gamificationList.find(
                 (i) =>
@@ -229,9 +260,8 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.name && i.model === content
             )
           )
-          .map((item, index) => ({
+          .map((item) => ({
             ...item,
-            no: index + 1,
             points:
               gamificationList.find(
                 (i) => i.name === item.name && i.model === content
@@ -244,9 +274,8 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.Name && i.model === content
             )
           )
-          .map((item, index) => ({
+          .map((item) => ({
             ...item,
-            no: index + 1,
             points:
               gamificationList.find(
                 (i) => i.name === item.Name && i.model === content
@@ -259,9 +288,8 @@ const ViewGamification = ({ content, activeTab }) => {
               (i) => i.name === item.meeting_title && i.model === content
             )
           )
-          .map((item, index) => ({
+          .map((item) => ({
             ...item,
-            no: index + 1,
             points:
               gamificationList.find(
                 (i) => i.name === item.meeting_title && i.model === content

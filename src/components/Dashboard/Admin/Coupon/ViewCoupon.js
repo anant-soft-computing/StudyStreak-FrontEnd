@@ -6,7 +6,13 @@ import Table from "../../../UI/Table";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no", resizable: false, width: 92 },
+  {
+    headerName: "No.",
+    field: "no",
+    resizable: false,
+    width: 92,
+    cellRenderer: (params) => params.rowIndex + 1,
+  },
   { headerName: "Name", field: "cupon_name", filter: true, width: 300 },
   {
     headerName: "Campaign Name",
@@ -48,7 +54,7 @@ const ViewCoupon = ({ activeTab }) => {
       setIsLoading(true);
       try {
         const response = await ajaxCall(
-          `/cuponlistview/`,
+          "/cuponlistview/",
           {
             headers: {
               Accept: "application/json",
@@ -60,11 +66,7 @@ const ViewCoupon = ({ activeTab }) => {
           8000
         );
         if (response?.status === 200) {
-          const couponsWithNumbers = response.data.map((coupon, index) => ({
-            ...coupon,
-            no: index + 1,
-          }));
-          setCouponList(couponsWithNumbers);
+          setCouponList(response.data);
         }
       } catch (error) {
         console.log("error", error);

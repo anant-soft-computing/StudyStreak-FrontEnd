@@ -39,11 +39,6 @@ const ViewPT = ({ activeTab }) => {
   const [examCategory, setExamCategory] = useState("IELTS");
   const authData = useSelector((state) => state.authStore);
 
-  const ptData = ptList.map((item, index) => ({
-    ...item,
-    no: index + 1,
-  }));
-
   const fetchData = useCallback(
     async (url, setDataCallback) => {
       setIsLoading(true);
@@ -94,6 +89,7 @@ const ViewPT = ({ activeTab }) => {
       field: "no",
       resizable: false,
       width: 200,
+      cellRenderer: (params) => params.rowIndex + 1,
     },
     {
       headerName: "Exam Name",
@@ -199,8 +195,8 @@ const ViewPT = ({ activeTab }) => {
       </div>
       {isLoading ? (
         <Loading />
-      ) : ptData.length > 0 ? (
-        <Table rowData={ptData} columnDefs={columns} />
+      ) : ptList.length > 0 ? (
+        <Table rowData={ptList} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">
           No Practice Test Available !!

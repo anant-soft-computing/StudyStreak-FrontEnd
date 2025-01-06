@@ -90,13 +90,14 @@ const ViewMT = ({ activeTab }) => {
     }
   }, [examCategory, examType]);
 
-  const miniTestData = mockTestData.map((item, index) => ({
-    ...item,
-    no: index + 1,
-  }));
-
   const columns = [
-    { headerName: "No.", field: "no", resizable: false, width: 68 },
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 68,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Exam Name",
       field: "exam_name",
@@ -171,8 +172,8 @@ const ViewMT = ({ activeTab }) => {
       </div>
       {isLoading ? (
         <Loading />
-      ) : miniTestData.length > 0 ? (
-        <Table rowData={miniTestData} columnDefs={columns} />
+      ) : mockTestData.length > 0 ? (
+        <Table rowData={mockTestData} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">No Mock Test Available !!</h5>
       )}

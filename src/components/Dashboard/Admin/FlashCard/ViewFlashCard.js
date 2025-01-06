@@ -5,7 +5,13 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no", resizable: false, width: 120 },
+  {
+    headerName: "No.",
+    field: "no",
+    resizable: false,
+    width: 120,
+    cellRenderer: (params) => params.rowIndex + 1,
+  },
   { headerName: "Name", field: "title", filter: true, width: 450 },
   { headerName: "Description", field: "description", filter: true, width: 500 },
   {
@@ -27,7 +33,7 @@ const ViewFlashCard = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/gamification/flashcard/`,
+            "/gamification/flashcard/",
             {
               headers: {
                 Accept: "application/json",
@@ -39,13 +45,7 @@ const ViewFlashCard = ({ activeTab }) => {
             8000
           );
           if (response?.status === 200) {
-            const flashCardWithNumbers = response?.data?.map(
-              (flashCard, index) => ({
-                ...flashCard,
-                no: index + 1,
-              })
-            );
-            setFlashCardList(flashCardWithNumbers);
+            setFlashCardList(response?.data);
           }
         } catch (error) {
           console.log("error", error);

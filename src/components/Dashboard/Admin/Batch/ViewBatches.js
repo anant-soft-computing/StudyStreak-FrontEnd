@@ -5,7 +5,13 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no", resizable: false, width: 92 },
+  {
+    headerName: "No.",
+    field: "no",
+    resizable: false,
+    width: 92,
+    cellRenderer: (params) => params.rowIndex + 1,
+  },
   { headerName: "Name", field: "batch_name", filter: true, width: 300 },
   {
     headerName: "Package",
@@ -45,7 +51,7 @@ const ViewBatches = ({ activeTab }) => {
       setIsLoading(true);
       try {
         const response = await ajaxCall(
-          `/batchview/`,
+          "/batchview/",
           {
             headers: {
               Accept: "application/json",
@@ -57,11 +63,7 @@ const ViewBatches = ({ activeTab }) => {
           8000
         );
         if (response?.status === 200) {
-          const batchesWithNumbers = response.data.map((batch, index) => ({
-            ...batch,
-            no: index + 1,
-          }));
-          setBatchList(batchesWithNumbers);
+          setBatchList(response.data);
         }
       } catch (error) {
         console.log("error", error);

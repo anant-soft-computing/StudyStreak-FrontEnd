@@ -5,20 +5,6 @@ import { useNavigate } from "react-router-dom";
 const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
   const navigate = useNavigate();
 
-  const writingAssessment = givenWritingTest.map((item, index) => {
-    return {
-      ...item,
-      no: index + 1,
-    };
-  });
-
-  const speakingAssessment = givenSpeakingTest.map((item, index) => {
-    return {
-      ...item,
-      no: index + 1,
-    };
-  });
-
   const viewAssessment = (params) => {
     const paperId = params.data.IELTS.id;
     return (
@@ -34,7 +20,13 @@ const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
   };
 
   const columns = [
-    { headerName: "No.", field: "no", resizable: false, width: 155 },
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 155,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Name",
       field: "Name",
@@ -82,11 +74,11 @@ const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
       <div className="dashboard__section__title">
         <h4>Assessment</h4>
       </div>
-      {(testType === "Writing" && writingAssessment.length > 0) ||
-      (testType === "Speaking" && speakingAssessment.length > 0) ? (
+      {(testType === "Writing" && givenWritingTest.length > 0) ||
+      (testType === "Speaking" && givenSpeakingTest.length > 0) ? (
         <Table
           rowData={
-            testType === "Writing" ? writingAssessment : speakingAssessment
+            testType === "Writing" ? givenWritingTest : givenSpeakingTest
           }
           columnDefs={columns}
         />

@@ -31,11 +31,7 @@ const AdditionalResources = ({ courseId }) => {
           8000
         );
         if (response.status === 200) {
-          const aRWithNumbers = response?.data?.data?.map((item, index) => ({
-            ...item,
-            no: index + 1,
-          }));
-          setAdditionalResource(aRWithNumbers);
+          setAdditionalResource(response?.data?.data);
         } else {
           console.log("error");
         }
@@ -46,8 +42,13 @@ const AdditionalResources = ({ courseId }) => {
   }, [courseId]);
 
   const columns = [
-    { headerName: "No.", field: "no", width: 60  },
-    { headerName: "Name", field: "info", filter: true, width: 250  },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 60,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
+    { headerName: "Name", field: "info", filter: true, width: 250 },
     {
       headerName: "Download",
       field: "course_files",

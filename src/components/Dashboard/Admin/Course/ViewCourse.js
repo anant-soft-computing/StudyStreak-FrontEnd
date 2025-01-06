@@ -5,7 +5,13 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no", resizable: false, width: 60 },
+  {
+    headerName: "No.",
+    field: "no",
+    resizable: false,
+    width: 60,
+    cellRenderer: (params) => params.rowIndex + 1,
+  },
   {
     headerName: "Course Title",
     field: "Course_Title",
@@ -34,7 +40,7 @@ const ViewCourse = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/courselistview/`,
+            "/courselistview/",
             {
               headers: {
                 Accept: "application/json",
@@ -46,11 +52,7 @@ const ViewCourse = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            const courseWithNumbers = response?.data?.map((course, index) => ({
-              ...course,
-              no: index + 1,
-            }));
-            setCouresList(courseWithNumbers);
+            setCouresList(response?.data);
           }
         } catch (error) {
           console.log("error", error);

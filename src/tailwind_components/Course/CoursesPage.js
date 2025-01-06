@@ -323,21 +323,25 @@ const CoursesPage = () => {
                   <div
                     key={index}
                     className="bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover 
-                  transition-all duration-300 border border-neutral-200 hover:border-primary-200"
+                  transition-all duration-300 border border-neutral-200 hover:border-primary-200 flex flex-col"
                   >
-                    <div className="p-6">
+                    <div className="p-6 flex-grow flex flex-col">
                       <h3
-                        className="text-lg font-bold text-neutral-800 mb-3 cursor-pointer"
+                        className="text-lg font-bold text-neutral-800 mb-3 cursor-pointer line-clamp-2"
                         onClick={() => navigate(`/blogs/${item?.slug}`)}
+                        style={{ minHeight: "48px" }}
                       >
                         {item?.title}
                       </h3>
-                      <p className="text-neutral-600 mb-6">
+                      <p
+                        className="text-neutral-600 mb-6 line-clamp-3"
+                        style={{ minHeight: "60px" }}
+                      >
                         {item?.excerpt.length > 100
                           ? `${item?.excerpt.substring(0, 100)}...`
                           : item?.excerpt}
                       </p>
-                      <div className="flex justify-between items-center text-sm text-neutral-500">
+                      <div className="flex justify-between items-center text-sm text-neutral-500 mt-auto">
                         <span>{item?.author}</span>
                         <span>{moment(item?.published_at).format("lll")}</span>
                       </div>

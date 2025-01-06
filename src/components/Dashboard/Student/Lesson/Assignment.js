@@ -2,20 +2,12 @@ import React from "react";
 import Table from "../../../UI/Table";
 
 const Assignment = ({ activeLesson }) => {
-  const assignments = activeLesson
-    ?.filter(
-      (exam) =>
-        exam.block_type === "Assignments" &&
-        exam.exam_type === "General" &&
-        exam.exam_category === "GENERAL"
-    )
-    .map((item, index) => {
-      return {
-        ...item,
-        no: index + 1,
-      };
-    });
-
+  const assignments = activeLesson?.filter(
+    (exam) =>
+      exam.block_type === "Assignments" &&
+      exam.exam_type === "General" &&
+      exam.exam_category === "GENERAL"
+  );
   const viewAssignment = (params) => {
     return (
       <button
@@ -33,7 +25,13 @@ const Assignment = ({ activeLesson }) => {
   };
 
   const columns = [
-    { headerName: "No", field: "no", resizable: false, width: 80 },
+    {
+      headerName: "No",
+      field: "no",
+      resizable: false,
+      width: 80,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Name", field: "exam_name", filter: true, width: 350 },
     {
       headerName: "No Of Questions",

@@ -5,7 +5,12 @@ import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
 const columns = [
-  { headerName: "No.", field: "no", width: 490 },
+  {
+    headerName: "No.",
+    field: "no",
+    width: 490,
+    cellRenderer: (params) => params.rowIndex + 1,
+  },
   { headerName: "Name", field: "title", filter: true, width: 490 },
   {
     headerName: "Points Required",
@@ -26,7 +31,7 @@ const ViewBadges = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/gamification/badges/`,
+            "/gamification/badges/",
             {
               headers: {
                 Accept: "application/json",
@@ -38,11 +43,7 @@ const ViewBadges = ({ activeTab }) => {
             8000
           );
           if (response?.status === 200) {
-            const badgesWithNumbers = response?.data?.map((batch, index) => ({
-              ...batch,
-              no: index + 1,
-            }));
-            setBadgeList(badgesWithNumbers);
+            setBadgeList(response?.data);
           }
         } catch (error) {
           console.log("error", error);

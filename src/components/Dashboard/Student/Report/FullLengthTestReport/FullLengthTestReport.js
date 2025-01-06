@@ -31,13 +31,7 @@ const FullLengthTestReport = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            const data = response.data[0].student_flt.map((item, index) => {
-              return {
-                ...item,
-                no: index + 1,
-              };
-            });
-            setFltData(data);
+            setFltData(response.data[0].student_flt);
             setTotalFLT(response.data[0].total_flt);
             setIsLoading(false);
           }
@@ -49,7 +43,13 @@ const FullLengthTestReport = ({ activeTab }) => {
   }, [activeTab]);
 
   const columns = [
-    { headerName: "No.", field: "no", resizable: false, width: 80 },
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 80,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Name",
       field: "name",

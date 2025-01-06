@@ -31,13 +31,7 @@ const PracticeTestReport = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            const data = response.data[0].student_pt.map((item, index) => {
-              return {
-                ...item,
-                no: index + 1,
-              };
-            });
-            setPtData(data);
+            setPtData(response.data[0].student_pt);
             setTotalPT(response.data[0].total_pt);
             setIsLoading(false);
           }
@@ -49,26 +43,34 @@ const PracticeTestReport = ({ activeTab }) => {
   }, [activeTab]);
 
   const columns = [
-    { headerName: "No", field: "no", resizable: false, width: 60 },
+    {
+      headerName: "No",
+      field: "no",
+      width: 100,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Name",
       field: "IELTS.Name",
       filter: true,
-      width: 300,
+      width: 400,
     },
     {
       headerName: "Exam Type",
       field: "IELTS.practice_test_type",
       filter: true,
+      width: 350,
     },
     {
       headerName: "Category",
       field: "IELTS.category",
       filter: true,
+      width: 300,
     },
     {
       headerName: "View",
       field: "IELTS.id",
+      width: 300,
       cellRenderer: (params) => {
         const paperId = params.data.IELTS.id;
         const testType = params.data.IELTS.practice_test_type;
@@ -113,9 +115,7 @@ const PracticeTestReport = ({ activeTab }) => {
       {isLoading ? (
         <Loading />
       ) : ptData?.length > 0 ? (
-        <div className="col-xl-8">
-          <Table rowData={ptData} columnDefs={columns} />
-        </div>
+        <Table rowData={ptData} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">
           Not Given Any Practice Test !!

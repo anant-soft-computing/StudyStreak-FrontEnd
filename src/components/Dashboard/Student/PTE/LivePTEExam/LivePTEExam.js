@@ -16,7 +16,7 @@ const LivePTEExam = () => {
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[4];
-  
+
   const [examData, setExamData] = useState([]);
   const [examBlock, setExamBlock] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
@@ -545,7 +545,7 @@ const LivePTEExam = () => {
 
       if (response.status === 201) {
         practiceTestSubmit();
-        navigate(`/PracticeTest/Answer/${examForm}/${examId}`);
+        navigate(`/PracticeTest/Answer/${examForm}/${fullPaper[0]?.IELTS?.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

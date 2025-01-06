@@ -31,13 +31,7 @@ const Material = ({ courseId }) => {
           8000
         );
         if (response.status === 200) {
-          const materialWithNumbers = response?.data?.data?.map(
-            (item, index) => ({
-              ...item,
-              no: index + 1,
-            })
-          );
-          setCourseMaterial(materialWithNumbers);
+          setCourseMaterial(response?.data?.data);
         } else {
           console.log("error");
         }
@@ -48,7 +42,12 @@ const Material = ({ courseId }) => {
   }, [courseId]);
 
   const columns = [
-    { headerName: "No.", field: "no", width: 60 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 60,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     { headerName: "Name", field: "material_name", filter: true, width: 250 },
     {
       headerName: "Download",

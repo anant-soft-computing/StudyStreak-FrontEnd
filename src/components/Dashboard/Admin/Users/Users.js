@@ -35,12 +35,8 @@ const Users = () => {
           8000
         );
         if (response?.status === 200) {
-          const userWithNumbers = response?.data?.map((user, index) => ({
-            ...user,
-            no: index + 1,
-          }));
-          setUserList(userWithNumbers);
-          setFilteredUserList(userWithNumbers);
+          setUserList(response?.data);
+          setFilteredUserList(response?.data);
         }
       } catch (error) {
         console.log("error", error);
@@ -70,6 +66,7 @@ const Users = () => {
       field: "no",
       resizable: false,
       width: 80,
+      cellRenderer: (params) => params.rowIndex + 1,
     },
     { headerName: "User Name", field: "username", filter: true, width: 250 },
     { headerName: "Email", field: "email", filter: true, width: 250 },

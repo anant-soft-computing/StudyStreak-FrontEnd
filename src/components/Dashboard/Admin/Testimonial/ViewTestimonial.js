@@ -22,6 +22,7 @@ const ViewTestimonial = ({ activeTab }) => {
       headerName: "No.",
       field: "no",
       width: 76,
+      cellRenderer: (params) => params.rowIndex + 1,
     },
     { headerName: "Name", field: "name", filter: true, width: 280 },
     {
@@ -49,7 +50,7 @@ const ViewTestimonial = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/testimonial/`,
+            "/testimonial/",
             {
               headers: {
                 Accept: "application/json",
@@ -61,13 +62,7 @@ const ViewTestimonial = ({ activeTab }) => {
             8000
           );
           if (response?.status === 200) {
-            const testimonialWithNumbers = response?.data?.map(
-              (item, index) => ({
-                ...item,
-                no: index + 1,
-              })
-            );
-            setTestimonialList(testimonialWithNumbers);
+            setTestimonialList(response?.data);
           }
         } catch (error) {
           console.log("error", error);

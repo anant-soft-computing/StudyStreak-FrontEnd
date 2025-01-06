@@ -82,13 +82,7 @@ const ViewLiveClasses = ({ activeTab }) => {
           8000
         );
         if (response?.status === 200) {
-          const liveClassWithNumbers = response.data.map(
-            (liveClass, index) => ({
-              ...liveClass,
-              no: index + 1,
-            })
-          );
-          setLiveClassList(liveClassWithNumbers);
+          setLiveClassList(response.data);
         }
       } catch (error) {
         console.log("error", error);
@@ -100,7 +94,13 @@ const ViewLiveClasses = ({ activeTab }) => {
   }, [activeTab, authData?.accessToken, liveClassType]);
 
   const columns = [
-    { headerName: "No.", field: "no", resizable: false, width: 60 },
+    {
+      headerName: "No.",
+      field: "no",
+      resizable: false,
+      width: 60,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Meeting Name",
       field: "meeting_title",

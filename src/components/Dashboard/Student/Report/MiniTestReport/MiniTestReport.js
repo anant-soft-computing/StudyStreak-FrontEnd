@@ -37,13 +37,7 @@ const MiniTestReport = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            const data = response.data[0].student_mock.map((item, index) => {
-              return {
-                ...item,
-                no: index + 1,
-              };
-            });
-            setMtData(data);
+            setMtData(response.data[0].student_mock);
             setTotalMT(response.data[0].total_mock);
             setIsLoading(false);
           }
@@ -74,15 +68,7 @@ const MiniTestReport = ({ activeTab }) => {
             8000
           );
           if (response.status === 200) {
-            const data = response.data[0].student_speakingblock.map(
-              (item, index) => {
-                return {
-                  ...item,
-                  no: index + 1,
-                };
-              }
-            );
-            setSpeakingData(data);
+            setSpeakingData(response.data[0].student_speakingblock);
             setTotalSpeaking(response.data[0].total_speaking);
             setIsLoading(false);
           }
@@ -95,8 +81,7 @@ const MiniTestReport = ({ activeTab }) => {
 
   const tableData = useMemo(
     () =>
-      [...mtData, ...speakingData].map((item, index) => ({
-        no: index + 1,
+      [...mtData, ...speakingData].map((item) => ({
         id: item.id,
         exam_name: item.exam_name || item.name,
         exam_type: item.exam_type,
@@ -106,26 +91,34 @@ const MiniTestReport = ({ activeTab }) => {
   );
 
   const columns = [
-    { headerName: "No", field: "no", resizable: false, width: 60 },
+    {
+      headerName: "No",
+      field: "no",
+      width: 100,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Name",
       field: "exam_name",
       filter: true,
-      width: 300,
+      width: 400,
     },
     {
       headerName: "Exam Type",
       field: "exam_type",
       filter: true,
+      width: 350,
     },
     {
       headerName: "Category",
       field: "exam_category",
       filter: true,
+      width: 350,
     },
     {
       headerName: "View",
       field: "id",
+      width: 250,
       cellRenderer: (params) => {
         const examId = params.data.id;
         const testType = params.data.exam_type;
@@ -170,9 +163,7 @@ const MiniTestReport = ({ activeTab }) => {
       {isLoading ? (
         <Loading />
       ) : tableData?.length > 0 ? (
-        <div className="col-xl-8">
-          <Table rowData={tableData} columnDefs={columns} />
-        </div>
+        <Table rowData={tableData} columnDefs={columns} />
       ) : (
         <h5 className="text-center text-danger">Not Given Any Min Test !!</h5>
       )}

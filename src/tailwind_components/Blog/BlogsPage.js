@@ -158,68 +158,64 @@ const BlogsPage = () => {
         {isLoading ? (
           <Loading />
         ) : currentBlogs?.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 md:grid-cols-4 gap-8">
-            {currentBlogs?.map((blog) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {currentBlogs.map((blog) => (
               <article
                 key={blog.id}
                 className="bg-white rounded-2xl overflow-hidden border border-neutral-200 
-                shadow-card hover:shadow-card-hover transition-all duration-300 
-                transform hover:-translate-y-1"
+        shadow-card hover:shadow-card-hover transition-transform duration-300 
+        transform hover:-translate-y-1 flex flex-col"
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={blog?.featured_image}
-                    alt={blog?.title}
+                    src={blog.featured_image}
+                    alt={blog.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute top-4 left-4">
-                    <span
-                      className="bg-primary-600 text-white px-3 py-1 rounded-full 
-                    text-sm font-medium"
-                    >
-                      {blog?.category}
-                    </span>
-                  </div>
+                  {blog.category && (
+                    <div className="absolute top-4 left-4">
+                      <span className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        {blog.category}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="p-6">
+                <div className="flex flex-col flex-1 p-6">
                   <h2
                     className="text-xl font-bold text-neutral-800 mb-3 line-clamp-2 
-                  hover:text-primary-600 transition-colors cursor-pointer"
-                    onClick={() => navigate(`/blogs/${blog?.slug}`)}
+            hover:text-primary-600 transition-colors cursor-pointer"
+                    onClick={() => navigate(`/blogs/${blog.slug}`)}
                   >
-                    {blog?.title}
+                    {blog.title}
                   </h2>
                   <p className="text-neutral-600 mb-4 line-clamp-3">
-                    {blog?.excerpt}
+                    {blog.excerpt}
                   </p>
 
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {blog?.tags?.map((tag) => (
-                      <span
-                        key={tag}
-                        className="bg-neutral-100 text-neutral-600 px-2 py-1 
-                        rounded-lg text-sm"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {blog.tags?.length > 0 && (
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {blog.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="bg-neutral-100 text-neutral-600 px-2 py-1 
+                  rounded-lg text-sm"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
-                  <div
-                    className="flex items-center justify-between pt-4 
-                  border-t border-neutral-100"
-                  >
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center text-neutral-500 text-sm">
-                        <User size={16} className="mr-1" />
-                        <span>{blog?.author}</span>
-                      </div>
+                  <div className="mt-auto pt-4 border-t border-neutral-100 flex items-center justify-between">
+                    <div className="flex items-center text-neutral-500 text-sm">
+                      <User size={16} className="mr-1" />
+                      <span>{blog.author}</span>
                     </div>
                     <button
                       className="text-primary-600 hover:text-primary-700 
-                    flex items-center gap-1 text-sm font-medium"
-                      onClick={() => navigate(`/blogs/${blog?.slug}`)}
+              flex items-center gap-1 text-sm font-medium"
+                      onClick={() => navigate(`/blogs/${blog.slug}`)}
                     >
                       Read More <ArrowRight size={16} />
                     </button>

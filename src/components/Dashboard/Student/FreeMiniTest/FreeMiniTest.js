@@ -7,7 +7,50 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 const FreeMiniTest = () => {
   const [testData, setTestData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [testType, setTestType] = useState("Reading");
+  const [examType, setExamType] = useState("Reading");
+  const [examCategoryy, setExamCategoryy] = useState("IELTS");
+  const [ieltsCategory, setIeltsCategory] = useState("Academic");
+
+  const examSubCategory = [
+    { name: "Academic", value: "Academic" },
+    { name: "General", value: "General" },
+    { name: "Foundation", value: "Foundation" },
+    { name: "Grammar", value: "Grammar" },
+  ];
+
+  const examCategory = [
+    { name: "IELTS", value: "IELTS" },
+    { name: "GENERAL", value: "GENERAL" },
+  ];
+
+  const examTypes =
+    examCategoryy === "IELTS"
+      ? [
+          { name: "Reading", value: "Reading" },
+          { name: "Writing", value: "Writing" },
+          { name: "Listening", value: "Listening" },
+          { name: "Speaking", value: "Speaking" },
+        ]
+      : [{ name: "General", value: "General" }];
+
+  const filterByIELTSCategory = (item, category) => {
+    switch (category) {
+      case "General":
+        return item.name.includes("General");
+      case "Foundation":
+        return item.name.includes("Foundation");
+      case "Grammar":
+        return item.name.includes("Grammar");
+      case "Academic":
+        return (
+          !item.name.includes("General") &&
+          !item.name.includes("Foundation") &&
+          !item.name.includes("Grammar")
+        );
+      default:
+        return false;
+    }
+  };
 
   const takeTest = (params) => {
     return (
@@ -16,12 +59,12 @@ const FreeMiniTest = () => {
         onClick={() =>
           window.open(
             `${
-              testType === "General"
+              examType === "General"
                 ? "/GENERAL-MiniLiveExam"
-                : testType !== "Speaking"
+                : examType !== "Speaking"
                 ? "/MiniLiveExam"
                 : "/Speaking-MiniLiveExam"
-            }/${testType}/${params.data.id}`,
+            }/${examType}/${params.data.id}`,
             "_blank"
           )
         }
@@ -32,10 +75,18 @@ const FreeMiniTest = () => {
   };
 
   useEffect(() => {
+    if (examCategoryy !== "GENERAL") {
+      setExamType("Reading");
+    } else {
+      setExamType("General");
+    }
+  }, [examCategoryy]);
+
+  useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        if (testType === "Speaking") {
+        if (examType === "Speaking") {
           const speakingBlocksResponse = await ajaxCall(
             "/speaking-block/",
             {
@@ -52,7 +103,12 @@ const FreeMiniTest = () => {
           );
           if (speakingBlocksResponse.status === 200) {
             const allSpeakingData = speakingBlocksResponse?.data
-              ?.filter((item) => item.block_threshold === 0)
+              ?.filter(
+                (item) =>
+                  item.block_threshold === 0 &&
+                  item.exam_category === examCategoryy &&
+                  filterByIELTSCategory({ name: item.name }, ieltsCategory)
+              )
               ?.map((item) => ({
                 ...item,
                 exam_name: item.name,
@@ -62,7 +118,9 @@ const FreeMiniTest = () => {
           }
         } else {
           const examBlocksResponse = await ajaxCall(
-            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${testType}`,
+            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${examType}&exam_category=${examCategoryy}&sub_category=${
+              examCategoryy === "IELTS" ? ieltsCategory : ""
+            }`,
             {
               headers: {
                 Accept: "application/json",
@@ -76,7 +134,7 @@ const FreeMiniTest = () => {
             8000
           );
           if (examBlocksResponse.status === 200) {
-            if (testType === "General") {
+            if (examType === "General") {
               const mockTestData = examBlocksResponse.data.filter(
                 ({ exam_name, block_type }) =>
                   block_type === "Assignments" &&
@@ -98,7 +156,7 @@ const FreeMiniTest = () => {
       }
     };
     fetchData();
-  }, [testType]);
+  }, [examCategoryy, examType, ieltsCategory]);
 
   const columns = [
     {
@@ -138,27 +196,59 @@ const FreeMiniTest = () => {
                       <div className="d-flex gap-2 flex-column flex-sm-row align-items-start align-items-md-center">
                         <div className="dashboard__form__wraper">
                           <div className="dashboard__form__input">
-                            <label>Select Exam</label>
+                            <label>Exam Category</label>
                             <select
                               className="form-select"
                               aria-label="Default select example"
-                              onChange={(e) => setTestType(e.target.value)}
-                              value={testType}
+                              value={examCategoryy}
+                              onChange={(e) => setExamCategoryy(e.target.value)}
                             >
-                              {[
-                                "Reading",
-                                "Writing",
-                                "Listening",
-                                "Speaking",
-                                "General",
-                              ].map((item) => (
-                                <option key={item} value={item}>
-                                  {item}
+                              {examCategory.map((item) => (
+                                <option key={item} value={item.value}>
+                                  {item.name}
                                 </option>
                               ))}
                             </select>
                           </div>
                         </div>
+                        <div className="dashboard__form__wraper">
+                          <div className="dashboard__form__input">
+                            <label>Exam Type</label>
+                            <select
+                              className="form-select"
+                              aria-label="Default select example"
+                              value={examType}
+                              onChange={(e) => setExamType(e.target.value)}
+                            >
+                              {examTypes.map((item) => (
+                                <option key={item} value={item.value}>
+                                  {item.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        {examCategoryy === "IELTS" && (
+                          <div className="dashboard__form__wraper">
+                            <div className="dashboard__form__input">
+                              <label>Exam Sub Category</label>
+                              <select
+                                className="form-select"
+                                aria-label="Default select example"
+                                value={ieltsCategory}
+                                onChange={(e) =>
+                                  setIeltsCategory(e.target.value)
+                                }
+                              >
+                                {examSubCategory.map((item) => (
+                                  <option key={item} value={item.value}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="row">
@@ -168,7 +258,9 @@ const FreeMiniTest = () => {
                         ) : testData.length > 0 ? (
                           <Table rowData={testData} columnDefs={columns} />
                         ) : (
-                          <h5 className="text-center text-danger">{`No ${testType} Tests Available !!`}</h5>
+                          <h5 className="text-center text-danger">
+                            No Free Mini Tests Available !!
+                          </h5>
                         )}
                       </div>
                     </div>

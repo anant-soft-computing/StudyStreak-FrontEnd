@@ -29,7 +29,12 @@ const ViewNotice = ({ activeTab }) => {
   };
 
   const columns = [
-    { headerName: "No.", field: "no", width: 60 },
+    {
+      headerName: "No.",
+      field: "no",
+      width: 60,
+      cellRenderer: (params) => params.rowIndex + 1,
+    },
     {
       headerName: "Notice",
       field: "notice",
@@ -72,7 +77,7 @@ const ViewNotice = ({ activeTab }) => {
       (async () => {
         try {
           const response = await ajaxCall(
-            `/noticeboard-list/`,
+            "/noticeboard-list/",
             {
               headers: {
                 Accept: "application/json",
@@ -85,7 +90,6 @@ const ViewNotice = ({ activeTab }) => {
           );
           if (response.status === 200) {
             const noticeData = response.data.map((item, index) => ({
-              no: index + 1,
               notice: item.notice,
               expiry_date: item.expiry_date,
               batch:

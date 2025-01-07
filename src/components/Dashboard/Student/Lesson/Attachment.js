@@ -1,46 +1,43 @@
 import React from "react";
-import Table from "../../../UI/Table";
 
 const Attachment = ({ activeLesson }) => {
-  const doDownload = (params) => {
-    return params.value !== null ? (
-      <button className="take-test" onClick={() => window.open(params.value)}>
-        <i className="icofont-download" /> Download
-      </button>
-    ) : (
-      "-"
-    );
-  };
-
-  const columns = [
-    {
-      headerName: "No",
-      field: "no",
-      resizable: false,
-      width: 80,
-      cellRenderer: (params) => params.rowIndex + 1,
-    },
-    {
-      headerName: "Lesson Name",
-      field: "lesson.Lesson_Title",
-      filter: true,
-      width: 350,
-    },
-    {
-      headerName: "Description",
-      field: "attachment_description",
-      filter: true,
-      width: 255,
-    },
-    {
-      headerName: "Download",
-      field: "attachment",
-      cellRenderer: doDownload,
-    },
-  ];
-
   return activeLesson && activeLesson.length > 0 ? (
-    <Table rowData={activeLesson} columnDefs={columns} />
+    <div className="row">
+      <div className="col-xl-12">
+        <div className="dashboard__table table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Lesson Name</th>
+                <th>Description</th>
+                <th>Download</th>
+              </tr>
+            </thead>
+            <tbody>
+              {activeLesson?.map((item, index) => {
+                const rowClass = index % 2 === 0 ? "" : "dashboard__table__row";
+                return (
+                  <tr key={index} className={rowClass}>
+                    <td>{index + 1}.</td>
+                    <td>{item?.lesson?.Lesson_Title}</td>
+                    <td>{item?.attachment_description || "-"}</td>
+                    <td>
+                      <button
+                        className="take-test"
+                        onClick={() => window.open(item?.attachment)}
+                      >
+                        <i className="icofont-download" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   ) : (
     <h5 className="text-center text-danger">Attachment Not Found !!</h5>
   );

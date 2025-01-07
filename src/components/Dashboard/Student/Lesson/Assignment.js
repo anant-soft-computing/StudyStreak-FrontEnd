@@ -1,5 +1,4 @@
 import React from "react";
-import Table from "../../../UI/Table";
 
 const Assignment = ({ activeLesson }) => {
   const assignments = activeLesson?.filter(
@@ -8,48 +7,49 @@ const Assignment = ({ activeLesson }) => {
       exam.exam_type === "General" &&
       exam.exam_category === "GENERAL"
   );
-  const viewAssignment = (params) => {
-    return (
-      <button
-        className="take-test"
-        onClick={() =>
-          window.open(
-            `/Assignment/${params.data.exam_type}/${params.data.id}`,
-            "_blank"
-          )
-        }
-      >
-        View
-      </button>
-    );
-  };
-
-  const columns = [
-    {
-      headerName: "No",
-      field: "no",
-      resizable: false,
-      width: 80,
-      cellRenderer: (params) => params.rowIndex + 1,
-    },
-    { headerName: "Name", field: "exam_name", filter: true, width: 350 },
-    {
-      headerName: "No Of Questions",
-      field: "no_of_questions",
-      filter: true,
-      width: 220,
-    },
-    {
-      headerName: "View Assignment",
-      field: "button",
-      cellRenderer: viewAssignment,
-      filter: true,
-      width: 220,
-    },
-  ];
 
   return assignments && assignments.length > 0 ? (
-    <Table rowData={assignments} columnDefs={columns} />
+    <div className="row">
+      <div className="col-xl-12">
+        <div className="dashboard__table table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>No Of Questions</th>
+                <th>View Assignment</th>
+              </tr>
+            </thead>
+            <tbody>
+              {assignments?.map((item, index) => {
+                const rowClass = index % 2 === 0 ? "" : "dashboard__table__row";
+                return (
+                  <tr key={index} className={rowClass}>
+                    <td>{index + 1}.</td>
+                    <td>{item?.exam_name}</td>
+                    <td>{item?.no_of_questions}</td>
+                    <td>
+                      <button
+                        className="take-test"
+                        onClick={() =>
+                          window.open(
+                            `/Assignment/${item.exam_type}/${item.id}`,
+                            "_blank"
+                          )
+                        }
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   ) : (
     <h5 className="text-center text-danger">Assignment Not Found !!</h5>
   );

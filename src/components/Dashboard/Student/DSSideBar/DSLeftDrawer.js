@@ -16,24 +16,26 @@ import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import NavBar from "../../../NavBar/NavBar";
 import NoticeBoard from "../Dashboard/NoticeBoard/NoticeBoard";
-
-import mic from "../../../../img/icon/mic.svg";
-import logOut from "../../../../img/icon/logout.svg";
-import report from "../../../../img/icon/coupon.svg";
-import profile from "../../../../img/icon/profile.svg";
-import resources from "../../../../img/icon/support.svg";
-import settings from "../../../../img/icon/settings.svg";
-import myCourse from "../../../../img/icon/myCourse.svg";
-import liveClass from "../../../../img/icon/liveClass.svg";
-import flashcard from "../../../../img/icon/flashCard.svg";
-import dashBoard from "../../../../img/icon/dashboard.svg";
-import paperTest from "../../../../img/icon/paperTest.svg";
-import headPhone from "../../../../img/icon/headphones.svg";
-import recordedClass from "../../../../img/icon/webinar.svg";
-import assignment from "../../../../img/icon/assignment.svg";
-import fullLengthTest from "../../../../img/icon/notebook.svg";
-import practiceTest from "../../../../img/icon/practiceTest.svg";
-import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
+import {
+  BookCheck,
+  BookCopy,
+  BookHeadphones,
+  CassetteTape,
+  ClipboardMinus,
+  LayoutPanelLeft,
+  LogOut,
+  Mic,
+  NotepadTextDashed,
+  PcCase,
+  Pencil,
+  Proportions,
+  Scroll,
+  Settings,
+  SquarePen,
+  UserPen,
+  Videotape,
+  WalletCards,
+} from "lucide-react";
 
 const drawerWidth = 280;
 
@@ -130,34 +132,34 @@ const DSLeftDrawer = () => {
       ? [
           {
             name: "Dashboard",
-            icon: <img src={dashBoard} alt="Dashboard" />,
+            icon: <LayoutPanelLeft />,
             link: "/studentDashboard",
           },
           {
             name: "My Profile",
-            icon: <img src={profile} alt="Profile" />,
+            icon: <UserPen />,
             link: "/studentProfile",
           },
           {
             name: "My Course",
-            icon: <img src={myCourse} alt="My Course" />,
+            icon: <BookCopy />,
             link: "/studentMyCourse",
           },
           {
             name: "Paper Test",
-            icon: <img src={paperTest} alt="Paper Test" />,
+            icon: <Scroll />,
             link: "/paperTest",
             state: { packageCount: count?.count },
           },
           {
             name: "Mini Test",
-            icon: <img src={assignment} alt="Mini Test" />,
+            icon: <BookCheck />,
             link: "/mockTest",
             state: { count: count?.count },
           },
           {
             name: "Practice Test",
-            icon: <img src={practiceTest} alt="Practice Test" />,
+            icon: <Pencil />,
             link: "/practiceTest",
             state: {
               count: count?.practice_test_count,
@@ -166,7 +168,7 @@ const DSLeftDrawer = () => {
           },
           {
             name: "Full Length Test",
-            icon: <img src={fullLengthTest} alt="Full Length Test" />,
+            icon: <PcCase />,
             link: "/fullLengthTest",
             state: {
               count: count?.full_length_test_count,
@@ -175,7 +177,7 @@ const DSLeftDrawer = () => {
           },
           {
             name: "Diagnostic Test",
-            icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
+            icon: <NotepadTextDashed />,
             link: "/diagnosticTest",
             state: {
               packageCount: count?.count,
@@ -183,50 +185,41 @@ const DSLeftDrawer = () => {
           },
           {
             name: "Live Classes",
-            icon: <img src={liveClass} alt="Live Classes" />,
+            icon: <CassetteTape />,
             link: "/studentLiveClasses",
             state: { packageCount: count?.count },
           },
           {
             name: "Recorded Classes",
-            icon: (
-              <img
-                src={recordedClass}
-                alt="Recorded Classes"
-                height={18}
-                width={18}
-              />
-            ),
+            icon: <Videotape />,
             link: "/recordedClasses",
             state: { packageCount: count?.count },
           },
           {
             name: "Flash Card",
-            icon: <img src={flashcard} alt="Flash Card" />,
+            icon: <WalletCards />,
             link: "/flashCard",
             state: { packageCount: count?.count },
           },
           {
             name: "Resources",
-            icon: (
-              <img src={resources} alt="Resources" height={20} width={20} />
-            ),
+            icon: <Proportions />,
             link: "/resources",
             state: { packageCount: count?.count },
           },
           {
             name: "Reports",
-            icon: <img src={report} alt="Reports" />,
+            icon: <ClipboardMinus />,
             link: "/reports",
           },
           {
             name: "Settings",
-            icon: <img src={settings} alt="Settings" />,
+            icon: <Settings />,
             link: "/studentSettings",
           },
           {
             name: "Logout",
-            icon: <img src={logOut} alt="Logout" />,
+            icon: <LogOut />,
             link: "/login",
           },
         ]
@@ -234,81 +227,81 @@ const DSLeftDrawer = () => {
       ? [
           {
             name: "Dashboard",
-            icon: <img src={dashBoard} alt="Dashboard" />,
+            icon: <LayoutPanelLeft />,
             link: "/studentDashboard",
           },
           {
             name: "My Profile",
-            icon: <img src={profile} alt="Profile" />,
+            icon: <UserPen />,
             link: "/studentProfile",
           },
           {
             name: "My Course",
-            icon: <img src={myCourse} alt="My Course" />,
+            icon: <BookCopy />,
             link: "/studentMyCourse",
           },
           {
             name: "PTE Speaking",
-            icon: <img src={mic} alt="PTE Speaking" />,
+            icon: <Mic />,
             link: "/PTE/Speaking",
           },
           {
             name: "PTE Writing",
-            icon: <img src={practiceTest} alt="PTE Writing" />,
+            icon: <SquarePen />,
             link: "/PTE/Writing",
           },
           {
             name: "PTE Reading",
-            icon: <img src={fullLengthTest} alt="PTE Reading" />,
+            icon: <PcCase />,
             link: "/PTE/Reading",
           },
           {
             name: "PTE Listening",
-            icon: <img src={headPhone} alt="PTE Listening" />,
+            icon: <BookHeadphones />,
             link: "/PTE/Listening",
           },
           {
             name: "Settings",
-            icon: <img src={settings} alt="Settings" />,
+            icon: <Settings />,
             link: "/studentSettings",
           },
           {
             name: "Logout",
-            icon: <img src={logOut} alt="Logout" />,
+            icon: <LogOut />,
             link: "/login",
           },
         ]
       : [
           {
             name: "Dashboard",
-            icon: <img src={dashBoard} alt="Dashboard" />,
+            icon: <LayoutPanelLeft />,
             link: "/studentDashboard",
           },
           {
             name: "My Profile",
-            icon: <img src={profile} alt="Profile" />,
+            icon: <UserPen />,
             link: "/studentProfile",
           },
           {
             name: "My Course",
-            icon: <img src={myCourse} alt="My Course" />,
+            icon: <BookCopy />,
             link: "/studentMyCourse",
           },
           {
             name: "Paper Test",
-            icon: <img src={paperTest} alt="Paper Test" />,
+            icon: <Scroll />,
             link: "/paperTest",
             state: { packageCount: count?.count },
           },
           {
             name: "Mini Test",
-            icon: <img src={assignment} alt="Mini Test" />,
+            icon: <BookCheck />,
             link: "/mockTest",
             state: { count: count?.count },
           },
           {
             name: "Practice Test",
-            icon: <img src={practiceTest} alt="Practice Test" />,
+            icon: <Pencil />,
             link: "/practiceTest",
             state: {
               count: count?.practice_test_count,
@@ -317,7 +310,7 @@ const DSLeftDrawer = () => {
           },
           {
             name: "Diagnostic Test",
-            icon: <img src={diagnosticTest} alt="Diagnostic Test" />,
+            icon: <NotepadTextDashed />,
             link: "/diagnosticTest",
             state: {
               packageCount: count?.count,
@@ -325,46 +318,37 @@ const DSLeftDrawer = () => {
           },
           {
             name: "Live Classes",
-            icon: <img src={liveClass} alt="Live Classes" />,
+            icon: <CassetteTape />,
             link: "/studentLiveClasses",
           },
           {
             name: "Recorded Classes",
-            icon: (
-              <img
-                src={recordedClass}
-                alt="Recorded Classes"
-                height={18}
-                width={18}
-              />
-            ),
+            icon: <ClipboardMinus />,
             link: "/recordedClasses",
           },
           {
             name: "Flash Card",
-            icon: <img src={flashcard} alt="Flash Card" />,
+            icon: <WalletCards />,
             link: "/flashCard",
           },
           {
             name: "Resources",
-            icon: (
-              <img src={resources} alt="Resources" height={20} width={20} />
-            ),
+            icon: <Proportions />,
             link: "/resources",
           },
           {
             name: "Reports",
-            icon: <img src={report} alt="Reports" />,
+            icon: <ClipboardMinus />,
             link: "/reports",
           },
           {
             name: "Settings",
-            icon: <img src={settings} alt="Settings" />,
+            icon: <Settings />,
             link: "/studentSettings",
           },
           {
             name: "Logout",
-            icon: <img src={logOut} alt="Logout" />,
+            icon: <LogOut />,
             link: "/login",
           },
         ];
@@ -521,6 +505,7 @@ const DSLeftDrawer = () => {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
+                      style={{ height: 20, width: 20, color: "black" }}
                     >
                       {item.icon}
                     </ListItemIcon>

@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { CassetteTape, LogOut } from "lucide-react";
 import { useCheckAuth } from "../../../../hooks/useCheckAuth";
-
-import liveClass from "../../../../img/icon/liveClass.svg";
-import logOut from "../../../../img/icon/logout.svg";
 
 const menuList = [
   {
     name: "Live Class",
-    icon: <img src={liveClass} alt="Live Class" />,
+    icon: <CassetteTape />,
     link: "/tutor-liveClass",
   },
   {
     name: "Logout",
-    icon: <img src={logOut} alt="Logout" />,
+    icon: <LogOut />,
     link: "/login",
   },
 ];

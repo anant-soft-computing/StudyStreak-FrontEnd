@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
+  Star,
+  Globe,
   Users,
+  Clock,
   Trophy,
   Target,
-  CheckCircle,
-  Globe,
-  Clock,
-  BarChart,
   BookOpen,
   ThumbsUp,
+  BarChart,
+  CheckCircle,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const statistics = [
   { icon: Users, number: "15,000+", label: "Students Trained" },
@@ -57,16 +59,6 @@ const keyFeatures = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Sarah Johnson",
-    score: "8.5",
-    university: "University of Toronto",
-    quote:
-      "StudyStreak's methodology and expert guidance helped me achieve my dream score in just 2 months!",
-  },
-];
-
 const guarantees = [
   "Band Score Improvement",
   "Money Back Guarantee",
@@ -79,13 +71,54 @@ const guarantees = [
 const WhyChooseUsPage = () => {
   const navigate = useNavigate();
 
-  const handleDemoClick = () => {
-    navigate("/talk-to-us");
-  };
+  const scrollRef = useRef(null);
+  const [testimonials, setTestimonials] = useState([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
-  const handleCourseClick = () => {
-    navigate("/courses");
-  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/testimonial/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setTestimonials(response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    const scrollWidth = scrollContainer.scrollWidth / 2;
+
+    const animateScroll = () => {
+      setScrollPosition((prevPosition) => {
+        const newPosition = prevPosition + 1;
+        if (newPosition >= scrollWidth) {
+          return 0;
+        }
+        return newPosition;
+      });
+    };
+
+    const scrollInterval = setInterval(animateScroll, 50);
+    return () => clearInterval(scrollInterval);
+  }, [testimonials]);
 
   return (
     <div className="bg-neutral-50 min-h-screen">
@@ -109,14 +142,14 @@ const WhyChooseUsPage = () => {
             </p>
             <div className="flex justify-center gap-4 animate-fade-in-up delay-200">
               <button
-                onClick={handleDemoClick}
+                onClick={() => navigate("/talk-to-us")}
                 className="bg-white text-primary-600 px-8 py-3 rounded-xl 
                 hover:bg-primary-50 transition-all duration-300 font-medium"
               >
                 Book Free Demo
               </button>
               <button
-                onClick={handleCourseClick}
+                onClick={() => navigate("/courses")}
                 className="bg-primary-700 text-white px-8 py-3 rounded-xl 
                 hover:bg-primary-800 transition-all duration-300 font-medium 
                 border border-primary-500"
@@ -127,7 +160,6 @@ const WhyChooseUsPage = () => {
           </div>
         </div>
       </section>
-
       <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -152,7 +184,6 @@ const WhyChooseUsPage = () => {
           </div>
         </div>
       </section>
-
       <section className="py-12 bg-neutral-100">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-neutral-800 mb-12">
@@ -178,7 +209,6 @@ const WhyChooseUsPage = () => {
           </div>
         </div>
       </section>
-
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-neutral-800 mb-12">
@@ -199,38 +229,68 @@ const WhyChooseUsPage = () => {
           </div>
         </div>
       </section>
-
       <section className="py-16 bg-neutral-100">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-neutral-800 mb-12">
             Student Success Stories
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl p-6 shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <div className="flex items-start gap-4 mb-4">
-                  <div>
-                    <h4 className="font-semibold text-neutral-800">
-                      {testimonial.name}
-                    </h4>
-                    <p className="text-primary-600 text-sm">
-                      Band Score: {testimonial.score}
+          <div className="relative overflow-hidden rounded-2xl">
+            <div
+              ref={scrollRef}
+              className="flex transition-transform duration-1000 ease-linear"
+              style={{ transform: `translateX(-${scrollPosition}px)` }}
+            >
+              {[...testimonials, ...testimonials].map((testimonial, index) => (
+                <div key={index} className="w-[300px] flex-shrink-0 mx-3">
+                  <div
+                    className="bg-white p-6 rounded-xl shadow-card hover:shadow-card-hover 
+              transition-all duration-300 h-full flex flex-col"
+                  >
+                    <div className="flex items-center mb-4">
+                      {testimonial?.image ? (
+                        <div
+                          className="w-12 h-12 rounded-full bg-primary-100 flex items-center 
+                  justify-center text-primary-600 font-bold text-lg mr-4"
+                        >
+                          <img
+                            className="w-full h-full object-cover rounded-full"
+                            src={testimonial?.image}
+                            alt={testimonial.name}
+                          />
+                        </div>
+                      ) : (
+                        <div
+                          className="w-12 h-12 rounded-full bg-primary-100 flex items-center 
+                  justify-center text-primary-600 font-bold text-lg mr-4"
+                        >
+                          {testimonial.name.charAt(0)}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="font-semibold text-lg text-neutral-800">
+                          {testimonial.name}
+                        </h4>
+                      </div>
+                    </div>
+                    <p className="text-neutral-600 text-sm flex-grow">
+                      {testimonial.description}
                     </p>
-                    <p className="text-neutral-500 text-sm">
-                      {testimonial.university}
-                    </p>
+                    <div className="flex mt-4 justify-end">
+                      {[1, 2, 3, 4, 5].map((_, i) => (
+                        <Star
+                          key={i}
+                          size={16}
+                          className="text-warning-400 fill-current"
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <p className="text-neutral-600 italic">"{testimonial.quote}"</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
-
       <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-800">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-white mb-6">

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { Menu } from "lucide-react";
 import moment from "moment";
-import logo from "../../img/logo/Logo.png";
-import menuIcon from "../../img/icon/icon-menu.svg";
-import { useCheckAuth } from "../../hooks/useCheckAuth";
 import { IconButton } from "@mui/material";
+import logo from "../../img/logo/Logo.png";
+import { useCheckAuth } from "../../hooks/useCheckAuth";
 
 const encrypt = (text, key) => {
   let result = "";
@@ -126,7 +126,7 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
                       }}
                       disableRipple
                     >
-                      <img src={menuIcon} alt="menu" width="18px" />
+                      <Menu size={25} color="black" />
                     </IconButton>
                   </div>
                 )}

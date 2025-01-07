@@ -1,14 +1,14 @@
 import { useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import ReactPlayer from "react-player";
+import { NotebookText } from "lucide-react";
+import Quiz from "./Quiz";
+import Tab from "../../../UI/Tab";
 import Assignment from "./Assignment";
 import Attachment from "./Attachment";
-import Quiz from "./Quiz";
-import ReactPlayer from "react-player";
-import ajaxCall from "../../../../helpers/ajaxCall";
-import noteBook from "../../../../img/icon/notebook.svg";
 import FloatingNote from "./FloatingNote";
-import Tab from "../../../UI/Tab";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
 const tabs = [{ name: "Attachment" }, { name: "Assignment" }, { name: "Quiz" }];
 
@@ -165,9 +165,7 @@ const LessonContent = ({ activeLesson, setLessonStatus }) => {
               onStart={() => videoRef.current.seekTo(startTime, "seconds")}
             />
             <div className="floating-notes-container-icon">
-              <img
-                src={noteBook}
-                alt="notes"
+              <NotebookText
                 onClick={() => setIsFloatingNotes(!isFloatingNotes)}
               />
             </div>

@@ -14,19 +14,17 @@ import {
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import NavBar from "../../../NavBar/NavBar";
-
-import liveClass from "../../../../img/icon/liveClass.svg";
-import logOut from "../../../../img/icon/logout.svg";
+import { CassetteTape, LogOut } from "lucide-react";
 
 const menuList = [
   {
     name: "Live Class",
-    icon: <img src={liveClass} alt="Live Class" />,
+    icon: <CassetteTape />,
     link: "/tutor-liveClass",
   },
   {
     name: "Logout",
-    icon: <img src={logOut} alt="Logout" />,
+    icon: <LogOut />,
     link: "/login",
   },
 ];
@@ -175,6 +173,7 @@ const DTLeftDrawer = () => {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
+                      style={{ height: 20, width: 20, color: "black" }}
                     >
                       {item.icon}
                     </ListItemIcon>

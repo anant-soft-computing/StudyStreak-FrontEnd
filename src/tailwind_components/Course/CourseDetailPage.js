@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   Clock,
   Calendar,
@@ -19,7 +18,6 @@ import PackageDetails from "./PackageDetails";
 import CourseBanner from "./CourseBanner";
 
 const CourseDetailPage = () => {
-  const navigate = useNavigate();
   const { courseId } = useParams();
   const { checkAuth } = useCheckAuth();
 
@@ -58,11 +56,6 @@ const CourseDetailPage = () => {
 
   useEffect(() => {
     (async () => {
-      if (!courseId || isNaN(courseId)) {
-        toast.error("Please select a valid course");
-        navigate("/");
-        return;
-      }
       try {
         const response = await ajaxCall(
           `/courseretupddel/${courseId}/`,
@@ -103,15 +96,10 @@ const CourseDetailPage = () => {
         console.log("error", error);
       }
     })();
-  }, [courseId, navigate]);
+  }, [courseId]);
 
   useEffect(() => {
     (async () => {
-      if (!courseId || isNaN(courseId)) {
-        toast.error("Please select a valid course");
-        navigate("/");
-        return;
-      }
       try {
         const response = await ajaxCall(
           `/course/${courseId}/packages/`,
@@ -133,7 +121,7 @@ const CourseDetailPage = () => {
         console.log("error", error);
       }
     })();
-  }, [courseId, navigate]);
+  }, [courseId]);
 
   useEffect(() => {
     (async () => {
@@ -288,10 +276,8 @@ const CourseDetailPage = () => {
               </div>
             </div>
           </div>
-
           {coursePackages?.packages?.length >= 1 ? (
             <PackageDetails
-              courseId={courseId}
               packages={coursePackages?.packages}
               courseName={courseDetail?.Course_Title}
               courseType={courseDetail?.course_delivery}
@@ -303,7 +289,6 @@ const CourseDetailPage = () => {
               </h5>
             </div>
           )}
-
           <div className="mb-12">
             <h2 className="text-2xl font-bold text-neutral-800 mb-8">
               Course Curriculum

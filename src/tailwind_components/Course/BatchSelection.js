@@ -8,15 +8,14 @@ const BatchSelection = ({
   open,
   onClose,
   packageId,
-  courseId,
   courseType,
   courseName,
   packageName,
   packagePrice,
 }) => {
-  const [batches, setBatches] = useState([]);
-  const [selectedBatchIds, setSelectedBatchIds] = useState([]);
   const navigate = useNavigate();
+  const [batches, setBatches] = useState([]);
+  const [selectedBatch, setSelectedBatch] = useState(0);
 
   const getCourseBatches = useCallback(async () => {
     try {
@@ -48,23 +47,14 @@ const BatchSelection = ({
   const handleEnrollButton = () => {
     navigate("/checkout", {
       state: {
-        courseId,
         packageId,
-        selectedBatchIds,
+        courseType,
         courseName,
         packageName,
         packagePrice,
-        courseType,
+        selectedBatch,
       },
     });
-  };
-
-  const handleBatchSelect = (batchId) => {
-    setSelectedBatchIds((prev) =>
-      prev?.includes(batchId)
-        ? prev?.filter((id) => id !== batchId)
-        : [...prev, batchId]
-    );
   };
 
   return (
@@ -82,7 +72,6 @@ const BatchSelection = ({
               <X className="w-6 h-6 text-gray-600" />
             </button>
           </div>
-
           <div className="mt-4">
             {batches.length > 0 ? (
               <div className="space-y-4">
@@ -92,9 +81,10 @@ const BatchSelection = ({
                     className="flex items-center p-4 border rounded-lg"
                   >
                     <input
-                      type="checkbox"
-                      checked={selectedBatchIds.includes(batch.id)}
-                      onChange={() => handleBatchSelect(batch.id)}
+                      type="radio"
+                      name="batch"
+                      checked={selectedBatch === batch.id}
+                      onChange={() => setSelectedBatch(batch.id)}
                       className="w-5 h-5 text-primary-600 rounded border-gray-300"
                     />
                     <div className="ml-4">
@@ -133,7 +123,6 @@ const BatchSelection = ({
               </p>
             )}
           </div>
-
           <div className="mt-6 flex justify-end space-x-3 border-t pt-4">
             <button
               onClick={onClose}
@@ -143,9 +132,9 @@ const BatchSelection = ({
             </button>
             <button
               onClick={handleEnrollButton}
-              disabled={selectedBatchIds.length === 0}
+              disabled={selectedBatch === 0}
               className={`px-6 py-2 rounded-lg font-medium transition-colors duration-300 ${
-                selectedBatchIds.length === 0
+                selectedBatch === 0
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-primary-600 hover:bg-primary-700 text-white"
               }`}

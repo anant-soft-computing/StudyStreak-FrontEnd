@@ -14,27 +14,28 @@ import {
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import NavBar from "../../../NavBar/NavBar";
-
-import dashBoard from "../../../../img/icon/dashboard.svg";
-import users from "../../../../img/icon/users.svg";
-import student from "../../../../img/icon/profile.svg";
-import report from "../../../../img/icon/coupon.svg";
-import packageIcon from "../../../../img/icon/package.svg";
-import course from "../../../../img/icon/course.svg";
-import exam from "../../../../img/icon/assignment.svg";
-import liveClass from "../../../../img/icon/liveClass.svg";
-import batch from "../../../../img/icon/batch.svg";
-import badges from "../../../../img/icon/badges.svg";
-import gamification from "../../../../img/icon/gamification.svg";
-import flashCard from "../../../../img/icon/flashCard.svg";
-import paperTest from "../../../../img/icon/practiceTest.svg";
-import resourceLink from "../../../../img/icon/support.svg";
-import testimonial from "../../../../img/icon/notebook.svg";
-import coupon from "../../../../img/icon/coupon.svg";
-import settings from "../../../../img/icon/settings.svg";
-import notice from "../../../../img/icon/notice.svg";
-import lesson from "../../../../img/icon/lesson.svg";
-import logOut from "../../../../img/icon/logout.svg";
+import {
+  Award,
+  Bell,
+  BookCopy,
+  BookOpenCheck,
+  CassetteTape,
+  Dices,
+  EthernetPort,
+  GraduationCap,
+  LayoutPanelLeft,
+  LogOut,
+  Package,
+  Presentation,
+  Proportions,
+  Scroll,
+  Settings,
+  Tags,
+  TicketsPlane,
+  User,
+  Users,
+  WalletCards,
+} from "lucide-react";
 
 const drawerWidth = 300;
 
@@ -97,102 +98,102 @@ const Drawer = styled(MuiDrawer, {
 const menuList = [
   {
     name: "Dashboard",
-    icon: <img src={dashBoard} alt="Dashboard" />,
+    icon: <LayoutPanelLeft />,
     link: "/admin-dashboard",
   },
   {
     name: "Users",
-    icon: <img src={users} alt="Users" height={17} width={17} />,
+    icon: <Users />,
     link: "/admin-users",
   },
   {
     name: "Student",
-    icon: <img src={student} alt="Student" />,
+    icon: <User />,
     link: "/admin-student",
   },
   {
     name: "Live Class Report",
-    icon: <img src={report} alt="Live Class Report" />,
+    icon: <TicketsPlane />,
     link: "/admin-live-class-report",
   },
   {
     name: "Package",
-    icon: <img src={packageIcon} alt="Package" />,
+    icon: <Package />,
     link: "/admin-package",
   },
   {
     name: "Course",
-    icon: <img src={course} alt="Course" />,
+    icon: <BookCopy />,
     link: "/admin-course",
   },
   {
     name: "Exam",
-    icon: <img src={exam} alt="Exam" />,
+    icon: <BookOpenCheck />,
     link: "/admin-exam",
   },
   {
     name: "Live Class",
-    icon: <img src={liveClass} alt="Live Class" />,
+    icon: <CassetteTape />,
     link: "/admin-liveClass",
   },
   {
     name: "Batch",
-    icon: <img src={batch} alt="Batch" />,
+    icon: <GraduationCap />,
     link: "/admin-batch",
   },
   {
     name: "Flash Card",
-    icon: <img src={flashCard} alt="Flash Card" />,
+    icon: <WalletCards />,
     link: "/admin-flashCard",
   },
   {
     name: "Paper Test",
-    icon: <img src={paperTest} alt="Paper Test" />,
+    icon: <Scroll />,
     link: "/admin-paperTest",
   },
   {
     name: "Badges",
-    icon: <img src={badges} alt="Badges" />,
+    icon: <Award />,
     link: "/admin-badges",
   },
   {
     name: "Gamification",
-    icon: <img src={gamification} alt="Gamification" />,
+    icon: <Dices />,
     link: "/admin-gamification",
   },
   {
     name: "Notice",
-    icon: <img src={notice} alt="Notice" />,
+    icon: <Bell />,
     link: "/admin-notice",
   },
   {
     name: "Resources",
-    icon: <img src={resourceLink} alt="Resources" height={20} width={20} />,
+    icon: <Proportions />,
     link: "/admin-resources",
   },
   {
     name: "Lesson",
-    icon: <img src={lesson} alt="Lesson" height={20} width={20} />,
+    icon: <Presentation />,
     link: "/admin-lesson",
   },
   {
     name: "Coupon",
-    icon: <img src={coupon} alt="Coupon" />,
+    icon: <Tags />,
     link: "/admin-coupon",
   },
   {
     name: "Testimonial",
-    icon: <img src={testimonial} alt="Testimonial" />,
+    icon: <EthernetPort />,
     link: "/admin-testimonial",
   },
   {
     name: "Settings",
-    icon: <img src={settings} alt="Settings" />,
+    icon: <Settings />,
     link: "/admin-profile",
   },
   {
     name: "Logout",
-    icon: <img src={logOut} alt="Logout" />,
+    icon: <LogOut />,
     link: "/login",
   },
 ];
@@ -283,6 +284,7 @@ const DALeftDrawer = () => {
                         justifyContent: "center",
                         alignItems: "center",
                       }}
+                      style={{ height: 20, width: 20, color: "black" }}
                     >
                       {item.icon}
                     </ListItemIcon>

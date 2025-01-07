@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { BookOpen, CheckCircle, Clock, LibraryBig } from "lucide-react";
 import BatchSelection from "./BatchSelection";
 
-const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
+const PackageDetails = ({ packages, courseName, courseType }) => {
   const navigate = useNavigate();
-  const [selectedPackage, setSelectedPackage] = useState("");
+
   const [packageName, setPackageName] = useState("");
   const [packagePrice, setPackagePrice] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState("");
 
   const handleEnroll = (packageId, packageName, packagePrice) => {
     if (courseType === "TAUGHT") {
@@ -19,12 +20,11 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
     } else {
       navigate("/checkout", {
         state: {
-          courseId,
           packageId,
+          courseType,
           courseName,
           packageName,
           packagePrice,
-          courseType,
         },
       });
     }
@@ -70,7 +70,6 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                   </div>
                 )}
               </div>
-
               <div className="flex flex-wrap gap-2 mt-4">
                 {pkg.duration && (
                   <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
@@ -100,7 +99,6 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                 )}
               </div>
             </div>
-
             <div className="space-y-6 mb-8">
               {[
                 {
@@ -210,7 +208,6 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
                   )
               )}
             </div>
-
             <button
               onClick={() => {
                 handleEnroll(
@@ -242,9 +239,8 @@ const PackageDetails = ({ courseId, packages, courseName, courseType }) => {
         ))}
       </div>
       <BatchSelection
-        open={isModalOpen}
         onClose={onClose}
-        courseId={courseId}
+        open={isModalOpen}
         courseName={courseName}
         courseType={courseType}
         packageName={packageName}

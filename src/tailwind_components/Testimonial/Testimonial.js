@@ -4,8 +4,8 @@ import ajaxCall from "../../helpers/ajaxCall";
 
 const Testimonial = () => {
   const scrollRef = useRef(null);
-  const [scrollPosition, setScrollPosition] = useState(0);
   const [testimonials, setTestimonials] = useState([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     (async () => {

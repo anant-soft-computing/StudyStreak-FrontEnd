@@ -6,24 +6,24 @@ import { CreditCard, Package, Tag, User, Cpu } from "lucide-react";
 import logo from "../../img/logo/Logo.png";
 import ajaxCall from "../../helpers/ajaxCall";
 const Checkout = () => {
-  const [discount, setDiscount] = useState(0);
-  const [couponCode, setCouponCode] = useState("");
-  const [noCoupon, setNoCoupon] = useState("");
-  const [userDetails, setUserDetails] = useState({});
-  const authData = useSelector((state) => state.authStore);
-
+  const navigate = useNavigate();
   const location = useLocation();
+
   const {
-    courseId,
-    courseType,
     packageId,
-    selectedBatchIds,
+    courseType,
     courseName,
     packageName,
     packagePrice,
+    selectedBatch,
   } = location.state || {};
 
-  const navigate = useNavigate();
+  const [discount, setDiscount] = useState(0);
+  const [noCoupon, setNoCoupon] = useState("");
+  const [couponCode, setCouponCode] = useState("");
+  const [userDetails, setUserDetails] = useState({});
+
+  const authData = useSelector((state) => state.authStore);
 
   const package_amount = discount ? packagePrice - discount : packagePrice;
 
@@ -102,7 +102,7 @@ const Checkout = () => {
             amount: package_amount,
             currency: "INR",
             product_type: "batch",
-            product_id: selectedBatchIds[0],
+            product_id: selectedBatch,
           }
         : {
             amount: package_amount,

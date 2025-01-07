@@ -1,21 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
-import mic from "../../../../img/icon/mic.svg";
-import webinar from "../../../../img/icon/webinar.svg";
-import support from "../../../../img/icon/support.svg";
-import counselling from "../../../../img/icon/users.svg";
-import progress from "../../../../img/icon/progress.svg";
-import liveClass from "../../../../img/icon/liveClass.svg";
-import headphone from "../../../../img/icon/headphones.svg";
-import assignment from "../../../../img/icon/assignment.svg";
-import practice from "../../../../img/icon/practiceTest.svg";
-import regularClass from "../../../../img/icon/liveClass.svg";
-import fullLengthTest from "../../../../img/icon/notebook.svg";
-import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
-import recordedClasses from "../../../../img/icon/gamification.svg";
-import diagnosticTest from "../../../../img/icon/diagnosticTest.svg";
-
 import Loading from "../../../UI/Loading";
 import ScoreCard from "./ScoreCard/ScoreCard";
 import DSSidebar from "../DSSideBar/DSSideBar";
@@ -26,6 +11,23 @@ import SpeakingSlots from "./SpeakingSlots/SpeakingSlots";
 import UnPaidDashboard from "../UnPaidDashboard/UnPaidDashboard";
 import UpcomingLiveClasses from "./UpcomingLiveClasses/UpcomingLiveClasses";
 import UpcomingRegularLiveClass from "./UpcomingRegularLiveClass/UpCommingRegularLiveClass";
+import {
+  BookCheck,
+  BookHeadphones,
+  CassetteTape,
+  ChartNoAxesColumnIncreasing,
+  Film,
+  Mic,
+  NotepadTextDashed,
+  PcCase,
+  Pencil,
+  Presentation,
+  Proportions,
+  Speaker,
+  SquarePen,
+  Users,
+  Videotape,
+} from "lucide-react";
 
 const Dashboard = () => {
   const [count, setCount] = useState({
@@ -49,114 +51,130 @@ const Dashboard = () => {
       ? [
           {
             name: "Speaking Slot",
-            icon: bookSpeakingSlot,
+            icon: <Speaker width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Speaking Practice" },
           },
           {
             name: "Practice Test",
-            icon: practice,
+            icon: <Pencil width={35} height={35} />,
             link: "/practiceTest",
             state: { count: count?.practice_test_count },
           },
           {
             name: "Full Length Test",
-            icon: fullLengthTest,
+            icon: <PcCase width={35} height={35} />,
             link: "/fullLengthTest",
             state: { count: count?.full_length_test_count },
           },
           {
             name: "Counselling",
-            icon: counselling,
+            icon: <Users width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Counselling" },
           },
           {
             name: "Regular Classes",
-            icon: regularClass,
+            icon: <Videotape width={35} height={35} />,
             link: "/studentLiveClasses",
           },
           {
             name: "Tutor Support",
-            icon: counselling,
+            icon: <Users width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Tutor Support" },
           },
           {
             name: "Webinar",
-            icon: webinar,
+            icon: <Film width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Webinar" },
           },
-          { name: "Progress", icon: progress, link: "/progress" },
-          { name: "Resources", icon: support, link: "/resources" },
+          {
+            name: "Progress",
+            icon: <ChartNoAxesColumnIncreasing width={35} height={35} />,
+            link: "/progress",
+          },
+          {
+            name: "Resources",
+            icon: <Proportions width={35} height={35} />,
+            link: "/resources",
+          },
         ]
       : category === "PTE"
       ? [
           {
             name: "Speaking",
-            icon: mic,
+            icon: <Mic width={35} height={35} />,
             link: "/PTE/Speaking/",
           },
           {
             name: "Writing",
-            icon: practice,
+            icon: <SquarePen width={35} height={35} />,
             link: "/PTE/Writing/",
           },
           {
             name: "Reading",
-            icon: fullLengthTest,
+            icon: <PcCase width={35} height={35} />,
             link: "/PTE/Reading/",
           },
           {
             name: "Listening",
-            icon: headphone,
+            icon: <BookHeadphones width={35} height={35} />,
             link: "/PTE/Listening/",
           },
         ]
       : [
           {
             name: "Mini Test",
-            icon: assignment,
+            icon: <BookCheck width={35} height={35} />,
             link: "/mockTest",
           },
           {
             name: "Practice Test",
-            icon: practice,
+            icon: <Pencil width={35} height={35} />,
             link: "/practiceTest",
             state: { count: count?.practice_test_count },
           },
           {
             name: "Regular Classes",
-            icon: regularClass,
+            icon: <Videotape width={35} height={35} />,
             link: "/studentLiveClasses",
           },
           {
             name: "Counselling",
-            icon: counselling,
+            icon: <Users width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Counselling" },
           },
           {
             name: "Webinar",
-            icon: webinar,
+            icon: <Film width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Webinar" },
           },
           {
             name: "Tutor Support",
-            icon: counselling,
+            icon: <Users width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Tutor Support" },
           },
           {
             name: "Group Doubt Solving",
-            icon: liveClass,
+            icon: <CassetteTape width={35} height={35} />,
             link: "/studentLiveClasses",
             state: { activeTab: "Group Doubt" },
           },
-          { name: "Progress", icon: progress, link: "/progress" },
-          { name: "Resources", icon: support, link: "/resources" },
+          {
+            name: "Progress",
+            icon: <ChartNoAxesColumnIncreasing width={35} height={35} />,
+            link: "/progress",
+          },
+          {
+            name: "Resources",
+            icon: <Proportions width={35} height={35} />,
+            link: "/resources",
+          },
         ];
 
   const studentBatch = batchData?.filter((item) =>
@@ -341,11 +359,10 @@ const Dashboard = () => {
                                       className="text-decoration-none"
                                     >
                                       <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                        <img
-                                          src={diagnosticTest}
-                                          alt="Recorded Classes"
-                                          height={35}
+                                        <NotepadTextDashed
                                           width={35}
+                                          height={35}
+                                          color="black"
                                         />
                                         <h2 className="mt-2">
                                           {category === "IELTS"
@@ -372,11 +389,10 @@ const Dashboard = () => {
                                           className="text-decoration-none"
                                         >
                                           <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                            <img
-                                              src={recordedClasses}
-                                              alt="Start Lesson"
-                                              height={35}
+                                            <Presentation
                                               width={35}
+                                              height={35}
+                                              color="black"
                                             />
                                             <h2 className="mt-2">
                                               Start Lesson
@@ -406,17 +422,13 @@ const Dashboard = () => {
                                   >
                                     <Link
                                       to={link}
-                                      className="text-decoration-none"
                                       state={state}
+                                      className="text-decoration-none"
+                                      style={{ color: "black" }}
                                     >
                                       <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                        <img
-                                          src={icon}
-                                          alt={name}
-                                          height={35}
-                                          width={35}
-                                        />
-                                        <h3 className="mt-2">{name}</h3>
+                                        {icon}
+                                        <h3>{name}</h3>
                                       </div>
                                     </Link>
                                   </div>
@@ -434,11 +446,10 @@ const Dashboard = () => {
                                       className="text-decoration-none"
                                     >
                                       <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                        <img
-                                          src={recordedClasses}
-                                          alt="Recorded Classes"
-                                          height={35}
+                                        <CassetteTape
                                           width={35}
+                                          height={35}
+                                          color="black"
                                         />
                                         <h2 className="mt-2">
                                           Recorded Classes

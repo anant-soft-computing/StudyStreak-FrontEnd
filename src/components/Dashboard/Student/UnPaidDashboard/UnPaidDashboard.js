@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import practiceTest from "../../../../img/icon/practiceTest.svg";
-import fullLengthTest from "../../../../img/icon/notebook.svg";
-import bookSpeakingSlot from "../../../../img/icon/assignment.svg";
-import practice from "../../../../img/icon/practiceTest.svg";
-import regularClass from "../../../../img/icon/liveClass.svg";
-import counselling from "../../../../img/icon/users.svg";
-import progress from "../../../../img/icon/progress.svg";
-import webinar from "../../../../img/icon/webinar.svg";
-import support from "../../../../img/icon/support.svg";
 import DSSidebar from "../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import UnPaidClasses from "./UnPaidClasses/UnPaidClasses";
+import {
+  ChartNoAxesColumnIncreasing,
+  Film,
+  PcCase,
+  Pencil,
+  Settings,
+  Speaker,
+  Users,
+  Videotape,
+} from "lucide-react";
 
 const tableData = [
   {
@@ -37,15 +38,18 @@ const tableData = [
 ];
 
 const cardList = [
-  { name: "Book Speaking Slot", icon: bookSpeakingSlot },
-  { name: "Practice Test", icon: practice },
-  { name: "Full Length Test", icon: fullLengthTest },
-  { name: "Counselling", icon: counselling },
-  { name: "Regular Classes", icon: regularClass },
-  { name: "Tutor Support", icon: counselling },
-  { name: "Webinar", icon: webinar },
-  { name: "Progress", icon: progress },
-  { name: "Software Support", icon: support },
+  { name: "Book Speaking Slot", icon: <Speaker width={35} height={35} /> },
+  { name: "Practice Test", icon: <Pencil width={35} height={35} /> },
+  { name: "Full Length Test", icon: <PcCase width={35} height={35} /> },
+  { name: "Counselling", icon: <Users width={35} height={35} /> },
+  { name: "Regular Classes", icon: <Videotape width={35} height={35} /> },
+  { name: "Tutor Support", icon: <Users width={35} height={35} /> },
+  { name: "Webinar", icon: <Film width={35} height={35} /> },
+  {
+    name: "Progress",
+    icon: <ChartNoAxesColumnIncreasing width={35} height={35} />,
+  },
+  { name: "Software Support", icon: <Settings width={35} height={35} /> },
 ];
 
 const UnPaidDashboard = () => {
@@ -142,12 +146,7 @@ const UnPaidDashboard = () => {
                             onClick={() => navigate("/freeMiniTest")}
                           >
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                              <img
-                                src={fullLengthTest}
-                                alt="Recorded Classes"
-                                height={35}
-                                width={35}
-                              />
+                              <Pencil width={35} height={35} />
                               <Link className="text-decoration-none">
                                 <h2 className="mt-2">Free Mini Test</h2>
                               </Link>
@@ -165,12 +164,7 @@ const UnPaidDashboard = () => {
                             onClick={() => navigate("/freeDiagnosticTest")}
                           >
                             <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                              <img
-                                src={practiceTest}
-                                alt="Recorded Classes"
-                                height={35}
-                                width={35}
-                              />
+                              <PcCase width={35} height={35} />
                               <Link className="text-decoration-none">
                                 <h2 className="mt-2">Free Diagnostic Test</h2>
                               </Link>

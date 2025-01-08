@@ -29,6 +29,7 @@ import {
   PcCase,
   Pencil,
   Proportions,
+  Ribbon,
   Scroll,
   Settings,
   SquarePen,
@@ -239,6 +240,11 @@ const DSLeftDrawer = () => {
             name: "My Course",
             icon: <BookCopy />,
             link: "/studentMyCourse",
+          },
+          {
+            name: "Free Mock Test",
+            icon: <Ribbon />,
+            link: "/PTE/FreeMockTest",
           },
           {
             name: "PTE Speaking",

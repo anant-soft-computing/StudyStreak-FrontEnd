@@ -5,14 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 //-------------------------> pages <--------------------------------------------
 
-// import Main from "./pages/Home/Home";
-// import Login from "./pages/Login/Login";
-// import ContactUs from "./pages/ContactUs/ContactUs";
-// import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-// import TermsAndService from "./pages/TermsAndService/TermsAndService";
-// import PrivacyPolicy from "./pages/PrivacyPolicy/PrivacyPolicy";
-// import Courses from "./pages/Courses/Courses";
-// import CourseDetail from "./components/CourseDetail/CourseDetail";
 import Checkout from "./components/Checkout/Checkout";
 
 //-------------------------> Tailwind components <--------------------------------------------
@@ -64,6 +56,7 @@ import PTEReading from "./components/Dashboard/Student/PTE/Reading/Reading";
 import PTEListening from "./components/Dashboard/Student/PTE/Listening/Listening";
 import PTEWriting from "./components/Dashboard/Student/PTE/Writing/Writing";
 import PTESpeaking from "./components/Dashboard/Student/PTE/Speaking/Speaking";
+import FreeMockTest from "./components/Dashboard/Student/PTE/FreeMockTest/FreeMockTest";
 
 //-----------------> Admin <-----------------------------------------------------
 
@@ -108,6 +101,7 @@ import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/Di
 import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
 import LivePTEExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTEExam";
 import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTESpeakingExam";
+import Instructions from "./components/Dashboard/Student/PTE/FreeMockTest/Instruction/Instructions";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -278,6 +272,10 @@ const App = () => {
             <Route path="/Writing" Component={withBootstrap(ExamWriting)} />
             <Route path="/Speaking" Component={withBootstrap(ExamSpeaking)} />
 
+            <Route
+              path="/PTE/FreeMockTest"
+              Component={withBootstrap(FreeMockTest)}
+            />
             <Route path="/PTE/Reading" Component={withBootstrap(PTEReading)} />
             <Route
               path="/PTE/Listening"
@@ -388,6 +386,7 @@ const App = () => {
             path="/PTE-Speaking/:examType/:examForm/:examId"
             Component={withBootstrap(LivePTESpeakingExam)}
           />
+          <Route path="/PTE/Mock" Component={withBootstrap(Instructions)} />
         </Routes>
       </div>
     </>

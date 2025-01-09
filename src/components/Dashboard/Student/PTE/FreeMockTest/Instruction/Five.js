@@ -9,7 +9,6 @@ const Five = () => {
       <div className="instruction-content">
         This is an opportunity to check that your have the correct keyboard.
       </div>
-
       <div className="instruction-content">
         <ul>
           <li>
@@ -17,14 +16,12 @@ const Five = () => {
             the keyboard.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> The letters should appear in this
             order Q W E R T Y
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> If you don't have a QWERTY
@@ -32,17 +29,8 @@ const Five = () => {
             Administrator
           </li>
         </ul>
-
         <div>
-          <img
-            src={keyboard}
-            alt="Keyboard"
-            className="lv-instruction-image"
-            style={{
-              borderRadius: "6px",
-              border: "1px solid #01579b",
-            }}
-          />
+          <img src={keyboard} alt="Keyboard" className="lv-instruction-image" />
         </div>
       </div>
     </div>

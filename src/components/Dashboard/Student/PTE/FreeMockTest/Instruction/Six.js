@@ -12,7 +12,6 @@ const Six = () => {
         This test measures the Reading, Writing, Listening and Speaking skills
         in English that you will need in an academic setting.
       </div>
-
       <div className="instruction-content">
         <ul>
           <li>
@@ -23,19 +22,9 @@ const Six = () => {
             bedisplayed.
           </li>
         </ul>
-
         <div>
-          <img
-            src={ti1}
-            alt="ti1"
-            className="lv-instruction-image"
-            style={{
-              borderRadius: "6px",
-              border: "1px solid #01579b",
-            }}
-          />
+          <img src={ti1} alt="ti1" className="instruction-test-image" />
         </div>
-
         <ul className="mt-3">
           <li>
             <i className="icofont-check"></i> The timer will become red when
@@ -44,32 +33,14 @@ const Six = () => {
             icon again to bring the timer back.
           </li>
         </ul>
-
-        <div className="d-flex gap-3">
+        <div className="d-flex flex-column flex-md-row gap-3">
           <div>
-            <img
-              src={ti2}
-              alt="ti2"
-              style={{
-                borderRadius: "6px",
-                border: "1px solid #01579b",
-              }}
-              className="lv-instruction-image"
-            />
+            <img src={ti2} alt="ti2" className="instruction-test-image" />
           </div>
           <div>
-            <img
-              src={ti3}
-              alt="ti3"
-              style={{
-                borderRadius: "6px",
-                border: "1px solid #01579b",
-              }}
-              className="lv-instruction-image"
-            />
+            <img src={ti3} alt="ti3" className="instruction-test-image" />
           </div>
         </div>
-
         <ul className="mt-3">
           <li>
             <i className="icofont-check"></i> At the beginning of each part you
@@ -77,7 +48,6 @@ const Six = () => {
             expect in the part of the test.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> By clicking on the Next(N) button
@@ -87,14 +57,12 @@ const Six = () => {
             question at the end of the test.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> You will be offered a break of up
             to 10 minutes after part 2. The break is optional.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> This test makes use of different

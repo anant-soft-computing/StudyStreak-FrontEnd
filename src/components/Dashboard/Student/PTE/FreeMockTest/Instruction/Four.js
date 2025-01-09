@@ -1,7 +1,53 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import microphone from "../../../../../../img/service/microphone.png";
 
 const Four = () => {
+  const audioChunksRef = useRef([]);
+  const mediaRecorderRef = useRef(null);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/wav",
+        });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setAudioUrl(audioUrl);
+        audioChunksRef.current = [];
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const playBackRecording = () => {
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+  };
+
   return (
     <div className="instruction-card m-5">
       <h3 className="instruction-heading">PTE-Academic Mock Test</h3>
@@ -18,7 +64,6 @@ const Four = () => {
             the microphone is in the downward position near your mouth.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> When you are ready. click on the{" "}
@@ -26,7 +71,6 @@ const Four = () => {
             testing, one, two, three" into the microphone.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> After you have spoken, click on
@@ -34,7 +78,6 @@ const Four = () => {
             now complete.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> Now click on the{" "}
@@ -42,7 +85,6 @@ const Four = () => {
             hear yourself speaking.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> If you can not hear your voice,
@@ -50,30 +92,32 @@ const Four = () => {
             Administrator
           </li>
         </ul>
-
-        <div
-          style={{
-            margin: "10px",
-            padding: "10px",
-            border: "1px solid #01579b",
-            borderRadius: "10px",
-          }}
-        >
-          <span>Status : Click Play To Begin</span>
-          <audio className="mt-3" controls></audio>
+        <div className="instruction-audio">
+          <span>Status : Click To Record</span>
           <div className="d-flex flex-wrap gap-2 mt-3">
-            <button className="default__button">
+            <button
+              className="default__button"
+              onClick={startRecording}
+              disabled={isRecording}
+            >
               <i className="icofont-record"></i> Record
             </button>
-            <button className="default__button">
+            <button
+              className="default__button"
+              onClick={playBackRecording}
+              disabled={!audioUrl}
+            >
               <i className="icofont-play-alt-1"></i> Playback
             </button>
-            <button className="default__button">
+            <button
+              className="default__button"
+              onClick={stopRecording}
+              disabled={!isRecording}
+            >
               <i className="icofont-stop"></i> Stop
             </button>
           </div>
         </div>
-
         <ul>
           <li>
             <i className="icofont-check"></i> During the test you will not have{" "}
@@ -82,16 +126,11 @@ const Four = () => {
             will start automatically.
           </li>
         </ul>
-
         <div>
           <img
             src={microphone}
             alt="Micro Phone"
             className="lv-instruction-image"
-            style={{
-              borderRadius: "6px",
-              border: "1px solid #01579b",
-            }}
           />
         </div>
       </div>

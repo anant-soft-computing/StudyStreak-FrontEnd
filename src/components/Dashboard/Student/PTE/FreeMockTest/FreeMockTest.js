@@ -62,7 +62,7 @@ const FreeMockTest = () => {
 
                   <button
                     className="default__button"
-                    onClick={() => navigate("/PTE/Mock")}
+                    onClick={() => navigate("/PTE/MockTest/Instructions")}
                   >
                     Start a new PTE-Academic Mock Test
                   </button>

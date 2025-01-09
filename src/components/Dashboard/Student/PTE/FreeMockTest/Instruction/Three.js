@@ -1,5 +1,6 @@
 import React from "react";
 import headset from "../../../../../../img/service/headset.png";
+import testAudio from "../../../../../../img/service/TestAudio.ogg";
 
 const Three = () => {
   return (
@@ -9,7 +10,6 @@ const Three = () => {
       <div className="instruction-content">
         This is an opportunity to check that your headset is working correctly.
       </div>
-
       <div className="instruction-content">
         <ul>
           <li>
@@ -17,7 +17,6 @@ const Three = () => {
             so that it fits comfortably over your ears.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> When you are ready, click on the{" "}
@@ -25,7 +24,6 @@ const Three = () => {
             recording.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> If you are not hearing anything in
@@ -34,19 +32,10 @@ const Three = () => {
             attention of Test Administrator.
           </li>
         </ul>
-
-        <div
-          style={{
-            margin: "10px",
-            padding: "10px",
-            border: "1px solid #01579b",
-            borderRadius: "10px",
-          }}
-        >
+        <div className="instruction-audio">
           <span>Status : Click Play To Begin</span>
-          <audio className="mt-3" controls></audio>
+          <audio className="mt-3" controls src={testAudio}></audio>
         </div>
-
         <ul>
           <li>
             <i className="icofont-check"></i> During the test you will not have{" "}
@@ -55,23 +44,17 @@ const Three = () => {
             will start playing automatically.
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> Please don't remove your headset.
             You should wear it throughout the test.
           </li>
         </ul>
-
         <div>
           <img
             src={headset}
             alt="Head phone"
             className="lv-instruction-image"
-            style={{
-              borderRadius: "6px",
-              border: "1px solid #01579b",
-            }}
           />
         </div>
       </div>

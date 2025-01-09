@@ -17,7 +17,6 @@ const Eight = () => {
         Some questions require you to first listen to an audio clip and then
         record your answer by speaking clearly into the microphone.
       </div>
-
       <h5 className="instruction-content">Listening</h5>
       <div className="instruction-content">
         <ul>
@@ -26,19 +25,9 @@ const Eight = () => {
             you have until the audio clips starts.
           </li>
         </ul>
-
         <div>
-          <img
-            src={p1}
-            alt="P1"
-            className="lv-instruction-image"
-            style={{
-              borderRadius: "6px",
-              border: "1px solid #01579b",
-            }}
-          />
+          <img src={p1} alt="P1" className="instruction-test-image" />
         </div>
-
         <ul className="mt-3">
           <li>
             <i className="icofont-check"></i> A blue bar shows the progress of
@@ -46,33 +35,14 @@ const Eight = () => {
             playing.
           </li>
         </ul>
-
-        <div className="d-flex flex-wrap gap-3">
+        <div className="d-flex flex-column flex-md-row gap-3">
           <div>
-            <img
-              src={p2}
-              alt="P2"
-              className="lv-instruction-image"
-              style={{
-                borderRadius: "6px",
-                border: "1px solid #01579b",
-              }}
-            />
+            <img src={p2} alt="P2" className="instruction-test-image" />
           </div>
-
           <div>
-            <img
-              src={p3}
-              alt="P3"
-              className="lv-instruction-image"
-              style={{
-                borderRadius: "6px",
-                border: "1px solid #01579b",
-              }}
-            />
+            <img src={p3} alt="P3" className="instruction-test-image" />
           </div>
         </div>
-
         <h5 className="instruction-content mt-3">Speaking</h5>
         <ul>
           <li>
@@ -81,19 +51,9 @@ const Eight = () => {
             changes
           </li>
         </ul>
-
         <div>
-          <img
-            src={s1}
-            alt="S1"
-            className="lv-instruction-image"
-            style={{
-              borderRadius: "6px",
-              border: "1px solid #01579b",
-            }}
-          />
+          <img src={s1} alt="S1" className="instruction-test-image" />
         </div>
-
         <ul className="mt-3">
           <li>
             <i className="icofont-check"></i> You must finish before the
@@ -102,30 +62,12 @@ const Eight = () => {
             re-record.
           </li>
         </ul>
-
-        <div className="d-flex flex-wrap gap-3">
+        <div className="d-flex flex-column flex-md-row gap-3">
           <div>
-            <img
-              src={s2}
-              alt="S2"
-              className="lv-instruction-image"
-              style={{
-                borderRadius: "6px",
-                border: "1px solid #01579b",
-              }}
-            />
+            <img src={s2} alt="S2" className="instruction-test-image" />
           </div>
-
           <div>
-            <img
-              src={s3}
-              alt="S3"
-              className="lv-instruction-image"
-              style={{
-                borderRadius: "6px",
-                border: "1px solid #01579b",
-              }}
-            />
+            <img src={s3} alt="S3" className="instruction-test-image" />
           </div>
         </div>
       </div>

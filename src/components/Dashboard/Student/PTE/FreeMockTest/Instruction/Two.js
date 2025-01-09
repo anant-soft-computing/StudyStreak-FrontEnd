@@ -9,7 +9,6 @@ const Two = () => {
         This is a Reminder of the non-disclosure aggrement that you accepted
         when you scheduled and stated this test.
       </div>
-
       <div className="instruction-content">
         <ul>
           <li>
@@ -17,7 +16,6 @@ const Two = () => {
             grantet for the studystreak.in
           </li>
         </ul>
-
         <ul>
           <li>
             <i className="icofont-check"></i> Make sure that Auto audio play is

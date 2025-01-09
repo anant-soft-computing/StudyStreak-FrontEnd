@@ -402,7 +402,7 @@ const LivePTESpeakingExam = () => {
                         : "Play"}
                     </button>
                     <button
-                      className="lv-speaking-button lv-speaking-button"
+                      className="lv-speaking-button"
                       onClick={() => stopSpeaking(item.id)}
                       disabled={speaking?.[speakingIndex]?.status !== 1}
                       style={{

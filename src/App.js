@@ -27,6 +27,10 @@ import ForgotPasswordPage from "./tailwind_components/Login/ForgotPassword";
 
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
+//-------------------------> Instructions  <----------------------------------
+
+import Instructions from "./components/Dashboard/Student/PTE/FreeMockTest/Instruction/Instructions";
+
 //-------------------------> layout <--------------------------------------
 
 import StudentNavBarRoute from "./layout/StudentNavBarRoute";
@@ -101,7 +105,7 @@ import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/Di
 import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
 import LivePTEExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTEExam";
 import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTESpeakingExam";
-import Instructions from "./components/Dashboard/Student/PTE/FreeMockTest/Instruction/Instructions";
+import PTEMockTestLive from "./components/Dashboard/Student/PTE/FreeMockTest/MockTestLive/MockTestLive";
 
 //------------------------> Exam Answer <------------------------------------
 import Answer from "./components/Exam-Answer/Answer";
@@ -386,7 +390,14 @@ const App = () => {
             path="/PTE-Speaking/:examType/:examForm/:examId"
             Component={withBootstrap(LivePTESpeakingExam)}
           />
-          <Route path="/PTE/Mock" Component={withBootstrap(Instructions)} />
+          <Route
+            path="/PTE-Academic/MockTest/:examId"
+            Component={withBootstrap(PTEMockTestLive)}
+          />
+
+          {/*------------------------ Instructions Component --------------------- */}
+
+          <Route path="/PTE/MockTest/Instructions" Component={withBootstrap(Instructions)} />
         </Routes>
       </div>
     </>

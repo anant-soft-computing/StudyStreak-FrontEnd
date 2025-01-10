@@ -27,10 +27,6 @@ import ForgotPasswordPage from "./tailwind_components/Login/ForgotPassword";
 
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
-//-------------------------> Instructions  <----------------------------------
-
-import Instructions from "./components/Dashboard/Student/PTE/FreeMockTest/Instruction/Instructions";
-
 //-------------------------> layout <--------------------------------------
 
 import StudentNavBarRoute from "./layout/StudentNavBarRoute";
@@ -394,10 +390,6 @@ const App = () => {
             path="/PTE-Academic/MockTest/:examId"
             Component={withBootstrap(PTEMockTestLive)}
           />
-
-          {/*------------------------ Instructions Component --------------------- */}
-
-          <Route path="/PTE/MockTest/Instructions" Component={withBootstrap(Instructions)} />
         </Routes>
       </div>
     </>

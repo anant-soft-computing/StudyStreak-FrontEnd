@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Tab from "../../../UI/Tab";
+import ViewExam from "./ViewExam";
 import DASideBar from "../DASideBar/DASideBar";
+import PT from "../../../Exam-Create/Practice-Test/PT";
+import FLT from "../../../Exam-Create/FullLength-Test/FLT";
 import ExamWriting from "../../../Exam-Create/ExamWriting";
 import ExamReading from "../../../Exam-Create/ExamReading";
-import ExamListening from "../../../Exam-Create/ExamListening";
 import ExamSpeaking from "../../../Exam-Create/ExamSpeaking";
-import ViewExam from "./ViewExam";
-import FLT from "../../../Exam-Create/FullLength-Test/FLT";
-import PT from "../../../Exam-Create/Practice-Test/PT";
-import Tab from "../../../UI/Tab";
+import ExamListening from "../../../Exam-Create/ExamListening";
+import PTEMockTest from "../../../Exam-Create/PTEMock-Test/PTEMockTest";
 
 const tabs = [
   { name: "View Exam" },
   { name: "Create MT" },
   { name: "Create PT" },
   { name: "Create FLT" },
+  { name: "Create PTE Mock" },
 ];
 
 const exams = [
@@ -188,6 +190,13 @@ const Exam = () => {
                         handleTabChange={handleTabChange}
                       />
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
+                        <div
+                          className={`tab-pane fade ${
+                            activeTab === "View Exam" ? "show active" : ""
+                          }`}
+                        >
+                          <ViewExam />
+                        </div>
                         <div
                           className={`tab-pane fade ${
                             activeTab === "Create MT" ? "show active" : ""
@@ -390,10 +399,10 @@ const Exam = () => {
                         </div>
                         <div
                           className={`tab-pane fade ${
-                            activeTab === "View Exam" ? "show active" : ""
+                            activeTab === "Create PTE Mock" ? "show active" : ""
                           }`}
                         >
-                          <ViewExam />
+                          <PTEMockTest primaryTab={setActiveTab} />
                         </div>
                       </div>
                     </div>

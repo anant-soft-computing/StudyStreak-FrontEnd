@@ -145,6 +145,7 @@ const ExamSpeaking = ({ category }) => {
   const submitSpeakingExam = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+    setFormStatus((prev) => ({ ...prev, isSubmitting: true }));
     const data = {
       ...SpeakingData,
       exam_category: category,
@@ -177,6 +178,8 @@ const ExamSpeaking = ({ category }) => {
         errMsg: "Some Problem Occurred. Please try again.",
         isSubmitting: false,
       });
+    } finally {
+      setFormStatus((prev) => ({ ...prev, isSubmitting: false }));
     }
   };
 
@@ -324,8 +327,12 @@ const ExamSpeaking = ({ category }) => {
             {formStatus.isError && (
               <div className="text-danger mb-2">{formStatus.errMsg}</div>
             )}
-            <button className="default__button" onClick={submitSpeakingExam}>
-              Submit
+            <button
+              className="default__button"
+              onClick={submitSpeakingExam}
+              disabled={formStatus.isSubmitting}
+            >
+              {formStatus.isSubmitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </div>

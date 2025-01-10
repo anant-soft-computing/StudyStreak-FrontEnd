@@ -1,8 +1,104 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import Table from "../../../../UI/Table";
+import Loading from "../../../../UI/Loading";
+import DSSidebar from "../../DSSideBar/DSSideBar";
+import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const FreeMockTest = () => {
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [fullLengthTestData, setFullLengthTestData] = useState([]);
+
+  const sortedFLT = fullLengthTestData.sort((a, b) => {
+    const getNumber = (name) => {
+      const match = name.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+    const nameA = getNumber(a.name);
+    const nameB = getNumber(b.name);
+    return nameA - nameB;
+  });
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/get/flt/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          const fullLengthTest = response.data.filter(({ name }) =>
+            name.includes("PTE")
+          );
+          setFullLengthTestData(fullLengthTest);
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
+
+  const columns = [
+    {
+      headerName: "Take Test",
+      field: "button",
+      cellRenderer: (params) => {
+        return (
+          <button
+            className="take-test"
+            onClick={() =>
+              window.open(`/PTE-Academic/MockTest/${params.data?.id}`, "_blank")
+            }
+          >
+            Take Test
+          </button>
+        );
+      },
+    },
+    {
+      headerName: "Name",
+      field: "name",
+      filter: true,
+      width: 250,
+    },
+    {
+      headerName: "Reading Set",
+      field: "reading_set.Reading.length",
+      filter: true,
+      width: 250,
+    },
+    {
+      headerName: "Writing Set",
+      field: "writing_set.Writing.length",
+      filter: true,
+      width: 250,
+    },
+    {
+      headerName: "Listening Set",
+      field: "listening_set.Listening.length",
+      filter: true,
+      width: 250,
+    },
+    {
+      headerName: "Speaking Set",
+      field: "speaking_set.Speaking.length",
+      filter: true,
+      width: 250,
+    },
+  ];
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -10,62 +106,22 @@ const FreeMockTest = () => {
           <div className="dashboard">
             <div className="container-fluid full__width__padding">
               <div className="row">
-                <div className="instruction-card">
-                  <p className="instruction-heading">
-                    Start a new <b>PTE-Academic</b> Mock Test
-                  </p>
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "1px",
-                      backgroundColor: "#000",
-                      marginBottom: "20px",
-                    }}
-                  />
-                  <div className="instruction-content">
-                    PTE-Academic Mock Test is a simulation of Pearson
-                    PTE-Academic English Test and the questions will be selected
-                    randomly from our question bank. Each PTEstudy.net Mock Test
-                    will have different questions. In "Standard PTE-Academic
-                    Mock Test" the number of questions are based on the real PTE
-                    exam.
+                <DSSidebar />
+                <div className="col-xl-12 col-lg-12 col-md-12">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
+                    <div className="dashboard__section__title">
+                      <h4>Free Mock Test</h4>
+                    </div>
+                    {isLoading ? (
+                      <Loading />
+                    ) : sortedFLT.length > 0 ? (
+                      <Table rowData={sortedFLT} columnDefs={columns} />
+                    ) : (
+                      <h5 className="text-center text-danger">
+                        No Tests Available !!
+                      </h5>
+                    )}
                   </div>
-
-                  <p className="instruction-wishes">
-                    <b className="text-danger">Notice:</b> Taking the
-                    PTE-Academic Mock test is free but for checking your answers
-                    and scoring{" "}
-                    <b className="text-danger">you need to pay the Mock fee.</b>
-                  </p>
-
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "1px",
-                      backgroundColor: "#000",
-                      marginBottom: "20px",
-                    }}
-                  />
-
-                  <p className="instruction-wishes">
-                    <input className="mr-2" type="radio" name="radio" />
-                    <span className="instruction-wishes">
-                      Standard PTE-Academic Mock Test
-                    </span>
-                  </p>
-                  <p className="instruction-wishes">
-                    <input className="mr-2" type="radio" name="radio" />
-                    <span className="instruction-wishes">
-                      Optional PTE-Academic Mock Test
-                    </span>
-                  </p>
-
-                  <button
-                    className="default__button"
-                    onClick={() => navigate("/PTE/MockTest/Instructions")}
-                  >
-                    Start a new PTE-Academic Mock Test
-                  </button>
                 </div>
               </div>
             </div>

@@ -1,13 +1,12 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../../UI/Loading";
+import Loading from "../../../UI/Loading";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import ajaxCall from "../../../helpers/ajaxCall";
 import "ag-grid-community/styles/ag-theme-quartz.css";
+import ajaxCall from "../../../../helpers/ajaxCall";
 
-const intialFLTData = {
+const intialMockData = {
   name: "",
   sub_category: "",
   difficulty_level: "Easy",
@@ -23,15 +22,14 @@ const initialSubmit = {
   isSubmitting: false,
 };
 
-const reducerFLT = (state, action) => {
+const reducerMock = (state, action) => {
   if (action.type === "reset") {
-    return action.payload || intialFLTData;
+    return action.payload || intialMockData;
   }
   return { ...state, [action.type]: action.value };
 };
 
-const FLT = ({ category, activeTab }) => {
-  const navigate = useNavigate();
+const CreateMock = ({ activeTab, primaryTab }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
@@ -40,25 +38,7 @@ const FLT = ({ category, activeTab }) => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const [createFLT, dispatchFLT] = useReducer(reducerFLT, intialFLTData);
-
-  const examSubCategory =
-    category === "IELTS"
-      ? [
-          { name: "Academic", value: "Academic" },
-          { name: "General", value: "General" },
-          { name: "Foundation", value: "Foundation" },
-          { name: "Grammar", value: "Grammar" },
-        ]
-      : [];
-
-  useEffect(() => {
-    if (category === "IELTS") {
-      dispatchFLT({ type: "sub_category", value: "Academic" });
-    } else {
-      dispatchFLT({ type: "sub_category", value: "" });
-    }
-  }, [category]);
+  const [createFLT, dispatchFLT] = useReducer(reducerMock, intialMockData);
 
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
@@ -69,12 +49,12 @@ const FLT = ({ category, activeTab }) => {
   };
 
   useEffect(() => {
-    if (activeTab === "Create FLT") {
+    if (activeTab === "Create Mock") {
       setIsLoading(true);
       (async () => {
         try {
           const response = await ajaxCall(
-            `/moduleListView/?category=${category}&sub_category=${createFLT.sub_category}`,
+            "/moduleListView/?category=PTE",
             {
               headers: {
                 Accept: "application/json",
@@ -88,9 +68,7 @@ const FLT = ({ category, activeTab }) => {
             8000
           );
           if (response?.status === 200) {
-            const data = response?.data?.filter(
-              ({ Name }) => !Name.includes("SPT")
-            );
+            const data = response?.data;
             const updatedExams = {
               Reading: data.filter(
                 ({ practice_test_type }) => practice_test_type === "Reading"
@@ -114,7 +92,7 @@ const FLT = ({ category, activeTab }) => {
         }
       })();
     }
-  }, [activeTab, category, createFLT.sub_category]);
+  }, [activeTab]);
 
   const validateForm = () => {
     const requiredFields = [
@@ -170,8 +148,8 @@ const FLT = ({ category, activeTab }) => {
       );
       if (response.status === 201) {
         resetReducerForm();
-        navigate("/admin-exam");
-        toast.success("Full Length Test Create Successfully");
+        primaryTab("View Exam");
+        toast.success("Free Mock Test Created Successfully");
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -258,28 +236,6 @@ const FLT = ({ category, activeTab }) => {
             </div>
           </div>
         </div>
-        {category === "IELTS" && (
-          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-            <div className="dashboard__select__heading">
-              <span>Exam category</span>
-            </div>
-            <div className="dashboard__selector">
-              <select
-                className="form-select"
-                value={createFLT.sub_category}
-                onChange={(e) =>
-                  dispatchFLT({ type: "sub_category", value: e.target.value })
-                }
-              >
-                {examSubCategory.map((item, index) => (
-                  <option key={index} value={item.value}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        )}
         <div className="col-xl-12 col-lg-12 col-md-12 col-12">
           <div className="d-flex flex-wrap gap-3">
             <div className="dashboard__form__input">
@@ -376,11 +332,11 @@ const FLT = ({ category, activeTab }) => {
           onClick={createFullLengthTest}
           disabled={formStatus.isSubmitting}
         >
-          {formStatus.isSubmitting ? "Creating..." : "Create FLT"}
+          {formStatus.isSubmitting ? "Creating..." : "Create Mock"}
         </button>
       </div>
     </>
   );
 };
 
-export default FLT;
+export default CreateMock;

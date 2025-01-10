@@ -10,8 +10,8 @@ import { toast } from "react-toastify";
 import { convert } from "html-to-text";
 import Reading from "../Instruction/Reading";
 import Loading from "../../../../../UI/Loading";
-import Listening from "../Instruction/Listening";
 import SmallModal from "../../../../../UI/Modal";
+import Instructions from "../Instruction/Instructions";
 import ajaxCall from "../../../../../../helpers/ajaxCall";
 import SpeakingAndWriting from "../Instruction/SpeakingAndWriting";
 import PTEAudioRecorder from "../../LivePTEExam/PTEAudioRecorder/PTEAudioRecorder";
@@ -853,7 +853,7 @@ const MockTestLive = () => {
       });
 
       const response = await ajaxCall(
-        `/answer/full-length-test/`,
+        "/answer/full-length-test/",
         {
           headers: {
             Accept: "application/json",
@@ -1095,7 +1095,7 @@ const MockTestLive = () => {
         <SpeakingAndWriting type="writing" startTest={handleInstruction} />
       )}
       {instructionCompleted.type.listening === 1 && (
-        <Listening startTest={handleInstruction} />
+        <Instructions startTest={handleInstruction} />
       )}
       {instructionCompleted.type.speaking === 1 && (
         <SpeakingAndWriting type="speaking" startTest={handleInstruction} />

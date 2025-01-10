@@ -123,6 +123,7 @@ const ExamWriting = ({ category }) => {
   const submitWritingExam = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
+    setFormStatus((prev) => ({ ...prev, isSubmitting: true }));
     const witingQuestionStrucutre = [
       { type: "Textarea", numberOfQuestions: 1 },
     ];
@@ -167,6 +168,8 @@ const ExamWriting = ({ category }) => {
         errMsg: "Some Problem Occurred. Please try again.",
         isSubmitting: false,
       });
+    } finally {
+      setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     }
   };
 
@@ -291,8 +294,12 @@ const ExamWriting = ({ category }) => {
             {formStatus.isError && (
               <div className="text-danger mb-2">{formStatus.errMsg}</div>
             )}
-            <button className="default__button" onClick={submitWritingExam}>
-              Submit
+            <button
+              className="default__button"
+              onClick={submitWritingExam}
+              disabled={formStatus.isSubmitting}
+            >
+              {formStatus.isSubmitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </div>

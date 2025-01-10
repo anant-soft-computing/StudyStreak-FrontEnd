@@ -1,74 +1,12 @@
 import React, { useEffect, useReducer, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../../UI/Loading";
+import Loading from "../../../UI/Loading";
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
-import ajaxCall from "../../../helpers/ajaxCall";
+import ajaxCall from "../../../../helpers/ajaxCall";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 
-const ieltsSubCategory = [
-  { name: "Academic", value: "Academic" },
-  { name: "General", value: "General" },
-  { name: "Foundation", value: "Foundation" },
-  { name: "Grammer", value: "Grammer" },
-];
-
-const pteReadingSubCategory = [
-  { name: "R&W: Fill in the blanks [RWFIB]", value: "RWFIB" },
-  { name: "MC, choose multiple answers", value: "CMA" },
-  { name: "Re-order paragraphs", value: "ROP" },
-  { name: "R: Fill in the blanks [RFIB]", value: "RFIB" },
-  { name: "MC, choose single answer", value: "CSA" },
-];
-
-const pteWritingSubCategory = [
-  { name: "Summarize written text [SWT]", value: "SWT" },
-  { name: "Write essay [WE]", value: "WE" },
-];
-
-const pteListeningSubCategory = [
-  { name: "Summarize spoken text [SST]", value: "SST" },
-  { name: "MC, choose multiple answers", value: "CMA" },
-  { name: "Fill in the blanks [LFIB]", value: "LFIB" },
-  { name: "Highlight correct summar", value: "HCS" },
-  { name: "MC, choose single answer", value: "CSA" },
-  { name: "Select missing words [SMW]", value: "SMW" },
-  { name: "Highlight incorrect words", value: "HIW" },
-  { name: "Write from diction [WFD]", value: "WFD" },
-];
-
-const pteSpeakingSubCategory = [
-  { name: "Read aloud [RA]", value: "RA" },
-  { name: "Repeat sentence [RS]", value: "RS" },
-  { name: "Describe image [DI]", value: "DI" },
-  { name: "Re-tell lecture [RL]", value: "RL" },
-  { name: "Answer short question [ASQ]", value: "ASQ" },
-  { name: "Respond to a sitution [RTS]", value: "RTS" },
-  { name: "Summarize group discussion [SGD]", value: "SGD" },
-];
-
-const getDefaultSubCategory = (category, type) => {
-  if (category === "IELTS") return "Academic";
-
-  if (category === "PTE") {
-    switch (type) {
-      case "Reading":
-        return "RWFIB";
-      case "Writing":
-        return "SWT";
-      case "Listening":
-        return "SST";
-      case "Speaking":
-        return "RA";
-      default:
-        return "";
-    }
-  }
-  return "";
-};
-
-const initialPT = {
+const initialPTEPT = {
   Name: "",
   difficulty_level: "Easy",
   sub_category: "",
@@ -78,7 +16,6 @@ const initialPT = {
   Writing: [],
   Listening: [],
   Speaking: [],
-  General: [],
 };
 
 const initialSubmit = {
@@ -87,53 +24,33 @@ const initialSubmit = {
   isSubmitting: false,
 };
 
-const reducerPT = (state, action) => {
+const reducerPTEPT = (state, action) => {
   if (action.type === "reset") {
-    return action.payload || initialPT;
+    return action.payload || initialPTEPT;
   }
   return { ...state, [action.type]: action.value };
 };
 
-const PT = ({ category, type, activeTab }) => {
-  const navigate = useNavigate();
+const CreatePTEPT = ({ activeTab,setActiveTab, category }) => {
   const [exams, setExams] = useState({
     Reading: [],
     Writing: [],
     Listening: [],
     Speaking: [],
-    General: [],
   });
+  const [type, setType] = useState("Reading");
   const [isLoading, setIsLoading] = useState(true);
-  const [createPT, dispatchPT] = useReducer(reducerPT, initialPT);
   const [formStatus, setFormStatus] = useState(initialSubmit);
-  const [totalQuestions, setTotalQuestions] = useState(0);
-
-  const examSubCategory =
-    category === "IELTS"
-      ? ieltsSubCategory
-      : category === "PTE"
-      ? type === "Reading"
-        ? pteReadingSubCategory
-        : type === "Writing"
-        ? pteWritingSubCategory
-        : type === "Listening"
-        ? pteListeningSubCategory
-        : type === "Speaking"
-        ? pteSpeakingSubCategory
-        : []
-      : [];
-
-  useEffect(() => {
-    const defaultValue = getDefaultSubCategory(category, type);
-    dispatchPT({ type: "sub_category", value: defaultValue });
-  }, [category, type]);
+  const [createPT, dispatchPT] = useReducer(reducerPTEPT, initialPTEPT);
 
   const setFormError = (errMsg) => {
     setFormStatus({ isError: true, errMsg, isSubmitting: false });
   };
 
-  const resetReducerForm = () => {
+  const handleClear = () => {
     dispatchPT({ type: "reset" });
+    setActiveTab("Create Mock");
+    toast.success("Practice Exam For PTE Created Successfully");
   };
 
   useEffect(() => {
@@ -143,8 +60,8 @@ const PT = ({ category, type, activeTab }) => {
       try {
         const url =
           type === "Speaking"
-            ? `/speaking-block/?exam_category=${category}&sub_category=${createPT.sub_category}`
-            : `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,block_type,no_of_questions&exam_type=${type}&exam_category=${category}&sub_category=${createPT.sub_category}`;
+            ? `/speaking-block/?exam_category=${category}`
+            : `/exam-blocks/?fields=id,exam_name,exam_type,sub_category,block_type&exam_type=${type}&exam_category=${category}`;
         const response = await ajaxCall(
           url,
           {
@@ -181,7 +98,7 @@ const PT = ({ category, type, activeTab }) => {
     };
 
     fetchExams();
-  }, [activeTab, category, type, createPT.sub_category]);
+  }, [activeTab, category, type]);
 
   const validateForm = () => {
     if (!createPT.Name) {
@@ -222,9 +139,7 @@ const PT = ({ category, type, activeTab }) => {
         8000
       );
       if (response.status === 201) {
-        resetReducerForm();
-        navigate("/admin-exam");
-        toast.success("Practice Exam Created Successfully");
+        handleClear();
       } else if (response.status === 400 || response.status === 404) {
         toast.error("Some Problem Occurred. Please try again.");
       }
@@ -242,12 +157,6 @@ const PT = ({ category, type, activeTab }) => {
   const handleRowSelection = (type) => (event) => {
     const selectedNodes = event.api?.getSelectedNodes() || [];
     const selectedIds = selectedNodes.map((node) => node?.data?.id);
-    const total = selectedNodes.reduce((total, node) => {
-      return (
-        total + (node.data.no_of_questions || node.data.questions?.length || 0)
-      );
-    }, 0);
-    setTotalQuestions(total);
     dispatchPT({ type, value: selectedIds });
   };
 
@@ -259,7 +168,7 @@ const PT = ({ category, type, activeTab }) => {
         headerCheckboxSelection: true,
         checkboxSelection: true,
         resizable: false,
-        width: 110,
+        width: 100,
       },
       {
         headerName: "Exam Name",
@@ -269,33 +178,25 @@ const PT = ({ category, type, activeTab }) => {
         width: 400,
       },
       {
-        headerName: "Exam Category",
-        field: "exam_category",
+        headerName: "Exam Sub Category",
+        field: "sub_category",
         filter: true,
-        valueGetter: (params) => params.data?.exam_category || "-",
-        width: 230,
+        valueGetter: (params) => params.data?.sub_category || "-",
+        width: 310,
       },
       {
         headerName: "Exam Type",
         field: "exam_type",
         filter: true,
         valueGetter: (params) => params.data?.exam_type || "Speaking",
-        width: 230,
-      },
-      {
-        headerName: "No. Of Questions",
-        field: "no_of_questions",
-        filter: true,
-        valueGetter: (params) =>
-          params.data?.no_of_questions || params.data?.questions?.length,
-        width: 230,
+        width: 310,
       },
       {
         headerName: "Block Type",
         field: "block_type",
         filter: true,
         valueGetter: (params) => params.data?.block_type || "Mock Test",
-        width: 230,
+        width: 310,
       },
     ],
     pagination: true,
@@ -324,36 +225,29 @@ const PT = ({ category, type, activeTab }) => {
           </div>
         </div>
       </div>
-      {(category === "IELTS" || category === "PTE") && (
-        <div className="col-xl-6 col-lg-6 col-md-6 col-12">
-          <div className="dashboard__select__heading">
-            <span>Exam category</span>
-          </div>
-          <div className="dashboard__selector">
-            <select
-              className="form-select"
-              value={createPT.sub_category}
-              onChange={(e) =>
-                dispatchPT({ type: "sub_category", value: e.target.value })
-              }
-            >
-              {examSubCategory.map((item, index) => (
-                <option key={index} value={item.value}>
-                  {item.name}
+
+      <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+        <div className="dashboard__select__heading">
+          <span>Exam Type</span>
+        </div>
+        <div className="dashboard__selector">
+          <select
+            className="form-select"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            {["Reading", "Writing", "Listening", "Speaking"].map(
+              (item, index) => (
+                <option key={index} value={item}>
+                  {item}
                 </option>
-              ))}
-            </select>
-          </div>
+              )
+            )}
+          </select>
         </div>
-      )}
-      {exams[type]?.length > 0 && (
-        <div className="dashboard__form__wraper">
-          <div className="dashboard__form__input">
-            <label>Total No. of Questions: {totalQuestions}</label>
-          </div>
-        </div>
-      )}
-      <div className="dashboard__form__wraper">
+      </div>
+
+      <div className="dashboard__form__wraper mt-3">
         <div className="dashboard__form__input">
           {isLoading ? (
             <Loading />
@@ -385,4 +279,4 @@ const PT = ({ category, type, activeTab }) => {
   );
 };
 
-export default PT;
+export default CreatePTEPT;

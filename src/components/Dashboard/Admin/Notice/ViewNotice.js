@@ -99,10 +99,7 @@ const ViewNotice = ({ activeTab }) => {
               student:
                 item?.student?.length > 0
                   ? item?.student
-                      .map(
-                        (student) =>
-                          `${student?.user?.first_name} ${student?.user?.last_name}`
-                      )
+                      .map((student) => `${student?.name}`)
                       .join(", ")
                   : "-",
               course:

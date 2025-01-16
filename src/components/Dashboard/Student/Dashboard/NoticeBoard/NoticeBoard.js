@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment/moment";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 import { Box, List, ListItem, Typography } from "@mui/material";
 
 const NoticeBoard = () => {
-  const currentDate = moment().startOf("day");
-  const [noticeData, setNoticeData] = useState([]);
-  const category = JSON.parse(localStorage.getItem("course"))?.course_category;
-
-  const activeNotice = noticeData?.filter((item) =>
-    moment(item.expiry_date, "YYYY-MM-DD").isSameOrAfter(currentDate)
-  );
+  const [notice, setNotice] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -30,13 +23,13 @@ const NoticeBoard = () => {
           8000
         );
         if (response.status === 200) {
-          const responseNotice = response?.data?.map((item) => {
+          const noticeData = response?.data?.map((item) => {
             return {
               notice: item?.notice,
               expiry_date: item?.expiry_date,
             };
           });
-          setNoticeData(responseNotice);
+          setNotice(noticeData);
         } else {
           console.log("error");
         }
@@ -44,7 +37,7 @@ const NoticeBoard = () => {
         console.log("error", error);
       }
     })();
-  }, [category]);
+  }, []);
 
   const checkLink = (text) => {
     const urlPattern = /(https?:\/\/[^\s]+)/g;
@@ -66,7 +59,7 @@ const NoticeBoard = () => {
   };
 
   return (
-    activeNotice?.length > 0 && (
+    notice?.length > 0 && (
       <Box overflow="auto" p={1}>
         <Box
           sx={{
@@ -79,7 +72,7 @@ const NoticeBoard = () => {
             Notice board
           </Typography>
           <List>
-            {activeNotice?.map((notice, index) => (
+            {notice?.map((notice, index) => (
               <ListItem
                 key={index}
                 sx={{

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import ajaxCall from "../../../../helpers/ajaxCall";
-import ClassList from "../Classes/ClassList";
 import Tab from "../../../UI/Tab";
-import { filterByDateRange } from "../Classes/filterByDateRange";
+import ClassList from "../Classes/ClassList";
+import ajaxCall from "../../../../helpers/ajaxCall";
 import UpcomingClass from "../Classes/UpcomingClass";
+import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const tabs = [{ name: "Upcoming" }, { name: "Tutor Support" }];
 
@@ -17,9 +17,6 @@ const TutorSupport = ({
   const [activeTab, setActiveTab] = useState("Tutor Support");
   const [tutorSupportClass, setTutorSupportClass] = useState([]);
 
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -28,62 +25,24 @@ const TutorSupport = ({
     setIsLoading(true);
     (async () => {
       try {
-        let tutorSupportClassData = [];
-
-        if (batchIds?.length) {
-          for (let i = 0; i < batchIds.length; i++) {
-            const batchId = batchIds[i];
-            const response = await ajaxCall(
-              `/liveclass_listwithid_view/${batchId}/?live_class_type=Tutor Support`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              tutorSupportClassData = [
-                ...tutorSupportClassData,
-                ...response?.data,
-              ];
-            }
-          }
+        const response = await ajaxCall(
+          "/liveclass/studentonly/?liveClassType=Tutor Support",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          onDataFetch(response?.data);
+          setTutorSupportClass(response?.data);
         }
-
-        if (courseIds?.length) {
-          for (let i = 0; i < courseIds.length; i++) {
-            const courseId = courseIds[i];
-            const response = await ajaxCall(
-              `/liveclass-withcourseid/${courseId}/?live_class_type=Tutor Support`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              tutorSupportClassData = [
-                ...tutorSupportClassData,
-                ...response?.data,
-              ];
-            }
-          }
-        }
-
-        onDataFetch(tutorSupportClassData);
-        setTutorSupportClass(tutorSupportClassData);
       } catch (error) {
         console.log("error", error);
       } finally {

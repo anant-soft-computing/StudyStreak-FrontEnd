@@ -193,8 +193,7 @@ const endpoints = {
   Lesson: "/lesson-get/",
   "Flash Card": "/gamification/flashcard/",
   "Live Class": "/liveclass_list_view/",
-  "Exam Block":
-    "/exam-blocks/?fields=id,exam_name,exam_type,exam_category,no_of_questions",
+  "Exam Block": "/exam/blocks/",
   "Full Length Test": "/get/flt/",
   "Practice Test": "/moduleListView/",
 };

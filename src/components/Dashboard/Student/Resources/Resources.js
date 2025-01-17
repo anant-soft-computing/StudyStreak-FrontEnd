@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
@@ -8,12 +8,10 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 
 const Resources = () => {
   const { packageCount } = useLocation().state || {};
+
   const [isLoading, setIsLoading] = useState(true);
   const [resourcesList, setResourceList] = useState([]);
 
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
-  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
   const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const data = resourcesList.flatMap((item) => {
@@ -23,20 +21,6 @@ const Resources = () => {
       description: doc?.description,
     }));
   });
-
-  const filterResources = useCallback(
-    (data) => {
-      return data.filter((item) => {
-        const studentMatch = item?.student?.some((s) => s?.id === studentId);
-        const batchMatch = item?.batch?.some((b) => batchIds?.includes(b?.id));
-        const courseMatch = item?.course?.some(
-          (c) => courseIds?.includes(c?.id) && c?.category === category
-        );
-        return studentMatch || batchMatch || courseMatch;
-      });
-    },
-    [category]
-  );
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -58,8 +42,10 @@ const Resources = () => {
         );
 
         if (response?.status === 200) {
-          const filteredResources = filterResources(response?.data);
-          setResourceList(filteredResources);
+          const data = response?.data?.filter((item) =>
+            item?.course.some((course) => course.category === category)
+          );
+          setResourceList(data);
         }
       } catch (error) {
         console.log("error", error);
@@ -69,7 +55,7 @@ const Resources = () => {
     };
 
     fetchResources();
-  }, [filterResources]);
+  }, [category]);
 
   const columns = [
     {

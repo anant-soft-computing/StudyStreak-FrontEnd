@@ -813,7 +813,7 @@ const DragDrop = () => {
 
     try {
       const response = await ajaxCall(
-        "/exam-blocks/",
+        "/exam/blocks/",
         {
           headers: {
             Authorization: `Bearer ${
@@ -871,7 +871,7 @@ const DragDrop = () => {
     formData.append("sub_category", listeningData?.sub_category);
     try {
       const response = await ajaxCall(
-        "/exam-blocks/",
+        "/exam/blocks/",
         {
           method: "POST",
           body: formData,

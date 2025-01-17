@@ -77,7 +77,7 @@ const ViewMT = ({ activeTab }) => {
       );
     } else {
       fetchData(
-        `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type,sub_category&exam_category=${examCategory}&exam_type=${examType}`,
+        `/exam/blocks/?exam_category=${examCategory}&exam_type=${examType}`,
         setMockTestData
       );
     }

@@ -144,7 +144,7 @@ const PT = ({ category, type, activeTab }) => {
         const url =
           type === "Speaking"
             ? `/speaking-block/?exam_category=${category}&sub_category=${createPT.sub_category}`
-            : `/exam-blocks/?fields=id,exam_name,exam_type,exam_category,block_type,no_of_questions&exam_type=${type}&exam_category=${category}&sub_category=${createPT.sub_category}`;
+            : `/exam/blocks/?exam_type=${type}&exam_category=${category}&sub_category=${createPT.sub_category}`;
         const response = await ajaxCall(
           url,
           {

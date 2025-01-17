@@ -194,7 +194,7 @@ const ViewGamification = ({ content, activeTab }) => {
     const endpoints = {
       "Flash Card": `/gamification/flashcard/`,
       Lesson: `/lesson-get/`,
-      "Exam Block": `/exam-blocks/?fields=id,exam_name,exam_type,block_type`,
+      "Exam Block": `/exam/blocks/`,
       "Full Length Test": `/get/flt/`,
       "Practice Test": `/moduleListView/`,
       "Live Class": `/liveclass_list_view/`,

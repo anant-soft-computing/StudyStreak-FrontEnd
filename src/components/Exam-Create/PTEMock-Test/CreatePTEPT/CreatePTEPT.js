@@ -61,7 +61,7 @@ const CreatePTEPT = ({ activeTab,setActiveTab, category }) => {
         const url =
           type === "Speaking"
             ? `/speaking-block/?exam_category=${category}`
-            : `/exam-blocks/?fields=id,exam_name,exam_type,sub_category,block_type&exam_type=${type}&exam_category=${category}`;
+            : `/exam/blocks/?exam_type=${type}&exam_category=${category}`;
         const response = await ajaxCall(
           url,
           {

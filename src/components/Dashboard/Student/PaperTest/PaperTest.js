@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
@@ -8,12 +8,10 @@ import ajaxCall from "../../../../helpers/ajaxCall";
 
 const PaperTest = () => {
   const { packageCount } = useLocation().state || {};
+  
   const [isLoading, setIsLoading] = useState(true);
   const [paperTestList, setPaperTestList] = useState([]);
 
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
-  const studentId = JSON?.parse(localStorage.getItem("StudentID"));
   const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
   const data = paperTestList.flatMap((item) => {
@@ -29,20 +27,6 @@ const PaperTest = () => {
     const numB = parseInt(b.description.match(/\d+/)?.[0]) || 0;
     return numA - numB;
   });
-
-  const filterPaperTest = useCallback(
-    (data) => {
-      return data.filter((item) => {
-        const studentMatch = item?.student?.some((s) => s?.id === studentId);
-        const batchMatch = item?.batch?.some((b) => batchIds?.includes(b?.id));
-        const courseMatch = item?.course?.some(
-          (c) => courseIds?.includes(c?.id) && c?.category === category
-        );
-        return studentMatch || batchMatch || courseMatch;
-      });
-    },
-    [category]
-  );
 
   useEffect(() => {
     const fetchResources = async () => {
@@ -64,8 +48,10 @@ const PaperTest = () => {
         );
 
         if (response?.status === 200) {
-          const filteredResources = filterPaperTest(response?.data);
-          setPaperTestList(filteredResources);
+          const data = response?.data?.filter((item) =>
+            item?.course.some((course) => course.category === category)
+          );
+          setPaperTestList(data);
         }
       } catch (error) {
         console.log("error", error);
@@ -74,7 +60,7 @@ const PaperTest = () => {
       }
     };
     fetchResources();
-  }, [filterPaperTest]);
+  }, [category]);
 
   const columns = [
     {

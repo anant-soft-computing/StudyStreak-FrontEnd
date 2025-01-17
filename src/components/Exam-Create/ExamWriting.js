@@ -142,7 +142,7 @@ const ExamWriting = ({ category }) => {
 
     try {
       const response = await ajaxCall(
-        "/exam-blocks/",
+        "/exam/blocks/",
         {
           headers: {
             Accept: "application/json",

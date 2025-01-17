@@ -39,7 +39,7 @@ const GeneralMTExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/exam-blocks/?exam_type=${examType}`,
+          `/exam/blocks/?exam_type=${examType}`,
           {
             headers: {
               Accept: "application/json",

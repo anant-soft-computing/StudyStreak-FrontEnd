@@ -43,7 +43,7 @@ const GmatLiveMockTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/exam-blocks/`,
+          `/exam/block/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -57,16 +57,7 @@ const GmatLiveMockTest = () => {
           8000
         );
         if (response.status === 200) {
-          const examBlockWithNumbers = response?.data?.map(
-            (examBlock, index) => ({
-              ...examBlock,
-              no: index + 1,
-            })
-          );
-          const tempExamData = examBlockWithNumbers?.find(
-            (examBlock) => examBlock?.id.toString() === examId
-          );
-          setExamData(tempExamData);
+          setExamData(response?.data);
         } else {
           console.log("error");
         }

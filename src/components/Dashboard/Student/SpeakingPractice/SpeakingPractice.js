@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import Tab from "../../../UI/Tab";
+import ClassList from "../Classes/ClassList";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import UpcomingClass from "../Classes/UpcomingClass";
-import ClassList from "../Classes/ClassList";
-import Tab from "../../../UI/Tab";
 import { filterByDateRange } from "../Classes/filterByDateRange";
 
 const tabs = [{ name: "Upcoming" }, { name: "Available Slot" }];
@@ -23,9 +23,6 @@ const SpeakingPractice = ({
   );
   const [speakingSolvingClass, setSpeakingSolvingClass] = useState([]);
 
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -34,55 +31,24 @@ const SpeakingPractice = ({
     setIsLoading(true);
     (async () => {
       try {
-        let speakingClass = [];
-
-        if (batchIds?.length) {
-          for (let i = 0; i < batchIds.length; i++) {
-            const batchId = batchIds[i];
-            const response = await ajaxCall(
-              `/liveclass_listwithid_view/${batchId}/?live_class_type=Speaking-Practice`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              speakingClass = [...speakingClass, ...response?.data];
-            }
-          }
+        const response = await ajaxCall(
+          "/liveclass/studentonly/?liveClassType=Speaking-Practice",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          onDataFetch(response?.data);
+          setSpeakingSolvingClass(response?.data);
         }
-
-        if (courseIds?.length) {
-          for (let j = 0; j < courseIds.length; j++) {
-            const courseId = courseIds[j];
-            const response = await ajaxCall(
-              `/liveclass-withcourseid/${courseId}/?live_class_type=Speaking-Practice`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              speakingClass = [...speakingClass, ...response?.data];
-            }
-          }
-        }
-        onDataFetch(speakingClass);
-        setSpeakingSolvingClass(speakingClass);
       } catch (error) {
         console.log("error", error);
       } finally {

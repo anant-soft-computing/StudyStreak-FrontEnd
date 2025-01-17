@@ -12,11 +12,11 @@ import WritingMTInstruction from "../Instruction/MiniTestInstruction/WritingMTIn
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
-  const containerRef = useRef(null);
   const navigate = useNavigate();
+  const containerRef = useRef(null);
   const examId = useLocation()?.pathname?.split("/")?.[3];
-  const examType = useLocation()?.pathname?.split("/")?.[2];
-  const [examData, setExamData] = useState([]);
+
+  const [examData, setExamData] = useState({});
   const [examAnswer, setExamAnswer] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(0);
@@ -24,9 +24,11 @@ const LiveExam = () => {
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [instructionCompleted, setInstructionCompleted] = useState(false);
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
-  const [instructionCompleted, setInstructionCompleted] = useState(false);
+  
   let highlightedElement = null;
 
   const handleCompleteInstruction = () => setInstructionCompleted(true);
@@ -47,7 +49,7 @@ const LiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/exam-blocks/?exam_type=${examType}`,
+          `/exam/block/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -61,16 +63,7 @@ const LiveExam = () => {
           8000
         );
         if (response.status === 200) {
-          const examBlockWithNumbers = response?.data?.map(
-            (examBlock, index) => ({
-              ...examBlock,
-              no: index + 1,
-            })
-          );
-          const tempExamData = examBlockWithNumbers?.find(
-            (examBlock) => examBlock?.id.toString() === examId
-          );
-          setExamData(tempExamData);
+          setExamData(response?.data);
         } else {
           console.log("error");
         }
@@ -78,7 +71,7 @@ const LiveExam = () => {
         console.log("error", error);
       }
     })();
-  }, [examId, examType]);
+  }, [examId]);
 
   const examLastSubmit = async () => {
     try {

@@ -14,11 +14,8 @@ const Counselling = ({
   onDataFetch,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("Counselling");
   const [counselling, setCounselling] = useState([]);
-
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
+  const [activeTab, setActiveTab] = useState("Counselling");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -28,56 +25,24 @@ const Counselling = ({
     setIsLoading(true);
     (async () => {
       try {
-        let counsellingData = [];
-
-        if (batchIds?.length) {
-          for (let i = 0; i < batchIds.length; i++) {
-            const batchId = batchIds[i];
-            const response = await ajaxCall(
-              `/liveclass_listwithid_view/${batchId}/?live_class_type=Counselling`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              counsellingData = [...counsellingData, ...response?.data];
-            }
-          }
+        const response = await ajaxCall(
+          "/liveclass/studentonly/?liveClassType=Counselling",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          onDataFetch(response?.data);
+          setCounselling(response?.data);
         }
-
-        if (courseIds?.length) {
-          for (let i = 0; i < courseIds.length; i++) {
-            const courseId = courseIds[i];
-            const response = await ajaxCall(
-              `/liveclass-withcourseid/${courseId}/?live_class_type=Counselling`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              counsellingData = [...counsellingData, ...response?.data];
-            }
-          }
-        }
-
-        onDataFetch(counsellingData);
-        setCounselling(counsellingData);
       } catch (error) {
         console.log("error", error);
       } finally {

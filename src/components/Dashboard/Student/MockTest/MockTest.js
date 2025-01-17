@@ -167,7 +167,7 @@ const MockTest = () => {
           }
         } else {
           const examBlocksResponse = await ajaxCall(
-            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type,sub_category&exam_type=${activeTab}&exam_category=${category}&sub_category=${ieltsCategory}`,
+            `/exam/blocks/?exam_type=${activeTab}&exam_category=${category}&sub_category=${ieltsCategory}`,
             {
               headers: {
                 Accept: "application/json",

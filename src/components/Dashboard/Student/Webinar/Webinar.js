@@ -12,9 +12,6 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
   const [activeTab, setActiveTab] = useState("Webinar");
   const [webinar, setWebinar] = useState([]);
 
-  const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
-  const courseIds = JSON?.parse(localStorage.getItem("courses"));
-
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
@@ -23,56 +20,24 @@ const Webinar = ({ count, solvingClassBook, selectedDate, onDataFetch }) => {
     setIsLoading(true);
     (async () => {
       try {
-        let webinarData = [];
-
-        if (batchIds?.length) {
-          for (let i = 0; i < batchIds.length; i++) {
-            const batchId = batchIds[i];
-            const response = await ajaxCall(
-              `/liveclass_listwithid_view/${batchId}/?live_class_type=Webinar`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              webinarData = [...webinarData, ...response?.data];
-            }
-          }
+        const response = await ajaxCall(
+          "/liveclass/studentonly/?liveClassType=Webinar",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          onDataFetch(response?.data);
+          setWebinar(response?.data);
         }
-
-        if (courseIds?.length) {
-          for (let i = 0; i < courseIds.length; i++) {
-            const courseId = courseIds[i];
-            const response = await ajaxCall(
-              `/liveclass-withcourseid/${courseId}/?live_class_type=Webinar`,
-              {
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${
-                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                  }`,
-                },
-                method: "GET",
-              },
-              8000
-            );
-            if (response?.status === 200) {
-              webinarData = [...webinarData, ...response?.data];
-            }
-          }
-        }
-
-        onDataFetch(webinarData);
-        setWebinar(webinarData);
       } catch (error) {
         console.log("error", error);
       } finally {

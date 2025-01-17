@@ -118,7 +118,7 @@ const FreeMiniTest = () => {
           }
         } else {
           const examBlocksResponse = await ajaxCall(
-            `/exam-blocks/?fields=id,block_type,exam_category,exam_name,no_of_questions,exam_type&exam_type=${examType}&exam_category=${examCategoryy}&sub_category=${
+            `/exam/blocks/?exam_type=${examType}&exam_category=${examCategoryy}&sub_category=${
               examCategoryy === "IELTS" ? ieltsCategory : ""
             }`,
             {

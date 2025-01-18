@@ -66,7 +66,7 @@ const FLTReport = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/get/flt/",
+          "/ct/flts/",
           {
             headers: {
               Accept: "application/json",

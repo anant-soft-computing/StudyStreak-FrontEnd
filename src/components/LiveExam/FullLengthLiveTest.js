@@ -140,7 +140,7 @@ const FullLengthLiveExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/get/flt/",
+          `/ct/flt/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -154,26 +154,22 @@ const FullLengthLiveExam = () => {
           8000
         );
         if (response.status === 200) {
-          const filteredData = response?.data?.filter(
-            (examBlock) => examBlock?.id.toString() === examId.toString()
-          );
+          const filteredData = response?.data;
           let pappers = [];
-          sortPapers(filteredData[0].listening_set.Listening).forEach(
-            (item) => {
-              pappers.push({
-                ...item,
-                paperId: filteredData[0].listening_set.id,
-              });
-            }
-          );
-          sortPapers(filteredData[0].reading_set.Reading).forEach((item) => {
-            pappers.push({ ...item, paperId: filteredData[0].reading_set.id });
+          sortPapers(filteredData.listening_set.Listening).forEach((item) => {
+            pappers.push({
+              ...item,
+              paperId: filteredData.listening_set.id,
+            });
           });
-          sortPapers(filteredData[0].writing_set.Writing).forEach((item) => {
-            pappers.push({ ...item, paperId: filteredData[0].writing_set.id });
+          sortPapers(filteredData.reading_set.Reading).forEach((item) => {
+            pappers.push({ ...item, paperId: filteredData.reading_set.id });
+          });
+          sortPapers(filteredData.writing_set.Writing).forEach((item) => {
+            pappers.push({ ...item, paperId: filteredData.writing_set.id });
           });
           sortPapers(
-            filteredData[0].speaking_set.Speaking.map((item) => ({
+            filteredData.speaking_set.Speaking.map((item) => ({
               ...item,
               exam_name: item.name,
               exam_type: "Speaking",
@@ -184,11 +180,11 @@ const FullLengthLiveExam = () => {
               })),
             }))
           ).forEach((item) => {
-            pappers.push({ ...item, paperId: filteredData[0].speaking_set.id });
+            pappers.push({ ...item, paperId: filteredData.speaking_set.id });
           });
-          filteredData[0].papers = pappers;
+          filteredData.papers = pappers;
           setFullPaper(pappers);
-          setFullLengthId(filteredData[0].id);
+          setFullLengthId(filteredData.id);
         }
       } catch (error) {
         console.log("error", error);

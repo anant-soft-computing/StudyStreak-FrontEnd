@@ -87,22 +87,22 @@ const specificColumns = {
     { headerName: "Exam Name", field: "name", filter: true },
     {
       headerName: "Reading Set",
-      field: "reading_set.Reading.length",
+      field: "reading_block_count",
       filter: true,
     },
     {
       headerName: "Writing Set",
-      field: "writing_set.Writing.length",
+      field: "writing_block_count",
       filter: true,
     },
     {
       headerName: "Listening Set",
-      field: "listening_set.Listening.length",
+      field: "listening_block_count",
       filter: true,
     },
     {
       headerName: "Speaking Set",
-      field: "speaking_set.Speaking.length",
+      field: "speaking_block_count",
       filter: true,
     },
     { headerName: "Points", field: "points", filter: true },
@@ -192,12 +192,12 @@ const ViewGamification = ({ content, activeTab }) => {
 
   useEffect(() => {
     const endpoints = {
-      "Flash Card": `/gamification/flashcard/`,
-      Lesson: `/lesson-get/`,
-      "Exam Block": `/exam/blocks/`,
-      "Full Length Test": `/get/flt/`,
-      "Practice Test": `/moduleListView/`,
-      "Live Class": `/liveclass_list_view/`,
+      "Flash Card": "/gamification/flashcard/",
+      Lesson: "/lesson-get/",
+      "Exam Block": "/exam/blocks/",
+      "Full Length Test": "/ct/flts/",
+      "Practice Test": "/moduleListView/",
+      "Live Class": "/liveclass_list_view/",
     };
 
     if (content && endpoints[content] && activeTab === "View Gamification") {

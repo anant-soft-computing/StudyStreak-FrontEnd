@@ -40,7 +40,7 @@ const ViewFLT = ({ activeTab }) => {
   useEffect(() => {
     if (activeTab !== "View FLT") return;
 
-    fetchData("/get/flt/", setFltList);
+    fetchData("/ct/flts/", setFltList);
   }, [activeTab, authData.accessToken, fetchData]);
 
   if (isLoading) {
@@ -71,25 +71,25 @@ const ViewFLT = ({ activeTab }) => {
     },
     {
       headerName: "Reading Set",
-      field: "reading_set.Reading.length",
+      field: "reading_block_count",
       filter: true,
       width: 265,
     },
     {
       headerName: "Writing Set",
-      field: "writing_set.Writing.length",
+      field: "writing_block_count",
       filter: true,
       width: 265,
     },
     {
       headerName: "Listening Set",
-      field: "listening_set.Listening.length",
+      field: "listening_block_count",
       filter: true,
       width: 265,
     },
     {
       headerName: "Speaking Set",
-      field: "speaking_set.Speaking.length",
+      field: "speaking_block_count",
       filter: true,
       width: 265,
     },

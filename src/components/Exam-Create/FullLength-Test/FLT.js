@@ -15,6 +15,8 @@ const intialFLTData = {
   Writing: "",
   Listening: "",
   Speaking: "",
+  is_diagnostic: false,
+  is_quick: false,
 };
 
 const initialSubmit = {
@@ -149,7 +151,10 @@ const FLT = ({ category, activeTab }) => {
         writing_set: createFLT.Writing,
         listening_set: createFLT.Listening,
         speaking_set: createFLT.Speaking,
+        category: category,
         sub_category: createFLT.sub_category,
+        is_quick: createFLT.is_quick,
+        is_diagnostic: createFLT.is_diagnostic,
         difficulty_level: createFLT.difficulty_level,
       };
       const response = await ajaxCall(
@@ -243,7 +248,51 @@ const FLT = ({ category, activeTab }) => {
   return (
     <>
       <div className="row">
-        <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+        <div className="d-flex flex-wrap gap-4">
+          <div className="form__check">
+            <label
+              style={{
+                fontSize: "14px",
+                fontWeight: "600",
+                color: "black",
+              }}
+            >
+              Diagnostic
+            </label>{" "}
+            <input
+              type="checkbox"
+              value={createFLT.is_diagnostic}
+              onChange={(e) => {
+                dispatchFLT({
+                  type: "is_diagnostic",
+                  value: e.target.checked,
+                });
+              }}
+            />
+          </div>
+          <div className="form__check">
+            <label
+              style={{
+                fontSize: "14px",
+                fontWeight: "600",
+                color: "black",
+              }}
+            >
+              Free Diagnostic
+            </label>{" "}
+            <input
+              type="checkbox"
+              value={createFLT.is_quick}
+              onChange={(e) => {
+                dispatchFLT({
+                  type: "is_quick",
+                  value: e.target.checked,
+                });
+              }}
+            />
+          </div>
+        </div>
+        <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-3">
           <div className="dashboard__form__wraper">
             <div className="dashboard__form__input">
               <label>Full Length Test Name</label>
@@ -259,7 +308,7 @@ const FLT = ({ category, activeTab }) => {
           </div>
         </div>
         {category === "IELTS" && (
-          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-3">
             <div className="dashboard__select__heading">
               <span>Exam category</span>
             </div>
@@ -280,7 +329,7 @@ const FLT = ({ category, activeTab }) => {
             </div>
           </div>
         )}
-        <div className="col-xl-12 col-lg-12 col-md-12 col-12">
+        <div className="col-xl-12 col-lg-12 col-md-12 col-12 mt-3">
           <div className="d-flex flex-wrap gap-3">
             <div className="dashboard__form__input">
               <label>(1) Reading : </label>

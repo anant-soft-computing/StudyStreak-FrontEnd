@@ -23,7 +23,8 @@ const PracticeTest = () => {
   const [ieltsCategory, setIeltsCategory] = useState("");
   const category = JSON.parse(localStorage.getItem("course"))?.course_category;
 
-  const tabs =category !== "GENERAL"
+  const tabs =
+    category !== "GENERAL"
       ? [
           { name: "Reading" },
           { name: "Writing" },
@@ -31,25 +32,6 @@ const PracticeTest = () => {
           { name: "Speaking" },
         ]
       : [{ name: "General" }];
-
-  const filterByIELTSCategory = (item, category) => {
-    switch (category) {
-      case "General":
-        return item.name.includes("General");
-      case "Foundation":
-        return item.name.includes("Foundation");
-      case "Grammar":
-        return item.name.includes("Grammar");
-      case "Academic":
-        return (
-          !item.name.includes("General") &&
-          !item.name.includes("Foundation") &&
-          !item.name.includes("Grammar")
-        );
-      default:
-        return false;
-    }
-  };
 
   useEffect(() => {
     if (category !== "GENERAL") {
@@ -154,35 +136,12 @@ const PracticeTest = () => {
         if (response.status === 200) {
           const { data } = response;
           const filteredData = {
-            Reading: data.filter(
-              ({ exam_type, IELTS }) =>
-                exam_type === "Reading" &&
-                !IELTS?.Name?.includes("Diagnostic") &&
-                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
-            ),
-            Writing: data.filter(
-              ({ exam_type, IELTS }) =>
-                exam_type === "Writing" &&
-                !IELTS?.Name?.includes("Diagnostic") &&
-                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
-            ),
-            Listening: data.filter(
-              ({ exam_type, IELTS }) =>
-                exam_type === "Listening" &&
-                !IELTS?.Name?.includes("Diagnostic") &&
-                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
-            ),
-            Speaking: data.filter(
-              ({ exam_type, IELTS }) =>
-                exam_type === "Speaking" &&
-                !IELTS?.Name?.includes("Diagnostic") &&
-                filterByIELTSCategory({ name: IELTS?.Name }, ieltsCategory)
-            ),
-            General: data.filter(
-              ({ exam_type, IELTS }) =>
-                exam_type === "General" &&
-                !IELTS?.Name?.includes("Diagnostic") &&
-                studentCourses?.some((item) => IELTS?.Name?.includes(item))
+            Reading: data,
+            Writing: data,
+            Listening: data,
+            Speaking: data,
+            General: data.filter(({ IELTS }) =>
+              studentCourses?.some((item) => IELTS?.Name?.includes(item))
             ),
           };
           setTestData(filteredData);

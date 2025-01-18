@@ -26,25 +26,6 @@ const FullLengthTest = () => {
     return nameA - nameB;
   });
 
-  const filterByIELTSCategory = (item, category) => {
-    switch (category) {
-      case "General":
-        return item.name.includes("General");
-      case "Foundation":
-        return item.name.includes("Foundation");
-      case "Grammar":
-        return item.name.includes("Grammar");
-      case "Academic":
-        return (
-          !item.name.includes("General") &&
-          !item.name.includes("Foundation") &&
-          !item.name.includes("Grammar")
-        );
-      default:
-        return false;
-    }
-  };
-
   useEffect(() => {
     (async () => {
       try {
@@ -78,7 +59,7 @@ const FullLengthTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/get/flt/?sub_category=${ieltsCategory}`,
+          `/ct/flts/?is_diagnostic=false&is_quick=false&category=${category}&sub_category=${ieltsCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -92,12 +73,7 @@ const FullLengthTest = () => {
           8000
         );
         if (response.status === 200) {
-          const fullLengthTest = response.data.filter(
-            ({ name }) =>
-              !name.includes("Diagnostic") &&
-              filterByIELTSCategory({ name }, ieltsCategory)
-          );
-          setFullLengthTestData(fullLengthTest);
+          setFullLengthTestData(response.data);
         }
       } catch (error) {
         console.log("error", error);
@@ -105,7 +81,7 @@ const FullLengthTest = () => {
         setIsLoading(false);
       }
     })();
-  }, [ieltsCategory]);
+  }, [category, ieltsCategory]);
 
   const handleFullLengthTest = (examId) => {
     if (count === 0) {
@@ -157,22 +133,22 @@ const FullLengthTest = () => {
     },
     {
       headerName: "Reading Set",
-      field: "reading_set.Reading.length",
+      field: "reading_block_count",
       filter: true,
     },
     {
       headerName: "Writing Set",
-      field: "writing_set.Writing.length",
+      field: "writing_block_count",
       filter: true,
     },
     {
       headerName: "Listening Set",
-      field: "listening_set.Listening.length",
+      field: "listening_block_count",
       filter: true,
     },
     {
       headerName: "Speaking Set",
-      field: "speaking_set.Speaking.length",
+      field: "speaking_block_count",
       filter: true,
     },
     {

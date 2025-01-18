@@ -23,7 +23,7 @@ const FreeMockTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/get/flt/",
+          "/ct/flts/?is_diagnostic=false&is_quick=false&category=PTE",
           {
             headers: {
               Accept: "application/json",
@@ -37,10 +37,7 @@ const FreeMockTest = () => {
           8000
         );
         if (response.status === 200) {
-          const fullLengthTest = response.data.filter(({ name }) =>
-            name.includes("PTE")
-          );
-          setFullLengthTestData(fullLengthTest);
+          setFullLengthTestData(response.data);
         }
       } catch (error) {
         console.log("error", error);
@@ -75,25 +72,25 @@ const FreeMockTest = () => {
     },
     {
       headerName: "Reading Set",
-      field: "reading_set.Reading.length",
+      field: "reading_block_count",
       filter: true,
       width: 250,
     },
     {
       headerName: "Writing Set",
-      field: "writing_set.Writing.length",
+      field: "writing_block_count",
       filter: true,
       width: 250,
     },
     {
       headerName: "Listening Set",
-      field: "listening_set.Listening.length",
+      field: "listening_block_count",
       filter: true,
       width: 250,
     },
     {
       headerName: "Speaking Set",
-      field: "speaking_set.Speaking.length",
+      field: "speaking_block_count",
       filter: true,
       width: 250,
     },

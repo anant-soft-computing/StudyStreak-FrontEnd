@@ -54,7 +54,7 @@ const EnglishLevelTest = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/diagnostic-list/",
+          "/ct/flts/?is_diagnostic=true&is_quick=false",
           {
             headers: {
               Accept: "application/json",
@@ -68,10 +68,7 @@ const EnglishLevelTest = () => {
           8000
         );
         if (response.status === 200) {
-          const tests = response.data.filter(({ name }) =>
-            name.includes("Diagnostic") && !name.includes("Quick")
-          );
-          setEnglishLevelTestData(tests);
+          setEnglishLevelTestData(response.data);
         }
       } catch (error) {
         console.log("error", error);
@@ -117,22 +114,22 @@ const EnglishLevelTest = () => {
     },
     {
       headerName: "Reading Set",
-      field: "reading_set.Reading.length",
+      field: "reading_block_count",
       filter: true,
     },
     {
       headerName: "Writing Set",
-      field: "writing_set.Writing.length",
+      field: "writing_block_count",
       filter: true,
     },
     {
       headerName: "Listening Set",
-      field: "listening_set.Listening.length",
+      field: "listening_block_count",
       filter: true,
     },
     {
       headerName: "Speaking Set",
-      field: "speaking_set.Speaking.length",
+      field: "speaking_block_count",
       filter: true,
     },
     {

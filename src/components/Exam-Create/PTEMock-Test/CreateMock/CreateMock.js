@@ -122,6 +122,7 @@ const CreateMock = ({ activeTab, primaryTab }) => {
     setFormStatus((prev) => ({ ...prev, isSubmitting: true }));
     try {
       const data = {
+        category: "PTE",
         name: createFLT.name,
         reading_set: createFLT.Reading,
         writing_set: createFLT.Writing,

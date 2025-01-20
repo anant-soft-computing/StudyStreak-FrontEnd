@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ajaxCall from "../../helpers/ajaxCall";
 import SmallModal from "../UI/Modal";
+import Loading from "../UI/Loading";
 
 const PracticeLiveExam = () => {
   const containerRef = useRef(null);
@@ -15,6 +16,7 @@ const PracticeLiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
   const [next, setNext] = useState(0);
@@ -58,10 +60,11 @@ const PracticeLiveExam = () => {
   }, [timer]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=${examForm}`,
+          `/ct/ielts/practice-test/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -75,15 +78,15 @@ const PracticeLiveExam = () => {
           8000
         );
         if (response.status === 200) {
-          const filteredData = response?.data?.filter(
-            (examBlock) => examBlock?.id.toString() === examId.toString()
-          );
+          const filteredData = [response?.data];
           setFullPaper(filteredData);
         } else {
           console.log("error");
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [examId]);
@@ -337,8 +340,12 @@ const PracticeLiveExam = () => {
     }
   };
 
-  return (
-    <>
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : (
+    <div>
       {/* Navbar */}
       <div className="lv-navbar">
         <div className="lv-navbar-title">
@@ -470,7 +477,7 @@ const PracticeLiveExam = () => {
           </SmallModal>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

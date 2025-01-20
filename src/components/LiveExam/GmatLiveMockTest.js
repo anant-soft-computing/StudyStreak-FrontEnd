@@ -6,6 +6,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import readingBandValues from "../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 import InstructionsPage from "./Instruction";
+import Loading from "../UI/Loading";
 const Cheerio = require("cheerio");
 
 const GmatLiveMockTest = () => {
@@ -18,6 +19,7 @@ const GmatLiveMockTest = () => {
   const [linkAnswer, setLinkAnswer] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [timerRunning, setTimerRunning] = useState(true);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,6 +42,7 @@ const GmatLiveMockTest = () => {
   }, [timerRunning]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -63,6 +66,8 @@ const GmatLiveMockTest = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [examId]);
@@ -530,7 +535,11 @@ const GmatLiveMockTest = () => {
     }
   }, [recordedFilePath]);
 
-  return Instruction !== 3 ? (
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : Instruction !== 3 ? (
     <InstructionsPage
       Instruction={Instruction}
       setInstruction={setInstruction}

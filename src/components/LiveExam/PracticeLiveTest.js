@@ -2,14 +2,15 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import ajaxCall from "../../helpers/ajaxCall";
+import Loading from "../UI/Loading";
 import SmallModal from "../UI/Modal";
-import readingBandValues from "../../utils/bandValues/ReadingBandValues";
-import listeningBandValues from "../../utils/bandValues/listeningBandValues";
+import ajaxCall from "../../helpers/ajaxCall";
+import DisplayLeftContainer from "../UI/DisplayPassage";
 import ReadingInstruction from "../Instruction/ReadingInstruction";
 import WritingInstruction from "../Instruction/WritingInstruction";
 import ListeningInstruction from "../Instruction/ListeningInstruction";
-import DisplayLeftContainer from "../UI/DisplayPassage";
+import readingBandValues from "../../utils/bandValues/ReadingBandValues";
+import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 const Cheerio = require("cheerio");
 
 const PracticeLiveExam = () => {
@@ -26,6 +27,7 @@ const PracticeLiveExam = () => {
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
@@ -75,10 +77,11 @@ const PracticeLiveExam = () => {
   }, [timer]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=${examForm}`,
+          `/ct/ielts/practice-test/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -92,9 +95,7 @@ const PracticeLiveExam = () => {
           8000
         );
         if (response.status === 200) {
-          let filteredData = response?.data?.filter(
-            (examBlock) => examBlock?.id.toString() === examId.toString()
-          );
+          let filteredData = [response?.data];
           filteredData[0].IELTS[examForm] = filteredData[0].IELTS[
             examForm
           ].sort((a, b) => {
@@ -118,9 +119,11 @@ const PracticeLiveExam = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
-  }, [examId]);
+  }, [examForm, examId]);
 
   useEffect(() => {
     if (fullPaper?.length !== 0) {
@@ -134,7 +137,7 @@ const PracticeLiveExam = () => {
       setExamBlock(examBlockWithNumbers);
       setExamData(examBlockWithNumbers[next]);
     }
-  }, [fullPaper, next]);
+  }, [examForm, examType, fullPaper, next]);
 
   const handleAnswerLinking = (e, questionId, next) => {
     const { value, id, name, checked } = e.target;
@@ -928,7 +931,11 @@ const PracticeLiveExam = () => {
     setNumberOfWord(words.length);
   };
 
-  return !instructionCompleted ? (
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : !instructionCompleted ? (
     <div className="test-instruction">
       {examData?.exam_type === "Reading" && (
         <ReadingInstruction

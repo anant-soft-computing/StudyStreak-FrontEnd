@@ -42,7 +42,7 @@ const LivePTEExam = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?category=PTE&exam_type=${examForm}`,
+          `/ct/ielts/practice-test/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -56,9 +56,7 @@ const LivePTEExam = () => {
           8000
         );
         if (response.status === 200) {
-          let filteredData = response?.data?.filter(
-            (examBlock) => examBlock?.id.toString() === examId.toString()
-          );
+          let filteredData = [response?.data];
           filteredData[0].IELTS[examForm] = filteredData[0].IELTS[
             examForm
           ].sort((a, b) => {

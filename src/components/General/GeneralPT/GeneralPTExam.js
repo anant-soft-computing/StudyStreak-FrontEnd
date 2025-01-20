@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 import SmallModal from "../../UI/Modal";
 import DisplayLeftContainer from "../../UI/DisplayPassage";
+import Loading from "../../UI/Loading";
 const Cheerio = require("cheerio");
 
 const GeneralPTExam = () => {
@@ -20,6 +21,7 @@ const GeneralPTExam = () => {
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [timer, setTimer] = useState(3600);
   const [timerRunning, setTimerRunning] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
@@ -57,10 +59,11 @@ const GeneralPTExam = () => {
   }, [timer]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=${examForm}`,
+          `/ct/ielts/practice-test/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -74,9 +77,7 @@ const GeneralPTExam = () => {
           8000
         );
         if (response.status === 200) {
-          let filteredData = response?.data?.filter(
-            (examBlock) => examBlock?.id.toString() === examId.toString()
-          );
+          let filteredData = [response?.data];
           filteredData[0].IELTS[examForm] = filteredData[0].IELTS[
             examForm
           ].sort((a, b) => {
@@ -100,6 +101,8 @@ const GeneralPTExam = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [examId]);
@@ -635,8 +638,12 @@ const GeneralPTExam = () => {
     });
   }, [uniqueIdArr, examAnswer, next]);
 
-  return (
-    <>
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : (
+    <div>
       <div className="lv-navbar lv-navbar-responsive">
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
@@ -791,7 +798,7 @@ const GeneralPTExam = () => {
           </SmallModal>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

@@ -21,60 +21,44 @@ const PracticeTestTable = ({
       return;
     }
 
-    Object?.keys(data?.IELTS)?.forEach((key) => {
-      if (Array.isArray(data?.IELTS[key])) {
-        if (data?.IELTS[key].length > 0) {
-          if (testType === "Speaking") {
-            window.open(
-              `/Speaking-PracticeLiveExam/IELTS/${key}/${data.id}`,
-              "_blank"
-            );
-          } else if (
-            testType === "Reading" ||
-            testType === "Writing" ||
-            testType === "Listening"
-          ) {
-            window.open(`/PracticeLiveExam/IELTS/${key}/${data.id}`, "_blank");
-          } else {
-            window.open(
-              `/GENERAL-PracticeLiveExam/IELTS/${key}/${data.id}`,
-              "_blank"
-            );
-          }
-        }
-      }
-    });
+    const baseUrl =
+      data?.exam_type === "Speaking"
+        ? "/Speaking-PracticeLiveExam/IELTS"
+        : "/PracticeLiveExam/IELTS";
+
+    const url =
+      data?.exam_type === "General"
+        ? `/GENERAL-PracticeLiveExam/IELTS/${data.exam_type}/${data.id}`
+        : `${baseUrl}/${data.exam_type}/${data.id}`;
+    window.open(url, "_blank");
   };
 
   const testButton = (params) => {
-    const examId = params.data.id;
-    const paperId = params.data.IELTS.id;
-    const isGiven = givenTest?.find((test) => test?.id === examId);
-    if (isGiven) {
-      return (
-        <button
-          className="take-test"
-          onClick={() => {
-            if (testType === "Writing" || testType === "Speaking") {
-              navigate(`/PracticeTest/Assessment/${testType}/${paperId}`);
-            } else if (testType === "General") {
-              navigate(`/PracticeTest/Answer/GENERAL/${paperId}`);
-            } else {
-              navigate(`/PracticeTest/Answer/${testType}/${paperId}`);
-            }
-          }}
-          style={{ backgroundColor: "green", border: "1px solid green" }}
-        >
-          Review Test
-        </button>
-      );
-    } else {
-      return (
-        <button className="take-test" onClick={() => handleClick(params.data)}>
-          Take Test
-        </button>
-      );
-    }
+    const { id: examId, exam_type, IELTS } = params.data;
+    const paperId = IELTS?.id;
+    const isGiven = givenTest?.some((test) => test?.id === examId);
+
+    return isGiven ? (
+      <button
+        className="take-test"
+        onClick={() => {
+          const reviewUrl =
+            exam_type === "Writing" || exam_type === "Speaking"
+              ? `/PracticeTest/Assessment/${exam_type}/${paperId}`
+              : `/PracticeTest/Answer/${
+                  exam_type === "General" ? "GENERAL" : exam_type
+                }/${paperId}`;
+          navigate(reviewUrl);
+        }}
+        style={{ backgroundColor: "green", border: "1px solid green" }}
+      >
+        Review Test
+      </button>
+    ) : (
+      <button className="take-test" onClick={() => handleClick(params.data)}>
+        Take Test
+      </button>
+    );
   };
 
   const columns = [
@@ -96,16 +80,16 @@ const PracticeTestTable = ({
     {
       headerName: "Sections",
       field: "sections",
-      valueGetter: () => {
-        switch (testType) {
+      valueGetter: (params) => {
+        switch (params.data.exam_type) {
           case "Reading":
-            return "3";
+            return params.data.reading_block_count;
           case "Writing":
-            return "2";
+            return params.data.writing_block_count;
           case "Listening":
-            return "4";
+            return params.data.listening_block_count;
           case "Speaking":
-            return "3";
+            return params.data.speaking_block_count;
           case "General":
             return "3";
           default:
@@ -118,8 +102,8 @@ const PracticeTestTable = ({
     {
       headerName: "Questions",
       field: "questions",
-      valueGetter: () => {
-        switch (testType) {
+      valueGetter: (params) => {
+        switch (params.data.exam_type) {
           case "Reading":
             return "40";
           case "Writing":
@@ -140,8 +124,8 @@ const PracticeTestTable = ({
     {
       headerName: "Time",
       field: "time",
-      valueGetter: () => {
-        switch (testType) {
+      valueGetter: (params) => {
+        switch (params.data.exam_type) {
           case "Reading":
             return "60 Minutes";
           case "Writing":
@@ -164,27 +148,24 @@ const PracticeTestTable = ({
       field: "Status",
       cellRenderer: (params) => {
         const examId = params.data.id;
-        const isGiven = givenTest?.find((test) => test?.id === examId);
-        if (isGiven) {
-          return (
-            <button className="given-tag" style={{ backgroundColor: "green" }}>
-              Given
-            </button>
-          );
-        } else {
-          return (
-            <button className="given-tag" style={{ backgroundColor: "red" }}>
-              Not Given
-            </button>
-          );
-        }
+        const isGiven = givenTest?.some((test) => test?.id === examId);
+
+        return isGiven ? (
+          <button className="given-tag" style={{ backgroundColor: "green" }}>
+            Given
+          </button>
+        ) : (
+          <button className="given-tag" style={{ backgroundColor: "red" }}>
+            Not Given
+          </button>
+        );
       },
       filter: true,
       width: 250,
     },
   ];
 
-  const sortedData = testData.sort((a, b) => {
+  const rowData = testData.sort((a, b) => {
     const getNumber = (name) => {
       const match = name.match(/\d+/);
       return match ? parseInt(match[0], 10) : 0;
@@ -193,20 +174,6 @@ const PracticeTestTable = ({
     const nameB = getNumber(b.IELTS.Name);
     return nameA - nameB;
   });
-
-  const rowData = sortedData.map((data) => ({
-    ...data,
-    sections:
-      testType === "Speaking" ? "3" : testType === "Listening" ? "4" : "3",
-    questions:
-      testType === "Speaking" ? "" : testType === "Writing" ? "20" : "40",
-    time:
-      testType === "Speaking"
-        ? "15 Minutes"
-        : testType === "Listening"
-        ? "30 Minutes"
-        : "60 Minutes",
-  }));
 
   return (
     <>

@@ -78,7 +78,7 @@ const PracticeTestReport = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=${activeTab}`,
+          `/ct/ielts/practice-tests/?exam_type=${activeTab}`,
           {
             headers: {
               Accept: "application/json",

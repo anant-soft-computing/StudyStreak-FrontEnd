@@ -2,13 +2,14 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
+import Loading from "../UI/Loading";
 import SmallModal from "../UI/Modal";
 import ajaxCall from "../../helpers/ajaxCall";
 import DisplayLeftContainer from "../UI/DisplayPassage";
 import { formatTime } from "../../utils/timer/formateTime";
 import ReadingMTInstruction from "../Instruction/MiniTestInstruction/ReadingMTInstruction";
-import ListeningMTInstruction from "../Instruction/MiniTestInstruction/ListeningMTInstruction";
 import WritingMTInstruction from "../Instruction/MiniTestInstruction/WritingMTInstruction";
+import ListeningMTInstruction from "../Instruction/MiniTestInstruction/ListeningMTInstruction";
 const Cheerio = require("cheerio");
 
 const LiveExam = () => {
@@ -20,6 +21,7 @@ const LiveExam = () => {
   const [examAnswer, setExamAnswer] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [timerRunning, setTimerRunning] = useState(true);
   const [numberOfWord, setNumberOfWord] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,7 +30,7 @@ const LiveExam = () => {
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
-  
+
   let highlightedElement = null;
 
   const handleCompleteInstruction = () => setInstructionCompleted(true);
@@ -46,6 +48,7 @@ const LiveExam = () => {
   }, [timerRunning]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -69,6 +72,8 @@ const LiveExam = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [examId]);
@@ -696,7 +701,11 @@ const LiveExam = () => {
     </div>
   );
 
-  return !instructionCompleted ? (
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : !instructionCompleted ? (
     <div className="test-instruction">
       {examData.exam_type === "Reading" && (
         <ReadingMTInstruction startTest={handleCompleteInstruction} />

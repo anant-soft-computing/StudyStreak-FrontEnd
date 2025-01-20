@@ -23,16 +23,6 @@ const Listening = () => {
   const [listeningData, setListeningData] = useState([]);
   const [subCategory, setSubCategory] = useState(pteListeningCategory[0].value);
 
-  const handleClick = (data) => {
-    Object?.keys(data?.IELTS)?.forEach((key) => {
-      if (Array.isArray(data?.IELTS[key])) {
-        if (data?.IELTS[key].length > 0) {
-          window.open(`/PTE/IELTS/${key}/${data.id}`, "_blank");
-        }
-      }
-    });
-  };
-
   useEffect(() => {
     (async () => {
       try {
@@ -60,28 +50,28 @@ const Listening = () => {
   }, []);
 
   const testButton = (params) => {
-    const examId = params.data.id;
-    const paperId = params.data.IELTS.id;
-    const isGiven = givenTest?.find((item) => item === examId);
-    if (isGiven) {
-      return (
-        <button
-          className="take-test"
-          onClick={() => {
-            navigate(`/PracticeTest/Answer/Listening/${paperId}`);
-          }}
-          style={{ backgroundColor: "green", border: "1px solid green" }}
-        >
-          Review Test
-        </button>
-      );
-    } else {
-      return (
-        <button className="take-test" onClick={() => handleClick(params.data)}>
-          Take Test
-        </button>
-      );
-    }
+    const { id: examId, IELTS } = params.data;
+    const paperId = IELTS?.id;
+    const isGiven = givenTest?.some((test) => test === examId);
+
+    return isGiven ? (
+      <button
+        className="take-test"
+        onClick={() => {
+          navigate(`/PracticeTest/Answer/Listening/${paperId}`);
+        }}
+        style={{ backgroundColor: "green", border: "1px solid green" }}
+      >
+        Review Test
+      </button>
+    ) : (
+      <button
+        className="take-test"
+        onClick={() => window.open(`/PTE/IELTS/Listening/${examId}`, "_blank")}
+      >
+        Take Test
+      </button>
+    );
   };
 
   useEffect(() => {
@@ -89,7 +79,7 @@ const Listening = () => {
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/createexamview/?exam_type=Listening&category=PTE&sub_category=${subCategory}`,
+          `/ct/ielts/practice-tests/?exam_type=Listening&category=PTE&sub_category=${subCategory}`,
           {
             headers: {
               Accept: "application/json",
@@ -134,7 +124,7 @@ const Listening = () => {
       headerName: "Questions",
       field: "questions",
       cellRenderer: (params) => {
-        return params.data.IELTS?.Listening.length;
+        return params.data.listening_block_count;
       },
       filter: true,
       width: 300,
@@ -153,20 +143,17 @@ const Listening = () => {
       field: "Status",
       cellRenderer: (params) => {
         const examId = params.data.id;
-        const isGiven = givenTest?.find((item) => item === examId);
-        if (isGiven) {
-          return (
-            <button className="given-tag" style={{ backgroundColor: "green" }}>
-              Given
-            </button>
-          );
-        } else {
-          return (
-            <button className="given-tag" style={{ backgroundColor: "red" }}>
-              Not Given
-            </button>
-          );
-        }
+        const isGiven = givenTest?.some((test) => test === examId);
+
+        return isGiven ? (
+          <button className="given-tag" style={{ backgroundColor: "green" }}>
+            Given
+          </button>
+        ) : (
+          <button className="given-tag" style={{ backgroundColor: "red" }}>
+            Not Given
+          </button>
+        );
       },
       filter: true,
       width: 300,

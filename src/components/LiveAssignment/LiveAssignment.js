@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import "../../css/LiveExam.css";
-import ajaxCall from "../../helpers/ajaxCall";
-import SmallModal from "../UI/Modal";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loading from "../UI/Loading";
+import SmallModal from "../UI/Modal";
+import ajaxCall from "../../helpers/ajaxCall";
 const Cheerio = require("cheerio");
 
 const LiveAssignment = () => {
@@ -14,6 +15,7 @@ const LiveAssignment = () => {
   const [examData, setExamData] = useState({});
   const [examAnswer, setExamAnswer] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 
@@ -23,6 +25,7 @@ const LiveAssignment = () => {
   let highlightedElement = null;
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
@@ -46,6 +49,8 @@ const LiveAssignment = () => {
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [examId]);
@@ -374,8 +379,12 @@ const LiveAssignment = () => {
     </div>
   );
 
-  return (
-    <>
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : (
+    <div>
       <div className="lv-navbar lv-navbar-responsive">
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
@@ -395,7 +404,6 @@ const LiveAssignment = () => {
           </div>
         </div>
       </div>
-
       <div className="lv-container">
         {/* Main Container */}
         <div className="lv-main-container">
@@ -497,7 +505,7 @@ const LiveAssignment = () => {
           </SmallModal>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

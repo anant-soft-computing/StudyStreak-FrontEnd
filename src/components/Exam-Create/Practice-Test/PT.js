@@ -11,7 +11,7 @@ const ieltsSubCategory = [
   { name: "Academic", value: "Academic" },
   { name: "General", value: "General" },
   { name: "Foundation", value: "Foundation" },
-  { name: "Grammer", value: "Grammer" },
+  { name: "Grammar", value: "Grammar" },
 ];
 
 const pteReadingSubCategory = [

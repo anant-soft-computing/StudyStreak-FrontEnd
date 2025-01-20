@@ -8,7 +8,8 @@ const FlowChartContent = `
   </p>
   <div>
     <h1>Paragraph</h1>
-    <textarea id="editor" className="optionClass"></textarea>
+    <textarea id="editor" className="optionClass" 
+      style="width: 100%; height: 200px; max-width: 100%; min-width: 300px; min-height: 150px; resize: vertical;"></textarea>
   </div>
 </div>
 `;

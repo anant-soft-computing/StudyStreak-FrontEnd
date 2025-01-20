@@ -11,7 +11,7 @@ const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
       <button
         className="take-test"
         onClick={() =>
-          navigate(`/PracticeTest/Assessment/${testType}/${paperId}`)
+          navigate(`/PracticeTest/Assessment/${params.data.exam_type}/${paperId}`)
         }
       >
         View
@@ -34,16 +34,7 @@ const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
         return <div>{params.data.IELTS?.Name}</div>;
       },
       filter: true,
-      width: 325,
-    },
-    {
-      headerName: "Difficulty Level",
-      field: "difficulty_level",
-      cellRenderer: (params) => {
-        return <div>{params.data.IELTS?.difficulty_level}</div>;
-      },
-      filter: true,
-      width: 325,
+      width: 432,
     },
     {
       headerName: "Sections",
@@ -51,21 +42,21 @@ const PTAssessment = ({ testType, givenWritingTest, givenSpeakingTest }) => {
       cellRenderer: (params) => {
         return (
           <div>
-            {testType === "Writing"
-              ? params.data.IELTS?.Writing.length
-              : params.data.IELTS?.Speaking.length}
+            {params.data.exam_type === "Writing"
+              ? params.data.writing_block_count
+              : params.data.speaking_block_count}
           </div>
         );
       },
       filter: true,
-      width: 325,
+      width: 432,
     },
     {
       headerName: "View Assessment",
       field: "button",
       cellRenderer: viewAssessment,
       filter: true,
-      width: 325,
+      width: 432,
     },
   ];
 

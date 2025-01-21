@@ -366,7 +366,7 @@ const DragDrop = () => {
       null,
       type,
       randomNumbers[0],
-      type === "Multiple Questions"
+      type === "Multiple Question Answers"
     );
 
     setSelectedDivs((prev) => [
@@ -444,7 +444,7 @@ const DragDrop = () => {
     tempSelectedDivs[divIndex].passage = event.target.innerHTML;
     setSelectedDivs(tempSelectedDivs);
 
-    if (header.type !== "Multiple Questions")
+    if (header.type !== "Multiple Question Answers")
       generateAnswerField(
         event.target.innerHTML,
         divIndex,
@@ -917,13 +917,16 @@ const DragDrop = () => {
                   { id: "header9", title: "Matching Features" },
                   { id: "header10", title: "Sentence Completion" },
                   { id: "header11", title: "Short Answer Que" },
-                  { id: "header12", title: "Flow Chart Completion" },
+                  {
+                    id: "header12",
+                    title: "Flow Chart Completion / Summarize Spoken Text",
+                  },
                   { id: "header13", title: "Note Completion" },
                   { id: "header14", title: "Yes No Not Given" },
                   { id: "header15", title: "Table Completion" },
                   { id: "header16", title: "Radio Choice Questions" },
                   { id: "header17", title: "Checkbox Choice Questions" },
-                  { id: "header18", title: "Multiple Questions" },
+                  { id: "header18", title: "Multiple Question Answers" },
                 ].map((item, index) => (
                   <div
                     key={index}
@@ -971,7 +974,7 @@ const DragDrop = () => {
                       }
                     />
                   </div>
-                  {header.type === "Multiple Questions" && (
+                  {header.type === "Multiple Question Answers" && (
                     <div style={{ display: "flex", marginBottom: "20px" }}>
                       <h5>Number Of Questions:</h5>
                       <input

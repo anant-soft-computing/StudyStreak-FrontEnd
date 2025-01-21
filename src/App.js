@@ -100,6 +100,7 @@ import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTest";
 import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
 import LivePTEExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTEExam";
+import LivePTEReadingsExam from "./components/Dashboard/Student/PTE/LivePTEExam/Reading/LivePTEReadingsExam";
 import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTESpeakingExam";
 import PTEMockTestLive from "./components/Dashboard/Student/PTE/FreeMockTest/MockTestLive/MockTestLive";
 
@@ -381,6 +382,10 @@ const App = () => {
           <Route
             path="/PTE/:examType/:examForm/:examId"
             Component={withBootstrap(LivePTEExam)}
+          />
+          <Route
+            path="/PTE/IELTS/Reading/:examSubcategory/:examId"
+            Component={withBootstrap(LivePTEReadingsExam)}
           />
           <Route
             path="/PTE-Speaking/:examType/:examForm/:examId"

@@ -718,7 +718,7 @@ const LiveExam = () => {
       )}
     </div>
   ) : (
-    <>
+    <div>
       <div className="lv-navbar lv-navbar-responsive">
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
@@ -746,7 +746,6 @@ const LiveExam = () => {
           </div>
         </div>
       </div>
-
       <div className="lv-container">
         {/* Main Container */}
         {renderAudio(examData?.audio_file)}
@@ -882,7 +881,7 @@ const LiveExam = () => {
             </SmallModal>
           )}
       </div>
-    </>
+    </div>
   );
 };
 

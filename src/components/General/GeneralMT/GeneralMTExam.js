@@ -2,8 +2,9 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import ajaxCall from "../../../helpers/ajaxCall";
+import Loading from "../../UI/Loading";
 import SmallModal from "../../UI/Modal";
+import ajaxCall from "../../../helpers/ajaxCall";
 import DisplayLeftContainer from "../../UI/DisplayPassage";
 const Cheerio = require("cheerio");
 
@@ -12,10 +13,11 @@ const GeneralMTExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[3];
   const examType = useLocation()?.pathname?.split("/")?.[2];
-  const [examData, setExamData] = useState([]);
+  const [examData, setExamData] = useState({});
   const [examAnswer, setExamAnswer] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [timer, setTimer] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const [timerRunning, setTimerRunning] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -36,10 +38,11 @@ const GeneralMTExam = () => {
   }, [timerRunning]);
 
   useEffect(() => {
+    setIsLoading(true);
     (async () => {
       try {
         const response = await ajaxCall(
-          `/exam/blocks/?exam_type=${examType}`,
+          `/exam/block/${examId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -53,21 +56,14 @@ const GeneralMTExam = () => {
           8000
         );
         if (response.status === 200) {
-          const examBlockWithNumbers = response?.data?.map(
-            (examBlock, index) => ({
-              ...examBlock,
-              no: index + 1,
-            })
-          );
-          const tempExamData = examBlockWithNumbers?.find(
-            (examBlock) => examBlock?.id.toString() === examId
-          );
-          setExamData(tempExamData);
+          setExamData(response?.data);
         } else {
           console.log("error");
         }
       } catch (error) {
         console.log("error", error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, [examId, examType]);
@@ -460,8 +456,12 @@ const GeneralMTExam = () => {
     </div>
   );
 
-  return (
-    <>
+  return isLoading ? (
+    <div className="mt-4">
+      <Loading />
+    </div>
+  ) : (
+    <div>
       <div className="lv-navbar lv-navbar-responsive">
         <div className="lv-navbar-title">
           <h2>{examData?.exam_category}</h2>
@@ -604,7 +604,7 @@ const GeneralMTExam = () => {
           </SmallModal>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

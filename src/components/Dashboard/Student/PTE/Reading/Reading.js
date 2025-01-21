@@ -47,7 +47,7 @@ const Reading = () => {
   }, []);
 
   const testButton = (params) => {
-    const { id: examId, IELTS } = params.data;
+    const { id: examId, IELTS, sub_category } = params.data;
     const paperId = IELTS?.id;
     const isGiven = givenTest?.some((test) => test === examId);
 
@@ -64,7 +64,9 @@ const Reading = () => {
     ) : (
       <button
         className="take-test"
-        onClick={() => window.open(`/PTE/IELTS/Reading/${examId}`, "_blank")}
+        onClick={() =>
+          window.open(`/PTE/IELTS/Reading/${sub_category}/${examId}`, "_blank")
+        }
       >
         Take Test
       </button>

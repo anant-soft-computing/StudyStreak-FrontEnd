@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import {useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import LessonList from "./LessonList";
 import LessonContent from "./LessonContent";
@@ -17,37 +17,15 @@ const Lesson = () => {
   const [lessonStatus, setLessonStatus] = useState("Pending");
   const [completedLessons, setCompletedLessons] = useState([]);
 
-  const getNextLesson = useCallback(
-    (currentLessonId) => {
-      let foundNext = false;
-      for (const section of courseLessons[0]?.section || []) {
-        for (let i = 0; i < section.lessons.length; i++) {
-          if (foundNext) {
-            return section.lessons[i];
-          }
-          if (section.lessons[i].id === currentLessonId) {
-            foundNext = true;
-            // If this is the last lesson in the section, look in the next section
-            if (i === section.lessons.length - 1) {
-              const nextSectionIndex =
-                courseLessons[0].section.indexOf(section) + 1;
-              if (nextSectionIndex < courseLessons[0].section.length) {
-                return courseLessons[0].section[nextSectionIndex].lessons[0];
-              }
-            }
-          }
-        }
-      }
-      return null;
-    },
-    [courseLessons]
-  );
+  const handleLessonComplete = (lessonId) => {
+    setCompletedLessons((prev) => [...prev, lessonId]);
+  };
 
   useEffect(() => {
     (async () => {
       try {
         const response = await ajaxCall(
-          `/getyoutubedataview/`,
+          "/getyoutubedataview/",
           {
             headers: {
               Accept: "application/json",
@@ -167,6 +145,7 @@ const Lesson = () => {
                     <LessonContent
                       activeLesson={activeLesson}
                       setLessonStatus={setLessonStatus}
+                      onLessonComplete={handleLessonComplete}
                     />
                   </div>
                 </>

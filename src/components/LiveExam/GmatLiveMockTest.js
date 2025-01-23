@@ -363,8 +363,8 @@ const GmatLiveMockTest = () => {
     const temp = [...examAnswer];
     temp[next].answers.map((item) => {
       if (item.questionId === id && elementId === "InputText") {
-        const trimedValue = value.trim();
-        item.answer = trimedValue;
+        const trimmedValue = value.trim();
+        item.answer = trimmedValue;
       } else if (item.questionId === id) {
         item.answer = value;
       }

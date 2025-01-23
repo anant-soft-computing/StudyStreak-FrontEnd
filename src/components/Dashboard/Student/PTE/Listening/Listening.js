@@ -50,7 +50,7 @@ const Listening = () => {
   }, []);
 
   const testButton = (params) => {
-    const { id: examId, IELTS } = params.data;
+    const { id: examId, IELTS, sub_category } = params.data;
     const paperId = IELTS?.id;
     const isGiven = givenTest?.some((test) => test === examId);
 
@@ -67,7 +67,18 @@ const Listening = () => {
     ) : (
       <button
         className="take-test"
-        onClick={() => window.open(`/PTE/IELTS/Listening/${examId}`, "_blank")}
+        onClick={() => {
+          if (sub_category === "SST") {
+            window.open(`/PTE/IELTS/Listening/SST/${examId}`, "_blank");
+          } else if (sub_category === "WFD") {
+            window.open(`/PTE/IELTS/Listening/WFD/${examId}`, "_blank");
+          } else {
+            window.open(
+              `/PTE/IELTS/Listening/${sub_category}/${examId}`,
+              "_blank"
+            );
+          }
+        }}
       >
         Take Test
       </button>

@@ -457,8 +457,8 @@ const LiveExam = () => {
       temp[next].answers.forEach((item) => {
         if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
         if (item.questionId === id && elementId === "InputText") {
-          const trimedValue = value.trim();
-          item.answer = trimedValue;
+          const trimmedValue = value.trim();
+          item.answer = trimmedValue;
           conditionSatisfied = true; // Set the flag to true
         } else if (item.questionId === id && elementId === "Checkbox") {
           item.answer = checked ? value : "";

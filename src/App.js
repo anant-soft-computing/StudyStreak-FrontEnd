@@ -99,9 +99,11 @@ import PracticeLiveExam from "./components/LiveExam/PracticeLiveTest";
 import FullLengthLiveExam from "./components/LiveExam/FullLengthLiveTest";
 import DiagnosticTest from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTest";
 import EnglishLevelTest from "./components/Dashboard/Student/EnglishLevelTest/EnglishLevelTest";
-import LivePTEExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTEExam";
 import LivePTEReadingExam from "./components/Dashboard/Student/PTE/LivePTEExam/Reading/LivePTEReadingExam";
 import LivePTEWritingExam from "./components/Dashboard/Student/PTE/LivePTEExam/Writing/LivePTEWritingExam";
+import LivePTEListeningExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/LivePTEListeningExam";
+import LivePTESSTExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SST/LivePTESSTExam";
+import LivePTEWFDExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/WFD/LivePTEWFDExam";
 import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTESpeakingExam";
 import PTEMockTestLive from "./components/Dashboard/Student/PTE/FreeMockTest/MockTestLive/MockTestLive";
 
@@ -381,16 +383,24 @@ const App = () => {
             Component={withBootstrap(FullLengthLiveExam)}
           />
           <Route
-            path="/PTE/:examType/:examForm/:examId"
-            Component={withBootstrap(LivePTEExam)}
-          />
-          <Route
             path="/PTE/IELTS/Reading/:examSubcategory/:examId"
             Component={withBootstrap(LivePTEReadingExam)}
           />
           <Route
             path="/PTE/IELTS/Writing/:examSubcategory/:examId"
             Component={withBootstrap(LivePTEWritingExam)}
+          />
+          <Route
+            path="/PTE/IELTS/Listening/:examSubcategory/:examId"
+            Component={withBootstrap(LivePTEListeningExam)}
+          />
+          <Route
+            path="/PTE/IELTS/Listening/SST/:examId"
+            Component={withBootstrap(LivePTESSTExam)}
+          />
+          <Route
+            path="/PTE/IELTS/Listening/WFD/:examId"
+            Component={withBootstrap(LivePTEWFDExam)}
           />
           <Route
             path="/PTE-Speaking/:examType/:examForm/:examId"

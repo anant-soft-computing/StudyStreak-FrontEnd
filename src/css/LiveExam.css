@@ -90,12 +90,6 @@
   padding-top: 100px;
 }
 
-.lv-scrollable-content {
-  overflow-y: auto; /* Enable vertical scrollbar if content overflows vertically */
-  height: 100%; /* Take up 100% of the container height */
-  padding: 10px; /* Add padding to make it look better */
-}
-
 .lv-container-title {
   color: black;
   font-size: 24px;
@@ -104,6 +98,21 @@
 .lv-container-subtitle {
   color: #666;
   font-size: 18px;
+}
+
+.audio-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #01579b;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  margin-top: 20px;
 }
 
 .lv-main-container {

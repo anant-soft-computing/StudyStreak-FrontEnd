@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -9,15 +9,15 @@ import { formatTime } from "../../../../../../utils/timer/formateTime";
 const Cheerio = require("cheerio");
 
 const instructions = {
-  RWFIB:
-    "Below is a text with blanks. Click on each blank, a list of choice will appear. Select the appropriate answer choice for each blank.",
-  CMA: "Read the text and answer the multiple-choice question by selecting the correct response. More than one response is correct.",
-  ROP: "The text boxes in the left panel have been placed in a random order. Restore the original order by dragging the text boxes from the left panel to the right panel.",
-  RFIB: "In the text below some words are missing. Drag words from the box below to the appropriate place in the text. To undo an answer choice, drag the word back to the box below the text.",
-  CSA: "Read the text and answer the multiple-choice question by selecting the correct response. Only one response is correct.",
+  CMA: "Listen to the recording and answer the question by selecting all the correct responses. You will need to select more than one response.",
+  LFIB: "You will hear a recording. Type the missing words in each blank",
+  HCS: "You will hear a recording. Click on the paragraph that best relates to the recording.",
+  CSA: "Listen to the recording and answer the multiple-choice question by selecting the correct response. Only one response is correct.",
+  SMW: "You will hear a recording. At the end of the recording, the last word or group of words has been replaced by a beep. Select the correct option to complete the recording.",
+  HIW: "You will hear a recording. Below is a transcription of the recording. Some words in the transcription differ from what the speaker(s) said. Please click on the words that are different.",
 };
 
-const LivePTEReadingsExam = () => {
+const LivePTEListeningExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
@@ -31,10 +31,16 @@ const LivePTEReadingsExam = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timerRunning, setTimerRunning] = useState(true);
+  const [reRenderAudio, setReRenderAudio] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
+
+  const audioRef = useRef(null);
+  const [countdown, setCountdown] = useState(10);
+  const [audioStatus, setAudioStatus] = useState("not started");
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
   useEffect(() => {
@@ -106,6 +112,7 @@ const LivePTEReadingsExam = () => {
           no: index + 1,
         })
       );
+      setReRenderAudio(true);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [examForm, examType, fullPaper, next]);
@@ -118,7 +125,7 @@ const LivePTEReadingsExam = () => {
     const temp = [...examAnswer];
     let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
 
-    // is this a multipleTypeQuestions
+    // Is this a multipleTypeQuestions
     const isMultiQuestions = examAnswer[next].data.filter(
       (item) => item.question_number === id
     );
@@ -152,6 +159,7 @@ const LivePTEReadingsExam = () => {
         temp[next].data[multipleTypeQuestions].answer_text = checked
           ? value
           : "";
+
         setExamAnswer(temp);
       } else {
         const contentElements = document.querySelectorAll(`[id="${id}"]`);
@@ -196,6 +204,53 @@ const LivePTEReadingsExam = () => {
       }
     }
   }, [linkAnswer, next]);
+
+  useEffect(() => {
+    let countdownInterval;
+    if (audioStatus === "not started") {
+      countdownInterval = setInterval(() => {
+        setCountdown((prevCount) => {
+          if (prevCount <= 1) {
+            clearInterval(countdownInterval);
+            setAudioStatus("playing");
+            audioRef.current.play();
+            return 0;
+          }
+          return prevCount - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(countdownInterval);
+  }, [audioStatus]);
+
+  const renderAudio = (audio_file) => {
+    if (audio_file && reRenderAudio) {
+      return (
+        <div className="audio-container">
+          <div className="audio-status mb-2">
+            Status :{" "}
+            {audioStatus === "not started" &&
+              `Beginning in ${countdown} seconds`}
+            {audioStatus === "playing" && "Playing"}
+            {audioStatus === "complete" && "Completed"}
+          </div>
+          <audio
+            ref={audioRef}
+            controls
+            onLoadedMetadata={() => {
+              setAudioStatus("not started");
+              setCountdown(10);
+            }}
+            onEnded={() => {
+              setAudioStatus("complete");
+            }}
+          >
+            <source src={audio_file} type="audio/mpeg" />
+          </audio>
+        </div>
+      );
+    }
+  };
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
     const question = paperData?.question_other;
@@ -439,21 +494,13 @@ const LivePTEReadingsExam = () => {
       <div className="lv-container">
         {/* Main Container */}
         <div className="lv-main-container">
-          {/* Left Container */}
-          {examData?.passage && (
-            <div
-              className="lv-left-container"
-              dangerouslySetInnerHTML={{
-                __html: examData?.passage,
-              }}
-            />
-          )}
           {/* Right Container */}
           <div className="lv-right-container">
             <div className="lv-box-right">
               <div className="text-black" style={{ fontWeight: "bold" }}>
                 {instructions[examSubcategory]}
               </div>
+              {renderAudio(examData?.audio_file)}
               <div
                 className="mt-4"
                 dangerouslySetInnerHTML={{
@@ -486,6 +533,7 @@ const LivePTEReadingsExam = () => {
                 display: next === 0 ? "none" : "block",
               }}
               onClick={() => {
+                setReRenderAudio(false);
                 setNext(next - 1);
               }}
             >
@@ -503,12 +551,12 @@ const LivePTEReadingsExam = () => {
                     : "block",
               }}
               onClick={() => {
+                setReRenderAudio(false);
                 setNext(next + 1);
               }}
             >
               <span>Next</span>
             </button>
-
             <button
               className="btn btn-primary m-2"
               style={{
@@ -567,4 +615,4 @@ const LivePTEReadingsExam = () => {
   );
 };
 
-export default LivePTEReadingsExam;
+export default LivePTEListeningExam;

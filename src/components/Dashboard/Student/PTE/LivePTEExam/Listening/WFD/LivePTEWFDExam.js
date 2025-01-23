@@ -1,22 +1,15 @@
-import React, { useState, useEffect } from "react";
-import "../../../../../../css/LiveExam.css";
+import React, { useState, useEffect, useRef } from "react";
+import "../../../../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
-import Loading from "../../../../../UI/Loading";
-import SmallModal from "../../../../../UI/Modal";
-import ajaxCall from "../../../../../../helpers/ajaxCall";
+import { useLocation } from "react-router-dom";
+import ajaxCall from "../../../../../../../helpers/ajaxCall";
+import Loading from "../../../../../../UI/Loading";
+import SmallModal from "../../../../../../UI/Modal";
 
-const instructions = {
-  SWT: "Read the passage below and summarize it using one sentence. Type your response in the box at the bottom of the screen. You have 10 minutes to finish this task. Your response will be judged on the quality of your writing and on how well your response presents the key points in the passage.",
-  WE: "You will have 20 minutes to plan, write and revise an essay about the topic below. Your response will be judged on how well you develop a position, organize your ideas, present supporting details, and control the elements of standard written English. You should write 200-300 words.",
-};
-
-const LivePTEWritingExam = () => {
-  const navigate = useNavigate();
+const LivePTEWFDExam = () => {
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
-  const examSubcategory = useLocation()?.pathname?.split("/")?.[4];
   const [timer, setTimer] = useState(600);
   const [examData, setExamData] = useState({});
   const [fullPaper, setFullPaper] = useState([]);
@@ -24,20 +17,20 @@ const LivePTEWritingExam = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timerRunning, setTimerRunning] = useState(true);
+  const [reRenderAudio, setReRenderAudio] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
+
+  const audioRef = useRef(null);
+  const [countdown, setCountdown] = useState(10);
+  const [audioStatus, setAudioStatus] = useState("not started");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
-  const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
   useEffect(() => {
-    if (examSubcategory === "SWT") {
-      setTimer(10 * 60);
-    } else {
-      setTimer(20 * 60);
-    }
-  }, [examSubcategory, next]);
+    setTimer(10 * 60);
+  }, [next]);
 
   useEffect(() => {
     let interval;
@@ -117,20 +110,68 @@ const LivePTEWritingExam = () => {
           no: index + 1,
         })
       );
+      setReRenderAudio(true);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [examForm, examType, fullPaper, next]);
 
+  useEffect(() => {
+    let countdownInterval;
+    if (audioStatus === "not started") {
+      countdownInterval = setInterval(() => {
+        setCountdown((prevCount) => {
+          if (prevCount <= 1) {
+            clearInterval(countdownInterval);
+            setAudioStatus("playing");
+            audioRef.current.play();
+            return 0;
+          }
+          return prevCount - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(countdownInterval);
+  }, [audioStatus]);
+
+  const renderAudio = (audio_file) => {
+    if (audio_file && reRenderAudio) {
+      return (
+        <div className="audio-container">
+          <div className="audio-status mb-2">
+            Status :{" "}
+            {audioStatus === "not started" &&
+              `Beginning in ${countdown} seconds`}
+            {audioStatus === "playing" && "Playing"}
+            {audioStatus === "complete" && "Completed"}
+          </div>
+          <audio
+            ref={audioRef}
+            controls
+            onLoadedMetadata={() => {
+              setAudioStatus("not started");
+              setCountdown(10);
+            }}
+            onEnded={() => {
+              setAudioStatus("complete");
+            }}
+          >
+            <source src={audio_file} type="audio/mpeg" />
+          </audio>
+        </div>
+      );
+    }
+  };
+
   const fetchHtmlContent = async (paperData, index) => {
     let tempAnswer = {};
 
-    if (paperData?.exam_type === "Writing") {
+    if (paperData?.exam_type === "Listening") {
       tempAnswer = {
         exam_id: paperData?.id,
         data: [
           {
             question_number:
-              paperData?.exam_type === "Writing" && `textarea_${index}_1`,
+              paperData?.exam_type === "Listening" && `textarea_${index}_1`,
             answer_text: "",
           },
         ],
@@ -175,197 +216,6 @@ const LivePTEWritingExam = () => {
     })();
   }, [fullPaper]);
 
-  const handleWritingSubmit = async () => {
-    const answersArray = [];
-    let isAllAnswered = true;
-
-    examAnswer.forEach((item, index) => {
-      const temp = item.data.map((answer, index2) => {
-        if (answer.answer_text === "") isAllAnswered = false;
-        return {
-          question_number: index2 + 1,
-          answer_text: answer.answer_text,
-        };
-      });
-      const tempObj = {
-        exam_id: item.exam_id,
-        question: item.question,
-        data: temp,
-      };
-      answersArray.push(tempObj);
-    });
-
-    if (!isAllAnswered) {
-      toast.error("Please answer all the questions before submitting.");
-      return;
-    }
-
-    let newAnswersArray = [];
-    let isError = false;
-    try {
-      // Wait for all ChatGPT API calls to complete
-      await Promise.all(
-        answersArray.map(async (item) => {
-          let gptResponse = "";
-          let scoreValue = null;
-
-          const passage = examData?.passage
-            ? examData?.passage?.replace(/<img[^>]*>/g, "")
-            : "Passage not found";
-
-          const gptBody = {
-            model: "gpt-3.5-turbo",
-            messages: [
-              {
-                role: "user",
-                content:
-                  "You are an expert evaluator for the PTE Writing Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation and provide scores in 1-point increments (0-90).",
-              },
-              {
-                role: "user",
-                content: `Questions: ${passage}`,
-              },
-              {
-                role: "user",
-                content: `Answer: ${item.data[0].answer_text}
-                      
-                      Question Type: Essay`,
-              },
-              {
-                role: "user",
-                content: `Evaluate based on:
-                      
-                      Content: Does the response address the task completely and appropriately? Score: (0-90)
-                      
-                      Form: Is the response within the required word count and format? Score: (0-90)
-                      
-                      Grammar: Is a wide range of grammatical structures used accurately? Score: (0-90)
-                      
-                      Vocabulary: Is a wide range of vocabulary used with precision and accuracy? Score: (0-90)
-                      
-                      Spelling: Are spelling and word choice appropriate? Score: (0-90)
-                    
-                      Provide an Overall Band Score (0-90) based on the individual criteria.
-      
-                      Additionally, include detailed explanations for each score, outlining the **strengths**, **weaknesses**, and **areas for improvement**.
-                      
-                      #Evaluation Format:
-                      Content: [Explanation]  
-                      Score: X/90
-      
-                      Form: [Explanation]  
-                      Score: X/90
-      
-                      Grammar: [Explanation]  
-                      Score: X/90
-      
-                      Vocabulary: [Explanation]  
-                      Score: X/90 
-      
-                      Spelling: [Explanation]  
-                      Score: X/90
-      
-                      #Overall Band Score:X/90
-      
-                      Respond only with the evaluation up to the #Overall Band Score. Do not include any additional text or explanation beyond this point.`,
-              },
-            ],
-          };
-
-          const res = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-              },
-              body: JSON.stringify(gptBody),
-            }
-          );
-
-          const data = await res.json();
-
-          if (data?.choices?.[0]?.message?.content) {
-            gptResponse = data.choices[0].message.content;
-
-            // Use regex to extract the score value
-            const scoreMatch = gptResponse.match(/Overall Band Score:\s*(\d+)/);
-            scoreValue = scoreMatch ? scoreMatch[1] : null;
-
-            if (!scoreValue) {
-              isError = true;
-              toast.error(
-                "Score value could not be extracted. Please try again."
-              );
-              return;
-            }
-
-            // Convert gptResponse to HTML format
-            const formattedResponse = gptResponse
-              .split("\n")
-              .map((line) => `<p>${line}</p>`)
-              .join("");
-
-            newAnswersArray.push({
-              exam_id: item.exam_id,
-              band: scoreValue,
-              AI_Assessment: formattedResponse,
-              data: item.data,
-            });
-          } else {
-            isError = true;
-            toast.error("AI response is empty. Please try again.");
-            return;
-          }
-        })
-      );
-    } catch (error) {
-      isError = true;
-      toast.error("Some Problem Occurred. Please try again.");
-    }
-
-    if (isError) {
-      return;
-    }
-
-    try {
-      const data = JSON.stringify({
-        answer_data: newAnswersArray,
-        user: userData?.userId,
-        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
-        band: null,
-      });
-
-      const response = await ajaxCall(
-        "/answer/practice-test/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-
-      if (response.status === 201) {
-        setTimerRunning(false);
-        navigate(`/PTE/Assessment/Writing/${fullPaper[0].IELTS.id}`);
-      } else if (response.status === 400) {
-        toast.error("Please Submit Your Exam Answer");
-      } else {
-        toast.error("Some Problem Occurred. Please try again.");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   const reviewContent = () =>
     examAnswer.map((test, index) => (
       <div key={index}>
@@ -385,7 +235,7 @@ const LivePTEWritingExam = () => {
       </div>
     ));
 
-  const handleWritingAnswer = (e, next) => {
+  const handleListeningAnswer = (e, next) => {
     const answer_text = e.target.value;
     const temp = [...examAnswer];
 
@@ -426,8 +276,11 @@ const LivePTEWritingExam = () => {
           <div className="lv-right-container">
             <div className="lv-box-right">
               <div className="text-black" style={{ fontWeight: "bold" }}>
-                {instructions[examSubcategory]}
+                You will hear a sentence. Type the sentence in the box below
+                exactly as you hear it. Write as much of the sentence as you
+                can. You will hear the sentence only once.
               </div>
+              {renderAudio(examData?.audio_file)}
               <div
                 className="mt-3"
                 dangerouslySetInnerHTML={{
@@ -439,7 +292,7 @@ const LivePTEWritingExam = () => {
                   id={`textarea_${next}`}
                   className="writing__textarea"
                   value={examAnswer[next]?.data[0]?.answer_text || ""}
-                  onChange={(e) => handleWritingAnswer(e, next)}
+                  onChange={(e) => handleListeningAnswer(e, next)}
                 />
                 <span>
                   Total Word Count: {examAnswer[next]?.wordCount || 0}
@@ -470,6 +323,7 @@ const LivePTEWritingExam = () => {
                 display: next === 0 ? "none" : "block",
               }}
               onClick={() => {
+                setReRenderAudio(false);
                 setNext(next - 1);
               }}
             >
@@ -486,6 +340,7 @@ const LivePTEWritingExam = () => {
                     : "block",
               }}
               onClick={() => {
+                setReRenderAudio(false);
                 setNext(next + 1);
               }}
             >
@@ -514,12 +369,7 @@ const LivePTEWritingExam = () => {
             isOpen={isConfirmModalOpen}
             footer={
               <div className="d-flex gap-2">
-                <button
-                  className="btn btn-success"
-                  onClick={() => handleWritingSubmit()}
-                >
-                  Yes
-                </button>
+                <button className="btn btn-success">Yes</button>
                 <button
                   className="btn btn-danger"
                   onClick={() => setIsConfirmModalOpen(false)}
@@ -549,4 +399,4 @@ const LivePTEWritingExam = () => {
   );
 };
 
-export default LivePTEWritingExam;
+export default LivePTEWFDExam;

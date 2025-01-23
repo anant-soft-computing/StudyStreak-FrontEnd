@@ -325,8 +325,8 @@ const DiagnosticTest = () => {
       temp[next].data.forEach((item) => {
         if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
         if (item.question_number === id && elementId === "InputText") {
-          const trimedValue = value.trim();
-          item.answer_text = trimedValue;
+          const trimmedValue = value.trim();
+          item.answer_text = trimmedValue;
           conditionSatisfied = true; // Set the flag to true
         } else if (item.question_number === id && elementId === "Checkbox") {
           item.answer_text = checked ? value : "";

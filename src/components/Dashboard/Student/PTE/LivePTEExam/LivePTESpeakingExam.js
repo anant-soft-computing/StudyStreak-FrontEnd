@@ -1,12 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { convert } from "html-to-text";
-import "../../../../../css/LiveExam.css";
 import Loading from "../../../../UI/Loading";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 import PTEAudioRecorder from "./PTEAudioRecorder/PTEAudioRecorder";
-import SpeakingInstruction from "../../../../Instruction/SpeakingInstruction";
+import { formatTime } from "../../../../../utils/timer/formateTime";
+
+const instructions = {
+  RA: "Look at the text below. In 30 seconds, you must read this text aloud as naturally and clearly as possible. You have 30 seconds to read aloud.",
+  RS: "You will hear a sentence. Please repeat the sentence exactly as you hear it. You will hear the sentence only once.",
+  DI: "Look at the picture below. In 25 seconds, please speak into microphone and describe in detail what the picture is showing. You will have 40 seconds to give your response.",
+  RL: "You will hear a lecture. After listening to the lecture, in 10 seconds, please speak into the microphone and retell what you have just heard from the lecture in your own words. You will have 40 seconds to give your response.",
+  ASQ: "You will hear a question. Please give a simple and short answer. Often just one or a few words is enough.",
+  RTS: "Listen to and read a description of a situation. You will have 10 seconds to think about your answer. Then you will hear a beep. You will have 40 seconds to answer the question. Please answer as completely as you can.",
+  SGD: "You will hear three people having a discussion. When you hear the beep, summarize the whole discussion. You will have 10 seconds to prepare and 2 minutes to give your response.",
+};
 
 const initialState = {
   // 0 for incoming, 1 for instruction on screen, 2 for completed
@@ -15,26 +24,34 @@ const initialState = {
 };
 
 const LivePTESpeakingExam = () => {
-  const navigate = useNavigate();
-  const containerRef = useRef(null);
   const synth = window.speechSynthesis;
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[4];
-  const [examData, setExamData] = useState([]);
+  const [examData, setExamData] = useState({});
   const [voices, setVoices] = useState([]);
+  const [timer, setTimer] = useState(0);
+  const [timerRunning, setTimerRunning] = useState(true);
   const [fullPaper, setFullPaper] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeRecordingIndex, setActiveRecordingIndex] = useState(null);
-  const [instructionCompleted, setInstructionCompleted] = useState(false);
-  // 0 means before start, 1 means after start, 2 means after finish
   const [speaking, setSpeaking] = useState([initialState]);
   const [next, setNext] = useState(0);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
-  const handleCompleteInstruction = () => setInstructionCompleted(true);
+  useEffect(() => {
+    let interval;
+    if (timerRunning) {
+      interval = setInterval(() => {
+        setTimer((prevTimer) => prevTimer + 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timerRunning]);
 
   function generateRandomId(length) {
     let characters =
@@ -47,37 +64,6 @@ const LivePTESpeakingExam = () => {
     }
     return randomId;
   }
-
-  const examLatestSubmit = async () => {
-    try {
-      const response = await ajaxCall(
-        "/test-submission/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify({
-            student: studentId,
-            practise_set: fullPaper?.IELTS?.id,
-          }),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        console.log("Lastest Practice Exam Submitted");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
   const practiceTestSubmit = async () => {
     const data = {
       student_id: studentId,
@@ -100,8 +86,6 @@ const LivePTESpeakingExam = () => {
         8000
       );
       if (response.status === 200) {
-        examLatestSubmit();
-        navigate(`/PTE/Assessment/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");
@@ -229,45 +213,18 @@ const LivePTESpeakingExam = () => {
 
       if (index === utterances.length - 1) {
         utterance.onend = () => {
-          const updatedSpeaking = speaking.map((item, index) => {
-            const tempId = item.id;
-            if (tempId === id) {
-              return { ...item, status: 2 }; // Mark as completed
-            } else {
-              return item;
-            }
-          });
+          const updatedSpeaking = speaking.map((item) =>
+            item.id === id ? { ...item, status: 2 } : item
+          );
           setSpeaking(updatedSpeaking);
         };
       }
     });
-
     // Update speaking state to reflect that the current question is being spoken
-    const updatedSpeaking = speaking.map((item, index) => {
-      const tempId = item.id;
-      if (tempId === id) {
-        return { ...item, status: 1 };
-      } else {
-        return item;
-      }
-    });
-    setSpeaking(updatedSpeaking);
-  };
-
-  const stopSpeaking = (questionId) => {
-    if (synth.speaking) {
-      synth.cancel();
-    }
-    // Update the status to stopped
-    setSpeaking((prev) =>
-      prev.map((item) =>
-        item.id === questionId ? { ...item, status: 3 } : item
-      )
+    const updatedSpeaking = speaking.map((item) =>
+      item.id === id ? { ...item, status: 1 } : item
     );
-  };
-
-  const handleReplay = (speakingContent, questionId) => {
-    speak(speakingContent, questionId);
+    setSpeaking(updatedSpeaking);
   };
 
   useEffect(() => {
@@ -283,192 +240,159 @@ const LivePTESpeakingExam = () => {
   }, [recordedFilePath, speaking]);
 
   const recorderContainer = useCallback(
-    (item, index) => {
+    (item) => {
       return (
         <PTEAudioRecorder
           setRecordedFilePath={setRecordedFilePath}
           next={next}
           exam={examData}
-          enableRecording={
-            speaking?.[index]?.status === 2 || speaking?.[index]?.status === 3
-          }
-          completed={speaking?.[index]?.filePath !== ""}
           question_number={item.question_number}
           user={userData.userId}
           recorderIndex={item.id}
           practice={fullPaper?.IELTS?.id}
           setActiveRecordingIndex={setActiveRecordingIndex}
-          isActiveRecording={activeRecordingIndex === index}
         />
       );
     },
-    [
-      next,
-      examData,
-      speaking,
-      userData.userId,
-      fullPaper?.IELTS?.id,
-      activeRecordingIndex,
-    ]
+    [next, examData, userData.userId, fullPaper?.IELTS?.id]
   );
 
   return isLoading ? (
     <div className="mt-4">
       <Loading />
     </div>
-  ) : !instructionCompleted ? (
-    <div className="test-instruction">
-      <SpeakingInstruction
-        testType="Practice"
-        startTest={handleCompleteInstruction}
-      />
-    </div>
   ) : (
-    <>
-      <div className="lv-navbar lv-navbar-responsive">
-        <div className="lv-navbar-title">
-          <h2>{examData?.exam_category}</h2>
-          <div className="lv-userName">{userData?.username}</div>
-          <div style={{ marginLeft: "10px" }}>/</div>
-          <div className="lv-userName">{`${examData?.name}`}</div>
+    <div
+      style={{
+        border: "1px solid #01579b",
+        margin: "50px",
+        height: "90vh",
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "calc(100% - 100px)",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        className="d-flex justify-content-between align-items-center"
+        style={{
+          borderBottom: "1px solid #01579b",
+          padding: "20px",
+          backgroundColor: "#01579b",
+          color: "white",
+          flexShrink: 0,
+        }}
+      >
+        <div>
+          {examData?.exam_category} / {examData?.name}
         </div>
-        <div className="lv-navbar-title-mobile">
-          <div className="username-mobile">
-            <h2>{examData?.exam_category}</h2>
-            <div className="mobile-breadcumb">
-              <div className="lv-userName">{userData?.username}</div>
-              <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className="lv-userName">{`${examData?.name}`}</div>
+        <div>
+          <i className="icofont-stopwatch mr-2"></i>
+          <span>Timer :</span>
+          <span className="ml-2">{formatTime(timer)}</span>
+        </div>
+      </div>
+      <div
+        style={{
+          fontWeight: "bold",
+          padding: "20px",
+        }}
+      >
+        {instructions[examData.sub_category]}
+      </div>
+      <div style={{ flex: 1, overflowY: "auto", padding: "20px" }}>
+        {examData?.questions?.map((item, i) => {
+          const speakingIndex = speaking.findIndex(
+            (element) => element.id === item.id
+          );
+          return (
+            <div key={item.id} style={{ marginBottom: "20px" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  background: "#f9f9f9",
+                  padding: "15px",
+                  border: "1px solid #01579b",
+                  borderRadius: "8px",
+                  width: "100%",
+                  maxWidth: "400px",
+                  margin: "0 auto",
+                }}
+              >
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => speak(item.question, item.id)}
+                  disabled={activeRecordingIndex !== null}
+                  style={{
+                    minWidth: "100px",
+                    opacity: activeRecordingIndex !== null ? 0.5 : 1,
+                    cursor:
+                      activeRecordingIndex !== null ? "not-allowed" : "pointer",
+                  }}
+                >
+                  Play
+                </button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  background: "#f9f9f9",
+                  padding: "15px",
+                  border: "1px solid #01579b",
+                  borderRadius: "8px",
+                  width: "100%",
+                  maxWidth: "400px",
+                  margin: "0 auto",
+                  marginTop: "15px",
+                }}
+              >
+                {recorderContainer(item, speakingIndex)}
+              </div>
             </div>
-          </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          borderTop: "1px solid #01579b",
+          padding: "15px 20px",
+          background: "#f9f9f9",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div>
+          Item {next + 1} of {fullPaper?.[examType].Speaking?.length}
+        </div>
+        <div className="d-flex gap-2">
+          {next > 0 && (
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => setNext(next - 1)}
+            >
+              <i className="icofont-arrow-left mr-2"></i>Previous
+            </button>
+          )}
+          {next < fullPaper?.[examType].Speaking?.length - 1 && (
+            <button
+              className="btn btn-primary btn-sm"
+              onClick={() => setNext(next + 1)}
+            >
+              Next
+              <i className="icofont-arrow-right ml-2"></i>
+            </button>
+          )}
+          <button className="btn btn-primary btn-sm" onClick={practiceTestSubmit}>Submit</button>
         </div>
       </div>
-      <div className="lv-container">
-        <div
-          ref={containerRef}
-          className="lv-left-container"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-around",
-          }}
-        >
-          {Object.keys(examData).length > 0 &&
-            examData.questions.map((item, i) => {
-              const speakingIndex = speaking.findIndex(
-                (element) => element.id === item.id
-              );
-              return (
-                <div key={item.id} className="p-4">
-                  <div className="d-flex justify-content-center">
-                    <button
-                      className="lv-speaking-button"
-                      onClick={() =>
-                        speaking?.[speakingIndex]?.status === 2
-                          ? handleReplay(item.question, item.id)
-                          : speak(item.question, item.id)
-                      }
-                      disabled={
-                        speaking?.[speakingIndex]?.status === 1 ||
-                        speaking.some(
-                          (element, index) =>
-                            index !== speakingIndex && element.status === 1
-                        ) ||
-                        activeRecordingIndex !== null
-                      }
-                      style={{
-                        opacity:
-                          speaking?.[speakingIndex]?.status === 1 ||
-                          speaking.some(
-                            (element, index) =>
-                              index !== speakingIndex && element.status === 1
-                          ) ||
-                          activeRecordingIndex !== null
-                            ? 0.5
-                            : 1,
-                        cursor:
-                          speaking?.[speakingIndex]?.status === 1 ||
-                          speaking.some(
-                            (element, index) =>
-                              index !== speakingIndex && element.status === 1
-                          ) ||
-                          activeRecordingIndex !== null
-                            ? "not-allowed"
-                            : "pointer",
-                      }}
-                    >
-                      {speaking?.[speakingIndex]?.status === 2
-                        ? "Replay"
-                        : "Play"}
-                    </button>
-                    <button
-                      className="lv-speaking-button"
-                      onClick={() => stopSpeaking(item.id)}
-                      disabled={speaking?.[speakingIndex]?.status !== 1}
-                      style={{
-                        opacity:
-                          speaking?.[speakingIndex]?.status === 1 ? 1 : 0.5,
-                        cursor:
-                          speaking?.[speakingIndex]?.status === 1
-                            ? "pointer"
-                            : "not-allowed",
-                      }}
-                    >
-                      Pause
-                    </button>
-                  </div>
-                  <hr />
-                  <div className="d-flex justify-content-center">
-                    {recorderContainer(item, speakingIndex)}
-                  </div>
-                </div>
-              );
-            })}
-        </div>
-        <div className="d-flex justify-content-between mb-2">
-          <div className="lv-question-pagination" />
-          <div className="lv-footer-btn">
-            <button
-              className="lv-footer-button"
-              style={{
-                display: next === 0 ? "none" : "block",
-              }}
-              onClick={() => {
-                setNext(next - 1);
-              }}
-            >
-              <span>Back</span>
-            </button>
-            <button
-              className="lv-footer-button"
-              style={{
-                display:
-                  next === fullPaper?.[examType].Speaking?.length - 1
-                    ? "none"
-                    : "block",
-              }}
-              onClick={() => {
-                setNext(next + 1);
-              }}
-            >
-              <span>&#10152;</span>
-            </button>
-            <button
-              className="lv-footer-button"
-              style={{
-                display:
-                  next === fullPaper?.[examType].Speaking?.length - 1
-                    ? "block"
-                    : "none",
-              }}
-              onClick={practiceTestSubmit}
-            >
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 

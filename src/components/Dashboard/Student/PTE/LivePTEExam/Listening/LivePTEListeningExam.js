@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import "../../../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../../../../UI/Loading";
@@ -226,8 +225,23 @@ const LivePTEListeningExam = () => {
   const renderAudio = (audio_file) => {
     if (audio_file && reRenderAudio) {
       return (
-        <div className="audio-container">
-          <div className="audio-status mb-2">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "#f9f9f9",
+            padding: "15px",
+            border: "1px solid #01579b",
+            borderRadius: "8px",
+            width: "100%",
+            maxWidth: "400px",
+            margin: "0 auto",
+            marginTop: "20px",
+          }}
+        >
+          <div className="mb-2">
             Status :{" "}
             {audioStatus === "not started" &&
               `Beginning in ${countdown} seconds`}
@@ -475,143 +489,181 @@ const LivePTEListeningExam = () => {
       <Loading />
     </div>
   ) : (
-    <>
-      <div className="lv-navbar">
-        <div className="lv-navbar-title">
-          <h2>{examData?.exam_category}</h2>
-          <div style={{ marginLeft: "10px", marginRight: "10px" }}>/</div>
-          <h2>{examData?.exam_name}</h2>
+    <div
+      style={{
+        border: "1px solid #01579b",
+        margin: "50px",
+        height: "90vh",
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "calc(100% - 100px)",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        className="d-flex justify-content-between align-items-center"
+        style={{
+          borderBottom: "1px solid #01579b",
+          padding: "20px",
+          backgroundColor: "#01579b",
+          color: "white",
+          flexShrink: 0,
+        }}
+      >
+        <div>
+          {examData?.exam_category} / {examData?.exam_name}
         </div>
-        <span
-          className="lv-navbar-title"
-          style={{ backgroundColor: "#01579b", color: "white", padding: "5px" }}
-        >
+        <div>
           <i className="icofont-stopwatch mr-2"></i>
           <span>Timer :</span>
           <span className="ml-2">{formatTime(timer)}</span>
-        </span>
-      </div>
-      <div className="lv-container">
-        {/* Main Container */}
-        <div className="lv-main-container">
-          {/* Right Container */}
-          <div className="lv-right-container">
-            <div className="lv-box-right">
-              <div className="text-black" style={{ fontWeight: "bold" }}>
-                {instructions[examSubcategory]}
-              </div>
-              {renderAudio(examData?.audio_file)}
-              <div
-                className="mt-4"
-                dangerouslySetInnerHTML={{
-                  __html: htmlContents?.[next],
-                }}
-              />
-            </div>
-          </div>
         </div>
-        <div className="d-flex justify-content-between align-items-center mb-3 mt-2 flex-column flex-md-row">
-          <div className="lv-question-pagination d-flex justify-content-between align-items-center pb-1 w-100 mb-2 mb-md-0">
-            <div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            fontWeight: "bold",
+            padding: "20px",
+          }}
+        >
+          {instructions[examSubcategory]}
+        </div>
+        {renderAudio(examData?.audio_file)}
+        <div
+          style={{
+            display: "flex",
+            flex: 1,
+            padding: "20px",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              overflowY: "auto",
+            }}
+            dangerouslySetInnerHTML={{
+              __html: htmlContents?.[next],
+            }}
+          />
+        </div>
+        <div
+          style={{
+            borderTop: "1px solid #01579b",
+            borderBottom: "1px solid #01579b",
+            padding: "20px",
+          }}
+        >
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
+            <div className="mb-2 mb-sm-0">
               Item {next + 1} of{" "}
               {fullPaper.length > 0
                 ? fullPaper[0][examType][examForm]?.length
                 : 0}
             </div>
-          </div>
-          <div className="lv-footer-btn pb-1">
-            <button
-              className="btn btn-primary m-2"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Review
-            </button>
-
-            <button
-              className="btn btn-primary m-2"
-              style={{
-                display: next === 0 ? "none" : "block",
-              }}
-              onClick={() => {
-                setReRenderAudio(false);
-                setNext(next - 1);
-              }}
-            >
-              <span>Previous</span>
-            </button>
-
-            <button
-              className="btn btn-primary m-2"
-              style={{
-                display:
-                  next ===
-                  (fullPaper.length > 0 &&
-                    fullPaper?.[0][examType][examForm]?.length - 1)
-                    ? "none"
-                    : "block",
-              }}
-              onClick={() => {
-                setReRenderAudio(false);
-                setNext(next + 1);
-              }}
-            >
-              <span>Next</span>
-            </button>
-            <button
-              className="btn btn-primary m-2"
-              style={{
-                display:
-                  next !==
-                  (fullPaper.length > 0 &&
-                    fullPaper?.[0][examType][examForm]?.length - 1)
-                    ? "none"
-                    : "block",
-              }}
-              onClick={() => setIsConfirmModalOpen(true)}
-            >
-              Submit
-            </button>
+            <div className="d-flex gap-2">
+              <button
+                className="btn btn-primary btn-sm"
+                style={{
+                  minWidth: "100px",
+                  display: next === 0 ? "none" : "block",
+                }}
+                onClick={() => {
+                  setNext(next - 1);
+                }}
+              >
+                <i className="icofont-arrow-left mr-2"></i>Previous
+              </button>
+              <button
+                className="btn btn-primary btn-sm"
+                style={{
+                  minWidth: "100px",
+                  display:
+                    next ===
+                    (fullPaper.length > 0 &&
+                      fullPaper?.[0][examType][examForm]?.length - 1)
+                      ? "none"
+                      : "block",
+                }}
+                onClick={() => {
+                  setNext(next + 1);
+                }}
+              >
+                Next
+                <i className="icofont-arrow-right ml-2"></i>
+              </button>
+            </div>
           </div>
         </div>
-        {isConfirmModalOpen && (
-          <SmallModal
-            size="lg"
-            centered
-            isOpen={isConfirmModalOpen}
-            footer={
-              <div className="d-flex gap-2">
-                <button
-                  className="btn btn-success"
-                  onClick={() => handleSubmit()}
-                >
-                  Yes
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => setIsConfirmModalOpen(false)}
-                >
-                  No
-                </button>
-              </div>
-            }
+        <div
+          className="d-flex flex-column flex-sm-row justify-content-between align-items-center"
+          style={{
+            justifyContent: "space-between",
+            padding: "20px",
+            gap: "10px",
+          }}
+        >
+          <button
+            className="btn btn-primary btn-sm"
+            style={{ minWidth: "100px" }}
+            onClick={() => setIsModalOpen(true)}
           >
-            <h5>Are You Sure You Want To Submit ?</h5>
-            {reviewContent()}
-          </SmallModal>
-        )}
-        {isModalOpen && (
-          <SmallModal
-            size="lg"
-            centered
-            title="Your Answers"
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            <i className="icofont-eye-open mr-2"></i>
+            Review
+          </button>
+          <button
+            className="btn btn-primary btn-sm"
+            style={{ minWidth: "100px" }}
+            onClick={() => setIsConfirmModalOpen(true)}
           >
-            {reviewContent()}
-          </SmallModal>
-        )}
+            Submit
+          </button>
+        </div>
       </div>
-    </>
+      {isConfirmModalOpen && (
+        <SmallModal
+          size="lg"
+          centered
+          isOpen={isConfirmModalOpen}
+          footer={
+            <div className="d-flex gap-2">
+              <button
+                className="btn btn-success"
+                onClick={() => handleSubmit()}
+              >
+                Yes
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => setIsConfirmModalOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          }
+        >
+          <h5>Are You Sure You Want To Submit ?</h5>
+          {reviewContent()}
+        </SmallModal>
+      )}
+      {isModalOpen && (
+        <SmallModal
+          size="lg"
+          centered
+          title="Your Answers"
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        >
+          {reviewContent()}
+        </SmallModal>
+      )}
+    </div>
   );
 };
 

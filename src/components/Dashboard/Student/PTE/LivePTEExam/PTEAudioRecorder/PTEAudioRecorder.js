@@ -9,15 +9,12 @@ const PTEAudioRecorder = ({
   setRecordedFilePath,
   next,
   exam,
-  enableRecording = true,
   question_number,
   user,
-  completed = false,
   recorderIndex = 0,
   practice,
   Flt,
   setActiveRecordingIndex,
-  isActiveRecording,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
@@ -234,40 +231,19 @@ const PTEAudioRecorder = ({
         justifyContent: "center",
         alignItems: "center",
       }}
-      className="ly-mic-audio-container"
     >
       <button
-        disabled={!enableRecording || (isActiveRecording && !isRecording)}
-        className="audio__recorder__btn"
+        className={`btn btn-${isRecording ? "danger" : "success"} btn-sm ${
+          audioBlob && "mb-2"
+        }`}
         onClick={isRecording ? handleStopRecording : handleStartRecording}
         style={{
-          cursor:
-            enableRecording && (!isActiveRecording || isRecording)
-              ? "pointer"
-              : "not-allowed",
-          backgroundColor: isRecording ? "red" : "green",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          display: "flex",
-          alignItems: "center",
+          minWidth: "100px",
         }}
       >
-        <i
-          className={`icofont-${isRecording ? "stop" : "mic"} audio_icon`}
-          style={{ marginRight: "8px" }}
-        ></i>
+        <i className={`icofont-${isRecording ? "stop" : "mic"} mr-2`}/>
         <span>{isRecording ? "Stop" : "Start"}</span>
       </button>
-      <h6
-        style={{ alignSelf: "center", textAlign: "center", marginTop: "10px" }}
-      >
-        {(!enableRecording &&
-          "Click on the Mic icon to Record your Response") ||
-          (completed && "Recording Completed") ||
-          (isRecording && "Recording...") ||
-          (!isRecording && !audioBlob && "Click on Mic to Record")}
-      </h6>
       {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
       {isRecording && <p>Transcript: {transcript}</p>}
     </div>

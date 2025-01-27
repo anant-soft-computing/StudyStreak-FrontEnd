@@ -104,7 +104,7 @@ import LivePTEWritingExam from "./components/Dashboard/Student/PTE/LivePTEExam/W
 import LivePTEListeningExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/LivePTEListeningExam";
 import LivePTESSTExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SST/LivePTESSTExam";
 import LivePTEWFDExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/WFD/LivePTEWFDExam";
-import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/LivePTESpeakingExam";
+import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/LivePTESpeakingExam";
 import PTEMockTestLive from "./components/Dashboard/Student/PTE/FreeMockTest/MockTestLive/MockTestLive";
 
 //------------------------> Exam Answer <------------------------------------
@@ -119,8 +119,9 @@ import PracticeSpeakingLiveExam from "./components/LiveExam/SpeakingPracticeTest
 import ViewMTAAssessment from "./components/Dashboard/Student/Assessment/MTAssessment/ViewMTAAssessment";
 import DiagnosticTestAnswer from "./components/Dashboard/Student/FreeDiagnosticTest/DiagnosticTestAnswer";
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
-import PTEWritingAnswer from "./components/Dashboard/Student/PTE/PTEAnswer/PTEWritingAnswer";
-import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/PTEAnswer/PTESpeakingAnswer";
+import PTEReadingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Reading/PTEReadingAnswer";
+import PTEWritingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Writing/PTEWritingAnswer";
+import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/PTESpeakingAnswer";
 import Progress from "./components/Dashboard/Student/Progress/Progress";
 import withBootstrap from "./layout/BootstrapStyles";
 
@@ -330,11 +331,15 @@ const App = () => {
               Component={withBootstrap(ViewPTAssessment)}
             />
             <Route
-              path="/PTE/Assessment/Writing/:examId"
+              path="/PTE/Reading/:examId"
+              Component={withBootstrap(PTEReadingAnswer)}
+            />
+            <Route
+              path="/PTE/Writing/:examId"
               Component={withBootstrap(PTEWritingAnswer)}
             />
             <Route
-              path="/PTE/Assessment/Speaking/:examId"
+              path="/PTE/Speaking/:examId"
               Component={withBootstrap(PTESpeakingAnswer)}
             />
           </Route>

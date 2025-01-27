@@ -6,8 +6,8 @@ import SmallModal from "../../../../../UI/Modal";
 import ajaxCall from "../../../../../../helpers/ajaxCall";
 
 const instructions = {
-  SWT: "Read the passage below and summarize it using one sentence. Type your response in the box at the bottom of the screen. You have 10 minutes to finish this task. Your response will be judged on the quality of your writing and on how well your response presents the key points in the passage.",
-  WE: "You will have 20 minutes to plan, write and revise an essay about the topic below. Your response will be judged on how well you develop a position, organize your ideas, present supporting details, and control the elements of standard written English. You should write 200-300 words.",
+  SWT: "Read the passage below and summarize it using one sentence. Type your response in the box at the bottom of your screen. You have 10 minutes to finish your task. Your response will be judged on the quality of your writing and how well your response presents the key points in the passage. Your response must be between 5 and 75 words.",
+  WE: "You will have 20 minutes to plan, write and revise an essay about the topic below. Your response will be judged on how well you develop a position, organize your ideas, present Supporting details, and control the elements of standard written English.",
 };
 
 const LivePTEWritingExam = () => {
@@ -29,6 +29,7 @@ const LivePTEWritingExam = () => {
   const [linkAnswer, setLinkAnswer] = useState(false);
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     if (examSubcategory === "SWT") {
@@ -174,6 +175,37 @@ const LivePTEWritingExam = () => {
     })();
   }, [fullPaper]);
 
+  const submitExam = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have Already Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
   const handleSubmit = async () => {
     const answersArray = [];
     let isAllAnswered = true;
@@ -201,6 +233,7 @@ const LivePTEWritingExam = () => {
 
     let newAnswersArray = [];
     let isError = false;
+
     try {
       // Wait for all ChatGPT API calls to complete
       await Promise.all(
@@ -212,13 +245,20 @@ const LivePTEWritingExam = () => {
             ? examData?.passage?.replace(/<img[^>]*>/g, "")
             : "Passage not found";
 
+          const questionTypeMap = {
+            SWT: "Summarize Written Text",
+            WE: "Write Essay",
+          };
+
+          const questionType = questionTypeMap[examData?.sub_category];
+
           const gptBody = {
             model: "gpt-3.5-turbo",
             messages: [
               {
                 role: "user",
                 content:
-                  "You are an expert evaluator for the PTE Writing Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation and provide scores in 1-point increments (0-90).",
+                  "You are an expert evaluator for the PTE Writing Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation.",
               },
               {
                 role: "user",
@@ -227,46 +267,79 @@ const LivePTEWritingExam = () => {
               {
                 role: "user",
                 content: `Answer: ${item.data[0].answer_text}
-                      
-                      Question Type: Essay`,
+                          Question Type: ${questionType}`,
               },
               {
                 role: "user",
-                content: `Evaluate based on:
-                      
-                      Content: Does the response address the task completely and appropriately? Score: (0-90)
-                      
-                      Form: Is the response within the required word count and format? Score: (0-90)
-                      
-                      Grammar: Is a wide range of grammatical structures used accurately? Score: (0-90)
-                      
-                      Vocabulary: Is a wide range of vocabulary used with precision and accuracy? Score: (0-90)
-                      
-                      Spelling: Are spelling and word choice appropriate? Score: (0-90)
-                    
-                      Provide an Overall Band Score (0-90) based on the individual criteria.
-      
-                      Additionally, include detailed explanations for each score, outlining the **strengths**, **weaknesses**, and **areas for improvement**.
-                      
-                      #Evaluation Format:
-                      Content: [Explanation]  
-                      Score: X/90
-      
-                      Form: [Explanation]  
-                      Score: X/90
-      
-                      Grammar: [Explanation]  
-                      Score: X/90
-      
-                      Vocabulary: [Explanation]  
-                      Score: X/90 
-      
-                      Spelling: [Explanation]  
-                      Score: X/90
-      
-                      #Overall Band Score:X/90
-      
-                      Respond only with the evaluation up to the #Overall Band Score. Do not include any additional text or explanation beyond this point.`,
+                content: `Evaluate based on:${
+                  questionType === "Summarize Written Text"
+                    ? `
+                  
+                  Content (0-2): Does it capture all key points?
+                  Form (0-1): Single sentence within word limit?
+                  Grammar (0-2): Error-free sentence?
+                  Vocabulary (0-2): Appropriate word choice?
+                  Spelling (0-2): No spelling errors?`
+                    : `
+                  
+                  Content (0-3): Complete topic coverage?
+                  Form (0-2): Proper length & structure?
+                  Development (0-2): Logical organization?
+                  Grammar (0-2): Grammatical accuracy?
+                  Vocabulary (0-2): Precise word choice?
+                  Spelling (0-2): No spelling errors?`
+                }
+          
+                  Provide:
+                  1. Detailed explanations with strengths, *weaknesses, and **improvements*
+                  2. Individual criterion scores
+                  3. Overall Band Score (0-90) using PTE conversion
+          
+                  #Evaluation Format:
+                  ${
+                    questionType === "Summarize Written Text"
+                      ? `
+                  Content: [Explanation]  
+                  Score: X/2
+          
+                  Form: [Explanation]  
+                  Score: X/1
+          
+                  Grammar: [Explanation]  
+                  Score: X/2
+          
+                  Vocabulary: [Explanation]  
+                  Score: X/2
+          
+                  Spelling: [Explanation]  
+                  Score: X/2`
+                      : `
+                  Content: [Explanation]  
+                  Score: X/3
+          
+                  Form: [Explanation]  
+                  Score: X/2
+          
+                  Development: [Explanation]  
+                  Score: X/2
+          
+                  Grammar: [Explanation]  
+                  Score: X/2
+          
+                  Vocabulary: [Explanation]  
+                  Score: X/2
+          
+                  Spelling: [Explanation]  
+                  Score: X/2`
+                  }
+          
+                  #Overall Band Score: ${
+                    questionType === "Summarize Written Text"
+                      ? "(Sum × 10)"
+                      : "(Sum × 6)"
+                  }/90
+          
+                  Respond only with the evaluation up to the #Overall Band Score. Do not include any additional text or explanation beyond this point.`,
               },
             ],
           };
@@ -288,8 +361,9 @@ const LivePTEWritingExam = () => {
           if (data?.choices?.[0]?.message?.content) {
             gptResponse = data.choices[0].message.content;
 
-            // Use regex to extract the score value
-            const scoreMatch = gptResponse.match(/Overall Band Score:\s*(\d+)/);
+            const scoreMatch = gptResponse.match(
+              /Overall Band Score:\s*.*?=\s*(\d+)/
+            );
             scoreValue = scoreMatch ? scoreMatch[1] : null;
 
             if (!scoreValue) {
@@ -354,7 +428,8 @@ const LivePTEWritingExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        navigate(`/PTE/Assessment/Writing/${fullPaper[0].IELTS.id}`);
+        submitExam();
+        navigate(`/PTE/Writing/${fullPaper[0].IELTS.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

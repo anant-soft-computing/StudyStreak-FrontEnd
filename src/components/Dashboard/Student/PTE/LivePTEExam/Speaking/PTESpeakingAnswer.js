@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ajaxCall from "../../../../../helpers/ajaxCall";
+import ajaxCall from "../../../../../../helpers/ajaxCall";
 
-const PTEWritingAnswer = () => {
+const PTESpeakingAnswer = () => {
   const { examId } = useParams();
   const [examName, setExamName] = useState("");
   const [assessment, setAssessment] = useState([]);
@@ -26,7 +26,7 @@ const PTEWritingAnswer = () => {
         );
         if (response.status === 200) {
           setExamName(response?.data?.name);
-          setAssessment(response?.data?.student_answers?.Writing);
+          setAssessment(response?.data?.student_answers?.Speaking);
         } else {
           console.log("error");
         }
@@ -62,4 +62,4 @@ const PTEWritingAnswer = () => {
   );
 };
 
-export default PTEWritingAnswer;
+export default PTESpeakingAnswer;

@@ -2,17 +2,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { convert } from "html-to-text";
-import Loading from "../../../../UI/Loading";
-import ajaxCall from "../../../../../helpers/ajaxCall";
-import PTEAudioRecorder from "./PTEAudioRecorder/PTEAudioRecorder";
-import { formatTime } from "../../../../../utils/timer/formateTime";
+import Loading from "../../../../../UI/Loading";
+import ajaxCall from "../../../../../../helpers/ajaxCall";
+import PTEAudioRecorder from "../PTEAudioRecorder/PTEAudioRecorder";
+import { formatTime } from "../../../../../../utils/timer/formateTime";
 
 const instructions = {
-  RA: "Look at the text below. In 30 seconds, you must read this text aloud as naturally and clearly as possible. You have 30 seconds to read aloud.",
-  RS: "You will hear a sentence. Please repeat the sentence exactly as you hear it. You will hear the sentence only once.",
-  DI: "Look at the picture below. In 25 seconds, please speak into microphone and describe in detail what the picture is showing. You will have 40 seconds to give your response.",
-  RL: "You will hear a lecture. After listening to the lecture, in 10 seconds, please speak into the microphone and retell what you have just heard from the lecture in your own words. You will have 40 seconds to give your response.",
-  ASQ: "You will hear a question. Please give a simple and short answer. Often just one or a few words is enough.",
+  RA: "Look at the text below. In 40 seconds, you must read this text aloud as naturally and clearly as possible. You have 40 seconds to Read Aloud.",
+  RS: "You will hear a sentence. Please repeat the sentence exactly as you hear it. You will hear the sentence once only.",
+  DI: "Look at the image below. In 25 seconds, please speak into the microphone and describe in detail what the image is showing. You will have 40 seconds to give your response.",
+  RL: "You will hear a lecture. After listening to the lecture, in 10 seconds (to prepare), please speak into the microphone and retell what you have just heard from the lecture in your own words. You will have 40 seconds to give your response.",
+  ASQ: "You will hear a question. Please give a simple and short answer. Often, just one or a few words is enough.",
   RTS: "Listen to and read a description of a situation. You will have 10 seconds to think about your answer. Then you will hear a beep. You will have 40 seconds to answer the question. Please answer as completely as you can.",
   SGD: "You will hear three people having a discussion. When you hear the beep, summarize the whole discussion. You will have 10 seconds to prepare and 2 minutes to give your response.",
 };
@@ -389,7 +389,12 @@ const LivePTESpeakingExam = () => {
               <i className="icofont-arrow-right ml-2"></i>
             </button>
           )}
-          <button className="btn btn-primary btn-sm" onClick={practiceTestSubmit}>Submit</button>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={practiceTestSubmit}
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>

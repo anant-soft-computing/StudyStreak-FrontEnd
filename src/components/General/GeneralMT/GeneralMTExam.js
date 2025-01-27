@@ -498,7 +498,7 @@ const GeneralMTExam = () => {
         {/* Main Container */}
         <div className="lv-main-container">
           {/* Left Container */}
-          {examData?.exam_type === "General" && (
+          {examData?.passage && examData?.exam_type === "General" && (
             <div className="lv-left-container">
               <DisplayLeftContainer
                 passage={examData?.passage}

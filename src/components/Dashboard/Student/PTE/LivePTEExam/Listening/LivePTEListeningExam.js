@@ -12,8 +12,8 @@ const instructions = {
   LFIB: "You will hear a recording. Type the missing words in each blank",
   HCS: "You will hear a recording. Click on the paragraph that best relates to the recording.",
   CSA: "Listen to the recording and answer the multiple-choice question by selecting the correct response. Only one response is correct.",
-  SMW: "You will hear a recording. At the end of the recording, the last word or group of words has been replaced by a beep. Select the correct option to complete the recording.",
-  HIW: "You will hear a recording. Below is a transcription of the recording. Some words in the transcription differ from what the speaker(s) said. Please click on the words that are different.",
+  SMW: "You will hear a recording. At the end of the recording, the last word or group of words will be replaced by a beep. Select the correct option to complete the recording.",
+  HIW: "You will hear a recording. Below is a transcription of the recording. Some words in the transcription that differ from what the speaker(s) said. Please click on the words that are different.",
 };
 
 const LivePTEListeningExam = () => {

@@ -19,8 +19,6 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
 
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
-  console.log("-----Google Clander API Key----->", process.env.REACT_APP_GOOGLE_CALENDER_API_KEY);
-  console.log("-----Google Client Key----->", process.env.REACT_APP_GOOGLE_CALENDER_CLIENT_ID);
 
   // Google Scripts Loading Effect
   useEffect(() => {

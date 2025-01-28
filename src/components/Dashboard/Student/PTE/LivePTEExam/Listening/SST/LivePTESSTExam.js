@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import Loading from "../../../../../../UI/Loading";
 import SmallModal from "../../../../../../UI/Modal";
 
 const LivePTESSTExam = () => {
+  const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
@@ -26,6 +27,9 @@ const LivePTESSTExam = () => {
   const [countdown, setCountdown] = useState(10);
   const [audioStatus, setAudioStatus] = useState("not started");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
+
+  const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     setTimer(10 * 60);
@@ -230,6 +234,234 @@ const LivePTESSTExam = () => {
     })();
   }, [fullPaper]);
 
+  const submitExam = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have Already Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
+  const handleSubmit = async () => {
+    const answersArray = examAnswer.map((item) => {
+      const data = item.data.map((answer, index) => ({
+        question_number: index + 1,
+        answer_text: answer.answer_text,
+      }));
+      return {
+        exam_id: item.exam_id,
+        question: item.question,
+        data,
+      };
+    });
+
+    let newAnswersArray = [];
+    let isError = false;
+
+    try {
+      await Promise.all(
+        answersArray.map(async (item) => {
+          let gptResponse = "";
+          let scoreValue = null;
+
+          const transcript =
+            examData?.passage && examData?.passage?.replace(/<img[^>]*>/g, "");
+
+          const gptBody = {
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "user",
+                content:
+                  "You are an expert evaluator for the PTE Listening Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation.",
+              },
+              {
+                role: "user",
+                content: `Audio Transcript: ${transcript}`,
+              },
+              {
+                role: "user",
+                content: `Answer: ${item.data[0].answer_text}
+                          Question Type: Summarize Spoken Text`,
+              },
+              {
+                role: "user",
+                content: `Evaluate based on: Summarize Spoken Text Scoring Criteria:
+            
+                          **Content (0-2):**
+                          - 2: Includes all relevant key points and ideas from the spoken text.
+                          - 1: Includes only some key points or ideas but misses others.
+                          - 0: Fails to include any relevant key points or is off-topic.
+            
+                          **Form (0-2):**
+                          - 2: The response is one sentence, within the 50–70 word limit.
+                          - 1: The response is over or under the word limit or includes multiple sentences.
+                          - 0: The response does not meet the task requirements.
+            
+                          **Grammar (0-2):**
+                          - 2: The response has no grammatical errors and demonstrates complex sentence structures.
+                          - 1: The response has minor grammatical errors that do not affect meaning.
+                          - 0: Major grammatical errors that interfere with understanding.
+            
+                          **Vocabulary (0-2):**
+                          - 2: Demonstrates appropriate word choice and variety, with correct collocations.
+                          - 1: Limited vocabulary or minor errors in word choice.
+                          - 0: Frequent vocabulary errors that interfere with meaning.
+            
+                          **Spelling (0-2):**
+                          - 2: No spelling errors.
+                          - 1: One or two spelling errors.
+                          - 0: Frequent spelling errors.
+            
+                          Provide:
+                          1. Detailed explanations with strengths, *weaknesses, and **improvements*
+                          2. Individual criterion scores
+                          3. Overall Score (0-90) using PTE conversion
+            
+                          #Evaluation Format:
+            
+                          Content: [Explanation]  
+                          Score: X/2
+            
+                          Form: [Explanation]  
+                          Score: X/2
+            
+                          Grammar: [Explanation]  
+                          Score: X/2
+            
+                          Vocabulary: [Explanation]  
+                          Score: X/2
+            
+                          Spelling: [Explanation]  
+                          Score: X/2
+            
+                          #Overall Score: "(Sum × 10)/90"
+            
+                          Respond only with the evaluation up to the #Overall Score. Do not include any additional text or explanation beyond this point.`,
+              },
+            ],
+          };
+
+          const res = await fetch(
+            "https://api.openai.com/v1/chat/completions",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+              },
+              body: JSON.stringify(gptBody),
+            }
+          );
+
+          const data = await res.json();
+
+          if (data?.choices?.[0]?.message?.content) {
+            gptResponse = data.choices[0].message.content;
+
+            const scoreMatch = gptResponse.match(
+              /Overall Score:\s*.*?=\s*(\d+)/
+            );
+            scoreValue = scoreMatch ? scoreMatch[1] : null;
+
+            if (!scoreValue) {
+              isError = true;
+              toast.error(
+                "Score value could not be extracted. Please try again."
+              );
+              return;
+            }
+
+            // Convert gptResponse to HTML format
+            const formattedResponse = gptResponse
+              .split("\n")
+              .map((line) => `<p>${line}</p>`)
+              .join("");
+
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: scoreValue,
+              AI_Assessment: formattedResponse,
+              data: item.data,
+            });
+          } else {
+            isError = true;
+            toast.error("AI response is empty. Please try again.");
+            return;
+          }
+        })
+      );
+    } catch (error) {
+      isError = true;
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+
+    if (isError) {
+      return;
+    }
+
+    try {
+      const data = JSON.stringify({
+        answer_data: newAnswersArray,
+        user: userData?.userId,
+        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
+        band: null,
+      });
+
+      const response = await ajaxCall(
+        "/answer/practice-test/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+
+      if (response.status === 201) {
+        setTimerRunning(false);
+        toast.success("Exam submitted successfully!");
+        submitExam();
+        navigate(`/PTE/Listening/SST/WFD/${fullPaper[0].IELTS.id}`);
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const reviewContent = () =>
     examAnswer.map((test, index) => (
       <div key={index}>
@@ -420,7 +652,7 @@ const LivePTESSTExam = () => {
           isOpen={isConfirmModalOpen}
           footer={
             <div className="d-flex gap-2">
-              <button className="btn btn-success">Yes</button>
+              <button className="btn btn-success" onClick={handleSubmit}>Yes</button>
               <button
                 className="btn btn-danger"
                 onClick={() => setIsConfirmModalOpen(false)}

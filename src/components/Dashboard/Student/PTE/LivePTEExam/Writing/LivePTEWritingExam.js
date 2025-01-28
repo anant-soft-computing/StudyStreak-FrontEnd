@@ -634,10 +634,7 @@ const LivePTEWritingExam = () => {
           isOpen={isConfirmModalOpen}
           footer={
             <div className="d-flex gap-2">
-              <button
-                className="btn btn-success"
-                onClick={() => handleSubmit()}
-              >
+              <button className="btn btn-success" onClick={handleSubmit}>
                 Yes
               </button>
               <button

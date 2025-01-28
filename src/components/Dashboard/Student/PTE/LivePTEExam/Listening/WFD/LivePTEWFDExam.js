@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import Loading from "../../../../../../UI/Loading";
 import SmallModal from "../../../../../../UI/Modal";
 
 const LivePTEWFDExam = () => {
+  const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
@@ -26,6 +27,9 @@ const LivePTEWFDExam = () => {
   const [countdown, setCountdown] = useState(10);
   const [audioStatus, setAudioStatus] = useState("not started");
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
+
+  const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     setTimer(10 * 60);
@@ -230,6 +234,203 @@ const LivePTEWFDExam = () => {
     })();
   }, [fullPaper]);
 
+  const submitExam = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have Already Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
+
+  const handleSubmit = async () => {
+    const answersArray = examAnswer.map((item) => {
+      const data = item.data.map((answer, index) => ({
+        question_number: index + 1,
+        answer_text: answer.answer_text,
+      }));
+      return {
+        exam_id: item.exam_id,
+        question: item.question,
+        data,
+      };
+    });
+
+    let newAnswersArray = [];
+    let isError = false;
+
+    try {
+      await Promise.all(
+        answersArray.map(async (item) => {
+          let gptResponse = "";
+          let scoreValue = null;
+
+          const transcript =
+            examData?.passage && examData?.passage?.replace(/<img[^>]*>/g, "");
+
+          const gptBody = {
+            model: "gpt-3.5-turbo",
+            messages: [
+              {
+                role: "user",
+                content:
+                  "You are an expert evaluator for the PTE Listening Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation.",
+              },
+              {
+                role: "user",
+                content: `Audio Transcript: ${transcript}`,
+              },
+              {
+                role: "user",
+                content: `Answer: ${item.data[0].answer_text}
+                          Question Type: Write From Dictation`,
+              },
+              {
+                role: "user",
+                content: `Evaluate based on: Write From Dictation Scoring Criteria:
+  
+                          **Correct Words (0-N):**
+                          - +1 point for each correctly transcribed word (including punctuation and capitalization).
+                          - 0 points for incorrect or missing words.
+  
+                          **Partial Credit:**
+                          - If more than 50% of the words are correct, partial credit may be awarded.
+  
+                          Provide:
+                          1. Detailed explanations with strengths, *weaknesses, and **improvements*
+                          2. Number of correct words
+                          3. Overall Score (0-N) based on the number of correct words
+  
+                          #Evaluation Format:
+  
+                          Correct Words: [Explanation]  
+                          Score: X/N
+  
+                          #Overall Score: X/N
+  
+                          Respond only with the evaluation up to the #Overall Score. Do not include any additional text or explanation beyond this point.`,
+              },
+            ],
+          };
+
+          const res = await fetch(
+            "https://api.openai.com/v1/chat/completions",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+              },
+              body: JSON.stringify(gptBody),
+            }
+          );
+
+          const data = await res.json();
+
+          if (data?.choices?.[0]?.message?.content) {
+            gptResponse = data.choices[0].message.content;
+
+            const scoreMatch = gptResponse.match(/Overall Score:\s*(\d+\/\d+)/);
+            scoreValue = scoreMatch ? scoreMatch[1].split("/")[0] : null;
+
+            if (!scoreValue) {
+              isError = true;
+              toast.error(
+                "Score value could not be extracted. Please try again."
+              );
+              return;
+            }
+
+            // Convert GPT response to HTML format
+            const formattedResponse = gptResponse
+              .split("\n")
+              .map((line) => `<p>${line}</p>`)
+              .join("");
+
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: scoreValue,
+              AI_Assessment: formattedResponse,
+              data: item.data,
+            });
+          } else {
+            isError = true;
+            toast.error("AI response is empty. Please try again.");
+            return;
+          }
+        })
+      );
+    } catch (error) {
+      isError = true;
+      toast.error("Some Problem Occurred. Please try again.");
+      console.error("Error:", error);
+    }
+
+    if (isError) {
+      return;
+    }
+
+    try {
+      const data = JSON.stringify({
+        answer_data: newAnswersArray,
+        user: userData?.userId,
+        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
+        band: null,
+      });
+
+      const response = await ajaxCall(
+        "/answer/practice-test/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+
+      if (response.status === 201) {
+        setTimerRunning(false);
+        toast.success("Exam submitted successfully!");
+        submitExam();
+        navigate(`/PTE/Listening/SST/WFD/${fullPaper[0].IELTS.id}`);
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const reviewContent = () =>
     examAnswer.map((test, index) => (
       <div key={index}>
@@ -418,7 +619,9 @@ const LivePTEWFDExam = () => {
           isOpen={isConfirmModalOpen}
           footer={
             <div className="d-flex gap-2">
-              <button className="btn btn-success">Yes</button>
+              <button className="btn btn-success" onClick={handleSubmit}>
+                Yes
+              </button>
               <button
                 className="btn btn-danger"
                 onClick={() => setIsConfirmModalOpen(false)}

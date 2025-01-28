@@ -5,11 +5,57 @@ import Table from "../../../UI/Table";
 import Loading from "../../../UI/Loading";
 import ajaxCall from "../../../../helpers/ajaxCall";
 
+const DISCOVERY_URL = [
+  "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+];
+const SCOPES = "https://www.googleapis.com/auth/calendar.events";
+
 const ClassList = ({ count, classes, isLoading, message, classType }) => {
   const [isBooking, setIsBooking] = useState(false);
   const [bookedCount, setBookedCount] = useState(0);
   const [bookingSlotId, setBookingSlotId] = useState(null);
+  const [googleLoaded, setGoogleLoaded] = useState(false);
+  let tokenClient;
+
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
+
+  console.log("-----Google Clander API Key----->", process.env.REACT_APP_GOOGLE_CALENDER_API_KEY);
+  console.log("-----Google Client Key----->", process.env.REACT_APP_GOOGLE_CALENDER_CLIENT_ID);
+
+  // Google Scripts Loading Effect
+  useEffect(() => {
+    const loadGoogleScripts = () => {
+      const script = document.createElement("script");
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = () => {
+        console.log("Google Identity Services script loaded.");
+        setGoogleLoaded(true);
+      };
+      document.body.appendChild(script);
+
+      const aScript = document.createElement("script");
+      aScript.src = "https://apis.google.com/js/api.js";
+      aScript.async = true;
+      aScript.defer = true;
+      aScript.onload = () => {
+        window.gapi.load("client", () => {
+          window.gapi.client
+            .init({
+              apiKey: process.env.REACT_APP_GOOGLE_CALENDER_API_KEY,
+              discoveryDocs: DISCOVERY_URL,
+            })
+            .then(() => {
+              console.log("Google API client initialized.");
+            });
+        });
+      };
+      document.body.appendChild(aScript);
+    };
+
+    loadGoogleScripts();
+  }, []);
 
   const fetchBookedCount = useCallback(async () => {
     try {
@@ -41,14 +87,14 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     fetchBookedCount();
   }, [classType, fetchBookedCount, studentId]);
 
-  const handleEnrollNow = async (Id) => {
-    const data = JSON.stringify({
-      live_class_id: Id,
+  const handleEnrollNow = async (id, data) => {
+    const enrollData = JSON.stringify({
+      live_class_id: id,
       student_id: studentId,
     });
     try {
       const response = await ajaxCall(
-        `/enroll-students-in-live-class/`,
+        "/enroll-students-in-live-class/",
         {
           headers: {
             Accept: "application/json",
@@ -58,7 +104,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
             }`,
           },
           method: "POST",
-          body: data,
+          body: enrollData,
         },
         8000
       );
@@ -66,6 +112,31 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
         toast.success("Slot Booked Successfully");
         // Update the booked count by fetching the latest count
         fetchBookedCount();
+
+        // Add to Google Calendar if loaded and available
+        if (!googleLoaded) {
+          alert("Google Identity Services not loaded yet. Please wait.");
+          return;
+        }
+
+        // Initialize the token client if it doesn't already exist
+        if (!tokenClient) {
+          tokenClient = window.google.accounts.oauth2.initTokenClient({
+            client_id: process.env.REACT_APP_GOOGLE_CALENDER_CLIENT_ID,
+            scope: SCOPES,
+            callback: (response) => {
+              if (response.error) {
+                console.error("Error during token request:", response.error);
+                return;
+              }
+              console.log("Access token acquired:", response.access_token);
+              createGoogleCalendarEvent(data);
+            },
+          });
+        }
+
+        // Request access token
+        tokenClient.requestAccessToken();
       } else if (response.status === 400) {
         toast.error(response?.data?.message);
       }
@@ -77,7 +148,38 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     }
   };
 
-  const bookCount = async (Id) => {
+  const createGoogleCalendarEvent = async (data) => {
+    const event = {
+      summary: data.meeting_title,
+      description: `${data.meeting_description}\n\n[Join the Zoom Class](${data.join_url})`,
+      start: {
+        dateTime: moment(data.start_time).toISOString(),
+        timeZone: "UTC",
+      },
+      end: {
+        dateTime: moment(data.end_time).toISOString(),
+        timeZone: "UTC",
+      },
+      reminders: {
+        useDefault: false,
+        overrides: [{ method: "popup", minutes: 10 }],
+      },
+    };
+
+    try {
+      await window.gapi.client.calendar.events.insert({
+        calendarId: "primary",
+        resource: event,
+      });
+      toast.success("Event added to Google Calendar");
+    } catch (error) {
+      toast.error("Failed to add event to Google Calendar");
+    }
+  };
+
+  const bookCount = async (params) => {
+    const { id, ...data } = params.data;
+
     if (count !== -1 && bookedCount >= count) {
       toast.error(
         `You Do Not Have ${classType} Class Available, Please Upgrade Package !!`
@@ -86,10 +188,10 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     }
 
     setIsBooking(true);
-    setBookingSlotId(Id);
+    setBookingSlotId(id);
     try {
       const response = await ajaxCall(
-        `/add-bookslot/${Id}/`,
+        `/add-bookslot/${id}/`,
         {
           headers: {
             Accept: "application/json",
@@ -103,7 +205,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
         8000
       );
       if (response.status === 200) {
-        handleEnrollNow(Id);
+        handleEnrollNow(id, data);
       } else if (response.status === 400) {
         toast.error(response.data.message);
       } else {
@@ -139,7 +241,7 @@ const ClassList = ({ count, classes, isLoading, message, classType }) => {
     return (
       <button
         className="take-test"
-        onClick={() => bookCount(id)}
+        onClick={() => bookCount(params)}
         disabled={!isButtonEnabled || (isBooking && bookingSlotId === id)}
         style={{ opacity: !isButtonEnabled ? 0.5 : 1 }}
       >

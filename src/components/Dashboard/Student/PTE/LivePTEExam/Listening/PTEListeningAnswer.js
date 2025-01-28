@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ajaxCall from "../../../../../../helpers/ajaxCall";
 import SkipIcon from "../../../../../UI/SkipIcon";
 import CheckIcon from "../../../../../UI/CheckIcon";
 import CancelIcon from "../../../../../UI/CancelIcon";
 
-const PTEReadingAnswer = () => {
+const PTEListeningAnswer = () => {
   const { examId } = useParams();
   const [examName, setExamName] = useState("");
-  const [examSubCategory, setExamSubCategory] = useState("");
   const [correctAnswer, setCorrectAnswer] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
 
@@ -35,16 +34,15 @@ const PTEReadingAnswer = () => {
         );
         if (response.status === 200) {
           setExamName(response?.data?.name);
-          setExamSubCategory(response?.data?.sub_category);
 
           let studentAnswers = [];
           let correctAnswer = [];
 
           if (
-            response.data.student_answers?.Reading &&
-            response.data.correct_answers?.Reading
+            response.data.student_answers?.Listening &&
+            response.data.correct_answers?.Listening
           ) {
-            response.data.student_answers.Reading.forEach((block) => {
+            response.data.student_answers.Listening.forEach((block) => {
               studentAnswers = studentAnswers.concat(
                 block.answers.sort(
                   (a, b) => a.question_number - b.question_number
@@ -52,7 +50,7 @@ const PTEReadingAnswer = () => {
               );
             });
 
-            response.data.correct_answers.Reading.forEach((block) => {
+            response.data.correct_answers.Listening.forEach((block) => {
               correctAnswer = correctAnswer.concat(
                 block.answers.sort(
                   (a, b) => a.question_number - b.question_number
@@ -113,23 +111,16 @@ const PTEReadingAnswer = () => {
                         Skip Answer : <span>{skipCount}</span>
                       </div>
                       <div className="flt-question-card">
-                        Total Score :{" "}
-                        {examSubCategory === "CMA" ? (
-                          <span>
-                            {correctCount - incorrectCount} /{" "}
-                            {correctAnswer.length}
-                          </span>
-                        ) : (
-                          <span>
-                            {correctCount} / {correctAnswer.length}
-                          </span>
-                        )}
+                        Score :{" "}
+                        <span>
+                          {correctCount} / {correctAnswer.length}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className="writing__exam">
                     <div className="dashboard__section__title">
-                      <h4 className="sidebar__title">Answer</h4>
+                      <h4 className="sidebar__title">Answer Table</h4>
                     </div>
                     <div className="row">
                       <div className="col-xl-12">
@@ -206,4 +197,4 @@ const PTEReadingAnswer = () => {
   );
 };
 
-export default PTEReadingAnswer;
+export default PTEListeningAnswer;

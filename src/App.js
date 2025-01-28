@@ -121,6 +121,8 @@ import DiagnosticTestAnswer from "./components/Dashboard/Student/FreeDiagnosticT
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
 import PTEReadingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Reading/PTEReadingAnswer";
 import PTEWritingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Writing/PTEWritingAnswer";
+import PTESSTWFDAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTESSTWFDAnswer";
+import PTEListeningAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTEListeningAnswer";
 import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/PTESpeakingAnswer";
 import Progress from "./components/Dashboard/Student/Progress/Progress";
 import withBootstrap from "./layout/BootstrapStyles";
@@ -337,6 +339,14 @@ const App = () => {
             <Route
               path="/PTE/Writing/:examId"
               Component={withBootstrap(PTEWritingAnswer)}
+            />
+            <Route
+              path="/PTE/Listening/:examId"
+              Component={withBootstrap(PTEListeningAnswer)}
+            />
+            <Route
+              path="/PTE/Listening/SST/WFD/:examId"
+              Component={withBootstrap(PTESSTWFDAnswer)}
             />
             <Route
               path="/PTE/Speaking/:examId"

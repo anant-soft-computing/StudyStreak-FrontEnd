@@ -55,7 +55,7 @@ const Reading = () => {
       <button
         className="take-test"
         onClick={() => {
-          navigate(`/PracticeTest/Answer/Reading/${paperId}`);
+          navigate(`/PTE/Reading/${paperId}`);
         }}
         style={{ backgroundColor: "green", border: "1px solid green" }}
       >

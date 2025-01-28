@@ -58,7 +58,11 @@ const Listening = () => {
       <button
         className="take-test"
         onClick={() => {
-          navigate(`/PracticeTest/Answer/Listening/${paperId}`);
+          if (sub_category === "SST" || sub_category === "WFD") {
+            navigate(`/PTE/Listening/SST/WFD/${paperId}`);
+          } else {
+            navigate(`/PTE/Listening/${paperId}`);
+          }
         }}
         style={{ backgroundColor: "green", border: "1px solid green" }}
       >

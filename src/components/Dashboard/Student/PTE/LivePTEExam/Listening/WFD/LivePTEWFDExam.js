@@ -279,7 +279,6 @@ const LivePTEWFDExam = () => {
     });
 
     let newAnswersArray = [];
-    let isError = false;
 
     try {
       await Promise.all(
@@ -355,14 +354,6 @@ const LivePTEWFDExam = () => {
             const scoreMatch = gptResponse.match(/Overall Score:\s*(\d+\/\d+)/);
             scoreValue = scoreMatch ? scoreMatch[1].split("/")[0] : null;
 
-            if (!scoreValue) {
-              isError = true;
-              toast.error(
-                "Score value could not be extracted. Please try again."
-              );
-              return;
-            }
-
             // Convert GPT response to HTML format
             const formattedResponse = gptResponse
               .split("\n")
@@ -376,20 +367,12 @@ const LivePTEWFDExam = () => {
               data: item.data,
             });
           } else {
-            isError = true;
             toast.error("AI response is empty. Please try again.");
-            return;
           }
         })
       );
     } catch (error) {
-      isError = true;
       toast.error("Some Problem Occurred. Please try again.");
-      console.error("Error:", error);
-    }
-
-    if (isError) {
-      return;
     }
 
     try {

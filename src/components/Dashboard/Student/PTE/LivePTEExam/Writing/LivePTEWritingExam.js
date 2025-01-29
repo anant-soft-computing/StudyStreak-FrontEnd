@@ -232,7 +232,6 @@ const LivePTEWritingExam = () => {
     }
 
     let newAnswersArray = [];
-    let isError = false;
 
     try {
       // Wait for all ChatGPT API calls to complete
@@ -366,14 +365,6 @@ const LivePTEWritingExam = () => {
             );
             scoreValue = scoreMatch ? scoreMatch[1] : null;
 
-            if (!scoreValue) {
-              isError = true;
-              toast.error(
-                "Score value could not be extracted. Please try again."
-              );
-              return;
-            }
-
             // Convert gptResponse to HTML format
             const formattedResponse = gptResponse
               .split("\n")
@@ -387,19 +378,12 @@ const LivePTEWritingExam = () => {
               data: item.data,
             });
           } else {
-            isError = true;
             toast.error("AI response is empty. Please try again.");
-            return;
           }
         })
       );
     } catch (error) {
-      isError = true;
       toast.error("Some Problem Occurred. Please try again.");
-    }
-
-    if (isError) {
-      return;
     }
 
     try {
@@ -575,9 +559,7 @@ const LivePTEWritingExam = () => {
                   minWidth: "100px",
                   display: next === 0 ? "none" : "block",
                 }}
-                onClick={() => {
-                  setNext(next - 1);
-                }}
+                onClick={() => setNext(next - 1)}
               >
                 <i className="icofont-arrow-left mr-2"></i>Previous
               </button>
@@ -592,9 +574,7 @@ const LivePTEWritingExam = () => {
                       ? "none"
                       : "block",
                 }}
-                onClick={() => {
-                  setNext(next + 1);
-                }}
+                onClick={() => setNext(next + 1)}
               >
                 Next
                 <i className="icofont-arrow-right ml-2"></i>

@@ -279,7 +279,6 @@ const LivePTESSTExam = () => {
     });
 
     let newAnswersArray = [];
-    let isError = false;
 
     try {
       await Promise.all(
@@ -387,14 +386,6 @@ const LivePTESSTExam = () => {
             );
             scoreValue = scoreMatch ? scoreMatch[1] : null;
 
-            if (!scoreValue) {
-              isError = true;
-              toast.error(
-                "Score value could not be extracted. Please try again."
-              );
-              return;
-            }
-
             // Convert gptResponse to HTML format
             const formattedResponse = gptResponse
               .split("\n")
@@ -408,19 +399,12 @@ const LivePTESSTExam = () => {
               data: item.data,
             });
           } else {
-            isError = true;
             toast.error("AI response is empty. Please try again.");
-            return;
           }
         })
       );
     } catch (error) {
-      isError = true;
       toast.error("Some Problem Occurred. Please try again.");
-    }
-
-    if (isError) {
-      return;
     }
 
     try {
@@ -652,7 +636,9 @@ const LivePTESSTExam = () => {
           isOpen={isConfirmModalOpen}
           footer={
             <div className="d-flex gap-2">
-              <button className="btn btn-success" onClick={handleSubmit}>Yes</button>
+              <button className="btn btn-success" onClick={handleSubmit}>
+                Yes
+              </button>
               <button
                 className="btn btn-danger"
                 onClick={() => setIsConfirmModalOpen(false)}

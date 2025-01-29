@@ -14,34 +14,13 @@ const ieltsSubCategory = [
 ];
 
 const pteSubCategory = [
-  {
-    name: "Read aloud [RA]",
-    value: "RA",
-  },
-  {
-    name: "Repeat sentence [RS]",
-    value: "RS",
-  },
-  {
-    name: "Describe image [DI]",
-    value: "DI",
-  },
-  {
-    name: "Re-tell lecture [RL]",
-    value: "RL",
-  },
-  {
-    name: "Answer short question [ASQ]",
-    value: "ASQ",
-  },
-  {
-    name: "Respond to a sitution [RTS]",
-    value: "RTS",
-  },
-  {
-    name: "Summarize group discussion [SGD]",
-    value: "SGD",
-  },
+  { name: "Read aloud [RA]", value: "RA" },
+  { name: "Repeat sentence [RS]", value: "RS" },
+  { name: "Describe image [DI]", value: "DI" },
+  { name: "Re-tell lecture [RL]", value: "RL" },
+  { name: "Answer short question [ASQ]", value: "ASQ" },
+  { name: "Respond to a situation [RTS]", value: "RTS" },
+  { name: "Summarize group discussion [SGD]", value: "SGD" },
 ];
 
 const initialSpeakingField = {
@@ -59,6 +38,9 @@ const initialSubmit = {
 };
 
 const reducerSpeaking = (state, action) => {
+  if (action.type === "reset") {
+    return initialSpeakingField;
+  }
   return { ...state, [action.type]: action.value };
 };
 
@@ -84,10 +66,7 @@ const ExamSpeaking = ({ category }) => {
     if (category === "IELTS") {
       dispatchSpeakingData({ type: "sub_category", value: "Academic" });
     } else if (category === "PTE") {
-      dispatchSpeakingData({
-        type: "sub_category",
-        value: "RA",
-      });
+      dispatchSpeakingData({ type: "sub_category", value: "RA" });
     } else {
       dispatchSpeakingData({ type: "sub_category", value: "" });
     }
@@ -167,8 +146,9 @@ const ExamSpeaking = ({ category }) => {
         8000
       );
       if (response.status === 201) {
-        toast.success("Speaking Exam Create Successfully");
+        toast.success("Speaking Exam Created Successfully");
         navigate("/admin-exam");
+        dispatchSpeakingData({ type: "reset" });
       } else if (response.status === 400) {
         toast.error("Some Problem Occurred. Please try again.");
       }

@@ -676,7 +676,6 @@ const MockTestLive = () => {
     });
 
     let newAnswersArray = [];
-    let isError = false;
 
     try {
       // Wait for all ChatGPT API calls to complete for writing only
@@ -768,18 +767,8 @@ const MockTestLive = () => {
                   /Overall Band Score:\s*(\d+)/
                 );
                 scoreValue = scoreMatch ? scoreMatch[1] : null;
-
-                if (!scoreValue) {
-                  isError = true;
-                  toast.error(
-                    "Score value could not be extracted. Please try again."
-                  );
-                  return;
-                }
               } else {
-                isError = true;
                 toast.error("AI response is empty. Please try again.");
-                return;
               }
 
               // Convert gptResponse to HTML format
@@ -834,11 +823,8 @@ const MockTestLive = () => {
         })
       );
     } catch (error) {
-      isError = true;
       toast.error("Some Problem Occurred. Please try again.");
     }
-
-    if (isError) return;
 
     try {
       const data = JSON.stringify({

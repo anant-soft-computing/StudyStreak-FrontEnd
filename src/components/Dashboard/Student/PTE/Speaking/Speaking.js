@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import ajaxCall from "../../../../../helpers/ajaxCall";
-import DSSidebar from "../../DSSideBar/DSSideBar";
-import Loading from "../../../../UI/Loading";
 import Table from "../../../../UI/Table";
+import Loading from "../../../../UI/Loading";
+import DSSidebar from "../../DSSideBar/DSSideBar";
+import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const pteSpeakingCategory = [
   { name: "Read aloud [RA]", value: "RA" },
@@ -16,7 +15,6 @@ const pteSpeakingCategory = [
 ];
 
 const Speaking = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
@@ -49,16 +47,12 @@ const Speaking = () => {
   }, []);
 
   const testButton = (params) => {
-    const { id: examId, IELTS } = params.data;
-    const paperId = IELTS?.id;
+    const { id: examId, sub_category } = params.data;
     const isGiven = givenTest?.some((test) => test === examId);
 
     return isGiven ? (
       <button
         className="take-test"
-        onClick={() => {
-          navigate(`/PTE/Speaking/${paperId}`);
-        }}
         style={{ backgroundColor: "green", border: "1px solid green" }}
       >
         Review Test
@@ -66,9 +60,13 @@ const Speaking = () => {
     ) : (
       <button
         className="take-test"
-        onClick={() =>
-          window.open(`/PTE-Speaking/IELTS/Speaking/${examId}`, "_blank")
-        }
+        onClick={() => {
+          if (sub_category === "RA") {
+            window.open(`/PTE/IELTS/Speaking/RA/${examId}`, "_blank");
+          } else {
+            window.open(`/PTE/IELTS/Speaking/ASQ/${examId}`, "_blank");
+          }
+        }}
       >
         Take Test
       </button>

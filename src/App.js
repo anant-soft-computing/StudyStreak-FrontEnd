@@ -104,7 +104,8 @@ import LivePTEWritingExam from "./components/Dashboard/Student/PTE/LivePTEExam/W
 import LivePTEListeningExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/LivePTEListeningExam";
 import LivePTESSTExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SST/LivePTESSTExam";
 import LivePTEWFDExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/WFD/LivePTEWFDExam";
-import LivePTESpeakingExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/LivePTESpeakingExam";
+import LivePTESpeakingRAExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/ReadAloud/LivePTESpeakingRAExam";
+import LivePTESpeakingASQExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/AnswerShortQuestion/LivePTESpeakingASQExam";
 import PTEMockTestLive from "./components/Dashboard/Student/PTE/FreeMockTest/MockTestLive/MockTestLive";
 
 //------------------------> Exam Answer <------------------------------------
@@ -123,7 +124,6 @@ import PTEReadingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Rea
 import PTEWritingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Writing/PTEWritingAnswer";
 import PTESSTWFDAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTESSTWFDAnswer";
 import PTEListeningAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTEListeningAnswer";
-import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/PTESpeakingAnswer";
 import Progress from "./components/Dashboard/Student/Progress/Progress";
 import withBootstrap from "./layout/BootstrapStyles";
 
@@ -348,10 +348,6 @@ const App = () => {
               path="/PTE/Listening/SST/WFD/:examId"
               Component={withBootstrap(PTESSTWFDAnswer)}
             />
-            <Route
-              path="/PTE/Speaking/:examId"
-              Component={withBootstrap(PTESpeakingAnswer)}
-            />
           </Route>
 
           <Route element={<StudentNavBarRoute isProtected={false} />}>
@@ -418,8 +414,12 @@ const App = () => {
             Component={withBootstrap(LivePTEWFDExam)}
           />
           <Route
-            path="/PTE-Speaking/:examType/:examForm/:examId"
-            Component={withBootstrap(LivePTESpeakingExam)}
+            path="/PTE/IELTS/Speaking/RA/:examId"
+            Component={withBootstrap(LivePTESpeakingRAExam)}
+          />
+          <Route
+            path="/PTE/IELTS/Speaking/ASQ/:examId"
+            Component={withBootstrap(LivePTESpeakingASQExam)}
           />
           <Route
             path="/PTE-Academic/MockTest/:examId"

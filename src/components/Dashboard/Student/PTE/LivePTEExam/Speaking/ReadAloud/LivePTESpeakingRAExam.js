@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import RARecorder from "./RARecorder";
 import Loading from "../../../../../../UI/Loading";
@@ -13,6 +13,7 @@ const initialState = {
 };
 
 const LivePTESpeakingRAExam = () => {
+  const navigate = useNavigate();
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[5];
@@ -97,6 +98,7 @@ const LivePTESpeakingRAExam = () => {
         8000
       );
       if (response.status === 200) {
+        navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");

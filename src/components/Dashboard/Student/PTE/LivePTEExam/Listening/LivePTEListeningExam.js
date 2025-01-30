@@ -608,6 +608,7 @@ const LivePTEListeningExam = () => {
                   display: next === 0 ? "none" : "block",
                 }}
                 onClick={() => {
+                  setReRenderAudio(false);
                   setNext(next - 1);
                 }}
               >
@@ -625,6 +626,7 @@ const LivePTEListeningExam = () => {
                       : "block",
                 }}
                 onClick={() => {
+                  setReRenderAudio(false);
                   setNext(next + 1);
                 }}
               >

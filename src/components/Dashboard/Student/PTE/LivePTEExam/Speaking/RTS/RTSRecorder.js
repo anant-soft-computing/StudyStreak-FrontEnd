@@ -5,7 +5,7 @@ import SpeechRecognition, {
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
-const RARecorder = ({
+const RTSRecorder = ({
   setRecordedFilePath,
   next,
   exam,
@@ -14,46 +14,43 @@ const RARecorder = ({
   recorderIndex = 0,
   practice,
   Flt,
-  preparationTimer,
   shouldStartRecording,
 }) => {
-  const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
-  const [recordingTimer, setRecordingTimer] = useState(40);
+  const [countdown, setCountdown] = useState(null);
+  const [recordingTimer, setRecordingTimer] = useState(null);
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
 
   useEffect(() => {
-    setIsRecording(false);
     setAudioBlob(null);
     setRecordedFilePath(null);
+    setCountdown(null);
+    setRecordingTimer(null);
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     resetTranscript();
-    setRecordingTimer(40);
   }, [next, resetTranscript, setRecordedFilePath]);
 
-  // Auto-start recording when shouldStartRecording becomes true
   useEffect(() => {
-    if (shouldStartRecording && !isRecording && !audioBlob) {
-      handleStartRecording();
+    if (shouldStartRecording) {
+      setCountdown(28);
+      const countdownInterval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            handleStartRecording();
+            return null;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(countdownInterval);
     }
   }, [shouldStartRecording]);
-
-  // Recording timer countdown
-  useEffect(() => {
-    let interval;
-    if (isRecording && recordingTimer > 0) {
-      interval = setInterval(() => {
-        setRecordingTimer((prev) => prev - 1);
-      }, 1000);
-    } else if (recordingTimer === 0 && isRecording) {
-      handleStopRecording();
-    }
-    return () => clearInterval(interval);
-  }, [isRecording, recordingTimer]);
 
   const handleStartRecording = () => {
     resetTranscript();
@@ -71,13 +68,24 @@ const RARecorder = ({
         mediaRecorderRef.current.onstop = () => {
           const blob = new Blob(chunksRef.current, { type: "audio/mp3" });
           setAudioBlob(blob);
-          // Stop all tracks in the stream
           stream.getTracks().forEach((track) => track.stop());
         };
 
         mediaRecorderRef.current.start();
-        setIsRecording(true);
         SpeechRecognition.startListening({ continuous: true });
+
+        // Set 40-second recording timer
+        setRecordingTimer(40);
+        const timerInterval = setInterval(() => {
+          setRecordingTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(timerInterval);
+              handleStopRecording();
+              return null;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       })
       .catch((error) => {
         console.log("error", error);
@@ -85,13 +93,10 @@ const RARecorder = ({
   };
 
   const handleStopRecording = () => {
-    if (
-      mediaRecorderRef.current &&
-      mediaRecorderRef.current.state === "recording"
-    ) {
+    if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
     }
-    setIsRecording(false);
+    setRecordingTimer(null);
     SpeechRecognition.stopListening();
   };
 
@@ -115,48 +120,60 @@ const RARecorder = ({
         messages: [
           {
             role: "user",
-            content: `Analyze the following PTE Speaking: Read Aloud response using these criteria:
-          
-              **Content (0-5 points):**
-                - Accuracy in reproducing the text as displayed.
-                - Deductions for missing words, incorrect words, or substitutions.
-          
-              **Pronunciation (0-5 points):**
-                - Clarity of speech and understandability to most English speakers.
-                - Deductions for mispronunciations or heavy accents.
-          
-              **Oral Fluency (0-5 points):**
-                - Smoothness and natural flow of speech.
-                - Deductions for hesitations, repetitions, or unnatural pauses.
-          
-              Provide scores on a scale of 15 points, broken down as follows:
-                - Content: 0-5 points
-                - Pronunciation: 0-5 points
-                - Oral Fluency: 0-5 points
-          
-              Please provide the assessment in the following format:
-          
-              #Detailed_Analysis:
-          
-              Content:
-              [Detailed analysis with specific examples from the response]
-              Score: X/5
-          
-              Pronunciation:
-              [Detailed analysis with specific examples from the response]
-              Score: X/5
-          
-              Oral Fluency:
-              [Detailed analysis with specific examples from the response]
-              Score: X/5
-          
-              #Overall_Score: [Total]/15
-          
-              Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.`,
+            content: `Analyze the following PTE Speaking: Respond to a Situation response using these criteria:
+        
+                **Content (0-5 points):**
+                  - 5 Points: Fully addresses the situation with clear, relevant, and well-organized details.
+                  - 4 Points: Addresses the situation well but may miss minor details or have slight disorganization.
+                  - 3 Points: Partially addresses the situation with some relevant details but lacks coherence or completeness.
+                  - 2 Points: Provides a vague or incomplete response with limited relevance to the situation.
+                  - 1 Point: Response is largely irrelevant or lacks meaningful content.
+                  - 0 Points: No response or completely unrelated to the situation.
+        
+                **Pronunciation (0-5 points):**
+                  - 5 Points: Native-like pronunciation, easily understandable.
+                  - 4 Points: Slight accent but clear and understandable.
+                  - 3 Points: Noticeable accent or minor mispronunciations but understandable.
+                  - 2 Points: Frequently unclear and difficult to understand.
+                  - 1 Point: Rarely understandable.
+                  - 0 Points: Not understandable.
+        
+                **Oral Fluency (0-5 points):**
+                  - 5 Points: Natural pace, smooth flow, no hesitations.
+                  - 4 Points: Minor hesitations or unnatural intonation.
+                  - 3 Points: Noticeable hesitations or uneven flow.
+                  - 2 Points: Frequent pauses, stuttering, or halting speech.
+                  - 1 Point: Speech is very disjointed and difficult to follow.
+                  - 0 Points: No attempt or incomprehensible delivery.
+        
+                Provide scores on a scale of 15 points, broken down as follows:
+                  - Content: 0-5 points
+                  - Pronunciation: 0-5 points
+                  - Oral Fluency: 0-5 points
+        
+                Please provide the assessment in the following format:
+        
+                #Detailed_Analysis:
+        
+                Content:
+                [Detailed analysis with specific examples from the response]
+                Score: X/5
+        
+                Pronunciation:
+                [Detailed analysis with specific examples from the response]
+                Score: X/5
+        
+                Oral Fluency:
+                [Detailed analysis with specific examples from the response]
+                Score: X/5
+        
+                #Overall_Score: [Total]/15
+        
+                Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.`,
           },
           {
             role: "user",
-            content: `Text to Read: ${question}`,
+            content: `Situation: ${question}`,
           },
           {
             role: "user",
@@ -164,7 +181,6 @@ const RARecorder = ({
           },
         ],
       };
-
       const getChatGPTResponse = async () => {
         try {
           const gptResponse = await fetch(
@@ -235,19 +251,15 @@ const RARecorder = ({
   return (
     <div>
       <h6 className="text-center">Recorded Answer</h6>
-      <div>
-        {!isRecording && !audioBlob && (
-          <div>Beginning in {preparationTimer} seconds</div>
-        )}
-        {isRecording && (
-          <div style={{ color: recordingTimer <= 10 ? "red" : "inherit" }}>
-            Recording Time Left : {recordingTimer}s
-          </div>
-        )}
-        {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
-      </div>
+      {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
+      {recordingTimer && (
+        <div style={{ color: recordingTimer <= 10 ? "red" : "inherit" }}>
+          Recording Time Left : {recordingTimer}s
+        </div>
+      )}
+      {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
     </div>
   );
 };
 
-export default RARecorder;
+export default RTSRecorder;

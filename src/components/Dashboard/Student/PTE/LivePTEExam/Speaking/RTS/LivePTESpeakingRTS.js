@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { convert } from "html-to-text";
-import ASQRecorder from "./ASQRecorder";
+import RTSRecorder from "./RTSRecorder";
 import Loading from "../../../../../../UI/Loading";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import { formatTime } from "../../../../../../../utils/timer/formateTime";
@@ -13,23 +13,24 @@ const initialState = {
   filePath: "",
 };
 
-const LivePTESpeakingASQExam = () => {
+const LivePTESpeakingRTS = () => {
   const synth = window.speechSynthesis;
   const navigate = useNavigate();
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[5];
-  const [examData, setExamData] = useState({});
-  const [voices, setVoices] = useState([]);
-  const [timer, setTimer] = useState(0);
-  const [timerRunning, setTimerRunning] = useState(true);
-  const [fullPaper, setFullPaper] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [speaking, setSpeaking] = useState([initialState]);
   const [next, setNext] = useState(0);
-  const [recordedFilePath, setRecordedFilePath] = useState("");
+  const [timer, setTimer] = useState(0);
+  const [voices, setVoices] = useState([]);
+  const [examData, setExamData] = useState({});
+  const [fullPaper, setFullPaper] = useState([]);
   const [countdown, setCountdown] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(true);
+  const [speaking, setSpeaking] = useState([initialState]);
+  const [recordedFilePath, setRecordedFilePath] = useState("");
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
@@ -241,7 +242,7 @@ const LivePTESpeakingASQExam = () => {
   // Automatically start countdown and speaking for the current question
   useEffect(() => {
     if (examData?.questions && examData.questions.length > 0) {
-      setCountdown(3); // Start countdown from 3 seconds
+      setCountdown(12); // Start countdown from 12 seconds
       const countdownInterval = setInterval(() => {
         setCountdown((prev) => {
           if (prev === 1) {
@@ -268,7 +269,7 @@ const LivePTESpeakingASQExam = () => {
   const recorderContainer = useCallback(
     (item) => {
       return (
-        <ASQRecorder
+        <RTSRecorder
           setRecordedFilePath={setRecordedFilePath}
           next={next}
           exam={examData}
@@ -324,8 +325,10 @@ const LivePTESpeakingASQExam = () => {
           padding: "20px",
         }}
       >
-        You will hear a question. Please give a simple and short answer. Often,
-        just one or a few words is enough.
+        Listen to and read a description of a situation. You will have 10
+        seconds to think about your answer. Then you will hear a beep. You will
+        have 40 seconds to answer the question. Please answer as completely as
+        you can.
       </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "20px" }}>
         {examData?.questions?.map((item, i) => {
@@ -373,6 +376,16 @@ const LivePTESpeakingASQExam = () => {
               >
                 {recorderContainer(item, speakingIndex)}
               </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginTop: "15px",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: item.question,
+                }}
+              />
             </div>
           );
         })}
@@ -417,4 +430,4 @@ const LivePTESpeakingASQExam = () => {
   );
 };
 
-export default LivePTESpeakingASQExam;
+export default LivePTESpeakingRTS;

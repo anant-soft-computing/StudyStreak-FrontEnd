@@ -16,7 +16,6 @@ const ASQRecorder = ({
   Flt,
   shouldStartRecording,
 }) => {
-  const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [countdown, setCountdown] = useState(null);
@@ -26,7 +25,6 @@ const ASQRecorder = ({
   const chunksRef = useRef([]);
 
   useEffect(() => {
-    setIsRecording(false);
     setAudioBlob(null);
     setRecordedFilePath(null);
     setCountdown(null);
@@ -74,7 +72,6 @@ const ASQRecorder = ({
         };
 
         mediaRecorderRef.current.start();
-        setIsRecording(true);
         SpeechRecognition.startListening({ continuous: true });
 
         // Set 10-second recording timer
@@ -99,7 +96,6 @@ const ASQRecorder = ({
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
     }
-    setIsRecording(false);
     setRecordingTimer(null);
     SpeechRecognition.stopListening();
   };
@@ -169,15 +165,15 @@ const ASQRecorder = ({
   
               #Overall_Score: [Total]/11
   
-              Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.,
+              Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.`,
           },
           {
             role: "user",
-            content: Question: ${question},
+            content: `Question: ${question}`,
           },
           {
             role: "user",
-            content: Candidate's Response: ${transcript}`,
+            content: `Candidate's Response: ${transcript}`,
           },
         ],
       };
@@ -250,15 +246,8 @@ const ASQRecorder = ({
   }, [audioBlob]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <div className="mb-2">Recorded Answer</div>
+    <div>
+      <h6 className="text-center">Recorded Answer</h6>
       {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
       {recordingTimer && (
         <div style={{ color: recordingTimer <= 5 ? "red" : "inherit" }}>
@@ -266,7 +255,6 @@ const ASQRecorder = ({
         </div>
       )}
       {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
-      {isRecording && <p className="mt-2">Transcript: {transcript}</p>}
     </div>
   );
 };

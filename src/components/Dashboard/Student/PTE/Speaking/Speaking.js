@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Table from "../../../../UI/Table";
 import Loading from "../../../../UI/Loading";
 import DSSidebar from "../../DSSideBar/DSSideBar";
@@ -15,6 +16,7 @@ const pteSpeakingCategory = [
 ];
 
 const Speaking = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [givenTest, setGivenTest] = useState([]);
   const [speakingData, setSpeakingData] = useState([]);
@@ -47,13 +49,17 @@ const Speaking = () => {
   }, []);
 
   const testButton = (params) => {
-    const { id: examId, sub_category } = params.data;
+    const { id: examId, IELTS, sub_category } = params.data;
+    const paperId = IELTS?.id;
     const isGiven = givenTest?.some((test) => test === examId);
 
     return isGiven ? (
       <button
         className="take-test"
         style={{ backgroundColor: "green", border: "1px solid green" }}
+        onClick={() => {
+          navigate(`/PTE/Speaking/${paperId}`);
+        }}
       >
         Review Test
       </button>
@@ -63,8 +69,14 @@ const Speaking = () => {
         onClick={() => {
           if (sub_category === "RA") {
             window.open(`/PTE/IELTS/Speaking/RA/${examId}`, "_blank");
-          } else {
+          } else if (sub_category === "RS") {
+            window.open(`/PTE/IELTS/Speaking/RS/${examId}`, "_blank");
+          } else if (sub_category === "RL") {
+            window.open(`/PTE/IELTS/Speaking/RL/${examId}`, "_blank");
+          } else if (sub_category === "ASQ") {
             window.open(`/PTE/IELTS/Speaking/ASQ/${examId}`, "_blank");
+          } else if (sub_category === "RTS") {
+            window.open(`/PTE/IELTS/Speaking/RTS/${examId}`, "_blank");
           }
         }}
       >

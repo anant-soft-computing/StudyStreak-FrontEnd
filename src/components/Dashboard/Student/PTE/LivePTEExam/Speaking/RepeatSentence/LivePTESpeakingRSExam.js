@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { convert } from "html-to-text";
-import ASQRecorder from "./ASQRecorder";
+import RSRecorder from "./RSRecorder";
 import Loading from "../../../../../../UI/Loading";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import { formatTime } from "../../../../../../../utils/timer/formateTime";
@@ -13,23 +13,24 @@ const initialState = {
   filePath: "",
 };
 
-const LivePTESpeakingASQExam = () => {
+const LivePTESpeakingRSExam = () => {
   const synth = window.speechSynthesis;
   const navigate = useNavigate();
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[5];
-  const [examData, setExamData] = useState({});
-  const [voices, setVoices] = useState([]);
-  const [timer, setTimer] = useState(0);
-  const [timerRunning, setTimerRunning] = useState(true);
-  const [fullPaper, setFullPaper] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [speaking, setSpeaking] = useState([initialState]);
   const [next, setNext] = useState(0);
-  const [recordedFilePath, setRecordedFilePath] = useState("");
+  const [timer, setTimer] = useState(0);
+  const [voices, setVoices] = useState([]);
+  const [examData, setExamData] = useState({});
+  const [fullPaper, setFullPaper] = useState([]);
   const [countdown, setCountdown] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [timerRunning, setTimerRunning] = useState(true);
+  const [speaking, setSpeaking] = useState([initialState]);
+  const [recordedFilePath, setRecordedFilePath] = useState("");
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
@@ -268,7 +269,7 @@ const LivePTESpeakingASQExam = () => {
   const recorderContainer = useCallback(
     (item) => {
       return (
-        <ASQRecorder
+        <RSRecorder
           setRecordedFilePath={setRecordedFilePath}
           next={next}
           exam={examData}
@@ -324,8 +325,8 @@ const LivePTESpeakingASQExam = () => {
           padding: "20px",
         }}
       >
-        You will hear a question. Please give a simple and short answer. Often,
-        just one or a few words is enough.
+        You will hear a sentence. Please repeat the sentence exactly as you hear
+        it. You will hear the sentence only once.
       </div>
       <div style={{ flex: 1, overflowY: "auto", padding: "20px" }}>
         {examData?.questions?.map((item, i) => {
@@ -417,4 +418,4 @@ const LivePTESpeakingASQExam = () => {
   );
 };
 
-export default LivePTESpeakingASQExam;
+export default LivePTESpeakingRSExam;

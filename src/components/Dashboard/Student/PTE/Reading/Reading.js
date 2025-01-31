@@ -64,9 +64,16 @@ const Reading = () => {
     ) : (
       <button
         className="take-test"
-        onClick={() =>
-          window.open(`/PTE/IELTS/Reading/${sub_category}/${examId}`, "_blank")
-        }
+        onClick={() => {
+          if (sub_category === "RFIB") {
+            window.open(`/PTE/IELTS/Reading/RFIB/${examId}`, "_blank");
+          } else {
+            window.open(
+              `/PTE/IELTS/Reading/${sub_category}/${examId}`,
+              "_blank"
+            );
+          }
+        }}
       >
         Take Test
       </button>

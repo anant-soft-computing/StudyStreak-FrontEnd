@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { convert } from "html-to-text";
-import ASQRecorder from "./ASQRecorder";
+import DIRecorder from "./DIRecorder";
 import Loading from "../../../../../../UI/Loading";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import { formatTime } from "../../../../../../../utils/timer/formateTime";
@@ -13,31 +12,47 @@ const initialState = {
   filePath: "",
 };
 
-const LivePTESpeakingASQExam = () => {
-  const synth = window.speechSynthesis;
+const LivePTESpeakingDIExam = () => {
   const navigate = useNavigate();
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[5];
-  const [examData, setExamData] = useState({});
-  const [voices, setVoices] = useState([]);
+
+  const [next, setNext] = useState(0);
   const [timer, setTimer] = useState(0);
-  const [timerRunning, setTimerRunning] = useState(true);
+  const [examData, setExamData] = useState({});
   const [fullPaper, setFullPaper] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [timerRunning, setTimerRunning] = useState(true);
   const [speaking, setSpeaking] = useState([initialState]);
-  const [next, setNext] = useState(0);
   const [recordedFilePath, setRecordedFilePath] = useState("");
-  const [countdown, setCountdown] = useState(null);
-  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const [isPreparing, setIsPreparing] = useState(true);
+  const [preparationTimer, setPreparationTimer] = useState(25);
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
+  // Preparation countdown timer
+  useEffect(() => {
+    let interval;
+    if (isPreparing && preparationTimer > 0) {
+      interval = setInterval(() => {
+        setPreparationTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (preparationTimer === 0) {
+      setIsPreparing(false);
+    }
+    return () => clearInterval(interval);
+  }, [isPreparing, preparationTimer]);
+
   // Reset preparation timer when moving to next question
   useEffect(() => {
-    setIsSpeaking(false);
+    setPreparationTimer(25);
+    setIsPreparing(true);
   }, [next]);
 
+  // Original timer logic
   useEffect(() => {
     let interval;
     if (timerRunning) {
@@ -115,11 +130,11 @@ const LivePTESpeakingASQExam = () => {
         if (response.status === 200) {
           let filteredSpeaking = response.data.IELTS.Speaking.sort((a, b) => {
             const tempExamName1Array = a.name.split(" ");
-            const tempExamName2array = b.name.split(" ");
+            const tempExamName2Array = b.name.split(" ");
             const tempExamName1 =
               tempExamName1Array[tempExamName1Array.length - 1];
             const tempExamName2 =
-              tempExamName2array[tempExamName2array.length - 1];
+              tempExamName2Array[tempExamName2Array.length - 1];
             if (tempExamName1 > tempExamName2) {
               return 1;
             }
@@ -170,63 +185,6 @@ const LivePTESpeakingASQExam = () => {
   }, [examForm, examType, fullPaper, next]);
 
   useEffect(() => {
-    const fetchVoices = () => {
-      const availableVoices = synth.getVoices();
-      setVoices(availableVoices);
-    };
-
-    // Fetch voices when they are loaded
-    synth.onvoiceschanged = fetchVoices;
-    fetchVoices();
-  }, [synth]);
-
-  const options = {
-    wordwrap: false,
-    ignoreHref: true,
-    ignoreImage: true,
-    preserveNewlines: true,
-  };
-
-  const extractVisibleText = (htmlContent) => {
-    const text = convert(htmlContent, options);
-    return text.replace(/\n+/g, ". ").trim();
-  };
-
-  const speak = (speakingContent, id) => {
-    const utterances = extractVisibleText(speakingContent).split(". ");
-    utterances.forEach((text, index) => {
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-
-      // Select "Google UK English Male" voice
-      const ukMaleVoice = voices.find(
-        (voice) =>
-          voice.name === "Google UK English Male" && voice.lang === "en-GB"
-      );
-
-      if (ukMaleVoice) {
-        utterance.voice = ukMaleVoice;
-      }
-
-      synth.speak(utterance);
-
-      if (index === utterances.length - 1) {
-        utterance.onend = () => {
-          const updatedSpeaking = speaking.map((item) =>
-            item.id === id ? { ...item, status: 2 } : item
-          );
-          setSpeaking(updatedSpeaking);
-        };
-      }
-    });
-    // Update speaking state to reflect that the current question is being spoken
-    const updatedSpeaking = speaking.map((item) =>
-      item.id === id ? { ...item, status: 1 } : item
-    );
-    setSpeaking(updatedSpeaking);
-  };
-
-  useEffect(() => {
     if (recordedFilePath) {
       const { recorderIndex, filePath } = recordedFilePath;
       const tempSpeaking = [...speaking];
@@ -238,49 +196,30 @@ const LivePTESpeakingASQExam = () => {
     }
   }, [recordedFilePath, speaking]);
 
-  // Automatically start countdown and speaking for the current question
-  useEffect(() => {
-    if (examData?.questions && examData.questions.length > 0) {
-      setCountdown(3); // Start countdown from 3 seconds
-      const countdownInterval = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev === 1) {
-            clearInterval(countdownInterval);
-            return null;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      const speakTimeout = setTimeout(() => {
-        const currentQuestion = examData.questions[0]; // Assuming only one question per exam block
-        speak(currentQuestion.question, currentQuestion.id);
-        setIsSpeaking(true);
-      }, 3000); // Start speaking after 3 seconds
-
-      return () => {
-        clearInterval(countdownInterval);
-        clearTimeout(speakTimeout);
-      };
-    }
-  }, [examData]);
-
   const recorderContainer = useCallback(
     (item) => {
       return (
-        <ASQRecorder
-          setRecordedFilePath={setRecordedFilePath}
+        <DIRecorder
           next={next}
           exam={examData}
-          question_number={item.question_number}
           user={userData.userId}
           recorderIndex={item.id}
           practice={fullPaper?.IELTS?.id}
-          shouldStartRecording={isSpeaking}
+          preparationTimer={preparationTimer}
+          shouldStartRecording={!isPreparing}
+          question_number={item.question_number}
+          setRecordedFilePath={setRecordedFilePath}
         />
       );
     },
-    [next, examData, userData.userId, fullPaper?.IELTS?.id, isSpeaking]
+    [
+      examData,
+      fullPaper?.IELTS?.id,
+      isPreparing,
+      next,
+      preparationTimer,
+      userData.userId,
+    ]
   );
 
   return isLoading ? (
@@ -345,8 +284,9 @@ const LivePTESpeakingASQExam = () => {
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
-          You will hear a question. Please give a simple and short answer.
-          Often, just one or a few words is enough.
+          Look at the picture below. In 25 seconds, please speak into microphone
+          and describe in detail what the picture is showing. You will have 40
+          seconds to give your response.
         </div>
         <div style={{ flex: 1, overflowY: "auto" }}>
           {examData?.questions?.map((item, i) => {
@@ -355,46 +295,43 @@ const LivePTESpeakingASQExam = () => {
             );
             return (
               <div key={item.id} style={{ marginBottom: "20px" }}>
-                {countdown !== null && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "20px",
+                  }}
+                >
                   <div
                     style={{
+                      flex: 1,
                       display: "flex",
-                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <img
+                      src={item.image}
+                      alt=""
+                      style={{ maxWidth: "100%", maxHeight: "400px" }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      flex: 1,
+                      display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
                       background: "#f9f9f9",
                       padding: "15px",
                       border: "1px solid #01579b",
                       borderRadius: "8px",
-                      width: "100%",
-                      maxWidth: "400px",
-                      margin: "0 auto",
-                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      marginTop: "15px",
                     }}
                   >
-                    <div style={{ fontWeight: "bold" }}>
-                      Beginning in {countdown} seconds
-                    </div>
+                    {recorderContainer(item, speakingIndex)}
                   </div>
-                )}
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    background: "#f9f9f9",
-                    padding: "15px",
-                    border: "1px solid #01579b",
-                    borderRadius: "8px",
-                    width: "100%",
-                    maxWidth: "400px",
-                    margin: "0 auto",
-                    marginTop: "15px",
-                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  {recorderContainer(item, speakingIndex)}
                 </div>
               </div>
             );
@@ -443,4 +380,4 @@ const LivePTESpeakingASQExam = () => {
   );
 };
 
-export default LivePTESpeakingASQExam;
+export default LivePTESpeakingDIExam;

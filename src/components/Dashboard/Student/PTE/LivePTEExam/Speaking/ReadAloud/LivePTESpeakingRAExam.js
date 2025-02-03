@@ -229,12 +229,15 @@ const LivePTESpeakingRAExam = () => {
     <div
       style={{
         border: "1px solid #01579b",
-        margin: "50px",
+        margin: "20px",
         height: "90vh",
         display: "flex",
         flexDirection: "column",
-        maxWidth: "calc(100% - 100px)",
+        maxWidth: "calc(100% - 40px)",
         overflow: "hidden",
+        borderRadius: "12px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#ffffff",
       }}
     >
       <div
@@ -245,99 +248,128 @@ const LivePTESpeakingRAExam = () => {
           backgroundColor: "#01579b",
           color: "white",
           flexShrink: 0,
+          borderRadius: "12px 12px 0 0",
         }}
       >
-        <div>
+        <div style={{ fontSize: "18px", fontWeight: "500" }}>
           {examData?.exam_category} / {examData?.name}
         </div>
-        <div>
-          <i className="icofont-stopwatch mr-2"></i>
-          <span>Timer :</span>
-          <span className="ml-2">{formatTime(timer)}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>
+          <span>Timer:</span>
+          <span style={{ fontWeight: "500" }}>{formatTime(timer)}</span>
         </div>
       </div>
       <div
         style={{
-          fontWeight: "bold",
-          padding: "20px",
-        }}
-      >
-        Look at the text below. In 40 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 40 seconds to Read Aloud.
-      </div>
-      <div style={{ flex: 1, overflowY: "auto", padding: "20px" }}>
-        {examData?.questions?.map((item, i) => {
-          const speakingIndex = speaking.findIndex(
-            (element) => element.id === item.id
-          );
-          return (
-            <div key={item.id} style={{ marginBottom: "20px" }}>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  background: "#f9f9f9",
-                  padding: "15px",
-                  border: "1px solid #01579b",
-                  borderRadius: "8px",
-                  width: "100%",
-                  maxWidth: "400px",
-                  margin: "0 auto",
-                  marginTop: "15px",
-                }}
-              >
-                {recorderContainer(item, speakingIndex)}
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "15px",
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: item.question,
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
-      <div
-        style={{
-          borderTop: "1px solid #01579b",
-          padding: "15px 20px",
-          background: "#f9f9f9",
           display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: "column",
+          flex: 1,
+          overflow: "hidden",
+          padding: "20px",
+          gap: "20px",
+          backgroundColor: "#f5f5f5",
         }}
       >
-        <div>
-          Item {next + 1} of {fullPaper?.[examType].Speaking?.length}
+        <div
+          style={{
+            fontWeight: "bold",
+            fontSize: "16px",
+            color: "#333",
+            padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+          }}
+        >
+          Look at the text below. In 40 seconds, you must read this text aloud
+          as naturally and clearly as possible. You have 40 seconds to Read
+          Aloud.
         </div>
-        <div className="d-flex gap-2">
-          {next > 0 && (
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={() => setNext(next - 1)}
-            >
-              <i className="icofont-arrow-left mr-2"></i>Previous
-            </button>
-          )}
-          {next < fullPaper?.[examType].Speaking?.length - 1 && (
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={() => setNext(next + 1)}
-            >
-              Next
-              <i className="icofont-arrow-right ml-2"></i>
-            </button>
-          )}
-          <button className="btn btn-primary btn-sm" onClick={handleSubmit}>
-            Submit
-          </button>
+        <div style={{ flex: 1, overflowY: "auto" }}>
+          {examData?.questions?.map((item, i) => {
+            const speakingIndex = speaking.findIndex(
+              (element) => element.id === item.id
+            );
+            return (
+              <div key={item.id} style={{ marginBottom: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    background: "#f9f9f9",
+                    padding: "15px",
+                    border: "1px solid #01579b",
+                    borderRadius: "8px",
+                    width: "100%",
+                    maxWidth: "400px",
+                    margin: "0 auto",
+                    marginTop: "15px",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                  }}
+                >
+                  {recorderContainer(item, speakingIndex)}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "15px",
+                    borderTop: "1px solid #ddd",
+                    borderBottom: "1px solid #ddd",
+                    padding: "20px",
+                    backgroundColor: "#ffffff",
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                  }}
+                  dangerouslySetInnerHTML={{
+                    __html: item.question,
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <div
+          style={{
+            borderTop: "1px solid #ddd",
+            borderBottom: "1px solid #ddd",
+            padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+          }}
+        >
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+            <div style={{ fontSize: "16px", fontWeight: "500" }}>
+              Item {next + 1} of {fullPaper?.[examType].Speaking?.length}
+            </div>
+            <div className="d-flex gap-2">
+              {next > 0 && (
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => setNext(next - 1)}
+                >
+                  <i className="icofont-arrow-left mr-2"></i>Previous
+                </button>
+              )}
+              {next < fullPaper?.[examType].Speaking?.length - 1 && (
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={() => setNext(next + 1)}
+                >
+                  Next
+                  <i className="icofont-arrow-right ml-2"></i>
+                </button>
+              )}
+              <button className="btn btn-primary btn-sm" onClick={handleSubmit}>
+                Submit
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

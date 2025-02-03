@@ -28,7 +28,7 @@ const initialSpeakingField = {
   sub_category: "",
   difficulty_level: "Easy",
   block_threshold: 0,
-  questions: [{ question: "", question_number: "" }],
+  questions: [{ question: "", image: "", question_number: "" }],
 };
 
 const initialSubmit = {
@@ -117,6 +117,14 @@ const ExamSpeaking = ({ category }) => {
       setFormError("All Questions must have both Question and Question Number");
       return false;
     }
+    if (category === "PTE" && SpeakingData.sub_category === "DI") {
+      if (!SpeakingData.questions.every((question) => question.image)) {
+        setFormError(
+          "All Questions must have an image for Describe Image (DI)"
+        );
+        return false;
+      }
+    }
     setFormStatus({ isError: false, errMsg: null, isSubmitting: false });
     return true;
   };
@@ -125,23 +133,31 @@ const ExamSpeaking = ({ category }) => {
     e.preventDefault();
     if (!validateForm()) return;
     setFormStatus((prev) => ({ ...prev, isSubmitting: true }));
-    const data = {
-      ...SpeakingData,
-      exam_category: category,
-    };
     try {
+      const formData = new FormData();
+      formData.append("exam_category", category);
+      formData.append("name", SpeakingData.name);
+      formData.append("sub_category", SpeakingData.sub_category);
+      formData.append("difficulty_level", SpeakingData.difficulty_level);
+      formData.append("block_threshold", SpeakingData.block_threshold);
+      SpeakingData.questions.forEach((question, index) => {
+        formData.append(`questions[${index}]question`, question.question);
+        formData.append(
+          `questions[${index}]question_number`,
+          question.question_number
+        );
+        formData.append(`questions[${index}]image`, question.image);
+      });
       const response = await ajaxCall(
         "/speaking-block/",
         {
           headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
             Authorization: `Bearer ${
               JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
             }`,
           },
           method: "POST",
-          body: JSON.stringify(data),
+          body: formData,
         },
         8000
       );
@@ -180,8 +196,9 @@ const ExamSpeaking = ({ category }) => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Exam Name</label>
+                  <label htmlFor="exam-name">Exam Name</label>
                   <input
+                    id="exam-name"
                     type="text"
                     placeholder="Exam Name"
                     value={SpeakingData.name}
@@ -198,8 +215,9 @@ const ExamSpeaking = ({ category }) => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Exam Type</label>
+                  <label htmlFor="exam-type">Exam Type</label>
                   <select
+                    id="exam-type"
                     className="form-select"
                     aria-label="Default select example"
                     value={SpeakingData.block_threshold}
@@ -253,8 +271,11 @@ const ExamSpeaking = ({ category }) => {
               <div className="col-xl-6 col-lg-6 col-md-6 col-12" key={index}>
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">
-                    <label>Question Number</label>
+                    <label htmlFor={`question-number-${index}`}>
+                      Question Number
+                    </label>
                     <input
+                      id={`question-number-${index}`}
                       type="number"
                       placeholder="Question Number"
                       value={question.question_number}
@@ -268,9 +289,29 @@ const ExamSpeaking = ({ category }) => {
                     />
                   </div>
                 </div>
+                {category === "PTE" && SpeakingData.sub_category === "DI" && (
+                  <div className="dashboard__form__wraper">
+                    <div className="dashboard__form__input">
+                      <label htmlFor={`question-image-${index}`}>
+                        Question Image
+                      </label>
+                      <input
+                        id={`question-image-${index}`}
+                        type="file"
+                        onChange={(e) =>
+                          handleQuestionChange(
+                            index,
+                            "image",
+                            e.target.files[0]
+                          )
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">
-                    <label>Question</label>
+                    <label htmlFor={`question-${index}`}>Question</label>
                     <CKEditor
                       editor={ClassicEditor}
                       data={question.question}

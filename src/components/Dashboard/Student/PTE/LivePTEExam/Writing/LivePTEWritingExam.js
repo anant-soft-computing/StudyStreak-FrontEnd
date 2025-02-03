@@ -466,12 +466,15 @@ const LivePTEWritingExam = () => {
     <div
       style={{
         border: "1px solid #01579b",
-        margin: "50px",
+        margin: "20px",
         height: "90vh",
         display: "flex",
         flexDirection: "column",
-        maxWidth: "calc(100% - 100px)",
+        maxWidth: "calc(100% - 40px)",
         overflow: "hidden",
+        borderRadius: "12px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#ffffff",
       }}
     >
       <div
@@ -482,15 +485,16 @@ const LivePTEWritingExam = () => {
           backgroundColor: "#01579b",
           color: "white",
           flexShrink: 0,
+          borderRadius: "12px 12px 0 0",
         }}
       >
-        <div>
+        <div style={{ fontSize: "18px", fontWeight: "500" }}>
           {examData?.exam_category} / {examData?.exam_name}
         </div>
-        <div>
-          <i className="icofont-stopwatch mr-2"></i>
-          <span>Time Remaining :</span>
-          <span className="ml-2">{timeTaken}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>
+          <span>Timer:</span>
+          <span style={{ fontWeight: "500" }}>{timeTaken}</span>
         </div>
       </div>
       <div
@@ -499,12 +503,21 @@ const LivePTEWritingExam = () => {
           flexDirection: "column",
           flex: 1,
           overflow: "hidden",
+          padding: "20px",
+          gap: "20px",
+          backgroundColor: "#f5f5f5",
         }}
       >
         <div
           style={{
             fontWeight: "bold",
+            fontSize: "16px",
+            color: "#333",
             padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
           {instructions[examSubcategory]}
@@ -513,6 +526,10 @@ const LivePTEWritingExam = () => {
           style={{
             padding: "20px",
             overflow: "auto",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
           {examData?.passage && (
@@ -530,23 +547,41 @@ const LivePTEWritingExam = () => {
               onChange={(e) => handleWritingAnswer(e, next)}
               style={{
                 width: "100%",
-                padding: "10px",
+                padding: "15px",
                 border: "1px solid #01579b",
+                borderRadius: "8px",
                 resize: "none",
+                fontSize: "16px",
+                lineHeight: "1.5",
+                backgroundColor: "#f9f9f9",
+                transition: "border-color 0.3s ease",
               }}
+              placeholder="Type your answer here..."
             />
-            <div>Total Word Count: {examAnswer[next]?.wordCount || 0}</div>
+            <div
+              style={{
+                fontWeight: "bold",
+                fontSize: "16px",
+                color: "#333",
+                marginTop: "10px",
+              }}
+            >
+              Total Word Count: {examAnswer[next]?.wordCount || 0}
+            </div>
           </div>
         </div>
         <div
           style={{
-            borderTop: "1px solid #01579b",
-            borderBottom: "1px solid #01579b",
+            borderTop: "1px solid #ddd",
+            borderBottom: "1px solid #ddd",
             padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
-          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
-            <div className="mb-2 mb-sm-0">
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+            <div style={{ fontSize: "16px", fontWeight: "500" }}>
               Item {next + 1} of{" "}
               {fullPaper.length > 0
                 ? fullPaper[0][examType][examForm]?.length
@@ -585,7 +620,6 @@ const LivePTEWritingExam = () => {
         <div
           className="d-flex flex-column flex-sm-row justify-content-between align-items-center"
           style={{
-            justifyContent: "space-between",
             padding: "20px",
             gap: "10px",
           }}
@@ -626,7 +660,7 @@ const LivePTEWritingExam = () => {
             </div>
           }
         >
-          <h5>Are You Sure You Want To Submit ?</h5>
+          <h5>Are You Sure You Want To Submit?</h5>
           {reviewContent()}
         </SmallModal>
       )}

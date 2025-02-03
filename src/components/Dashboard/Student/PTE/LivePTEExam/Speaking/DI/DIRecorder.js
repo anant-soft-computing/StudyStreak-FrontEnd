@@ -5,7 +5,7 @@ import SpeechRecognition, {
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
-const RSRecorder = ({
+const DIRecorder = ({
   setRecordedFilePath,
   next,
   exam,
@@ -14,43 +14,44 @@ const RSRecorder = ({
   recorderIndex = 0,
   practice,
   Flt,
+  preparationTimer,
   shouldStartRecording,
 }) => {
+  const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
-  const [countdown, setCountdown] = useState(null);
-  const [recordingTimer, setRecordingTimer] = useState(null);
+  const [recordingTimer, setRecordingTimer] = useState(40);
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
 
   useEffect(() => {
+    setIsRecording(false);
     setAudioBlob(null);
     setRecordedFilePath(null);
-    setCountdown(null);
-    setRecordingTimer(null);
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     resetTranscript();
+    setRecordingTimer(40);
   }, [next, resetTranscript, setRecordedFilePath]);
 
   useEffect(() => {
-    if (shouldStartRecording) {
-      setCountdown(3);
-      const countdownInterval = setInterval(() => {
-        setCountdown((prev) => {
-          if (prev <= 1) {
-            clearInterval(countdownInterval);
-            handleStartRecording();
-            return null;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(countdownInterval);
+    if (shouldStartRecording && !isRecording && !audioBlob) {
+      handleStartRecording();
     }
   }, [shouldStartRecording]);
+
+  useEffect(() => {
+    let interval;
+    if (isRecording && recordingTimer > 0) {
+      interval = setInterval(() => {
+        setRecordingTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (recordingTimer === 0 && isRecording) {
+      handleStopRecording();
+    }
+    return () => clearInterval(interval);
+  }, [isRecording, recordingTimer]);
 
   const handleStartRecording = () => {
     resetTranscript();
@@ -68,24 +69,13 @@ const RSRecorder = ({
         mediaRecorderRef.current.onstop = () => {
           const blob = new Blob(chunksRef.current, { type: "audio/mp3" });
           setAudioBlob(blob);
+          // Stop all tracks in the stream
           stream.getTracks().forEach((track) => track.stop());
         };
 
         mediaRecorderRef.current.start();
+        setIsRecording(true);
         SpeechRecognition.startListening({ continuous: true });
-
-        // Set 15-second recording timer
-        setRecordingTimer(15);
-        const timerInterval = setInterval(() => {
-          setRecordingTimer((prev) => {
-            if (prev <= 1) {
-              clearInterval(timerInterval);
-              handleStopRecording();
-              return null;
-            }
-            return prev - 1;
-          });
-        }, 1000);
       })
       .catch((error) => {
         console.log("error", error);
@@ -93,10 +83,13 @@ const RSRecorder = ({
   };
 
   const handleStopRecording = () => {
-    if (mediaRecorderRef.current) {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "recording"
+    ) {
       mediaRecorderRef.current.stop();
     }
-    setRecordingTimer(null);
+    setIsRecording(false);
     SpeechRecognition.stopListening();
   };
 
@@ -120,34 +113,36 @@ const RSRecorder = ({
         messages: [
           {
             role: "user",
-            content: `Analyze the following PTE Speaking: Repeat Sentence response using these criteria:
+            content: `Analyze the following PTE Speaking: Describe Image response using these criteria:
         
-                **Content (0-3 points):**
-                  - 3 Points: All words in the sentence are repeated correctly in the correct order.
-                  - 2 Points: More than 50% of the words are repeated correctly, and the meaning is preserved.
-                  - 1 Point: Less than 50% of the words are repeated correctly, or the meaning is partially preserved.
-                  - 0 Points: No correct words or no meaningful attempt.
+                **Content (0–5 points):**
+                    - 5 Points: Includes all key points and relationships; the description is accurate, logical, and complete.
+                    - 4 Points: Includes most key points but misses some minor details or relationships.
+                    - 3 Points: Includes some key points but misses important details or relationships.
+                    - 2 Points: Mentions a few details but lacks coherence or misses most key points.
+                    - 1 Point: Mentions only one or two aspects of the image, with no meaningful description.
+                    - 0 Points: No meaningful attempt or description is entirely unrelated to the image.
         
-                **Pronunciation (0-5 points):**
-                  - 5 Points: Native-like pronunciation, easily understandable.
-                  - 4 Points: Slight accent but clear and understandable.
-                  - 3 Points: Noticeable accent or minor mispronunciations but understandable.
-                  - 2 Points: Frequently unclear and difficult to understand.
-                  - 1 Point: Rarely understandable.
-                  - 0 Points: Not understandable.
+                **Pronunciation (0–5 points):**
+                    - 5 Points: Native-like pronunciation, easily understood.
+                    - 4 Points: Slight accent but clear and understandable.
+                    - 3 Points: Noticeable accent or mispronunciations but understandable.
+                    - 2 Points: Frequently unclear and difficult to understand.
+                    - 1 Point: Rarely understandable.
+                    - 0 Points: Not understandable.
         
-                **Oral Fluency (0-5 points):**
-                  - 5 Points: Smooth delivery, natural pace, no hesitations.
-                  - 4 Points: Minor hesitations or unnatural intonation.
-                  - 3 Points: Noticeable hesitations or uneven flow.
-                  - 2 Points: Frequent pauses, stuttering, or halting speech.
-                  - 1 Point: Speech is very disjointed and difficult to follow.
-                  - 0 Points: No attempt or incomprehensible delivery.
+                **Oral Fluency (0–5 points):**
+                    - 5 Points: Natural pace, smooth flow, no hesitations.
+                    - 4 Points: Minor hesitations or unnatural intonation.
+                    - 3 Points: Noticeable hesitations or uneven flow.
+                    - 2 Points: Frequent pauses, stuttering, or halting speech.
+                    - 1 Point: Speech is very disjointed and difficult to follow.
+                    - 0 Points: No attempt or incomprehensible delivery.
         
-                Provide scores on a scale of 13 points, broken down as follows:
-                  - Content: 0-3 points
-                  - Pronunciation: 0-5 points
-                  - Oral Fluency: 0-5 points
+                Provide scores on a scale of 15 points, broken down as follows:
+                    - Content: 0–5 points
+                    - Pronunciation: 0–5 points
+                    - Oral Fluency: 0–5 points
         
                 Please provide the assessment in the following format:
         
@@ -155,7 +150,7 @@ const RSRecorder = ({
         
                 Content:
                 [Detailed analysis with specific examples from the response]
-                Score: X/3
+                Score: X/5
         
                 Pronunciation:
                 [Detailed analysis with specific examples from the response]
@@ -165,7 +160,7 @@ const RSRecorder = ({
                 [Detailed analysis with specific examples from the response]
                 Score: X/5
         
-                #Overall_Score: [Total]/13
+                #Overall_Score: [Total]/15
         
                 Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.`,
           },
@@ -182,7 +177,7 @@ const RSRecorder = ({
       const getChatGPTResponse = async () => {
         try {
           const gptResponse = await fetch(
-            //"https://api.openai.com/v1/chat/completions",
+            "https://api.openai.com/v1/chat/completions",
             {
               method: "POST",
               headers: {
@@ -212,7 +207,7 @@ const RSRecorder = ({
           formData.append("band", overallScore);
 
           ajaxCall(
-            //z"/speaking-answers/",
+            "/speaking-answers/",
             {
               method: "POST",
               body: formData,
@@ -249,15 +244,19 @@ const RSRecorder = ({
   return (
     <div>
       <h6 className="text-center">Recorded Answer</h6>
-      {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
-      {recordingTimer && (
-        <div style={{ color: recordingTimer <= 7 ? "red" : "inherit" }}>
-          Recording Time Left : {recordingTimer}s
-        </div>
-      )}
-      {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
+      <div>
+        {!isRecording && !audioBlob && (
+          <div>Beginning in {preparationTimer} seconds</div>
+        )}
+        {isRecording && (
+          <div style={{ color: recordingTimer <= 10 ? "red" : "inherit" }}>
+            Recording Time Left : {recordingTimer}s
+          </div>
+        )}
+        {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
+      </div>
     </div>
   );
 };
 
-export default RSRecorder;
+export default DIRecorder;

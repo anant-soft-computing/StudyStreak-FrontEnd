@@ -107,6 +107,7 @@ import LivePTESSTExam from "./components/Dashboard/Student/PTE/LivePTEExam/Liste
 import LivePTEWFDExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/WFD/LivePTEWFDExam";
 import LivePTESpeakingRAExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/ReadAloud/LivePTESpeakingRAExam";
 import LivePTESpeakingRSExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RepeatSentence/LivePTESpeakingRSExam";
+import LivePTESpeakingDIExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/DI/LivePTESpeakingDIExam";
 import LivePTESpeakingRLExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RetellLecture/LivePTESpeakingRLExam";
 import LivePTESpeakingASQExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/AnswerShortQuestion/LivePTESpeakingASQExam";
 import LivePTESpeakingRTS from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RTS/LivePTESpeakingRTS";
@@ -433,6 +434,10 @@ const App = () => {
           <Route
             path="/PTE/IELTS/Speaking/RS/:examId"
             Component={withBootstrap(LivePTESpeakingRSExam)}
+          />
+          <Route
+            path="/PTE/IELTS/Speaking/DI/:examId"
+            Component={withBootstrap(LivePTESpeakingDIExam)}
           />
           <Route
             path="/PTE/IELTS/Speaking/RL/:examId"

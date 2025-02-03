@@ -233,17 +233,24 @@ const LivePTEListeningExam = () => {
             justifyContent: "center",
             alignItems: "center",
             background: "#f9f9f9",
-            padding: "15px",
+            padding: "20px",
             border: "1px solid #01579b",
-            borderRadius: "8px",
+            borderRadius: "12px",
             width: "100%",
             maxWidth: "400px",
-            margin: "0 auto",
-            marginTop: "20px",
+            margin: "20px auto",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div className="mb-2">
-            Status :{" "}
+          <div
+            style={{
+              fontSize: "16px",
+              fontWeight: "500",
+              marginBottom: "10px",
+              color: "#333",
+            }}
+          >
+            Status:{" "}
             {audioStatus === "not started" &&
               `Beginning in ${countdown} seconds`}
             {audioStatus === "playing" && "Playing"}
@@ -252,6 +259,7 @@ const LivePTEListeningExam = () => {
           <audio
             ref={audioRef}
             controls
+            style={{ width: "100%" }}
             onLoadedMetadata={() => {
               setAudioStatus("not started");
               setCountdown(10);
@@ -525,12 +533,15 @@ const LivePTEListeningExam = () => {
     <div
       style={{
         border: "1px solid #01579b",
-        margin: "50px",
+        margin: "20px",
         height: "90vh",
         display: "flex",
         flexDirection: "column",
-        maxWidth: "calc(100% - 100px)",
+        maxWidth: "calc(100% - 40px)",
         overflow: "hidden",
+        borderRadius: "12px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#ffffff",
       }}
     >
       <div
@@ -541,15 +552,16 @@ const LivePTEListeningExam = () => {
           backgroundColor: "#01579b",
           color: "white",
           flexShrink: 0,
+          borderRadius: "12px 12px 0 0",
         }}
       >
-        <div>
+        <div style={{ fontSize: "18px", fontWeight: "500" }}>
           {examData?.exam_category} / {examData?.exam_name}
         </div>
-        <div>
-          <i className="icofont-stopwatch mr-2"></i>
-          <span>Timer :</span>
-          <span className="ml-2">{formatTime(timer)}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>
+          <span>Timer:</span>
+          <span style={{ fontWeight: "500" }}>{formatTime(timer)}</span>
         </div>
       </div>
       <div
@@ -558,12 +570,21 @@ const LivePTEListeningExam = () => {
           flexDirection: "column",
           flex: 1,
           overflow: "hidden",
+          padding: "20px",
+          gap: "20px",
+          backgroundColor: "#f5f5f5",
         }}
       >
         <div
           style={{
             fontWeight: "bold",
+            fontSize: "16px",
+            color: "#333",
             padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
           {instructions[examSubcategory]}
@@ -571,30 +592,30 @@ const LivePTEListeningExam = () => {
         {renderAudio(examData?.audio_file)}
         <div
           style={{
-            display: "flex",
             flex: 1,
             padding: "20px",
-            overflow: "hidden",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+            overflowY: "auto",
           }}
-        >
-          <div
-            style={{
-              overflowY: "auto",
-            }}
-            dangerouslySetInnerHTML={{
-              __html: htmlContents?.[next],
-            }}
-          />
-        </div>
+          dangerouslySetInnerHTML={{
+            __html: htmlContents?.[next],
+          }}
+        />
         <div
           style={{
-            borderTop: "1px solid #01579b",
-            borderBottom: "1px solid #01579b",
+            borderTop: "1px solid #ddd",
+            borderBottom: "1px solid #ddd",
             padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
-          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
-            <div className="mb-2 mb-sm-0">
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+            <div style={{ fontSize: "16px", fontWeight: "500" }}>
               Item {next + 1} of{" "}
               {fullPaper.length > 0
                 ? fullPaper[0][examType][examForm]?.length
@@ -639,7 +660,6 @@ const LivePTEListeningExam = () => {
         <div
           className="d-flex flex-column flex-sm-row justify-content-between align-items-center"
           style={{
-            justifyContent: "space-between",
             padding: "20px",
             gap: "10px",
           }}
@@ -680,7 +700,7 @@ const LivePTEListeningExam = () => {
             </div>
           }
         >
-          <h5>Are You Sure You Want To Submit ?</h5>
+          <h5>Are You Sure You Want To Submit?</h5>
           {reviewContent()}
         </SmallModal>
       )}

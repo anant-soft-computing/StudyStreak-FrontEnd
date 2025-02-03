@@ -146,17 +146,24 @@ const LivePTEWFDExam = () => {
             justifyContent: "center",
             alignItems: "center",
             background: "#f9f9f9",
-            padding: "15px",
+            padding: "20px",
             border: "1px solid #01579b",
-            borderRadius: "8px",
+            borderRadius: "12px",
             width: "100%",
             maxWidth: "400px",
-            margin: "0 auto",
-            marginTop: "20px",
+            margin: "20px auto",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           }}
         >
-          <div className="mb-2">
-            Status :{" "}
+          <div
+            style={{
+              fontSize: "16px",
+              fontWeight: "500",
+              marginBottom: "10px",
+              color: "#333",
+            }}
+          >
+            Status:{" "}
             {audioStatus === "not started" &&
               `Beginning in ${countdown} seconds`}
             {audioStatus === "playing" && "Playing"}
@@ -165,6 +172,7 @@ const LivePTEWFDExam = () => {
           <audio
             ref={audioRef}
             controls
+            style={{ width: "100%" }}
             onLoadedMetadata={() => {
               setAudioStatus("not started");
               setCountdown(10);
@@ -456,12 +464,15 @@ const LivePTEWFDExam = () => {
     <div
       style={{
         border: "1px solid #01579b",
-        margin: "50px",
+        margin: "20px",
         height: "90vh",
         display: "flex",
         flexDirection: "column",
         maxWidth: "calc(100% - 40px)",
         overflow: "hidden",
+        borderRadius: "12px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#ffffff",
       }}
     >
       <div
@@ -472,15 +483,16 @@ const LivePTEWFDExam = () => {
           backgroundColor: "#01579b",
           color: "white",
           flexShrink: 0,
+          borderRadius: "12px 12px 0 0",
         }}
       >
-        <div>
+        <div style={{ fontSize: "18px", fontWeight: "500" }}>
           {examData?.exam_category} / {examData?.exam_name}
         </div>
-        <div>
-          <i className="icofont-stopwatch mr-2"></i>
-          <span>Time Remaining :</span>
-          <span className="ml-2">{timeTaken}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>
+          <span>Timer:</span>
+          <span style={{ fontWeight: "500" }}>{timeTaken}</span>
         </div>
       </div>
       <div
@@ -489,12 +501,21 @@ const LivePTEWFDExam = () => {
           flexDirection: "column",
           flex: 1,
           overflow: "hidden",
+          padding: "20px",
+          gap: "20px",
+          backgroundColor: "#f5f5f5",
         }}
       >
         <div
           style={{
             fontWeight: "bold",
+            fontSize: "16px",
+            color: "#333",
             padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
           You will hear a sentence. Type the sentence in the box below exactly
@@ -502,7 +523,16 @@ const LivePTEWFDExam = () => {
           hear the sentence only once.
         </div>
         {renderAudio(examData?.audio_file)}
-        <div style={{ padding: "20px", overflow: "auto" }}>
+        <div
+          style={{
+            padding: "20px",
+            overflow: "auto",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+          }}
+        >
           <textarea
             id={`textarea_${next}`}
             className="writing__textarea"
@@ -510,24 +540,39 @@ const LivePTEWFDExam = () => {
             onChange={(e) => handleListeningAnswer(e, next)}
             style={{
               width: "100%",
-              padding: "10px",
+              padding: "15px",
               border: "1px solid #01579b",
+              borderRadius: "8px",
               resize: "none",
+              fontSize: "16px",
+              lineHeight: "1.5",
+              backgroundColor: "#f9f9f9",
+              transition: "border-color 0.3s ease",
             }}
           />
-          <div style={{ marginTop: "10px" }}>
+          <div
+            style={{
+              fontWeight: "bold",
+              fontSize: "16px",
+              color: "#333",
+              marginTop: "10px",
+            }}
+          >
             Total Word Count: {examAnswer[next]?.wordCount || 0}
           </div>
         </div>
         <div
           style={{
-            borderTop: "1px solid #01579b",
-            borderBottom: "1px solid #01579b",
+            borderTop: "1px solid #ddd",
+            borderBottom: "1px solid #ddd",
             padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
-          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center">
-            <div className="mb-2 mb-sm-0">
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+            <div style={{ fontSize: "16px", fontWeight: "500" }}>
               Item {next + 1} of{" "}
               {fullPaper.length > 0
                 ? fullPaper[0][examType][examForm]?.length
@@ -538,7 +583,6 @@ const LivePTEWFDExam = () => {
                 className="btn btn-primary btn-sm"
                 style={{
                   minWidth: "100px",
-
                   display: next === 0 ? "none" : "block",
                 }}
                 onClick={() => {
@@ -573,7 +617,6 @@ const LivePTEWFDExam = () => {
         <div
           className="d-flex flex-column flex-sm-row justify-content-between align-items-center"
           style={{
-            justifyContent: "space-between",
             padding: "20px",
             gap: "10px",
           }}

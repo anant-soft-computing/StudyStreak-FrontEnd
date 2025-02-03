@@ -71,6 +71,8 @@ const Speaking = () => {
             window.open(`/PTE/IELTS/Speaking/RA/${examId}`, "_blank");
           } else if (sub_category === "RS") {
             window.open(`/PTE/IELTS/Speaking/RS/${examId}`, "_blank");
+          } else if (sub_category === "DI") {
+            window.open(`/PTE/IELTS/Speaking/DI/${examId}`, "_blank");
           } else if (sub_category === "RL") {
             window.open(`/PTE/IELTS/Speaking/RL/${examId}`, "_blank");
           } else if (sub_category === "ASQ") {

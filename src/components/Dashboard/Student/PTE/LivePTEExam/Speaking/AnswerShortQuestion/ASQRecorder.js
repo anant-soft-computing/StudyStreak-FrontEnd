@@ -204,10 +204,10 @@ const ASQRecorder = ({
 
           const formattedResponse = assessment
             .split("\n")
-            .map((line) => <p>${line}</p>)
+            .map((line) => `<p>${line}</p>`)
             .join("");
 
-          formData.append("AI_Assessment", <div>${formattedResponse}</div>);
+          formData.append("AI_Assessment", `<div>${formattedResponse}</div>`);
           formData.append("band", overallScore);
 
           ajaxCall(

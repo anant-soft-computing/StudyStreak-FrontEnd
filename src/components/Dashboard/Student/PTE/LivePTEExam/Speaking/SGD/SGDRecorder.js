@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
+import ajaxCall from "../../../../../../../helpers/ajaxCall";
 
-const RLRecorder = ({
+const SGDRecorder = ({
   setRecordedFilePath,
   next,
   exam,
@@ -36,7 +36,7 @@ const RLRecorder = ({
 
   useEffect(() => {
     if (shouldStartRecording) {
-      setCountdown(86);
+      setCountdown(90);
       const countdownInterval = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
@@ -74,8 +74,8 @@ const RLRecorder = ({
         mediaRecorderRef.current.start();
         SpeechRecognition.startListening({ continuous: true });
 
-        // Set 40-second recording timer
-        setRecordingTimer(40);
+        // Set 120-second recording timer
+        setRecordingTimer(120);
         const timerInterval = setInterval(() => {
           setRecordingTimer((prev) => {
             if (prev <= 1) {
@@ -111,7 +111,7 @@ const RLRecorder = ({
       formData.append("practise_test", practice ? practice : "");
       formData.append("Flt", Flt ? Flt : "");
 
-      const question = exam?.questions
+      const audioTranscript = exam?.questions
         ?.find((q) => q.question_number === question_number)
         ?.question.replace(/<\/?[^>]+(>|$)/g, "");
 
@@ -120,60 +120,60 @@ const RLRecorder = ({
         messages: [
           {
             role: "user",
-            content: `Analyze the following PTE Speaking: Re-Tell Lecture response using these criteria:
-        
-                **Content (0-5 points):**
-                  - 5 Points: Includes all main ideas and several supporting details.
-                  - 4 Points: Includes most main ideas and some supporting details.
-                  - 3 Points: Includes some main ideas but misses key supporting details.
-                  - 2 Points: Includes only one main idea with little or no supporting details.
-                  - 1 Point: Provides a vague or incomplete description of the lecture.
-                  - 0 Points: No meaningful attempt or response is unrelated to the lecture.
-        
-                **Pronunciation (0-5 points):**
-                  - 5 Points: Native-like pronunciation, easily understandable.
-                  - 4 Points: Slight accent but clear and understandable.
-                  - 3 Points: Noticeable accent or mispronunciations but understandable.
-                  - 2 Points: Frequently unclear and difficult to understand.
-                  - 1 Point: Rarely understandable.
-                  - 0 Points: Not understandable.
-        
-                **Oral Fluency (0-5 points):**
-                  - 5 Points: Natural pace, smooth flow, no hesitations.
-                  - 4 Points: Minor hesitations or unnatural intonation.
-                  - 3 Points: Noticeable hesitations or uneven flow.
-                  - 2 Points: Frequent pauses, stuttering, or halting speech.
-                  - 1 Point: Speech is very disjointed and difficult to follow.
-                  - 0 Points: No attempt or incomprehensible delivery.
-        
-                Provide scores on a scale of 15 points, broken down as follows:
-                  - Content: 0-5 points
-                  - Pronunciation: 0-5 points
-                  - Oral Fluency: 0-5 points
-        
-                Please provide the assessment in the following format:
-        
-                #Detailed_Analysis:
-        
-                Content:
-                [Detailed analysis with specific examples from the response]
-                Score: X/5
-        
-                Pronunciation:
-                [Detailed analysis with specific examples from the response]
-                Score: X/5
-        
-                Oral Fluency:
-                [Detailed analysis with specific examples from the response]
-                Score: X/5
-        
-                #Overall_Score: [Total]/15
-        
-                Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.`,
+            content: `Analyze the following PTE Speaking: Summarize Group Discussion response using these criteria:
+            
+            **Content (0–5 points):**
+                - 5 Points: Summarizes all key points and main ideas from the discussion accurately and comprehensively.
+                - 4 Points: Summarizes most key points but misses some minor details or nuances.
+                - 3 Points: Summarizes some key points but misses important details or misinterprets some ideas.
+                - 2 Points: Mentions a few points but lacks coherence or misses most key ideas.
+                - 1 Point: Mentions only one or two aspects of the discussion, with no meaningful summary.
+                - 0 Points: No meaningful attempt or summary is entirely unrelated to the discussion.
+            
+            **Pronunciation (0–5 points):**
+                - 5 Points: Native-like pronunciation, easily understood.
+                - 4 Points: Slight accent but clear and understandable.
+                - 3 Points: Noticeable accent or mispronunciations but understandable.
+                - 2 Points: Frequently unclear and difficult to understand.
+                - 1 Point: Rarely understandable.
+                - 0 Points: Not understandable.
+            
+            **Oral Fluency (0–5 points):**
+                - 5 Points: Natural pace, smooth flow, no hesitations.
+                - 4 Points: Minor hesitations or unnatural intonation.
+                - 3 Points: Noticeable hesitations or uneven flow.
+                - 2 Points: Frequent pauses, stuttering, or halting speech.
+                - 1 Point: Speech is very disjointed and difficult to follow.
+                - 0 Points: No attempt or incomprehensible delivery.
+            
+            Provide scores on a scale of 15 points, broken down as follows:
+                - Content: 0–5 points
+                - Pronunciation: 0–5 points
+                - Oral Fluency: 0–5 points
+            
+            Please provide the assessment in the following format:
+            
+            #Detailed_Analysis:
+            
+            Content:
+            [Detailed analysis with specific examples from the response]
+            Score: X/5
+            
+            Pronunciation:
+            [Detailed analysis with specific examples from the response]
+            Score: X/5
+            
+            Oral Fluency:
+            [Detailed analysis with specific examples from the response]
+            Score: X/5
+            
+            #Overall_Score: [Total]/15
+            
+            Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.`,
           },
           {
             role: "user",
-            content: `Lecture Summary: ${question}`,
+            content: `Audio Transcript: ${audioTranscript}`,
           },
           {
             role: "user",
@@ -181,6 +181,7 @@ const RLRecorder = ({
           },
         ],
       };
+
       const getChatGPTResponse = async () => {
         try {
           const gptResponse = await fetch(
@@ -250,10 +251,10 @@ const RLRecorder = ({
 
   return (
     <div>
-      <h6 className="text-center">Recorded Answer</h6>
+      <div className="text-center">Recorded Answer</div>
       {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
       {recordingTimer && (
-        <div style={{ color: recordingTimer <= 10 ? "red" : "inherit" }}>
+        <div style={{ color: recordingTimer <= 30 ? "red" : "inherit" }}>
           Recording Time Left : {recordingTimer}s
         </div>
       )}
@@ -262,4 +263,4 @@ const RLRecorder = ({
   );
 };
 
-export default RLRecorder;
+export default SGDRecorder;

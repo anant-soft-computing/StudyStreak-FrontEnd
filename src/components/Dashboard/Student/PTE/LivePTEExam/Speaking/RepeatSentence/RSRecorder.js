@@ -182,7 +182,7 @@ const RSRecorder = ({
       const getChatGPTResponse = async () => {
         try {
           const gptResponse = await fetch(
-            //"https://api.openai.com/v1/chat/completions",
+            "https://api.openai.com/v1/chat/completions",
             {
               method: "POST",
               headers: {
@@ -212,7 +212,7 @@ const RSRecorder = ({
           formData.append("band", overallScore);
 
           ajaxCall(
-            //z"/speaking-answers/",
+            "/speaking-answers/",
             {
               method: "POST",
               body: formData,

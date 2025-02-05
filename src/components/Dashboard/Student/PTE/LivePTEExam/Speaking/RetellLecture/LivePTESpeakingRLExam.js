@@ -85,6 +85,7 @@ const LivePTESpeakingRLExam = () => {
         8000
       );
       if (response.status === 200) {
+        setTimerRunning(false);
         navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");
       } else {

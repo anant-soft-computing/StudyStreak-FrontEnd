@@ -273,72 +273,77 @@ const LivePTEWritingExam = () => {
                 content: `Evaluate based on:${
                   questionType === "Summarize Written Text"
                     ? `
-                  
-                  Content (0-2): Does it capture all key points?
-                  Form (0-1): Single sentence within word limit?
-                  Grammar (0-2): Error-free sentence?
-                  Vocabulary (0-2): Appropriate word choice?
-                  Spelling (0-2): No spelling errors?`
+          
+                    Content (0-2): Does it capture all key points?
+                    Form (0-1): Single sentence within word limit?
+                    Grammar (0-2): Error-free sentence?
+                    Vocabulary (0-2): Appropriate word choice?
+                    Spelling (0-2): No spelling errors?`
                     : `
-                  
-                  Content (0-3): Complete topic coverage?
-                  Form (0-2): Proper length & structure?
-                  Development (0-2): Logical organization?
-                  Grammar (0-2): Grammatical accuracy?
-                  Vocabulary (0-2): Precise word choice?
-                  Spelling (0-2): No spelling errors?`
+          
+                    Content (0-3): Complete topic coverage?
+                    Form (0-2): Proper length & structure?
+                    Development (0-2): Logical organization?
+                    Grammar (0-2): Grammatical accuracy?
+                    Vocabulary (0-2): Precise word choice?
+                    Spelling (0-2): No spelling errors?`
                 }
           
-                  Provide:
-                  1. Detailed explanations with strengths, *weaknesses, and **improvements*
-                  2. Individual criterion scores
-                  3. Overall Band Score (0-90) using PTE conversion
+                Provide:
+                1. **Detailed explanations** with strengths, *weaknesses, and **improvements***
+                2. **Individual criterion scores**
+                3. **Overall Score (0-90) using this exact format:**
+                   
+                   **Overall Score: (Sum × 10) / 90 = X** (For Summarize Written Text)
+                   **Overall Score: (Sum × 6) / 90 = X** (For Write Essay)
+                   
+                   - The calculation must **always** be formatted exactly as above.
+                   - No extra text or variations.
+                   
+                #Evaluation Format:
           
-                  #Evaluation Format:
-                  ${
-                    questionType === "Summarize Written Text"
-                      ? `
-                  Content: [Explanation]  
-                  Score: X/2
+                ${
+                  questionType === "Summarize Written Text"
+                    ? `
+                Content: [Explanation]  
+                Score: X/2
           
-                  Form: [Explanation]  
-                  Score: X/1
+                Form: [Explanation]  
+                Score: X/1
           
-                  Grammar: [Explanation]  
-                  Score: X/2
+                Grammar: [Explanation]  
+                Score: X/2
           
-                  Vocabulary: [Explanation]  
-                  Score: X/2
+                Vocabulary: [Explanation]  
+                Score: X/2
           
-                  Spelling: [Explanation]  
-                  Score: X/2`
-                      : `
-                  Content: [Explanation]  
-                  Score: X/3
+                Spelling: [Explanation]  
+                Score: X/2`
+                    : `
+                Content: [Explanation]  
+                Score: X/3
           
-                  Form: [Explanation]  
-                  Score: X/2
+                Form: [Explanation]  
+                Score: X/2
           
-                  Development: [Explanation]  
-                  Score: X/2
+                Development: [Explanation]  
+                Score: X/2
           
-                  Grammar: [Explanation]  
-                  Score: X/2
+                Grammar: [Explanation]  
+                Score: X/2
           
-                  Vocabulary: [Explanation]  
-                  Score: X/2
+                Vocabulary: [Explanation]  
+                Score: X/2
           
-                  Spelling: [Explanation]  
-                  Score: X/2`
-                  }
+                Spelling: [Explanation]  
+                Score: X/2`
+                }
           
-                  #Overall Band Score: ${
-                    questionType === "Summarize Written Text"
-                      ? "(Sum × 10)"
-                      : "(Sum × 6)"
-                  }/90
+                **Overall Score: (Sum × ${
+                  questionType === "Summarize Written Text" ? "10" : "6"
+                }) / 90 = X**
           
-                  Respond only with the evaluation up to the #Overall Band Score. Do not include any additional text or explanation beyond this point.`,
+                `,
               },
             ],
           };
@@ -361,9 +366,9 @@ const LivePTEWritingExam = () => {
             gptResponse = data.choices[0].message.content;
 
             const scoreMatch = gptResponse.match(
-              /Overall Band Score:\s*.*?=\s*(\d+)/
+              /Overall Score:\s*(?:.*?=\s*)?(\d+(\.\d+)?)/
             );
-            scoreValue = scoreMatch ? scoreMatch[1] : null;
+            scoreValue = scoreMatch ? parseFloat(scoreMatch[1]) : null;
 
             // Convert gptResponse to HTML format
             const formattedResponse = gptResponse

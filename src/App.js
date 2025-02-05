@@ -111,6 +111,7 @@ import LivePTESpeakingDIExam from "./components/Dashboard/Student/PTE/LivePTEExa
 import LivePTESpeakingRLExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RetellLecture/LivePTESpeakingRLExam";
 import LivePTESpeakingASQExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/AnswerShortQuestion/LivePTESpeakingASQExam";
 import LivePTESpeakingRTS from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RTS/LivePTESpeakingRTS";
+import LivePTESpeakingSGD from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/SGD/LivePTESpeakingSGD";
 import PTEMockTestLive from "./components/Dashboard/Student/PTE/FreeMockTest/MockTestLive/MockTestLive";
 
 //------------------------> Exam Answer <------------------------------------
@@ -450,6 +451,10 @@ const App = () => {
           <Route
             path="/PTE/IELTS/Speaking/RTS/:examId"
             Component={withBootstrap(LivePTESpeakingRTS)}
+          />
+          <Route
+            path="/PTE/IELTS/Speaking/SGD/:examId"
+            Component={withBootstrap(LivePTESpeakingSGD)}
           />
           <Route
             path="/PTE-Academic/MockTest/:examId"

@@ -318,35 +318,40 @@ const LivePTESSTExam = () => {
                 role: "user",
                 content: `Evaluate based on: Summarize Spoken Text Scoring Criteria:
             
-                          **Content (0-2):**
+                          Content (0-2):
                           - 2: Includes all relevant key points and ideas from the spoken text.
                           - 1: Includes only some key points or ideas but misses others.
                           - 0: Fails to include any relevant key points or is off-topic.
             
-                          **Form (0-2):**
+                          Form (0-2):
                           - 2: The response is one sentence, within the 50–70 word limit.
                           - 1: The response is over or under the word limit or includes multiple sentences.
                           - 0: The response does not meet the task requirements.
             
-                          **Grammar (0-2):**
+                          Grammar (0-2):
                           - 2: The response has no grammatical errors and demonstrates complex sentence structures.
                           - 1: The response has minor grammatical errors that do not affect meaning.
                           - 0: Major grammatical errors that interfere with understanding.
             
-                          **Vocabulary (0-2):**
+                          Vocabulary (0-2):
                           - 2: Demonstrates appropriate word choice and variety, with correct collocations.
                           - 1: Limited vocabulary or minor errors in word choice.
                           - 0: Frequent vocabulary errors that interfere with meaning.
             
-                          **Spelling (0-2):**
+                          Spelling (0-2):
                           - 2: No spelling errors.
                           - 1: One or two spelling errors.
                           - 0: Frequent spelling errors.
             
                           Provide:
-                          1. Detailed explanations with strengths, *weaknesses, and **improvements*
-                          2. Individual criterion scores
-                          3. Overall Score (0-90) using PTE conversion
+                          1. **Detailed explanations** with strengths, *weaknesses, and **improvements***
+                          2. **Individual criterion scores**
+                          3. **Overall Score (0-90) using this exact format:**
+
+                              **Overall Score: (Sum × 10) / 90 = X**
+
+                              - The calculation must **always** be formatted exactly as above.
+                              - No extra text or variations.
             
                           #Evaluation Format:
             
@@ -365,9 +370,8 @@ const LivePTESSTExam = () => {
                           Spelling: [Explanation]  
                           Score: X/2
             
-                          #Overall Score: "(Sum × 10)/90"
-            
-                          Respond only with the evaluation up to the #Overall Score. Do not include any additional text or explanation beyond this point.`,
+                          **Overall Score: (Sum × 10)/90 = X**
+                          `,
               },
             ],
           };
@@ -390,9 +394,9 @@ const LivePTESSTExam = () => {
             gptResponse = data.choices[0].message.content;
 
             const scoreMatch = gptResponse.match(
-              /Overall Score:\s*.*?=\s*(\d+)/
+              /Overall Score:\s*(?:.*?=\s*)?(\d+(\.\d+)?)/
             );
-            scoreValue = scoreMatch ? scoreMatch[1] : null;
+            scoreValue = scoreMatch ? parseFloat(scoreMatch[1]) : null;
 
             // Convert gptResponse to HTML format
             const formattedResponse = gptResponse

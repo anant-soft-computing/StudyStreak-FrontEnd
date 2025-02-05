@@ -99,6 +99,7 @@ const LivePTESpeakingDIExam = () => {
         8000
       );
       if (response.status === 200) {
+        setTimerRunning(false);
         navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");
       } else {
@@ -312,7 +313,7 @@ const LivePTESpeakingDIExam = () => {
                     }}
                   >
                     <img
-                      src={item.image}
+                      src={item.file}
                       alt=""
                       style={{ maxWidth: "100%", maxHeight: "400px" }}
                     />

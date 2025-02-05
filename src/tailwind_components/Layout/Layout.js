@@ -88,8 +88,20 @@ const Layout = () => {
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center text-sm">
               <div className="flex items-center gap-4">
-                <span>📧 reachus@studystreak.io</span>
-                <span>📞 +91 88496 50924</span>
+                <a
+                  className="hover:text-white transition-colors duration-300"
+                  style={{ color: "white" }}
+                  href="mailto:reachus@studystreak.io"
+                >
+                  📧 reachus@studystreak.io
+                </a>
+                <a
+                  className="hover:text-white transition-colors duration-300"
+                  style={{ color: "white" }}
+                  href="tel:+918849650924"
+                >
+                  📞 +91 88496 50924
+                </a>
               </div>
               <div className="hidden md:flex items-center gap-4">
                 <Link
@@ -329,9 +341,23 @@ const Layout = () => {
                     1st and 2nd Floor, Galav Chambers, Dairy Den Circle,
                     Sayajigunj, Vadodara, Gujarat, India - 390020
                   </p>
-                  <p className="text-neutral-400">Phone: (+91) 88496 50924</p>
                   <p className="text-neutral-400">
-                    Email: reachus@studystreak.io
+                    Phone:{" "}
+                    <a
+                      className="text-neutral-400 hover:text-white transition-colors duration-300"
+                      href="tel:+918849650924"
+                    >
+                      (+91) 88496 50924
+                    </a>
+                  </p>
+                  <p className="text-neutral-400">
+                    Email:{" "}
+                    <a
+                      className="text-neutral-400 hover:text-white transition-colors duration-300"
+                      href="mailto:reachus@studystreak.io"
+                    >
+                      reachus@studystreak.io
+                    </a>
                   </p>
                 </div>
 

@@ -28,7 +28,7 @@ const initialSpeakingField = {
   sub_category: "",
   difficulty_level: "Easy",
   block_threshold: 0,
-  questions: [{ question: "", image: "", question_number: "" }],
+  questions: [{ question: "", file: "", question_number: "" }],
 };
 
 const initialSubmit = {
@@ -117,11 +117,19 @@ const ExamSpeaking = ({ category }) => {
       setFormError("All Questions must have both Question and Question Number");
       return false;
     }
-    if (category === "PTE" && SpeakingData.sub_category === "DI") {
-      if (!SpeakingData.questions.every((question) => question.image)) {
-        setFormError(
-          "All Questions must have an image for Describe Image (DI)"
-        );
+    if (
+      category === "PTE" &&
+      (SpeakingData.sub_category === "DI" ||
+        SpeakingData.sub_category === "SGD")
+    ) {
+      if (!SpeakingData.questions.every((question) => question.file)) {
+        SpeakingData.sub_category === "DT"
+          ? setFormError(
+              "All Questions must have an image for Describe Image (DI)"
+            )
+          : setFormError(
+              "All Questions must have an audio for Summarize Group Discussion (SGD)"
+            );
         return false;
       }
     }
@@ -146,7 +154,7 @@ const ExamSpeaking = ({ category }) => {
           `questions[${index}]question_number`,
           question.question_number
         );
-        formData.append(`questions[${index}]image`, question.image);
+        formData.append(`questions[${index}]file`, question.file);
       });
       const response = await ajaxCall(
         "/speaking-block/",
@@ -289,26 +297,28 @@ const ExamSpeaking = ({ category }) => {
                     />
                   </div>
                 </div>
-                {category === "PTE" && SpeakingData.sub_category === "DI" && (
-                  <div className="dashboard__form__wraper">
-                    <div className="dashboard__form__input">
-                      <label htmlFor={`question-image-${index}`}>
-                        Question Image
-                      </label>
-                      <input
-                        id={`question-image-${index}`}
-                        type="file"
-                        onChange={(e) =>
-                          handleQuestionChange(
-                            index,
-                            "image",
-                            e.target.files[0]
-                          )
-                        }
-                      />
+                {category === "PTE" &&
+                  (SpeakingData.sub_category === "DI" ||
+                    SpeakingData.sub_category === "SGD") && (
+                    <div className="dashboard__form__wraper">
+                      <div className="dashboard__form__input">
+                        <label htmlFor={`question-file-${index}`}>
+                          Question Image / Audio
+                        </label>
+                        <input
+                          id={`question-file-${index}`}
+                          type="file"
+                          onChange={(e) =>
+                            handleQuestionChange(
+                              index,
+                              "file",
+                              e.target.files[0]
+                            )
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">
                     <label htmlFor={`question-${index}`}>Question</label>

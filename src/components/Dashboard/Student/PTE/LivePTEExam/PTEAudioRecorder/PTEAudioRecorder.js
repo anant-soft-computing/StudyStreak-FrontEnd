@@ -2,35 +2,65 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import ajaxCall from "../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../UI/DisplayAudio";
+import ajaxCall from "../../../../../../helpers/ajaxCall";
 
 const PTEAudioRecorder = ({
-  setRecordedFilePath,
   next,
-  exam,
-  question_number,
-  user,
-  recorderIndex = 0,
-  practice,
   Flt,
-  setActiveRecordingIndex,
+  exam,
+  user,
+  practice,
+  recorderIndex = 0,
+  shouldStartRecording,
+  question_number,
+  setRecordedFilePath,
 }) => {
-  const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
+  const [countdown, setCountdown] = useState(null);
+  const [recordingTimer, setRecordingTimer] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
 
-  const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
+  const mediaRecorderRef = useRef(null);
 
   useEffect(() => {
-    setIsRecording(false);
     setAudioBlob(null);
     setRecordedFilePath(null);
+    setCountdown(null);
+    setRecordingTimer(null);
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     resetTranscript();
   }, [next, resetTranscript, setRecordedFilePath]);
+
+  useEffect(() => {
+    if (shouldStartRecording) {
+      if (exam.sub_category === "RA") {
+        setCountdown(40);
+      } else if (exam.sub_category === "RS") {
+        setCountdown(3);
+      } else if (exam.sub_category === "DI") {
+        setCountdown(25);
+      } else if (exam.sub_category === "RL") {
+        setCountdown(86);
+      } else {
+        setCountdown(3);
+      }
+      const countdownInterval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownInterval);
+            handleStartRecording();
+            return null;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(countdownInterval);
+    }
+  }, [exam.sub_category, shouldStartRecording]);
 
   const handleStartRecording = () => {
     resetTranscript();
@@ -48,12 +78,34 @@ const PTEAudioRecorder = ({
         mediaRecorderRef.current.onstop = () => {
           const blob = new Blob(chunksRef.current, { type: "audio/mp3" });
           setAudioBlob(blob);
+          stream.getTracks().forEach((track) => track.stop());
         };
 
         mediaRecorderRef.current.start();
-        setIsRecording(true);
-        setActiveRecordingIndex(recorderIndex);
         SpeechRecognition.startListening({ continuous: true });
+
+        // Set Recording Timer
+        if (exam.sub_category === "RA") {
+          setRecordingTimer(40);
+        } else if (exam.sub_category === "RS") {
+          setRecordingTimer(15);
+        } else if (exam.sub_category === "DI") {
+          setRecordingTimer(40);
+        } else if (exam.sub_category === "RL") {
+          setRecordingTimer(40);
+        } else {
+          setRecordingTimer(10);
+        }
+        const timerInterval = setInterval(() => {
+          setRecordingTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(timerInterval);
+              handleStopRecording();
+              return null;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       })
       .catch((error) => {
         console.log("error", error);
@@ -64,9 +116,8 @@ const PTEAudioRecorder = ({
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
     }
-    setIsRecording(false);
+    setRecordingTimer(null);
     SpeechRecognition.stopListening();
-    setActiveRecordingIndex(null);
   };
 
   useEffect(() => {
@@ -89,69 +140,68 @@ const PTEAudioRecorder = ({
         messages: [
           {
             role: "user",
-            content: `Analyze the following PTE Speaking response using these criteria:
-              
-              Content and Relevance:
-                - Complete coverage of the task requirements
-                - Relevance and appropriateness of the response
-                - Development of ideas and supporting details
-    
-              Oral Fluency:
-                - Smooth flow of speech with natural pacing
-                - Minimal hesitation and self-correction
-                - Effective use of linking words and phrases
-          
-              Pronunciation:
-                - Clear articulation of sounds
-                - Appropriate word stress and sentence stress
-                - Natural intonation patterns
-                - Consistent rhythm and connected speech
-          
-              Language Use:
-                - Range and accuracy of vocabulary
-                - Grammatical accuracy and complexity
-                - Appropriate word choice and collocations
-              
-              Provide scores on a scale of 90 points, broken down as follows:
-                - Content and Relevance: 0-25 points
-                - Oral Fluency: 0-25 points
-                - Pronunciation: 0-20 points
-                - Language Use: 0-20 points
-              `,
-          },
-          {
-            role: "user",
-            content: `Questions: ${question}`,
-          },
-          {
-            role: "user",
-            content: `Answers: ${transcript}`,
-          },
-          {
-            role: "user",
-            content: `Please provide the assessment in the following format:
-      
+            content: `Analyze the following PTE Speaking response based on the task type and provide a detailed evaluation using these criteria:
+  
+              **Content (0-5 points):**
+                - 5 Points: The response is accurate, complete, and fully addresses the task.
+                - 4 Points: The response is mostly accurate and addresses the task but may have minor omissions.
+                - 3 Points: The response is partially accurate but has significant omissions or inaccuracies.
+                - 2 Points: The response is largely inaccurate or irrelevant.
+                - 1 Point: The response is minimal and does not address the task.
+                - 0 Points: No response or completely irrelevant.
+  
+              **Pronunciation (0-5 points):**
+                - 5 Points: Native-like pronunciation, easily understandable.
+                - 4 Points: Slight accent but clear and understandable.
+                - 3 Points: Noticeable accent or minor mispronunciations but understandable.
+                - 2 Points: Frequently unclear and difficult to understand.
+                - 1 Point: Rarely understandable.
+                - 0 Points: Not understandable.
+  
+              **Oral Fluency (0-5 points):**
+                - 5 Points: Smooth delivery, natural pace, no hesitations.
+                - 4 Points: Minor hesitations or unnatural intonation.
+                - 3 Points: Noticeable hesitations or uneven flow.
+                - 2 Points: Frequent pauses, stuttering, or halting speech.
+                - 1 Point: Speech is very disjointed and difficult to follow.
+                - 0 Points: No attempt or incomprehensible delivery.
+  
+              Provide scores on a scale of 15 points, broken down as follows:
+                - Content: 0-5 points
+                - Pronunciation: 0-5 points
+                - Oral Fluency: 0-5 points
+  
+              Please provide the assessment in the following format:
+  
               #Detailed_Analysis:
-              
-              Content and Relevance:
+  
+              Content:
               [Detailed analysis with specific examples from the response]
-              Score: X/25
-              
-              Oral Fluency:
-              [Detailed analysis with specific examples from the response]
-              Score: X/25
-              
+              Score: X/5
+  
               Pronunciation:
               [Detailed analysis with specific examples from the response]
-              Score: X/20
-              
-              Language Use:
+              Score: X/5
+  
+              Oral Fluency:
               [Detailed analysis with specific examples from the response]
-              Score: X/20
-              
-              #Overall_Score: [Total]/90
-              
+              Score: X/5
+  
+              #Overall_Score: [Total]/15
+  
               Respond only with the evaluation up to the #Overall_Score. Do not include any additional text or explanation beyond this point.`,
+          },
+          {
+            role: "user",
+            content: `Task Type: ${exam.sub_category}`, // e.g., "Read Aloud", "Repeat Sentence", "Describe Image", "Answer Short Question", "Re-tell Lecture"
+          },
+          {
+            role: "user",
+            content: `Question: ${question}`,
+          },
+          {
+            role: "user",
+            content: `Candidate's Response: ${transcript}`,
           },
         ],
       };
@@ -224,28 +274,15 @@ const PTEAudioRecorder = ({
   }, [audioBlob]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <button
-        className={`btn btn-${isRecording ? "danger" : "success"} btn-sm ${
-          audioBlob && "mb-2"
-        }`}
-        onClick={isRecording ? handleStopRecording : handleStartRecording}
-        style={{
-          minWidth: "100px",
-        }}
-      >
-        <i className={`icofont-${isRecording ? "stop" : "mic"} mr-2`}/>
-        <span>{isRecording ? "Stop" : "Start"}</span>
-      </button>
+    <div>
+      <h6 className="text-center">Recorded Answer</h6>
+      {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
+      {recordingTimer && (
+        <div style={{ color: recordingTimer <= 5 ? "red" : "inherit" }}>
+          Recording Time Left : {recordingTimer}s
+        </div>
+      )}
       {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
-      {isRecording && <p>Transcript: {transcript}</p>}
     </div>
   );
 };

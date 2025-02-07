@@ -1,13 +1,7 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
 import { toast } from "react-toastify";
 import { convert } from "html-to-text";
+import { useParams } from "react-router-dom";
 import Reading from "../Instruction/Reading";
 import Loading from "../../../../../UI/Loading";
 import SmallModal from "../../../../../UI/Modal";
@@ -18,6 +12,38 @@ import PTEAudioRecorder from "../../LivePTEExam/PTEAudioRecorder/PTEAudioRecorde
 import readingBandValues from "../../../../../../utils/bandValues/ReadingBandValues";
 import listeningBandValues from "../../../../../../utils/bandValues/listeningBandValues";
 const Cheerio = require("cheerio");
+
+const instructions = {
+  Reading: {
+    RWFIB:
+      "Below is a text with blanks. Click on each blank, a list of choice will appear. Select the appropriate answer choice for each blank.",
+    CMA: "Read the text and answer the multiple-choice question by selecting the correct response. More than one response is correct.",
+    ROP: "The text boxes in the left panel have been placed in a random order. Restore the original order by dragging the text boxes from the left panel to the right panel.",
+    RFIB: "In the text below some words are missing. Drag words from the box below to the appropriate place in the text. To undo an answer choice, drag the word back to the box below the text.",
+    CSA: "Read the text and answer the multiple-choice question by selecting the correct response. Only one response is correct.",
+  },
+  Writing: {
+    SWT: "Read the passage below and summarize it using one sentence. Type your response in the box at the bottom of your screen. You have 10 minutes to finish your task. Your response will be judged on the quality of your writing and how well your response presents the key points in the passage. Your response must be between 5 and 75 words.",
+    WE: "You will have 20 minutes to plan, write and revise an essay about the topic below. Your response will be judged on how well you develop a position, organize your ideas, present Supporting details, and control the elements of standard written English.",
+  },
+  Listening: {
+    SST: " You will hear a short lecture. Write a summary for a fellow student who was not present at the lecture. You should write 50-70 words. You have 10 minutes to finish this task. Your response will be judged on the Quality of Your writing and on how well your response presents the key points presented in the lecture.",
+    CMA: "Listen to the recording and answer the question by selecting all the correct responses. You will need to select more than one response.",
+    LFIB: "You will hear a recording. Type the missing words in each blank",
+    HCS: "You will hear a recording. Click on the paragraph that best relates to the recording.",
+    CSA: "Listen to the recording and answer the multiple-choice question by selecting the correct response. Only one response is correct.",
+    SMW: "You will hear a recording. At the end of the recording, the last word or group of words will be replaced by a beep. Select the correct option to complete the recording.",
+    HIW: "You will hear a recording. Below is a transcription of the recording. Some words in the transcription that differ from what the speaker(s) said. Please click on the words that are different.",
+    WFD: "You will hear a sentence. Type the sentence in the box below exactly as you hear it. Write as much of the sentence as you can. You will hear the sentence only once.",
+  },
+  Speaking: {
+    RA: "Look at the text below. In 40 seconds, you must read this text aloud as naturally and clearly as possible. You have 40 seconds to Read Aloud.",
+    RS: "You will hear a sentence. Please repeat the sentence exactly as you hear it. You will hear the sentence only once.",
+    DI: "Look at the picture below. In 25 seconds, please speak into microphone and describe in detail what the picture is showing. You will have 40 seconds to give your response.",
+    RL: "You will hear a lecture. After listening to the lecture, in 10 seconds, please speak into the microphone and retell what you have just heard from the lecture in your own words. You will have 40 seconds to give your response.",
+    ASQ: " You will hear a question. Please give a simple and short answer.Often, just one or a few words is enough.",
+  },
+};
 
 const intialInstructionState = {
   showInstruction: true,
@@ -31,16 +57,13 @@ const intialInstructionState = {
 };
 
 const MockTestLive = () => {
-  const containerRef = useRef(null);
   const { examId } = useParams();
-  const navigate = useNavigate();
   const [examData, setExamData] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
   const [reRenderAudio, setReRenderAudio] = useState(false);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
-  const [voices, setVoices] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
@@ -48,12 +71,14 @@ const MockTestLive = () => {
   const [fullLengthId, setFullLengthId] = useState("");
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
-  const [numberOfWord, setNumberOfWord] = useState(0);
-  const [activeRecordingIndex, setActiveRecordingIndex] = useState(null);
   const [instructionCompleted, setInstructionCompleted] = useState(
     intialInstructionState
   );
+
   const synth = window.speechSynthesis;
+  const [voices, setVoices] = useState([]);
+  const [countdown, setCountdown] = useState(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
@@ -231,6 +256,156 @@ const MockTestLive = () => {
     }
   }, [fullPaper, next]);
 
+  useEffect(() => {
+    (async () => {
+      if (fullPaper?.length !== 0) {
+        const examDataList = fullPaper?.map((examBlock, index) => ({
+          ...examBlock,
+          no: index + 1,
+        }));
+        let tempHtmlContents = [];
+        let tempExamAnswer = [];
+        let tempQuestions = 1;
+        for (let paper of examDataList) {
+          const index = examDataList.indexOf(paper);
+          const returnContent = await fetchHtmlContent(
+            paper,
+            index,
+            tempQuestions
+          );
+          tempHtmlContents.push(returnContent?.questionPassage);
+          const tempUniqueArr = {
+            name: `section-${index + 1}`,
+            ...returnContent?.tempAnswer,
+          };
+          tempExamAnswer.push(tempUniqueArr);
+          let totalLEngth = tempExamAnswer
+            .map((item) => [...item.data])
+            .flat().length;
+          tempQuestions = totalLEngth + 1;
+        }
+        setHtmlContents(tempHtmlContents);
+        setExamAnswer(tempExamAnswer);
+        setLinkAnswer(!linkAnswer);
+      }
+    })();
+  }, [fullPaper]);
+
+  const handleAnswerLinking = (e, questionId, next) => {
+    const { value, id, name, checked } = e.target;
+
+    const elementId = id.split("_")[0];
+
+    const temp = [...examAnswer];
+    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+
+    // is this a multipleTypeQuestions
+    const isMultiQuestions = examAnswer[next].data.filter(
+      (item) => item.question_number === id
+    );
+
+    if (isMultiQuestions?.length <= 1) {
+      temp[next].data.forEach((item) => {
+        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+        if (item.question_number === id && elementId === "InputText") {
+          const trimmedValue = value.trim();
+          item.answer_text = trimmedValue;
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id && elementId === "Checkbox") {
+          item.answer_text = checked ? value : "";
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id) {
+          item.answer_text = value;
+          conditionSatisfied = true; // Set the flag to true
+        }
+      });
+
+      setExamAnswer(temp);
+    } else {
+      const multipleTypeQuestions = checked
+        ? examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text === ""
+          )
+        : examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text !== ""
+          );
+      if (multipleTypeQuestions !== -1) {
+        temp[next].data[multipleTypeQuestions].answer_text = checked
+          ? value
+          : "";
+        setExamAnswer(temp);
+      } else {
+        const contentElements = document.querySelectorAll(`[id="${id}"]`);
+        contentElements.forEach((element) => {
+          const isAlreadyAnswered = isMultiQuestions.findIndex(
+            (a) => a.answer_text === element.value
+          );
+
+          if (isAlreadyAnswered === -1) element.checked = false;
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!instructionCompleted.showInstruction && examAnswer.length > 0) {
+      for (let tempExamAnswer of examAnswer) {
+        if (!tempExamAnswer.data) return;
+        let examIndex = examAnswer.indexOf(tempExamAnswer);
+        // remove duplicate
+        const filteredData = tempExamAnswer.data.filter(
+          (item, index) =>
+            index ===
+            tempExamAnswer.data.findIndex(
+              (element) => element.question_number === item.question_number
+            )
+        );
+        filteredData.forEach((item) => {
+          const contentElements = document.querySelectorAll(
+            `[id="${item.question_number}"]`
+          );
+          if (item.answer_text !== "") {
+            contentElements.forEach((element) => {
+              element.value = item.answer_text;
+            });
+          }
+          contentElements.forEach((element) => {
+            element.addEventListener("change", (e) => {
+              handleAnswerLinking(e, item.question_number, examIndex);
+            });
+          });
+        });
+      }
+    }
+  }, [linkAnswer, next, instructionCompleted]);
+
+  const renderAudio = (audio_file) => {
+    if (audio_file && reRenderAudio) {
+      return (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "#f9f9f9",
+            padding: "20px",
+            border: "1px solid #01579b",
+            borderRadius: "12px",
+            width: "100%",
+            maxWidth: "400px",
+            margin: "20px auto",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <audio style={{ width: "100%" }} controls autoPlay>
+            <source src={audio_file} type="audio/mpeg" />
+          </audio>
+        </div>
+      );
+    }
+  };
+
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
     const question = paperData?.question_other;
     let tempAnswer = {};
@@ -405,164 +580,6 @@ const MockTestLive = () => {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      if (fullPaper?.length !== 0) {
-        const examDataList = fullPaper?.map((examBlock, index) => ({
-          ...examBlock,
-          no: index + 1,
-        }));
-        let tempHtmlContents = [];
-        let tempExamAnswer = [];
-        let tempQuestions = 1;
-        for (let paper of examDataList) {
-          const index = examDataList.indexOf(paper);
-          const returnContent = await fetchHtmlContent(
-            paper,
-            index,
-            tempQuestions
-          );
-          tempHtmlContents.push(returnContent?.questionPassage);
-          const tempUniqueArr = {
-            name: `section-${index + 1}`,
-            ...returnContent?.tempAnswer,
-          };
-          tempExamAnswer.push(tempUniqueArr);
-          let totalLEngth = tempExamAnswer
-            .map((item) => [...item.data])
-            .flat().length;
-          tempQuestions = totalLEngth + 1;
-        }
-        setHtmlContents(tempHtmlContents);
-        setExamAnswer(tempExamAnswer);
-        setLinkAnswer(!linkAnswer);
-      }
-    })();
-  }, [fullPaper]);
-
-  const handleAnswerLinking = (e, questionId, next) => {
-    const { value, id, name, checked } = e.target;
-
-    const elementId = id.split("_")[0];
-
-    const temp = [...examAnswer];
-    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
-
-    // is this a multipleTypeQuestions
-    const isMultiQuestions = examAnswer[next].data.filter(
-      (item) => item.question_number === id
-    );
-
-    if (isMultiQuestions?.length <= 1) {
-      temp[next].data.forEach((item) => {
-        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
-        if (item.question_number === id && elementId === "InputText") {
-          const trimmedValue = value.trim();
-          item.answer_text = trimmedValue;
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.question_number === id && elementId === "Checkbox") {
-          item.answer_text = checked ? value : "";
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.question_number === id) {
-          item.answer_text = value;
-          conditionSatisfied = true; // Set the flag to true
-        }
-      });
-
-      setExamAnswer(temp);
-    } else {
-      const multipleTypeQuestions = checked
-        ? examAnswer[next].data.findIndex(
-            (item) => item.question_number === id && item.answer_text === ""
-          )
-        : examAnswer[next].data.findIndex(
-            (item) => item.question_number === id && item.answer_text !== ""
-          );
-      if (multipleTypeQuestions !== -1) {
-        temp[next].data[multipleTypeQuestions].answer_text = checked
-          ? value
-          : "";
-        setExamAnswer(temp);
-      } else {
-        const contentElements = document.querySelectorAll(`[id="${id}"]`);
-        contentElements.forEach((element) => {
-          const isAlreadyAnswered = isMultiQuestions.findIndex(
-            (a) => a.answer_text === element.value
-          );
-
-          if (isAlreadyAnswered === -1) element.checked = false;
-        });
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!instructionCompleted.showInstruction && examAnswer.length > 0) {
-      for (let tempExamAnswer of examAnswer) {
-        if (!tempExamAnswer.data) return;
-        let examIndex = examAnswer.indexOf(tempExamAnswer);
-        // remove duplicate
-        const filteredData = tempExamAnswer.data.filter(
-          (item, index) =>
-            index ===
-            tempExamAnswer.data.findIndex(
-              (element) => element.question_number === item.question_number
-            )
-        );
-        filteredData.forEach((item) => {
-          const contentElements = document.querySelectorAll(
-            `[id="${item.question_number}"]`
-          );
-          if (item.answer_text !== "") {
-            contentElements.forEach((element) => {
-              element.value = item.answer_text;
-            });
-          }
-          contentElements.forEach((element) => {
-            element.addEventListener("change", (e) => {
-              handleAnswerLinking(e, item.question_number, examIndex);
-            });
-          });
-        });
-      }
-    }
-  }, [linkAnswer, next, instructionCompleted]);
-
-  const renderAudio = (audio_file) => {
-    if (audio_file && reRenderAudio) {
-      return (
-        <div className="mt-2 mb-2">
-          <audio controls autoPlay>
-            <source src={audio_file} type="audio/mpeg" />
-          </audio>
-        </div>
-      );
-    }
-  };
-
-  const renderPassage = (passage, image) => {
-    return (
-      <div>
-        {image && (
-          <div className="text-center">
-            <img
-              className="mb-2"
-              src={image}
-              alt="Study Streak"
-              height={250}
-              width={250}
-            />
-          </div>
-        )}
-        <div
-          dangerouslySetInnerHTML={{
-            __html: passage,
-          }}
-        />
-      </div>
-    );
-  };
-
   const examLatestSubmit = async () => {
     try {
       const response = await ajaxCall(
@@ -657,7 +674,7 @@ const MockTestLive = () => {
     }
   };
 
-  const handleRLSubmit = async () => {
+  const handleSubmit = async () => {
     const answersArray = [];
     let bandValue = 0;
 
@@ -701,9 +718,7 @@ const MockTestLive = () => {
                 },
                 {
                   role: "user",
-                  content: `Answer: ${item.data[0].answer_text}
-                    
-                    Question Type: Essay`,
+                  content: `Answer: ${item.data[0].answer_text}`,
                 },
                 {
                   role: "user",
@@ -720,27 +735,27 @@ const MockTestLive = () => {
                     Spelling: Are spelling and word choice appropriate? Score: (0-90)
                   
                     Provide an Overall Band Score (0-90) based on the individual criteria.
-    
+            
                     Additionally, include detailed explanations for each score, outlining the **strengths**, **weaknesses**, and **areas for improvement**.
                     
                     #Evaluation Format:
                     Content: [Explanation]  
                     Score: X/90
-    
+            
                     Form: [Explanation]  
                     Score: X/90
-    
+            
                     Grammar: [Explanation]  
                     Score: X/90
-    
+            
                     Vocabulary: [Explanation]  
                     Score: X/90 
-    
+            
                     Spelling: [Explanation]  
                     Score: X/90
-    
+            
                     #Overall Band Score:X/90
-    
+            
                     Respond only with the evaluation up to the #Overall Band Score. Do not include any additional text or explanation beyond this point.`,
                 },
               ],
@@ -851,8 +866,7 @@ const MockTestLive = () => {
       );
 
       if (response.status === 201) {
-        fullLengthTestSubmit();
-        navigate(`/FullLengthTest/Answer/${examId}`);
+        toast.success("Your Exam Submitted Successfully");
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -863,24 +877,29 @@ const MockTestLive = () => {
     }
   };
 
-  const handleWritingAnswer = (e, next) => {
+  const handleTextareaAnswer = (e, next) => {
     const answer_text = e.target.value;
     const temp = [...examAnswer];
+
+    // Update the answer text
     temp[next].data[0].answer_text = answer_text;
+
+    // Update the word count for this exam
+    const words =
+      answer_text.trim() === "" ? 0 : answer_text.trim().split(/\s+/).length;
+    temp[next].wordCount = words;
+
     setExamAnswer(temp);
-
-    // Count the number of words
-    const words = answer_text.split(" ");
-    setNumberOfWord(words.length);
   };
 
-  const handleBackSectionClicked = () => {
-    setReRenderAudio(false);
+  const handlePrevious = () => {
     setNext(next - 1);
-  };
-  const handleNextSectionClicked = () => {
     setReRenderAudio(false);
+  };
+
+  const handleNext = () => {
     setNext(next + 1);
+    setReRenderAudio(false);
   };
 
   useEffect(() => {
@@ -962,28 +981,6 @@ const MockTestLive = () => {
     setExamAnswer(tempExamAnswer);
   };
 
-  const stopSpeaking = (questionId) => {
-    if (synth.speaking) {
-      synth.cancel();
-    }
-    // Update the state to mark the specific question as stopped (status: 3)
-    setExamAnswer((prev) => {
-      const updatedAnswers = [...prev];
-      const currentData = updatedAnswers[next].data.map((item) =>
-        item.id === questionId ? { ...item, status: 3 } : item
-      );
-      updatedAnswers[next].data = currentData;
-      return updatedAnswers;
-    });
-
-    // Optionally, clear the active recording index to allow new recordings
-    setActiveRecordingIndex(null);
-  };
-
-  const handleReplay = (speakingContent, questionId) => {
-    speak(speakingContent, questionId);
-  };
-
   useEffect(() => {
     if (recordedFilePath) {
       const { recorderIndex, filePath } = recordedFilePath;
@@ -995,36 +992,62 @@ const MockTestLive = () => {
       setExamAnswer(tempexamAnswer);
       setRecordedFilePath(null);
     }
-  }, [recordedFilePath]);
+  }, [examAnswer, next, recordedFilePath]);
+
+  useEffect(() => {
+    if (examData?.questions && examData.questions.length > 0) {
+      if (examData.sub_category === "RA" || examData.sub_category === "DI") {
+        setCountdown(null);
+        setIsSpeaking(true);
+        return;
+      }
+
+      setCountdown(3);
+
+      const countdownInterval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            clearInterval(countdownInterval);
+            return null;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      const speakTimeout = setTimeout(() => {
+        const currentQuestion = examData.questions[0];
+        speak(currentQuestion.question, currentQuestion.id);
+        setIsSpeaking(true);
+      }, 3000);
+
+      return () => {
+        clearInterval(countdownInterval);
+        clearTimeout(speakTimeout);
+      };
+    }
+  }, [examData]);
 
   const recorderContainer = useCallback(
-    (item, index) => {
+    (item) => {
       if (examData?.exam_type !== "Speaking") return null;
       if (Object.keys(examData).length > 0) {
         return (
           <PTEAudioRecorder
-            setRecordedFilePath={setRecordedFilePath}
             next={next}
+            Flt={examId}
             exam={examData}
-            enableRecording={
-              examAnswer[next].data?.[index]?.status === 2 ||
-              examAnswer[next].data?.[index]?.status === 3
-            }
-            completed={examAnswer[next].data?.[index]?.answer_text !== ""}
-            question_number={item.question_number}
             user={userData.userId}
             recorderIndex={item.id}
-            Flt={examId}
-            setActiveRecordingIndex={setActiveRecordingIndex}
-            isActiveRecording={activeRecordingIndex === index}
+            shouldStartRecording={isSpeaking}
+            question_number={item.question_number}
+            setRecordedFilePath={setRecordedFilePath}
           />
         );
       }
       return;
     },
-    [examData, next, examAnswer, userData.userId, examId, activeRecordingIndex]
+    [next, examData, userData.userId, examId, isSpeaking]
   );
-
   const reviewContent = () =>
     examAnswer.map((test, index) => (
       <div key={index}>
@@ -1033,9 +1056,8 @@ const MockTestLive = () => {
           {test.data.map((answer, idx) => (
             <div key={idx} className="card answer__width">
               <div className="card-body">
-                <h6 className="card-title">Q. {idx + 1}</h6>
                 <h6 className="card-text">
-                  Answer :{" "}
+                  Answer ({idx + 1}) :{" "}
                   <span className="text-success">{answer.answer_text}</span>
                 </h6>
               </div>
@@ -1044,29 +1066,6 @@ const MockTestLive = () => {
         </div>
       </div>
     ));
-
-  const renderPagination = useMemo(() => {
-    if (uniqueIdArr.length === 0 && examAnswer.length === 0) {
-      return null;
-    }
-    let tempSectionNumber = 0;
-    return uniqueIdArr?.map((item, sectionIndex) => {
-      if (item.examType !== examData.exam_type) {
-        return null;
-      }
-      tempSectionNumber++;
-      return (
-        <div className="lv-section" key={item.name + sectionIndex}>
-          <button
-            className="lv-footer-section"
-            onClick={() => setNext(sectionIndex)}
-          >
-            {tempSectionNumber}
-          </button>
-        </div>
-      );
-    });
-  }, [uniqueIdArr, examAnswer, next, examData]);
 
   return instructionCompleted.showInstruction ? (
     <div className="test-instruction">
@@ -1088,250 +1087,437 @@ const MockTestLive = () => {
       <Loading />
     </div>
   ) : (
-    <div>
-      <div className="lv-navbar lv-navbar-responsive">
-        <div className="lv-navbar-title">
-          <h2>{examData?.exam_category}</h2>
-          <div className="lv-userName">{userData?.username}</div>
-          <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-          <div className="lv-userName">{`${examData?.exam_name}`}</div>
+    <div
+      style={{
+        border: "1px solid #01579b",
+        margin: "20px",
+        height: "90vh",
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "calc(100% - 40px)",
+        overflow: "hidden",
+        borderRadius: "12px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      <div
+        className="d-flex justify-content-between align-items-center"
+        style={{
+          borderBottom: "1px solid #01579b",
+          padding: "20px",
+          backgroundColor: "#01579b",
+          color: "white",
+          flexShrink: 0,
+          borderRadius: "12px 12px 0 0",
+        }}
+      >
+        <div style={{ fontSize: "18px", fontWeight: "500" }}>
+          {examData?.exam_category} / {examData?.exam_type} /{" "}
+          {examData?.exam_name}
         </div>
-        <div className="lv-navbar-title-mobile">
-          <div className="username-mobile">
-            <h2>{examData?.exam_category}</h2>
-            <div className="mobile-breadcumb">
-              <div className="lv-userName">{userData?.username}</div>
-              <div style={{ margin: "15px 0px 0 10px" }}>/</div>
-              <div className="lv-userName">{`${examData?.exam_name}`}</div>
-            </div>
-          </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>
+          <span>Timer:</span>
+          <span style={{ fontWeight: "500" }}>10:00 AM</span>
         </div>
       </div>
-      <div className="lv-container">
-        {/* Main Container */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          overflow: "hidden",
+          padding: "20px",
+          gap: "20px",
+          backgroundColor: "#f5f5f5",
+        }}
+      >
+        <div
+          style={{
+            fontWeight: "bold",
+            fontSize: "16px",
+            color: "#333",
+            padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+          }}
+        >
+          {instructions[examData?.exam_type][examData?.sub_category]}
+        </div>
 
-        <div className="lv-main-container">
-          {/* Left Container */}
-          {((examData?.passage &&
-            examData?.passage_image &&
-            examData?.exam_type === "Reading") ||
-            examData?.exam_type === "Writing") && (
-            <div className="lv-left-container">
-              {renderPassage(examData?.passage, examData?.passage_image)}
-            </div>
-          )}
-          {examData?.exam_type === "Speaking" && (
-            <div className="lv-left-container">
-              {Object.keys(examData).length > 0 &&
-                examData.questions.map((item, i) => {
-                  const speakingIndex = examAnswer[next].data.findIndex(
-                    (element) => element.id === item.id
-                  );
-                  return (
-                    <div
-                      className="d-flex align-items-center justify-content-center"
-                      style={{
-                        borderBottom: "1px solid #01579b",
-                      }}
-                    >
-                      <div>
-                        <p> {i + 1} :</p>
-                      </div>
-                      <div className="d-flex align-items-center lv-btn-mic-container">
-                        <button
-                          className="lv-speaking-button"
-                          onClick={() =>
-                            examAnswer[next].data?.[speakingIndex]?.status === 2
-                              ? handleReplay(item.question, item.id)
-                              : speak(item.question, item.id)
-                          }
-                          disabled={
-                            examAnswer[next].data?.[speakingIndex]?.status ===
-                              1 ||
-                            examAnswer[next].data?.some(
-                              (element, index) =>
-                                index !== speakingIndex && element.status === 1
-                            ) ||
-                            activeRecordingIndex !== null
-                          }
-                          style={{
-                            opacity:
-                              examAnswer[next].data?.[speakingIndex]?.status ===
-                                1 ||
-                              examAnswer[next].data?.some(
-                                (element, index) =>
-                                  index !== speakingIndex &&
-                                  element.status === 1
-                              ) ||
-                              activeRecordingIndex !== null
-                                ? 0.5
-                                : 1,
-                            cursor:
-                              examAnswer[next].data?.[speakingIndex]?.status ===
-                                1 ||
-                              examAnswer[next].data?.some(
-                                (element, index) =>
-                                  index !== speakingIndex &&
-                                  element.status === 1
-                              ) ||
-                              activeRecordingIndex !== null
-                                ? "not-allowed"
-                                : "pointer",
-                          }}
-                        >
-                          {examAnswer[next].data?.[speakingIndex]?.status === 2
-                            ? "Replay"
-                            : "Play"}
-                        </button>
-                        <button
-                          className="lv-speaking-button"
-                          onClick={() => stopSpeaking(item.id)}
-                          disabled={
-                            examAnswer[next].data?.[speakingIndex]?.status !== 1
-                          }
-                          style={{
-                            opacity:
-                              examAnswer[next].data?.[speakingIndex]?.status ===
-                              1
-                                ? 1
-                                : 0.5,
-                            cursor:
-                              examAnswer[next].data?.[speakingIndex]?.status ===
-                              1
-                                ? "pointer"
-                                : "not-allowed",
-                          }}
-                        >
-                          Pause
-                        </button>
-                        <hr />
-                        {recorderContainer(item, speakingIndex)}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          )}
-
-          {/* Right Container */}
-          {(examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening" ||
-            examData?.exam_type === "Writing") && (
+        {/* Reading */}
+        {examData?.exam_type === "Reading" && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              flex: 1,
+              gap: "20px",
+              overflow: "hidden",
+            }}
+          >
+            {!!examData?.passage && (
+              <div
+                style={{
+                  flex: 1,
+                  overflowY: "auto",
+                  padding: "20px",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: examData?.passage,
+                }}
+              />
+            )}
             <div
-              className="lv-right-container"
-              id="right-container"
-              ref={containerRef}
-            >
-              <div className="lv-box-right">
-                {examData?.exam_type === "Listening" &&
-                  renderAudio(examData?.audio_file)}
-                {(examData?.exam_type === "Reading" ||
-                  examData?.exam_type === "Listening") && (
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: htmlContents?.[next],
-                    }}
-                  />
-                )}
-                {examData?.exam_type === "Writing" && (
-                  <div className="lv-textarea">
-                    <textarea
-                      id={`textarea_${next}`}
-                      className="writing__textarea"
-                      value={examAnswer[next]?.data?.[0]?.answer_text || ""}
-                      onChange={(e) => handleWritingAnswer(e, next)}
-                    />
-                    <span>{numberOfWord} Words</span>
-                  </div>
-                )}
+              style={{
+                flex: !!examData?.passage ? 1 : "100%",
+                overflowY: "auto",
+                padding: "20px",
+                backgroundColor: "#ffffff",
+                borderRadius: "8px",
+                border: "1px solid #ddd",
+              }}
+              dangerouslySetInnerHTML={{
+                __html: htmlContents?.[next],
+              }}
+            />
+          </div>
+        )}
+
+        {/* Listening */}
+        {examData.exam_type === "Listening" && (
+          <>
+            {renderAudio(examData?.audio_file)}
+            {!(
+              examData?.sub_category === "SST" ||
+              examData?.sub_category === "WFD"
+            ) && (
+              <div
+                style={{
+                  flex: 1,
+                  padding: "20px",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                  overflowY: "auto",
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: htmlContents?.[next],
+                }}
+              />
+            )}
+            {(examData?.sub_category === "SST" ||
+              examData?.sub_category === "WFD") && (
+              <div
+                style={{
+                  padding: "20px",
+                  overflow: "auto",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                }}
+              >
+                <textarea
+                  id={`textarea_${next}`}
+                  className="writing__textarea"
+                  value={examAnswer[next]?.data[0]?.answer_text || ""}
+                  onChange={(e) => {
+                    handleTextareaAnswer(e, next);
+                  }}
+                  style={{
+                    width: "100%",
+                    padding: "15px",
+                    border: "1px solid #01579b",
+                    borderRadius: "8px",
+                    resize: "none",
+                    fontSize: "16px",
+                    lineHeight: "1.5",
+                    backgroundColor: "#f9f9f9",
+                    transition: "border-color 0.3s ease",
+                  }}
+                />
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    color: "#333",
+                    marginTop: "10px",
+                  }}
+                >
+                  Total Word Count: {examAnswer[next]?.wordCount || 0}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        {/* Writing */}
+        {examData?.exam_type === "Writing" && (
+          <div
+            style={{
+              padding: "20px",
+              overflow: "auto",
+              backgroundColor: "#ffffff",
+              borderRadius: "8px",
+              border: "1px solid #ddd",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+            }}
+          >
+            {examData?.passage && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: examData?.passage,
+                }}
+              />
+            )}
+            <div>
+              <textarea
+                id={`textarea_${next}`}
+                className="writing__textarea"
+                value={examAnswer[next]?.data?.[0]?.answer_text || ""}
+                onChange={(e) => {
+                  handleTextareaAnswer(e, next);
+                }}
+                style={{
+                  width: "100%",
+                  padding: "15px",
+                  border: "1px solid #01579b",
+                  borderRadius: "8px",
+                  resize: "none",
+                  fontSize: "16px",
+                  lineHeight: "1.5",
+                  backgroundColor: "#f9f9f9",
+                  transition: "border-color 0.3s ease",
+                }}
+                placeholder="Type your answer here..."
+              />
+              <div
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "16px",
+                  color: "#333",
+                  marginTop: "10px",
+                }}
+              >
+                Total Word Count: {examAnswer[next]?.wordCount || 0}
               </div>
             </div>
-          )}
-        </div>
-
-        {/* Paginaton - Footer */}
-        <div className="d-flex justify-content-between align-items-center mb-3 mt-2 flex-column flex-md-row">
-          <div className="lv-question-pagination d-flex justify-content-between align-items-center pb-1 w-100 mb-2 mb-md-0">
-            <div className="lv-section-pagination">{renderPagination}</div>
           </div>
-          <div className="lv-footer-btn pb-1">
-            {(examData?.exam_type === "Reading" ||
-              examData?.exam_type === "Listening") && (
+        )}
+
+        {/* Speaking */}
+        {examData.exam_type === "Speaking" && (
+          <div style={{ flex: 1, overflowY: "auto" }}>
+            {Object.keys(examData).length > 0 &&
+              examData.questions.map((item, i) => {
+                const speakingIndex = examAnswer[next].data.findIndex(
+                  (element) => element.id === item.id
+                );
+                return (
+                  <div key={item.id} style={{ marginBottom: "20px" }}>
+                    {examData?.sub_category === "DI" ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          gap: "20px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <img
+                            src={item.file}
+                            alt=""
+                            style={{ maxWidth: "100%", maxHeight: "400px" }}
+                          />
+                        </div>
+                        <div
+                          style={{
+                            flex: 1,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            background: "#f9f9f9",
+                            padding: "15px",
+                            border: "1px solid #01579b",
+                            borderRadius: "8px",
+                            marginTop: "15px",
+                          }}
+                        >
+                          {recorderContainer(item, speakingIndex)}
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {countdown !== null && (
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              background: "#f9f9f9",
+                              padding: "15px",
+                              border: "1px solid #01579b",
+                              borderRadius: "8px",
+                              width: "100%",
+                              maxWidth: "400px",
+                              margin: "0 auto",
+                              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                            }}
+                          >
+                            <div style={{ fontWeight: "bold" }}>
+                              Beginning in {countdown} seconds
+                            </div>
+                          </div>
+                        )}
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            background: "#f9f9f9",
+                            padding: "15px",
+                            border: "1px solid #01579b",
+                            borderRadius: "8px",
+                            width: "100%",
+                            maxWidth: "400px",
+                            margin: "0 auto",
+                            marginTop: "15px",
+                            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                          }}
+                        >
+                          {recorderContainer(item, speakingIndex)}
+                        </div>
+                        {examData.sub_category === "RA" && (
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "center",
+                              marginTop: "15px",
+                              borderTop: "1px solid #ddd",
+                              borderBottom: "1px solid #ddd",
+                              padding: "20px",
+                              backgroundColor: "#ffffff",
+                              borderRadius: "8px",
+                              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                            }}
+                            dangerouslySetInnerHTML={{
+                              __html: item.question,
+                            }}
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+          </div>
+        )}
+        {/* Pagination */}
+        <div
+          style={{
+            borderTop: "1px solid #ddd",
+            borderBottom: "1px solid #ddd",
+            padding: "20px",
+            backgroundColor: "#ffffff",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+          }}
+        >
+          <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+            <div style={{ fontSize: "16px", fontWeight: "500" }}>
+              Item {next + 1} of {uniqueIdArr.length}
+            </div>
+            <div className="d-flex gap-2">
               <button
-                className="lv-footer-button review_size"
-                onClick={() => setIsModalOpen(true)}
+                className="btn btn-primary btn-sm"
+                style={{
+                  display: next === 0 ? "none" : "block",
+                }}
+                onClick={handlePrevious}
               >
-                Reviews
+                <i className="icofont-arrow-left mr-2"></i>Previous
               </button>
-            )}
-            <button
-              className="lv-footer-button"
-              style={{
-                display: next === 0 ? "none" : "block",
-              }}
-              onClick={handleBackSectionClicked}
-            >
-              <span>Back</span>
-            </button>
-            <button
-              className="lv-footer-button"
-              style={{
-                display: fullPaper.length === next + 1 ? "none" : "block",
-              }}
-              onClick={handleNextSectionClicked}
-            >
-              <span>&#10152;</span>
-            </button>
-            <button
-              className="lv-footer-button"
-              style={{
-                display: next !== (fullPaper.length > 0 ? "none" : "block"),
-              }}
-              onClick={() => setIsConfirmModalOpen(true)}
-            >
-              Submit
-            </button>
+              <button
+                className="btn btn-primary btn-sm"
+                style={{
+                  display: fullPaper.length === next + 1 ? "none" : "block",
+                }}
+                onClick={handleNext}
+              >
+                Next
+                <i className="icofont-arrow-right ml-2"></i>
+              </button>
+            </div>
           </div>
         </div>
+        <div className="d-flex justify-content-end">
+          <button
+            className="btn btn-primary btn-sm"
+            style={{
+              minWidth: "100px",
+              display: next !== (fullPaper.length > 0 ? "none" : "block"),
+            }}
+            onClick={() => setIsConfirmModalOpen(true)}
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+      {isConfirmModalOpen && (
+        <SmallModal
+          size="lg"
+          centered
+          isOpen={isConfirmModalOpen}
+          footer={
+            <div className="d-flex gap-2">
+              <button className="btn btn-success" onClick={handleSubmit}>
+                Yes
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => setIsConfirmModalOpen(false)}
+              >
+                No
+              </button>
+            </div>
+          }
+        >
+          <h5>Are You Sure You Want To Submit ?</h5>
+          {reviewContent()}
+        </SmallModal>
+      )}
 
-        {isConfirmModalOpen && (
+      {isModalOpen &&
+        (examData?.exam_type === "Reading" ||
+          examData?.exam_type === "Listening") && (
           <SmallModal
             size="lg"
             centered
-            isOpen={isConfirmModalOpen}
-            footer={
-              <div className="d-flex gap-2">
-                <button className="btn btn-success" onClick={handleRLSubmit}>
-                  Yes
-                </button>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => setIsConfirmModalOpen(false)}
-                >
-                  No
-                </button>
-              </div>
-            }
+            title="Your Answers"
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
           >
-            <h5>Are You Sure You Want To Submit ?</h5>
             {reviewContent()}
           </SmallModal>
         )}
-
-        {isModalOpen &&
-          (examData?.exam_type === "Reading" ||
-            examData?.exam_type === "Listening") && (
-            <SmallModal
-              size="lg"
-              centered
-              title="Your Answers"
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-            >
-              {reviewContent()}
-            </SmallModal>
-          )}
-      </div>
     </div>
   );
 };

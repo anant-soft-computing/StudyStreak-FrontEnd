@@ -423,6 +423,7 @@ const MockTestLive = () => {
           },
         ],
         exam_type: paperData?.exam_type,
+        sub_category: paperData?.sub_category,
         question: paperData?.question_other,
       };
       if (paperData?.exam_type === "Writing") {
@@ -430,6 +431,7 @@ const MockTestLive = () => {
           name: `section-${index + 1}`,
           paginationsIds: [`textarea_${index}_1`],
           examType: paperData?.exam_type,
+          subCategory: paperData?.sub_category,
         };
         setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       } else {
@@ -437,6 +439,7 @@ const MockTestLive = () => {
           name: `section-${index + 1}`,
           paginationsIds: [`speaking_${index}_1`],
           examType: paperData?.exam_type,
+          subCategory: paperData?.sub_category,
         };
         setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       }
@@ -458,6 +461,7 @@ const MockTestLive = () => {
           (element) => `speaking_${index}_${element.id}`
         ),
         examType: paperData?.exam_type,
+        subCategory: paperData?.sub_category,
       };
       setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       return new Promise((resolve) => {
@@ -567,11 +571,13 @@ const MockTestLive = () => {
         exam_id: paperData?.id,
         data: tempPaginationStructure,
         exam_type: paperData?.exam_type,
+        sub_category: paperData?.sub_category,
       };
       const tempUniqueArr = {
         name: `section-${index + 1}`,
         paginationsIds: paginationsStrucutre,
         examType: paperData?.exam_type,
+        subCategory: paperData?.sub_category,
       };
       setUniqueIdArr((prev) => [...prev, tempUniqueArr]);
       return new Promise((resolve) => {

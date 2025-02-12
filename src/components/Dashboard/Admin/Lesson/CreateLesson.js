@@ -13,7 +13,7 @@ const initialLessonData = {
   Lesson_Title: "",
   Lesson_Description: "",
   Lesson_Video: "",
-  Lesson_Duration: "",
+  duration: 0,
   lesson_assignment: [],
   sequence: 0,
   active: false,
@@ -53,6 +53,10 @@ const validateForm = (createLessonData, setFormError) => {
   }
   if (!createLessonData.sequence) {
     setFormError("Lesson Sequence is Required");
+    return false;
+  }
+  if (!createLessonData.duration) {
+    setFormError("Lesson Duration is Required");
     return false;
   }
   return true;
@@ -196,7 +200,7 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
     formData.append("section", createLessonData?.section);
     formData.append("Lesson_Title", createLessonData?.Lesson_Title);
     formData.append("Lesson_Description", createLessonData?.Lesson_Description);
-    formData.append("Lesson_Duration", createLessonData?.Lesson_Duration);
+    formData.append("duration", createLessonData?.duration);
     formData.append("active", createLessonData?.active);
     formData.append("sequence", createLessonData?.sequence);
     formData.append("Lesson_Video", encodeURI(createLessonData.Lesson_Video));
@@ -399,14 +403,14 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
             <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
-                  <label>Duration</label>
+                  <label>Duration (In Seconds)</label>
                   <input
-                    type="text"
-                    placeholder="Lesson Duration"
-                    value={createLessonData.Lesson_Duration}
+                    type="number"
+                    placeholder="Lesson Duration (In Seconds)"
+                    value={createLessonData.duration}
                     onChange={(e) => {
                       dispatchCreateLesson({
-                        type: "Lesson_Duration",
+                        type: "duration",
                         value: e.target.value,
                       });
                     }}

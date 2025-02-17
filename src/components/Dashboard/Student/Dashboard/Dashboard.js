@@ -21,6 +21,7 @@ import {
   NotepadTextDashed,
   PcCase,
   Pencil,
+  Ribbon,
   Presentation,
   Proportions,
   Speaker,
@@ -104,24 +105,68 @@ const Dashboard = () => {
       : category === "PTE"
       ? [
           {
-            name: "Speaking",
+            name: "Speaking Slot",
+            icon: <Speaker width={35} height={35} />,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Speaking Practice" },
+          },
+          {
+            name: "Free Mock Test",
+            icon: <Ribbon width={35} height={35} />,
+            link: "/PTE/FreeMockTest",
+          },
+          {
+            name: "PTE Speaking",
             icon: <Mic width={35} height={35} />,
             link: "/PTE/Speaking/",
           },
           {
-            name: "Writing",
+            name: "PTE Writing",
             icon: <SquarePen width={35} height={35} />,
             link: "/PTE/Writing/",
           },
           {
-            name: "Reading",
+            name: "PTE Reading",
             icon: <PcCase width={35} height={35} />,
             link: "/PTE/Reading/",
           },
           {
-            name: "Listening",
+            name: "PTE Listening",
             icon: <BookHeadphones width={35} height={35} />,
             link: "/PTE/Listening/",
+          },
+          {
+            name: "Counselling",
+            icon: <Users width={35} height={35} />,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Counselling" },
+          },
+          {
+            name: "Regular Classes",
+            icon: <Videotape width={35} height={35} />,
+            link: "/studentLiveClasses",
+          },
+          {
+            name: "Tutor Support",
+            icon: <Users width={35} height={35} />,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Tutor Support" },
+          },
+          {
+            name: "Webinar",
+            icon: <Film width={35} height={35} />,
+            link: "/studentLiveClasses",
+            state: { activeTab: "Webinar" },
+          },
+          {
+            name: "Progress",
+            icon: <ChartNoAxesColumnIncreasing width={35} height={35} />,
+            link: "/progress",
+          },
+          {
+            name: "Resources",
+            icon: <Proportions width={35} height={35} />,
+            link: "/resources",
           },
         ]
       : [
@@ -305,210 +350,192 @@ const Dashboard = () => {
     fetchStudentCourses();
   }, [category]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  return (
-    <>
-      {isLoading ? (
-        <Loading />
-      ) : count?.count !== 0 ? (
-        <div className="body__wrapper">
-          <div className="main_wrapper overflow-hidden">
-            <div className="dashboardarea sp_bottom_100">
-              <div className="dashboard">
-                <div className="container-fluid full__width__padding">
-                  <div className="row">
-                    <DSSidebar />
-                    <div className="col-xl-8 col-lg-8">
-                      <div className="blog__details__content__wraper">
-                        <div className="course__details__heading">
-                          <h3>Welcome, {userData?.username}</h3>
+  return isLoading ? (
+    <Loading />
+  ) : count?.count !== 0 ? (
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="dashboardarea sp_bottom_100">
+          <div className="dashboard">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
+                <DSSidebar />
+                <div className="col-xl-8 col-lg-8">
+                  <div className="blog__details__content__wraper">
+                    <div className="course__details__heading">
+                      <h3>Welcome, {userData?.username}</h3>
+                    </div>
+                    {(category === "IELTS" || category === "PTE") &&
+                      studentBatch?.length > 0 && (
+                        <h5>
+                          Batch :{" "}
+                          {studentBatch?.map((batch) => (
+                            <span key={batch.id}>
+                              {batch.batch_name} :{" "}
+                              {moment(
+                                batch.batch_start_timing,
+                                "HH:mm:ss"
+                              ).format("hh:mm A")}{" "}
+                              |*|{" "}
+                            </span>
+                          ))}
+                        </h5>
+                      )}
+                    {(category === "IELTS" || category === "GENERAL") && (
+                      <div className="online__course__wrap mt-0">
+                        <div className="row instructor__slider__active row__custom__class">
+                          <ScoreCard course={category} />
                         </div>
-                        {category === "IELTS" && studentBatch?.length > 0 && (
-                          <h5>
-                            Batch :{" "}
-                            {studentBatch?.map((batch) => (
-                              <span key={batch.id}>
-                                {batch.batch_name} :{" "}
-                                {moment(
-                                  batch.batch_start_timing,
-                                  "HH:mm:ss"
-                                ).format("hh:mm A")}{" "}
-                                |*|{" "}
-                              </span>
-                            ))}
-                          </h5>
-                        )}
-                        {(category === "IELTS" || category === "GENERAL") && (
-                          <div className="online__course__wrap mt-0">
-                            <div className="row instructor__slider__active row__custom__class">
-                              <ScoreCard course={category} />
-                            </div>
-                          </div>
-                        )}
-                        <div className="online__course__wrap mt-0">
-                          <div className="row instructor__slider__active row__custom__class">
-                            <div className="col-xl-6 column__custom__class">
-                              <div className="gridarea__wraper card-background">
-                                <div className="gridarea__content">
-                                  <div className="gridarea__content p-2 m-2">
-                                    <Link
-                                      to="/diagnosticTest"
-                                      className="text-decoration-none"
-                                    >
-                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                        <NotepadTextDashed
-                                          width={35}
-                                          height={35}
-                                          color="black"
-                                        />
-                                        <h2 className="mt-2">
-                                          {category === "IELTS"
-                                            ? "Diagnostic Test"
-                                            : "English Diagnostic Test"}
-                                        </h2>
-                                      </div>
-                                    </Link>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            {lesson?.length > 0 &&
-                              lesson.map((item, index) => (
-                                <div
-                                  key={index}
-                                  className="col-xl-6 column__custom__class"
+                      </div>
+                    )}
+                    <div className="online__course__wrap mt-0">
+                      <div className="row instructor__slider__active row__custom__class">
+                        <div className="col-xl-6 column__custom__class">
+                          <div className="gridarea__wraper card-background">
+                            <div className="gridarea__content">
+                              <div className="gridarea__content p-2 m-2">
+                                <Link
+                                  to="/diagnosticTest"
+                                  className="text-decoration-none"
                                 >
-                                  <div className="gridarea__wraper card-background">
-                                    <div className="gridarea__content">
-                                      <div className="gridarea__content p-2 m-2">
-                                        <Link
-                                          to={`/courseLessons/${item.course_id}`}
-                                          className="text-decoration-none"
-                                        >
-                                          <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                            <Presentation
-                                              width={35}
-                                              height={35}
-                                              color="black"
-                                            />
-                                            <h2 className="mt-2">
-                                              Start Lesson
-                                            </h2>
-                                          </div>
-                                        </Link>
-                                      </div>
-                                    </div>
+                                  <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                    <NotepadTextDashed
+                                      width={35}
+                                      height={35}
+                                      color="black"
+                                    />
+                                    <h2 className="mt-2">
+                                      {category === "IELTS" ||
+                                      category === "PTE"
+                                        ? "Diagnostic Test"
+                                        : "English Diagnostic Test"}
+                                    </h2>
                                   </div>
-                                </div>
-                              ))}
+                                </Link>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <div className="row">
-                          {cardList.map(
-                            ({ name, icon, link, state }, index) => (
-                              <div
-                                key={index}
-                                className="col-xl-4 column__custom__class"
-                              >
-                                <div className="gridarea__wraper text-center card-background">
-                                  <div
-                                    className="gridarea__content p-3 m-2"
-                                    style={{
-                                      cursor: link ? "pointer" : "default",
-                                    }}
-                                  >
-                                    <Link
-                                      to={link}
-                                      state={state}
-                                      className="text-decoration-none"
-                                      style={{ color: "black" }}
-                                    >
-                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                        {icon}
-                                        <h3>{name}</h3>
-                                      </div>
-                                    </Link>
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                          )}
-                          {(category === "IELTS" || category === "GENERAL") && (
-                            <div className="col-xl-12 column__custom__class">
+                        {lesson?.length > 0 &&
+                          lesson.map((item, index) => (
+                            <div
+                              key={index}
+                              className="col-xl-6 column__custom__class"
+                            >
                               <div className="gridarea__wraper card-background">
                                 <div className="gridarea__content">
                                   <div className="gridarea__content p-2 m-2">
                                     <Link
-                                      to="/recordedClasses"
+                                      to={`/courseLessons/${item.course_id}`}
                                       className="text-decoration-none"
                                     >
                                       <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                        <CassetteTape
+                                        <Presentation
                                           width={35}
                                           height={35}
                                           color="black"
                                         />
-                                        <h2 className="mt-2">
-                                          Recorded Classes
-                                        </h2>
+                                        <h2 className="mt-2">Start Lesson</h2>
                                       </div>
                                     </Link>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          )}
-                        </div>
+                          ))}
                       </div>
                     </div>
-                    <div className="col-xl-4 col-lg-4">
-                      <div className="dashboard__form__wraper mb-3">
-                        <div className="dashboard__form__input">
-                          <h5>Course</h5>
-                          <select
-                            className="form-select"
-                            aria-label="Select a course"
-                            value={JSON.stringify(selectedCourse)}
-                            onChange={(e) =>
-                              handleCourse(JSON.parse(e.target.value))
-                            }
-                          >
-                            {studentCourses?.map((item) => (
-                              <option
-                                key={item.course_id}
-                                value={JSON.stringify(item)}
+                    <div className="row">
+                      {cardList.map(({ name, icon, link, state }, index) => (
+                        <div
+                          key={index}
+                          className="col-xl-4 column__custom__class"
+                        >
+                          <div className="gridarea__wraper text-center card-background">
+                            <div
+                              className="gridarea__content p-3 m-2"
+                              style={{
+                                cursor: link ? "pointer" : "default",
+                              }}
+                            >
+                              <Link
+                                to={link}
+                                state={state}
+                                className="text-decoration-none"
+                                style={{ color: "black" }}
                               >
-                                {item.course_category}
-                              </option>
-                            ))}
-                          </select>
+                                <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                  {icon}
+                                  <h3>{name}</h3>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="col-xl-12 column__custom__class">
+                        <div className="gridarea__wraper card-background">
+                          <div className="gridarea__content">
+                            <div className="gridarea__content p-2 m-2">
+                              <Link
+                                to="/recordedClasses"
+                                className="text-decoration-none"
+                              >
+                                <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                  <CassetteTape
+                                    width={35}
+                                    height={35}
+                                    color="black"
+                                  />
+                                  <h2 className="mt-2">Recorded Classes</h2>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <LeaderBoard studentID={studentID} />
-                      {(category === "IELTS" || category === "GENERAL") && (
-                        <UpcomingRegularLiveClass />
-                      )}
-                      {(category === "IELTS" || category === "GENERAL") && (
-                        <NextLesson />
-                      )}
-                      {category === "IELTS" && <SpeakingSlots />}
-                      {(category === "IELTS" || category === "GENERAL") && (
-                        <UpcomingLiveClasses />
-                      )}
                     </div>
                   </div>
+                </div>
+                <div className="col-xl-4 col-lg-4">
+                  <div className="dashboard__form__wraper mb-3">
+                    <div className="dashboard__form__input">
+                      <h5>Course</h5>
+                      <select
+                        className="form-select"
+                        aria-label="Select a course"
+                        value={JSON.stringify(selectedCourse)}
+                        onChange={(e) =>
+                          handleCourse(JSON.parse(e.target.value))
+                        }
+                      >
+                        {studentCourses?.map((item) => (
+                          <option
+                            key={item.course_id}
+                            value={JSON.stringify(item)}
+                          >
+                            {item.course_category}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <LeaderBoard studentID={studentID} />
+                  <UpcomingRegularLiveClass />
+                  <NextLesson />
+                  {(category === "IELTS" || category === "PTE") && (
+                    <SpeakingSlots />
+                  )}
+                  <UpcomingLiveClasses />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <UnPaidDashboard />
-      )}
-    </>
+      </div>
+    </div>
+  ) : (
+    <UnPaidDashboard />
   );
 };
 

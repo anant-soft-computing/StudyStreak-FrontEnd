@@ -175,6 +175,36 @@ const LivePTEWritingExam = () => {
     })();
   }, [fullPaper]);
 
+  const latestExamSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            practise_set: fullPaper[0].IELTS.id,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Exam Submitted Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const submitExam = async () => {
     const data = {
       student_id: studentId,
@@ -197,6 +227,7 @@ const LivePTEWritingExam = () => {
         8000
       );
       if (response.status === 200) {
+        latestExamSubmit();
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");

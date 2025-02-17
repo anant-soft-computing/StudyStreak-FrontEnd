@@ -182,6 +182,26 @@ const DSSidebar = () => {
             link: "/PTE/Listening",
           },
           {
+            name: "Live Classes",
+            icon: <CassetteTape />,
+            link: "/studentLiveClasses",
+          },
+          {
+            name: "Resources",
+            icon: <Proportions />,
+            link: "/resources",
+          },
+          {
+            name: "Flash Card",
+            icon: <WalletCards />,
+            link: "/flashCard",
+          },
+          {
+            name: "Reports",
+            icon: <ClipboardMinus />,
+            link: "/reports",
+          },
+          {
             name: "Settings",
             icon: <Settings />,
             link: "/studentSettings",

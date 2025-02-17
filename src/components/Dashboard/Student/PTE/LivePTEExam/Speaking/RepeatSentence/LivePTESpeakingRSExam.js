@@ -63,6 +63,36 @@ const LivePTESpeakingRSExam = () => {
     return randomId;
   }
 
+  const latestExamSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            practise_set: fullPaper?.IELTS?.id,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Practice Exam Submitted");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const handleSubmit = async () => {
     const data = {
       student_id: studentId,
@@ -85,6 +115,7 @@ const LivePTESpeakingRSExam = () => {
         8000
       );
       if (response.status === 200) {
+        latestExamSubmit();
         setTimerRunning(false);
         navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`);
         toast.success("Your Exam Submitted Successfully");

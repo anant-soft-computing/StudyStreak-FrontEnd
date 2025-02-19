@@ -679,11 +679,9 @@ const PracticeLiveExam = () => {
 
   const handleWritingSubmit = async () => {
     const answersArray = [];
-    let isAllAnswered = true;
 
     examAnswer.forEach((item, index) => {
       const temp = item.data.map((answer, index2) => {
-        if (answer.answer_text === "") isAllAnswered = false;
         return {
           question_number: index2 + 1,
           answer_text: answer.answer_text,
@@ -696,11 +694,6 @@ const PracticeLiveExam = () => {
       };
       answersArray.push(tempObj);
     });
-
-    if (!isAllAnswered) {
-      toast.error("Please answer all the questions before submitting.");
-      return;
-    }
 
     let newAnswersArray = [];
     let isError = false;
@@ -826,7 +819,7 @@ const PracticeLiveExam = () => {
       });
 
       const response = await ajaxCall(
-        `/answer/practice-test/`,
+        "/answer/practice-test/",
         {
           headers: {
             Accept: "application/json",

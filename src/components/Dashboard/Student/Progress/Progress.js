@@ -50,9 +50,10 @@ const Progress = () => {
     counsellingJoin: 0,
   });
 
-  const examList =
-    category === "IELTS"
-      ? [
+  const getExamList = (category) => {
+    switch (category) {
+      case "IELTS":
+        return [
           {
             name: "Mini Test",
             lastScore: miniTestData[0]?.band,
@@ -68,8 +69,19 @@ const Progress = () => {
             lastScore: fltBand,
             count: studentExams?.fullLengthTest,
           },
-        ]
-      : [
+        ];
+
+      case "PTE":
+        return [
+          { name: "Free Mock Test", count: 0 },
+          { name: "PTE Reading", count: 0 },
+          { name: "PTE Listening", count: 0 },
+          { name: "PTE Writing", count: 0 },
+          { name: "PTE Speaking", count: 0 },
+        ];
+
+      default:
+        return [
           {
             name: "Mini Test",
             lastScore: miniTestData[0]?.band,
@@ -81,76 +93,54 @@ const Progress = () => {
             count: studentExams?.practiceTest,
           },
         ];
+    }
+  };
+
+  const examList = getExamList(category);
+
+  const commonClassList = [
+    {
+      name: "Regular Class",
+      join: studentExams?.regularClassesJoin,
+    },
+    {
+      name: "Group Doubt Solving",
+      count: studentExams?.groupDoubtSolvingClass,
+      join: studentExams?.groupDoubtSolvingJoin,
+    },
+    {
+      name: "One To One Doubt Solving",
+      count: studentExams?.oneToOneDoubtSolvingClass,
+      join: studentExams?.oneToOneDoubtSolvingJoin,
+    },
+    {
+      name: "Tutor Support",
+      count: studentExams?.tutorSupport,
+      join: studentExams?.tutorSupportJoin,
+    },
+    {
+      name: "Webinar",
+      count: studentExams?.webinar,
+      join: studentExams?.webinarJoin,
+    },
+    {
+      name: "Counselling",
+      count: studentExams?.counselling,
+      join: studentExams?.counsellingJoin,
+    },
+  ];
+
+  // Speaking Practice class only for IELTS or PTE
+  const speakingPracticeClass = {
+    name: "Speaking Practice",
+    count: studentExams?.speakingPracticeClass,
+    join: studentExams?.speakingPracticeJoin,
+  };
 
   const classList =
-    category === "IELTS"
-      ? [
-          {
-            name: "Regular Class",
-            join: studentExams?.regularClassesJoin,
-          },
-          {
-            name: "Speaking Practice",
-            count: studentExams?.speakingPracticeClass,
-            join: studentExams?.speakingPracticeJoin,
-          },
-          {
-            name: "Group Doubt Solving",
-            count: studentExams?.groupDoubtSolvingClass,
-            join: studentExams?.groupDoubtSolvingJoin,
-          },
-          {
-            name: "One To One Doubt Solving",
-            count: studentExams?.oneToOneDoubtSolvingClass,
-            join: studentExams?.oneToOneDoubtSolvingJoin,
-          },
-          {
-            name: "Tutor Support",
-            count: studentExams?.tutorSupport,
-            join: studentExams?.tutorSupportJoin,
-          },
-          {
-            name: "Webinar",
-            count: studentExams?.webinar,
-            join: studentExams?.webinarJoin,
-          },
-          {
-            name: "Counselling",
-            count: studentExams?.counselling,
-            join: studentExams?.counsellingJoin,
-          },
-        ]
-      : [
-          {
-            name: "Regular Class",
-            join: studentExams?.regularClassesJoin,
-          },
-          {
-            name: "Group Doubt Solving",
-            count: studentExams?.groupDoubtSolvingClass,
-            join: studentExams?.groupDoubtSolvingJoin,
-          },
-          {
-            name: "One To One Doubt Solving",
-            count: studentExams?.oneToOneDoubtSolvingClass,
-            join: studentExams?.oneToOneDoubtSolvingJoin,
-          },
-          {
-            name: "Tutor Support",
-            count: studentExams?.tutorSupport,
-            join: studentExams?.tutorSupportJoin,
-          },
-          {
-            name: "Webinar",
-            count: studentExams?.webinar,
-            join: studentExams?.webinarJoin,
-          },
-          {
-            name: "Counselling",
-            count: studentExams?.counselling,
-            join: studentExams?.counsellingJoin,
-          },
-        ];
+    category === "IELTS" || category === "PTE"
+      ? [...commonClassList, speakingPracticeClass]
+      : commonClassList;
 
   const fetchTestData = async (url, setData) => {
     try {
@@ -622,9 +612,9 @@ const Progress = () => {
                           <div className="gridarea__wraper text-center card-background">
                             <div className="gridarea__content p-2 m-2">
                               <div className="gridarea__heading">
-                                <h3>No. of Given : {name}</h3>
+                                <h3>No. of Given: {name}</h3>
                                 <h3>{count}</h3>
-                                <h3>Last Score : {lastScore}</h3>
+                                {lastScore && <h3>Last Score: {lastScore}</h3>}
                               </div>
                             </div>
                           </div>

@@ -350,6 +350,10 @@ const Dashboard = () => {
     fetchStudentCourses();
   }, [category]);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return isLoading ? (
     <Loading />
   ) : count?.count !== 0 ? (

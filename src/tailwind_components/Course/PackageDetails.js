@@ -132,6 +132,22 @@ const PackageDetails = ({ packages, courseName, courseType }) => {
                   enabled: pkg.practice_test,
                 },
                 {
+                  label: "Full Length Test",
+                  count:
+                    pkg.full_length_test_count !== -1
+                      ? pkg.full_length_test_count
+                      : null,
+                  enabled: pkg.full_length_test,
+                },
+                {
+                  label: "Speaking Evaluation",
+                  count:
+                    pkg.speaking_test_count !== -1
+                      ? pkg.speaking_test_count
+                      : null,
+                  enabled: pkg.speaking_test,
+                },
+                {
                   label: "Writing Evaluation",
                   count:
                     pkg.writing_evaluation_count !== -1

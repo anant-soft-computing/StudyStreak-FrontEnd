@@ -4,9 +4,85 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../helpers/ajaxCall";
 import SmallModal from "../../UI/Modal";
-import DisplayLeftContainer from "../../UI/DisplayPassage";
 import Loading from "../../UI/Loading";
 const Cheerio = require("cheerio");
+
+const DisplayLeftContainer = ({ next, passage, image }) => {
+  const [highlights, setHighlights] = useState([]);
+
+  // Reset highlights when passage changes
+  useEffect(() => {
+    setHighlights([]);
+  }, [next, passage]);
+
+  const handleSelect = () => {
+    const selection = window.getSelection();
+    const text = selection.toString().trim();
+
+    if (text) {
+      // Create a new range for highlighting
+      const range = selection.getRangeAt(0);
+      const span = document.createElement("span");
+      span.style.backgroundColor = "#15f5ba";
+      span.className = "highlight-span";
+
+      try {
+        range.surroundContents(span);
+        setHighlights((prev) => [
+          ...prev,
+          {
+            text,
+            element: span,
+          },
+        ]);
+      } catch (e) {
+        console.log("Cannot highlight across multiple nodes");
+      }
+
+      // Clear the selection
+      selection.removeAllRanges();
+    }
+  };
+
+  // Function to remove all highlights
+  const clearHighlights = () => {
+    highlights.forEach(({ element }) => {
+      if (element.parentNode) {
+        const parent = element.parentNode;
+        parent.replaceChild(element.firstChild, element);
+        parent.normalize();
+      }
+    });
+    setHighlights([]);
+  };
+
+  return (
+    <div>
+      {image && (
+        <div className="text-center">
+          <img
+            className="mb-2"
+            src={image}
+            alt="Study Streak"
+            height={250}
+            width={250}
+          />
+        </div>
+      )}
+      {highlights.length > 0 && (
+        <button
+          onClick={clearHighlights}
+          className="dashboard__small__btn__2 flash-card__remove__btn"
+        >
+          <i className="icofont-ui-delete" />
+        </button>
+      )}
+      <div onMouseUp={handleSelect}>
+        <div className="mt-2" dangerouslySetInnerHTML={{ __html: passage }} />
+      </div>
+    </div>
+  );
+};
 
 const GeneralPTExam = () => {
   const containerRef = useRef(null);
@@ -677,6 +753,7 @@ const GeneralPTExam = () => {
           {examData?.passage && examData?.exam_type === "General" && (
             <div className="lv-left-container">
               <DisplayLeftContainer
+                next={next}
                 passage={examData?.passage}
                 image={examData?.passage_image}
               />

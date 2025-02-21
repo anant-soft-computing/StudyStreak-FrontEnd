@@ -73,7 +73,7 @@ const SignUp = () => {
       isValid = false;
     } else {
       const passwordRegex =
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]{8,}$/;
       if (!passwordRegex.test(formData.password)) {
         setFormError(
           "password",

@@ -239,11 +239,9 @@ const LivePTEWritingExam = () => {
 
   const handleSubmit = async () => {
     const answersArray = [];
-    let isAllAnswered = true;
 
     examAnswer.forEach((item, index) => {
       const temp = item.data.map((answer, index2) => {
-        if (answer.answer_text === "") isAllAnswered = false;
         return {
           question_number: index2 + 1,
           answer_text: answer.answer_text,
@@ -257,11 +255,6 @@ const LivePTEWritingExam = () => {
       answersArray.push(tempObj);
     });
 
-    if (!isAllAnswered) {
-      toast.error("Please answer all the questions before submitting.");
-      return;
-    }
-
     let newAnswersArray = [];
 
     try {
@@ -269,7 +262,18 @@ const LivePTEWritingExam = () => {
       await Promise.all(
         answersArray.map(async (item) => {
           let gptResponse = "";
-          let scoreValue = null;
+          let scoreValue = 0;
+
+          // Check if the answer_text is empty or not provided and skip that.
+          if (!item.data[0].answer_text) {
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: 0,
+              AI_Assessment: "",
+              data: item.data,
+            });
+            return;
+          }
 
           const passage = examData?.passage
             ? examData?.passage?.replace(/<img[^>]*>/g, "")
@@ -288,7 +292,7 @@ const LivePTEWritingExam = () => {
               {
                 role: "user",
                 content:
-                  "You are an expert evaluator for the PTE Writing Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation.",
+                  "You are an expert evaluator for the PTE Writing Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation. Follow the instructions below precisely:",
               },
               {
                 role: "user",
@@ -304,14 +308,14 @@ const LivePTEWritingExam = () => {
                 content: `Evaluate based on:${
                   questionType === "Summarize Written Text"
                     ? `
-          
+
                     Content (0-2): Does it capture all key points?
                     Form (0-1): Single sentence within word limit?
                     Grammar (0-2): Error-free sentence?
                     Vocabulary (0-2): Appropriate word choice?
                     Spelling (0-2): No spelling errors?`
                     : `
-          
+
                     Content (0-3): Complete topic coverage?
                     Form (0-2): Proper length & structure?
                     Development (0-2): Logical organization?
@@ -319,61 +323,63 @@ const LivePTEWritingExam = () => {
                     Vocabulary (0-2): Precise word choice?
                     Spelling (0-2): No spelling errors?`
                 }
-          
+
                 Provide:
-                1. **Detailed explanations** with strengths, *weaknesses, and **improvements***
-                2. **Individual criterion scores**
-                3. **Overall Score (0-90) using this exact format:**
-                   
-                   **Overall Score: (Sum × 10) / 90 = X** (For Summarize Written Text)
-                   **Overall Score: (Sum × 6) / 90 = X** (For Write Essay)
-                   
-                   - The calculation must **always** be formatted exactly as above.
-                   - No extra text or variations.
-                   
+                1. **Detailed explanations** with strengths, weaknesses, and improvements.
+                2. **Individual criterion scores**.
+                3. **Overall Score** using the exact format below:
+
+                **Overall Score: (Sum × ${
+                  questionType === "Summarize Written Text" ? "10" : "6"
+                }) / 90 = X/90**
+
+                - The calculation must **always** be formatted exactly as above.
+                - Do **not** simplify the fraction (e.g., display 80/90, not 8/10).
+                - Ensure the sum of individual scores is calculated correctly before applying the formula.
+
                 #Evaluation Format:
-          
+
                 ${
                   questionType === "Summarize Written Text"
                     ? `
                 Content: [Explanation]  
                 Score: X/2
-          
+
                 Form: [Explanation]  
                 Score: X/1
-          
+
                 Grammar: [Explanation]  
                 Score: X/2
-          
+
                 Vocabulary: [Explanation]  
                 Score: X/2
-          
+
                 Spelling: [Explanation]  
                 Score: X/2`
                     : `
                 Content: [Explanation]  
                 Score: X/3
-          
+
                 Form: [Explanation]  
                 Score: X/2
-          
+
                 Development: [Explanation]  
                 Score: X/2
-          
+
                 Grammar: [Explanation]  
                 Score: X/2
-          
+
                 Vocabulary: [Explanation]  
                 Score: X/2
-          
+
                 Spelling: [Explanation]  
                 Score: X/2`
                 }
-          
+
                 **Overall Score: (Sum × ${
                   questionType === "Summarize Written Text" ? "10" : "6"
-                }) / 90 = X**
-          
+                }) / 90 = X/90**
+
                 `,
               },
             ],
@@ -397,7 +403,7 @@ const LivePTEWritingExam = () => {
             gptResponse = data.choices[0].message.content;
 
             const scoreMatch = gptResponse.match(
-              /Overall Score:\s*(?:.*?=\s*)?(\d+(\.\d+)?)/
+              /Overall Score:\s*\(.*?\)\s*\/\s*90\s*=\s*(\d+)\/90/
             );
             scoreValue = scoreMatch ? parseFloat(scoreMatch[1]) : null;
 

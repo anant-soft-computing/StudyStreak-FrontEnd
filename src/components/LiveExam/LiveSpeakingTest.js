@@ -97,6 +97,7 @@ const LiveSpeakingExam = () => {
       );
       if (response.status === 201) {
         examLastSubmit();
+        navigate(`/MiniTest/Assessment/Speaking/${examId}`);
         toast.success("Your Exam Submitted Successfully");
       } else {
         toast.error("You Have Already Submitted This Exam");
@@ -236,14 +237,6 @@ const LiveSpeakingExam = () => {
     });
     setSpeaking(updatedSpeaking);
   };
-
-  useEffect(() => {
-    const isAllAnswered = speaking.every((item) => item.filePath !== "");
-    if (isAllAnswered) {
-      examSubmit();
-      navigate(`/MiniTest/Assessment/Speaking/${examId}`);
-    }
-  }, [speaking]);
 
   const handleReplay = (speakingContent, questionId) => {
     speak(speakingContent, questionId);
@@ -401,6 +394,9 @@ const LiveSpeakingExam = () => {
               );
             })}
           </div>
+          <button className="default__button" onClick={examSubmit}>
+            Submit
+          </button>
         </div>
       </div>
     </>

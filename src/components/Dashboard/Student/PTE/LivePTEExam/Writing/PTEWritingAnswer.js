@@ -66,7 +66,7 @@ const PTEWritingAnswer = () => {
             })
           ) : (
             <h5 className="text-center text-danger">
-              Not Assessment Available !!
+              No Assessment Available !!
             </h5>
           )}
         </div>

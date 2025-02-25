@@ -4,7 +4,6 @@ import SmallModal from "../../../../UI/Modal";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
 import { getBackgroundColor } from "../../../../../utils/background/background";
-import { speakingAssessment } from "../../../../../utils/assessment/speakingAssessment";
 import WritingAnswerTable from "../../../../Exam-Answer/AnswerTable/WritingAnswerTable";
 import SpeakingAnswerTable from "../../../../Exam-Answer/AnswerTable/SpeakingAnswerTable";
 
@@ -109,13 +108,7 @@ const ViewPTAssessment = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >
-        {Object.keys(speakingAssessment(sAssessment)).map((section, index) => (
-          <div key={index}>
-            <br />
-            <strong>{section}</strong>
-            <div>{speakingAssessment(sAssessment)[section]}</div>
-          </div>
-        ))}
+        <div dangerouslySetInnerHTML={{ __html: sAssessment }} />
       </SmallModal>
       <SmallModal
         size="lg"

@@ -66,7 +66,7 @@ const PTESpeakingAnswer = () => {
             })
           ) : (
             <h5 className="text-danger text-center">
-              Not Assessment Available !!
+              No Assessment Available !!
             </h5>
           )}
         </div>

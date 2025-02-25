@@ -953,7 +953,7 @@ const FullLengthLiveExam = () => {
       });
 
       const response = await ajaxCall(
-        `/answer/full-length-test/`,
+        "/answer/full-length-test/",
         {
           headers: {
             Accept: "application/json",
@@ -1459,7 +1459,6 @@ const FullLengthLiveExam = () => {
                     <span>{numberOfWord} Words</span>
                   </div>
                 )}
-                {/* {examData?.exam_type === "Speaking" && recorderContainer} */}
               </div>
             </div>
           )}

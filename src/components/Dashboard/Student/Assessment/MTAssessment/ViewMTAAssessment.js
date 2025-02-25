@@ -4,8 +4,6 @@ import SmallModal from "../../../../UI/Modal";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 import ScoreCard from "../../../../Exam-Answer/ScoreCard/ScoreCard";
 import { getBackgroundColor } from "../../../../../utils/background/background";
-import { writingAssessment } from "../../../../../utils/assessment/writingAssessment";
-import { speakingAssessment } from "../../../../../utils/assessment/speakingAssessment";
 
 const ViewMTAAssessment = () => {
   const { examId, examType } = useParams();
@@ -71,28 +69,23 @@ const ViewMTAAssessment = () => {
   };
 
   const renderWritingAssessment = () => {
-    const assessments = writingAssessment(examData?.AI_Assessment);
     return (
       <div>
         <div className="writing__exam" style={{ marginTop: "0px" }}>
           <div className="dashboard__section__title">
             <h4 className="sidebar__title">AI Assessment</h4>
           </div>
-          <div className="gptResponse">
-            {assessments ? (
-              Object.entries(assessments).map(([section, content], index) => (
-                <div key={index}>
-                  <br />
-                  <strong>{section}</strong>
-                  <div>{content}</div>
-                </div>
-              ))
-            ) : (
-              <h5 className="text-center text-danger">
-                "Assessment By AI Will Be Displayed Here"
-              </h5>
-            )}
-          </div>
+          {examData?.AI_Assessment &&
+          examData?.AI_Assessment.trim() !== "<p></p>" ? (
+            <div
+              className="gptResponse"
+              dangerouslySetInnerHTML={{ __html: examData?.AI_Assessment }}
+            ></div>
+          ) : (
+            <h5 className="text-center text-danger">
+              No Assessment Available !!
+            </h5>
+          )}
         </div>
         <div className="writing__exam">
           <div className="dashboard__section__title">
@@ -227,15 +220,7 @@ const ViewMTAAssessment = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >
-        {Object.entries(speakingAssessment(assessment)).map(
-          ([section, content], index) => (
-            <div key={index}>
-              <br />
-              <strong>{section}</strong>
-              <div>{content}</div>
-            </div>
-          )
-        )}
+        <div dangerouslySetInnerHTML={{ __html: assessment }} />
       </SmallModal>
       <SmallModal
         size="lg"

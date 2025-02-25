@@ -74,6 +74,10 @@ const AudioRecorder = ({
 
   useEffect(() => {
     if (audioBlob) {
+      if (!transcript || transcript.trim().length === 0) {
+        console.log("No Transcript Available. Skip ChatGPT Analysis.");
+        return;
+      }
       const formData = new FormData();
       formData.append("question_number", question_number);
       formData.append("extension", "mp3");
@@ -93,26 +97,26 @@ const AudioRecorder = ({
           {
             role: "user",
             content: `Analyse The Package For IELTS Speaking Task With Following Criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
-    
-            Assessment Criteria:
-    
-            Task:
-    
-            Fluency: Refers to the ability to speak at a natural pace without excessive pausing or hesitation. The speaker should be able to maintain a smooth flow of speech without too many self-corrections or repetition.
-    
-            Coherence: Involves logical organization of ideas, effective use of linking words, and the ability to convey information clearly. The speaker should be able to connect sentences and ideas in a way that makes their speech easy to follow.
-    
-            Range of Vocabulary: The use of a wide range of vocabulary relevant to the topic. The examiner looks for both everyday vocabulary and less common or idiomatic language.
-    
-            Accuracy and Appropriacy: The correct use of words and phrases, appropriate word choice for context, and the ability to paraphrase effectively when necessary. Minor errors are acceptable if they do not impede communication.
-            
-            Range of Grammar: Use of various sentence structures, such as simple, compound, and complex sentences. The use of different grammatical forms, including tenses, conditionals, passive voice, and modal verbs.
-            
-            Accuracy: Correct use of grammar, with attention to verb forms, word order, and subject-verb agreement. Occasional errors are acceptable if they do not affect understanding.
-            
-            Intelligibility: The ability to be understood throughout the speaking test. This includes clarity of speech, correct pronunciation of words, and consistent use of stress and intonation patterns.
-            
-            Range of Pronunciation Features: The use of features such as rhythm, intonation, stress patterns, and connected speech. Effective use of these features helps convey meaning and maintain the listener's interest.`,
+      
+              Assessment Criteria:
+      
+              Task:
+      
+              Fluency: Refers to the ability to speak at a natural pace without excessive pausing or hesitation. The speaker should be able to maintain a smooth flow of speech without too many self-corrections or repetition.
+      
+              Coherence: Involves logical organization of ideas, effective use of linking words, and the ability to convey information clearly. The speaker should be able to connect sentences and ideas in a way that makes their speech easy to follow.
+      
+              Range of Vocabulary: The use of a wide range of vocabulary relevant to the topic. The examiner looks for both everyday vocabulary and less common or idiomatic language.
+      
+              Accuracy and Appropriacy: The correct use of words and phrases, appropriate word choice for context, and the ability to paraphrase effectively when necessary. Minor errors are acceptable if they do not impede communication.
+              
+              Range of Grammar: Use of various sentence structures, such as simple, compound, and complex sentences. The use of different grammatical forms, including tenses, conditionals, passive voice, and modal verbs.
+              
+              Accuracy: Correct use of grammar, with attention to verb forms, word order, and subject-verb agreement. Occasional errors are acceptable if they do not affect understanding.
+              
+              Intelligibility: The ability to be understood throughout the speaking test. This includes clarity of speech, correct pronunciation of words, and consistent use of stress and intonation patterns.
+              
+              Range of Pronunciation Features: The use of features such as rhythm, intonation, stress patterns, and connected speech. Effective use of these features helps convey meaning and maintain the listener's interest.`,
           },
           {
             role: "user",
@@ -125,16 +129,16 @@ const AudioRecorder = ({
           {
             role: "user",
             content: `Give band explanation as #Explanation:  
-              
-              Fluency and Coherence: 
-    
-              Lexical Resource:
-    
-              Grammatical Range and Accuracy:
-    
-              Pronunciation:
-              
-              as #Band:bandValue`,
+                
+                Fluency and Coherence: 
+      
+                Lexical Resource:
+      
+                Grammatical Range and Accuracy:
+      
+                Pronunciation:
+                
+                as #Band:bandValue`,
           },
         ],
       };
@@ -158,13 +162,19 @@ const AudioRecorder = ({
           }
 
           const data = await gptResponse.json();
-          const aiAssessment = data?.choices?.[0]?.message?.content || "";
+          const aiAssessment = data?.choices?.[0]?.message?.content;
 
           const pattern = /\b\d+(?:\.\d+)?\b/g;
           const matches = aiAssessment.match(pattern);
           const bandValue = matches ? matches[matches.length - 1] : 0;
 
-          formData.append("AI_Assessment", aiAssessment);
+          // Convert aiAssessment to HTML format
+          const assessment = aiAssessment
+          .split("\n")
+          .map((line) => `<p>${line}</p>`)
+          .join("");
+
+          formData.append("AI_Assessment", assessment);
           formData.append("band", bandValue);
 
           ajaxCall(

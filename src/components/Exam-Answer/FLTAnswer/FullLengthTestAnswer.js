@@ -10,7 +10,6 @@ import ScoreCard from "../ScoreCard/ScoreCard";
 import AnswerTable from "../AnswerTable/AnswerTable";
 import WritingAnswerTable from "../AnswerTable/WritingAnswerTable";
 import SpeakingAnswerTable from "../AnswerTable/SpeakingAnswerTable";
-import { speakingAssessment } from "../../../utils/assessment/speakingAssessment";
 
 const FullLengthTestAnswer = () => {
   const { examId } = useParams();
@@ -315,15 +314,7 @@ const FullLengthTestAnswer = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
-          {Object.keys(speakingAssessment(sAssessment)).map(
-            (section, index) => (
-              <div key={index}>
-                <br />
-                <strong>{section}</strong>
-                <div>{speakingAssessment(sAssessment)[section]}</div>
-              </div>
-            )
-          )}
+          <div dangerouslySetInnerHTML={{ __html: sAssessment }} />
         </SmallModal>
       )}
       {isTutorModalOpen && (

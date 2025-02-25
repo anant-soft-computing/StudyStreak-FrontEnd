@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import ScoreCard from "./ScoreCard/ScoreCard";
-import { getBackgroundColor } from "../../utils/background/background";
 import AnswerTable from "./AnswerTable/AnswerTable";
-import { writingAssessment } from "../../utils/assessment/writingAssessment";
+import { getBackgroundColor } from "../../utils/background/background";
 
 const Answer = () => {
   const { examId } = useParams();
@@ -109,8 +108,6 @@ const Answer = () => {
     }
   }, [studentAnswers, correctAnswer]);
 
-  const aiAssessment = gptResponse ? writingAssessment(gptResponse) : {};
-
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -155,22 +152,16 @@ const Answer = () => {
                       <div className="dashboard__section__title">
                         <h4 className="sidebar__title">Assessment</h4>
                       </div>
-                      <div className="gptResponse">
-                        {Object.keys(aiAssessment)?.length > 0 && (
-                          <>
-                            <h4>#Explanation:</h4>
-                            {Object.keys(aiAssessment)?.map(
-                              (section, index) => (
-                                <div key={index}>
-                                  <br />
-                                  <strong>{section}</strong>
-                                  <div>{aiAssessment[section]}</div>
-                                </div>
-                              )
-                            )}
-                          </>
-                        )}
-                      </div>
+                      {gptResponse && gptResponse.trim() !== "<p></p>" ? (
+                        <div
+                          className="gptResponse"
+                          dangerouslySetInnerHTML={{ __html: gptResponse }}
+                        ></div>
+                      ) : (
+                        <h5 className="text-center text-danger">
+                          No Assessment Available !!
+                        </h5>
+                      )}
                     </div>
                   )}
                   {(examType === "Reading" || examType === "Listening") && (

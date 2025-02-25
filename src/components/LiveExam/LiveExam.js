@@ -193,57 +193,61 @@ const LiveExam = () => {
       });
     });
 
-    // Call ChaGpt API for checking the answer
-    const gptBody = {
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "user",
-          content: `Analyze the following IELTS Writing Task 1 response according to the official IELTS assessment criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
-  
-          Assessment Criteria:
-  
-          Task 1:
-  
-          Task Achievement: Does the response fully address all parts of the task with a clear overview and well-developed details?
-  
-          Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately and accurately?
-  
-          Lexical Resource: Is a wide range of vocabulary used accurately and appropriately, including less common lexical items?
-  
-          Grammatical Range and Accuracy: Are a variety of complex grammatical structures used accurately? Is punctuation used correctly?`,
-        },
-        {
-          role: "user",
-          content: `Questions: ${examData?.passage?.replace(
-            /<img[^>]*>/g,
-            ""
-          )}`,
-        },
-        {
-          role: "user",
-          content: `Answers: ${examAnswer[0].answers[0].answer}`,
-        },
-        {
-          role: "user",
-          content: `Give band explanation as #Explanation:  
-            
-            Task Achievement: 
-  
-            Coherence and Cohesion:
-  
-            Lexical Resource:
-  
-            Grammatical Range and Accuracy:
-            
-            as #Band:bandValue`,
-        },
-      ],
-    };
+    let gptResponse = "";
+    let bandValue = 0.0;
 
-    try {
-      let gptResponse;
-      let bandValue;
+    // Check if the answer is not empty or undefined
+    if (
+      examAnswer[0].answers[0].answer &&
+      examAnswer[0].answers[0].answer.trim() !== ""
+    ) {
+      // Call ChaGpt API for checking the answer
+      const gptBody = {
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "user",
+            content: `Analyze the following IELTS Writing Task 1 response according to the official IELTS assessment criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
+    
+            Assessment Criteria:
+    
+            Task 1:
+    
+            Task Achievement: Does the response fully address all parts of the task with a clear overview and well-developed details?
+    
+            Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately and accurately?
+    
+            Lexical Resource: Is a wide range of vocabulary used accurately and appropriately, including less common lexical items?
+    
+            Grammatical Range and Accuracy: Are a variety of complex grammatical structures used accurately? Is punctuation used correctly?`,
+          },
+          {
+            role: "user",
+            content: `Questions: ${examData?.passage?.replace(
+              /<img[^>]*>/g,
+              ""
+            )}`,
+          },
+          {
+            role: "user",
+            content: `Answers: ${examAnswer[0].answers[0].answer}`,
+          },
+          {
+            role: "user",
+            content: `Give band explanation as #Explanation:  
+              
+              Task Achievement: 
+    
+              Coherence and Cohesion:
+    
+              Lexical Resource:
+    
+              Grammatical Range and Accuracy:
+              
+              as #Band:bandValue`,
+          },
+        ],
+      };
 
       try {
         const res = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -262,60 +266,58 @@ const LiveExam = () => {
 
         // Extract band value using regex
         const bandMatch = gptResponse.match(/#Band:\s*(\d+(\.\d+)?)/);
-        bandValue = bandMatch ? bandMatch[1] : null;
+        bandValue = bandMatch ? bandMatch[1] : 0.0;
       } catch (error) {
         toast.error(
           "Error occurred while fetching data from AI. Please try again."
         );
         return;
       }
+    }
 
-      // Convert gptResponse to HTML format
-      const formattedResponse = gptResponse
-        .split("\n")
-        .map((line) => `<p>${line}</p>`)
-        .join("");
+    // Convert gptResponse to HTML format
+    const formattedResponse = gptResponse
+      .split("\n")
+      .map((line) => `<p>${line}</p>`)
+      .join("");
 
-      const data = JSON.stringify({
-        student_exam: answersArray,
-        user: userData?.userId,
-        exam: parseInt(examId),
-        AI_Assessment: formattedResponse,
-        band: bandValue,
-        exam_type: examData?.exam_type,
-      });
+    const data = JSON.stringify({
+      student_exam: answersArray,
+      user: userData?.userId,
+      exam: parseInt(examId),
+      AI_Assessment: formattedResponse,
+      band: bandValue,
+      exam_type: examData?.exam_type,
+    });
 
-      try {
-        const response = await ajaxCall(
-          `/studentanswerlistview/`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "POST",
-            body: data,
+    try {
+      const response = await ajaxCall(
+        "/studentanswerlistview/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
-          8000
-        );
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
 
-        if (response.status === 201) {
-          setTimerRunning(false);
-          examSubmit();
-          navigate(`/MiniTest/Answer/${examData?.id}`);
-        } else if (response.status === 400) {
-          toast.error("Please Submit Your Exam Answer");
-        } else {
-          toast.error("Some Problem Occurred. Please try again.");
-        }
-      } catch (error) {
+      if (response.status === 201) {
+        setTimerRunning(false);
+        examSubmit();
+        navigate(`/MiniTest/Answer/${examData?.id}`);
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error("Some Problem Occurred. Please try again.");
     }
   };
 
@@ -381,7 +383,7 @@ const LiveExam = () => {
       });
 
       const response = await ajaxCall(
-        `/studentanswerlistview/`,
+        "/studentanswerlistview/",
         {
           headers: {
             Accept: "application/json",

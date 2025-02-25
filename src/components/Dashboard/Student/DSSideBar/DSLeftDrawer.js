@@ -277,6 +277,12 @@ const DSLeftDrawer = () => {
             link: "/resources",
           },
           {
+            name: "Recorded Classes",
+            icon: <Videotape />,
+            link: "/recordedClasses",
+            state: { packageCount: count?.count },
+          },
+          {
             name: "Flash Card",
             icon: <WalletCards />,
             link: "/flashCard",

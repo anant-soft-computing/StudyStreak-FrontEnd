@@ -96,7 +96,6 @@ const PracticeLiveExam = () => {
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const examId = useLocation()?.pathname?.split("/")?.[4];
   const [examData, setExamData] = useState([]);
-  const [examBlock, setExamBlock] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
   const [uniqueIdArr, setUniqueIdArr] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
@@ -210,7 +209,6 @@ const PracticeLiveExam = () => {
         })
       );
       setReRenderAudio(true);
-      setExamBlock(examBlockWithNumbers);
       setExamData(examBlockWithNumbers[next]);
     }
   }, [examForm, examType, fullPaper, next]);
@@ -724,7 +722,7 @@ const PracticeLiveExam = () => {
       });
 
       const response = await ajaxCall(
-        `/answer/practice-test/`,
+        "/answer/practice-test/",
         {
           headers: {
             Accept: "application/json",
@@ -772,17 +770,26 @@ const PracticeLiveExam = () => {
     });
 
     let newAnswersArray = [];
-    let isError = false;
     try {
       // Wait for all ChatGPT API calls to complete
       await Promise.all(
         answersArray.map(async (item) => {
           let gptResponse = "";
-          let bandValue = null;
+          let bandValue = 0;
 
-          const examItem = examBlock.find((exam) => exam.id === item.exam_id);
-          const passage = examItem
-            ? examItem.passage?.replace(/<img[^>]*>/g, "")
+          // Check if the answer_text is empty or not provided and skip that.
+          if (!item.data[0].answer_text) {
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: 0,
+              AI_Assessment: "",
+              data: item.data,
+            });
+            return;
+          }
+
+          const passage = examData?.passage
+            ? examData?.passage?.replace(/<img[^>]*>/g, "")
             : "Passage not found";
 
           const gptBody = {
@@ -848,42 +855,28 @@ const PracticeLiveExam = () => {
 
             // Use regex to extract the band value
             const bandMatch = gptResponse.match(/Band:\s*(\d+(\.\d+)?)/);
-            bandValue = bandMatch ? bandMatch[1] : null;
+            bandValue = bandMatch ? bandMatch[1] : 0;
 
-            if (!bandValue) {
-              isError = true;
-              toast.error(
-                "Band value could not be extracted. Please try again."
-              );
-              return;
-            }
+            // Convert gptResponse to HTML format
+            const formattedResponse = gptResponse
+              .split("\n")
+              .map((line) => `<p>${line}</p>`)
+              .join("");
+
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: bandValue,
+              AI_Assessment: formattedResponse,
+              data: item.data,
+            });
           } else {
-            isError = true;
             toast.error("AI response is empty. Please try again.");
             return;
           }
-
-          // Convert gptResponse to HTML format
-          const formattedResponse = gptResponse
-            .split("\n")
-            .map((line) => `<p>${line}</p>`)
-            .join("");
-
-          newAnswersArray.push({
-            exam_id: item.exam_id,
-            band: bandValue,
-            AI_Assessment: formattedResponse,
-            data: item.data,
-          });
         })
       );
     } catch (error) {
-      isError = true;
       toast.error("Some Problem Occurred. Please try again.");
-    }
-
-    if (isError) {
-      return;
     }
 
     try {

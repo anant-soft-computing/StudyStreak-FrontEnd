@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ajaxCall from "../../../../helpers/ajaxCall";
 import SmallModal from "../../../UI/Modal";
-import { speakingAssessment } from "../../../../utils/assessment/speakingAssessment";
 import QuestionCard from "../../../Exam-Answer/FLTAnswer/QuestionCard";
 import WritingAnswerTable from "../../../Exam-Answer/AnswerTable/WritingAnswerTable";
 import SpeakingAnswerTable from "../../../Exam-Answer/AnswerTable/SpeakingAnswerTable";
@@ -286,7 +285,6 @@ const DiagnosticTestAnswer = () => {
                         <div className="text-center">{percentage} %</div>
                       </div>
                     </div>
-                    
                     {/* Reading */}
                     <div className="writing__exam">
                       <div className="dashboard__section__title">
@@ -458,15 +456,7 @@ const DiagnosticTestAnswer = () => {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
-          {Object.keys(speakingAssessment(sAssessment)).map(
-            (section, index) => (
-              <div key={index}>
-                <br />
-                <strong>{section}</strong>
-                <div>{speakingAssessment(sAssessment)[section]}</div>
-              </div>
-            )
-          )}
+          <div dangerouslySetInnerHTML={{ __html: sAssessment }} />
         </SmallModal>
       )}
       {isTutorModalOpen && (

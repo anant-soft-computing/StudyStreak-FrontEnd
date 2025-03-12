@@ -28,6 +28,14 @@ const Progress = () => {
     .filter((badge) => totalPoints >= badge.points_required)
     .sort((a, b) => a.points_required - b.points_required);
 
+  const [examPTE, setExamPTE] = useState({
+    PTEReading: 0,
+    PTEListening: 0,
+    PTEWriting: 0,
+    PTESpeaking: 0,
+    PTEFreeMockTest: 0,
+  });
+
   const [studentExams, setStudentExams] = useState({
     miniTest: 0,
     practiceTest: 0,
@@ -73,11 +81,11 @@ const Progress = () => {
 
       case "PTE":
         return [
-          { name: "Free Mock Test", count: 0 },
-          { name: "PTE Reading", count: 0 },
-          { name: "PTE Listening", count: 0 },
-          { name: "PTE Writing", count: 0 },
-          { name: "PTE Speaking", count: 0 },
+          { name: "Free Mock Test", count: examPTE.PTEFreeMockTest },
+          { name: "PTE Reading", count: examPTE.PTEReading },
+          { name: "PTE Listening", count: examPTE.PTEListening },
+          { name: "PTE Writing", count: examPTE.PTEWriting },
+          { name: "PTE Speaking", count: examPTE.PTESpeaking },
         ];
 
       default:
@@ -503,6 +511,40 @@ const Progress = () => {
     }
     return 0;
   };
+
+  useEffect(() => {
+    if (category === "PTE") {
+      (async () => {
+        try {
+          const response = await ajaxCall(
+            "/given-test-count/?category=PTE",
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "GET",
+            },
+            8000
+          );
+          if (response.status === 200) {
+            setExamPTE({
+              PTEFreeMockTest: response.data.flt_count,
+              PTEReading: response.data.reading_count,
+              PTEListening: response.data.listening_count,
+              PTEWriting: response.data.writing_count,
+              PTESpeaking: response.data.speaking_count,
+            });
+          }
+        } catch (error) {
+          console.log("error:", error);
+        }
+      })();
+    }
+  }, [category]);
 
   useEffect(() => {
     (async () => {

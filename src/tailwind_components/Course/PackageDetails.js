@@ -74,7 +74,7 @@ const PackageDetails = ({ packages, courseName, courseType }) => {
                 {pkg.duration && (
                   <div className="inline-flex items-center gap-1.5 bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
                     <Clock size={14} />
-                    Validity : {pkg.duration} Months
+                    Duration : {pkg.duration} Months
                   </div>
                 )}
                 {courseType === "TAUGHT" && (
@@ -89,7 +89,7 @@ const PackageDetails = ({ packages, courseName, courseType }) => {
                 </div>
                 <div className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 px-3 py-1 rounded-full text-sm font-medium">
                   <LibraryBig size={14} />
-                  E-Librarary
+                  E-Library
                 </div>
                 {pkg.practice_test && (
                   <div className="inline-flex items-center gap-1.5 bg-success-100 text-success-700 px-3 py-1 rounded-full text-sm font-medium">

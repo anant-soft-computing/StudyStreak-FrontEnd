@@ -1,100 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Table from "../../../../UI/Table";
 import Loading from "../../../../UI/Loading";
 import DSSidebar from "../../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const pteSpeakingCategory = [
-  { name: "Read aloud [RA]", value: "RA" },
-  { name: "Repeat sentence [RS]", value: "RS" },
-  { name: "Describe image [DI]", value: "DI" },
-  { name: "Re-tell lecture [RL]", value: "RL" },
-  { name: "Answer short question [ASQ]", value: "ASQ" },
-  { name: "Respond to a sitution [RTS]", value: "RTS" },
-  { name: "Summarize group discussion [SGD]", value: "SGD" },
-];
-
 const Speaking = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [givenTest, setGivenTest] = useState([]);
-  const [speakingData, setSpeakingData] = useState([]);
-  const [subCategory, setSubCategory] = useState(pteSpeakingCategory[0].value);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/student-stats/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setGivenTest(response?.data?.student_pt);
-        }
-      } catch (error) {
-        console.log("error:", error);
-      }
-    })();
-  }, []);
-
-  const testButton = (params) => {
-    const { id: examId, IELTS, sub_category } = params.data;
-    const paperId = IELTS?.id;
-    const isGiven = givenTest?.some((test) => test === examId);
-
-    return isGiven ? (
-      <button
-        className="take-test"
-        style={{ backgroundColor: "green", border: "1px solid green" }}
-        onClick={() => {
-          navigate(`/PTE/Speaking/${paperId}`);
-        }}
-      >
-        Review Test
-      </button>
-    ) : (
-      <button
-        className="take-test"
-        onClick={() => {
-          if (sub_category === "RA") {
-            window.open(`/PTE/IELTS/Speaking/RA/${examId}`, "_blank");
-          } else if (sub_category === "RS") {
-            window.open(`/PTE/IELTS/Speaking/RS/${examId}`, "_blank");
-          } else if (sub_category === "DI") {
-            window.open(`/PTE/IELTS/Speaking/DI/${examId}`, "_blank");
-          } else if (sub_category === "RL") {
-            window.open(`/PTE/IELTS/Speaking/RL/${examId}`, "_blank");
-          } else if (sub_category === "ASQ") {
-            window.open(`/PTE/IELTS/Speaking/ASQ/${examId}`, "_blank");
-          } else if (sub_category === "RTS") {
-            window.open(`/PTE/IELTS/Speaking/RTS/${examId}`, "_blank");
-          } else if (sub_category === "SGD") {
-            window.open(`/PTE/IELTS/Speaking/SGD/${examId}`, "_blank");
-          }
-        }}
-      >
-        Take Test
-      </button>
-    );
-  };
+  const [speakingData, setSpeakingData] = useState({
+    RA: {},
+    RS: {},
+    DI: {},
+    RL: {},
+    ASQ: {},
+    RTS: {},
+    SGD: {},
+  });
 
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/ct/ielts/practice-tests/?exam_type=Speaking&category=PTE&sub_category=${subCategory}`,
+          `/ct/ielts/practice-tests/?exam_type=Speaking&category=PTE`,
           {
             headers: {
               Accept: "application/json",
@@ -108,7 +34,18 @@ const Speaking = () => {
           8000
         );
         if (response.status === 200) {
-          setSpeakingData(response?.data);
+          setSpeakingData({
+            RA: response.data.find((item) => item.sub_category === "RA") || {},
+            RS: response.data.find((item) => item.sub_category === "RS") || {},
+            DI: response.data.find((item) => item.sub_category === "DI") || {},
+            RL: response.data.find((item) => item.sub_category === "RL") || {},
+            ASQ:
+              response.data.find((item) => item.sub_category === "ASQ") || {},
+            RTS:
+              response.data.find((item) => item.sub_category === "RTS") || {},
+            SGD:
+              response.data.find((item) => item.sub_category === "SGD") || {},
+          });
         }
       } catch (error) {
         console.log("error", error);
@@ -117,63 +54,25 @@ const Speaking = () => {
       }
     };
     fetchData();
-  }, [subCategory]);
+  }, []);
 
-  const columns = [
-    {
-      headerName: "Take Test",
-      field: "button",
-      cellRenderer: testButton,
-      width: 200,
-    },
-    {
-      headerName: "Name",
-      field: "Name",
-      cellRenderer: (params) => {
-        return params.data.IELTS?.Name;
-      },
-      filter: true,
-      width: 350,
-    },
-    {
-      headerName: "Questions",
-      field: "questions",
-      cellRenderer: (params) => {
-        return params.data.speaking_block_count;
-      },
-      filter: true,
-      width: 300,
-    },
-    {
-      headerName: "Time",
-      field: "time",
-      cellRenderer: () => {
-        return "15 Minutes";
-      },
-      filter: true,
-      width: 300,
-    },
-    {
-      headerName: "Status",
-      field: "Status",
-      cellRenderer: (params) => {
-        const examId = params.data.id;
-        const isGiven = givenTest?.some((test) => test === examId);
-
-        return isGiven ? (
-          <button className="given-tag" style={{ backgroundColor: "green" }}>
-            Given
-          </button>
-        ) : (
-          <button className="given-tag" style={{ backgroundColor: "red" }}>
-            Not Given
-          </button>
-        );
-      },
-      filter: true,
-      width: 300,
-    },
-  ];
+  const handleCardClick = (sub_category, examId) => {
+    const url =
+      sub_category === "RA"
+        ? `/PTE/IELTS/Speaking/RA/${examId}`
+        : sub_category === "RS"
+        ? `/PTE/IELTS/Speaking/RS/${examId}`
+        : sub_category === "DI"
+        ? `/PTE/IELTS/Speaking/DI/${examId}`
+        : sub_category === "RL"
+        ? `/PTE/IELTS/Speaking/RL/${examId}`
+        : sub_category === "ASQ"
+        ? `/PTE/IELTS/Speaking/ASQ/${examId}`
+        : sub_category === "RTS"
+        ? `/PTE/IELTS/Speaking/RTS/${examId}`
+        : `/PTE/IELTS/Speaking/SGD/${examId}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="body__wrapper">
@@ -187,29 +86,35 @@ const Speaking = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>PTE Speaking</h4>
-                      <div className="dashboard__form__wraper">
-                        <div className="dashboard__form__input">
-                          <label>Speaking Exam Type</label>
-                          <select
-                            className="form-select"
-                            name="speakingExamType"
-                            value={subCategory}
-                            onChange={(e) => setSubCategory(e.target.value)}
-                          >
-                            {pteSpeakingCategory.map((item, index) => (
-                              <option key={index} value={item.value}>
-                                {item.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
                     </div>
                     <div className="row">
                       {isLoading ? (
                         <Loading />
-                      ) : speakingData.length > 0 ? (
-                        <Table rowData={speakingData} columnDefs={columns} />
+                      ) : Object.values(speakingData).some(
+                          (tests) => Object.keys(tests).length > 0
+                        ) ? (
+                        Object.values(speakingData)
+                          .filter((data) => Object.keys(data).length > 0)
+                          .map((data, index) => (
+                            <div
+                              className="col-xl-4 column__custom__class"
+                              key={index}
+                              onClick={() =>
+                                handleCardClick(data.sub_category, data.id)
+                              }
+                              style={{ cursor: "pointer" }}
+                            >
+                              <div className="gridarea__wraper text-center card-background">
+                                <div className="gridarea__content p-3 m-2">
+                                  <div className="gridarea__heading">
+                                    <h3 className="text-center">
+                                      {data?.IELTS?.Name}
+                                    </h3>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))
                       ) : (
                         <h5 className="text-center text-danger">
                           No Speaking Tests Available !!

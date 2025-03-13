@@ -1,91 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Table from "../../../../UI/Table";
 import Loading from "../../../../UI/Loading";
 import DSSidebar from "../../DSSideBar/DSSideBar";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const pteReadingCategory = [
-  { name: "R&W: Fill in the blanks [RWFIB]", value: "RWFIB" },
-  { name: "MC, choose multiple answers [CMA]", value: "CMA" },
-  { name: "Re-order paragraphs [ROP]", value: "ROP" },
-  { name: "R: Fill in the blanks [RFIB]", value: "RFIB" },
-  { name: "MC, choose single answer [CSA]", value: "CSA" },
-];
-
 const Reading = () => {
-  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [givenTest, setGivenTest] = useState([]);
-  const [readingData, setReadingData] = useState([]);
-  const [subCategory, setSubCategory] = useState(pteReadingCategory[0].value);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await ajaxCall(
-          "/student-stats/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "GET",
-          },
-          8000
-        );
-        if (response.status === 200) {
-          setGivenTest(response?.data?.student_pt);
-        }
-      } catch (error) {
-        console.log("error:", error);
-      }
-    })();
-  }, []);
-
-  const testButton = (params) => {
-    const { id: examId, IELTS, sub_category } = params.data;
-    const paperId = IELTS?.id;
-    const isGiven = givenTest?.some((test) => test === examId);
-
-    return isGiven ? (
-      <button
-        className="take-test"
-        onClick={() => {
-          navigate(`/PTE/Reading/${paperId}`);
-        }}
-        style={{ backgroundColor: "green", border: "1px solid green" }}
-      >
-        Review Test
-      </button>
-    ) : (
-      <button
-        className="take-test"
-        onClick={() => {
-          if (sub_category === "RFIB") {
-            window.open(`/PTE/IELTS/Reading/RFIB/${examId}`, "_blank");
-          } else {
-            window.open(
-              `/PTE/IELTS/Reading/${sub_category}/${examId}`,
-              "_blank"
-            );
-          }
-        }}
-      >
-        Take Test
-      </button>
-    );
-  };
+  const [readingData, setReadingData] = useState({
+    RWFIB: {},
+    CMA: {},
+    ROP: {},
+    RFIB: {},
+    CSA: {},
+  });
 
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
       try {
         const response = await ajaxCall(
-          `/ct/ielts/practice-tests/?exam_type=Reading&category=PTE&sub_category=${subCategory}`,
+          `/ct/ielts/practice-tests/?exam_type=Reading&category=PTE`,
           {
             headers: {
               Accept: "application/json",
@@ -99,7 +32,13 @@ const Reading = () => {
           8000
         );
         if (response.status === 200) {
-          setReadingData(response?.data);
+          setReadingData({
+            RWFIB: response.data.find((item) => item.sub_category === "RWFIB") || {},
+            CMA: response.data.find((item) => item.sub_category === "CMA") || {},
+            ROP: response.data.find((item) => item.sub_category === "ROP") || {},
+            RFIB: response.data.find((item) => item.sub_category === "RFIB") || {},
+            CSA: response.data.find((item) => item.sub_category === "CSA") || {},
+          });
         }
       } catch (error) {
         console.log("error", error);
@@ -108,63 +47,15 @@ const Reading = () => {
       }
     };
     fetchData();
-  }, [subCategory]);
+  }, []);
 
-  const columns = [
-    {
-      headerName: "Take Test",
-      field: "button",
-      cellRenderer: testButton,
-      width: 200,
-    },
-    {
-      headerName: "Name",
-      field: "Name",
-      cellRenderer: (params) => {
-        return params.data.IELTS?.Name;
-      },
-      filter: true,
-      width: 350,
-    },
-    {
-      headerName: "Questions",
-      field: "questions",
-      cellRenderer: (params) => {
-        return params.data.reading_block_count;
-      },
-      filter: true,
-      width: 300,
-    },
-    {
-      headerName: "Time",
-      field: "time",
-      cellRenderer: () => {
-        return "60 Minutes";
-      },
-      filter: true,
-      width: 300,
-    },
-    {
-      headerName: "Status",
-      field: "Status",
-      cellRenderer: (params) => {
-        const examId = params.data.id;
-        const isGiven = givenTest?.some((test) => test === examId);
-
-        return isGiven ? (
-          <button className="given-tag" style={{ backgroundColor: "green" }}>
-            Given
-          </button>
-        ) : (
-          <button className="given-tag" style={{ backgroundColor: "red" }}>
-            Not Given
-          </button>
-        );
-      },
-      filter: true,
-      width: 300,
-    },
-  ];
+  const handleCardClick = (sub_category, examId) => {
+    const url =
+      sub_category === "RFIB"
+        ? `/PTE/IELTS/Reading/RFIB/${examId}`
+        : `/PTE/IELTS/Reading/${sub_category}/${examId}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <div className="body__wrapper">
@@ -178,29 +69,35 @@ const Reading = () => {
                   <div className="dashboard__content__wraper common-background-color-across-app">
                     <div className="dashboard__section__title">
                       <h4>PTE Reading</h4>
-                      <div className="dashboard__form__wraper">
-                        <div className="dashboard__form__input">
-                          <label>Reading Exam Type</label>
-                          <select
-                            className="form-select"
-                            name="readingExamType"
-                            value={subCategory}
-                            onChange={(e) => setSubCategory(e.target.value)}
-                          >
-                            {pteReadingCategory.map((option, index) => (
-                              <option key={index} value={option.value}>
-                                {option.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
                     </div>
                     <div className="row">
                       {isLoading ? (
                         <Loading />
-                      ) : readingData.length > 0 ? (
-                        <Table rowData={readingData} columnDefs={columns} />
+                      ) : Object.values(readingData).some(
+                          (tests) => Object.keys(tests).length > 0
+                        ) ? (
+                        Object.values(readingData)
+                          .filter((data) => Object.keys(data).length > 0)
+                          .map((data, index) => (
+                            <div
+                              className="col-xl-4 column__custom__class"
+                              key={index}
+                              onClick={() =>
+                                handleCardClick(data.sub_category, data.id)
+                              }
+                              style={{ cursor: "pointer" }}
+                            >
+                              <div className="gridarea__wraper text-center card-background">
+                                <div className="gridarea__content p-3 m-2">
+                                  <div className="gridarea__heading">
+                                    <h3 className="text-center">
+                                      {data?.IELTS?.Name}
+                                    </h3>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))
                       ) : (
                         <h5 className="text-center text-danger">
                           No Reading Tests Available !!

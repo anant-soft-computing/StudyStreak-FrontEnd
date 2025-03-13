@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { Search, Clock, Calendar, ArrowRight } from "lucide-react";
@@ -167,7 +168,15 @@ const CoursesPage = () => {
   }, []);
 
   return (
-    <>
+    <div>
+      <Helmet>
+        <title>Top Studying Abroad Courses Online | StudyStreak</title>
+        <meta
+          name="description"
+          content="Explore our top-rated studying abroad courses online and practice tests for various exams like IELTS, PTE, TOEFL and more. Prepare with expert instructors. Start your journey today!"
+        />
+        <meta name="keywords" content="Top Studying Abroad Courses Online" />
+      </Helmet>
       <div className="bg-neutral-50 min-h-screen">
         <header className="bg-gradient-to-r from-primary-600 to-primary-700 pb-6">
           <div className="container mx-auto px-4 pt-8">
@@ -365,7 +374,6 @@ const CoursesPage = () => {
           </section>
         </main>
       </div>
-
       {open && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white w-full max-w-md p-8 rounded-2xl shadow-elevated">
@@ -432,7 +440,7 @@ const CoursesPage = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -970,7 +970,7 @@ const FullLengthLiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        // fullLengthTestSubmit();
+        fullLengthTestSubmit();
         navigate(`/FullLengthTest/Answer/${examId}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

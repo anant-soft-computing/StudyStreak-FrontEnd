@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { ProgressBar } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
@@ -240,8 +241,15 @@ const RARecorder = ({
           <div>Beginning in {preparationTimer} seconds</div>
         )}
         {isRecording && (
-          <div style={{ color: recordingTimer <= 10 ? "red" : "inherit" }}>
+          <div>
             Recording Time Left : {recordingTimer}s
+            <ProgressBar
+              striped
+              animated
+              className="mt-2"
+              now={((40 - recordingTimer) / 40) * 100}
+              variant={recordingTimer <= 10 ? "danger" : "success"}
+            />
           </div>
         )}
         {audioBlob && <DisplayAudio audioBlob={audioBlob} />}

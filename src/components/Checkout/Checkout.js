@@ -3,8 +3,10 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreditCard, Package, Tag, User, Cpu } from "lucide-react";
+import { Spinner } from "react-bootstrap";
 import logo from "../../img/logo/Logo.png";
 import ajaxCall from "../../helpers/ajaxCall";
+
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,6 +24,8 @@ const Checkout = () => {
   const [noCoupon, setNoCoupon] = useState("");
   const [couponCode, setCouponCode] = useState("");
   const [userDetails, setUserDetails] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isScriptLoading, setIsScriptLoading] = useState(false);
 
   const authData = useSelector((state) => state.authStore);
 
@@ -29,12 +33,15 @@ const Checkout = () => {
 
   function loadScript(src) {
     return new Promise((resolve) => {
+      setIsScriptLoading(true);
       const script = document.createElement("script");
       script.src = src;
       script.onload = () => {
+        setIsScriptLoading(false);
         resolve(true);
       };
       script.onerror = () => {
+        setIsScriptLoading(false);
         resolve(false);
       };
       document.body.appendChild(script);
@@ -86,11 +93,14 @@ const Checkout = () => {
       navigate("/login");
       return;
     }
+
+    setIsLoading(true);
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
 
     if (!res) {
+      setIsLoading(false);
       alert("Razorpay SDK failed to load. Are you online?");
       return;
     }
@@ -111,85 +121,90 @@ const Checkout = () => {
             product_id: packageId,
           };
 
-    // const result = await axios.post("http://localhost:5000/payment/orders");
-
-    const response = await ajaxCall(
-      "/create/order/",
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${
-            JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-          }`,
-        },
-        method: "POST",
-        body: JSON.stringify(body),
-      },
-      8000
-    );
-
-    if (!response) {
-      alert("Server error. Are you online?");
-      return;
-    }
-
-    // Getting the order details back
-    const { amount, id: order_id, currency } = response.data;
-
-    const userData = JSON.parse(localStorage.getItem("loginInfo"));
-
-    const options = {
-      key: process.env.REACT_APP_RAZORPAY_KEY_ID,
-      amount: amount?.toString(),
-      currency: currency,
-      name: `${userDetails?.user?.first_name} ${userDetails?.user?.last_name}`,
-      description: "Test Transaction",
-      image: { logo },
-      order_id: order_id,
-      handler: async function (response) {
-        const data = {
-          order_id: response.razorpay_order_id,
-          payment_id: response.razorpay_payment_id,
-          signature_id: response.razorpay_signature,
-        };
-
-        const result = await ajaxCall(
-          "/confirm/order/",
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${
-                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-            },
-            method: "POST",
-            body: JSON.stringify(data),
+    try {
+      const response = await ajaxCall(
+        "/create/order/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
           },
-          8000
-        );
+          method: "POST",
+          body: JSON.stringify(body),
+        },
+        8000
+      );
 
-        if (result?.status === 200) {
-          toast.success("Payment Successful");
-          navigate("/studentDashboard");
-        }
-      },
-      prefill: {
-        name: userData?.username,
-        email: userDetails?.user?.email,
-        contact: userDetails?.phone_no,
-      },
-      notes: {
-        address: "Razorpay Corporate Office",
-      },
-      theme: {
-        color: "#61dafb",
-      },
-    };
+      if (!response) {
+        setIsLoading(false);
+        alert("Server error. Are you online?");
+        return;
+      }
 
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+      // Getting the order details back
+      const { amount, id: order_id, currency } = response.data;
+
+      const userData = JSON.parse(localStorage.getItem("loginInfo"));
+
+      const options = {
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID,
+        amount: amount?.toString(),
+        currency: currency,
+        name: `${userDetails?.user?.first_name} ${userDetails?.user?.last_name}`,
+        description: "Test Transaction",
+        image: { logo },
+        order_id: order_id,
+        handler: async function (response) {
+          const data = {
+            order_id: response.razorpay_order_id,
+            payment_id: response.razorpay_payment_id,
+            signature_id: response.razorpay_signature,
+          };
+
+          const result = await ajaxCall(
+            "/confirm/order/",
+            {
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${
+                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                }`,
+              },
+              method: "POST",
+              body: JSON.stringify(data),
+            },
+            8000
+          );
+
+          if (result?.status === 200) {
+            toast.success("Payment Successful");
+            navigate("/studentDashboard");
+          }
+        },
+        prefill: {
+          name: userData?.username,
+          email: userDetails?.user?.email,
+          contact: userDetails?.phone_no,
+        },
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#61dafb",
+        },
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      toast.error("Payment process failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -348,9 +363,14 @@ const Checkout = () => {
               <div className="pt-6">
                 <button
                   onClick={handleEnrollButton}
+                  disabled={isLoading || isScriptLoading}
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-soft"
                 >
-                  Proceed to Payment
+                  {isLoading || isScriptLoading ? (
+                    <Spinner animation="border" style={{ color: "white" }} />
+                  ) : (
+                    "Proceed to Payment"
+                  )}
                 </button>
               </div>
             </div>

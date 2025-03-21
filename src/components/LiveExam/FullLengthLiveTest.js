@@ -374,10 +374,10 @@ const FullLengthLiveExam = () => {
             ...returnContent?.tempAnswer,
           };
           tempExamAnswer.push(tempUniqueArr);
-          let totalLEngth = tempExamAnswer
+          let totalLength = tempExamAnswer
             .map((item) => [...item.data])
             .flat().length;
-          tempQuestions = totalLEngth + 1;
+          tempQuestions = totalLength + 1;
         }
         setHtmlContents(tempHtmlContents);
         setExamAnswer(tempExamAnswer);
@@ -778,7 +778,7 @@ const FullLengthLiveExam = () => {
     }
   };
 
-  const handleRLSubmit = async () => {
+  const handleFLTSubmit = async () => {
     const answersArray = [];
     let bandValue = 0;
 
@@ -812,17 +812,17 @@ const FullLengthLiveExam = () => {
                 {
                   role: "user",
                   content: `Analyze the following IELTS Writing Task With response according to the official IELTS assessment criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
-          
+                  
                   Assessment Criteria:
-          
+                  
                   Task 1:
-          
+                  
                   Task Achievement: Does the response address all parts of the task and provide a well-developed description, summary, or explanation of the information presented?
-          
+                  
                   Coherence and Cohesion: Is the information logically organized? Are a range of cohesive devices used appropriately?
-          
+                  
                   Lexical Resource: Is a wide range of vocabulary used with precision and accuracy?
-          
+                  
                   Grammatical Range and Accuracy: Are a variety of grammatical structures used with accuracy?`,
                 },
                 {
@@ -839,16 +839,16 @@ const FullLengthLiveExam = () => {
                 {
                   role: "user",
                   content: `Give band explanation as #Explanation:  
+                    
+                    Task Achievement: 
                   
-                  Task Achievement: 
-          
-                  Coherence and Cohesion:
-          
-                  Lexical Resource:
-          
-                  Grammatical Range and Accuracy:
+                    Coherence and Cohesion:
                   
-                  as #Band:bandValue`,
+                    Lexical Resource:
+                  
+                    Grammatical Range and Accuracy:
+                    
+                    as #Band:bandValue`,
                 },
               ],
             };
@@ -870,10 +870,10 @@ const FullLengthLiveExam = () => {
                 gptResponse = data.choices[0].message.content;
 
                 // Use regex to extract the band value
-                const bandMatch = gptResponse.match(/Band:\s*(\d+(\.\d+)?)/);
-                bandValue = bandMatch ? bandMatch[1] : null;
+                const bandMatch = gptResponse.match(/Band:\s*(\d+(\.\d+)?)/i);
+                bandValue = bandMatch ? bandMatch[1] : 0.0;
 
-                if (!bandValue) {
+                if (!bandValue && bandValue !== 0) {
                   isError = true;
                   toast.error(
                     "Band value could not be extracted. Please try again."
@@ -901,7 +901,7 @@ const FullLengthLiveExam = () => {
             } else {
               newAnswersArray.push({
                 exam_id: item.exam_id,
-                band: 0,
+                band: 0.0,
                 AI_Assessment: "",
                 data: item.data,
               });
@@ -970,7 +970,7 @@ const FullLengthLiveExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        fullLengthTestSubmit();
+        // fullLengthTestSubmit();
         navigate(`/FullLengthTest/Answer/${examId}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
@@ -1513,7 +1513,7 @@ const FullLengthLiveExam = () => {
             isOpen={isConfirmModalOpen}
             footer={
               <div className="d-flex gap-2">
-                <button className="btn btn-success" onClick={handleRLSubmit}>
+                <button className="btn btn-success" onClick={handleFLTSubmit}>
                   Yes
                 </button>
                 <button

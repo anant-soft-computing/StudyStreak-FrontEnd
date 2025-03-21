@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { ProgressBar } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
@@ -253,6 +254,15 @@ const ASQRecorder = ({
         <div style={{ color: recordingTimer <= 5 ? "red" : "inherit" }}>
           Recording Time Left : {recordingTimer}s
         </div>
+      )}
+      {recordingTimer && (
+        <ProgressBar
+          striped
+          animated
+          className="mt-2"
+          now={((10 - recordingTimer) / 10) * 100}
+          variant={recordingTimer <= 5 ? "danger" : "success"}
+        />
       )}
       {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
     </div>

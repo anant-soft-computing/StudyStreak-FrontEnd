@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { ProgressBar } from "react-bootstrap";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 
@@ -253,10 +254,15 @@ const SGDRecorder = ({
     <div>
       <div className="text-center">Recorded Answer</div>
       {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
+      {recordingTimer && `Recording Time Left : ${recordingTimer}s`}
       {recordingTimer && (
-        <div style={{ color: recordingTimer <= 30 ? "red" : "inherit" }}>
-          Recording Time Left : {recordingTimer}s
-        </div>
+        <ProgressBar
+          striped
+          animated
+          className="mt-2"
+          now={((120 - recordingTimer) / 120) * 100}
+          variant={recordingTimer <= 10 ? "danger" : "success"}
+        />
       )}
       {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
     </div>

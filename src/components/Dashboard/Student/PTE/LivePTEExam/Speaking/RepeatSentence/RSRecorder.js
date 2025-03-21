@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { ProgressBar } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
@@ -250,10 +251,15 @@ const RSRecorder = ({
     <div>
       <h6 className="text-center">Recorded Answer</h6>
       {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
+      {recordingTimer && `Recording Time Left : ${recordingTimer}s`}
       {recordingTimer && (
-        <div style={{ color: recordingTimer <= 7 ? "red" : "inherit" }}>
-          Recording Time Left : {recordingTimer}s
-        </div>
+        <ProgressBar
+          striped
+          animated
+          className="mt-2"
+          now={((15 - recordingTimer) / 15) * 100}
+          variant={recordingTimer <= 7 ? "danger" : "success"}
+        />
       )}
       {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
     </div>

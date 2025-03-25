@@ -28,10 +28,9 @@ const Checkout = () => {
   const [isScriptLoading, setIsScriptLoading] = useState(false);
 
   const authData = useSelector((state) => state.authStore);
-
   const package_amount = discount ? packagePrice - discount : packagePrice;
 
-  function loadScript(src) {
+  const loadScript = (src) => {
     return new Promise((resolve) => {
       setIsScriptLoading(true);
       const script = document.createElement("script");
@@ -46,7 +45,7 @@ const Checkout = () => {
       };
       document.body.appendChild(script);
     });
-  }
+  };
 
   useEffect(() => {
     if (!couponCode) {
@@ -89,7 +88,7 @@ const Checkout = () => {
 
   const handleEnrollButton = async () => {
     if (!authData.loggedIn) {
-      toast.error("Please Do Login For Enroll Course");
+      toast.error("Please login to enroll in this course");
       navigate("/login");
       return;
     }
@@ -147,15 +146,13 @@ const Checkout = () => {
       // Getting the order details back
       const { amount, id: order_id, currency } = response.data;
 
-      const userData = JSON.parse(localStorage.getItem("loginInfo"));
-
       const options = {
         key: process.env.REACT_APP_RAZORPAY_KEY_ID,
         amount: amount?.toString(),
         currency: currency,
         name: `${userDetails?.user?.first_name} ${userDetails?.user?.last_name}`,
-        description: "Test Transaction",
-        image: { logo },
+        description: `Payment for ${courseName} - ${packageName}`,
+        image: logo,
         order_id: order_id,
         handler: async function (response) {
           const data = {
@@ -186,7 +183,7 @@ const Checkout = () => {
           }
         },
         prefill: {
-          name: userData?.username,
+          name: `${userDetails?.user?.first_name} ${userDetails?.user?.last_name}`,
           email: userDetails?.user?.email,
           contact: userDetails?.phone_no,
         },
@@ -194,7 +191,7 @@ const Checkout = () => {
           address: "Razorpay Corporate Office",
         },
         theme: {
-          color: "#61dafb",
+          color: "#4f46e5",
         },
       };
 
@@ -292,7 +289,7 @@ const Checkout = () => {
                       <div className="flex items-center space-x-3">
                         <Tag className="w-5 h-5 text-primary-500" />
                         <span className="text-sm font-medium text-neutral-700">
-                          Coupon Price
+                          Coupon Discount
                         </span>
                       </div>
                       <span className="text-sm text-neutral-900">
@@ -316,7 +313,7 @@ const Checkout = () => {
                 <h2 className="text-xl font-heading font-medium text-neutral-800">
                   Apply Coupon
                 </h2>
-                <div className="flex space-x-4">
+                <div className="flex flex-col md:flex-row gap-4">
                   <div className="flex-1">
                     <div className="relative">
                       <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400 w-5 h-5" />
@@ -337,7 +334,7 @@ const Checkout = () => {
                 </div>
                 {discount > 0 && (
                   <div className="bg-success-50 text-success-700 px-4 py-2 rounded-lg text-sm animate-fade-in">
-                    Coupon Applied Successfully! You Saved ₹{discount}
+                    Coupon Applied Successfully! You saved ₹{discount}
                   </div>
                 )}
               </div>
@@ -352,24 +349,31 @@ const Checkout = () => {
                       <div>
                         <p className="text-sm font-medium text-neutral-900">
                           {userDetails.user.first_name}{" "}
-                          {userDetails.user.last_name} -{" "}
+                          {userDetails.user.last_name}
+                        </p>
+                        <p className="text-sm text-neutral-600">
                           {userDetails.user.email}
                         </p>
+                        {userDetails.phone_no && (
+                          <p className="text-sm text-neutral-600">
+                            Phone: {userDetails.phone_no}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
               )}
-              <div className="pt-6">
+              <div className="pt-6 space-y-4">
                 <button
                   onClick={handleEnrollButton}
                   disabled={isLoading || isScriptLoading}
-                  className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-soft"
+                  className="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 shadow-soft disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isLoading || isScriptLoading ? (
                     <Spinner animation="border" style={{ color: "white" }} />
                   ) : (
-                    "Proceed to Payment"
+                    `Pay ${package_amount}`
                   )}
                 </button>
               </div>

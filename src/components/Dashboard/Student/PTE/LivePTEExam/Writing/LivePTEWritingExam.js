@@ -29,7 +29,6 @@ const LivePTEWritingExam = () => {
   const [linkAnswer, setLinkAnswer] = useState(false);
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     if (examSubcategory === "SWT") {
@@ -175,68 +174,6 @@ const LivePTEWritingExam = () => {
     })();
   }, [fullPaper]);
 
-  const latestExamSubmit = async () => {
-    try {
-      const response = await ajaxCall(
-        "/test-submission/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify({
-            student: studentId,
-            practise_set: fullPaper[0].IELTS.id,
-          }),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        console.log("Lastest Exam Submitted Successfully");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const submitExam = async () => {
-    const data = {
-      student_id: studentId,
-      pt_id: parseInt(examId),
-    };
-    try {
-      const response = await ajaxCall(
-        "/student-pt-submit/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-        8000
-      );
-      if (response.status === 200) {
-        latestExamSubmit();
-        toast.success("Your Exam Submitted Successfully");
-      } else {
-        toast.error("You Have Already Submitted This Exam");
-      }
-    } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
-    }
-  };
-
   const handleSubmit = async () => {
     const answersArray = [];
 
@@ -312,14 +249,13 @@ const LivePTEWritingExam = () => {
                     Content (0-2): Does it capture all key points?
                     Form (0-1): Single sentence within word limit?
                     Grammar (0-2): Error-free sentence?
-                    Vocabulary (0-2): Appropriate word choice?
-                    Spelling (0-2): No spelling errors?`
+                    Vocabulary (0-2): Appropriate word choice?`
                     : `
-
                     Content (0-3): Complete topic coverage?
                     Form (0-2): Proper length & structure?
-                    Development (0-2): Logical organization?
+                    Development, Structure and Coherence (0-2): Logical organization?
                     Grammar (0-2): Grammatical accuracy?
+                    General linguistic (0-2): Appropriate word choice?
                     Vocabulary (0-2): Precise word choice?
                     Spelling (0-2): No spelling errors?`
                 }
@@ -327,16 +263,13 @@ const LivePTEWritingExam = () => {
                 Provide:
                 1. **Detailed explanations** with strengths, weaknesses, and improvements.
                 2. **Individual criterion scores**.
-                3. **Overall Score** using the exact format below:
+                3. **Total Score** using the exact format below:
 
-                **Overall Score: (Sum × ${
-                  questionType === "Summarize Written Text" ? "10" : "6"
-                }) / 90 = X/90**
-
+                **Total Score: X/${
+                  questionType === "Summarize Written Text" ? "7" : "15"
+                }**
                 - The calculation must **always** be formatted exactly as above.
-                - Do **not** simplify the fraction (e.g., display 80/90, not 8/10).
-                - Ensure the sum of individual scores is calculated correctly before applying the formula.
-
+                - Do **not** simplify the fraction (e.g., display 8/10).
                 #Evaluation Format:
 
                 ${
@@ -352,9 +285,6 @@ const LivePTEWritingExam = () => {
                 Score: X/2
 
                 Vocabulary: [Explanation]  
-                Score: X/2
-
-                Spelling: [Explanation]  
                 Score: X/2`
                     : `
                 Content: [Explanation]  
@@ -363,10 +293,13 @@ const LivePTEWritingExam = () => {
                 Form: [Explanation]  
                 Score: X/2
 
-                Development: [Explanation]  
+                Development, Structure and Coherence: [Explanation]  
                 Score: X/2
 
                 Grammar: [Explanation]  
+                Score: X/2
+
+                General linguistic: [Explanation]  
                 Score: X/2
 
                 Vocabulary: [Explanation]  
@@ -376,9 +309,9 @@ const LivePTEWritingExam = () => {
                 Score: X/2`
                 }
 
-                **Overall Score: (Sum × ${
-                  questionType === "Summarize Written Text" ? "10" : "6"
-                }) / 90 = X/90**
+                **Total Score: X/${
+                  questionType === "Summarize Written Text" ? "7" : "15"
+                }**
 
                 `,
               },
@@ -403,7 +336,7 @@ const LivePTEWritingExam = () => {
             gptResponse = data.choices[0].message.content;
 
             const scoreMatch = gptResponse.match(
-              /Overall Score:\s*\(.*?\)\s*\/\s*90\s*=\s*(\d+)\/90/
+              /Total Score:\s*(\d+)\/(7|15)/
             );
             scoreValue = scoreMatch ? parseFloat(scoreMatch[1]) : null;
 
@@ -454,7 +387,6 @@ const LivePTEWritingExam = () => {
 
       if (response.status === 201) {
         setTimerRunning(false);
-        submitExam();
         navigate(`/PTE/Writing/${fullPaper[0].IELTS.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
@@ -475,7 +407,7 @@ const LivePTEWritingExam = () => {
             <div key={idx} className="card answer__width">
               <div className="card-body">
                 <h6 className="card-text">
-                  Answer ({idx + 1}) :{" "}
+                  Answer :{" "}
                   <span className="text-success">{answer.answer_text}</span>
                 </h6>
               </div>

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { convert } from "html-to-text";
 import RTSRecorder from "./RTSRecorder";
 import Loading from "../../../../../../UI/Loading";
@@ -27,12 +26,11 @@ const LivePTESpeakingRTS = () => {
   const [countdown, setCountdown] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [timerRunning, setTimerRunning] = useState(true);
+  const timerRunning = true;
   const [speaking, setSpeaking] = useState([initialState]);
   const [recordedFilePath, setRecordedFilePath] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   // Reset preparation timer when moving to next question
   useEffect(() => {
@@ -63,68 +61,6 @@ const LivePTESpeakingRTS = () => {
     return randomId;
   }
 
-  const latestExamSubmit = async () => {
-    try {
-      const response = await ajaxCall(
-        "/test-submission/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-          },
-          method: "POST",
-          body: JSON.stringify({
-            student: studentId,
-            practise_set: fullPaper?.IELTS?.id,
-          }),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        console.log("Lastest Practice Exam Submitted");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const handleSubmit = async () => {
-    const data = {
-      student_id: studentId,
-      pt_id: parseInt(examId),
-    };
-    try {
-      const response = await ajaxCall(
-        "/student-pt-submit/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-              }`,
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-        8000
-      );
-      if (response.status === 200) {
-        latestExamSubmit()
-        setTimerRunning(false);
-        navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`);
-        toast.success("Your Exam Submitted Successfully");
-      } else {
-        toast.error("You Have Already Submitted This Exam");
-      }
-    } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
-    }
-  };
-
   useEffect(() => {
     setIsLoading(true);
     (async () => {
@@ -135,8 +71,9 @@ const LivePTESpeakingRTS = () => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
-              Authorization: `Bearer ${JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
             },
             method: "GET",
           },
@@ -480,7 +417,12 @@ const LivePTESpeakingRTS = () => {
                   <i className="icofont-arrow-right ml-2"></i>
                 </button>
               )}
-              <button className="btn btn-primary btn-sm" onClick={handleSubmit}>
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() =>
+                  navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`)
+                }
+              >
                 Submit
               </button>
             </div>

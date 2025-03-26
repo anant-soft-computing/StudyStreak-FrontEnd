@@ -24,8 +24,8 @@ const LivePTERFIB = () => {
   // 0 means before start, 1 means after start, 2 means after finish
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
+  
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
     let interval;
@@ -366,68 +366,6 @@ const LivePTERFIB = () => {
     e.dataTransfer.setData("text/plain", answer);
   };
 
-  const latestExamSubmit = async () => {
-    try {
-      const response = await ajaxCall(
-        "/test-submission/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify({
-            student: studentId,
-            practise_set: fullPaper[0].IELTS.id,
-          }),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        console.log("Lastest RFIB Exam Submitted");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const submitExam = async () => {
-    const data = {
-      student_id: studentId,
-      pt_id: parseInt(examId),
-    };
-    try {
-      const response = await ajaxCall(
-        "/student-pt-submit/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-        8000
-      );
-      if (response.status === 200) {
-        latestExamSubmit();
-        toast.success("Your Exam Submitted Successfully");
-      } else {
-        toast.error("You Have Already Submitted This Exam");
-      }
-    } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
-    }
-  };
-
   const handleSubmit = async () => {
     const answersArray = [];
     let bandValue = 0;
@@ -470,7 +408,6 @@ const LivePTERFIB = () => {
       );
 
       if (response.status === 201) {
-        submitExam();
         setTimerRunning(false);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");

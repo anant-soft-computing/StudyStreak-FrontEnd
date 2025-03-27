@@ -335,7 +335,7 @@ const LivePTESpeakingRAExam = () => {
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() =>
-                  navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`)
+                  navigate(`/PTE/Speaking/RA/${fullPaper?.IELTS?.id}`)
                 }
               >
                 Submit

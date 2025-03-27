@@ -29,6 +29,7 @@ const LivePTESpeakingASQExam = () => {
   const [recordedFilePath, setRecordedFilePath] = useState("");
   const [countdown, setCountdown] = useState(null);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
 
   // Reset preparation timer when moving to next question
@@ -401,7 +402,7 @@ const LivePTESpeakingASQExam = () => {
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() =>
-                  navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`)
+                  navigate(`/PTE/Speaking/ASQ/${fullPaper?.IELTS?.id}`)
                 }
               >
                 Submit

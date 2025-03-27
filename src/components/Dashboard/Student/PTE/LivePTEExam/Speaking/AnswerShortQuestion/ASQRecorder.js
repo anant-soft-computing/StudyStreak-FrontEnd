@@ -143,10 +143,10 @@ const ASQRecorder = ({
                 - 1 Point: Speech is very disjointed and difficult to follow.
                 - 0 Points: No attempt or incomprehensible delivery.
   
-              Provide scores on a scale of 90 points, broken down as follows:
-                - Content: 0-1 point
-                - Pronunciation: 0-5 points
-                - Oral Fluency: 0-5 points
+              Scoring Calculation:
+                  1. Calculate subscore out of 11 (1 points for content and 5 points for pronunciation and oral fluency)
+                  2. Calculate subscore percentage
+                  3. Convert percentage to final score out of 90
   
               Please provide the assessment in the following format:
   
@@ -164,9 +164,12 @@ const ASQRecorder = ({
               [Detailed analysis with specific examples from the response]
               Score: X/5
   
-              #Total_Score: [Total]/90
+              #Subscore: X/11
+              #Subscore Percentage: X%
   
-              Respond only with the evaluation up to the #Total_Score. Do not include any additional text or explanation beyond this point.`,
+              #Total Score: X/90
+  
+              Respond only with the evaluation up to the #Total Score. Do not include any additional text or explanation beyond this point.`,
           },
           {
             role: "user",
@@ -200,7 +203,7 @@ const ASQRecorder = ({
           const data = await gptResponse.json();
           const assessment = data.choices[0].message.content;
 
-          const scoreMatch = assessment.match(/Total_Score:\s*(\d+)/);
+          const scoreMatch = assessment.match(/Total Score:\s*(\d+)/);
           const overallScore = scoreMatch ? parseFloat(scoreMatch[1]) : null;
 
           const formattedResponse = assessment

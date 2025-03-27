@@ -130,10 +130,10 @@ const RARecorder = ({
                 - Smoothness and natural flow of speech.
                 - Deductions for hesitations, repetitions, or unnatural pauses.
           
-              Provide scores on a scale of 90 points, broken down as follows:
-                - Content: 0-5 points
-                - Pronunciation: 0-5 points
-                - Oral Fluency: 0-5 points
+              Scoring Calculation:
+                1. Calculate subscore out of 15 (5 points per category)
+                2. Calculate subscore percentage
+                3. Convert percentage to final score out of 90
           
               Please provide the assessment in the following format:
           
@@ -150,10 +150,13 @@ const RARecorder = ({
               Oral Fluency:
               [Detailed analysis with specific examples from the response]
               Score: X/5
+
+              #Subscore: X/15
+              #Subscore Percentage: X%
           
-              #Total_Score: [Total]/90
+              #Total Score: X/90
           
-              Respond only with the evaluation up to the #Total_Score. Do not include any additional text or explanation beyond this point.`,
+              Respond only with the evaluation up to the #Total Score. Do not include any additional text or explanation beyond this point.`,
           },
           {
             role: "user",
@@ -187,7 +190,7 @@ const RARecorder = ({
           const data = await gptResponse.json();
           const assessment = data.choices[0].message.content;
 
-          const scoreMatch = assessment.match(/#Total_Score:\s*(\d+)/);
+          const scoreMatch = assessment.match(/#Total Score:\s*(\d+)/);
           const overallScore = scoreMatch ? parseFloat(scoreMatch[1]) : null;
 
           const formattedResponse = assessment

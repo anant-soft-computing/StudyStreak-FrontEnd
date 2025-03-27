@@ -31,7 +31,6 @@ const LivePTESpeakingRSExam = () => {
   const [recordedFilePath, setRecordedFilePath] = useState("");
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
-  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   // Reset preparation timer when moving to next question
   useEffect(() => {
@@ -403,7 +402,7 @@ const LivePTESpeakingRSExam = () => {
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() =>
-                  navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`)
+                  navigate(`/PTE/Speaking/RS/${fullPaper?.IELTS?.id}`)
                 }
               >
                 Submit

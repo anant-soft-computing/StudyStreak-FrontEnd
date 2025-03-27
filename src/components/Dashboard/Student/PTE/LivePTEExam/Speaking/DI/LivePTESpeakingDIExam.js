@@ -338,7 +338,7 @@ const LivePTESpeakingDIExam = () => {
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() =>
-                  navigate(`/PTE/Speaking/${fullPaper?.IELTS?.id}`)
+                  navigate(`/PTE/Speaking/DI/${fullPaper?.IELTS?.id}`)
                 }
               >
                 Submit

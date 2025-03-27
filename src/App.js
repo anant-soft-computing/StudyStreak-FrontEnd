@@ -132,6 +132,13 @@ import PTEWritingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Wri
 import PTESSTWFDAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTESSTWFDAnswer";
 import PTEListeningAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTEListeningAnswer";
 import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/PTESpeakingAnswer";
+import ASQSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/AnswerShortQuestion/ASQSpeakingAnswer";
+import RASpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/ReadAloud/RASpeakingAnswer";
+import RSSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RepeatSentence/RSSpeakingAnswer";
+import DISpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/DI/DISpeakingAnswer";
+import RLSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RetellLecture/RLSpeakingAnswer";
+import RTSSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RTS/RTSSpekingAnswer";
+import SGDSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/SGD/SGDSpeakingAnswer";
 import Progress from "./components/Dashboard/Student/Progress/Progress";
 import withBootstrap from "./layout/BootstrapStyles";
 
@@ -341,6 +348,34 @@ const App = () => {
           <Route
             path="/PTE/Speaking/:examId"
             Component={withBootstrap(PTESpeakingAnswer)}
+          />
+          <Route
+            path="/PTE/Speaking/ASQ/:examId"
+            Component={withBootstrap(ASQSpeakingAnswer)}
+          />
+          <Route
+            path="/PTE/Speaking/RA/:examId"
+            Component={withBootstrap(RASpeakingAnswer)}
+          />
+          <Route
+            path="/PTE/Speaking/RS/:examId"
+            Component={withBootstrap(RSSpeakingAnswer)}
+          />
+          <Route
+            path="/PTE/Speaking/DI/:examId"
+            Component={withBootstrap(DISpeakingAnswer)}
+          />
+          <Route
+            path="/PTE/Speaking/RL/:examId"
+            Component={withBootstrap(RLSpeakingAnswer)}
+          />
+          <Route
+            path="/PTE/Speaking/RTS/:examId"
+            Component={withBootstrap(RTSSpeakingAnswer)}
+          />
+          <Route
+            path="/PTE/Speaking/SGD/:examId"
+            Component={withBootstrap(SGDSpeakingAnswer)}
           />
         </Route>
 

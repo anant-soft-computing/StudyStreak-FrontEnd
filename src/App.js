@@ -37,6 +37,7 @@ import TutorNavBarRoute from "./layout/TutorNavBarRoute";
 //-----------------------> Student <----------------------------------------------
 
 import Dashboard from "./components/Dashboard/Student/Dashboard/Dashboard";
+import PTEDashboard from "./components/Dashboard/Student/PTE/Dashboard/PTEDashboard";
 import SProfile from "./components/Dashboard/Student/Profile/Profile";
 import MyCourse from "./components/Dashboard/Student/MyCourse/MyCourse";
 import Lesson from "./components/Dashboard/Student/Lesson/Lesson";
@@ -278,7 +279,10 @@ const App = () => {
           <Route path="/Listening" Component={withBootstrap(ExamListening)} />
           <Route path="/Writing" Component={withBootstrap(ExamWriting)} />
           <Route path="/Speaking" Component={withBootstrap(ExamSpeaking)} />
-
+          <Route
+            path="/PTE/Dashboard"
+            Component={withBootstrap(PTEDashboard)}
+          />
           <Route
             path="/PTE/FreeMockTest"
             Component={withBootstrap(FreeMockTest)}

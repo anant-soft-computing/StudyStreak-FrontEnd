@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { ProgressBar } from "react-bootstrap";
+import { ProgressBar, Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
@@ -21,6 +21,7 @@ const ASQRecorder = ({
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [countdown, setCountdown] = useState(null);
   const [recordingTimer, setRecordingTimer] = useState(null);
+  const [status, setStatus] = useState("idle");
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -30,13 +31,14 @@ const ASQRecorder = ({
     setRecordedFilePath(null);
     setCountdown(null);
     setRecordingTimer(null);
+    setStatus("idle");
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     resetTranscript();
   }, [next, resetTranscript, setRecordedFilePath]);
 
   useEffect(() => {
-    if (shouldStartRecording) {
+    if (shouldStartRecording && status === "idle") {
       setCountdown(3);
       const countdownInterval = setInterval(() => {
         setCountdown((prev) => {
@@ -51,9 +53,10 @@ const ASQRecorder = ({
 
       return () => clearInterval(countdownInterval);
     }
-  }, [shouldStartRecording]);
+  }, [shouldStartRecording, status]);
 
   const handleStartRecording = () => {
+    setStatus("recording");
     resetTranscript();
     navigator.mediaDevices
       .getUserMedia({ audio: true })
@@ -90,6 +93,7 @@ const ASQRecorder = ({
       })
       .catch((error) => {
         console.log("error", error);
+        setStatus("idle");
       });
   };
 
@@ -99,6 +103,7 @@ const ASQRecorder = ({
     }
     setRecordingTimer(null);
     SpeechRecognition.stopListening();
+    setStatus("processing");
   };
 
   useEffect(() => {
@@ -234,40 +239,59 @@ const ASQRecorder = ({
                   recorderIndex,
                   filePath: response?.data?.answer_audio,
                 });
+                setStatus("completed");
               } else {
                 console.log("error in submission response:", response);
+                setStatus("completed");
               }
             })
             .catch((error) => {
               console.log("error submitting data:", error);
+              setStatus("completed");
             });
         } catch (error) {
           console.log("error occurred while fetching data from AI:", error);
+          setStatus("completed");
         }
       };
       getChatGPTResponse();
     }
-  }, [audioBlob]);
+  }, [audioBlob, status]);
 
   return (
     <div>
       <h6 className="text-center">Recorded Answer</h6>
       {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
-      {recordingTimer && (
-        <div style={{ color: recordingTimer <= 5 ? "red" : "inherit" }}>
-          Recording Time Left : {recordingTimer}s
+      {status === "recording" && (
+        <div>
+          <div style={{ color: recordingTimer <= 5 ? "red" : "inherit" }}>
+            Recording Time Left : {recordingTimer}s
+          </div>
+          <ProgressBar
+            striped
+            animated
+            className="mt-2"
+            now={((10 - recordingTimer) / 10) * 100}
+            variant={recordingTimer <= 5 ? "danger" : "success"}
+          />
         </div>
       )}
-      {recordingTimer && (
-        <ProgressBar
-          striped
-          animated
-          className="mt-2"
-          now={((10 - recordingTimer) / 10) * 100}
-          variant={recordingTimer <= 5 ? "danger" : "success"}
-        />
+      {status === "processing" && (
+        <div className="text-center mt-3">
+          <Spinner animation="border" role="status" variant="primary" />
+          <p className="mt-2">Submitting recording...</p>
+        </div>
       )}
-      {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
+      {status === "completed" && (
+        <div className="text-center text-success mt-2">
+          Recording submitted successfully!
+        </div>
+      )}
+      {audioBlob && status === "completed" && (
+        <div className="mt-3">
+          <DisplayAudio audioBlob={audioBlob} />
+        </div>
+      )}
     </div>
   );
 };

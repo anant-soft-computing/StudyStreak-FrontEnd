@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { ProgressBar } from "react-bootstrap";
+import { ProgressBar, Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
@@ -22,6 +22,7 @@ const DIRecorder = ({
   const [audioBlob, setAudioBlob] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [recordingTimer, setRecordingTimer] = useState(40);
+  const [status, setStatus] = useState("idle");
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -34,13 +35,19 @@ const DIRecorder = ({
     chunksRef.current = [];
     resetTranscript();
     setRecordingTimer(40);
+    setStatus("idle");
   }, [next, resetTranscript, setRecordedFilePath]);
 
   useEffect(() => {
-    if (shouldStartRecording && !isRecording && !audioBlob) {
+    if (
+      shouldStartRecording &&
+      status === "idle" &&
+      !isRecording &&
+      !audioBlob
+    ) {
       handleStartRecording();
     }
-  }, [shouldStartRecording]);
+  }, [shouldStartRecording, status]);
 
   useEffect(() => {
     let interval;
@@ -55,6 +62,7 @@ const DIRecorder = ({
   }, [isRecording, recordingTimer]);
 
   const handleStartRecording = () => {
+    setStatus("recording");
     resetTranscript();
     navigator.mediaDevices
       .getUserMedia({ audio: true })
@@ -80,6 +88,7 @@ const DIRecorder = ({
       })
       .catch((error) => {
         console.log("error", error);
+        setStatus("idle");
       });
   };
 
@@ -92,10 +101,11 @@ const DIRecorder = ({
     }
     setIsRecording(false);
     SpeechRecognition.stopListening();
+    setStatus("processing");
   };
 
   useEffect(() => {
-    if (audioBlob) {
+    if (audioBlob && status === "processing") {
       const formData = new FormData();
       formData.append("question_number", question_number);
       formData.append("extension", "mp3");
@@ -230,20 +240,24 @@ const DIRecorder = ({
                   recorderIndex,
                   filePath: response?.data?.answer_audio,
                 });
+                setStatus("completed");
               } else {
                 console.log("error in submission response:", response);
+                setStatus("completed");
               }
             })
             .catch((error) => {
               console.log("error submitting data:", error);
+              setStatus("completed");
             });
         } catch (error) {
           console.log("error occurred while fetching data from AI:", error);
+          setStatus("completed");
         }
       };
       getChatGPTResponse();
     }
-  }, [audioBlob]);
+  }, [audioBlob, status]);
 
   return (
     <div>
@@ -252,7 +266,7 @@ const DIRecorder = ({
         {!isRecording && !audioBlob && (
           <div>Beginning in {preparationTimer} seconds</div>
         )}
-        {isRecording && (
+        {isRecording && status === "recording" && (
           <div>
             Recording Time Left : {recordingTimer}s
             <ProgressBar
@@ -264,7 +278,22 @@ const DIRecorder = ({
             />
           </div>
         )}
-        {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
+        {status === "processing" && (
+          <div className="text-center mt-3">
+            <Spinner animation="border" role="status" variant="primary" />
+            <p className="mt-2">Submitting recording...</p>
+          </div>
+        )}
+        {status === "completed" && (
+          <div className="text-center text-success mt-2">
+            Recording submitted successfully!
+          </div>
+        )}
+        {audioBlob && status === "completed" && (
+          <div className="mt-3">
+            <DisplayAudio audioBlob={audioBlob} />
+          </div>
+        )}
       </div>
     </div>
   );

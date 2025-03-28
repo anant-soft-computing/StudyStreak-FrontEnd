@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { ProgressBar } from "react-bootstrap";
+import { ProgressBar, Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
 
@@ -22,6 +22,7 @@ const RARecorder = ({
   const [audioBlob, setAudioBlob] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [recordingTimer, setRecordingTimer] = useState(40);
+  const [status, setStatus] = useState("idle");
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -34,14 +35,20 @@ const RARecorder = ({
     chunksRef.current = [];
     resetTranscript();
     setRecordingTimer(40);
+    setStatus("idle");
   }, [next, resetTranscript, setRecordedFilePath]);
 
   // Auto-start recording when shouldStartRecording becomes true
   useEffect(() => {
-    if (shouldStartRecording && !isRecording && !audioBlob) {
+    if (
+      shouldStartRecording &&
+      !isRecording &&
+      !audioBlob &&
+      status === "idle"
+    ) {
       handleStartRecording();
     }
-  }, [shouldStartRecording]);
+  }, [shouldStartRecording, status]);
 
   // Recording timer countdown
   useEffect(() => {
@@ -57,6 +64,7 @@ const RARecorder = ({
   }, [isRecording, recordingTimer]);
 
   const handleStartRecording = () => {
+    setStatus("recording");
     resetTranscript();
     navigator.mediaDevices
       .getUserMedia({ audio: true })
@@ -82,6 +90,7 @@ const RARecorder = ({
       })
       .catch((error) => {
         console.log("error", error);
+        setStatus("idle");
       });
   };
 
@@ -94,10 +103,11 @@ const RARecorder = ({
     }
     setIsRecording(false);
     SpeechRecognition.stopListening();
+    setStatus("processing");
   };
 
   useEffect(() => {
-    if (audioBlob) {
+    if (audioBlob && status === "processing") {
       const formData = new FormData();
       formData.append("question_number", question_number);
       formData.append("extension", "mp3");
@@ -221,20 +231,24 @@ const RARecorder = ({
                   recorderIndex,
                   filePath: response?.data?.answer_audio,
                 });
+                setStatus("completed");
               } else {
                 console.log("error in submission response:", response);
+                setStatus("completed");
               }
             })
             .catch((error) => {
               console.log("error submitting data:", error);
+              setStatus("completed");
             });
         } catch (error) {
           console.log("error occurred while fetching data from AI:", error);
+          setStatus("completed");
         }
       };
       getChatGPTResponse();
     }
-  }, [audioBlob]);
+  }, [audioBlob, status]);
 
   return (
     <div>
@@ -243,19 +257,36 @@ const RARecorder = ({
         {!isRecording && !audioBlob && (
           <div>Beginning in {preparationTimer} seconds</div>
         )}
-        {isRecording && (
-          <div>
-            Recording Time Left : {recordingTimer}s
-            <ProgressBar
-              striped
-              animated
-              className="mt-2"
-              now={((40 - recordingTimer) / 40) * 100}
-              variant={recordingTimer <= 10 ? "danger" : "success"}
-            />
+        {isRecording &&
+          status ===
+            "recording"(
+              <div>
+                Recording Time Left : {recordingTimer}s
+                <ProgressBar
+                  striped
+                  animated
+                  className="mt-2"
+                  now={((40 - recordingTimer) / 40) * 100}
+                  variant={recordingTimer <= 10 ? "danger" : "success"}
+                />
+              </div>
+            )}
+        {status === "processing" && (
+          <div className="text-center mt-3">
+            <Spinner animation="border" role="status" variant="primary" />
+            <p className="mt-2">Submitting recording...</p>
           </div>
         )}
-        {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
+        {status === "completed" && (
+          <div className="text-center text-success mt-2">
+            Recording submitted successfully!
+          </div>
+        )}
+        {audioBlob && status === "completed" && (
+          <div className="mt-3">
+            <DisplayAudio audioBlob={audioBlob} />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { Spinner } from "react-bootstrap";
 import ajaxCall from "../../helpers/ajaxCall";
 import DisplayAudio from "../UI/DisplayAudio";
 
@@ -21,6 +22,8 @@ const AudioRecorder = ({
 }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const { transcript, resetTranscript } = useSpeechRecognition();
 
   const mediaRecorderRef = useRef(null);
@@ -33,10 +36,13 @@ const AudioRecorder = ({
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     resetTranscript();
+    setIsSubmitting(false);
+    setSubmitSuccess(false);
   }, [next, resetTranscript, setRecordedFilePath]);
 
   const handleStartRecording = () => {
     resetTranscript();
+    setSubmitSuccess(false);
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -78,6 +84,8 @@ const AudioRecorder = ({
         console.log("No Transcript Available. Skip ChatGPT Analysis.");
         return;
       }
+      setIsSubmitting(true);
+      setSubmitSuccess(false);
       const formData = new FormData();
       formData.append("question_number", question_number);
       formData.append("extension", "mp3");
@@ -170,9 +178,9 @@ const AudioRecorder = ({
 
           // Convert aiAssessment to HTML format
           const assessment = aiAssessment
-          .split("\n")
-          .map((line) => `<p>${line}</p>`)
-          .join("");
+            .split("\n")
+            .map((line) => `<p>${line}</p>`)
+            .join("");
 
           formData.append("AI_Assessment", assessment);
           formData.append("band", bandValue);
@@ -197,15 +205,20 @@ const AudioRecorder = ({
                   recorderIndex,
                   filePath: response?.data?.answer_audio,
                 });
+                setSubmitSuccess(true);
               } else {
                 console.log("error in submission response:", response);
               }
             })
             .catch((error) => {
               console.log("error submitting data:", error);
+            })
+            .finally(() => {
+              setIsSubmitting(false);
             });
         } catch (error) {
           console.log("error occurred while fetching data from AI:", error);
+          setIsSubmitting(false);
         }
       };
       getChatGPTResponse();
@@ -224,38 +237,50 @@ const AudioRecorder = ({
     >
       <button
         disabled={!enableRecording || (isActiveRecording && !isRecording)}
-        className="audio__recorder__btn"
+        className={`audio__recorder__btn btn ${
+          isRecording ? "btn-danger" : "btn-success"
+        }`}
         onClick={isRecording ? handleStopRecording : handleStartRecording}
         style={{
           cursor:
             enableRecording && (!isActiveRecording || isRecording)
               ? "pointer"
               : "not-allowed",
-          backgroundColor: isRecording ? "red" : "green",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
-          display: "flex",
-          alignItems: "center",
         }}
       >
         <i
-          className={`icofont-${isRecording ? "stop" : "mic"} audio_icon`}
-          style={{ marginRight: "8px" }}
-        ></i>
-        <span>{isRecording ? "Stop" : "Start"}</span>
+          className={`icofont-${isRecording ? "stop" : "mic"} audio_icon mr-1`}
+        />
+        <span>{isRecording ? "Stop Recording" : "Start Recording"}</span>
       </button>
-      <h6
-        style={{ alignSelf: "center", textAlign: "center", marginTop: "10px" }}
-      >
-        {(!enableRecording &&
-          "Click on the Mic icon to Record your Response") ||
-          (completed && "Recording Completed") ||
-          (isRecording && "Recording...") ||
-          (!isRecording && !audioBlob && "Click on Mic to Record")}
-      </h6>
-      {audioBlob && <DisplayAudio audioBlob={audioBlob} />}
-      {isRecording && <p>Transcript: {transcript}</p>}
+      <div className="mt-2 mb-2">
+        {isSubmitting ? (
+          <div className="d-flex flex-column align-items-center gap-2">
+            <Spinner animation="border" role="status" variant="primary" />
+            <p className="mt-2 mb-2">Submitting your recording...</p>
+          </div>
+        ) : submitSuccess ? (
+          <div className="d-flex align-items-center justify-content-center gap-2 text-success">
+            <i className="icofont-check-circled"></i>
+            <span>Recording submitted successfully!</span>
+          </div>
+        ) : (
+          <h6
+            style={{
+              alignSelf: "center",
+              textAlign: "center",
+              marginTop: "10px",
+            }}
+          >
+            {isRecording
+              ? "Recording in progress... Speak clearly"
+              : !audioBlob
+              ? "Click the button to start recording"
+              : ""}
+          </h6>
+        )}
+      </div>
+      {audioBlob && submitSuccess && <DisplayAudio audioBlob={audioBlob} />}
     </div>
   );
 };

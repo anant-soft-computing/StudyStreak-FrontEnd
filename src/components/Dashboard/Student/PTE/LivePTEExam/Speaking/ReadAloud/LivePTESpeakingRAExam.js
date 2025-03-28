@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import RARecorder from "./RARecorder";
 import Loading from "../../../../../../UI/Loading";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
@@ -22,7 +23,7 @@ const LivePTESpeakingRAExam = () => {
   const [examData, setExamData] = useState({});
   const [fullPaper, setFullPaper] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const timerRunning = true;
+  const [timerRunning, setTimerRunning] = useState(true);
   const [speaking, setSpeaking] = useState([initialState]);
   const [recordedFilePath, setRecordedFilePath] = useState("");
 
@@ -30,6 +31,7 @@ const LivePTESpeakingRAExam = () => {
   const [preparationTimer, setPreparationTimer] = useState(40);
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   // Preparation countdown timer
   useEffect(() => {
@@ -74,6 +76,70 @@ const LivePTESpeakingRAExam = () => {
     }
     return randomId;
   }
+
+  const latestExamSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            practise_set: fullPaper?.IELTS?.id,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Practice Exam Submitted");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
+  const handleSubmit = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        latestExamSubmit();
+        setTimerRunning(false);
+        navigate(`/PTE/Speaking/RA/${fullPaper?.IELTS?.id}`);
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have Already Submitted This Exam");
+      }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -332,12 +398,7 @@ const LivePTESpeakingRAExam = () => {
                   <i className="icofont-arrow-right ml-2"></i>
                 </button>
               )}
-              <button
-                className="btn btn-primary btn-sm"
-                onClick={() =>
-                  navigate(`/PTE/Speaking/RA/${fullPaper?.IELTS?.id}`)
-                }
-              >
+              <button className="btn btn-primary btn-sm" onClick={handleSubmit}>
                 Submit
               </button>
             </div>

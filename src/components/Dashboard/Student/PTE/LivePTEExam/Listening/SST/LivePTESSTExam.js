@@ -334,7 +334,7 @@ const LivePTESSTExam = () => {
               {
                 role: "user",
                 content:
-                  "You are an expert evaluator for the PTE Listening Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation.",
+                  "You are an expert evaluator for the PTE Listening Summarize Spoken Text. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation. Follow the instructions below precisely:",
               },
               {
                 role: "user",
@@ -347,7 +347,7 @@ const LivePTESSTExam = () => {
               },
               {
                 role: "user",
-                content: `Evaluate based on: Summarize Spoken Text Scoring Criteria:
+                content: `Evaluate based on: Summarize Spoken Text
             
                           Content (0-2):
                           - 2: Includes all relevant key points and ideas from the spoken text.
@@ -375,15 +375,14 @@ const LivePTESSTExam = () => {
                           - 0: Frequent spelling errors.
             
                           Provide:
-                          1. **Detailed explanations** with strengths, *weaknesses, and **improvements***
-                          2. **Individual criterion scores**
-                          3. **Overall Score (0-90) using this exact format:**
+                          1. **Detailed explanations** with strengths, weaknesses, and improvements.
+                          2. **Individual criterion scores**.
+                          3. **Total Score** using the exact format below:
 
-                              **Overall Score: (Sum × 10) / 90 = X**
+                          **Total Score: X/10**
 
-                              - The calculation must **always** be formatted exactly as above.
-                              - No extra text or variations.
-            
+                          - The calculation must **always** be formatted exactly as above.
+                          - Do **not** simplify the fraction (e.g., display 8/10).
                           #Evaluation Format:
             
                           Content: [Explanation]  
@@ -401,8 +400,7 @@ const LivePTESSTExam = () => {
                           Spelling: [Explanation]  
                           Score: X/2
             
-                          **Overall Score: (Sum × 10)/90 = X**
-                          `,
+                          **Total Score: X/10**`,
               },
             ],
           };
@@ -424,9 +422,7 @@ const LivePTESSTExam = () => {
           if (data?.choices?.[0]?.message?.content) {
             gptResponse = data.choices[0].message.content;
 
-            const scoreMatch = gptResponse.match(
-              /Overall Score:\s*(?:.*?=\s*)?(\d+(\.\d+)?)/
-            );
+            const scoreMatch = gptResponse.match(/Total Score:\s*(\d+)\/(10)/);
             scoreValue = scoreMatch ? parseFloat(scoreMatch[1]) : null;
 
             // Convert gptResponse to HTML format
@@ -477,7 +473,7 @@ const LivePTESSTExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         submitExam();
-        navigate(`/PTE/Listening/SST/WFD/${fullPaper[0].IELTS.id}`);
+        navigate(`/PTE/Listening/SST/${fullPaper[0].IELTS.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

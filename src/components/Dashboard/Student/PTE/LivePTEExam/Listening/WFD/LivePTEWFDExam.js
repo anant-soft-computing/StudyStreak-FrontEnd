@@ -334,7 +334,7 @@ const LivePTEWFDExam = () => {
               {
                 role: "user",
                 content:
-                  "You are an expert evaluator for the PTE Listening Exam. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation.",
+                  "You are an expert evaluator for the PTE Listening Write From Dictation. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation. Follow the instructions below precisely:",
               },
               {
                 role: "user",
@@ -347,7 +347,7 @@ const LivePTEWFDExam = () => {
               },
               {
                 role: "user",
-                content: `Evaluate based on: Write From Dictation Scoring Criteria:
+                content: `Evaluate based on: Write From Dictation:
   
                           **Correct Words (0-N):**
                           - +1 point for each correctly transcribed word (including punctuation and capitalization).
@@ -441,7 +441,7 @@ const LivePTEWFDExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         submitExam();
-        navigate(`/PTE/Listening/SST/WFD/${fullPaper[0].IELTS.id}`);
+        navigate(`/PTE/Listening/WFD/${fullPaper[0].IELTS.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {

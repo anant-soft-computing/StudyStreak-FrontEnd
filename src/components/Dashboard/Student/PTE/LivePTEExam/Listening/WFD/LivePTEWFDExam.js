@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
@@ -7,6 +7,7 @@ import SmallModal from "../../../../../../UI/Modal";
 
 const LivePTEWFDExam = () => {
   const navigate = useNavigate();
+  const synth = window.speechSynthesis;
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
@@ -136,8 +137,8 @@ const LivePTEWFDExam = () => {
     return () => clearInterval(countdownInterval);
   }, [audioStatus]);
 
-  const renderAudio = (audio_file) => {
-    if (audio_file && reRenderAudio) {
+  const renderAudio = () => {
+    if (reRenderAudio) {
       return (
         <div
           style={{
@@ -169,24 +170,101 @@ const LivePTEWFDExam = () => {
             {audioStatus === "playing" && "Playing"}
             {audioStatus === "complete" && "Completed"}
           </div>
-          <audio
-            ref={audioRef}
-            controls
-            style={{ width: "100%" }}
-            onLoadedMetadata={() => {
-              setAudioStatus("not started");
-              setCountdown(10);
+          <button
+            onClick={() => {
+              if (audioStatus === "not started") {
+                setAudioStatus("playing");
+                speak(examData?.passage);
+              } else if (audioStatus === "playing") {
+                synth.cancel();
+                setAudioStatus("complete");
+              } else if (audioStatus === "complete") {
+                setAudioStatus("playing");
+                speak(examData?.passage);
+              }
             }}
-            onEnded={() => {
-              setAudioStatus("complete");
+            style={{
+              padding: "10px 20px",
+              backgroundColor:
+                audioStatus === "playing" ? "#e74c3c" : "#01579b",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              width: "100%",
+              fontWeight: "500",
             }}
           >
-            <source src={audio_file} type="audio/mpeg" />
-          </audio>
+            {audioStatus === "not started" && "Play Now"}
+            {audioStatus === "playing" && "Stop"}
+            {audioStatus === "complete" && "Replay"}
+          </button>
         </div>
       );
     }
   };
+
+  const extractVisibleText = (htmlContent) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = htmlContent;
+    const text = tempDiv.textContent || tempDiv.innerText || "";
+    return text.trim();
+  };
+
+  const speak = useCallback(
+    (passageContent) => {
+      if (!synth) return; // Check if synth is available
+
+      const text = extractVisibleText(passageContent);
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+
+      // Get voices each time (they might load asynchronously)
+      const voices = synth.getVoices();
+
+      // Select "Google UK English Male" voice
+      const ukMaleVoice = voices.find(
+        (voice) =>
+          voice.name === "Google UK English Male" && voice.lang === "en-GB"
+      );
+      if (ukMaleVoice) {
+        utterance.voice = ukMaleVoice;
+      }
+
+      utterance.onend = () => {
+        setAudioStatus("complete");
+      };
+
+      synth.speak(utterance);
+    },
+    [synth]
+  ); // Only synth as dependency since voices are fetched inside
+
+  useEffect(() => {
+    if (examData?.passage && audioStatus === "not started") {
+      let countdownInterval = setInterval(() => {
+        setCountdown((prevCount) => {
+          if (prevCount <= 1) {
+            clearInterval(countdownInterval);
+            setAudioStatus("playing");
+            speak(examData.passage);
+            return 0;
+          }
+          return prevCount - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(countdownInterval);
+    }
+  }, [examData, audioStatus, speak]);
+
+  useEffect(() => {
+    if (examData?.passage && synth) {
+      synth.cancel();
+      setAudioStatus("not started");
+      setCountdown(10);
+    }
+  }, [next, examData, synth]);
 
   const fetchHtmlContent = async (paperData, index) => {
     let tempAnswer = {};
@@ -552,7 +630,7 @@ const LivePTEWFDExam = () => {
           as you hear it. Write as much of the sentence as you can. You will
           hear the sentence only once.
         </div>
-        {renderAudio(examData?.audio_file)}
+        {renderAudio()}
         <div
           style={{
             padding: "20px",

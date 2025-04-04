@@ -51,12 +51,12 @@ const icons = [
   },
   {
     name: "Instagram",
-    url: "https://www.instagram.com/studystreak6/",
+    url: "https://www.instagram.com/studystreak_coaching/",
     icon: <Instagram size={24} />,
   },
   {
     name: "Linkedin",
-    url: "https://www.linkedin.com/in/studystreak-studystreak-b0390433a/",
+    url: "https://www.linkedin.com/in/studystreak/",
     icon: <Linkedin size={24} />,
   },
 ];
@@ -123,7 +123,6 @@ const Layout = () => {
             </div>
           </div>
         </div>
-
         <div className="bg-white border-b border-neutral-200 shadow-soft">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center h-16">
@@ -160,7 +159,6 @@ const Layout = () => {
                   </Link>
                 ))}
               </div>
-
               {token ? (
                 <div className="hidden lg:flex items-center gap-3">
                   <Link
@@ -205,7 +203,6 @@ const Layout = () => {
             </div>
           </div>
         </div>
-
         {isMenuOpen && (
           <div className="lg:hidden bg-white border-b border-neutral-200">
             <div className="container mx-auto px-4 py-4">
@@ -224,7 +221,6 @@ const Layout = () => {
                     {item.name}
                   </Link>
                 ))}
-
                 {token ? (
                   <div className="pt-4 mt-2 border-t border-neutral-200">
                     <Link
@@ -265,11 +261,9 @@ const Layout = () => {
           </div>
         )}
       </nav>
-
       <main className="flex-grow">
         <Outlet />
       </main>
-
       {!hideFooterPaths.includes(location.pathname) && (
         <footer className="bg-primary-900 text-white py-16">
           <div className="container mx-auto px-4">
@@ -286,7 +280,6 @@ const Layout = () => {
                   through expert-led courses and innovative learning techniques.
                 </p>
               </div>
-
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"
@@ -307,7 +300,6 @@ const Layout = () => {
                   ))}
                 </ul>
               </div>
-
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"
@@ -328,7 +320,6 @@ const Layout = () => {
                   ))}
                 </ul>
               </div>
-
               <div className="space-y-4">
                 <h3
                   className="text-xl font-heading font-bold"
@@ -360,7 +351,6 @@ const Layout = () => {
                     </a>
                   </p>
                 </div>
-
                 <div className="flex space-x-4 pt-4">
                   {icons.map((social, index) => (
                     <a
@@ -378,7 +368,6 @@ const Layout = () => {
                 </div>
               </div>
             </div>
-
             <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-neutral-400">
               <p className="text-neutral-400">
                 © 2024 StudyStreak. All rights reserved.
@@ -387,7 +376,6 @@ const Layout = () => {
           </div>
         </footer>
       )}
-
       {showTidio && <TidioChat />}
     </div>
   );

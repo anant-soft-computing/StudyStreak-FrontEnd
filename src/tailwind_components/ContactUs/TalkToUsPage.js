@@ -41,7 +41,7 @@ const icons = [
   {
     icon: <Linkedin size={24} />,
     name: "LinkedIn",
-    link: "https://www.linkedin.com/in/studystreak-studystreak-b0390433a/",
+    link: "https://www.linkedin.com/in/studystreak/",
   },
   {
     icon: <Facebook size={24} />,
@@ -51,7 +51,7 @@ const icons = [
   {
     icon: <Instagram size={24} />,
     name: "Instagram",
-    link: "https://www.instagram.com/studystreak6/",
+    link: "https://www.instagram.com/studystreak_coaching/",
   },
 ];
 

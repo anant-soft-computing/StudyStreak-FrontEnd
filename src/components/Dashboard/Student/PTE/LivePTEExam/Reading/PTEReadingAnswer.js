@@ -415,15 +415,17 @@ const PTEReadingAnswer = () => {
               <div className="mb-2">
                 <div className="d-flex justify-content-between">
                   <span>
-                    {blockData?.sub_category === "RWFIB"
-                      ? "R&W: Fill In The Blanks [RWFIB]"
-                      : blockData?.sub_category === "CMA"
+                    {blockData?.sub_category === "CMA"
                       ? "MC, choose multiple answers [CMA]"
                       : blockData?.sub_category === "CSA"
                       ? "MC, choose single answers [CSA]"
-                      : "R: Fill In The Blanks [RFIB]"}
+                      : "R&W: Fill In The Blanks [RWFIB]"}
                   </span>
-                  <span>{score}/90</span>
+                  <span>
+                    ({Math.round((score / 90) * blockData.answer.length)}/
+                    {blockData.answer.length})&nbsp;[
+                    {Math.round((score / 90) * 100)}]%
+                  </span>
                 </div>
                 <ProgressBar
                   variant={

@@ -22,6 +22,7 @@ const navigationItems = [
   { name: "IELTS", path: "/ielts" },
   { name: "Why Choose Us", path: "/why-choose-us" },
   { name: "Blogs", path: "/blogs" },
+  { name: "Podcast", path: "/podcast" },
   { name: "Contact Us", path: "/talk-to-us" },
   { name: "Become a Partner", path: "/become-a-partner" },
   { name: "Talk to Us", path: "/talk-to-us" },

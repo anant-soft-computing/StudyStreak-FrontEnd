@@ -23,6 +23,7 @@ import EnglishTest from "./tailwind_components/EnglishTest/EnglishTest";
 import AuthPage from "./tailwind_components/Login/AuthPage";
 import BlogDetails from "./tailwind_components/Blog/BlogDetail";
 import ForgotPasswordPage from "./tailwind_components/Login/ForgotPassword";
+import Podcast from "./tailwind_components/Podcast/Podcast";
 
 //-------------------------> Error Page <----------------------------------
 
@@ -182,6 +183,7 @@ const App = () => {
           <Route path="/login" element={<AuthPage />} />
           <Route path="/english-test" element={<EnglishTest />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="/podcast" element={<Podcast />} />
         </Route>
 
         <Route element={<AdminNavBarRoute isProtected={true} />}>

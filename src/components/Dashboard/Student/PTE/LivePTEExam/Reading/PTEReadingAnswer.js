@@ -145,6 +145,52 @@ const PTEReadingAnswer = () => {
       );
     }
 
+    // RFIB (R:Fill in the Blanks)
+    if (blockData.sub_category === "RFIB") {
+      const studentAnswersList = studentAnswers[0]?.studentAnswers || [];
+      const questionHtml = blockData.question_other;
+
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = questionHtml;
+
+      const inputElements = tempDiv.querySelectorAll("input");
+
+      inputElements.forEach((input, index) => {
+        const questionNumber = index + 1;
+
+        const studentAnswer =
+          studentAnswersList.find(
+            (answer) => answer.question_number === questionNumber
+          )?.answer_text || "";
+
+        const correctAnswer =
+          blockData.answer.find(
+            (answer) => answer.question_number === questionNumber
+          )?.answer_text || "";
+
+        const isCorrect =
+          studentAnswer.toLowerCase().trim() ===
+          correctAnswer.toLowerCase().trim();
+
+        const answerSpan = document.createElement("span");
+        answerSpan.style.display = "inline-block";
+        answerSpan.style.padding = "2px 8px";
+        answerSpan.style.margin = "0 3px";
+        answerSpan.style.borderRadius = "4px";
+        answerSpan.style.fontWeight = "bold";
+        answerSpan.style.backgroundColor = isCorrect ? "#e6f7e6" : "#ffebee";
+        answerSpan.style.color = isCorrect ? "#2e7d32" : "#c62828";
+        answerSpan.style.border = isCorrect
+          ? "1px solid #a5d6a7"
+          : "1px solid #ef9a9a";
+        answerSpan.textContent = studentAnswer || "[blank]";
+
+        input.parentNode.replaceChild(answerSpan, input);
+      });
+
+      return <div dangerouslySetInnerHTML={{ __html: tempDiv.innerHTML }} />;
+    }
+
     // RWFIB (Reading & Writing: Fill in the Blanks)
     if (blockData.sub_category === "RWFIB") {
       const studentAnswersList = studentAnswers[0]?.studentAnswers || [];
@@ -419,6 +465,8 @@ const PTEReadingAnswer = () => {
                       ? "MC, choose multiple answers [CMA]"
                       : blockData?.sub_category === "CSA"
                       ? "MC, choose single answers [CSA]"
+                      : blockData?.sub_category === "RFIB"
+                      ? "R: Fill In The Blanks [RFIB]"
                       : "R&W: Fill In The Blanks [RWFIB]"}
                   </span>
                   <span>

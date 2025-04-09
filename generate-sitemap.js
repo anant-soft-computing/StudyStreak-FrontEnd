@@ -16,38 +16,22 @@ async function generateSitemap() {
 
     const staticLinks = [
       { url: "/", changefreq: "daily", priority: 1.0 },
-      { url: "/courses", changefreq: "weekly", priority: 0.8 },
-      { url: "/ielts", changefreq: "weekly", priority: 0.7 },
-      { url: "/about-us", changefreq: "monthly", priority: 0.5 },
-      { url: "/why-choose-us", changefreq: "monthly", priority: 0.5 },
-      { url: "/blogs", changefreq: "weekly", priority: 0.8 },
-      { url: "/talk-to-us", changefreq: "monthly", priority: 0.6 },
-      { url: "/become-a-partner", changefreq: "monthly", priority: 0.6 },
+      { url: "/courses", changefreq: "daily", priority: 0.8 },
+      { url: "/ielts", changefreq: "daily", priority: 0.8 },
+      { url: "/about-us", changefreq: "daily", priority: 0.8 },
+      { url: "/blogs", changefreq: "daily", priority: 0.8 },
     ];
 
     staticLinks.forEach((link) => sitemap.write(link));
-
-    const coursesResponse = await fetch(
-      "https://studystreak.in/api/courselistview/?search=&Category__name="
-    );
-    const courses = await coursesResponse.json();
-    courses.forEach((course) => {
-      sitemap.write({
-        url: `/course/${course.id}`,
-        changefreq: "weekly",
-        priority: 0.7,
-        lastmod: course.updated_at || new Date().toISOString(),
-      });
-    });
 
     const blogsResponse = await fetch("https://studystreak.in/api/blog-list/");
     const blogs = await blogsResponse.json();
     blogs.forEach((blog) => {
       sitemap.write({
         url: `/blogs/${blog.slug}`,
-        changefreq: "monthly",
-        priority: 0.6,
-        lastmod: blog.updated_at || new Date().toISOString(),
+        changefreq: "daily",
+        priority: 0.9,
+        lastmod: new Date().toISOString(),
       });
     });
 

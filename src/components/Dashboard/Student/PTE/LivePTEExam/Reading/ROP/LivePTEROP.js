@@ -1,38 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import Loading from "../../../../../UI/Loading";
-import SmallModal from "../../../../../UI/Modal";
-import ajaxCall from "../../../../../../helpers/ajaxCall";
-import { formatTime } from "../../../../../../utils/timer/formateTime";
+import Loading from "../../../../../../UI/Loading";
+import SmallModal from "../../../../../../UI/Modal";
+import ajaxCall from "../../../../../../../helpers/ajaxCall";
+import { formatTime } from "../../../../../../../utils/timer/formateTime";
 const Cheerio = require("cheerio");
 
-const instructions = {
-  RWFIB:
-    "Below is a text with blanks. Click on each blank, a list of choice will appear. Select the appropriate answer choice for each blank.",
-  CMA: "Read the text and answer the multiple-choice question by selecting the correct response. More than one response is correct.",
-  RFIB: "In the text below some words are missing. Drag words from the box below to the appropriate place in the text. To undo an answer choice, drag the word back to the box below the text.",
-  CSA: "Read the text and answer the multiple-choice question by selecting the correct response. Only one response is correct.",
-};
-
-const LivePTEReadingsExam = () => {
+const LivePTEROP = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
-  const examSubcategory = useLocation()?.pathname?.split("/")?.[4];
   const [timer, setTimer] = useState(0);
   const [examData, setExamData] = useState({});
   const [fullPaper, setFullPaper] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
+  const [correctAnswer, setCorrectAnswer] = useState([]);
   const [htmlContents, setHtmlContents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [timerRunning, setTimerRunning] = useState(true);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  // 0 means before start, 1 means after start, 2 means after finish
+  const [timerRunning, setTimerRunning] = useState(true);
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
+  const [shuffledAnswers, setShuffledAnswers] = useState([]);
+  const [droppedItems, setDroppedItems] = useState([]);
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
@@ -110,92 +103,78 @@ const LivePTEReadingsExam = () => {
     }
   }, [examForm, examType, fullPaper, next]);
 
-  const handleAnswerLinking = (e, questionId, next) => {
-    const { value, id, name, checked } = e.target;
-
-    const elementId = id.split("_")[0];
-
-    const temp = [...examAnswer];
-    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
-
-    // is this a multipleTypeQuestions
-    const isMultiQuestions = examAnswer[next].data.filter(
-      (item) => item.question_number === id
-    );
-
-    if (isMultiQuestions?.length <= 1) {
-      temp[next].data.forEach((item) => {
-        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
-        if (item.question_number === id && elementId === "InputText") {
-          const trimmedValue = value.trim();
-          item.answer_text = trimmedValue;
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.question_number === id && elementId === "Checkbox") {
-          item.answer_text = checked ? value : "";
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.question_number === id) {
-          item.answer_text = value;
-          conditionSatisfied = true; // Set the flag to true
-        }
-      });
-
-      setExamAnswer(temp);
-    } else {
-      const multipleTypeQuestions = checked
-        ? examAnswer[next].data.findIndex(
-            (item) => item.question_number === id && item.answer_text === ""
-          )
-        : examAnswer[next].data.findIndex(
-            (item) => item.question_number === id && item.answer_text !== ""
-          );
-      if (multipleTypeQuestions !== -1) {
-        temp[next].data[multipleTypeQuestions].answer_text = checked
-          ? value
-          : "";
-        setExamAnswer(temp);
-      } else {
-        const contentElements = document.querySelectorAll(`[id="${id}"]`);
-        contentElements.forEach((element) => {
-          const isAlreadyAnswered = isMultiQuestions.findIndex(
-            (a) => a.answer_text === element.value
-          );
-
-          if (isAlreadyAnswered === -1) element.checked = false;
-        });
-      }
-    }
-  };
-
   useEffect(() => {
-    if (examAnswer.length > 0) {
-      for (let tempExamAnswer of examAnswer) {
-        let examIndex = examAnswer.indexOf(tempExamAnswer);
-        // remove duplicate
-        const filteredExamAnswer = tempExamAnswer.data.filter(
-          (item, index) =>
-            index ===
-            tempExamAnswer.data.findIndex(
-              (i) => i.question_number === item.question_number
-            )
+    const fetchCorrectAnswers = async () => {
+      try {
+        const response = await ajaxCall(
+          `/practice-answers/${fullPaper?.[0]?.IELTS?.id}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
         );
-        filteredExamAnswer.forEach((item) => {
-          const contentElements = document.querySelectorAll(
-            `[id="${item.question_number}"]`
+
+        if (
+          response.status === 200 &&
+          response.data?.correct_answers?.Reading
+        ) {
+          const currentCorrectAnswer =
+            response.data.correct_answers.Reading.find(
+              (item) => item.block_id === examData?.id
+            )?.answers || [];
+          setCorrectAnswer(currentCorrectAnswer);
+
+          // Shuffle the answers for the current question
+          const shuffled = [...currentCorrectAnswer].sort(
+            () => Math.random() - 0.5
           );
-          if (item.answer_text !== "") {
-            contentElements.forEach((element) => {
-              element.value = item.answer_text;
+          setShuffledAnswers(shuffled);
+
+          // Reset dropped items for the new question
+          setDroppedItems(Array(currentCorrectAnswer.length).fill(null));
+
+          // Check if we have saved answers for this question
+          if (examAnswer[next]?.data) {
+            const savedDroppedItems = currentCorrectAnswer.map((_, idx) => {
+              const savedAnswer = examAnswer[next].data.find(
+                (item) => item.question_number === `para_${idx}`
+              );
+              return savedAnswer?.answer_text
+                ? currentCorrectAnswer.find(
+                    (ca) => ca.answer_text === savedAnswer.answer_text
+                  )
+                : null;
             });
+            setDroppedItems(savedDroppedItems);
+
+            // Update shuffled answers by removing the ones already dropped
+            const remainingShuffled = shuffled.filter(
+              (item) =>
+                !savedDroppedItems.some(
+                  (di) => di?.answer_text === item.answer_text
+                )
+            );
+            setShuffledAnswers(remainingShuffled);
           }
-          contentElements.forEach((element) => {
-            element.addEventListener("change", (e) => {
-              handleAnswerLinking(e, item.question_number, examIndex);
-            });
-          });
-        });
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
       }
+    };
+
+    if (fullPaper?.length && examData?.id) {
+      fetchCorrectAnswers();
     }
-  }, [linkAnswer, next]);
+  }, [examAnswer, examData?.id, fullPaper, next]);
 
   const fetchHtmlContent = async (paperData, index, tempQuestions) => {
     const question = paperData?.question_other;
@@ -203,107 +182,28 @@ const LivePTEReadingsExam = () => {
 
     const $ = Cheerio.load(question.toString());
 
-    const questionTags = [
-      "select",
-      "textarea",
-      "input[type='text'], input:not([type='radio'], [type='checkbox'])",
-      "input[type='radio']",
-      "input[type='checkbox']",
-    ];
-
-    const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
-
-    const temp = [];
-    let questionPassage = "";
-
-    questionTags.forEach((tag, tagIndex) => {
-      // Find elements for current tag
-      const elements = $(tag);
-      const numberOfElements = elements.length;
-
-      const radioCheckboxtypeQuestionsGroup = {};
-      let uniqueId = "";
-
-      if (numberOfElements !== 0) {
-        let tagQuestions = {
-          type: tagIds[tagIndex],
-          paginationsIds: [],
-        };
-        elements.each((j, element) => {
-          if (
-            tag === "input[type='radio']" ||
-            tag === "input[type='checkbox']"
-          ) {
-            const name = $(element).attr("name");
-            if (!radioCheckboxtypeQuestionsGroup[name]) {
-              radioCheckboxtypeQuestionsGroup[name] = [];
-              uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
-              tagQuestions.paginationsIds.push(uniqueId);
-            }
-            $(element).attr("id", uniqueId);
-            radioCheckboxtypeQuestionsGroup[name].push(element);
-          } else {
-            const uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
-            tagQuestions.paginationsIds.push(uniqueId);
-            $(element).attr("id", uniqueId);
-          }
-        });
-        temp.push(tagQuestions);
-      }
+    // Extract paragraphs for re-order paragraphs
+    const paragraphs = [];
+    $("p").each((i, elem) => {
+      paragraphs.push($(elem).text().trim());
     });
 
-    let paginationsStrucutre = [];
+    const questionPassage = `<div className="mainContainer">${$.html()}</div>`;
 
-    paperData?.question_structure?.forEach((item, index) => {
-      temp.forEach((element) => {
-        if (element.type === item.type) {
-          if (element.type === "Checkbox" && item?.isMultiQuestions) {
-            const multipleTypeQuestionsGroup = element.paginationsIds.splice(
-              0,
-              1
-            );
-            paginationsStrucutre = [
-              ...paginationsStrucutre,
-              ...Array.from(
-                { length: item.numberOfQuestions },
-                () => multipleTypeQuestionsGroup
-              ),
-            ];
-          } else if (element.type === item.type) {
-            paginationsStrucutre.push(
-              element.paginationsIds.splice(0, item.numberOfQuestions)
-            );
-          }
-        }
-      });
-    });
-
-    paginationsStrucutre = paginationsStrucutre.flat();
-
-    // Display questions for the first page initially
-    questionPassage += `<div className="mainContainer">${$.html()}</div>`;
-
-    // Replace ♫ with unique symbols
-    let serialNumber = tempQuestions;
-    questionPassage = questionPassage.replaceAll(
-      "++",
-      () => `${serialNumber++}`
-    );
-
-    const tempPaginationStructure = paginationsStrucutre.map((item) => {
-      return {
-        question_number: item,
-        answer_text: "",
-      };
-    });
+    // Create answer structure for paragraphs
+    const tempPaginationStructure = paragraphs.map((para, idx) => ({
+      question_number: `para_${idx}`,
+      answer_text: "",
+      original_text: para,
+    }));
 
     tempAnswer = {
       exam_id: paperData?.id,
       data: tempPaginationStructure,
     };
-    // return questionPassage;
+
     return new Promise((resolve) => {
-      resolve({ questionPassage, tempAnswer }); // resolve with the question passage once it's constructed
+      resolve({ questionPassage, tempAnswer, paragraphs });
     });
   };
 
@@ -341,6 +241,69 @@ const LivePTEReadingsExam = () => {
       }
     })();
   }, [fullPaper]);
+
+  const handleDragStart = (e, answer, index) => {
+    e.dataTransfer.setData("text/plain", answer);
+    e.dataTransfer.setData("index", index);
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    const answer = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const dragIndex = e.dataTransfer.getData("index");
+
+    // If coming from source panel
+    if (dragIndex) {
+      const newShuffled = [...shuffledAnswers];
+      const newDropped = [...droppedItems];
+
+      // If dropping on an already filled slot, return that item to source
+      if (newDropped[dropIndex]) {
+        newShuffled.push(newDropped[dropIndex]);
+      }
+
+      // Remove from source and add to target
+      newDropped[dropIndex] = newShuffled[dragIndex];
+      newShuffled.splice(dragIndex, 1);
+
+      setShuffledAnswers(newShuffled);
+      setDroppedItems(newDropped);
+
+      // Update exam answers
+      updateExamAnswers(newDropped);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const updateExamAnswers = (newDropped) => {
+    const updatedAnswers = [...examAnswer];
+    updatedAnswers[next] = {
+      ...updatedAnswers[next],
+      data: newDropped.map((item, idx) => ({
+        question_number: `para_${idx}`,
+        answer_text: item ? item.answer_text : "",
+        original_text: item ? item.original_text : "",
+      })),
+    };
+    setExamAnswer(updatedAnswers);
+  };
+
+  const handleRemoveItem = (index) => {
+    const newDropped = [...droppedItems];
+    const itemToRemove = newDropped[index];
+
+    if (itemToRemove) {
+      const newShuffled = [...shuffledAnswers, itemToRemove];
+      newDropped[index] = null;
+
+      setShuffledAnswers(newShuffled);
+      setDroppedItems(newDropped);
+      updateExamAnswers(newDropped);
+    }
+  };
 
   const latestExamSubmit = async () => {
     try {
@@ -448,7 +411,7 @@ const LivePTEReadingsExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         submitExam();
-        navigate(`/PTE/Reading/${fullPaper[0]?.IELTS?.id}`);
+        navigate("/PTE/Reading");
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -459,24 +422,31 @@ const LivePTEReadingsExam = () => {
     }
   };
 
-  const reviewContent = () =>
-    examAnswer.map((test, index) => (
-      <div key={index}>
-        <h4>Test : {index + 1}</h4>
-        <div className="card-container">
-          {test.data.map((answer, idx) => (
-            <div key={idx} className="card answer__width">
-              <div className="card-body">
-                <h6 className="card-text">
-                  Answer ({idx + 1}) :{" "}
-                  <span className="text-success">{answer.answer_text}</span>
-                </h6>
-              </div>
-            </div>
-          ))}
+  const reviewContent = () => (
+    <div>
+      {examAnswer.map((test, testIndex) => (
+        <div>
+          <h4>Test {testIndex + 1}</h4>
+          <div className="card-container">
+            {test.data.map((answer, answerIndex) => {
+              return (
+                <div key={answerIndex} className="card answer__width">
+                  <div className="card-body">
+                    <h6 className="card-text">
+                      Paragraph {answerIndex + 1} :{" "}
+                      <span className="text-success">
+                        {answer?.answer_text}
+                      </span>
+                    </h6>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    ));
+      ))}
+    </div>
+  );
 
   return isLoading ? (
     <div className="mt-4">
@@ -517,6 +487,7 @@ const LivePTEReadingsExam = () => {
           <span style={{ fontWeight: "500" }}>{formatTime(timer)}</span>
         </div>
       </div>
+      {/* Main content area */}
       <div
         style={{
           display: "flex",
@@ -540,8 +511,11 @@ const LivePTEReadingsExam = () => {
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
-          {instructions[examSubcategory]}
+          The text boxes in the left panel have been placed in a random order.
+          Restore the original order by dragging the text boxes from the left
+          panel to the right panel.
         </div>
+        {/* Responsive Source and Target containers */}
         <div
           style={{
             display: "flex",
@@ -551,34 +525,118 @@ const LivePTEReadingsExam = () => {
             overflow: "hidden",
           }}
         >
-          {!!examData?.passage && (
-            <div
-              style={{
-                flex: 1,
-                overflowY: "auto",
-                padding: "20px",
-                backgroundColor: "#ffffff",
-                borderRadius: "8px",
-                border: "1px solid #ddd",
-              }}
-              dangerouslySetInnerHTML={{
-                __html: examData?.passage,
-              }}
-            />
-          )}
+          {/* Left panel - Source (shuffled paragraphs) */}
           <div
             style={{
-              flex: !!examData?.passage ? 1 : "100%",
+              flex: 1,
+              minHeight: "200px",
               overflowY: "auto",
               padding: "20px",
               backgroundColor: "#ffffff",
               borderRadius: "8px",
               border: "1px solid #ddd",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
             }}
-            dangerouslySetInnerHTML={{
-              __html: htmlContents?.[next],
+          >
+            <div
+              style={{
+                fontWeight: "500",
+                marginBottom: "15px",
+                textAlign: "center",
+                borderBottom: "1px solid #eee",
+                paddingBottom: "10px",
+              }}
+            >
+              Source
+            </div>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
+              {shuffledAnswers.map((item, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: "10px 15px",
+                    border: "1px solid #01579b",
+                    borderRadius: "5px",
+                    cursor: "grab",
+                    backgroundColor: "#f9f9f9",
+                    transition: "background-color 0.3s ease",
+                  }}
+                  draggable="true"
+                  onDragStart={(e) =>
+                    handleDragStart(e, JSON.stringify(item), index)
+                  }
+                >
+                  {item.answer_text}
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Right panel - Target (drop zones) */}
+          <div
+            style={{
+              flex: 1,
+              minHeight: "200px",
+              overflowY: "auto",
+              padding: "20px",
+              backgroundColor: "#ffffff",
+              borderRadius: "8px",
+              border: "1px solid #ddd",
+              boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
             }}
-          />
+          >
+            <div
+              style={{
+                fontWeight: "500",
+                marginBottom: "15px",
+                textAlign: "center",
+                borderBottom: "1px solid #eee",
+                paddingBottom: "10px",
+              }}
+            >
+              Target
+            </div>
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            >
+              {correctAnswer.map((_, index) => (
+                <div
+                  key={index}
+                  style={{
+                    minHeight: "50px",
+                    padding: "10px",
+                    border: "2px dashed #01579b",
+                    borderRadius: "5px",
+                    backgroundColor: droppedItems[index]
+                      ? "#e8f5e9"
+                      : "#fff3e0",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                  onDrop={(e) => handleDrop(e, index)}
+                  onDragOver={handleDragOver}
+                >
+                  {droppedItems[index] ? (
+                    <>
+                      <span>{droppedItems[index].answer_text}</span>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleRemoveItem(index)}
+                      >
+                        ×
+                      </button>
+                    </>
+                  ) : (
+                    <span style={{ color: "#9e9e9e" }}>
+                      Drop paragraph here
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         <div
           style={{
@@ -689,4 +747,4 @@ const LivePTEReadingsExam = () => {
   );
 };
 
-export default LivePTEReadingsExam;
+export default LivePTEROP;

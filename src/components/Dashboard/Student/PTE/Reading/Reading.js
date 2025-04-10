@@ -33,11 +33,16 @@ const Reading = () => {
         );
         if (response.status === 200) {
           setReadingData({
-            RWFIB: response.data.find((item) => item.sub_category === "RWFIB") || {},
-            CMA: response.data.find((item) => item.sub_category === "CMA") || {},
-            ROP: response.data.find((item) => item.sub_category === "ROP") || {},
-            RFIB: response.data.find((item) => item.sub_category === "RFIB") || {},
-            CSA: response.data.find((item) => item.sub_category === "CSA") || {},
+            RWFIB:
+              response.data.find((item) => item.sub_category === "RWFIB") || {},
+            CMA:
+              response.data.find((item) => item.sub_category === "CMA") || {},
+            ROP:
+              response.data.find((item) => item.sub_category === "ROP") || {},
+            RFIB:
+              response.data.find((item) => item.sub_category === "RFIB") || {},
+            CSA:
+              response.data.find((item) => item.sub_category === "CSA") || {},
           });
         }
       } catch (error) {
@@ -53,6 +58,8 @@ const Reading = () => {
     const url =
       sub_category === "RFIB"
         ? `/PTE/IELTS/Reading/RFIB/${examId}`
+        : sub_category === "ROP"
+        ? `/PTE/IELTS/Reading/ROP/${examId}`
         : `/PTE/IELTS/Reading/${sub_category}/${examId}`;
     window.open(url, "_blank");
   };

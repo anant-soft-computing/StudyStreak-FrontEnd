@@ -13,6 +13,7 @@ import YesNoContent from "./YesNo";
 import TableCompletionContent from "./TableCompletion";
 import MultipleChoiceQueContent from "./MultipleChoiceQue";
 import MultipleCheckboxChoiceQueContent from "./MultipleCheckBoxQuestions";
+import reOrderParagraphContent from "./ReorderParagraph";
 
 export const MatchHeading = MatchHeadingContent;
 export const LocatingInformation = LocatingInformatonContent;
@@ -29,3 +30,4 @@ export const YesNo = YesNoContent;
 export const TableCompletion = TableCompletionContent;
 export const MultipleChoiceQue = MultipleChoiceQueContent;
 export const MultipleCheckboxChoiceQue = MultipleCheckboxChoiceQueContent;
+export const ReorderParagraph = reOrderParagraphContent;

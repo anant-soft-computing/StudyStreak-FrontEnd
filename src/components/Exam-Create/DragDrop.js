@@ -20,6 +20,7 @@ import {
   TableCompletion,
   MultipleChoiceQue,
   MultipleCheckboxChoiceQue,
+  ReorderParagraph
 } from "../../utils/HTMLContent";
 import MultipleChoicesAnswer from "../../utils/HTMLContent/MultipleChoicesAnswer";
 
@@ -43,6 +44,7 @@ const initialDivContents = {
   header16: MultipleChoiceQue,
   header17: MultipleCheckboxChoiceQue,
   header18: MultipleChoicesAnswer,
+  header19: ReorderParagraph
 };
 
 const initialSubmit = {
@@ -927,6 +929,7 @@ const DragDrop = () => {
                   { id: "header16", title: "Radio Choice Questions" },
                   { id: "header17", title: "Checkbox Choice Questions" },
                   { id: "header18", title: "Multiple Question Answers" },
+                  { id: "header19", title: "Reorder Paragraph" },
                 ].map((item, index) => (
                   <div
                     key={index}

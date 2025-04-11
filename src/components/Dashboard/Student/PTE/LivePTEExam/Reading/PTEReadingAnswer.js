@@ -15,13 +15,14 @@ const PTEReadingAnswer = () => {
   });
   const [blockID, setBlockID] = useState(0);
   const [blockData, setBlockData] = useState({
-    answer: [],
     sub_category: "",
     question_other: "",
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [studentExams, setStudentExams] = useState([]);
+  const [matchedPairs, setMatchedPairs] = useState([]);
+  const [correctAnswers, setCorrectAnswers] = useState([]);
   const [studentAnswers, setStudentAnswers] = useState([]);
   const [score, setScore] = useState(0);
 
@@ -52,14 +53,23 @@ const PTEReadingAnswer = () => {
                 studentAnswers: item?.answers,
               };
             });
+          const correctAnswers =
+            response?.data?.correct_answers?.Reading?.filter(
+              (item) => item.block_id === blockID
+            ).map((item) => {
+              return {
+                correctAnswers: item?.answers,
+              };
+            });
           setExamData({
             name: response?.data?.name,
             category: response?.data?.category,
             sub_category: response?.data?.sub_category,
             practice_test_type: response?.data?.practice_test_type,
           });
-          setStudentExams(response.data.student_answers?.Reading);
-          setStudentAnswers(studentAnswers);
+          setStudentExams(response?.data?.student_answers?.Reading);
+          setStudentAnswers(studentAnswers[0]?.studentAnswers || []);
+          setCorrectAnswers(correctAnswers[0]?.correctAnswers || []);
         } else {
           console.log("error");
         }
@@ -91,7 +101,6 @@ const PTEReadingAnswer = () => {
         );
         if (response.status === 200) {
           setBlockData({
-            answer: response?.data?.answers,
             sub_category: response?.data?.sub_category,
             question_other: response?.data?.question_other,
           });
@@ -107,13 +116,12 @@ const PTEReadingAnswer = () => {
   }, [blockID]);
 
   const calculateScore = useCallback(() => {
-    if (!blockData.answer.length || !studentAnswers.length) return 0;
+    if (!correctAnswers?.length || !studentAnswers?.length) return 0;
 
-    const studentAnswersList = studentAnswers[0]?.studentAnswers || [];
     let correctCount = 0;
 
-    blockData.answer.forEach((correctAnswer) => {
-      const studentAnswer = studentAnswersList.find(
+    correctAnswers?.forEach((correctAnswer) => {
+      const studentAnswer = studentAnswers?.find(
         (answer) => answer.question_number === correctAnswer.question_number
       );
 
@@ -127,11 +135,47 @@ const PTEReadingAnswer = () => {
     });
 
     const calculatedScore = Math.round(
-      (correctCount / blockData.answer.length) * 90
+      (correctCount / correctAnswers?.length) * 90
     );
     setScore(calculatedScore);
     return calculatedScore;
-  }, [blockData, studentAnswers]);
+  }, [correctAnswers, studentAnswers]);
+
+  const calculateROPScore = useCallback(() => {
+    if (!correctAnswers.length || !studentAnswers.length) return 0;
+
+    let correctCount = 0;
+    const pairs = [];
+
+    // Create pairs of correct and student answers
+    correctAnswers.forEach((correctAnswer) => {
+      const studentAnswer = studentAnswers.find(
+        (answer) => answer.question_number === correctAnswer.question_number
+      );
+
+      const isCorrect =
+        studentAnswer &&
+        studentAnswer.answer_text.toLowerCase() ===
+          correctAnswer.answer_text.toLowerCase();
+
+      if (isCorrect) {
+        correctCount++;
+      }
+
+      pairs.push({
+        correct: correctAnswer,
+        student: studentAnswer,
+        isCorrect,
+      });
+    });
+
+    setMatchedPairs(pairs);
+    const calculatedScore = Math.round(
+      (correctCount / correctAnswers.length) * 90
+    );
+    setScore(calculatedScore);
+    return calculatedScore;
+  }, [correctAnswers, studentAnswers]);
 
   const handleOpenModal = (blockID) => {
     setBlockID(blockID);
@@ -147,7 +191,6 @@ const PTEReadingAnswer = () => {
 
     // RFIB (R:Fill in the Blanks)
     if (blockData.sub_category === "RFIB") {
-      const studentAnswersList = studentAnswers[0]?.studentAnswers || [];
       const questionHtml = blockData.question_other;
 
       const tempDiv = document.createElement("div");
@@ -159,12 +202,12 @@ const PTEReadingAnswer = () => {
         const questionNumber = index + 1;
 
         const studentAnswer =
-          studentAnswersList.find(
+          studentAnswers?.find(
             (answer) => answer.question_number === questionNumber
           )?.answer_text || "";
 
         const correctAnswer =
-          blockData.answer.find(
+          correctAnswers?.find(
             (answer) => answer.question_number === questionNumber
           )?.answer_text || "";
 
@@ -193,7 +236,6 @@ const PTEReadingAnswer = () => {
 
     // RWFIB (Reading & Writing: Fill in the Blanks)
     if (blockData.sub_category === "RWFIB") {
-      const studentAnswersList = studentAnswers[0]?.studentAnswers || [];
       let modifiedHtml = blockData.question_other;
 
       const tempDiv = document.createElement("div");
@@ -205,12 +247,12 @@ const PTEReadingAnswer = () => {
           parseInt(select.id.replace("blank", "")) || index + 1;
 
         const studentAnswer =
-          studentAnswersList.find(
+          studentAnswers?.find(
             (answer) => answer.question_number === questionNumber
           )?.answer_text || "";
 
         const correctAnswer =
-          blockData.answer.find(
+          correctAnswers?.find(
             (answer) => answer.question_number === questionNumber
           )?.answer_text || "";
 
@@ -243,7 +285,6 @@ const PTEReadingAnswer = () => {
 
     // CSA (Choose Single Answer)
     if (blockData.sub_category === "CSA") {
-      const studentAnswersList = studentAnswers[0]?.studentAnswers || [];
       let modifiedHtml = blockData.question_other;
 
       const tempDiv = document.createElement("div");
@@ -251,8 +292,8 @@ const PTEReadingAnswer = () => {
       const radioInputs = tempDiv.querySelectorAll("input[type='radio']");
 
       // Get answers
-      const studentAnswer = studentAnswersList[0]?.answer_text || "";
-      const correctAnswer = blockData.answer[0]?.answer_text || "";
+      const studentAnswer = studentAnswers[0]?.answer_text || "";
+      const correctAnswer = correctAnswers[0]?.answer_text || "";
       const isCorrect =
         studentAnswer.toLowerCase() === correctAnswer.toLowerCase();
 
@@ -286,7 +327,6 @@ const PTEReadingAnswer = () => {
 
     // CMA (Choose Multiple Answers)
     if (blockData.sub_category === "CMA") {
-      const studentAnswersList = studentAnswers[0]?.studentAnswers || [];
       let modifiedHtml = blockData.question_other;
 
       const tempDiv = document.createElement("div");
@@ -294,12 +334,12 @@ const PTEReadingAnswer = () => {
       const checkboxInputs = tempDiv.querySelectorAll("input[type='checkbox']");
 
       // Get correct answers
-      const correctAnswers = blockData.answer.map((answer) =>
+      const correctAnswer = correctAnswers?.map((answer) =>
         answer.answer_text.toUpperCase().trim()
       );
 
       // Get student selected answers
-      const studentSelections = studentAnswersList.map((answer) =>
+      const studentSelections = studentAnswers?.map((answer) =>
         answer.answer_text.toUpperCase().trim()
       );
 
@@ -308,7 +348,7 @@ const PTEReadingAnswer = () => {
         const optionElement = checkbox.closest("p");
 
         // Check if this option is correct
-        const isCorrectAnswer = correctAnswers.includes(optionValue);
+        const isCorrectAnswer = correctAnswer?.includes(optionValue);
         // Check if this option was selected by student
         const isSelected = studentSelections.includes(optionValue);
 
@@ -340,9 +380,19 @@ const PTEReadingAnswer = () => {
 
   useEffect(() => {
     if (isModalOpen) {
-      calculateScore();
+      if (blockData?.sub_category === "ROP") {
+        calculateROPScore();
+      } else {
+        calculateScore();
+      }
     }
-  }, [isModalOpen, blockData, studentAnswers, calculateScore]);
+  }, [
+    isModalOpen,
+    blockData,
+    studentAnswers,
+    calculateScore,
+    calculateROPScore,
+  ]);
 
   return (
     <div>
@@ -420,6 +470,123 @@ const PTEReadingAnswer = () => {
       >
         {isLoading ? (
           <Loading />
+        ) : blockData?.sub_category === "ROP" ? (
+          <div>
+            <div className="row">
+              <div className="col-md-6">
+                <div
+                  style={{
+                    padding: "20px",
+                    marginTop: "20px",
+                    backgroundColor: "#ffffff",
+                    borderRadius: "8px",
+                    border: "1px solid #ddd",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                  }}
+                >
+                  <h5
+                    style={{
+                      width: "100%",
+                      marginBottom: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Source
+                  </h5>
+                  {correctAnswers?.map((item, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: "10px 15px",
+                        border: "1px solid #01579b",
+                        borderRadius: "5px",
+                        backgroundColor: "#f9f9f9",
+                        marginBottom: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {item.answer_text}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div
+                  style={{
+                    padding: "20px",
+                    marginTop: "20px",
+                    backgroundColor: "#ffffff",
+                    borderRadius: "8px",
+                    border: "1px solid #ddd",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                  }}
+                >
+                  <h5
+                    style={{
+                      width: "100%",
+                      marginBottom: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Target
+                  </h5>
+                  {matchedPairs.map((pair, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        padding: "10px 15px",
+                        border: `1px solid ${
+                          pair.isCorrect ? "#4caf50" : "#f44336"
+                        }`,
+                        borderRadius: "5px",
+                        backgroundColor: pair.isCorrect ? "#e8f5e9" : "#ffebee",
+                        marginBottom: "10px",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {pair.student?.answer_text}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="progress-section mt-4">
+              <div
+                style={{
+                  padding: "20px",
+                  backgroundColor: "#ffffff",
+                  borderRadius: "8px",
+                  border: "1px solid #ddd",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+                }}
+              >
+                <h5>Your Total Score:</h5>
+                <div className="mb-2">
+                  <div className="d-flex justify-content-between">
+                    <span>Re-order Paragraphs</span>
+                    <span>
+                      ({Math.round((score / 90) * correctAnswers.length)}/
+                      {correctAnswers.length})&nbsp;[
+                      {Math.round((score / 90) * 100)}]%
+                    </span>
+                  </div>
+                  <ProgressBar
+                    variant={
+                      score >= 60
+                        ? "success"
+                        : score >= 30
+                        ? "warning"
+                        : "danger"
+                    }
+                    max={90}
+                    now={score}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           <div>
             {renderQuestionWithAnswers()}
@@ -439,8 +606,8 @@ const PTEReadingAnswer = () => {
               <h5 style={{ width: "100%", marginBottom: "10px" }}>
                 Correct Answers:
               </h5>
-              {blockData?.answer &&
-                blockData?.answer?.map((item) => (
+              {correctAnswers?.length > 0 &&
+                correctAnswers?.map((item) => (
                   <div
                     key={item.id}
                     style={{
@@ -470,8 +637,8 @@ const PTEReadingAnswer = () => {
                       : "R&W: Fill In The Blanks [RWFIB]"}
                   </span>
                   <span>
-                    ({Math.round((score / 90) * blockData.answer.length)}/
-                    {blockData.answer.length})&nbsp;[
+                    ({Math.round((score / 90) * correctAnswers?.length)}/
+                    {correctAnswers?.length})&nbsp;[
                     {Math.round((score / 90) * 100)}]%
                   </span>
                 </div>

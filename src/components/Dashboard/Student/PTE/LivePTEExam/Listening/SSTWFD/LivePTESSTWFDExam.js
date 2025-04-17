@@ -1,14 +1,18 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import Loading from "../../../../../../UI/Loading";
 import SmallModal from "../../../../../../UI/Modal";
 
-const LivePTEWFDExam = () => {
+const instructions = {
+  SST: "You will hear a short lecture. Write a summary for a fellow student who was not present at the lecture. You should write 50-70 words. You have 10 minutes to finish this task. Your response will be judged on the Quality of Your writing and on how well your response presents the key points presented in the lecture.",
+  WFD: "You will hear a sentence. Type the sentence in the box below exactly as you hear it. Write as much of the sentence as you can. You will hear the sentence only once.",
+};
+
+const LivePTESSTWFDExam = () => {
   const navigate = useNavigate();
-  const synth = window.speechSynthesis;
-  const examId = useLocation()?.pathname?.split("/")?.[5];
+  const examId = useLocation()?.pathname?.split("/")?.[6];
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
   const [timer, setTimer] = useState(600);
@@ -137,8 +141,8 @@ const LivePTEWFDExam = () => {
     return () => clearInterval(countdownInterval);
   }, [audioStatus]);
 
-  const renderAudio = () => {
-    if (reRenderAudio) {
+  const renderAudio = (audio_file) => {
+    if (audio_file && reRenderAudio) {
       return (
         <div
           style={{
@@ -170,101 +174,24 @@ const LivePTEWFDExam = () => {
             {audioStatus === "playing" && "Playing"}
             {audioStatus === "complete" && "Completed"}
           </div>
-          <button
-            onClick={() => {
-              if (audioStatus === "not started") {
-                setAudioStatus("playing");
-                speak(examData?.passage);
-              } else if (audioStatus === "playing") {
-                synth.cancel();
-                setAudioStatus("complete");
-              } else if (audioStatus === "complete") {
-                setAudioStatus("playing");
-                speak(examData?.passage);
-              }
+          <audio
+            ref={audioRef}
+            controls
+            style={{ width: "100%" }}
+            onLoadedMetadata={() => {
+              setAudioStatus("not started");
+              setCountdown(10);
             }}
-            style={{
-              padding: "10px 20px",
-              backgroundColor:
-                audioStatus === "playing" ? "#e74c3c" : "#01579b",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              width: "100%",
-              fontWeight: "500",
+            onEnded={() => {
+              setAudioStatus("complete");
             }}
           >
-            {audioStatus === "not started" && "Play Now"}
-            {audioStatus === "playing" && "Stop"}
-            {audioStatus === "complete" && "Replay"}
-          </button>
+            <source src={audio_file} type="audio/mpeg" />
+          </audio>
         </div>
       );
     }
   };
-
-  const extractVisibleText = (htmlContent) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = htmlContent;
-    const text = tempDiv.textContent || tempDiv.innerText || "";
-    return text.trim();
-  };
-
-  const speak = useCallback(
-    (passageContent) => {
-      if (!synth) return; // Check if synth is available
-
-      const text = extractVisibleText(passageContent);
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-
-      // Get voices each time (they might load asynchronously)
-      const voices = synth.getVoices();
-
-      // Select "Google UK English Male" voice
-      const ukMaleVoice = voices.find(
-        (voice) =>
-          voice.name === "Google UK English Male" && voice.lang === "en-GB"
-      );
-      if (ukMaleVoice) {
-        utterance.voice = ukMaleVoice;
-      }
-
-      utterance.onend = () => {
-        setAudioStatus("complete");
-      };
-
-      synth.speak(utterance);
-    },
-    [synth]
-  ); // Only synth as dependency since voices are fetched inside
-
-  useEffect(() => {
-    if (examData?.passage && audioStatus === "not started") {
-      let countdownInterval = setInterval(() => {
-        setCountdown((prevCount) => {
-          if (prevCount <= 1) {
-            clearInterval(countdownInterval);
-            setAudioStatus("playing");
-            speak(examData.passage);
-            return 0;
-          }
-          return prevCount - 1;
-        });
-      }, 1000);
-
-      return () => clearInterval(countdownInterval);
-    }
-  }, [examData, audioStatus, speak]);
-
-  useEffect(() => {
-    if (examData?.passage && synth) {
-      synth.cancel();
-      setAudioStatus("not started");
-      setCountdown(10);
-    }
-  }, [next, examData, synth]);
 
   const fetchHtmlContent = async (paperData, index) => {
     let tempAnswer = {};
@@ -406,26 +333,28 @@ const LivePTEWFDExam = () => {
           const transcript =
             examData?.passage && examData?.passage?.replace(/<img[^>]*>/g, "");
 
-          const gptBody = {
-            model: "gpt-3.5-turbo",
-            messages: [
-              {
-                role: "user",
-                content:
-                  "You are an expert evaluator for the PTE Listening Write From Dictation. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation. Follow the instructions below precisely:",
-              },
-              {
-                role: "user",
-                content: `Audio Transcript: ${transcript}`,
-              },
-              {
-                role: "user",
-                content: `Answer: ${item.data[0].answer_text}
+          const gptBody =
+            examData?.sub_category === "WFD"
+              ? {
+                  model: "gpt-3.5-turbo",
+                  messages: [
+                    {
+                      role: "user",
+                      content:
+                        "You are an expert evaluator for the PTE Listening Write From Dictation. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation. Follow the instructions below precisely:",
+                    },
+                    {
+                      role: "user",
+                      content: `Audio Transcript: ${transcript}`,
+                    },
+                    {
+                      role: "user",
+                      content: `Answer: ${item.data[0].answer_text}
                           Question Type: Write From Dictation`,
-              },
-              {
-                role: "user",
-                content: `Evaluate based on: Write From Dictation:
+                    },
+                    {
+                      role: "user",
+                      content: `Evaluate based on: Write From Dictation:
   
                           **Correct Words (0-N):**
                           - +1 point for each correctly transcribed word (including punctuation and capitalization).
@@ -447,9 +376,85 @@ const LivePTEWFDExam = () => {
                           #Overall Score: X/N
   
                           Respond only with the evaluation up to the #Overall Score. Do not include any additional text or explanation beyond this point.`,
-              },
-            ],
-          };
+                    },
+                  ],
+                }
+              : {
+                  model: "gpt-3.5-turbo",
+                  messages: [
+                    {
+                      role: "user",
+                      content:
+                        "You are an expert evaluator for the PTE Listening Summarize Spoken Text. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation. Follow the instructions below precisely:",
+                    },
+                    {
+                      role: "user",
+                      content: `Audio Transcript: ${transcript}`,
+                    },
+                    {
+                      role: "user",
+                      content: `Answer: ${item.data[0].answer_text}
+                            Question Type: Summarize Spoken Text`,
+                    },
+                    {
+                      role: "user",
+                      content: `Evaluate based on: Summarize Spoken Text
+              
+                            Content (0-2):
+                            - 2: Includes all relevant key points and ideas from the spoken text.
+                            - 1: Includes only some key points or ideas but misses others.
+                            - 0: Fails to include any relevant key points or is off-topic.
+              
+                            Form (0-2):
+                            - 2: The response is one sentence, within the 50–70 word limit.
+                            - 1: The response is over or under the word limit or includes multiple sentences.
+                            - 0: The response does not meet the task requirements.
+              
+                            Grammar (0-2):
+                            - 2: The response has no grammatical errors and demonstrates complex sentence structures.
+                            - 1: The response has minor grammatical errors that do not affect meaning.
+                            - 0: Major grammatical errors that interfere with understanding.
+              
+                            Vocabulary (0-2):
+                            - 2: Demonstrates appropriate word choice and variety, with correct collocations.
+                            - 1: Limited vocabulary or minor errors in word choice.
+                            - 0: Frequent vocabulary errors that interfere with meaning.
+              
+                            Spelling (0-2):
+                            - 2: No spelling errors.
+                            - 1: One or two spelling errors.
+                            - 0: Frequent spelling errors.
+              
+                            Provide:
+                            1. **Detailed explanations** with strengths, weaknesses, and improvements.
+                            2. **Individual criterion scores**.
+                            3. **Total Score** using the exact format below:
+  
+                            **Total Score: X/10**
+  
+                            - The calculation must **always** be formatted exactly as above.
+                            - Do **not** simplify the fraction (e.g., display 8/10).
+                            #Evaluation Format:
+              
+                            Content: [Explanation]  
+                            Score: X/2
+              
+                            Form: [Explanation]  
+                            Score: X/2
+              
+                            Grammar: [Explanation]  
+                            Score: X/2
+              
+                            Vocabulary: [Explanation]  
+                            Score: X/2
+              
+                            Spelling: [Explanation]  
+                            Score: X/2
+              
+                            **Total Score: X/10**`,
+                    },
+                  ],
+                };
 
           const res = await fetch(
             "https://api.openai.com/v1/chat/completions",
@@ -468,7 +473,10 @@ const LivePTEWFDExam = () => {
           if (data?.choices?.[0]?.message?.content) {
             gptResponse = data.choices[0].message.content;
 
-            const scoreMatch = gptResponse.match(/Overall Score:\s*(\d+\/\d+)/);
+            const scoreMatch =
+              examData?.sub_category === "WFD"
+                ? gptResponse.match(/Overall Score:\s*(\d+\/\d+)/)
+                : gptResponse.match(/Total Score:\s*(\d+)\/(10)/);
             scoreValue = scoreMatch ? scoreMatch[1].split("/")[0] : null;
 
             // Convert GPT response to HTML format
@@ -519,7 +527,11 @@ const LivePTEWFDExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         submitExam();
-        navigate(`/PTE/Listening/WFD/${fullPaper[0].IELTS.id}`);
+        navigate(
+          `/PTE/Listening/${examData?.sub_category === "WFD" ? "WFD" : "SST"}/${
+            fullPaper[0].IELTS.id
+          }`
+        );
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -626,11 +638,9 @@ const LivePTEWFDExam = () => {
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
-          You will hear a sentence. Type the sentence in the box below exactly
-          as you hear it. Write as much of the sentence as you can. You will
-          hear the sentence only once.
+          {instructions[examData?.sub_category]}
         </div>
-        {renderAudio()}
+        {renderAudio(examData?.audio_file)}
         <div
           style={{
             padding: "20px",
@@ -784,4 +794,4 @@ const LivePTEWFDExam = () => {
   );
 };
 
-export default LivePTEWFDExam;
+export default LivePTESSTWFDExam;

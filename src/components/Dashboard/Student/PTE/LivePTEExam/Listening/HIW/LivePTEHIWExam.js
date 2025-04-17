@@ -1,19 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
-import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import Loading from "../../../../../../UI/Loading";
 import SmallModal from "../../../../../../UI/Modal";
+import ajaxCall from "../../../../../../../helpers/ajaxCall";
+import { formatTime } from "../../../../../../../utils/timer/formateTime";
+const Cheerio = require("cheerio");
 
-const LivePTESSTExam = () => {
+const LivePTEListeningExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
   const examForm = useLocation()?.pathname?.split("/")?.[3];
-  const [timer, setTimer] = useState(600);
+  const [timer, setTimer] = useState(0);
   const [examData, setExamData] = useState({});
   const [fullPaper, setFullPaper] = useState([]);
   const [examAnswer, setExamAnswer] = useState([]);
+  const [htmlContents, setHtmlContents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timerRunning, setTimerRunning] = useState(true);
@@ -26,35 +29,21 @@ const LivePTESSTExam = () => {
   const audioRef = useRef(null);
   const [countdown, setCountdown] = useState(10);
   const [audioStatus, setAudioStatus] = useState("not started");
-  const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
 
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
   useEffect(() => {
-    setTimer(10 * 60);
-  }, [next]);
-
-  useEffect(() => {
     let interval;
-
     if (timerRunning) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
+        setTimer((prevTimer) => prevTimer + 1);
       }, 1000);
     }
-
     return () => {
       clearInterval(interval);
     };
   }, [timerRunning]);
-
-  useEffect(() => {
-    if (timer === 0) {
-      setTimerRunning(false);
-      toast.error("Time's up! Your exam has ended.");
-    }
-  }, [timer]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -117,6 +106,94 @@ const LivePTESSTExam = () => {
       setExamData(examBlockWithNumbers[next]);
     }
   }, [examForm, examType, fullPaper, next]);
+
+  const handleAnswerLinking = (e, questionId, next) => {
+    const { value, id, name, checked } = e.target;
+
+    const elementId = id.split("_")[0];
+
+    const temp = [...examAnswer];
+    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
+
+    // Is this a multipleTypeQuestions
+    const isMultiQuestions = examAnswer[next].data.filter(
+      (item) => item.question_number === id
+    );
+
+    if (isMultiQuestions?.length <= 1) {
+      temp[next].data.forEach((item) => {
+        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
+        if (item.question_number === id && elementId === "InputText") {
+          const trimmedValue = value.trim();
+          item.answer_text = trimmedValue;
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id && elementId === "Checkbox") {
+          item.answer_text = checked ? value : "";
+          conditionSatisfied = true; // Set the flag to true
+        } else if (item.question_number === id) {
+          item.answer_text = value;
+          conditionSatisfied = true; // Set the flag to true
+        }
+      });
+
+      setExamAnswer(temp);
+    } else {
+      const multipleTypeQuestions = checked
+        ? examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text === ""
+          )
+        : examAnswer[next].data.findIndex(
+            (item) => item.question_number === id && item.answer_text !== ""
+          );
+      if (multipleTypeQuestions !== -1) {
+        temp[next].data[multipleTypeQuestions].answer_text = checked
+          ? value
+          : "";
+
+        setExamAnswer(temp);
+      } else {
+        const contentElements = document.querySelectorAll(`[id="${id}"]`);
+        contentElements.forEach((element) => {
+          const isAlreadyAnswered = isMultiQuestions.findIndex(
+            (a) => a.answer_text === element.value
+          );
+
+          if (isAlreadyAnswered === -1) element.checked = false;
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (examAnswer.length > 0) {
+      for (let tempExamAnswer of examAnswer) {
+        let examIndex = examAnswer.indexOf(tempExamAnswer);
+        // remove duplicate
+        const filteredExamAnswer = tempExamAnswer.data.filter(
+          (item, index) =>
+            index ===
+            tempExamAnswer.data.findIndex(
+              (i) => i.question_number === item.question_number
+            )
+        );
+        filteredExamAnswer.forEach((item) => {
+          const contentElements = document.querySelectorAll(
+            `[id="${item.question_number}"]`
+          );
+          if (item.answer_text !== "") {
+            contentElements.forEach((element) => {
+              element.value = item.answer_text;
+            });
+          }
+          contentElements.forEach((element) => {
+            element.addEventListener("change", (e) => {
+              handleAnswerLinking(e, item.question_number, examIndex);
+            });
+          });
+        });
+      }
+    }
+  }, [linkAnswer, next]);
 
   useEffect(() => {
     let countdownInterval;
@@ -188,24 +265,114 @@ const LivePTESSTExam = () => {
     }
   };
 
-  const fetchHtmlContent = async (paperData, index) => {
+  const fetchHtmlContent = async (paperData, index, tempQuestions) => {
+    const question = paperData?.question_other;
     let tempAnswer = {};
 
-    if (paperData?.exam_type === "Listening") {
-      tempAnswer = {
-        exam_id: paperData?.id,
-        data: [
-          {
-            question_number:
-              paperData?.exam_type === "Listening" && `textarea_${index}_1`,
-            answer_text: "",
-          },
-        ],
-      };
-      return new Promise((resolve) => {
-        resolve({ questionPassage: "", tempAnswer });
+    const $ = Cheerio.load(question.toString());
+
+    const questionTags = [
+      "select",
+      "textarea",
+      "input[type='text'], input:not([type='radio'], [type='checkbox'])",
+      "input[type='radio']",
+      "input[type='checkbox']",
+    ];
+
+    const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
+
+    const temp = [];
+    let questionPassage = "";
+
+    questionTags.forEach((tag, tagIndex) => {
+      // Find elements for current tag
+      const elements = $(tag);
+      const numberOfElements = elements.length;
+
+      const radioCheckboxtypeQuestionsGroup = {};
+      let uniqueId = "";
+
+      if (numberOfElements !== 0) {
+        let tagQuestions = {
+          type: tagIds[tagIndex],
+          paginationsIds: [],
+        };
+        elements.each((j, element) => {
+          if (
+            tag === "input[type='radio']" ||
+            tag === "input[type='checkbox']"
+          ) {
+            const name = $(element).attr("name");
+            if (!radioCheckboxtypeQuestionsGroup[name]) {
+              radioCheckboxtypeQuestionsGroup[name] = [];
+              uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
+              tagQuestions.paginationsIds.push(uniqueId);
+            }
+            $(element).attr("id", uniqueId);
+            radioCheckboxtypeQuestionsGroup[name].push(element);
+          } else {
+            const uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
+            tagQuestions.paginationsIds.push(uniqueId);
+            $(element).attr("id", uniqueId);
+          }
+        });
+        temp.push(tagQuestions);
+      }
+    });
+
+    let paginationsStrucutre = [];
+
+    paperData?.question_structure?.forEach((item, index) => {
+      temp.forEach((element) => {
+        if (element.type === item.type) {
+          if (element.type === "Checkbox" && item?.isMultiQuestions) {
+            const multipleTypeQuestionsGroup = element.paginationsIds.splice(
+              0,
+              1
+            );
+            paginationsStrucutre = [
+              ...paginationsStrucutre,
+              ...Array.from(
+                { length: item.numberOfQuestions },
+                () => multipleTypeQuestionsGroup
+              ),
+            ];
+          } else if (element.type === item.type) {
+            paginationsStrucutre.push(
+              element.paginationsIds.splice(0, item.numberOfQuestions)
+            );
+          }
+        }
       });
-    }
+    });
+
+    paginationsStrucutre = paginationsStrucutre.flat();
+
+    // Display questions for the first page initially
+    questionPassage += `<div className="mainContainer">${$.html()}</div>`;
+
+    // Replace ♫ with unique symbols
+    let serialNumber = tempQuestions;
+    questionPassage = questionPassage.replaceAll(
+      "++",
+      () => `${serialNumber++}`
+    );
+
+    const tempPaginationStructure = paginationsStrucutre.map((item) => {
+      return {
+        question_number: item,
+        answer_text: "",
+      };
+    });
+
+    tempAnswer = {
+      exam_id: paperData?.id,
+      data: tempPaginationStructure,
+    };
+    // return questionPassage;
+    return new Promise((resolve) => {
+      resolve({ questionPassage, tempAnswer }); // resolve with the question passage once it's constructed
+    });
   };
 
   useEffect(() => {
@@ -236,6 +403,7 @@ const LivePTESSTExam = () => {
           tempQuestions =
             tempExamAnswer.map((item) => [...item.data]).flat().length + 1;
         }
+        setHtmlContents(tempHtmlContents);
         setExamAnswer(tempExamAnswer);
         setLinkAnswer(!linkAnswer);
       }
@@ -305,153 +473,28 @@ const LivePTESSTExam = () => {
   };
 
   const handleSubmit = async () => {
-    const answersArray = examAnswer.map((item) => {
-      const data = item.data.map((answer, index) => ({
-        question_number: index + 1,
+    const answersArray = [];
+    let bandValue = 0;
+
+    examAnswer.forEach((item, index) => {
+      const temp = item.data.map((answer, index2) => ({
+        question_number: index2 + 1,
         answer_text: answer.answer_text,
       }));
-      return {
+      const tempObj = {
         exam_id: item.exam_id,
-        question: item.question,
-        data,
+        data: temp,
       };
+      answersArray.push(tempObj);
     });
-
-    let newAnswersArray = [];
-
-    try {
-      await Promise.all(
-        answersArray.map(async (item) => {
-          let gptResponse = "";
-          let scoreValue = null;
-
-          const transcript =
-            examData?.passage && examData?.passage?.replace(/<img[^>]*>/g, "");
-
-          const gptBody = {
-            model: "gpt-3.5-turbo",
-            messages: [
-              {
-                role: "user",
-                content:
-                  "You are an expert evaluator for the PTE Listening Summarize Spoken Text. Assess the student's written response based on official PTE criteria and provide a detailed score with explanations. Use strict evaluation. Follow the instructions below precisely:",
-              },
-              {
-                role: "user",
-                content: `Audio Transcript: ${transcript}`,
-              },
-              {
-                role: "user",
-                content: `Answer: ${item.data[0].answer_text}
-                          Question Type: Summarize Spoken Text`,
-              },
-              {
-                role: "user",
-                content: `Evaluate based on: Summarize Spoken Text
-            
-                          Content (0-2):
-                          - 2: Includes all relevant key points and ideas from the spoken text.
-                          - 1: Includes only some key points or ideas but misses others.
-                          - 0: Fails to include any relevant key points or is off-topic.
-            
-                          Form (0-2):
-                          - 2: The response is one sentence, within the 50–70 word limit.
-                          - 1: The response is over or under the word limit or includes multiple sentences.
-                          - 0: The response does not meet the task requirements.
-            
-                          Grammar (0-2):
-                          - 2: The response has no grammatical errors and demonstrates complex sentence structures.
-                          - 1: The response has minor grammatical errors that do not affect meaning.
-                          - 0: Major grammatical errors that interfere with understanding.
-            
-                          Vocabulary (0-2):
-                          - 2: Demonstrates appropriate word choice and variety, with correct collocations.
-                          - 1: Limited vocabulary or minor errors in word choice.
-                          - 0: Frequent vocabulary errors that interfere with meaning.
-            
-                          Spelling (0-2):
-                          - 2: No spelling errors.
-                          - 1: One or two spelling errors.
-                          - 0: Frequent spelling errors.
-            
-                          Provide:
-                          1. **Detailed explanations** with strengths, weaknesses, and improvements.
-                          2. **Individual criterion scores**.
-                          3. **Total Score** using the exact format below:
-
-                          **Total Score: X/10**
-
-                          - The calculation must **always** be formatted exactly as above.
-                          - Do **not** simplify the fraction (e.g., display 8/10).
-                          #Evaluation Format:
-            
-                          Content: [Explanation]  
-                          Score: X/2
-            
-                          Form: [Explanation]  
-                          Score: X/2
-            
-                          Grammar: [Explanation]  
-                          Score: X/2
-            
-                          Vocabulary: [Explanation]  
-                          Score: X/2
-            
-                          Spelling: [Explanation]  
-                          Score: X/2
-            
-                          **Total Score: X/10**`,
-              },
-            ],
-          };
-
-          const res = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-              },
-              body: JSON.stringify(gptBody),
-            }
-          );
-
-          const data = await res.json();
-
-          if (data?.choices?.[0]?.message?.content) {
-            gptResponse = data.choices[0].message.content;
-
-            const scoreMatch = gptResponse.match(/Total Score:\s*(\d+)\/(10)/);
-            scoreValue = scoreMatch ? parseFloat(scoreMatch[1]) : null;
-
-            // Convert gptResponse to HTML format
-            const formattedResponse = gptResponse
-              .split("\n")
-              .map((line) => `<p>${line}</p>`)
-              .join("");
-
-            newAnswersArray.push({
-              exam_id: item.exam_id,
-              band: scoreValue,
-              AI_Assessment: formattedResponse,
-              data: item.data,
-            });
-          } else {
-            toast.error("AI response is empty. Please try again.");
-          }
-        })
-      );
-    } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
-    }
 
     try {
       const data = JSON.stringify({
-        answer_data: newAnswersArray,
+        answer_data: answersArray,
         user: userData?.userId,
         Practise_Exam: parseInt(fullPaper[0].IELTS.id),
-        band: null,
+        band: bandValue,
+        exam_type: examForm,
       });
 
       const response = await ajaxCall(
@@ -473,7 +516,7 @@ const LivePTESSTExam = () => {
       if (response.status === 201) {
         setTimerRunning(false);
         submitExam();
-        navigate(`/PTE/Listening/SST/${fullPaper[0].IELTS.id}`);
+        navigate(`/PTE/Listening/${fullPaper[0]?.IELTS?.id}`);
       } else if (response.status === 400) {
         toast.error("Please Submit Your Exam Answer");
       } else {
@@ -502,21 +545,6 @@ const LivePTESSTExam = () => {
         </div>
       </div>
     ));
-
-  const handleListeningAnswer = (e, next) => {
-    const answer_text = e.target.value;
-    const temp = [...examAnswer];
-
-    // Update the answer text
-    temp[next].data[0].answer_text = answer_text;
-
-    // Update the word count for this exam
-    const words =
-      answer_text.trim() === "" ? 0 : answer_text.trim().split(/\s+/).length;
-    temp[next].wordCount = words;
-
-    setExamAnswer(temp);
-  };
 
   return isLoading ? (
     <div className="mt-4">
@@ -554,7 +582,7 @@ const LivePTESSTExam = () => {
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>
           <span>Timer:</span>
-          <span style={{ fontWeight: "500" }}>{timeTaken}</span>
+          <span style={{ fontWeight: "500" }}>{formatTime(timer)}</span>
         </div>
       </div>
       <div
@@ -580,51 +608,25 @@ const LivePTESSTExam = () => {
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           }}
         >
-          You will hear a short lecture. Write a summary for a fellow student
-          who was not present at the lecture. You should write 50-70 words. You
-          have 10 minutes to finish this task. Your response will be judged on
-          the Quality of Your writing and on how well your response presents the
-          key points presented in the lecture.
+          You will hear a recording. Below is a transcription of the recording.
+          Some words in the transcription that differ from what the speaker(s)
+          said. Please click on the words that are different.
         </div>
         {renderAudio(examData?.audio_file)}
         <div
           style={{
+            flex: 1,
             padding: "20px",
-            overflow: "auto",
             backgroundColor: "#ffffff",
             borderRadius: "8px",
             border: "1px solid #ddd",
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
+            overflowY: "auto",
           }}
-        >
-          <textarea
-            id={`textarea_${next}`}
-            className="writing__textarea"
-            value={examAnswer[next]?.data[0]?.answer_text || ""}
-            onChange={(e) => handleListeningAnswer(e, next)}
-            style={{
-              width: "100%",
-              padding: "15px",
-              border: "1px solid #01579b",
-              borderRadius: "8px",
-              resize: "none",
-              fontSize: "16px",
-              lineHeight: "1.5",
-              backgroundColor: "#f9f9f9",
-              transition: "border-color 0.3s ease",
-            }}
-          />
-          <div
-            style={{
-              fontWeight: "bold",
-              fontSize: "16px",
-              color: "#333",
-              marginTop: "10px",
-            }}
-          >
-            Total Word Count: {examAnswer[next]?.wordCount || 0}
-          </div>
-        </div>
+          dangerouslySetInnerHTML={{
+            __html: htmlContents?.[next],
+          }}
+        />
         <div
           style={{
             borderTop: "1px solid #ddd",
@@ -740,4 +742,4 @@ const LivePTESSTExam = () => {
   );
 };
 
-export default LivePTESSTExam;
+export default LivePTEListeningExam;

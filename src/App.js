@@ -107,8 +107,8 @@ import LivePTEROP from "./components/Dashboard/Student/PTE/LivePTEExam/Reading/R
 import LivePTEReadingExam from "./components/Dashboard/Student/PTE/LivePTEExam/Reading/LivePTEReadingExam";
 import LivePTEWritingExam from "./components/Dashboard/Student/PTE/LivePTEExam/Writing/LivePTEWritingExam";
 import LivePTEListeningExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/LivePTEListeningExam";
-import LivePTESSTExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SST/LivePTESSTExam";
-import LivePTEWFDExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/WFD/LivePTEWFDExam";
+import LivePTESSTWFDExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SSTWFD/LivePTESSTWFDExam";
+import LivePTEHIWExam from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/HIW/LivePTEHIWExam";
 import LivePTESpeakingRAExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/ReadAloud/LivePTESpeakingRAExam";
 import LivePTESpeakingRSExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RepeatSentence/LivePTESpeakingRSExam";
 import LivePTESpeakingDIExam from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/DI/LivePTESpeakingDIExam";
@@ -132,8 +132,8 @@ import DiagnosticTestAnswer from "./components/Dashboard/Student/FreeDiagnosticT
 import ViewPTAssessment from "./components/Dashboard/Student/Assessment/PTAssessment/ViewPTAssessment";
 import PTEReadingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Reading/PTEReadingAnswer";
 import PTEWritingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Writing/PTEWritingAnswer";
-import PTESSTAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SST/PTESSTAnswer";
-import PTEWFDAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/WFD/PTEWFDAnswer";
+import PTESSTAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SSTWFD/PTESSTAnswer";
+import PTEWFDAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SSTWFD/PTEWFDAnswer";
 import PTEListeningAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTEListeningAnswer";
 import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/PTESpeakingAnswer";
 import ASQSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/AnswerShortQuestion/ASQSpeakingAnswer";
@@ -455,12 +455,12 @@ const App = () => {
           Component={withBootstrap(LivePTEListeningExam)}
         />
         <Route
-          path="/PTE/IELTS/Listening/SST/:examId"
-          Component={withBootstrap(LivePTESSTExam)}
+          path="/PTE/IELTS/Listening/HIW/:examId"
+          Component={withBootstrap(LivePTEHIWExam)}
         />
         <Route
-          path="/PTE/IELTS/Listening/WFD/:examId"
-          Component={withBootstrap(LivePTEWFDExam)}
+          path="/PTE/IELTS/Listening/SST/WFD/:examId"
+          Component={withBootstrap(LivePTESSTWFDExam)}
         />
         <Route
           path="/PTE/IELTS/Speaking/RA/:examId"

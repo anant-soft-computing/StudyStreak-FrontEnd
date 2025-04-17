@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Mail, ArrowLeft, ArrowRight } from "lucide-react";
 import RightSection from "./RightSection";
 import ajaxCall from "../../helpers/ajaxCall";
+import logo from "../../img/logo/Logo.png";
 
 const intialData = {
   email_id: "",
@@ -112,13 +113,8 @@ const ForgotPassword = () => {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="mb-2 flex justify-center">
-            <img
-              src="https://studystreak.in/static/media/Logo.d84254f8c0966763bb8d.png"
-              alt="StudyStreak Logo"
-              className="h-20 object-contain"
-            />
+            <img src={logo} alt="StudyStreak" className="h-20 object-contain" />
           </div>
-
           <div className="bg-white rounded-2xl shadow-card p-8">
             <Link
               to="/login"

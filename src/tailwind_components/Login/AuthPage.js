@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import RightSection from "./RightSection";
+import logo from "../../img/logo/Logo.png";
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,11 +12,7 @@ const AuthPage = () => {
       <div className="flex-1 flex align-center justify-center p-8">
         <div className="w-full max-w-md">
           <div className="mb-2 flex justify-center">
-            <img
-              src="https://studystreak.in/static/media/Logo.d84254f8c0966763bb8d.png"
-              alt="StudyStreak Logo"
-              className="h-20 object-contain"
-            />
+            <img src={logo} alt="StudyStreak" className="h-20 object-contain" />
           </div>
 
           <div className="bg-white rounded-2xl shadow-card p-8">

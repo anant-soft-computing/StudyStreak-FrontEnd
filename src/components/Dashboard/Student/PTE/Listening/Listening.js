@@ -36,22 +36,30 @@ const Listening = () => {
         );
         if (response.status === 200) {
           setListeningData({
-            SST:
-              response.data.find((item) => item.sub_category === "SST") || {},
-            CMA:
-              response.data.find((item) => item.sub_category === "CMA") || {},
-            LFIB:
-              response.data.find((item) => item.sub_category === "LFIB") || {},
-            HCS:
-              response.data.find((item) => item.sub_category === "HCS") || {},
-            CSA:
-              response.data.find((item) => item.sub_category === "CSA") || {},
-            SMW:
-              response.data.find((item) => item.sub_category === "SMW") || {},
-            HIW:
-              response.data.find((item) => item.sub_category === "HIW") || {},
-            WFD:
-              response.data.find((item) => item.sub_category === "WFD") || {},
+            SST: response.data.find(
+              ({ sub_category }) => sub_category === "SST"
+            ),
+            CMA: response.data.find(
+              ({ sub_category }) => sub_category === "CMA"
+            ),
+            LFIB: response.data.find(
+              ({ sub_category }) => sub_category === "LFIB"
+            ),
+            HCS: response.data.find(
+              ({ sub_category }) => sub_category === "HCS"
+            ),
+            CSA: response.data.find(
+              ({ sub_category }) => sub_category === "CSA"
+            ),
+            SMW: response.data.find(
+              ({ sub_category }) => sub_category === "SMW"
+            ),
+            HIW: response.data.find(
+              ({ sub_category }) => sub_category === "HIW"
+            ),
+            WFD: response.data.find(
+              ({ sub_category }) => sub_category === "WFD"
+            ),
           });
         }
       } catch (error) {
@@ -65,10 +73,10 @@ const Listening = () => {
 
   const handleCardClick = (sub_category, examId) => {
     const url =
-      sub_category === "SST"
-        ? `/PTE/IELTS/Listening/SST/${examId}`
-        : sub_category === "WFD"
-        ? `/PTE/IELTS/Listening/WFD/${examId}`
+      sub_category === "SST" || sub_category === "WFD"
+        ? `/PTE/IELTS/Listening/SST/WFD/${examId}`
+        : sub_category === "HIW"
+        ? `/PTE/IELTS/Listening/HIW/${examId}`
         : `/PTE/IELTS/Listening/${sub_category}/${examId}`;
     window.open(url, "_blank");
   };

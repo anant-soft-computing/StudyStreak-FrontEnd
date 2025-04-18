@@ -17,12 +17,9 @@ import {
   GraduationCap,
   Briefcase,
 } from "lucide-react";
-import Episode1 from "./Episodes/Episode1MasteringIELTS10Tips.mp3";
-import Episode2 from "./Episodes/Episode2FixTheseIELTSWritingGrammarMistakesforaHigherScore.mp3";
-import Episode3 from "./Episodes/Episode3AITOOLS.mp3";
-import Episode4 from "./Episodes/Episode4OvercomingIELTSAnxiety.mp3";
-import Episode5 from "./Episodes/Episode5IELTSExamFormatUpdates2025.mp3";
-import Episode6 from "./Episodes/Episode6CulturalNuancesInIELTSSpeaking.mp3";
+import moment from "moment/moment";
+import ajaxCall from "../../helpers/ajaxCall";
+import Loading from "../../components/UI/Loading";
 
 const categories = [
   { name: "All Episodes", icon: <Headphones size={16} /> },
@@ -33,93 +30,6 @@ const categories = [
   { name: "University Spotlights", icon: <Mic2 size={16} /> },
 ];
 
-const allEpisodes = [
-  {
-    id: 1,
-    title: "Mastering IELTS: 10 Tips for Band 8+",
-    description:
-      "Learn the top 10 strategies from IELTS experts to boost your score to Band 8 or higher.",
-    host: "Dr. Emily Johnson",
-    date: "April 10, 2025",
-    duration: "32 min",
-    audio: Episode1,
-    image:
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=250&h=250&q=50",
-    category: "IELTS Preparation",
-    listens: "8.2k",
-  },
-  {
-    id: 2,
-    title: "Fix These IELTS Writing Grammar Mistakes for a Higher Score",
-    description:
-      "Common grammar errors that cost you points and how to fix them with examples.",
-    host: "Prof. James Wilson",
-    date: "April 5, 2025",
-    duration: "28 min",
-    audio: Episode2,
-    image:
-      "https://images.unsplash.com/photo-1455390582262-044cdead277a?ixlib=rb-1.2.1&auto=format&fit=crop&w=250&h=250&q=50",
-    category: "IELTS Preparation",
-    listens: "6.5k",
-  },
-  {
-    id: 3,
-    title: "AI Tools for Language Learning",
-    description:
-      "How to leverage AI tools to improve your English skills for IELTS and beyond.",
-    host: "Tech Expert Mark Chen",
-    date: "March 30, 2025",
-    duration: "45 min",
-    audio: Episode3,
-    image:
-      "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-1.2.1&auto=format&fit=crop&w=250&h=250&q=50",
-    category: "IELTS Preparation",
-    listens: "5.3k",
-  },
-  {
-    id: 4,
-    title: "Overcoming IELTS Anxiety",
-    description:
-      "Psychological techniques to manage test anxiety and perform your best on exam day.",
-    host: "Dr. Sarah Thompson",
-    date: "March 25, 2025",
-    duration: "38 min",
-    audio: Episode4,
-    image:
-      "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-1.2.1&auto=format&fit=crop&w=250&h=250&q=50",
-    category: "IELTS Preparation",
-    listens: "4.7k",
-  },
-  {
-    id: 5,
-    title: "IELTS Exam Format Updates 2025",
-    description:
-      "Everything you need to know about the latest changes to the IELTS test format.",
-    host: "IELTS Official Representative",
-    date: "March 20, 2025",
-    duration: "42 min",
-    audio: Episode5,
-    image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=250&h=250&q=50",
-    category: "IELTS Preparation",
-    listens: "9.1k",
-  },
-  {
-    id: 6,
-    title: "Cultural Nuances in IELTS Speaking",
-    description:
-      "Understanding cultural context to improve your Speaking test performance.",
-    host: "Linguistics Prof. Anna Lee",
-    date: "March 15, 2025",
-    duration: "35 min",
-    audio: Episode6,
-    image:
-      "https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-1.2.1&auto=format&fit=crop&w=250&h=250&q=50",
-    category: "IELTS Preparation",
-    listens: "3.9k",
-  },
-];
-
 const stats = [
   { number: "100+", label: "Episodes" },
   { number: "500k+", label: "Total Listens" },
@@ -127,56 +37,44 @@ const stats = [
   { number: "75+", label: "Expert Guests" },
 ];
 
-const PodcastPlayer = ({
-  episode,
-  isPlaying,
-  togglePlay,
-  progress,
-  currentTime,
-}) => {
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  };
-
+const PodcastPlayer = ({ episode, isPlaying, togglePlay, progress }) => {
   return (
     <div className="bg-white rounded-xl border border-neutral-200 shadow-card p-4 flex flex-col md:flex-row gap-6">
       <div className="w-full md:w-1/3 lg:w-1/4">
         <img
-          src={episode.image}
-          alt={episode.title}
+          src={episode?.image_thumbnail}
+          alt={episode?.title}
           className="w-full aspect-square object-cover rounded-lg shadow-md"
         />
       </div>
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-sm font-medium text-primary-600">
-            {episode.category}
+            {episode?.category}
           </span>
           <span className="text-xs text-neutral-500">•</span>
           <span className="text-xs text-neutral-500">
-            {episode.listens} listens
+            {episode?.listened_count} listens
           </span>
         </div>
 
         <h3 className="text-xl font-bold text-neutral-800 mb-2">
-          {episode.title}
+          {episode?.title}
         </h3>
-        <p className="text-neutral-600 mb-4">{episode.description}</p>
+        <p className="text-neutral-600 mb-4">{episode?.description}</p>
 
         <div className="flex items-center gap-4 mb-4">
           <div className="flex items-center gap-1 text-neutral-500 text-sm">
             <User size={16} />
-            <span>{episode.host}</span>
+            <span>{episode?.host}</span>
           </div>
           <div className="flex items-center gap-1 text-neutral-500 text-sm">
             <Calendar size={16} />
-            <span>{episode.date}</span>
+            <span>{moment(episode?.created_at).format("MMM DD, YYYY")}</span>
           </div>
           <div className="flex items-center gap-1 text-neutral-500 text-sm">
             <Clock size={16} />
-            <span>{episode.duration}</span>
+            <span>{episode?.duration}</span>
           </div>
         </div>
 
@@ -193,10 +91,6 @@ const PodcastPlayer = ({
               className="bg-primary-500 h-full rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
-          </div>
-
-          <div className="text-neutral-600 text-sm w-20 text-right">
-            {formatTime(currentTime)} / {episode.duration}
           </div>
         </div>
 
@@ -229,8 +123,8 @@ const EpisodeCard = ({ episode, onPlay, isCurrentEpisode, isPlaying }) => {
     >
       <div className="relative group aspect-square">
         <img
-          src={episode.image}
-          alt={episode.title}
+          src={episode?.image_thumbnail}
+          alt={episode?.title}
           className="w-full h-full object-contain bg-neutral-100"
         />
         <div className="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -246,33 +140,33 @@ const EpisodeCard = ({ episode, onPlay, isCurrentEpisode, isPlaying }) => {
           </button>
         </div>
         <div className="absolute bottom-3 right-3 bg-primary-600 text-white text-xs font-medium px-2 py-1 rounded">
-          {episode.duration}
+          {episode?.duration}
         </div>
       </div>
       <div className="p-4">
         <div className="flex items-center gap-2 mb-2">
           <span className="text-xs font-medium text-primary-600">
-            {episode.category}
+            {episode?.category}
           </span>
           <span className="text-xs text-neutral-400">•</span>
           <span className="text-xs text-neutral-500">
-            {episode.listens} listens
+            {episode?.listened_count} listens
           </span>
         </div>
         <h3 className="text-lg font-bold text-neutral-800 mb-2 line-clamp-2">
-          {episode.title}
+          {episode?.title}
         </h3>
         <p className="text-neutral-600 text-sm mb-3 line-clamp-2">
-          {episode.description}
+          {episode?.description}
         </p>
 
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-1 text-neutral-500 text-xs">
             <Calendar size={14} />
-            <span>{episode.date}</span>
+            <span>{moment(episode?.created_at).format("MMM DD, YYYY")}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-neutral-500">{episode.host}</span>
+            <span className="text-xs text-neutral-500">{episode?.host}</span>
           </div>
         </div>
       </div>
@@ -281,13 +175,45 @@ const EpisodeCard = ({ episode, onPlay, isCurrentEpisode, isPlaying }) => {
 };
 
 const Podcast = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [allEpisodes, setAllEpisodes] = useState([]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Episodes");
-  const [currentEpisode, setCurrentEpisode] = useState(allEpisodes[0]);
+  const [currentEpisode, setCurrentEpisode] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const audioRef = useRef(null);
+
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      try {
+        const response = await ajaxCall(
+          "/podcast/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response?.status === 200) {
+          setAllEpisodes(response.data);
+        }
+        if (response?.data?.length > 0) {
+          setCurrentEpisode(response?.data[0]);
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
 
   const filteredEpisodes = allEpisodes.filter((episode) => {
     const matchesSearch =
@@ -311,7 +237,7 @@ const Podcast = () => {
 
   // Play a specific episode
   const playEpisode = (episode) => {
-    if (currentEpisode.id === episode.id) {
+    if (currentEpisode?.id === episode.id) {
       togglePlay();
     } else {
       setCurrentEpisode(episode);
@@ -360,17 +286,26 @@ const Podcast = () => {
 
   // Play/pause when current episode changes
   useEffect(() => {
-    if (isPlaying && currentEpisode.audio) {
+    if (isPlaying && currentEpisode?.audio) {
       audioRef.current.src = currentEpisode.audio;
+      audioRef.current.load();
       audioRef.current
         .play()
         .catch((e) => console.log("Auto-play prevented", e));
     }
   }, [currentEpisode, isPlaying]);
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <Loading />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-neutral-50">
-      <audio ref={audioRef} src={currentEpisode.audio} />
+      <audio ref={audioRef} src={currentEpisode?.audio} />
       <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
@@ -431,13 +366,21 @@ const Podcast = () => {
               Listen to our most popular and impactful discussions
             </p>
           </div>
-          <PodcastPlayer
-            episode={currentEpisode}
-            isPlaying={isPlaying}
-            togglePlay={togglePlay}
-            progress={progress}
-            currentTime={currentTime}
-          />
+          {currentEpisode ? (
+            <PodcastPlayer
+              episode={currentEpisode}
+              isPlaying={isPlaying}
+              togglePlay={togglePlay}
+              progress={progress}
+              currentTime={currentTime}
+            />
+          ) : (
+            <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
+              <h3 className="text-lg font-medium text-neutral-800 mb-2">
+                No episode selected
+              </h3>
+            </div>
+          )}
         </div>
       </section>
 
@@ -517,8 +460,8 @@ const Podcast = () => {
                   key={episode.id}
                   episode={episode}
                   onPlay={playEpisode}
-                  isCurrentEpisode={currentEpisode.id === episode.id}
-                  isPlaying={isPlaying && currentEpisode.id === episode.id}
+                  isCurrentEpisode={currentEpisode?.id === episode.id}
+                  isPlaying={isPlaying && currentEpisode?.id === episode.id}
                 />
               ))}
             </div>

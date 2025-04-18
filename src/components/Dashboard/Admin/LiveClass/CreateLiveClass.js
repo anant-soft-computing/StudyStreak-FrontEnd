@@ -271,7 +271,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
       <div className="row">
         <div className="col-xl-12">
           <div className="row">
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__select__heading">
                 <span>Live Class Type</span>
               </div>
@@ -293,7 +293,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
             {activeButton === "batch" &&
               createLiveClassData.liveclasstype !== 9 &&
               createLiveClassData.liveclasstype !== 8 && (
-                <div className="col-xl-6">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                   <div className="dashboard__select__heading">
                     <span>Batch</span>
                   </div>
@@ -318,7 +318,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
             {activeButton === "course" &&
               createLiveClassData.liveclasstype !== 9 &&
               createLiveClassData.liveclasstype !== 8 && (
-                <div className="col-xl-6">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                   <div className="dashboard__select__heading">
                     <span>Course</span>
                   </div>
@@ -341,7 +341,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
                 </div>
               )}
             <div
-              className={`col-xl-6 ${
+              className={`col-xl-6 col-lg-6 col-md-6 col-12 ${
                 createLiveClassData.liveclasstype === 9 ||
                 createLiveClassData.liveclasstype === 8
                   ? ""
@@ -366,7 +366,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
               </div>
             </div>
             <div
-              className={`col-xl-6 ${
+              className={`col-xl-6 col-lg-6 col-md-6 col-12 ${
                 createLiveClassData.liveclasstype === 9 ||
                 createLiveClassData.liveclasstype === 8
                   ? ""
@@ -390,7 +390,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Start Date & Time (UTC)</label>
@@ -408,7 +408,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>End Date & Time (UTC)</label>
@@ -428,7 +428,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
             </div>
             {createLiveClassData.liveclasstype >= 2 &&
               createLiveClassData.liveclasstype <= 7 && (
-                <div className="col-xl-6">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                   <div className="dashboard__form__wraper">
                     <div className="dashboard__form__input">
                       <label>Registration Limit</label>
@@ -490,7 +490,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
               <div>
                 {createLiveClassData.attachments.map((_, index) => (
                   <div className="row mt-3" key={index}>
-                    <div className="col-xl-6">
+                    <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                       <div className="dashboard__form__wraper">
                         <div className="dashboard__form__input">
                           <label htmlFor={`attachment-${index}`}>
@@ -517,7 +517,7 @@ const CreateLiveClass = ({ setActiveTab }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-xl-6">
+                    <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                       <div className="dashboard__form__wraper">
                         <div className="dashboard__form__input">
                           <label htmlFor={`description-${index}`}>

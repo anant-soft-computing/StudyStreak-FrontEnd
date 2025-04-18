@@ -22,6 +22,7 @@ import {
   User,
   Users,
   WalletCards,
+  Podcast,
 } from "lucide-react";
 
 const menuList = [
@@ -110,6 +111,7 @@ const menuList = [
     icon: <Tags />,
     link: "/admin-coupon",
   },
+  { name: "Podcast", icon: <Podcast />, link: "/admin-podcast" },
   {
     name: "Testimonial",
     icon: <EthernetPort />,

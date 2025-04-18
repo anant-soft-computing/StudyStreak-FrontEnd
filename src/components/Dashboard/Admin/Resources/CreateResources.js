@@ -211,7 +211,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
         <div className="col-xl-12">
           <div className="row">
             {activeButton === "student" && (
-              <div className="col-xl-6">
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <div className="dashboard__select__heading">
                   <span>Student</span>
                 </div>
@@ -234,7 +234,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
               </div>
             )}
             {activeButton === "course" && (
-              <div className="col-xl-6">
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <div className="dashboard__select__heading">
                   <span>Course</span>
                 </div>
@@ -257,7 +257,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
               </div>
             )}
             {activeButton === "batch" && (
-              <div className="col-xl-6">
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <div className="dashboard__select__heading">
                   <span>Batch</span>
                 </div>
@@ -279,7 +279,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
                 </div>
               </div>
             )}
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Link</label>
@@ -300,7 +300,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
           </div>
           {createRLData.documents.map((_, index) => (
             <div className="row" key={index}>
-              <div className="col-xl-6">
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">
                     <label htmlFor={`documents-${index}`}>Document</label>
@@ -323,7 +323,7 @@ const CreateResourceLink = ({ setActiveTab }) => {
                   </div>
                 </div>
               </div>
-              <div className="col-xl-6">
+              <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                 <div className="dashboard__form__wraper">
                   <div className="dashboard__form__input">
                     <label htmlFor={`descriptions-${index}`}>Description</label>

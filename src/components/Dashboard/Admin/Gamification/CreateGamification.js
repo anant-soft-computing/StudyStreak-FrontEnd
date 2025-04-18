@@ -164,7 +164,7 @@ const CreateGamification = ({ setActiveTab }) => {
     <div className="row">
       <div className="col-xl-12">
         <div className="row">
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__select__heading">
               <span>Content Type</span>
             </div>
@@ -189,7 +189,7 @@ const CreateGamification = ({ setActiveTab }) => {
             </div>
           </div>
           {gamificationData.model === "Live Class" && (
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__select__heading">
                 <span>Live Class Type</span>
               </div>
@@ -216,7 +216,7 @@ const CreateGamification = ({ setActiveTab }) => {
             </div>
           )}
           {gamificationData.model === "Live Class" && (
-            <div className="col-xl-6 mt-4">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
               <div className="dashboard__select__heading">
                 <span>Content</span>
               </div>
@@ -245,7 +245,7 @@ const CreateGamification = ({ setActiveTab }) => {
             </div>
           )}
           {gamificationData.model !== "Live Class" && (
-            <div className="col-xl-6 ">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__select__heading">
                 <span>Content</span>
               </div>
@@ -265,7 +265,7 @@ const CreateGamification = ({ setActiveTab }) => {
               </div>
             </div>
           )}
-          <div className="col-xl-6 mt-4">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Points</label>

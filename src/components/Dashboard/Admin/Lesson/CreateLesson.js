@@ -480,7 +480,7 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
           <div className="row">
             {createLessonData.lesson_attachments.map((_, index) => (
               <div className="row" key={index}>
-                <div className="col-xl-6">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                   <div className="dashboard__form__wraper">
                     <div className="dashboard__form__input">
                       <label htmlFor={`attachment-${index}`}>Document</label>
@@ -505,7 +505,7 @@ const CreateLesson = ({ parentActiveTab, parentSetActiveTab }) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6">
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12">
                   <div className="dashboard__form__wraper">
                     <div className="dashboard__form__input">
                       <label htmlFor={`description-${index}`}>

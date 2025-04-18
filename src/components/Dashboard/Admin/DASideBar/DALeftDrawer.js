@@ -35,6 +35,7 @@ import {
   User,
   Users,
   WalletCards,
+  Podcast,
 } from "lucide-react";
 
 const drawerWidth = 300;
@@ -186,6 +187,7 @@ const menuList = [
     icon: <EthernetPort />,
     link: "/admin-testimonial",
   },
+  { name: "Podcast", icon: <Podcast />, link: "/admin-podcast" },
   {
     name: "Settings",
     icon: <Settings />,

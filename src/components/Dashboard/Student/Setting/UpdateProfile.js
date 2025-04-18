@@ -280,7 +280,7 @@ const UpdateProfile = () => {
           }`}
         >
           <div className="row">
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>First Name</label>
@@ -294,7 +294,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Last Name</label>
@@ -308,7 +308,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Image</label>
@@ -320,7 +320,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Gender</label>
@@ -345,7 +345,7 @@ const UpdateProfile = () => {
           }`}
         >
           <div className="row">
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Phone No</label>
@@ -359,7 +359,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Whatsapp No</label>
@@ -381,7 +381,7 @@ const UpdateProfile = () => {
           }`}
         >
           <div className="row">
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Country</label>
@@ -400,7 +400,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>State</label>
@@ -420,7 +420,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6  mt-4">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12  mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>City</label>
@@ -439,7 +439,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 mt-4">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Country Interested In</label>
@@ -467,7 +467,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 mt-4">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Last Education</label>
@@ -481,7 +481,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6 mt-4">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12 mt-4">
               <div className="dashboard__form__wraper">
                 <div className="dashboard__form__input">
                   <label>Interested In Visa Counselling</label>
@@ -497,7 +497,7 @@ const UpdateProfile = () => {
                 </div>
               </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-6 col-lg-6 col-md-6 col-12">
               <strong>Exams Taken Before</strong>
               <div className="d-flex flex-wrap gap-4">
                 <div className="form__check mt-2">

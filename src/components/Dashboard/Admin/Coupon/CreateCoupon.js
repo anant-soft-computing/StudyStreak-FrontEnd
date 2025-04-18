@@ -106,7 +106,7 @@ const CreateCoupon = ({ setActiveTab }) => {
     <div className="row">
       <div className="col-xl-12">
         <div className="row">
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Coupon Name</label>
@@ -124,7 +124,7 @@ const CreateCoupon = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Campaign Name</label>
@@ -142,7 +142,7 @@ const CreateCoupon = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Coupon Code</label>
@@ -160,7 +160,7 @@ const CreateCoupon = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>
@@ -177,7 +177,7 @@ const CreateCoupon = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Start Date & Time (UTC)</label>
@@ -195,7 +195,7 @@ const CreateCoupon = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>End Date & Time (UTC)</label>

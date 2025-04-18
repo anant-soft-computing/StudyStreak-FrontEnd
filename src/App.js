@@ -82,6 +82,7 @@ import Resources from "./components/Dashboard/Admin/Resources/Resources";
 import Testimonial from "./components/Dashboard/Admin/Testimonial/Testimonial";
 import Coupon from "./components/Dashboard/Admin/Coupon/Coupon";
 import ALesson from "./components/Dashboard/Admin/Lesson/Lesson";
+import APodcast from "./components/Dashboard/Admin/Podcast/Podcast";
 
 //------------------------> Tutor <------------------------------------------
 
@@ -218,6 +219,7 @@ const App = () => {
             path="/admin-testimonial"
             Component={withBootstrap(Testimonial)}
           />
+          <Route path="/admin-podcast" Component={withBootstrap(APodcast)} />
           <Route path="/admin-profile" Component={withBootstrap(AProfile)} />
           <Route path="/admin-exam/:examType" Component={withBootstrap(Exam)} />
           <Route

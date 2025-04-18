@@ -128,7 +128,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
     <div className="row">
       <div className="col-xl-12">
         <div className="row">
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__select__heading">
               <span>Course</span>
             </div>
@@ -149,7 +149,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
               />
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Name</label>
@@ -167,7 +167,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Description</label>
@@ -188,7 +188,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
           <div className="row">
             {flashCardData.flash_card_items.map((item, index) => (
               <>
-                <div className="col-xl-6" key={index}>
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12" key={index}>
                   <div className="dashboard__form__wraper">
                     <div className="dashboard__form__input">
                       <label htmlFor={`front-${index}`}>Front</label>
@@ -216,7 +216,7 @@ const CreateFlashCard = ({ setActiveTab }) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6" key={index}>
+                <div className="col-xl-6 col-lg-6 col-md-6 col-12" key={index}>
                   <div className="dashboard__form__wraper">
                     <div className="dashboard__form__input">
                       <label htmlFor={`back-${index}`}>Back</label>

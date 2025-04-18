@@ -89,7 +89,7 @@ const CreateBadge = ({ setActiveTab }) => {
     <div className="row">
       <div className="col-xl-12">
         <div className="row">
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Badge Name</label>
@@ -104,7 +104,7 @@ const CreateBadge = ({ setActiveTab }) => {
               </div>
             </div>
           </div>
-          <div className="col-xl-6">
+          <div className="col-xl-6 col-lg-6 col-md-6 col-12">
             <div className="dashboard__form__wraper">
               <div className="dashboard__form__input">
                 <label>Badge Points</label>

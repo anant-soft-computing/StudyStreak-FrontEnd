@@ -17,7 +17,7 @@ import {
   GraduationCap,
   Briefcase,
 } from "lucide-react";
-import moment from "moment/moment";
+import moment from "moment";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";
 
@@ -37,7 +37,27 @@ const stats = [
   { number: "75+", label: "Expert Guests" },
 ];
 
-const PodcastPlayer = ({ episode, isPlaying, togglePlay, progress }) => {
+const PodcastPlayer = ({
+  episode,
+  isPlaying,
+  togglePlay,
+  progress,
+  isLoading,
+}) => {
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!episode) {
+    return (
+      <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
+        <h3 className="text-lg font-medium text-neutral-800 mb-2">
+          No episode selected
+        </h3>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl border border-neutral-200 shadow-card p-4 flex flex-col md:flex-row gap-6">
       <div className="w-full md:w-1/3 lg:w-1/4">
@@ -177,7 +197,6 @@ const EpisodeCard = ({ episode, onPlay, isCurrentEpisode, isPlaying }) => {
 const Podcast = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [allEpisodes, setAllEpisodes] = useState([]);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Episodes");
   const [currentEpisode, setCurrentEpisode] = useState(null);
@@ -187,7 +206,7 @@ const Podcast = () => {
   const audioRef = useRef(null);
 
   useEffect(() => {
-    (async () => {
+    const fetchEpisodes = async () => {
       setIsLoading(true);
       try {
         const response = await ajaxCall(
@@ -203,16 +222,18 @@ const Podcast = () => {
         );
         if (response?.status === 200) {
           setAllEpisodes(response.data);
-        }
-        if (response?.data?.length > 0) {
-          setCurrentEpisode(response?.data[0]);
+          if (response?.data?.length > 0) {
+            setCurrentEpisode(response?.data[0]);
+          }
         }
       } catch (error) {
         console.log("error", error);
       } finally {
         setIsLoading(false);
       }
-    })();
+    };
+
+    fetchEpisodes();
   }, []);
 
   const filteredEpisodes = allEpisodes.filter((episode) => {
@@ -284,7 +305,6 @@ const Podcast = () => {
     };
   }, []);
 
-  // Play/pause when current episode changes
   useEffect(() => {
     if (isPlaying && currentEpisode?.audio) {
       audioRef.current.src = currentEpisode.audio;
@@ -294,14 +314,6 @@ const Podcast = () => {
         .catch((e) => console.log("Auto-play prevented", e));
     }
   }, [currentEpisode, isPlaying]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <Loading />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -340,7 +352,6 @@ const Podcast = () => {
           </div>
         </div>
       </header>
-
       <div className="bg-white border-b border-neutral-200">
         <div className="container mx-auto px-4 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -355,7 +366,6 @@ const Podcast = () => {
           </div>
         </div>
       </div>
-
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -366,24 +376,16 @@ const Podcast = () => {
               Listen to our most popular and impactful discussions
             </p>
           </div>
-          {currentEpisode ? (
-            <PodcastPlayer
-              episode={currentEpisode}
-              isPlaying={isPlaying}
-              togglePlay={togglePlay}
-              progress={progress}
-              currentTime={currentTime}
-            />
-          ) : (
-            <div className="bg-white rounded-xl border border-neutral-200 p-8 text-center">
-              <h3 className="text-lg font-medium text-neutral-800 mb-2">
-                No episode selected
-              </h3>
-            </div>
-          )}
+          <PodcastPlayer
+            episode={currentEpisode}
+            isPlaying={isPlaying}
+            togglePlay={togglePlay}
+            progress={progress}
+            currentTime={currentTime}
+            isLoading={isLoading}
+          />
         </div>
       </section>
-
       <section className="bg-neutral-100 py-16">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -395,7 +397,6 @@ const Podcast = () => {
                 Discover valuable insights for your education journey
               </p>
             </div>
-
             <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
               <div className="relative flex-1 md:w-64">
                 <input
@@ -411,7 +412,6 @@ const Podcast = () => {
                   className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-400"
                 />
               </div>
-
               <div className="relative flex-1 md:w-48">
                 <select
                   value={selectedCategory}
@@ -432,7 +432,6 @@ const Podcast = () => {
               </div>
             </div>
           </div>
-
           <div className="md:hidden mb-6 overflow-x-auto">
             <div className="flex gap-2">
               {categories.map((category) => (
@@ -452,8 +451,9 @@ const Podcast = () => {
               ))}
             </div>
           </div>
-
-          {filteredEpisodes.length > 0 ? (
+          {isLoading ? (
+            <Loading />
+          ) : filteredEpisodes.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredEpisodes.map((episode) => (
                 <EpisodeCard
@@ -484,7 +484,6 @@ const Podcast = () => {
           </div>
         </div>
       </section>
-
       <section className="py-12 md:py-16 lg:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-10 md:mb-12 lg:mb-16">
@@ -528,7 +527,6 @@ const Podcast = () => {
           </div>
         </div>
       </section>
-
       <section className="bg-primary-800 text-white py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">

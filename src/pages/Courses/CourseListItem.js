@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment/moment";
+import moment from "moment";
 import { Link, useNavigate } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../../components/UI/Loading";

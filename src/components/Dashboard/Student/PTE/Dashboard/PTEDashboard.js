@@ -9,7 +9,7 @@ import {
   Trophy,
   BookOpen,
 } from "lucide-react";
-import moment from "moment/moment";
+import moment from "moment";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const summaries = [

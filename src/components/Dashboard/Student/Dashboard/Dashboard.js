@@ -28,6 +28,7 @@ import {
   SquarePen,
   Users,
   Videotape,
+  BookMarked,
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -449,6 +450,30 @@ const Dashboard = () => {
                           ))}
                       </div>
                     </div>
+                    {category === "PTE" && (
+                      <div className="col-xl-12 column__custom__class">
+                        <div className="gridarea__wraper card-background">
+                          <div className="gridarea__content">
+                            <div className="gridarea__content p-2 m-2">
+                              <Link
+                                to="/PTE/Dashboard"
+                                className="text-decoration-none"
+                              >
+                                <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                  <BookMarked
+                                    width={35}
+                                    height={35}
+                                    color="black"
+                                  />
+
+                                  <h2 className="mt-2">Reports</h2>
+                                </div>
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <div className="row">
                       {cardList.map(({ name, icon, link, state }, index) => (
                         <div

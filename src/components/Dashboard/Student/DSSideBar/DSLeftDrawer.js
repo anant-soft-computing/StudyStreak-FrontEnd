@@ -36,6 +36,7 @@ import {
   UserPen,
   Videotape,
   WalletCards,
+  BookMarked,
 } from "lucide-react";
 
 const drawerWidth = 280;
@@ -289,8 +290,8 @@ const DSLeftDrawer = () => {
           },
           {
             name: "Reports",
-            icon: <ClipboardMinus />,
-            link: "/reports",
+            icon: <BookMarked />,
+            link: "/PTE/Dashboard",
           },
           {
             name: "Settings",

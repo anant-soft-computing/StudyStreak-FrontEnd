@@ -5,9 +5,8 @@ import Loading from "../../../../../../UI/Loading";
 import SmallModal from "../../../../../../UI/Modal";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import { formatTime } from "../../../../../../../utils/timer/formateTime";
-const Cheerio = require("cheerio");
 
-const LivePTEListeningExam = () => {
+const LivePTEHIWExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[5];
   const examType = useLocation()?.pathname?.split("/")?.[2];
@@ -15,16 +14,13 @@ const LivePTEListeningExam = () => {
   const [timer, setTimer] = useState(0);
   const [examData, setExamData] = useState({});
   const [fullPaper, setFullPaper] = useState([]);
-  const [examAnswer, setExamAnswer] = useState([]);
-  const [htmlContents, setHtmlContents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timerRunning, setTimerRunning] = useState(true);
   const [reRenderAudio, setReRenderAudio] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-  // 0 means before start, 1 means after start, 2 means after finish
   const [next, setNext] = useState(0);
-  const [linkAnswer, setLinkAnswer] = useState(false);
+  const [allHighlightedWords, setAllHighlightedWords] = useState([]);
 
   const audioRef = useRef(null);
   const [countdown, setCountdown] = useState(10);
@@ -83,6 +79,10 @@ const LivePTEListeningExam = () => {
             return 0;
           });
           setFullPaper(filteredData);
+          // Initialize allHighlightedWords array when data is loaded
+          setAllHighlightedWords(
+            Array(filteredData[0][examType][examForm]?.length || 0).fill([])
+          );
         } else {
           console.log("error");
         }
@@ -107,93 +107,189 @@ const LivePTEListeningExam = () => {
     }
   }, [examForm, examType, fullPaper, next]);
 
-  const handleAnswerLinking = (e, questionId, next) => {
-    const { value, id, name, checked } = e.target;
+  const handleWordClick = (word, index) => {
+    setAllHighlightedWords((prev) => {
+      const newHighlights = [...prev];
+      // Check if word is already highlighted for current test
+      const isAlreadyHighlighted = newHighlights[next]?.some(
+        (w) => w.word === word && w.index === index
+      );
 
-    const elementId = id.split("_")[0];
-
-    const temp = [...examAnswer];
-    let conditionSatisfied = false; // Initialize a flag to track if any condition is satisfied
-
-    // Is this a multipleTypeQuestions
-    const isMultiQuestions = examAnswer[next].data.filter(
-      (item) => item.question_number === id
-    );
-
-    if (isMultiQuestions?.length <= 1) {
-      temp[next].data.forEach((item) => {
-        if (conditionSatisfied) return; // If a condition is already satisfied, exit the loop
-        if (item.question_number === id && elementId === "InputText") {
-          const trimmedValue = value.trim();
-          item.answer_text = trimmedValue;
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.question_number === id && elementId === "Checkbox") {
-          item.answer_text = checked ? value : "";
-          conditionSatisfied = true; // Set the flag to true
-        } else if (item.question_number === id) {
-          item.answer_text = value;
-          conditionSatisfied = true; // Set the flag to true
-        }
-      });
-
-      setExamAnswer(temp);
-    } else {
-      const multipleTypeQuestions = checked
-        ? examAnswer[next].data.findIndex(
-            (item) => item.question_number === id && item.answer_text === ""
-          )
-        : examAnswer[next].data.findIndex(
-            (item) => item.question_number === id && item.answer_text !== ""
-          );
-      if (multipleTypeQuestions !== -1) {
-        temp[next].data[multipleTypeQuestions].answer_text = checked
-          ? value
-          : "";
-
-        setExamAnswer(temp);
+      if (isAlreadyHighlighted) {
+        // Remove the word if clicked again
+        newHighlights[next] = newHighlights[next].filter(
+          (w) => !(w.word === word && w.index === index)
+        );
       } else {
-        const contentElements = document.querySelectorAll(`[id="${id}"]`);
-        contentElements.forEach((element) => {
-          const isAlreadyAnswered = isMultiQuestions.findIndex(
-            (a) => a.answer_text === element.value
-          );
-
-          if (isAlreadyAnswered === -1) element.checked = false;
-        });
+        // Add the word if not already highlighted
+        newHighlights[next] = [...(newHighlights[next] || []), { word, index }];
       }
+      return newHighlights;
+    });
+  };
+
+  // Process passage text and remove HTML tags
+  const cleanPassage = (text) => {
+    if (!text) return "";
+    // Remove HTML tags
+    return text.replace(/<[^>]*>/g, "");
+  };
+
+  // Split passage into words and render with clickable spans
+  const renderPassageWithClickableWords = (passage) => {
+    const cleanedPassage = cleanPassage(passage);
+    if (!cleanedPassage) return null;
+
+    // Split into words while preserving spaces and punctuation
+    const wordRegex = /(\S+|\s)/g;
+    const tokens = cleanedPassage.match(wordRegex) || [];
+
+    return tokens.map((token, index) => {
+      // Skip if it's just whitespace
+      if (token.trim() === "") return token;
+
+      const isHighlighted = allHighlightedWords[next]?.some(
+        (w) => w.word === token && w.index === index
+      );
+
+      return (
+        <span
+          key={index}
+          onClick={() => handleWordClick(token, index)}
+          style={{
+            backgroundColor: isHighlighted ? "#FFEB3B" : "transparent",
+            cursor: "pointer",
+            padding: "1px 2px",
+            borderRadius: "3px",
+            transition: "background-color 0.2s",
+            display: "inline-block",
+            margin: "1px 0",
+          }}
+        >
+          {token}
+        </span>
+      );
+    });
+  };
+
+  const latestExamSubmit = async () => {
+    try {
+      const response = await ajaxCall(
+        "/test-submission/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify({
+            student: studentId,
+            practise_set: fullPaper[0].IELTS.id,
+          }),
+        },
+        8000
+      );
+      if (response.status === 201) {
+        console.log("Lastest Exam Submitted Successfully");
+      } else {
+        console.log("error");
+      }
+    } catch (error) {
+      console.log("error", error);
     }
   };
 
-  useEffect(() => {
-    if (examAnswer.length > 0) {
-      for (let tempExamAnswer of examAnswer) {
-        let examIndex = examAnswer.indexOf(tempExamAnswer);
-        // remove duplicate
-        const filteredExamAnswer = tempExamAnswer.data.filter(
-          (item, index) =>
-            index ===
-            tempExamAnswer.data.findIndex(
-              (i) => i.question_number === item.question_number
-            )
-        );
-        filteredExamAnswer.forEach((item) => {
-          const contentElements = document.querySelectorAll(
-            `[id="${item.question_number}"]`
-          );
-          if (item.answer_text !== "") {
-            contentElements.forEach((element) => {
-              element.value = item.answer_text;
-            });
-          }
-          contentElements.forEach((element) => {
-            element.addEventListener("change", (e) => {
-              handleAnswerLinking(e, item.question_number, examIndex);
-            });
-          });
-        });
+  const submitExam = async () => {
+    const data = {
+      student_id: studentId,
+      pt_id: parseInt(examId),
+    };
+    try {
+      const response = await ajaxCall(
+        "/student-pt-submit/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        },
+        8000
+      );
+      if (response.status === 200) {
+        latestExamSubmit();
+        toast.success("Your Exam Submitted Successfully");
+      } else {
+        toast.error("You Have Already Submitted This Exam");
       }
+    } catch (error) {
+      toast.error("Some Problem Occurred. Please try again.");
     }
-  }, [linkAnswer, next]);
+  };
+
+  const handleSubmit = async () => {
+    const answersArray = [];
+    let bandValue = 0;
+
+    // Prepare answer data for all tests
+    allHighlightedWords.forEach((highlightedWords, index) => {
+      if (fullPaper?.[0]?.[examType]?.[examForm]?.[index]) {
+        const answerData = {
+          exam_id: fullPaper[0][examType][examForm][index]?.id,
+          data: highlightedWords.map((wordInfo, idx) => ({
+            question_number: idx + 1,
+            answer_text: wordInfo.word,
+          })),
+        };
+        answersArray.push(answerData);
+      }
+    });
+
+    try {
+      const data = JSON.stringify({
+        answer_data: answersArray,
+        user: userData?.userId,
+        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
+        band: bandValue,
+        exam_type: examForm,
+      });
+
+      const response = await ajaxCall(
+        "/answer/practice-test/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "POST",
+          body: data,
+        },
+        8000
+      );
+
+      if (response.status === 201) {
+        setTimerRunning(false);
+        submitExam();
+        navigate(`/PTE/Listening/HIW/${fullPaper[0]?.IELTS?.id}`);
+      } else if (response.status === 400) {
+        toast.error("Please Submit Your Exam Answer");
+      } else {
+        toast.error("Some Problem Occurred. Please try again.");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
 
   useEffect(() => {
     let countdownInterval;
@@ -265,286 +361,30 @@ const LivePTEListeningExam = () => {
     }
   };
 
-  const fetchHtmlContent = async (paperData, index, tempQuestions) => {
-    const question = paperData?.question_other;
-    let tempAnswer = {};
-
-    const $ = Cheerio.load(question.toString());
-
-    const questionTags = [
-      "select",
-      "textarea",
-      "input[type='text'], input:not([type='radio'], [type='checkbox'])",
-      "input[type='radio']",
-      "input[type='checkbox']",
-    ];
-
-    const tagIds = ["Select", "Textarea", "InputText", "Radio", "Checkbox"];
-
-    const temp = [];
-    let questionPassage = "";
-
-    questionTags.forEach((tag, tagIndex) => {
-      // Find elements for current tag
-      const elements = $(tag);
-      const numberOfElements = elements.length;
-
-      const radioCheckboxtypeQuestionsGroup = {};
-      let uniqueId = "";
-
-      if (numberOfElements !== 0) {
-        let tagQuestions = {
-          type: tagIds[tagIndex],
-          paginationsIds: [],
-        };
-        elements.each((j, element) => {
-          if (
-            tag === "input[type='radio']" ||
-            tag === "input[type='checkbox']"
-          ) {
-            const name = $(element).attr("name");
-            if (!radioCheckboxtypeQuestionsGroup[name]) {
-              radioCheckboxtypeQuestionsGroup[name] = [];
-              uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
-              tagQuestions.paginationsIds.push(uniqueId);
-            }
-            $(element).attr("id", uniqueId);
-            radioCheckboxtypeQuestionsGroup[name].push(element);
-          } else {
-            const uniqueId = `${tagIds[tagIndex]}_${index}_${j + 1}`;
-            tagQuestions.paginationsIds.push(uniqueId);
-            $(element).attr("id", uniqueId);
-          }
-        });
-        temp.push(tagQuestions);
-      }
-    });
-
-    let paginationsStrucutre = [];
-
-    paperData?.question_structure?.forEach((item, index) => {
-      temp.forEach((element) => {
-        if (element.type === item.type) {
-          if (element.type === "Checkbox" && item?.isMultiQuestions) {
-            const multipleTypeQuestionsGroup = element.paginationsIds.splice(
-              0,
-              1
-            );
-            paginationsStrucutre = [
-              ...paginationsStrucutre,
-              ...Array.from(
-                { length: item.numberOfQuestions },
-                () => multipleTypeQuestionsGroup
-              ),
-            ];
-          } else if (element.type === item.type) {
-            paginationsStrucutre.push(
-              element.paginationsIds.splice(0, item.numberOfQuestions)
-            );
-          }
-        }
-      });
-    });
-
-    paginationsStrucutre = paginationsStrucutre.flat();
-
-    // Display questions for the first page initially
-    questionPassage += `<div className="mainContainer">${$.html()}</div>`;
-
-    // Replace ♫ with unique symbols
-    let serialNumber = tempQuestions;
-    questionPassage = questionPassage.replaceAll(
-      "++",
-      () => `${serialNumber++}`
-    );
-
-    const tempPaginationStructure = paginationsStrucutre.map((item) => {
-      return {
-        question_number: item,
-        answer_text: "",
-      };
-    });
-
-    tempAnswer = {
-      exam_id: paperData?.id,
-      data: tempPaginationStructure,
-    };
-    // return questionPassage;
-    return new Promise((resolve) => {
-      resolve({ questionPassage, tempAnswer }); // resolve with the question passage once it's constructed
-    });
-  };
-
-  useEffect(() => {
-    (async () => {
-      if (fullPaper?.length !== 0) {
-        const examDataList = fullPaper?.[0][examType][examForm]?.map(
-          (examBlock, index) => ({
-            ...examBlock,
-            no: index + 1,
-          })
-        );
-        let tempHtmlContents = [];
-        let tempExamAnswer = [];
-        let tempQuestions = 1;
-        for (let paper of examDataList) {
-          const index = examDataList.indexOf(paper);
-          const returnContent = await fetchHtmlContent(
-            paper,
-            index,
-            tempQuestions
-          );
-          tempHtmlContents.push(returnContent.questionPassage);
-          const tempUniqueArr = {
-            name: `${index + 1}`,
-            ...returnContent.tempAnswer,
-          };
-          tempExamAnswer.push(tempUniqueArr);
-          tempQuestions =
-            tempExamAnswer.map((item) => [...item.data]).flat().length + 1;
-        }
-        setHtmlContents(tempHtmlContents);
-        setExamAnswer(tempExamAnswer);
-        setLinkAnswer(!linkAnswer);
-      }
-    })();
-  }, [fullPaper]);
-
-  const latestExamSubmit = async () => {
-    try {
-      const response = await ajaxCall(
-        "/test-submission/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify({
-            student: studentId,
-            practise_set: fullPaper[0].IELTS.id,
-          }),
-        },
-        8000
-      );
-      if (response.status === 201) {
-        console.log("Lastest Exam Submitted Successfully");
-      } else {
-        console.log("error");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const submitExam = async () => {
-    const data = {
-      student_id: studentId,
-      pt_id: parseInt(examId),
-    };
-    try {
-      const response = await ajaxCall(
-        "/student-pt-submit/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: JSON.stringify(data),
-        },
-        8000
-      );
-      if (response.status === 200) {
-        latestExamSubmit();
-        toast.success("Your Exam Submitted Successfully");
-      } else {
-        toast.error("You Have Already Submitted This Exam");
-      }
-    } catch (error) {
-      toast.error("Some Problem Occurred. Please try again.");
-    }
-  };
-
-  const handleSubmit = async () => {
-    const answersArray = [];
-    let bandValue = 0;
-
-    examAnswer.forEach((item, index) => {
-      const temp = item.data.map((answer, index2) => ({
-        question_number: index2 + 1,
-        answer_text: answer.answer_text,
-      }));
-      const tempObj = {
-        exam_id: item.exam_id,
-        data: temp,
-      };
-      answersArray.push(tempObj);
-    });
-
-    try {
-      const data = JSON.stringify({
-        answer_data: answersArray,
-        user: userData?.userId,
-        Practise_Exam: parseInt(fullPaper[0].IELTS.id),
-        band: bandValue,
-        exam_type: examForm,
-      });
-
-      const response = await ajaxCall(
-        "/answer/practice-test/",
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${
-              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-            }`,
-          },
-          method: "POST",
-          body: data,
-        },
-        8000
-      );
-
-      if (response.status === 201) {
-        setTimerRunning(false);
-        submitExam();
-        navigate(`/PTE/Listening/${fullPaper[0]?.IELTS?.id}`);
-      } else if (response.status === 400) {
-        toast.error("Please Submit Your Exam Answer");
-      } else {
-        toast.error("Some Problem Occurred. Please try again.");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
-
-  const reviewContent = () =>
-    examAnswer.map((test, index) => (
-      <div key={index}>
-        <h4>Test : {index + 1}</h4>
-        <div className="card-container">
-          {test.data.map((answer, idx) => (
-            <div key={idx} className="card answer__width">
-              <div className="card-body">
-                <h6 className="card-text">
-                  Answer ({idx + 1}) :{" "}
-                  <span className="text-success">{answer.answer_text}</span>
-                </h6>
+  const reviewContent = () => (
+    <div>
+      {allHighlightedWords.map(
+        (highlightedWords, testIndex) =>
+          highlightedWords.length > 0 && (
+            <div key={testIndex} className="mb-4">
+              <h4>Test : {testIndex + 1}</h4>
+              <div className="card-container">
+                {highlightedWords.map((wordInfo, index) => (
+                  <div key={index} className="card answer__width mb-2">
+                    <div className="card-body">
+                      <h6 className="card-text">
+                        Answer {index + 1}:{" "}
+                        <span className="text-success">{wordInfo.word}</span>
+                      </h6>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-    ));
+          )
+      )}
+    </div>
+  );
 
   return isLoading ? (
     <div className="mt-4">
@@ -609,8 +449,8 @@ const LivePTEListeningExam = () => {
           }}
         >
           You will hear a recording. Below is a transcription of the recording.
-          Some words in the transcription that differ from what the speaker(s)
-          said. Please click on the words that are different.
+          Some words in the transcription differ from what the speaker(s) said.
+          Please click on the words that are different.
         </div>
         {renderAudio(examData?.audio_file)}
         <div
@@ -622,11 +462,12 @@ const LivePTEListeningExam = () => {
             border: "1px solid #ddd",
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
             overflowY: "auto",
+            lineHeight: "1.8",
+            whiteSpace: "pre-wrap",
           }}
-          dangerouslySetInnerHTML={{
-            __html: htmlContents?.[next],
-          }}
-        />
+        >
+          {renderPassageWithClickableWords(examData?.passage)}
+        </div>
         <div
           style={{
             borderTop: "1px solid #ddd",
@@ -742,4 +583,4 @@ const LivePTEListeningExam = () => {
   );
 };
 
-export default LivePTEListeningExam;
+export default LivePTEHIWExam;

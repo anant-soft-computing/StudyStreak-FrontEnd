@@ -1,8 +1,9 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
-import { BookOpen, User, Award, Target } from "lucide-react";
+import { BookOpen, User, Award, Target, BarChart2, Star } from "lucide-react";
 import IeltsList from "./IeltsList";
+import PopularPackages from "./PopularPackages";
 import Testimonial from "../Testimonial/Testimonial";
 
 const keyFeatures = [
@@ -54,68 +55,68 @@ const IELTSPage = () => {
         />
       </Helmet>
       <div className="bg-neutral-50 min-h-screen">
-        <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 py-20 overflow-hidden">
-          <div
-            className="absolute inset-0 bg-grid-pattern opacity-10"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 2px 2px, white 1px, transparent 0)",
-              backgroundSize: "32px 32px",
-            }}
-          />
+        <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 py-12 md:py-16 overflow-hidden">
+          <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent"></div>
 
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col md:flex-row items-center gap-12">
-              <div className="w-full md:w-1/2 space-y-6 text-white">
-                <div className="inline-block px-4 py-1 bg-white/10 rounded-full text-sm backdrop-blur-sm">
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8">
+              <div className="w-full lg:w-1/2 space-y-4 text-white">
+                <div className="inline-flex items-center px-3 py-1 bg-white/10 rounded-full text-xs sm:text-sm backdrop-blur-sm border border-white/20">
+                  <Star className="w-3 h-3 mr-1.5 text-yellow-300" />
                   #1 Rated IELTS Preparation Course
                 </div>
-                <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight">
                   Master IELTS with{" "}
                   <span className="text-accent-400">Confidence</span>
                 </h1>
-                <p className="text-lg text-primary-100">
+                <p className="text-primary-100 text-sm sm:text-base">
                   Comprehensive IELTS preparation designed to help you achieve
                   your target band score. Join thousands of successful students
                   who have achieved their dreams with us.
                 </p>
 
-                <div className="grid grid-cols-3 gap-8 pt-8">
-                  <div>
-                    <div className="text-3xl font-bold">8.5+</div>
-                    <div className="text-primary-200 text-sm">
+                <div className="grid grid-cols-3 gap-4 pt-3">
+                  <div className="text-center">
+                    <div className="text-xl sm:text-2xl font-bold flex items-center justify-center">
+                      8.5+
+                      <BarChart2 className="w-4 h-4 ml-0.5 text-accent-300" />
+                    </div>
+                    <div className="text-primary-200 text-xs uppercase tracking-wider">
                       Average Band Score
                     </div>
                   </div>
-                  <div>
-                    <div className="text-3xl font-bold">15K+</div>
-                    <div className="text-primary-200 text-sm">
+                  <div className="text-center">
+                    <div className="text-xl sm:text-2xl font-bold">15K+</div>
+                    <div className="text-primary-200 text-xs uppercase tracking-wider">
                       Success Stories
                     </div>
                   </div>
-                  <div>
-                    <div className="text-3xl font-bold">95%</div>
-                    <div className="text-primary-200 text-sm">Success Rate</div>
+                  <div className="text-center">
+                    <div className="text-xl sm:text-2xl font-bold">95%</div>
+                    <div className="text-primary-200 text-xs uppercase tracking-wider">
+                      Success Rate
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex gap-4 pt-4">
+                <div className="flex flex-wrap gap-3 pt-4">
                   <button
                     onClick={handleCourse}
-                    className="bg-white text-primary-600 px-6 py-3 rounded-xl 
-                  hover:bg-primary-50 transition-all duration-300 font-medium"
+                    className="bg-white text-primary-700 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg 
+                    hover:bg-primary-50 transition-all duration-300 font-medium text-sm sm:text-base"
                   >
                     Explore Courses
                   </button>
                   <button
-                    className="bg-primary-700 text-white px-6 py-3 rounded-xl 
-                  hover:bg-primary-800 transition-all duration-300 font-medium border border-primary-500"
+                    className="bg-transparent text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg 
+                    hover:bg-white/10 transition-all duration-300 font-medium border border-white/30 text-sm sm:text-base"
                     onClick={handleTakeTest}
                   >
                     Take Diagnostic Test
                   </button>
                 </div>
               </div>
+              <PopularPackages />
             </div>
           </div>
         </section>

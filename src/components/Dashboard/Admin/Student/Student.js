@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import Table from "../../../UI/Table";
@@ -12,43 +11,77 @@ import SmallModal from "../../../UI/Modal";
 
 const Student = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [dateRange, setDateRange] = useState(null);
   const [studentList, setStudentList] = useState([]);
-  const [filteredStudentList, setFilteredStudentList] = useState([]);
   const authData = useSelector((state) => state.authStore);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [openBatch, setOpenBatch] = useState(false);
-  const [batchList, setBatchList] = useState([]);
-
-  const [openLiveClass, setOpenLiveClass] = useState(false);
-  const [liveClassList, setLiveClassList] = useState([]);
-
-  const [openJoinClass, setOpenJoinClass] = useState(false);
-  const [joinClassList, setJoinClassList] = useState([]);
+  const [batchDetails, setBatchDetails] = useState([]);
 
   const [openPackages, setOpenPackages] = useState(false);
-  const [packages, setPackages] = useState([]);
+  const [packageDeails, setPackageDeails] = useState([]);
 
-  const handleBatch = (batch) => {
-    setOpenBatch(true);
-    setBatchList(batch);
+  const handleBatch = async (batchIds) => {
+    try {
+      setIsLoading(true);
+      const batchPromises = batchIds?.map((batchId) =>
+        ajaxCall(
+          `/batch/${batchId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
+          },
+          8000
+        )
+      );
+
+      const responses = await Promise.all(batchPromises);
+      const validBatchDetails = responses
+        ?.filter((response) => response?.status === 200)
+        ?.map((response) => response?.data);
+
+      setBatchDetails(validBatchDetails);
+      setOpenBatch(true);
+    } catch (error) {
+      console.log("Error fetching batch details:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleLiveClass = (liveClass) => {
-    setOpenLiveClass(true);
-    setLiveClassList(liveClass);
-  };
+  const handlePackages = async (packageIds) => {
+    try {
+      setIsLoading(true);
+      const packagePromises = packageIds?.map((packageId) =>
+        ajaxCall(
+          `/package/${packageId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authData?.accessToken}`,
+            },
+            method: "GET",
+          },
+          8000
+        )
+      );
 
-  const handleJoinClass = (joinClass) => {
-    setOpenJoinClass(true);
-    setJoinClassList(joinClass);
-  };
+      const responses = await Promise.all(packagePromises);
+      const validPackageDetails = responses
+        ?.filter((response) => response?.status === 200)
+        ?.map((response) => response?.data);
 
-  const handlePackages = (packages) => {
-    setOpenPackages(true);
-    setPackages(packages);
+      setPackageDeails(validPackageDetails);
+      setOpenPackages(true);
+    } catch (error) {
+      console.log("Error fetching package details:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -56,7 +89,7 @@ const Student = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/student_list_view_dashboard/",
+          "/admin/student-dashboard/",
           {
             headers: {
               Accept: "application/json",
@@ -68,8 +101,11 @@ const Student = () => {
           8000
         );
         if (response?.status === 200) {
-          setStudentList(response?.data);
-          setFilteredStudentList(response?.data);
+          setStudentList(
+            response?.data.sort(
+              (a, b) => new Date(b.date_joined) - new Date(a.date_joined)
+            )
+          );
         }
       } catch (error) {
         console.log("error", error);
@@ -78,20 +114,6 @@ const Student = () => {
       }
     })();
   }, [authData?.accessToken]);
-
-  useEffect(() => {
-    if (!dateRange) {
-      setFilteredStudentList(studentList);
-    } else {
-      const startDate = moment(dateRange[0].startDate);
-      const endDate = moment(dateRange[0].endDate);
-      const filtered = studentList.filter((student) => {
-        const studentDate = moment(student.date_joined);
-        return studentDate.isBetween(startDate, endDate, "day", "[]");
-      });
-      setFilteredStudentList(filtered);
-    }
-  }, [dateRange, studentList]);
 
   const columns = [
     {
@@ -120,32 +142,8 @@ const Student = () => {
       filter: true,
     },
     {
-      headerName: "Gender",
-      field: "gender",
-      filter: true,
-      cellRenderer: (params) => {
-        return params.value ? <div>{params.value}</div> : "-";
-      },
-    },
-    {
-      headerName: "Phone No.",
-      field: "phone_no",
-      filter: true,
-      cellRenderer: (params) => {
-        return params.value ? <div>{params.value}</div> : "-";
-      },
-    },
-    {
-      headerName: "Whatsapp No.",
-      field: "whatsapp_no",
-      filter: true,
-      cellRenderer: (params) => {
-        return params.value ? <div>{params.value}</div> : "-";
-      },
-    },
-    {
       headerName: "City",
-      field: "city_name",
+      field: "city",
       filter: true,
       cellRenderer: (params) => {
         return params.value ? <div>{params.value}</div> : "-";
@@ -153,7 +151,7 @@ const Student = () => {
     },
     {
       headerName: "State",
-      field: "state_name",
+      field: "state",
       filter: true,
       cellRenderer: (params) => {
         return params.value ? <div>{params.value}</div> : "-";
@@ -161,10 +159,44 @@ const Student = () => {
     },
     {
       headerName: "Country",
-      field: "country_name",
+      field: "country",
       filter: true,
       cellRenderer: (params) => {
         return params.value ? <div>{params.value}</div> : "-";
+      },
+    },
+    {
+      headerName: "Batch",
+      field: "batch_ids",
+      cellRenderer: (params) => {
+        return params.value.length > 0 ? (
+          <button
+            className="take-test"
+            onClick={() => handleBatch(params.value)}
+            style={{ minWidth: "80px" }}
+          >
+            View
+          </button>
+        ) : (
+          "-"
+        );
+      },
+    },
+    {
+      headerName: "Package",
+      field: "package_ids",
+      cellRenderer: (params) => {
+        return params.value.length > 0 ? (
+          <button
+            className="take-test"
+            onClick={() => handlePackages(params.value)}
+            style={{ minWidth: "80px" }}
+          >
+            View
+          </button>
+        ) : (
+          "-"
+        );
       },
     },
     {
@@ -207,108 +239,31 @@ const Student = () => {
         return params.value ? <div>{params.value}</div> : "-";
       },
     },
-    {
-      headerName: "Book Live Class",
-      field: "live_classes",
-      cellRenderer: (params) => {
-        return params.value.length > 0 ? (
-          <button
-            className="take-test"
-            onClick={() => handleLiveClass(params.value)}
-          >
-            View
-          </button>
-        ) : (
-          "-"
-        );
-      },
-    },
-    {
-      headerName: "Join Live Class",
-      field: "live_classes_join",
-      cellRenderer: (params) => {
-        return params.value.length > 0 ? (
-          <button
-            className="take-test"
-            onClick={() => handleJoinClass(params.value)}
-          >
-            View
-          </button>
-        ) : (
-          "-"
-        );
-      },
-    },
-    {
-      headerName: "Batch",
-      field: "batches",
-      cellRenderer: (params) => {
-        return params.value.length > 0 ? (
-          <button
-            className="take-test"
-            onClick={() => handleBatch(params.value)}
-          >
-            View
-          </button>
-        ) : (
-          "-"
-        );
-      },
-    },
-    {
-      headerName: "Package & Course (Without Batch)",
-      field: "packages",
-      cellRenderer: (params) => {
-        return params.value.length > 0 ? (
-          <button
-            className="take-test"
-            onClick={() => handlePackages(params.value)}
-          >
-            View
-          </button>
-        ) : (
-          "-"
-        );
-      },
-    },
   ];
 
   return (
-    <>
-      <div className="body__wrapper">
-        <div className="main_wrapper overflow-hidden">
-          <div className="dashboardarea sp_bottom_100">
-            <div className="dashboard">
-              <div className="container-fluid full__width__padding">
-                <div className="row">
-                  <DASideBar />
-                  <div className="col-xl-12 col-lg-12 col-md-12">
-                    <div className="dashboard__content__wraper common-background-color-across-app">
-                      <div className="dashboard__section__title">
-                        <h4>Student</h4>
-                        <i
-                          className="icofont-calendar"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => setIsModalOpen(true)}
-                        >
-                          {" "}
-                          Select Date
-                        </i>
-                      </div>
-                      <div className="row">
-                        {isLoading ? (
-                          <Loading />
-                        ) : filteredStudentList.length > 0 ? (
-                          <Table
-                            rowData={filteredStudentList}
-                            columnDefs={columns}
-                          />
-                        ) : (
-                          <h5 className="text-center text-danger">
-                            No Students Available !!
-                          </h5>
-                        )}
-                      </div>
+    <div className="body__wrapper">
+      <div className="main_wrapper overflow-hidden">
+        <div className="dashboardarea sp_bottom_100">
+          <div className="dashboard">
+            <div className="container-fluid full__width__padding">
+              <div className="row">
+                <DASideBar />
+                <div className="col-xl-12 col-lg-12 col-md-12">
+                  <div className="dashboard__content__wraper common-background-color-across-app">
+                    <div className="dashboard__section__title">
+                      <h4>Student</h4>
+                    </div>
+                    <div className="row">
+                      {isLoading ? (
+                        <Loading />
+                      ) : studentList.length > 0 ? (
+                        <Table rowData={studentList} columnDefs={columns} />
+                      ) : (
+                        <h5 className="text-center text-danger">
+                          No Students Available !!
+                        </h5>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -324,182 +279,160 @@ const Student = () => {
         isOpen={openBatch}
         onClose={() => setOpenBatch(false)}
       >
-        <div className="row">
-          {batchList?.map((item, index) => (
-            <div
-              className="col-md-6 col-sm-12 mb-4 dashboard__recent__course__single"
-              key={index}
-            >
-              <div className="card shadow-sm h-100">
-                <div className="card-header text-white d-flex justify-content-between align-items-center">
-                  <h5 className="mb-0">{`(${index + 1}) ${
-                    item?.batch_name
-                  }`}</h5>
-                </div>
-                <div className="card-body">
-                  <ul className="list-unstyled mb-3">
-                    <li>
-                      <i className="icofont-calendar" /> <b>Date:</b>{" "}
-                      {`${item?.batch_startdate} to ${item?.batch_enddate}`}
-                    </li>
-                    <li>
-                      <i className="icofont-clock-time" /> <b>Time:</b>{" "}
-                      {`${item?.batch_start_timing} to ${item?.batch_end_timing}`}
-                    </li>
-                  </ul>
-                  <ul className="list-unstyled">
-                    <li>
-                      <b>Package : </b> {item?.add_packages?.package_name}
-                    </li>
-                    <li>
-                      <b>Course : </b> {item?.add_packages?.select_courses}
-                    </li>
-                    <br />
-                    <li>
-                      <b>Category : </b> {item?.add_packages?.coursecategory}
-                    </li>
-                  </ul>
-                </div>
-              </div>
+        <div className="container-fluid">
+          {batchDetails?.length === 0 ? (
+            <div className="text-center py-4">
+              <div className="alert alert-info">No batch details available</div>
             </div>
-          ))}
+          ) : (
+            <div className="row g-4">
+              {batchDetails?.map((item, index) => (
+                <div className="col-md-6" key={index}>
+                  <div
+                    className="card h-100 border-0 shadow-sm"
+                    style={{
+                      borderRadius: "12px",
+                      borderLeft: "4px solid #6777ef",
+                    }}
+                  >
+                    <div
+                      className="card-header bg-white d-flex justify-content-between align-items-center"
+                      style={{
+                        borderBottom: "1px solid rgba(0,0,0,0.1)",
+                        borderTopLeftRadius: "12px",
+                        borderTopRightRadius: "12px",
+                      }}
+                    >
+                      <h5 className="mb-0 text-success">
+                        {item?.batch_name || `Batch ${index + 1}`}
+                      </h5>
+                      <span className="badge bg-success">#{index + 1}</span>
+                    </div>
+                    <div className="card-body">
+                      <div className="mb-3">
+                        <h6 className="text-muted mb-2">Schedule</h6>
+                        <div className="d-flex justify-content-between">
+                          <div>
+                            <small className="text-muted">Start</small>
+                            <p className="mb-0 fw-bold">
+                              {item?.batch_startdate}
+                            </p>
+                            <small className="text-muted">
+                              {item?.batch_start_timing}
+                            </small>
+                          </div>
+                          <div>
+                            <small className="text-muted">End</small>
+                            <p className="mb-0 fw-bold">
+                              {item?.batch_enddate}
+                            </p>
+                            <small className="text-muted">
+                              {item?.batch_end_timing}
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+
+                      <hr className="my-3" />
+
+                      <div className="mb-3">
+                        <h6 className="text-muted mb-2">Package Details</h6>
+                        {item?.add_packages ? (
+                          <>
+                            <p className="mb-1">
+                              <span className="fw-bold">Name:</span>
+                              {item?.add_packages?.package_name}
+                            </p>
+                            <p className="mb-1">
+                              <span className="fw-bold">Course:</span>
+                              {item?.add_packages?.select_courses}
+                            </p>
+                            <p className="mb-0">
+                              <span className="fw-bold">Category:</span>
+                              {item?.add_packages?.coursecategory}
+                            </p>
+                          </>
+                        ) : (
+                          <p className="text-muted">No package information</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </SmallModal>
       <SmallModal
         size="lg"
         centered
-        title="Book Live Class"
-        isOpen={openLiveClass}
-        onClose={() => setOpenLiveClass(false)}
-      >
-        <div className="row">
-          {liveClassList?.map((item, index) => (
-            <div className="dashboard__recent__course__single" key={index}>
-              <div className="me-3">({index + 1})</div>
-              <div className="dashboard__recent__course__content">
-                <div className="dashboard__recent__course__heading">
-                  <h3>{item?.meeting_title}</h3>
-                </div>
-                <div className="dashboard__recent__course__meta text-xl-center">
-                  <ul className="ps-0">
-                    <li className="text-start">
-                      <i className="icofont-tag" style={{ color: "#01579b" }} />{" "}
-                      <b>Type</b> : {item?.liveclasstype} <br />
-                      <i className="icofont-calendar" /> <b>Date & Time</b> :{" "}
-                      {`${moment(item?.start_time).format("lll")} To ${moment(
-                        item?.end_time
-                      ).format("lll")}`}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </SmallModal>
-      <SmallModal
-        size="lg"
-        centered
-        title="Join Live Class"
-        isOpen={openJoinClass}
-        onClose={() => setOpenJoinClass(false)}
-      >
-        <div className="row">
-          {joinClassList?.map((item, index) => (
-            <div className="dashboard__recent__course__single" key={index}>
-              <div className="me-3">({index + 1})</div>
-              <div className="dashboard__recent__course__content">
-                <div className="dashboard__recent__course__heading">
-                  <h3>{item?.meeting_title}</h3>
-                </div>
-                <div className="dashboard__recent__course__meta text-xl-center">
-                  <ul className="ps-0">
-                    <li className="text-start">
-                      <i className="icofont-tag" style={{ color: "#01579b" }} />{" "}
-                      <b>Type</b> : {item?.liveclasstype} <br />
-                      <i className="icofont-calendar" /> <b>Date & Time</b> :{" "}
-                      {`${moment(item?.start_time).format("lll")} To ${moment(
-                        item?.end_time
-                      ).format("lll")}`}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </SmallModal>
-      <SmallModal
-        size="lg"
-        centered
-        title="Package & Course (Without Batch)"
+        title="Package & Course Details"
         isOpen={openPackages}
         onClose={() => setOpenPackages(false)}
       >
-        <div className="row">
-          {packages?.map((item, index) => (
-            <div className="dashboard__recent__course__single" key={index}>
-              <div className="me-3">({index + 1})</div>
-              <div className="dashboard__recent__course__content">
-                <div className="dashboard__recent__course__meta text-xl-center">
-                  <ul className="ps-0">
-                    <li className="text-start">
-                      <b>Package</b> : {item?.package_name}
-                      <br />
-                      <b>Course</b> : {item?.select_courses}
-                      <br />
-                      <b>Category</b> : {item?.coursecategory}
-                    </li>
-                  </ul>
-                </div>
+        <div className="container-fluid">
+          {packageDeails?.length === 0 ? (
+            <div className="text-center py-4">
+              <div className="alert alert-info">
+                No package details available
               </div>
             </div>
-          ))}
+          ) : (
+            <div className="row g-4">
+              {packageDeails?.map((item, index) => (
+                <div className="col-md-6" key={index}>
+                  <div
+                    className="card h-100 border-0 shadow-sm"
+                    style={{
+                      borderRadius: "12px",
+                      borderLeft: "4px solid #28a745",
+                    }}
+                  >
+                    <div
+                      className="card-header bg-white d-flex justify-content-between align-items-center"
+                      style={{
+                        borderBottom: "1px solid rgba(0,0,0,0.1)",
+                        borderTopLeftRadius: "12px",
+                        borderTopRightRadius: "12px",
+                      }}
+                    >
+                      <h5 className="mb-0 text-success">
+                        {item?.package_name || `Package ${index + 1}`}
+                      </h5>
+                      <span className="badge bg-success">#{index + 1}</span>
+                    </div>
+                    <div className="card-body">
+                      <div className="mb-3">
+                        <h6 className="text-muted mb-3">Course Information</h6>
+                        <div>
+                          <small className="text-muted">Course</small>
+                          <p className="mb-0 fw-bold">{item?.select_courses}</p>
+                        </div>
+                        <div>
+                          <small className="text-muted">Category</small>
+                          <p className="mb-0 fw-bold">{item?.coursecategory}</p>
+                        </div>
+                      </div>
+                      <hr className="my-3" />
+                      <div>
+                        <h6 className="text-muted mb-2">Package Information</h6>
+                        <div className="d-flex align-items-center mb-2">
+                          <div>
+                            <small className="text-muted">Package</small>
+                            <p className="mb-0 fw-bold">{item?.package_name}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </SmallModal>
-      {isModalOpen && (
-        <SmallModal
-          size="lg"
-          centered
-          isOpen={isModalOpen}
-          title="Select Date"
-          footer={
-            <div className="d-flex gap-2">
-              <button
-                className="default__button"
-                onClick={() => {
-                  setDateRange(null);
-                  setIsModalOpen(false);
-                }}
-              >
-                Reset
-              </button>
-              <button
-                className="default__button"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Apply
-              </button>
-            </div>
-          }
-          onClose={() => setIsModalOpen(false)}
-        >
-          <DateRangePicker
-            ranges={
-              dateRange || [
-                {
-                  startDate: new Date(),
-                  endDate: new Date(),
-                  key: "selection",
-                },
-              ]
-            }
-            onChange={(item) => setDateRange([item.selection])}
-            rangeColors={["#3d91ff"]}
-          />
-        </SmallModal>
-      )}
-    </>
+    </div>
   );
 };
 

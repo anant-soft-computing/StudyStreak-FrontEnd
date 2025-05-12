@@ -257,20 +257,18 @@ const RARecorder = ({
         {!isRecording && !audioBlob && (
           <div>Beginning in {preparationTimer} seconds</div>
         )}
-        {isRecording &&
-          status ===
-            "recording"(
-              <div>
-                Recording Time Left : {recordingTimer}s
-                <ProgressBar
-                  striped
-                  animated
-                  className="mt-2"
-                  now={((40 - recordingTimer) / 40) * 100}
-                  variant={recordingTimer <= 10 ? "danger" : "success"}
-                />
-              </div>
-            )}
+        {isRecording && status === "recording" && (
+          <div>
+            Recording Time Left : {recordingTimer}s
+            <ProgressBar
+              striped
+              animated
+              className="mt-2"
+              now={((40 - recordingTimer) / 40) * 100}
+              variant={recordingTimer <= 10 ? "danger" : "success"}
+            />
+          </div>
+        )}
         {status === "processing" && (
           <div className="text-center mt-3">
             <Spinner animation="border" role="status" variant="primary" />

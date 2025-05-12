@@ -208,12 +208,17 @@ const BlogsPage = () => {
                     </div>
 
                     <div className="flex flex-col flex-1 p-6">
-                      <h2
-                        className="text-xl font-bold text-neutral-800 mb-3 line-clamp-2 
-                        hover:text-primary-600 transition-colors cursor-pointer"
-                        onClick={() => navigate(`/blogs/${blog.slug}`)}
-                      >
-                        {blog.title}
+                      <h2>
+                        <a
+                          href={`/blogs/${blog.slug}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(`/blogs/${blog.slug}`);
+                          }}
+                          className="text-xl font-bold text-neutral-800 mb-3 line-clamp-2 hover:text-primary-600 transition-colors cursor-pointer"
+                        >
+                          {blog.title}
+                        </a>
                       </h2>
                       <p className="text-neutral-600 mb-4 line-clamp-3">
                         {blog.excerpt}
@@ -238,13 +243,16 @@ const BlogsPage = () => {
                           <User size={16} className="mr-1" />
                           <span>{blog.author}</span>
                         </div>
-                        <button
-                          className="text-primary-600 hover:text-primary-700 
-                          flex items-center gap-1 text-sm font-medium"
-                          onClick={() => navigate(`/blogs/${blog.slug}`)}
+                        <a
+                          href={`/blogs/${blog.slug}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate(`/blogs/${blog.slug}`);
+                          }}
+                          className="text-primary-600 hover:text-primary-700 flex items-center gap-1 text-sm font-medium"
                         >
                           Read More <ArrowRight size={16} />
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </article>

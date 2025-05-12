@@ -1,4 +1,3 @@
-import React from "react";
 import Modal from "react-bootstrap/Modal";
 
 const SmallModal = ({
@@ -11,7 +10,13 @@ const SmallModal = ({
   centered,
 }) => {
   return (
-    <Modal show={isOpen} onHide={onClose} size={size} centered={centered}>
+    <Modal
+      show={isOpen}
+      onHide={onClose}
+      size={size}
+      centered={centered}
+      style={{ zIndex: 1201 }}
+    >
       {title && (
         <Modal.Header closeButton>
           <Modal.Title>{title}</Modal.Title>

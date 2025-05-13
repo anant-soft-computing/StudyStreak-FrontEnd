@@ -268,7 +268,7 @@ const LivePTESSTWFDExam = () => {
         8000
       );
       if (response.status === 201) {
-        console.log("Lastest Exam Submitted Successfully");
+        console.log("Latest Exam Submitted Successfully");
       } else {
         console.log("error");
       }

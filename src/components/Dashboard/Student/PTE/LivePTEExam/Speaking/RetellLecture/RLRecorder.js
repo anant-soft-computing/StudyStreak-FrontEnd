@@ -17,28 +17,42 @@ const RLRecorder = ({
   Flt,
   shouldStartRecording,
 }) => {
+  const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [countdown, setCountdown] = useState(null);
-  const [recordingTimer, setRecordingTimer] = useState(null);
+  const [recordingTimer, setRecordingTimer] = useState(40);
   const [status, setStatus] = useState("idle");
+  const [noSpeechDetected, setNoSpeechDetected] = useState(false);
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
+  const transcriptTimeoutRef = useRef(null);
 
   useEffect(() => {
+    setIsRecording(false);
     setAudioBlob(null);
     setRecordedFilePath(null);
     setCountdown(null);
-    setRecordingTimer(null);
-    setStatus("idle");
     mediaRecorderRef.current = null;
     chunksRef.current = [];
     resetTranscript();
+    setRecordingTimer(40);
+    setStatus("idle");
+    setNoSpeechDetected(false);
+    if (transcriptTimeoutRef.current) {
+      clearTimeout(transcriptTimeoutRef.current);
+    }
   }, [next, resetTranscript, setRecordedFilePath]);
 
+  // Auto-start recording when shouldStartRecording becomes true
   useEffect(() => {
-    if (shouldStartRecording && status === "idle") {
+    if (
+      shouldStartRecording &&
+      !isRecording &&
+      !audioBlob &&
+      status === "idle"
+    ) {
       setCountdown(86);
       const countdownInterval = setInterval(() => {
         setCountdown((prev) => {
@@ -55,9 +69,35 @@ const RLRecorder = ({
     }
   }, [shouldStartRecording, status]);
 
+  // Recording timer countdown
+  useEffect(() => {
+    let interval;
+    if (isRecording && recordingTimer > 0) {
+      interval = setInterval(() => {
+        setRecordingTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (recordingTimer === 0 && isRecording) {
+      handleStopRecording();
+    }
+    return () => clearInterval(interval);
+  }, [isRecording, recordingTimer]);
+
+  // Check for transcript changes and set a timeout to check if speech was detected
+  useEffect(() => {
+    if (isRecording && transcript) {
+      if (transcriptTimeoutRef.current) {
+        clearTimeout(transcriptTimeoutRef.current);
+        transcriptTimeoutRef.current = null;
+      }
+      setNoSpeechDetected(false);
+    }
+  }, [transcript, isRecording]);
+
   const handleStartRecording = () => {
     setStatus("recording");
     resetTranscript();
+    setNoSpeechDetected(false);
+
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -76,20 +116,15 @@ const RLRecorder = ({
         };
 
         mediaRecorderRef.current.start();
+        setIsRecording(true);
         SpeechRecognition.startListening({ continuous: true });
 
-        // Set 40-second recording timer
-        setRecordingTimer(40);
-        const timerInterval = setInterval(() => {
-          setRecordingTimer((prev) => {
-            if (prev <= 1) {
-              clearInterval(timerInterval);
-              handleStopRecording();
-              return null;
-            }
-            return prev - 1;
-          });
-        }, 1000);
+        // Set a timeout to check if speech was detected after 5 seconds
+        transcriptTimeoutRef.current = setTimeout(() => {
+          if (!transcript || transcript.trim() === "") {
+            setNoSpeechDetected(true);
+          }
+        }, 5000);
       })
       .catch((error) => {
         console.log("error", error);
@@ -98,16 +133,45 @@ const RLRecorder = ({
   };
 
   const handleStopRecording = () => {
-    if (mediaRecorderRef.current) {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "recording"
+    ) {
       mediaRecorderRef.current.stop();
     }
-    setRecordingTimer(null);
+    setIsRecording(false);
     SpeechRecognition.stopListening();
-    setStatus("processing");
+
+    if (transcriptTimeoutRef.current) {
+      clearTimeout(transcriptTimeoutRef.current);
+      transcriptTimeoutRef.current = null;
+    }
+
+    if (!transcript || transcript.trim() === "") {
+      setNoSpeechDetected(true);
+      setStatus("completed");
+      setRecordedFilePath({
+        recorderIndex,
+        filePath: null,
+        noSpeech: true,
+      });
+    } else {
+      setStatus("processing");
+    }
+  };
+
+  const handleRetry = () => {
+    setNoSpeechDetected(false);
+    setAudioBlob(null);
+    chunksRef.current = [];
+    resetTranscript();
+    setRecordingTimer(40);
+    setStatus("idle");
+    handleStartRecording();
   };
 
   useEffect(() => {
-    if (audioBlob && status === "processing") {
+    if (audioBlob && status === "processing" && !noSpeechDetected) {
       const formData = new FormData();
       formData.append("question_number", question_number);
       formData.append("extension", "mp3");
@@ -120,13 +184,13 @@ const RLRecorder = ({
       const question = exam?.questions
         ?.find((q) => q.question_number === question_number)
         ?.question.replace(/<\/?[^>]+(>|$)/g, "");
-
-      const gptBody = {
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "user",
-            content: `Analyze the following PTE Speaking: Re-Tell Lecture response using these criteria:
+      if (transcript && transcript.trim() !== "") {
+        const gptBody = {
+          model: "gpt-3.5-turbo",
+          messages: [
+            {
+              role: "user",
+              content: `Analyze the following PTE Speaking: Re-Tell Lecture response using these criteria:
         
                 **Content (0-5 points):**
                   - 5 Points: Includes all main ideas and several supporting details.
@@ -179,95 +243,109 @@ const RLRecorder = ({
                 #Total Score: X/90
         
                 Respond only with the evaluation up to the #Total Score. Do not include any additional text or explanation beyond this point.`,
-          },
-          {
-            role: "user",
-            content: `Lecture Summary: ${question}`,
-          },
-          {
-            role: "user",
-            content: `Candidate's Response: ${transcript}`,
-          },
-        ],
-      };
-      const getChatGPTResponse = async () => {
-        try {
-          const gptResponse = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-              },
-              body: JSON.stringify(gptBody),
-            }
-          );
-
-          if (!gptResponse.ok) {
-            throw new Error("error");
-          }
-
-          const data = await gptResponse.json();
-          const assessment = data.choices[0].message.content;
-
-          const scoreMatch = assessment.match(/#Total Score:\s*(\d+)/);
-          const overallScore = scoreMatch ? parseFloat(scoreMatch[1]) : null;
-
-          const formattedResponse = assessment
-            .split("\n")
-            .map((line) => `<p>${line}</p>`)
-            .join("");
-
-          formData.append("AI_Assessment", `<div>${formattedResponse}</div>`);
-          formData.append("band", overallScore);
-
-          ajaxCall(
-            "/speaking-answers/",
-            {
-              method: "POST",
-              body: formData,
-              headers: {
-                Accept: "application/json",
-                Authorization: `Bearer ${
-                  JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
-                }`,
-              },
             },
-            8000
-          )
-            .then((response) => {
-              if (response.status === 201) {
-                setRecordedFilePath({
-                  recorderIndex,
-                  filePath: response?.data?.answer_audio,
-                });
-                setStatus("completed");
-              } else {
-                console.log("error in submission response:", response);
-                setStatus("completed");
+            {
+              role: "user",
+              content: `Lecture Summary: ${question}`,
+            },
+            {
+              role: "user",
+              content: `Candidate's Response: ${transcript}`,
+            },
+          ],
+        };
+        const getChatGPTResponse = async () => {
+          try {
+            const gptResponse = await fetch(
+              "https://api.openai.com/v1/chat/completions",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+                },
+                body: JSON.stringify(gptBody),
               }
-            })
-            .catch((error) => {
-              console.log("error submitting data:", error);
-              setStatus("completed");
-            });
-        } catch (error) {
-          console.log("error occurred while fetching data from AI:", error);
-          setStatus("completed");
-        }
-      };
-      getChatGPTResponse();
+            );
+
+            if (!gptResponse.ok) {
+              throw new Error("error");
+            }
+
+            const data = await gptResponse.json();
+            const assessment = data.choices[0].message.content;
+
+            const scoreMatch = assessment.match(/#Total Score:\s*(\d+)/);
+            const overallScore = scoreMatch ? parseFloat(scoreMatch[1]) : null;
+
+            const formattedResponse = assessment
+              .split("\n")
+              .map((line) => `<p>${line}</p>`)
+              .join("");
+
+            formData.append("AI_Assessment", `<div>${formattedResponse}</div>`);
+            formData.append("band", overallScore);
+
+            ajaxCall(
+              "/speaking-answers/",
+              {
+                method: "POST",
+                body: formData,
+                headers: {
+                  Accept: "application/json",
+                  Authorization: `Bearer ${
+                    JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+                  }`,
+                },
+              },
+              8000
+            )
+              .then((response) => {
+                if (response.status === 201) {
+                  setRecordedFilePath({
+                    recorderIndex,
+                    filePath: response?.data?.answer_audio,
+                  });
+                  setStatus("completed");
+                } else {
+                  console.log("error in submission response:", response);
+                  setStatus("completed");
+                }
+              })
+              .catch((error) => {
+                console.log("error submitting data:", error);
+                setStatus("completed");
+              });
+          } catch (error) {
+            console.log("error occurred while fetching data from AI:", error);
+            setStatus("completed");
+          }
+        };
+        getChatGPTResponse();
+      } else {
+        setNoSpeechDetected(true);
+        setStatus("completed");
+        setRecordedFilePath({
+          recorderIndex,
+          filePath: null,
+          noSpeech: true,
+        });
+      }
     }
-  }, [audioBlob, status]);
+  }, [audioBlob, status, transcript, noSpeechDetected]);
 
   return (
-    <div>
+    <div className="w-100">
       <h6 className="text-center">Recorded Answer</h6>
-      {countdown && <div>Recording : Beginning in {countdown} seconds</div>}
-      {recordingTimer && status === "recording" && (
+      {countdown && status === "idle" && (
+        <div className="text-center">Beginning in {countdown} seconds</div>
+      )}
+
+      {isRecording && status === "recording" && (
         <div>
-          <div>Recording Time Left: {recordingTimer}s</div>
+          <div className="text-center mb-2">
+            Recording Time Left: {recordingTimer}s
+          </div>
           <ProgressBar
             striped
             animated
@@ -275,21 +353,40 @@ const RLRecorder = ({
             now={((40 - recordingTimer) / 40) * 100}
             variant={recordingTimer <= 10 ? "danger" : "success"}
           />
+          {noSpeechDetected && (
+            <div className="text-warning text-center mt-2">
+              No speech detected. Please speak clearly.
+            </div>
+          )}
         </div>
       )}
+
       {status === "processing" && (
         <div className="text-center mt-3">
           <Spinner animation="border" role="status" variant="primary" />
           <p className="mt-2">Submitting recording...</p>
         </div>
       )}
-      {status === "completed" && (
+
+      {status === "completed" && noSpeechDetected ? (
+        <div className="text-center mt-3">
+          <div className="text-danger mb-3">
+            No speech detected. Please speak clearly and try again.
+          </div>
+          <button className="btn btn-primary btn-sm" onClick={handleRetry}>
+            Retry Recording
+          </button>
+        </div>
+      ) : status === "completed" && !noSpeechDetected ? (
         <div className="text-center text-success mt-2">
           Recording submitted successfully!
         </div>
-      )}
-      {audioBlob && status === "completed" && (
-        <DisplayAudio audioBlob={audioBlob} />
+      ) : null}
+
+      {audioBlob && status === "completed" && !noSpeechDetected && (
+        <div className="mt-3">
+          <DisplayAudio audioBlob={audioBlob} />
+        </div>
       )}
     </div>
   );

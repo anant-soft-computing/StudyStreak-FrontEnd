@@ -703,7 +703,7 @@ const DiagnosticTest = () => {
         8000
       );
       if (response.status === 201) {
-        console.log("Lastest Diagnostic Exam Submitted");
+        console.log("Latest Diagnostic Exam Submitted");
       } else {
         console.log("error");
       }

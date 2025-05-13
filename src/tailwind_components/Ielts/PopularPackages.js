@@ -6,7 +6,7 @@ import {
   HelpCircle,
   Zap,
   Tag,
-  Award,
+  LibraryBig,
   Star,
   Check,
   ShoppingBag,
@@ -135,13 +135,13 @@ const PopularPackages = () => {
                     ₹{pkg?.package_price - pkg?.coupon_code?.discount}
                   </span>
                   {pkg?.coupon_code && (
-                    <span className="ml-2 text-sm text-gray-500 mb-1">
+                    <span className="ml-2 text-sm text-gray-500 line-through mb-1">
                       ₹{pkg?.package_price}
                     </span>
                   )}
                 </div>
                 <div className="text-xs text-gray-600 mt-1 font-medium">
-                  Valid for {pkg?.duration} months
+                  Duration for {pkg?.duration} months
                 </div>
               </div>
 
@@ -165,10 +165,8 @@ const PopularPackages = () => {
                   </span>
                 </div>
                 <div className="flex items-center text-gray-700">
-                  <Award className="w-4 h-4 mr-2 text-primary-500 flex-shrink-0" />
-                  <span className="font-medium">
-                    {pkg?.hard_copy ? "Hard Copy" : "Digital"}
-                  </span>
+                  <LibraryBig className="w-4 h-4 mr-2 text-primary-500 flex-shrink-0" />
+                  <span className="font-medium">E-Library</span>
                 </div>
               </div>
 

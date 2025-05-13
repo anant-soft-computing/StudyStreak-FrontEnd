@@ -607,7 +607,7 @@ const MockTestLive = () => {
         8000
       );
       if (response.status === 201) {
-        console.log("Lastest Full Length Exam Submitted");
+        console.log("Latest Full Length Exam Submitted");
       } else {
         console.log("error");
       }

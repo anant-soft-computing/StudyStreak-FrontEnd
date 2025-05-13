@@ -14,10 +14,11 @@ import {
 } from "lucide-react";
 import Banner from "./Banner/Banner";
 import ajaxCall from "../helpers/ajaxCall";
-import Packages from "./Packages/Packages";
+import FreeClasses from "./FreeClasses/FreeClasses";
 import CourseList from "./Course/CourseList";
 import Loading from "../components/UI/Loading";
 import Testimonial from "./Testimonial/Testimonial";
+import TodayFreeClasses from "./FreeClasses/TodayFreeClasses";
 
 const features = [
   {
@@ -215,11 +216,13 @@ const HomePage = () => {
           </div>
         </section>
 
+        <TodayFreeClasses/>
+
         <CourseList />
 
         <Testimonial />
 
-        <Packages />
+        <FreeClasses />
 
         <section className="py-12 md:py-16">
           <div className="container mx-auto px-4">

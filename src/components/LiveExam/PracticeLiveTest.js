@@ -583,7 +583,7 @@ const PracticeLiveExam = () => {
         8000
       );
       if (response.status === 201) {
-        console.log("Lastest Practice Exam Submitted");
+        console.log("Latest Practice Exam Submitted");
       } else {
         console.log("error");
       }

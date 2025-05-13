@@ -89,7 +89,7 @@ const GeneralMTExam = () => {
         8000
       );
       if (response.status === 201) {
-        console.log("Lastest Exam Submitted");
+        console.log("Latest Exam Submitted");
       } else {
         console.log("error");
       }

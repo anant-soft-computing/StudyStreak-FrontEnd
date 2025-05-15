@@ -181,6 +181,17 @@ const FreeMiniTest = () => {
       width: 380,
     },
   ];
+
+  const sortedData = testData?.sort((a, b) => {
+    const getNumber = (name) => {
+      const match = name?.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+    const nameA = getNumber(a.exam_name);
+    const nameB = getNumber(b.exam_name);
+    return nameA - nameB;
+  });
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">
@@ -255,8 +266,8 @@ const FreeMiniTest = () => {
                       <div className="tab-content tab__content__wrapper aos-init aos-animate">
                         {isLoading ? (
                           <Loading />
-                        ) : testData.length > 0 ? (
-                          <Table rowData={testData} columnDefs={columns} />
+                        ) : sortedData.length > 0 ? (
+                          <Table rowData={sortedData} columnDefs={columns} />
                         ) : (
                           <h5 className="text-center text-danger">
                             No Free Mini Tests Available !!

@@ -55,9 +55,15 @@ const Testimonial = () => {
   return (
     <section className="bg-neutral-100 py-16">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-neutral-800 mb-12 text-center">
-          What Our Students Say
-        </h2>
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+            Success Stories
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            See how our program has helped students achieve their target IELTS
+            scores.
+          </p>
+        </div>
         <div className="relative overflow-hidden rounded-2xl">
           <div
             ref={scrollRef}

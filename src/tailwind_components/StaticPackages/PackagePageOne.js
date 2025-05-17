@@ -15,7 +15,6 @@ import {
   ChevronUp,
   ChevronDown,
   MessageSquare,
-  X,
 } from "lucide-react";
 import ContactForm from "./ContactForm";
 import Testimonials from "../Testimonial/Testimonial";
@@ -44,7 +43,9 @@ const FAQItem = ({ question, answer, index }) => {
         <div className="flex items-center">
           <div
             className={`w-8 h-8 rounded-lg mr-4 flex items-center justify-center ${
-              isOpen ? "bg-primary-100 text-primary-600" : "bg-neutral-100 text-neutral-600"
+              isOpen
+                ? "bg-primary-100 text-primary-600"
+                : "bg-neutral-100 text-neutral-600"
             }`}
           >
             {index + 1}
@@ -114,46 +115,48 @@ const CountdownTimer = ({ timeLeft }) => {
   );
 };
 
-const FloatingCoupon = ({ onClose }) => (
+const FloatingCoupon = ({ promoCode, originalPrice, discountedPrice }) => (
   <div className="fixed bottom-4 right-4 z-50 bg-white rounded-lg shadow-xl p-4 flex items-center animate-fade-in">
     <div>
       <p className="text-neutral-600 text-sm">Use code:</p>
-      <p className="font-mono font-bold text-primary-700">STUDYSMART49</p>
+      <p className="font-mono font-bold text-primary-700">{promoCode}</p>
     </div>
     <div className="ml-4 pl-4 border-l border-neutral-200">
-      <div className="text-2xl font-bold text-primary-700">₹49</div>
-      <div className="text-xs text-neutral-500 line-through">₹999</div>
+      <div className="text-2xl font-bold text-primary-700">
+        ₹{discountedPrice}
+      </div>
+      <div className="text-xs text-neutral-500 line-through">
+        ₹{originalPrice}
+      </div>
     </div>
-    <button
-      onClick={onClose}
-      aria-label="Close coupon"
-      className="absolute -top-2 -right-2 bg-neutral-200 hover:bg-neutral-300 rounded-full w-5 h-5 flex items-center justify-center text-neutral-500 hover:text-neutral-600 text-xs transition-colors"
-    >
-      <X className="w-3 h-3" />
-    </button>
   </div>
 );
 
 const faqs = [
   {
     question: "How do I access the study materials after purchase?",
-    answer: "After completing your payment, you'll receive login credentials via email within 10 minutes. Simply log in to StudyStreak.in with these credentials to access all your study materials instantly.",
+    answer:
+      "After completing your payment, you'll receive login credentials via email within 10 minutes. Simply log in to StudyStreak.in with these credentials to access all your study materials instantly.",
   },
   {
     question: "Is there a time limit for accessing the course?",
-    answer: "Yes, you'll have full access to all study materials, practice tests, and resources for 6 months from the date of purchase. This gives you ample time to prepare thoroughly at your own pace.",
+    answer:
+      "Yes, you'll have full access to all study materials, practice tests, and resources for 6 months from the date of purchase. This gives you ample time to prepare thoroughly at your own pace.",
   },
   {
     question: "How do the doubt-clearing sessions work?",
-    answer: "You can schedule your two doubt-clearing sessions anytime during your 6-month access period. Each session is 30 minutes long and conducted via Zoom with an IELTS expert who will address your specific questions and concerns.",
+    answer:
+      "You can schedule your two doubt-clearing sessions anytime during your 6-month access period. Each session is 30 minutes long and conducted via Zoom with an IELTS expert who will address your specific questions and concerns.",
   },
   {
     question: "Can I access the materials on my mobile phone?",
-    answer: "Absolutely! Our platform is fully responsive and works on smartphones, tablets, laptops, and desktop computers. You can study on any device with an internet connection.",
+    answer:
+      "Absolutely! Our platform is fully responsive and works on smartphones, tablets, laptops, and desktop computers. You can study on any device with an internet connection.",
   },
   {
     question: "Do you offer a refund if I'm not satisfied?",
-    answer: "We offer a 7-day money-back guarantee if you're not satisfied with the course materials. Simply email us at support@studystreak.in within 7 days of purchase, and we'll process your refund with no questions asked.",
+    answer:
+      "We offer a 7-day money-back guarantee if you're not satisfied with the course materials. Simply email us at support@studystreak.in within 7 days of purchase, and we'll process your refund with no questions asked.",
   },
 ];
 
@@ -161,45 +164,54 @@ const features = [
   {
     icon: <ClipboardCheck className="text-primary-600 w-6 h-6" />,
     title: "4 Full Length Tests",
-    description: "Complete mock exams that simulate the actual IELTS test environment and scoring.",
+    description:
+      "Complete mock exams that simulate the actual IELTS test environment and scoring.",
   },
   {
     icon: <BookOpen className="text-primary-600 w-6 h-6" />,
     title: "16 Practice Tests",
-    description: "Focused section-wise practice to master each component of the IELTS exam.",
+    description:
+      "Focused section-wise practice to master each component of the IELTS exam.",
   },
   {
     icon: <Headset className="text-primary-600 w-6 h-6" />,
     title: "2 Doubt Sessions",
-    description: "One-on-one virtual sessions with IELTS experts to resolve your specific questions.",
+    description:
+      "One-on-one virtual sessions with IELTS experts to resolve your specific questions.",
   },
   {
     icon: <BookUser className="text-primary-600 w-6 h-6" />,
     title: "E-Library Access",
-    description: "Comprehensive resource library with study materials, tips, and strategies.",
+    description:
+      "Comprehensive resource library with study materials, tips, and strategies.",
   },
 ];
 
 const benefits = [
   {
     title: "Flexible Learning Schedule",
-    description: "Study at your own pace, any time of day or night, fitting IELTS prep around your busy schedule.",
+    description:
+      "Study at your own pace, any time of day or night, fitting IELTS prep around your busy schedule.",
   },
   {
     title: "Comprehensive Coverage",
-    description: "Master all four IELTS modules: Reading, Writing, Listening, and Speaking with targeted practice.",
+    description:
+      "Master all four IELTS modules: Reading, Writing, Listening, and Speaking with targeted practice.",
   },
   {
     title: "Track Your Progress",
-    description: "Monitor your improvement with detailed performance analytics after each practice test.",
+    description:
+      "Monitor your improvement with detailed performance analytics after each practice test.",
   },
   {
     title: "Expert Guidance",
-    description: "Get personalized advice during doubt sessions with instructors who know the exam inside out.",
+    description:
+      "Get personalized advice during doubt sessions with instructors who know the exam inside out.",
   },
   {
     title: "Latest Exam Patterns",
-    description: "Stay current with up-to-date materials reflecting the most recent IELTS exam patterns.",
+    description:
+      "Stay current with up-to-date materials reflecting the most recent IELTS exam patterns.",
   },
 ];
 
@@ -227,17 +239,35 @@ const PackagePageOne = () => {
     seconds: 59,
   });
 
+  // Package details
+  const packageDetails = {
+    title: "Self-Study Success: Academic IELTS",
+    duration: "6 Months",
+    originalPrice: 999,
+    discountedPrice: 49,
+    promoCode: "STUDYSMART49",
+    discountPercentage: "95% OFF",
+  };
+
   // Countdown timer effect
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         const { days, hours, minutes, seconds } = prev;
-        
+
         if (seconds > 0) return { ...prev, seconds: seconds - 1 };
         if (minutes > 0) return { ...prev, minutes: minutes - 1, seconds: 59 };
-        if (hours > 0) return { ...prev, hours: hours - 1, minutes: 59, seconds: 59 };
-        if (days > 0) return { ...prev, days: days - 1, hours: 23, minutes: 59, seconds: 59 };
-        
+        if (hours > 0)
+          return { ...prev, hours: hours - 1, minutes: 59, seconds: 59 };
+        if (days > 0)
+          return {
+            ...prev,
+            days: days - 1,
+            hours: 23,
+            minutes: 59,
+            seconds: 59,
+          };
+
         return prev;
       });
     }, 1000);
@@ -247,26 +277,21 @@ const PackagePageOne = () => {
 
   // Coupon visibility effect
   useEffect(() => {
-    const manuallyClosed = sessionStorage.getItem("couponManuallyClosed") === "true";
+    const manuallyClosed =
+      sessionStorage.getItem("couponManuallyClosed") === "true";
     setWasManuallyClosed(manuallyClosed);
-    
+
     if (!manuallyClosed) {
       const handleScroll = () => {
         setShowCoupon(window.scrollY > 1000);
       };
-      
+
       window.addEventListener("scroll", handleScroll);
       handleScroll(); // Initial check
-      
+
       return () => window.removeEventListener("scroll", handleScroll);
     }
   }, []);
-
-  const handleCloseCoupon = () => {
-    setShowCoupon(false);
-    setWasManuallyClosed(true);
-    sessionStorage.setItem("couponManuallyClosed", "true");
-  };
 
   if (wasManuallyClosed) return null;
 
@@ -282,27 +307,37 @@ const PackagePageOne = () => {
                 Limited Time Offer
               </span>
             </div>
-            
+
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight tracking-tight">
-              Ace Your Academic IELTS Exam for Just{" "}
-              <span className="text-primary-600">₹49</span>
+              {packageDetails.title} for Just{" "}
+              <span className="text-primary-600">
+                {" "}
+                ₹{packageDetails.discountedPrice}
+              </span>
             </h1>
-            
+
             <p className="mt-4 text-lg sm:text-xl text-neutral-600 max-w-2xl">
-              Complete 6-Month Self-Study Program - 95% Off Today!
+              {packageDetails.duration} Access -{" "}
+              {packageDetails.discountPercentage} Today!
             </p>
-            
+
             <div className="mt-6 bg-white p-4 rounded-lg shadow-sm border border-neutral-200 inline-block">
               <div className="flex items-baseline">
-                <span className="text-neutral-500 line-through text-lg">₹999</span>
-                <span className="ml-3 text-3xl font-bold text-primary-700">₹49</span>
+                <span className="text-neutral-500 line-through text-lg">
+                  ₹{packageDetails.originalPrice}
+                </span>
+                <span className="ml-3 text-3xl font-bold text-primary-700">
+                  ₹{packageDetails.discountedPrice}
+                </span>
                 <span className="ml-2 text-sm font-medium text-white bg-red-500 px-2 py-0.5 rounded-full">
-                  95% OFF
+                  {packageDetails.discountPercentage}
                 </span>
               </div>
-              <div className="text-sm text-neutral-500 mt-1">Offer ends soon</div>
+              <div className="text-sm text-neutral-500 mt-1">
+                Offer ends soon
+              </div>
             </div>
-            
+
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button
                 className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
@@ -311,19 +346,23 @@ const PackagePageOne = () => {
                 Get Started Now
                 <ArrowRight className="w-4 h-4" />
               </button>
-              
+
               <div className="flex items-center bg-white border border-neutral-200 rounded-lg px-4 py-3 shadow-sm">
                 <span className="text-neutral-600 text-sm sm:text-base">
                   Use code:{" "}
                   <span className="font-mono font-bold bg-primary-50 text-primary-700 px-2 py-1 rounded">
-                    STUDYSMART49
+                    {packageDetails.promoCode}
                   </span>
                 </span>
               </div>
             </div>
-            
+
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-neutral-600">
-              {["6 months access", "15+ practice tests", "Expert feedback"].map((item, i) => (
+              {[
+                `${packageDetails.duration} access`,
+                "15+ practice tests",
+                "Expert feedback",
+              ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary-500"></div>
                   <span>{item}</span>
@@ -331,13 +370,9 @@ const PackagePageOne = () => {
               ))}
             </div>
           </div>
-          
+
           <div className="lg:w-1/2 order-1 lg:order-2">
-            <img 
-              src={bannerImg} 
-              alt="IELTS Success" 
-              className="rounded-xl shadow-lg w-full h-auto object-cover max-h-[500px]"
-            />
+            <img src={bannerImg} alt="IELTS Success" />
           </div>
         </div>
       </div>
@@ -353,7 +388,7 @@ const PackagePageOne = () => {
               Everything you need to prepare for Academic IELTS success.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <FeatureCard key={index} {...feature} />
@@ -370,10 +405,11 @@ const PackagePageOne = () => {
               Why Choose Our Program
             </h2>
             <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Our self-study package is designed to give you the edge in your IELTS preparation.
+              Our self-study package is designed to give you the edge in your
+              IELTS preparation.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-2 gap-8">
             {benefits.map((benefit, index) => (
               <div key={index} className="flex space-x-4">
@@ -403,27 +439,33 @@ const PackagePageOne = () => {
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="bg-primary-600 text-white text-center py-3">
               <p className="text-lg font-bold text-white mb-0">
-                Special Launch Offer - 95% OFF Today!
+                Special Practice Package Offer -{" "}
+                {packageDetails.discountPercentage} Today!
               </p>
             </div>
-            
+
             <div className="p-8">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-neutral-900 mb-2">
-                  Self-Study Success: Academic IELTS
+                  {packageDetails.title}
                 </h2>
                 <div className="flex items-center justify-center text-neutral-600 mb-4">
-                  <Clock className="mr-2" /> <span>6 Months Access</span>
+                  <Clock className="mr-2" />{" "}
+                  <span>{packageDetails.duration} Access</span>
                 </div>
-                
+
                 <CountdownTimer timeLeft={timeLeft} />
-                
+
                 <div className="flex items-center justify-center mt-6">
-                  <div className="text-neutral-500 line-through text-2xl mr-3">₹999</div>
-                  <div className="text-4xl font-bold text-primary-700">₹49</div>
+                  <div className="text-neutral-500 line-through text-2xl mr-3">
+                    ₹{packageDetails.originalPrice}
+                  </div>
+                  <div className="text-4xl font-bold text-primary-700">
+                    ₹{packageDetails.discountedPrice}
+                  </div>
                 </div>
               </div>
-              
+
               <div className="border-t border-b border-neutral-200 py-6 mb-6">
                 <h3 className="text-xl font-bold text-neutral-800 mb-4 text-center">
                   Package Includes:
@@ -437,18 +479,18 @@ const PackagePageOne = () => {
                   ))}
                 </div>
               </div>
-              
+
               <div className="text-center">
                 <button
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 text-xl"
                   onClick={() => navigate("/login")}
                 >
-                  Get Started for Just ₹49
+                  Get Started for Just ₹{packageDetails.discountedPrice}
                 </button>
                 <div className="mt-4 text-neutral-600">
                   Use Promo Code:{" "}
                   <span className="font-mono font-bold bg-primary-100 text-primary-700 px-3 py-1 rounded">
-                    STUDYSMART49
+                    {packageDetails.promoCode}
                   </span>
                 </div>
                 <p className="mt-6 text-sm text-neutral-500">
@@ -471,13 +513,18 @@ const PackagePageOne = () => {
               Everything you need to know about our IELTS preparation package.
             </p>
           </div>
-          
+
           <div className="bg-white rounded-2xl shadow-md border border-neutral-200 overflow-hidden">
             {faqs.map((faq, index) => (
-              <FAQItem key={index} question={faq.question} answer={faq.answer} index={index} />
+              <FAQItem
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                index={index}
+              />
             ))}
           </div>
-          
+
           <div className="mt-12 text-center">
             <div className="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-neutral-200">
               <MessageSquare className="w-5 h-5 text-primary-600" />
@@ -496,11 +543,20 @@ const PackagePageOne = () => {
       </section>
 
       {/* Floating Coupon */}
-      {showCoupon && <FloatingCoupon onClose={handleCloseCoupon} />}
+      {showCoupon && (
+        <FloatingCoupon
+          promoCode={packageDetails.promoCode}
+          originalPrice={packageDetails.originalPrice}
+          discountedPrice={packageDetails.discountedPrice}
+        />
+      )}
 
       {/* Contact Form Modal */}
       {isModalOpen && (
-        <ContactForm onClose={() => setIsModalOpen(false)} isOpen={isModalOpen} />
+        <ContactForm
+          onClose={() => setIsModalOpen(false)}
+          isOpen={isModalOpen}
+        />
       )}
     </div>
   );

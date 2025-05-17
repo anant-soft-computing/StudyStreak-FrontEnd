@@ -464,6 +464,35 @@ const LeaderboardTable = () => {
 };
 
 const PTEDashboard = () => {
+  
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/dashboard/pte/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          console.log("---PTE--Dashboard--Report--->", response?.data);
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="body__wrapper">
       <div className="main_wrapper overflow-hidden">

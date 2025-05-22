@@ -77,6 +77,7 @@ const BlogsPage = () => {
         );
 
         if (response.status === 200) {
+          console.log("--response--->", response.data);
           setBlogs(response.data);
           setFilteredBlogs(response.data);
         }

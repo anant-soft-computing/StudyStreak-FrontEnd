@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Banner from "./Banner/Banner";
 import ajaxCall from "../helpers/ajaxCall";
+import TidioChat from "./ChatBot/TidioChat";
 import FreeClasses from "./FreeClasses/FreeClasses";
 import CourseList from "./Course/CourseList";
 import Loading from "../components/UI/Loading";
@@ -216,7 +217,7 @@ const HomePage = () => {
           </div>
         </section>
 
-        <TodayFreeClasses/>
+        <TodayFreeClasses />
 
         <CourseList />
 
@@ -387,6 +388,7 @@ const HomePage = () => {
           </div>
         </div>
       )}
+      <TidioChat />
     </>
   );
 };

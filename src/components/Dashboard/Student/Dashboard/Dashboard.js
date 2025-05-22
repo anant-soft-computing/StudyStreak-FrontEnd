@@ -30,6 +30,7 @@ import {
   Videotape,
   BookMarked,
 } from "lucide-react";
+import TidioChat from "../../../../tailwind_components/ChatBot/TidioChat";
 
 const Dashboard = () => {
   const [count, setCount] = useState({
@@ -357,214 +358,223 @@ const Dashboard = () => {
 
   return isLoading ? (
     <Loading />
-  ) : count?.count !== 0 ? (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="dashboardarea sp_bottom_100">
-          <div className="dashboard">
-            <div className="container-fluid full__width__padding">
-              <div className="row">
-                <DSSidebar />
-                <div className="col-xl-8 col-lg-8">
-                  <div className="blog__details__content__wraper">
-                    <div className="course__details__heading">
-                      <h3>Welcome, {userData?.username}</h3>
-                    </div>
-                    {(category === "IELTS" || category === "PTE") &&
-                      studentBatch?.length > 0 && (
-                        <h5>
-                          Batch :{" "}
-                          {studentBatch?.map((batch) => (
-                            <span key={batch.id}>
-                              {batch.batch_name} :{" "}
-                              {moment(
-                                batch.batch_start_timing,
-                                "HH:mm:ss"
-                              ).format("hh:mm A")}{" "}
-                              |*|{" "}
-                            </span>
-                          ))}
-                        </h5>
-                      )}
-                    {(category === "IELTS" || category === "GENERAL") && (
-                      <div className="online__course__wrap mt-0">
-                        <div className="row instructor__slider__active row__custom__class">
-                          <ScoreCard course={category} />
+  ) : (
+    <>
+      {count?.count !== 0 ? (
+        <div className="body__wrapper">
+          <div className="main_wrapper overflow-hidden">
+            <div className="dashboardarea sp_bottom_100">
+              <div className="dashboard">
+                <div className="container-fluid full__width__padding">
+                  <div className="row">
+                    <DSSidebar />
+                    <div className="col-xl-8 col-lg-8">
+                      <div className="blog__details__content__wraper">
+                        <div className="course__details__heading">
+                          <h3>Welcome, {userData?.username}</h3>
                         </div>
-                      </div>
-                    )}
-                    <div className="online__course__wrap mt-0">
-                      <div className="row instructor__slider__active row__custom__class">
-                        <div className="col-xl-6 column__custom__class">
-                          <div className="gridarea__wraper card-background">
-                            <div className="gridarea__content">
-                              <div className="gridarea__content p-2 m-2">
-                                <Link
-                                  to="/diagnosticTest"
-                                  className="text-decoration-none"
-                                >
-                                  <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                    <NotepadTextDashed
-                                      width={35}
-                                      height={35}
-                                      color="black"
-                                    />
-                                    <h2 className="mt-2">
-                                      {category === "IELTS" ||
-                                      category === "PTE"
-                                        ? "Diagnostic Test"
-                                        : "English Diagnostic Test"}
-                                    </h2>
-                                  </div>
-                                </Link>
-                              </div>
+                        {(category === "IELTS" || category === "PTE") &&
+                          studentBatch?.length > 0 && (
+                            <h5>
+                              Batch :{" "}
+                              {studentBatch?.map((batch) => (
+                                <span key={batch.id}>
+                                  {batch.batch_name} :{" "}
+                                  {moment(
+                                    batch.batch_start_timing,
+                                    "HH:mm:ss"
+                                  ).format("hh:mm A")}{" "}
+                                  |*|{" "}
+                                </span>
+                              ))}
+                            </h5>
+                          )}
+                        {(category === "IELTS" || category === "GENERAL") && (
+                          <div className="online__course__wrap mt-0">
+                            <div className="row instructor__slider__active row__custom__class">
+                              <ScoreCard course={category} />
                             </div>
                           </div>
-                        </div>
-                        {lesson?.length > 0 &&
-                          lesson.map((item, index) => (
-                            <div
-                              key={index}
-                              className="col-xl-6 column__custom__class"
-                            >
+                        )}
+                        <div className="online__course__wrap mt-0">
+                          <div className="row instructor__slider__active row__custom__class">
+                            <div className="col-xl-6 column__custom__class">
                               <div className="gridarea__wraper card-background">
                                 <div className="gridarea__content">
                                   <div className="gridarea__content p-2 m-2">
                                     <Link
-                                      to={`/courseLessons/${item.course_id}`}
+                                      to="/diagnosticTest"
                                       className="text-decoration-none"
                                     >
                                       <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                        <Presentation
+                                        <NotepadTextDashed
                                           width={35}
                                           height={35}
                                           color="black"
                                         />
-                                        <h2 className="mt-2">Start Lesson</h2>
+                                        <h2 className="mt-2">
+                                          {category === "IELTS" ||
+                                          category === "PTE"
+                                            ? "Diagnostic Test"
+                                            : "English Diagnostic Test"}
+                                        </h2>
                                       </div>
                                     </Link>
                                   </div>
                                 </div>
                               </div>
                             </div>
-                          ))}
-                      </div>
-                    </div>
-                    {category === "PTE" && (
-                      <div className="col-xl-12 column__custom__class">
-                        <div className="gridarea__wraper card-background">
-                          <div className="gridarea__content">
-                            <div className="gridarea__content p-2 m-2">
-                              <Link
-                                to="/PTE/Dashboard"
-                                className="text-decoration-none"
-                              >
-                                <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                  <BookMarked
-                                    width={35}
-                                    height={35}
-                                    color="black"
-                                  />
+                            {lesson?.length > 0 &&
+                              lesson.map((item, index) => (
+                                <div
+                                  key={index}
+                                  className="col-xl-6 column__custom__class"
+                                >
+                                  <div className="gridarea__wraper card-background">
+                                    <div className="gridarea__content">
+                                      <div className="gridarea__content p-2 m-2">
+                                        <Link
+                                          to={`/courseLessons/${item.course_id}`}
+                                          className="text-decoration-none"
+                                        >
+                                          <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                            <Presentation
+                                              width={35}
+                                              height={35}
+                                              color="black"
+                                            />
+                                            <h2 className="mt-2">
+                                              Start Lesson
+                                            </h2>
+                                          </div>
+                                        </Link>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                        {category === "PTE" && (
+                          <div className="col-xl-12 column__custom__class">
+                            <div className="gridarea__wraper card-background">
+                              <div className="gridarea__content">
+                                <div className="gridarea__content p-2 m-2">
+                                  <Link
+                                    to="/PTE/Dashboard"
+                                    className="text-decoration-none"
+                                  >
+                                    <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                      <BookMarked
+                                        width={35}
+                                        height={35}
+                                        color="black"
+                                      />
 
-                                  <h2 className="mt-2">Reports</h2>
+                                      <h2 className="mt-2">Reports</h2>
+                                    </div>
+                                  </Link>
                                 </div>
-                              </Link>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="row">
-                      {cardList.map(({ name, icon, link, state }, index) => (
-                        <div
-                          key={index}
-                          className="col-xl-4 column__custom__class"
-                        >
-                          <div className="gridarea__wraper text-center card-background">
-                            <div
-                              className="gridarea__content p-3 m-2"
-                              style={{
-                                cursor: link ? "pointer" : "default",
-                              }}
-                            >
-                              <Link
-                                to={link}
-                                state={state}
-                                className="text-decoration-none"
-                                style={{ color: "black" }}
+                        )}
+                        <div className="row">
+                          {cardList.map(
+                            ({ name, icon, link, state }, index) => (
+                              <div
+                                key={index}
+                                className="col-xl-4 column__custom__class"
                               >
-                                <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                  {icon}
-                                  <h3>{name}</h3>
+                                <div className="gridarea__wraper text-center card-background">
+                                  <div
+                                    className="gridarea__content p-3 m-2"
+                                    style={{
+                                      cursor: link ? "pointer" : "default",
+                                    }}
+                                  >
+                                    <Link
+                                      to={link}
+                                      state={state}
+                                      className="text-decoration-none"
+                                      style={{ color: "black" }}
+                                    >
+                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                        {icon}
+                                        <h3>{name}</h3>
+                                      </div>
+                                    </Link>
+                                  </div>
                                 </div>
-                              </Link>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                      <div className="col-xl-12 column__custom__class">
-                        <div className="gridarea__wraper card-background">
-                          <div className="gridarea__content">
-                            <div className="gridarea__content p-2 m-2">
-                              <Link
-                                to="/recordedClasses"
-                                className="text-decoration-none"
-                              >
-                                <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
-                                  <CassetteTape
-                                    width={35}
-                                    height={35}
-                                    color="black"
-                                  />
-                                  <h2 className="mt-2">Recorded Classes</h2>
+                              </div>
+                            )
+                          )}
+                          <div className="col-xl-12 column__custom__class">
+                            <div className="gridarea__wraper card-background">
+                              <div className="gridarea__content">
+                                <div className="gridarea__content p-2 m-2">
+                                  <Link
+                                    to="/recordedClasses"
+                                    className="text-decoration-none"
+                                  >
+                                    <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                      <CassetteTape
+                                        width={35}
+                                        height={35}
+                                        color="black"
+                                      />
+                                      <h2 className="mt-2">Recorded Classes</h2>
+                                    </div>
+                                  </Link>
                                 </div>
-                              </Link>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div className="col-xl-4 col-lg-4">
-                  <div className="dashboard__form__wraper mb-3">
-                    <div className="dashboard__form__input">
-                      <h5>Course</h5>
-                      <select
-                        className="form-select"
-                        aria-label="Select a course"
-                        value={JSON.stringify(selectedCourse)}
-                        onChange={(e) =>
-                          handleCourse(JSON.parse(e.target.value))
-                        }
-                      >
-                        {studentCourses?.map((item) => (
-                          <option
-                            key={item.course_id}
-                            value={JSON.stringify(item)}
+                    <div className="col-xl-4 col-lg-4">
+                      <div className="dashboard__form__wraper mb-3">
+                        <div className="dashboard__form__input">
+                          <h5>Course</h5>
+                          <select
+                            className="form-select"
+                            aria-label="Select a course"
+                            value={JSON.stringify(selectedCourse)}
+                            onChange={(e) =>
+                              handleCourse(JSON.parse(e.target.value))
+                            }
                           >
-                            {item.course_category}
-                          </option>
-                        ))}
-                      </select>
+                            {studentCourses?.map((item) => (
+                              <option
+                                key={item.course_id}
+                                value={JSON.stringify(item)}
+                              >
+                                {item.course_category}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                      <LeaderBoard studentID={studentID} />
+                      <UpcomingRegularLiveClass />
+                      <NextLesson />
+                      {(category === "IELTS" || category === "PTE") && (
+                        <SpeakingSlots />
+                      )}
+                      <UpcomingLiveClasses />
                     </div>
                   </div>
-                  <LeaderBoard studentID={studentID} />
-                  <UpcomingRegularLiveClass />
-                  <NextLesson />
-                  {(category === "IELTS" || category === "PTE") && (
-                    <SpeakingSlots />
-                  )}
-                  <UpcomingLiveClasses />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  ) : (
-    <UnPaidDashboard />
+      ) : (
+        <UnPaidDashboard />
+      )}
+      <TidioChat />
+    </>
   );
 };
 

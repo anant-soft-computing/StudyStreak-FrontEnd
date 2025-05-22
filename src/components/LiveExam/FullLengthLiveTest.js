@@ -1144,25 +1144,46 @@ const FullLengthLiveExam = () => {
     [examData, next, examAnswer, userData.userId, examId, activeRecordingIndex]
   );
 
-  const reviewContent = () =>
-    examAnswer.map((test, index) => (
-      <div key={index}>
-        <h4>Test : {index + 1}</h4>
-        <div className="card-container">
-          {test.data.map((answer, idx) => (
-            <div key={idx} className="card answer__width">
-              <div className="card-body">
-                <h6 className="card-title">Q. {idx + 1}</h6>
-                <h6 className="card-text">
-                  Answer :{" "}
-                  <span className="text-success">{answer.answer_text}</span>
-                </h6>
+  const reviewContent = () => {
+    const groupedSections = examAnswer.reduce((acc, section) => {
+      if (!section.exam_type) return acc;
+
+      const type = section.exam_type;
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(section);
+      return acc;
+    }, {});
+
+    return Object.entries(groupedSections).map(
+      ([examType, sections], index) => (
+        <div key={index}>
+          <h3>{examType}:</h3>
+          {sections.map((section, sectionIndex) => (
+            <div key={sectionIndex}>
+              <h4>Section: {sectionIndex + 1}</h4>
+              <div className="card-container">
+                {section.data.map((answer, idx) => (
+                  <div key={idx} className="card answer__width">
+                    <div className="card-body">
+                      <h6 className="card-title">Q. {idx + 1}</h6>
+                      <h6 className="card-text">
+                        Answer:{" "}
+                        <span className="text-success">
+                          {answer.answer_text}
+                        </span>
+                      </h6>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           ))}
         </div>
-      </div>
-    ));
+      )
+    );
+  };
 
   const renderPagination = useMemo(() => {
     if (uniqueIdArr.length === 0 && examAnswer.length === 0) {

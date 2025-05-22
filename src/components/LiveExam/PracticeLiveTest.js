@@ -920,7 +920,7 @@ const PracticeLiveExam = () => {
   const reviewContent = () =>
     examAnswer.map((test, index) => (
       <div key={index}>
-        <h4>Test : {index + 1}</h4>
+        <h4>Section : {index + 1}</h4>
         <div className="card-container">
           {test.data.map((answer, idx) => (
             <div key={idx} className="card answer__width">

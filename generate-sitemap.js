@@ -31,7 +31,7 @@ async function generateSitemap() {
         url: `/blogs/${blog.slug}`,
         changefreq: "daily",
         priority: 0.9,
-        lastmod: new Date().toISOString(),
+        lastmod: blog.published_at,
       });
     });
 

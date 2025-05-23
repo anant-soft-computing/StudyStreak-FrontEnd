@@ -53,6 +53,42 @@ const IELTSPage = () => {
           name="keywords"
           content="IELTS Academic Self-Study Online Course"
         />
+        <meta name="author" content="StudyStreak.in" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.studystreak.in/ielts" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Best IELTS Academic Self-Study Online Course | StudyStreak"
+        />
+        <meta
+          property="og:description"
+          content="Boost your IELTS score with the best IELTS academic self-study online course. Study at your own pace with expert guidance. Start learning today!"
+        />
+        <meta property="og:url" content="https://www.studystreak.in/ielts" />
+        <meta
+          property="og:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Best IELTS Academic Self-Study Online Course | StudyStreak"
+        />
+        <meta
+          name="twitter:description"
+          content="Boost your IELTS score with the best IELTS academic self-study online course. Study at your own pace with expert guidance. Start learning today!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+        <meta name="twitter:url" content="https://www.studystreak.in/ielts" />
       </Helmet>
       <div className="bg-neutral-50 min-h-screen">
         <section className="relative bg-gradient-to-br from-primary-600 to-primary-800 py-12 md:py-16 overflow-hidden">

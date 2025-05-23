@@ -176,6 +176,42 @@ const CoursesPage = () => {
           content="Explore our top-rated studying abroad courses online and practice tests for various exams like IELTS, PTE, TOEFL and more. Prepare with expert instructors. Start your journey today!"
         />
         <meta name="keywords" content="Top Studying Abroad Courses Online" />
+        <meta name="author" content="StudyStreak.in" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.studystreak.in/courses" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Top Studying Abroad Courses Online | StudyStreak"
+        />
+        <meta
+          property="og:description"
+          content="Explore our top-rated studying abroad courses online and practice tests for various exams like IELTS, PTE, TOEFL and more. Prepare with expert instructors. Start your journey today!"
+        />
+        <meta property="og:url" content="https://www.studystreak.in/courses" />
+        <meta
+          property="og:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Top Studying Abroad Courses Online | StudyStreak"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore our top-rated studying abroad courses online and practice tests for various exams like IELTS, PTE, TOEFL and more. Prepare with expert instructors. Start your journey today!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+        <meta name="twitter:url" content="https://www.studystreak.in/courses" />
       </Helmet>
       <div className="bg-neutral-50 min-h-screen">
         <header className="bg-gradient-to-r from-primary-600 to-primary-700 pb-6">

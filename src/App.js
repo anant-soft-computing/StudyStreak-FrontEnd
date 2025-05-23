@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { Helmet } from "react-helmet";
+import { HelmetProvider } from "react-helmet-async";
 import "react-toastify/dist/ReactToastify.css";
 
 //-------------------------> pages <--------------------------------------------
@@ -160,352 +160,377 @@ const App = () => {
         autoClose={3000}
         className="toast-container"
       />
-      <Helmet>
-        <title>
-          Best Study Abroad Online Exam Preparation Platform | StudyStreak
-        </title>
-        <meta
-          name="description"
-          content="Prepare for IELTS & other study abroad online exam with StudyStreak. Get expert guidance and study materials to achieve your global education dreams."
-        />
-        <meta
-          name="keywords"
-          content="Study Abroad Online Exam Preparation Platform"
-        />
-      </Helmet>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/courses" element={<CoursesPage />} />
-          <Route path="/course/:courseId" element={<CourseDetailPage />} />
-          <Route path="/ielts" element={<IELTSCoursePage />} />
-          <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="/why-choose-us" element={<WhyChooseUsPage />} />
-          <Route path="/blogs" element={<BlogsPage />} />
-          <Route path="/blogs/:slug" element={<BlogDetails />} />
-          <Route path="/talk-to-us" element={<TalkToUsPage />} />
-          <Route path="/become-a-partner" element={<BecomeAPartnerPage />} />
-          <Route path="/login" element={<AuthPage />} />
-          <Route path="/english-test" element={<EnglishTest />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/podcast" element={<Podcast />} />
-          <Route path="/self-study-success-academic-ielts" element={<PackagePageOne />} />
-          <Route path="/ielts-practice-mastery-plan" element={<PackagePageTwo />} />
-        </Route>
+      <HelmetProvider>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/course/:courseId" element={<CourseDetailPage />} />
+            <Route path="/ielts" element={<IELTSCoursePage />} />
+            <Route path="/about-us" element={<AboutUsPage />} />
+            <Route path="/why-choose-us" element={<WhyChooseUsPage />} />
+            <Route path="/blogs" element={<BlogsPage />} />
+            <Route path="/blogs/:slug" element={<BlogDetails />} />
+            <Route path="/talk-to-us" element={<TalkToUsPage />} />
+            <Route path="/become-a-partner" element={<BecomeAPartnerPage />} />
+            <Route path="/login" element={<AuthPage />} />
+            <Route path="/english-test" element={<EnglishTest />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/podcast" element={<Podcast />} />
+            <Route
+              path="/self-study-success-academic-ielts"
+              element={<PackagePageOne />}
+            />
+            <Route
+              path="/ielts-practice-mastery-plan"
+              element={<PackagePageTwo />}
+            />
+          </Route>
 
-        <Route element={<AdminNavBarRoute isProtected={true} />}>
-          <Route
-            path="/admin-dashboard"
-            Component={withBootstrap(ADashboard)}
-          />
-          <Route path="/admin-users" Component={withBootstrap(Users)} />
-          <Route path="/admin-student" Component={withBootstrap(Student)} />
-          <Route
-            path="/admin-live-class-report"
-            Component={withBootstrap(LiveClassReport)}
-          />
-          <Route path="/admin-package" Component={withBootstrap(Package)} />
-          <Route path="/admin-course" Component={withBootstrap(Course)} />
-          <Route path="/admin-exam" Component={withBootstrap(Exam)} />
-          <Route path="/admin-liveClass" Component={withBootstrap(LiveClass)} />
-          <Route path="/admin-batch" Component={withBootstrap(Batch)} />
-          <Route path="/admin-badges" Component={withBootstrap(Badge)} />
-          <Route path="/admin-flashCard" Component={withBootstrap(FlashCard)} />
-          <Route path="/admin-paperTest" Component={withBootstrap(PaperTest)} />
-          <Route
-            path="/admin-gamification"
-            Component={withBootstrap(Gamification)}
-          />
-          <Route path="/admin-notice" Component={withBootstrap(Notice)} />
-          <Route path="/admin-resources" Component={withBootstrap(Resources)} />
-          <Route path="/admin-lesson" Component={withBootstrap(ALesson)} />
-          <Route path="/admin-coupon" Component={withBootstrap(Coupon)} />
-          <Route
-            path="/admin-testimonial"
-            Component={withBootstrap(Testimonial)}
-          />
-          <Route path="/admin-podcast" Component={withBootstrap(APodcast)} />
-          <Route path="/admin-profile" Component={withBootstrap(AProfile)} />
-          <Route path="/admin-exam/:examType" Component={withBootstrap(Exam)} />
-          <Route
-            path="/admin-exam/:examType/:examForm"
-            Component={withBootstrap(Exam)}
-          />
-          <Route path="/exam-create" Component={withBootstrap(DragDrop)} />
-        </Route>
+          <Route element={<AdminNavBarRoute isProtected={true} />}>
+            <Route
+              path="/admin-dashboard"
+              Component={withBootstrap(ADashboard)}
+            />
+            <Route path="/admin-users" Component={withBootstrap(Users)} />
+            <Route path="/admin-student" Component={withBootstrap(Student)} />
+            <Route
+              path="/admin-live-class-report"
+              Component={withBootstrap(LiveClassReport)}
+            />
+            <Route path="/admin-package" Component={withBootstrap(Package)} />
+            <Route path="/admin-course" Component={withBootstrap(Course)} />
+            <Route path="/admin-exam" Component={withBootstrap(Exam)} />
+            <Route
+              path="/admin-liveClass"
+              Component={withBootstrap(LiveClass)}
+            />
+            <Route path="/admin-batch" Component={withBootstrap(Batch)} />
+            <Route path="/admin-badges" Component={withBootstrap(Badge)} />
+            <Route
+              path="/admin-flashCard"
+              Component={withBootstrap(FlashCard)}
+            />
+            <Route
+              path="/admin-paperTest"
+              Component={withBootstrap(PaperTest)}
+            />
+            <Route
+              path="/admin-gamification"
+              Component={withBootstrap(Gamification)}
+            />
+            <Route path="/admin-notice" Component={withBootstrap(Notice)} />
+            <Route
+              path="/admin-resources"
+              Component={withBootstrap(Resources)}
+            />
+            <Route path="/admin-lesson" Component={withBootstrap(ALesson)} />
+            <Route path="/admin-coupon" Component={withBootstrap(Coupon)} />
+            <Route
+              path="/admin-testimonial"
+              Component={withBootstrap(Testimonial)}
+            />
+            <Route path="/admin-podcast" Component={withBootstrap(APodcast)} />
+            <Route path="/admin-profile" Component={withBootstrap(AProfile)} />
+            <Route
+              path="/admin-exam/:examType"
+              Component={withBootstrap(Exam)}
+            />
+            <Route
+              path="/admin-exam/:examType/:examForm"
+              Component={withBootstrap(Exam)}
+            />
+            <Route path="/exam-create" Component={withBootstrap(DragDrop)} />
+          </Route>
 
-        <Route element={<TutorNavBarRoute isProtected={true} />}>
-          <Route
-            path="/tutor-liveClass"
-            Component={withBootstrap(TLiveClass)}
-          />
-        </Route>
+          <Route element={<TutorNavBarRoute isProtected={true} />}>
+            <Route
+              path="/tutor-liveClass"
+              Component={withBootstrap(TLiveClass)}
+            />
+          </Route>
 
-        <Route element={<StudentNavBarRoute isProtected={true} />}>
-          <Route
-            path="/freeDiagnosticTest"
-            Component={withBootstrap(FreeDiagnosticTest)}
-          />
-          <Route path="/freeMiniTest" Component={withBootstrap(FreeMiniTest)} />
-          <Route
-            path="/studentDashboard"
-            Component={withBootstrap(Dashboard)}
-          />
-          <Route path="/progress" Component={withBootstrap(Progress)} />
-          <Route path="/studentProfile" Component={withBootstrap(SProfile)} />
-          <Route path="/studentMyCourse" Component={withBootstrap(MyCourse)} />
-          <Route
-            path="/courseLessons/:courseId"
-            Component={withBootstrap(Lesson)}
-          />
-          <Route
-            path="/courseMaterials/:courseId"
-            Component={withBootstrap(CourseContent)}
-          />
-          <Route path="/paperTest" Component={withBootstrap(SPaperTest)} />
-          <Route path="/mockTest" Component={withBootstrap(MockTest)} />
-          <Route path="/practiceTest" Component={withBootstrap(PracticeTest)} />
-          <Route
-            path="/fullLengthTest"
-            Component={withBootstrap(FullLengthTest)}
-          />
-          <Route
-            path="/diagnosticTest"
-            Component={withBootstrap(EnglishLevelTest)}
-          />
-          <Route
-            path="/studentLiveClasses"
-            Component={withBootstrap(SLiveClass)}
-          />
-          <Route
-            path="/recordedClasses"
-            Component={withBootstrap(RecordedClasses)}
-          />
-          <Route path="/flashcard" Component={withBootstrap(SFlashCard)} />
-          <Route path="/resources" Component={withBootstrap(SResources)} />
-          <Route path="/studentSettings" Component={withBootstrap(SSettings)} />
-          <Route path="/reports" Component={withBootstrap(Report)} />
+          <Route element={<StudentNavBarRoute isProtected={true} />}>
+            <Route
+              path="/freeDiagnosticTest"
+              Component={withBootstrap(FreeDiagnosticTest)}
+            />
+            <Route
+              path="/freeMiniTest"
+              Component={withBootstrap(FreeMiniTest)}
+            />
+            <Route
+              path="/studentDashboard"
+              Component={withBootstrap(Dashboard)}
+            />
+            <Route path="/progress" Component={withBootstrap(Progress)} />
+            <Route path="/studentProfile" Component={withBootstrap(SProfile)} />
+            <Route
+              path="/studentMyCourse"
+              Component={withBootstrap(MyCourse)}
+            />
+            <Route
+              path="/courseLessons/:courseId"
+              Component={withBootstrap(Lesson)}
+            />
+            <Route
+              path="/courseMaterials/:courseId"
+              Component={withBootstrap(CourseContent)}
+            />
+            <Route path="/paperTest" Component={withBootstrap(SPaperTest)} />
+            <Route path="/mockTest" Component={withBootstrap(MockTest)} />
+            <Route
+              path="/practiceTest"
+              Component={withBootstrap(PracticeTest)}
+            />
+            <Route
+              path="/fullLengthTest"
+              Component={withBootstrap(FullLengthTest)}
+            />
+            <Route
+              path="/diagnosticTest"
+              Component={withBootstrap(EnglishLevelTest)}
+            />
+            <Route
+              path="/studentLiveClasses"
+              Component={withBootstrap(SLiveClass)}
+            />
+            <Route
+              path="/recordedClasses"
+              Component={withBootstrap(RecordedClasses)}
+            />
+            <Route path="/flashcard" Component={withBootstrap(SFlashCard)} />
+            <Route path="/resources" Component={withBootstrap(SResources)} />
+            <Route
+              path="/studentSettings"
+              Component={withBootstrap(SSettings)}
+            />
+            <Route path="/reports" Component={withBootstrap(Report)} />
 
-          <Route path="/Reading" Component={withBootstrap(ExamReading)} />
-          <Route path="/Listening" Component={withBootstrap(ExamListening)} />
-          <Route path="/Writing" Component={withBootstrap(ExamWriting)} />
-          <Route path="/Speaking" Component={withBootstrap(ExamSpeaking)} />
-          <Route
-            path="/PTE/Dashboard"
-            Component={withBootstrap(PTEDashboard)}
-          />
-          <Route
-            path="/PTE/FreeMockTest"
-            Component={withBootstrap(FreeMockTest)}
-          />
-          <Route path="/PTE/Reading" Component={withBootstrap(PTEReading)} />
-          <Route
-            path="/PTE/Listening"
-            Component={withBootstrap(PTEListening)}
-          />
-          <Route path="/PTE/Writing" Component={withBootstrap(PTEWriting)} />
-          <Route path="/PTE/Speaking" Component={withBootstrap(PTESpeaking)} />
+            <Route path="/Reading" Component={withBootstrap(ExamReading)} />
+            <Route path="/Listening" Component={withBootstrap(ExamListening)} />
+            <Route path="/Writing" Component={withBootstrap(ExamWriting)} />
+            <Route path="/Speaking" Component={withBootstrap(ExamSpeaking)} />
+            <Route
+              path="/PTE/Dashboard"
+              Component={withBootstrap(PTEDashboard)}
+            />
+            <Route
+              path="/PTE/FreeMockTest"
+              Component={withBootstrap(FreeMockTest)}
+            />
+            <Route path="/PTE/Reading" Component={withBootstrap(PTEReading)} />
+            <Route
+              path="/PTE/Listening"
+              Component={withBootstrap(PTEListening)}
+            />
+            <Route path="/PTE/Writing" Component={withBootstrap(PTEWriting)} />
+            <Route
+              path="/PTE/Speaking"
+              Component={withBootstrap(PTESpeaking)}
+            />
 
-          {/*------------------------ Answers Component --------------------- */}
+            {/*------------------------ Answers Component --------------------- */}
+
+            <Route
+              path="/DiagnosticTest/Answer/:examId"
+              Component={withBootstrap(DiagnosticTestAnswer)}
+            />
+            <Route
+              path="/Assignment/Answer/:examId"
+              Component={withBootstrap(LiveAssignmentAnswer)}
+            />
+            <Route
+              path="/MiniTest/Answer/:examId"
+              Component={withBootstrap(Answer)}
+            />
+            <Route
+              path="/MiniTest/Answer/GENERAL/:examId"
+              Component={withBootstrap(GeneralMTAnswer)}
+            />
+            <Route
+              path="/PracticeTest/Answer/:examType/:examId"
+              Component={withBootstrap(PracticeTestAnswer)}
+            />
+            <Route
+              path="/PracticeTest/Answer/GENERAL/:examId"
+              Component={withBootstrap(GeneralPTAnswer)}
+            />
+            <Route
+              path="/FullLengthTest/Answer/:examId"
+              Component={withBootstrap(FullLengthTestAnswer)}
+            />
+            <Route
+              path="/MiniTest/Assessment/:examType/:examId"
+              Component={withBootstrap(ViewMTAAssessment)}
+            />
+            <Route
+              path="/PracticeTest/Assessment/:examType/:examId"
+              Component={withBootstrap(ViewPTAssessment)}
+            />
+            <Route
+              path="/PTE/Reading/:examId"
+              Component={withBootstrap(PTEReadingAnswer)}
+            />
+            <Route
+              path="/PTE/Writing/:examId"
+              Component={withBootstrap(PTEWritingAnswer)}
+            />
+            <Route
+              path="/PTE/Listening/:examId"
+              Component={withBootstrap(PTEListeningAnswer)}
+            />
+            <Route
+              path="/PTE/Listening/HIW/:examId"
+              Component={withBootstrap(PTEHIWAnswer)}
+            />
+            <Route
+              path="/PTE/Listening/SST/:examId"
+              Component={withBootstrap(PTESSTAnswer)}
+            />
+            <Route
+              path="/PTE/Listening/WFD/:examId"
+              Component={withBootstrap(PTEWFDAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/:examId"
+              Component={withBootstrap(PTESpeakingAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/ASQ/:examId"
+              Component={withBootstrap(ASQSpeakingAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/RA/:examId"
+              Component={withBootstrap(RASpeakingAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/RS/:examId"
+              Component={withBootstrap(RSSpeakingAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/DI/:examId"
+              Component={withBootstrap(DISpeakingAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/RL/:examId"
+              Component={withBootstrap(RLSpeakingAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/RTS/:examId"
+              Component={withBootstrap(RTSSpeakingAnswer)}
+            />
+            <Route
+              path="/PTE/Speaking/SGD/:examId"
+              Component={withBootstrap(SGDSpeakingAnswer)}
+            />
+          </Route>
+
+          <Route element={<StudentNavBarRoute isProtected={false} />}>
+            <Route path="/checkout" Component={withBootstrap(Checkout)} />
+            <Route path="*" element={withBootstrap(ErrorPage)} />
+          </Route>
+
+          {/*------------------------ Exams Component --------------------- */}
 
           <Route
-            path="/DiagnosticTest/Answer/:examId"
-            Component={withBootstrap(DiagnosticTestAnswer)}
+            path="/DiagnosticTest/:examId"
+            Component={withBootstrap(DiagnosticTest)}
           />
           <Route
-            path="/Assignment/Answer/:examId"
-            Component={withBootstrap(LiveAssignmentAnswer)}
+            path="/Assignment/:examType/:examId"
+            Component={withBootstrap(LiveAssignment)}
           />
           <Route
-            path="/MiniTest/Answer/:examId"
-            Component={withBootstrap(Answer)}
+            path="/MiniLiveExam/:examType/:examId"
+            Component={withBootstrap(LiveExam)}
           />
           <Route
-            path="/MiniTest/Answer/GENERAL/:examId"
-            Component={withBootstrap(GeneralMTAnswer)}
+            path="/Speaking-MiniLiveExam/:examType/:examId"
+            Component={withBootstrap(LiveSpeakingExam)}
           />
           <Route
-            path="/PracticeTest/Answer/:examType/:examId"
-            Component={withBootstrap(PracticeTestAnswer)}
+            path="/GENERAL-MiniLiveExam/:examType/:examId"
+            Component={withBootstrap(GeneralMTExam)}
           />
           <Route
-            path="/PracticeTest/Answer/GENERAL/:examId"
-            Component={withBootstrap(GeneralPTAnswer)}
+            path="/PracticeLiveExam/:examType/:examForm/:examId"
+            Component={withBootstrap(PracticeLiveExam)}
           />
           <Route
-            path="/FullLengthTest/Answer/:examId"
-            Component={withBootstrap(FullLengthTestAnswer)}
+            path="/Speaking-PracticeLiveExam/:examType/:examForm/:examId"
+            Component={withBootstrap(PracticeSpeakingLiveExam)}
           />
           <Route
-            path="/MiniTest/Assessment/:examType/:examId"
-            Component={withBootstrap(ViewMTAAssessment)}
+            path="/GENERAL-PracticeLiveExam/:examType/:examForm/:examId"
+            Component={withBootstrap(GeneralPTExam)}
           />
           <Route
-            path="/PracticeTest/Assessment/:examType/:examId"
-            Component={withBootstrap(ViewPTAssessment)}
+            path="/FullLengthLiveExam/:examId"
+            Component={withBootstrap(FullLengthLiveExam)}
           />
           <Route
-            path="/PTE/Reading/:examId"
-            Component={withBootstrap(PTEReadingAnswer)}
+            path="/PTE/IELTS/Reading/RFIB/:examId"
+            Component={withBootstrap(LivePTERFIB)}
           />
           <Route
-            path="/PTE/Writing/:examId"
-            Component={withBootstrap(PTEWritingAnswer)}
+            path="/PTE/IELTS/Reading/ROP/:examId"
+            Component={withBootstrap(LivePTEROP)}
           />
           <Route
-            path="/PTE/Listening/:examId"
-            Component={withBootstrap(PTEListeningAnswer)}
+            path="/PTE/IELTS/Reading/:examSubcategory/:examId"
+            Component={withBootstrap(LivePTEReadingExam)}
           />
           <Route
-            path="/PTE/Listening/HIW/:examId"
-            Component={withBootstrap(PTEHIWAnswer)}
+            path="/PTE/IELTS/Writing/:examSubcategory/:examId"
+            Component={withBootstrap(LivePTEWritingExam)}
           />
           <Route
-            path="/PTE/Listening/SST/:examId"
-            Component={withBootstrap(PTESSTAnswer)}
+            path="/PTE/IELTS/Listening/:examSubcategory/:examId"
+            Component={withBootstrap(LivePTEListeningExam)}
           />
           <Route
-            path="/PTE/Listening/WFD/:examId"
-            Component={withBootstrap(PTEWFDAnswer)}
+            path="/PTE/IELTS/Listening/HIW/:examId"
+            Component={withBootstrap(LivePTEHIWExam)}
           />
           <Route
-            path="/PTE/Speaking/:examId"
-            Component={withBootstrap(PTESpeakingAnswer)}
+            path="/PTE/IELTS/Listening/SST/WFD/:examId"
+            Component={withBootstrap(LivePTESSTWFDExam)}
           />
           <Route
-            path="/PTE/Speaking/ASQ/:examId"
-            Component={withBootstrap(ASQSpeakingAnswer)}
+            path="/PTE/IELTS/Speaking/RA/:examId"
+            Component={withBootstrap(LivePTESpeakingRAExam)}
           />
           <Route
-            path="/PTE/Speaking/RA/:examId"
-            Component={withBootstrap(RASpeakingAnswer)}
+            path="/PTE/IELTS/Speaking/RS/:examId"
+            Component={withBootstrap(LivePTESpeakingRSExam)}
           />
           <Route
-            path="/PTE/Speaking/RS/:examId"
-            Component={withBootstrap(RSSpeakingAnswer)}
+            path="/PTE/IELTS/Speaking/DI/:examId"
+            Component={withBootstrap(LivePTESpeakingDIExam)}
           />
           <Route
-            path="/PTE/Speaking/DI/:examId"
-            Component={withBootstrap(DISpeakingAnswer)}
+            path="/PTE/IELTS/Speaking/RL/:examId"
+            Component={withBootstrap(LivePTESpeakingRLExam)}
           />
           <Route
-            path="/PTE/Speaking/RL/:examId"
-            Component={withBootstrap(RLSpeakingAnswer)}
+            path="/PTE/IELTS/Speaking/ASQ/:examId"
+            Component={withBootstrap(LivePTESpeakingASQExam)}
           />
           <Route
-            path="/PTE/Speaking/RTS/:examId"
-            Component={withBootstrap(RTSSpeakingAnswer)}
+            path="/PTE/IELTS/Speaking/RTS/:examId"
+            Component={withBootstrap(LivePTESpeakingRTS)}
           />
           <Route
-            path="/PTE/Speaking/SGD/:examId"
-            Component={withBootstrap(SGDSpeakingAnswer)}
+            path="/PTE/IELTS/Speaking/SGD/:examId"
+            Component={withBootstrap(LivePTESpeakingSGD)}
           />
-        </Route>
-
-        <Route element={<StudentNavBarRoute isProtected={false} />}>
-          <Route path="/checkout" Component={withBootstrap(Checkout)} />
-          <Route path="*" element={withBootstrap(ErrorPage)} />
-        </Route>
-
-        {/*------------------------ Exams Component --------------------- */}
-
-        <Route
-          path="/DiagnosticTest/:examId"
-          Component={withBootstrap(DiagnosticTest)}
-        />
-        <Route
-          path="/Assignment/:examType/:examId"
-          Component={withBootstrap(LiveAssignment)}
-        />
-        <Route
-          path="/MiniLiveExam/:examType/:examId"
-          Component={withBootstrap(LiveExam)}
-        />
-        <Route
-          path="/Speaking-MiniLiveExam/:examType/:examId"
-          Component={withBootstrap(LiveSpeakingExam)}
-        />
-        <Route
-          path="/GENERAL-MiniLiveExam/:examType/:examId"
-          Component={withBootstrap(GeneralMTExam)}
-        />
-        <Route
-          path="/PracticeLiveExam/:examType/:examForm/:examId"
-          Component={withBootstrap(PracticeLiveExam)}
-        />
-        <Route
-          path="/Speaking-PracticeLiveExam/:examType/:examForm/:examId"
-          Component={withBootstrap(PracticeSpeakingLiveExam)}
-        />
-        <Route
-          path="/GENERAL-PracticeLiveExam/:examType/:examForm/:examId"
-          Component={withBootstrap(GeneralPTExam)}
-        />
-        <Route
-          path="/FullLengthLiveExam/:examId"
-          Component={withBootstrap(FullLengthLiveExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Reading/RFIB/:examId"
-          Component={withBootstrap(LivePTERFIB)}
-        />
-        <Route
-          path="/PTE/IELTS/Reading/ROP/:examId"
-          Component={withBootstrap(LivePTEROP)}
-        />
-        <Route
-          path="/PTE/IELTS/Reading/:examSubcategory/:examId"
-          Component={withBootstrap(LivePTEReadingExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Writing/:examSubcategory/:examId"
-          Component={withBootstrap(LivePTEWritingExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Listening/:examSubcategory/:examId"
-          Component={withBootstrap(LivePTEListeningExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Listening/HIW/:examId"
-          Component={withBootstrap(LivePTEHIWExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Listening/SST/WFD/:examId"
-          Component={withBootstrap(LivePTESSTWFDExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Speaking/RA/:examId"
-          Component={withBootstrap(LivePTESpeakingRAExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Speaking/RS/:examId"
-          Component={withBootstrap(LivePTESpeakingRSExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Speaking/DI/:examId"
-          Component={withBootstrap(LivePTESpeakingDIExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Speaking/RL/:examId"
-          Component={withBootstrap(LivePTESpeakingRLExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Speaking/ASQ/:examId"
-          Component={withBootstrap(LivePTESpeakingASQExam)}
-        />
-        <Route
-          path="/PTE/IELTS/Speaking/RTS/:examId"
-          Component={withBootstrap(LivePTESpeakingRTS)}
-        />
-        <Route
-          path="/PTE/IELTS/Speaking/SGD/:examId"
-          Component={withBootstrap(LivePTESpeakingSGD)}
-        />
-        <Route
-          path="/PTE-Academic/MockTest/:examId"
-          Component={withBootstrap(PTEMockTestLive)}
-        />
-      </Routes>
+          <Route
+            path="/PTE-Academic/MockTest/:examId"
+            Component={withBootstrap(PTEMockTestLive)}
+          />
+        </Routes>
+      </HelmetProvider>
     </div>
   );
 };

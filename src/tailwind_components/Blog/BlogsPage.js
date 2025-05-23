@@ -122,6 +122,42 @@ const BlogsPage = () => {
           name="keywords"
           content="StudyStreak Blogs, International Exams, Education Tips, Career Guidance"
         />
+        <meta name="author" content="StudyStreak.in" />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.studystreak.in/blogs" />
+
+        {/* Open Graph */}
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Study Streak Blogs | Expert Study Tips & Exam Guidance"
+        />
+        <meta
+          property="og:description"
+          content="Explore expert study tips, IELTS prep, PTE prep, and more. Stay ahead with StudyStreak latest blogs on education, exams, and career success!"
+        />
+        <meta property="og:url" content="https://www.studystreak.in/blogs" />
+        <meta
+          property="og:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Study Streak Blogs | Expert Study Tips & Exam Guidance"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore expert study tips, IELTS prep, PTE prep, and more. Stay ahead with StudyStreak latest blogs on education, exams, and career success!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+        <meta name="twitter:url" content="https://www.studystreak.in/blogs" />
       </Helmet>
       <div className="min-h-screen bg-neutral-50">
         <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-16">

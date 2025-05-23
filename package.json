@@ -35,6 +35,7 @@
     "react-datepicker": "^6.9.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
+    "react-helmet-async": "^2.0.5",
     "react-icofont": "^1.0.19",
     "react-player": "^2.14.1",
     "react-redux": "^9.0.4",

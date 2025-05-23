@@ -19,6 +19,7 @@ async function generateSitemap() {
       { url: "/courses", changefreq: "daily", priority: 0.8 },
       { url: "/ielts", changefreq: "daily", priority: 0.8 },
       { url: "/about-us", changefreq: "daily", priority: 0.8 },
+      { url: "/talk-to-us", changefreq: "daily", priority: 0.8 },
       { url: "/blogs", changefreq: "daily", priority: 0.8 },
     ];
 

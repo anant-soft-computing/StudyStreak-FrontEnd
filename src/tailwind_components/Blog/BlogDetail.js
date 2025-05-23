@@ -40,6 +40,34 @@ const BlogDetails = () => {
       <Helmet>
         <title>{blog?.title}</title>
         <meta name="description" content={blog?.excerpt} />
+        <meta name="author" content={blog?.author} />
+        <meta name="keywords" content={blog?.tags?.join(", ")} />
+
+        {/* Canonical URL */}
+        <link
+          rel="canonical"
+          href={`https://www.studystreak.in/blog/${blog?.slug}`}
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={blog?.title} />
+        <meta property="og:description" content={blog?.excerpt} />
+        <meta
+          property="og:url"
+          content={`https://www.studystreak.in/blog/${blog?.slug}`}
+        />
+        <meta property="og:image" content={blog?.featured_image} />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blog?.title} />
+        <meta name="twitter:description" content={blog?.excerpt} />
+        <meta name="twitter:image" content={blog?.featured_image} />
+        <meta
+          name="twitter:url"
+          content={`https://www.studystreak.in/blog/${blog?.slug}`}
+        />
       </Helmet>
       <div className="min-h-screen bg-neutral-50">
         <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-16">

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   BookOpen,
   CheckCircle,
@@ -7,7 +8,7 @@ import {
   Laptop,
   Users,
 } from "lucide-react";
-import React from "react";
+import { Helmet } from "react-helmet";
 import { Link } from "react-router-dom";
 
 const teamMembers = [
@@ -92,188 +93,231 @@ const partnerTypes = [
 
 const AboutUsPage = () => {
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-20">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              About StudyStreak
-            </h1>
-            <p className="text-xl text-primary-100 mb-8">
-              Empowering students to achieve their dreams through expert-led
-              test preparation
-            </p>
-          </div>
-        </div>
-      </header>
+    <>
+      <Helmet>
+        <title>About Us | StudyStreak.in</title>
+        <meta
+          name="description"
+          content="Learn about StudyStreak.in, a premier platform helping students excel in international exams like IELTS, TOEFL, PTE, GRE, and more through expert-led courses and interactive learning."
+        />
+        <meta
+          name="keywords"
+          content="StudyStreak, About Us, IELTS, TOEFL, PTE, GRE, GMAT, SAT, study abroad, international education, exam preparation"
+        />
+        <meta name="author" content="StudyStreak.in" />
 
-      <section className="py-8">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h3 className="text-3xl font-bold text-neutral-800 mb-4">
-              About Us
-            </h3>
-            <div
-              className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
-                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <p className="text-neutral-600 text-lg">
-                Welcome to StudyStreak.in, your dedicated partner in achieving
-                your dreams of studying abroad. We are a premier Learning
-                Management System (LMS) designed to help students prepare for
-                various international courses and exams, including ielts, pte,
-                toefl, oet, duolingo, gre, gmat, sat, and more.
-              </p>
-            </div>
-            <div
-              className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
-                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <p className="text-neutral-600 text-lg">
-                At StudyStreak.in, we understand the challenges and complexities
-                involved in preparing for higher education abroad. Our mission
-                is to simplify this journey by providing comprehensive,
-                high-quality, and accessible learning resources that cater to
-                the diverse needs of our students.
-              </p>
-            </div>
-          </div>
-          <div className="max-w-3xl mx-auto text-center mt-8">
-            <h3 className="text-3xl font-bold text-neutral-800 mb-4">
-              Our Vision
-            </h3>
-            <div
-              className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
-                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
-            >
-              <p className="text-neutral-600 text-lg">
-                To be the leading platform for international education
-                preparation, empowering students to achieve their academic and
-                career goals with confidence and excellence.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+        {/* Canonical URL */}
+        <link rel="canonical" href="https://www.studystreak.in/about-us" />
 
-      <section className="py-4">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl text-center font-bold text-neutral-800 mb-4">
-            Our Mission
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://www.studystreak.in/about-us" />
+        <meta property="og:title" content="About Us | StudyStreak.in" />
+        <meta
+          property="og:description"
+          content="Empowering students to succeed in international exams like IELTS, TOEFL, and GRE through expert-led, interactive courses."
+        />
+        <meta
+          property="og:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://www.studystreak.in/about-us" />
+        <meta name="twitter:title" content="About Us | StudyStreak.in" />
+        <meta
+          name="twitter:description"
+          content="Empowering students to succeed in international exams like IELTS, TOEFL, and GRE through expert-led, interactive courses."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.studystreak.in/Logo1.png"
+        />
+      </Helmet>
+      <div className="bg-gray-100 min-h-screen">
+        <header className="bg-gradient-to-r from-primary-600 to-primary-700 py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                About StudyStreak
+              </h1>
+              <p className="text-xl text-primary-100 mb-8">
+                Empowering students to achieve their dreams through expert-led
+                test preparation
+              </p>
+            </div>
+          </div>
+        </header>
+
+        <section className="py-8">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h3 className="text-3xl font-bold text-neutral-800 mb-4">
+                About Us
+              </h3>
               <div
-                key={index}
                 className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
                   hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
               >
-                <div className="p-4 text-center">
-                  <h3 className="text-xl font-bold text-neutral-800 mb-2">
-                    {member.name}
-                  </h3>
-                  <p className="text-neutral-600">{member.role}</p>
-                </div>
+                <p className="text-neutral-600 text-lg">
+                  Welcome to StudyStreak.in, your dedicated partner in achieving
+                  your dreams of studying abroad. We are a premier Learning
+                  Management System (LMS) designed to help students prepare for
+                  various international courses and exams, including ielts, pte,
+                  toefl, oet, duolingo, gre, gmat, sat, and more.
+                </p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="benefits" className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl font-bold text-neutral-800 mb-4">
-              What We Offer
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => (
               <div
-                key={index}
-                className="bg-white p-6 rounded-xl border border-neutral-200 shadow-card
+                className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
                   hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
               >
+                <p className="text-neutral-600 text-lg">
+                  At StudyStreak.in, we understand the challenges and
+                  complexities involved in preparing for higher education
+                  abroad. Our mission is to simplify this journey by providing
+                  comprehensive, high-quality, and accessible learning resources
+                  that cater to the diverse needs of our students.
+                </p>
+              </div>
+            </div>
+            <div className="max-w-3xl mx-auto text-center mt-8">
+              <h3 className="text-3xl font-bold text-neutral-800 mb-4">
+                Our Vision
+              </h3>
+              <div
+                className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+              >
+                <p className="text-neutral-600 text-lg">
+                  To be the leading platform for international education
+                  preparation, empowering students to achieve their academic and
+                  career goals with confidence and excellence.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-4">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl text-center font-bold text-neutral-800 mb-4">
+              Our Mission
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {teamMembers.map((member, index) => (
                 <div
-                  className="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center
+                  key={index}
+                  className="bg-white mb-4 p-6 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <div className="p-4 text-center">
+                    <h3 className="text-xl font-bold text-neutral-800 mb-2">
+                      {member.name}
+                    </h3>
+                    <p className="text-neutral-600">{member.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="benefits" className="py-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-3xl font-bold text-neutral-800 mb-4">
+                What We Offer
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {benefits.map((benefit, index) => (
+                <div
+                  key={index}
+                  className="bg-white p-6 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
+                >
+                  <div
+                    className="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center
                   text-primary-600 mb-4"
-                >
-                  {benefit.icon}
+                  >
+                    {benefit.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-neutral-800 mb-2">
+                    {benefit.title}
+                  </h3>
+                  <p className="text-neutral-600">{benefit.description}</p>
                 </div>
-                <h3 className="text-xl font-bold text-neutral-800 mb-2">
-                  {benefit.title}
-                </h3>
-                <p className="text-neutral-600">{benefit.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="bg-neutral-100 py-8">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-3xl font-bold text-neutral-800 mb-4">
-              Why Choose StudyStreak.in?
-            </h2>
-          </div>
+        <section className="bg-neutral-100 py-8">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-3xl mx-auto mb-12">
+              <h2 className="text-3xl font-bold text-neutral-800 mb-4">
+                Why Choose StudyStreak.in?
+              </h2>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {partnerTypes.map((type, index) => (
-              <div
-                key={index}
-                className="bg-white p-8 rounded-xl border border-neutral-200 shadow-card
-                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
-              >
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              {partnerTypes.map((type, index) => (
                 <div
-                  className="bg-primary-100 w-16 h-16 rounded-xl flex items-center justify-center
-                  text-primary-600 mb-6"
+                  key={index}
+                  className="bg-white p-8 rounded-xl border border-neutral-200 shadow-card
+                  hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
                 >
-                  {type.icon}
+                  <div
+                    className="bg-primary-100 w-16 h-16 rounded-xl flex items-center justify-center
+                  text-primary-600 mb-6"
+                  >
+                    {type.icon}
+                  </div>
+                  <h3 className="text-xl font-bold text-neutral-800 mb-3">
+                    {type.title}
+                  </h3>
+                  <p className="text-neutral-600 mb-6">{type.description}</p>
+                  <ul className="space-y-3">
+                    {type.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <CheckCircle
+                          size={18}
+                          className="text-primary-600 mt-1 flex-shrink-0"
+                        />
+                        <span className="text-neutral-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <h3 className="text-xl font-bold text-neutral-800 mb-3">
-                  {type.title}
-                </h3>
-                <p className="text-neutral-600 mb-6">{type.description}</p>
-                <ul className="space-y-3">
-                  {type.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <CheckCircle
-                        size={18}
-                        className="text-primary-600 mt-1 flex-shrink-0"
-                      />
-                      <span className="text-neutral-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-800">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-6">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of successful students who have achieved their dreams
-            with StudyStreak
-          </p>
-          <div className="flex justify-center gap-4">
-            <Link
-              to="/courses"
-              className="bg-white text-primary-600 px-8 py-3 rounded-xl 
+        <section className="py-20 bg-gradient-to-br from-primary-600 to-primary-800">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Ready to Start Your Journey?
+            </h2>
+            <p className="text-xl text-primary-100 mb-8 max-w-2xl mx-auto">
+              Join thousands of successful students who have achieved their
+              dreams with StudyStreak
+            </p>
+            <div className="flex justify-center gap-4">
+              <Link
+                to="/courses"
+                className="bg-white text-primary-600 px-8 py-3 rounded-xl 
                 hover:bg-primary-50 transition-all duration-300 font-medium"
-            >
-              Explore Our Courses
-            </Link>
+              >
+                Explore Our Courses
+              </Link>
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 };
 

@@ -15,6 +15,7 @@ import {
   ChevronUp,
   ChevronDown,
   MessageSquare,
+  Video,
 } from "lucide-react";
 import ContactForm from "./ContactForm";
 import Testimonials from "../Testimonial/Testimonial";
@@ -160,6 +161,56 @@ const faqs = [
     answer:
       "We offer a 7-day money-back guarantee if you're not satisfied with the practice materials.",
   },
+  {
+    question: "Who are these video lessons meant for?",
+    answer:
+      "These lessons are specially designed for IELTS aspirants preparing for both the Academic and General Training modules. Whether you're a beginner or looking to sharpen your strategies, our content is tailored to boost your band score.",
+  },
+  {
+    question: "What do the video lessons cover?",
+    answer:
+      "Our library includes 50+ recorded video lectures covering all four IELTS sections—Listening, Reading, Writing, and Speaking—with a focus on exam strategies, scoring techniques, time management, and common pitfalls to avoid.",
+  },
+  {
+    question: "Are the videos live or recorded?",
+    answer:
+      "All lessons are pre-recorded, allowing you to learn at your own pace. Each video is followed by descriptions, examples, and practice assignments to help reinforce your understanding.",
+  },
+  {
+    question: "How much does it cost?",
+    answer:
+      "You get full access to 50+ video lessons and assignments for just ₹99—no hidden fees or recurring charges.",
+  },
+  {
+    question: "How long will I have access after purchasing?",
+    answer:
+      "Once you purchase, you get lifetime access to all the content. Revisit the lessons as many times as you like.",
+  },
+  {
+    question: "Can I access the lessons on mobile?",
+    answer:
+      "Yes! You can access StudyStreak on mobiles, tablets, laptops, and desktops. No app download is required—just log in from any device.",
+  },
+  {
+    question: "Do I need to create an account?",
+    answer:
+      "Yes, a quick sign-up is required to track your progress and unlock all the video lessons and assignments.",
+  },
+  {
+    question: "Are there any practice materials included?",
+    answer:
+      "Absolutely. Alongside each video, you'll find assignments and examples to practice what you’ve learned. These help you apply strategies effectively in a real-test context.",
+  },
+  {
+    question: "What makes StudyStreak different from other IELTS platforms?",
+    answer:
+      "StudyStreak focuses on practical exam strategies, not just theory. Our bite-sized lessons are designed for clarity, focus, and easy retention—ideal for busy learners aiming for high scores.",
+  },
+  {
+    question: "Who created the lessons?",
+    answer:
+      "The video content is curated and delivered by experienced IELTS educators with proven track records of helping students achieve band 7+ scores.",
+  },
 ];
 
 const features = [
@@ -186,6 +237,12 @@ const features = [
     title: "E-Library Access",
     description:
       "Comprehensive resource library with study guides, vocabulary lists, and sample answers.",
+  },
+  {
+    icon: <Video className="text-primary-600 w-6 h-6" />,
+    title: "50+ Lessons",
+    description:
+      "Best in class lessons with recorded videos to help you full grasp the IELTS Mastery",
   },
 ];
 
@@ -390,7 +447,7 @@ const PackagePageTwo = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
             {features.map((feature, index) => (
               <FeatureCard key={index} {...feature} />
             ))}

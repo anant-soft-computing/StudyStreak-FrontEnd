@@ -26,6 +26,7 @@ import ForgotPasswordPage from "./tailwind_components/Login/ForgotPassword";
 import Podcast from "./tailwind_components/Podcast/Podcast";
 import PackagePageOne from "./tailwind_components/StaticPackages/PackagePageOne";
 import PackagePageTwo from "./tailwind_components/StaticPackages/PackagePageTwo";
+import PackagePageThree from "./tailwind_components/StaticPackages/PackagePageThree";
 
 //-------------------------> Error Page <----------------------------------
 
@@ -178,12 +179,16 @@ const App = () => {
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/podcast" element={<Podcast />} />
             <Route
-              path="/self-study-success-academic-ielts"
+              path="/self-study-mode-ielts-academic"
               element={<PackagePageOne />}
             />
             <Route
-              path="/ielts-practice-mastery-plan"
+              path="/guided-study-mode-ielts-academic"
               element={<PackagePageTwo />}
+            />
+            <Route
+              path="/mentorship-mode-ielts-academic"
+              element={<PackagePageThree />}
             />
           </Route>
 

@@ -6,7 +6,6 @@ import {
   BookOpen,
   ClipboardCheck,
   Headset,
-  BadgeInfo,
   Check,
   Clock,
   Hourglass,
@@ -15,6 +14,7 @@ import {
   ChevronUp,
   ChevronDown,
   MessageSquare,
+  BadgeInfo,
   Video,
 } from "lucide-react";
 import ContactForm from "./ContactForm";
@@ -22,7 +22,6 @@ import Testimonials from "../Testimonial/Testimonial";
 import bannerImg from "../../img/herobanner/about_10.png";
 import facultyImg from "../../img/faculty/faculty.png";
 
-// Reusable Components (same as before)
 const FeatureCard = ({ icon, title, description }) => (
   <div className="bg-white rounded-xl shadow-soft p-6 hover:shadow-card-hover transition-shadow duration-300 h-full">
     <div className="bg-primary-100 rounded-full w-12 h-12 flex items-center justify-center mb-4">
@@ -45,11 +44,10 @@ const FAQItem = ({ question, answer, index }) => {
       >
         <div className="flex items-center">
           <div
-            className={`w-8 h-8 rounded-lg mr-4 flex items-center justify-center ${
-              isOpen
+            className={`w-8 h-8 rounded-lg mr-4 flex items-center justify-center ${isOpen
                 ? "bg-primary-100 text-primary-600"
                 : "bg-neutral-100 text-neutral-600"
-            }`}
+              }`}
           >
             {index + 1}
           </div>
@@ -135,32 +133,31 @@ const FloatingCoupon = ({ promoCode, originalPrice, discountedPrice }) => (
   </div>
 );
 
-// Data for IELTS Practice Mastery Plan
 const faqs = [
   {
-    question: "How do I access the practice materials?",
+    question: "How do I access the study materials after purchase?",
     answer:
-      "Immediately after payment, you'll receive login details to access all practice tests and materials on our platform.",
+      "After completing your payment, you'll receive login credentials via email within 10 minutes. Simply log in to StudyStreak.in with these credentials to access all your study materials instantly.",
   },
   {
-    question: "Can I retake the practice tests?",
+    question: "Is there a time limit for accessing the course?",
     answer:
-      "Yes, all practice tests can be taken multiple times to help you track your improvement over the 6-month period.",
+      "Yes, you'll have full access to all study materials, practice tests, and resources for 6 months from the date of purchase. This gives you ample time to prepare thoroughly at your own pace.",
   },
   {
     question: "How do the doubt-clearing sessions work?",
     answer:
-      "You can schedule your 30-minute session with an IELTS expert anytime during your access period through your dashboard.",
+      "You can schedule your two doubt-clearing sessions anytime during your 6-month access period. Each session is 30 minutes long and conducted via Zoom with an IELTS expert who will address your specific questions and concerns.",
   },
   {
-    question: "Is mobile access included?",
+    question: "Can I access the materials on my mobile phone?",
     answer:
-      "Yes, our platform works perfectly on all devices including smartphones, tablets, and computers.",
+      "Absolutely! Our platform is fully responsive and works on smartphones, tablets, laptops, and desktop computers. You can study on any device with an internet connection.",
   },
   {
-    question: "What's the refund policy?",
+    question: "Do you offer a refund if I'm not satisfied?",
     answer:
-      "We offer a 7-day money-back guarantee if you're not satisfied with the practice materials.",
+      "We offer a 7-day money-back guarantee if you're not satisfied with the course materials. Simply email us at support@studystreak.in within 7 days of purchase, and we'll process your refund with no questions asked.",
   },
   {
     question: "Who are these video lessons meant for?",
@@ -217,21 +214,21 @@ const faqs = [
 const features = [
   {
     icon: <ClipboardCheck className="text-primary-600 w-6 h-6" />,
-    title: "2 Full Length Tests",
+    title: "5 Full Length Tests",
     description:
-      "Simulate real exam conditions with complete IELTS mock tests including all sections.",
+      "Complete full length tests that simulate the actual IELTS test environment and scoring.",
   },
   {
     icon: <BookOpen className="text-primary-600 w-6 h-6" />,
-    title: "12 Practice Tests",
+    title: "5 Sectional Tests",
     description:
-      "Section-specific practice tests to target your weak areas and improve your scores.",
+      "Reading, Listening, Writing, and Speaking Tests with Band Score estimates",
   },
   {
     icon: <Headset className="text-primary-600 w-6 h-6" />,
-    title: "3 Doubt Session",
+    title: "6 Doubt Sessions",
     description:
-      "30-minute one-on-one session with an IELTS expert to clarify your questions.",
+      "One-on-one virtual sessions with IELTS experts to resolve your specific questions.",
   },
   {
     icon: <Video className="text-primary-600 w-6 h-6" />,
@@ -243,51 +240,52 @@ const features = [
     icon: <BadgeInfo className="text-primary-600 w-6 h-6" />,
     title: "Ideal For",
     description:
-      "First time IELTS test trackers, Learners who prefer visual content, Student struggling with strategies, and understanding",
+      "Students aiming for high Band scores (7+), Real-time coaching, Learners who need accountability and structure.",
   },
 ];
 
 const benefits = [
   {
-    title: "Real Exam Simulation",
+    title: "Flexible Learning Schedule",
     description:
-      "Practice with tests that mirror the actual IELTS exam format and difficulty.",
+      "Study at your own pace, any time of day or night, fitting IELTS prep around your busy schedule.",
   },
   {
-    title: "Detailed Feedback",
+    title: "Comprehensive Coverage",
     description:
-      "Get comprehensive scoring and feedback on all your practice tests.",
+      "Master all four IELTS modules: Reading, Writing, Listening, and Speaking with targeted practice.",
   },
   {
-    title: "Flexible Scheduling",
+    title: "Track Your Progress",
     description:
-      "Practice anytime with 24/7 access to all materials for 6 months.",
+      "Monitor your improvement with detailed performance analytics after each practice test.",
   },
   {
-    title: "Performance Tracking",
+    title: "Expert Guidance",
     description:
-      "Monitor your progress with detailed analytics and improvement reports.",
+      "Get personalized advice during doubt sessions with instructors who know the exam inside out.",
   },
   {
-    title: "Expert Strategies",
+    title: "Latest Exam Patterns",
     description:
-      "Learn time-saving techniques and strategies from IELTS professionals.",
+      "Stay current with up-to-date materials reflecting the most recent IELTS exam patterns.",
   },
 ];
 
 const packageIncludes = [
   "Free Unlimited Mock Tests for all Modules",
-  "2 Full Length Mock Tests",
-  "12 Section-wise Practice Tests",
-  "3 Personalized Doubt Session",
+  "5 Full Length Tests",
+  "5 Practice Tests",
+  "6 Doubt Sessions",
+  "Weekly Strategy Classes + Live Doubt Clearing",
   "Complete E-Library Access",
-  "Detailed Answer Explanations",
-  "Mobile-Friendly Platform",
-  "Progress Tracking Dashboard",
-  "Email Support",
+  "Performance Analytics",
+  "Mobile & Desktop Access",
+  "Downloadable Resources",
+  "24/7 Technical Support",
 ];
 
-const PackagePageTwo = () => {
+const PackagePageThree = () => {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCoupon, setShowCoupon] = useState(false);
@@ -302,12 +300,12 @@ const PackagePageTwo = () => {
 
   // Package details
   const packageDetails = {
-    title: "Guided Study Mode: IELTS Academic + Video Lectures",
-    duration: "3 Months",
-    originalPrice: 999,
-    discountedPrice: 99,
-    promoCode: "SCOREBIG99",
-    discountPercentage: `${Math.round(((999 - 99) / 999) * 100)}% OFF`,
+    title: "Mentorship Mode: IELTS Academic + Video + Live Classes",
+    duration: "6 Months",
+    originalPrice: 2999,
+    discountedPrice: 999,
+    promoCode: "STUDYSMART999",
+    discountPercentage: `${Math.round(((2999 - 999) / 2999) * 100)}% OFF`,
   };
 
   // Countdown timer effect
@@ -372,6 +370,7 @@ const PackagePageTwo = () => {
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight tracking-tight">
               {packageDetails.title} for Just{" "}
               <span className="text-primary-600">
+                {" "}
                 ₹{packageDetails.discountedPrice}
               </span>
             </h1>
@@ -382,9 +381,9 @@ const PackagePageTwo = () => {
             </p>
 
             <p className="text-neutral-700">
-              Combines the power of visual learning with the rigor of practice.
-              The best starting point for those who want step-by-step
-              instruction but still prefer self-paced learning.
+              A complete blended learning model with direct mentor support. Get
+              strategic guidance, real interaction, and a support system to hit
+              Band 7 and above.
             </p>
 
             <div className="mt-6 bg-white p-4 rounded-lg shadow-sm border border-neutral-200 inline-block">
@@ -426,8 +425,8 @@ const PackagePageTwo = () => {
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-neutral-600">
               {[
                 `${packageDetails.duration} access`,
-                "12+ practice tests",
-                "Expert guidance",
+                "8+ practice tests",
+                "Expert feedback",
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary-500"></div>
@@ -438,7 +437,7 @@ const PackagePageTwo = () => {
           </div>
 
           <div className="lg:w-1/2 order-1 lg:order-2">
-            <img src={bannerImg} alt="IELTS Practice Mastery" />
+            <img src={bannerImg} alt="IELTS Success" />
           </div>
         </div>
       </div>
@@ -448,10 +447,10 @@ const PackagePageTwo = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-              Complete Practice Package
+              Complete Self-Study Package
             </h2>
             <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Everything you need to master IELTS through targeted practice.
+              Everything you need to prepare for Academic IELTS success.
             </p>
           </div>
 
@@ -464,49 +463,49 @@ const PackagePageTwo = () => {
       </section>
 
       {/* Faculty Section */}
-            <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
-              <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-                  Meet Your Instructor
-                </h2>
-                <p className="text-xl text-neutral-600 mb-12">
-                  Learn from the best in the field with years of experience and proven
-                  success.
-                </p>
-      
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                  <img
-                    src={facultyImg}
-                    alt="Faculty | Anand Shemrudkar"
-                    className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover shadow-lg"
-                  />
-                  <div className="text-left md:text-left">
-                    <h3 className="text-2xl font-bold text-neutral-900">
-                      Anand Shemrudkar
-                    </h3>
-                    <p className="text-primary-500 font-semibold mb-2">
-                      Head of Coaching | Study Streak
-                    </p>
-                    <p className="text-neutral-600">
-                      Anand Shemrudkar has over 15+ years of experience in English
-                      language training, helping thousands of students excel in IELTS,
-                      PTE, and TOEFL.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+            Meet Your Instructor
+          </h2>
+          <p className="text-xl text-neutral-600 mb-12">
+            Learn from the best in the field with years of experience and proven
+            success.
+          </p>
+
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <img
+              src={facultyImg}
+              alt="Faculty | Anand Shemrudkar"
+              className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover shadow-lg"
+            />
+            <div className="text-left md:text-left">
+              <h3 className="text-2xl font-bold text-neutral-900">
+                Anand Shemrudkar
+              </h3>
+              <p className="text-primary-500 font-semibold mb-2">
+                Head of Coaching | Study Streak
+              </p>
+              <p className="text-neutral-600">
+                Anand Shemrudkar has over 15+ years of experience in English
+                language training, helping thousands of students excel in IELTS,
+                PTE, and TOEFL.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Benefits Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-              Why This Practice Plan Works
+              Why Choose Our Program
             </h2>
             <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Scientifically designed practice system to maximize your IELTS
-              score.
+              Our self-study package is designed to give you the edge in your
+              IELTS preparation.
             </p>
           </div>
 
@@ -566,6 +565,33 @@ const PackagePageTwo = () => {
                 </div>
               </div>
 
+              <div className="border-t border-neutral-200 py-6 mb-6">
+                <h3 className="text-xl font-bold text-neutral-800 mb-4 text-center">
+                  Batch Timings
+                </h3>
+
+                <div className="overflow-x-auto">
+                  <div className="min-w-full grid grid-cols-3 gap-4 bg-primary-50 px-4 py-3 rounded-t-md font-semibold text-neutral-800 text-sm md:text-base">
+                    <div>Class</div>
+                    <div>Days</div>
+                    <div>Time</div>
+                  </div>
+
+                  <div className="min-w-full grid grid-cols-3 gap-4 px-4 py-3 border-b border-neutral-200 text-neutral-700 text-sm md:text-base">
+                    <div>Weekdays</div>
+                    <div>Monday to Friday</div>
+                    <div>5:30 PM - 6:30 PM IST</div>
+                  </div>
+
+                  <div className="min-w-full grid grid-cols-3 gap-4 px-4 py-3 text-neutral-700 text-sm md:text-base">
+                    <div>Weekend</div>
+                    <div>Saturday</div>
+                    <div>5:30 PM - 6:30 PM IST</div>
+                  </div>
+                </div>
+              </div>
+
+
               <div className="border-t border-b border-neutral-200 py-6 mb-6">
                 <h3 className="text-xl font-bold text-neutral-800 mb-4 text-center">
                   Package Includes:
@@ -610,7 +636,7 @@ const PackagePageTwo = () => {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Everything you need to know about our IELTS practice package.
+              Everything you need to know about our IELTS preparation package.
             </p>
           </div>
 
@@ -662,4 +688,4 @@ const PackagePageTwo = () => {
   );
 };
 
-export default PackagePageTwo;
+export default PackagePageThree;

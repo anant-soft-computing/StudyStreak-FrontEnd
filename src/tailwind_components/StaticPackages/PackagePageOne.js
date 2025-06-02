@@ -15,11 +15,12 @@ import {
   ChevronUp,
   ChevronDown,
   MessageSquare,
-  Video,
+  BadgeInfo,
 } from "lucide-react";
 import ContactForm from "./ContactForm";
 import Testimonials from "../Testimonial/Testimonial";
 import bannerImg from "../../img/herobanner/about_10.png";
+import facultyImg from "../../img/faculty/faculty.png";
 
 const FeatureCard = ({ icon, title, description }) => (
   <div className="bg-white rounded-xl shadow-soft p-6 hover:shadow-card-hover transition-shadow duration-300 h-full">
@@ -214,15 +215,15 @@ const faqs = [
 const features = [
   {
     icon: <ClipboardCheck className="text-primary-600 w-6 h-6" />,
-    title: "4 Full Length Tests",
+    title: "2 Full Length Tests",
     description:
-      "Complete mock exams that simulate the actual IELTS test environment and scoring.",
+      "Complete full length tests that simulate the actual IELTS test environment and scoring.",
   },
   {
     icon: <BookOpen className="text-primary-600 w-6 h-6" />,
-    title: "16 Practice Tests",
+    title: "8 Sectional Tests",
     description:
-      "Focused section-wise practice to master each component of the IELTS exam.",
+      "Reading, Listening, Writing, and Speaking Tests with Band Score estimates",
   },
   {
     icon: <Headset className="text-primary-600 w-6 h-6" />,
@@ -237,10 +238,10 @@ const features = [
       "Comprehensive resource library with study materials, tips, and strategies.",
   },
   {
-    icon: <Video className="text-primary-600 w-6 h-6" />,
-    title: "50+ Lessons",
+    icon: <BadgeInfo className="text-primary-600 w-6 h-6" />,
+    title: "Ideal For",
     description:
-      "Best in class lessons with recorded videos to help you full grasp the IELTS Mastery",
+      "Repeat test takers, Self paced leaners, Budget conscious aspirants, and IELTS aspirants.",
   },
 ];
 
@@ -273,8 +274,8 @@ const benefits = [
 ];
 
 const packageIncludes = [
-  "4 Full Length Tests",
-  "16 Practice Tests",
+  "2 Full Length Tests",
+  "8 Practice Tests",
   "2 Doubt Sessions",
   "Complete E-Library Access",
   "Performance Analytics",
@@ -298,12 +299,12 @@ const PackagePageOne = () => {
 
   // Package details
   const packageDetails = {
-    title: "Self-Study Mode: Academic IELTS",
-    duration: "6 Months",
-    originalPrice: 999,
+    title: "Self-Study Mode: IELTS Academic",
+    duration: "3 Months",
+    originalPrice: 599,
     discountedPrice: 49,
     promoCode: "STUDYSMART49",
-    discountPercentage: "95% OFF",
+    discountPercentage: `${Math.round(((599 - 49) / 599) * 100)}% OFF`,
   };
 
   // Countdown timer effect
@@ -378,6 +379,12 @@ const PackagePageOne = () => {
               {packageDetails.discountPercentage} Today!
             </p>
 
+            <p className="text-neutral-700">
+              A fully-equipped exam simulator at just ₹49. Ideal for those who
+              already know the IELTS structure and want to self-assess with
+              high-quality material.
+            </p>
+
             <div className="mt-6 bg-white p-4 rounded-lg shadow-sm border border-neutral-200 inline-block">
               <div className="flex items-baseline">
                 <span className="text-neutral-500 line-through text-lg">
@@ -417,7 +424,7 @@ const PackagePageOne = () => {
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-neutral-600">
               {[
                 `${packageDetails.duration} access`,
-                "15+ practice tests",
+                "8+ practice tests",
                 "Expert feedback",
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -450,6 +457,40 @@ const PackagePageOne = () => {
             {features.map((feature, index) => (
               <FeatureCard key={index} {...feature} />
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Faculty Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+            Meet Your Instructor
+          </h2>
+          <p className="text-xl text-neutral-600 mb-12">
+            Learn from the best in the field with years of experience and proven
+            success.
+          </p>
+
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <img
+              src={facultyImg}
+              alt="Faculty | Anand Shemrudkar"
+              className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover shadow-lg"
+            />
+            <div className="text-left md:text-left">
+              <h3 className="text-2xl font-bold text-neutral-900">
+                Anand Shemrudkar
+              </h3>
+              <p className="text-primary-500 font-semibold mb-2">
+                Head of Coaching | Study Streak
+              </p>
+              <p className="text-neutral-600">
+                Anand Shemrudkar has over 15+ years of experience in English
+                language training, helping thousands of students excel in IELTS,
+                PTE, and TOEFL.
+              </p>
+            </div>
           </div>
         </div>
       </section>

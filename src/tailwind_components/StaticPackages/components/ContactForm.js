@@ -35,9 +35,11 @@ const initialFormData = {
   phone: "",
   city: "",
   purpose: "General Inquiry",
+  otherPurpose: "",
   education: "12th or Equivalent",
+  otherEducation: "",
   studyDestination: "USA",
-  subject: "",
+  otherDestination: "",
   message: "",
 };
 
@@ -66,8 +68,18 @@ const ContactForm = ({ isOpen, onClose }) => {
     if (formData.phone && !phoneRegex.test(formData.phone)) {
       errors.phone = "Please enter a valid phone number";
     }
-    if (!formData.subject.trim()) errors.subject = "Subject is required";
-    if (!formData.message.trim()) errors.message = "Message is required";
+    if (formData.purpose === "Other" && !formData.otherPurpose.trim()) {
+      errors.otherPurpose = "Please specify the purpose";
+    }
+    if (formData.education === "Other" && !formData.otherEducation.trim()) {
+      errors.otherEducation = "Please specify the education";
+    }
+    if (
+      formData.studyDestination === "Other" &&
+      !formData.otherDestination.trim()
+    ) {
+      errors.otherDestination = "Please specify the destination";
+    }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -104,7 +116,7 @@ const ContactForm = ({ isOpen, onClose }) => {
 
     try {
       const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbwbaJF3Xb8hIlNgKQ_Re03TnLY26wJnm9gQSeNuIMs9yn_Hs2jvpj3N0efIMWYgWfM/exec",
+        "https://script.google.com/macros/s/AKfycbzSSFrnz1fpuggr3_C5_lllZgB44TcmfcK6fJAo6J_zjMA-aZAMFQU8myv2dso8kNHy/exec",
         {
           method: "POST",
           body: formPayload,
@@ -248,49 +260,90 @@ const ContactForm = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label
-                htmlFor="modal_purpose"
-                className="block text-sm font-medium text-neutral-700"
-              >
-                Purpose
-              </label>
-              <select
-                id="modal_purpose"
-                name="purpose"
-                value={formData.purpose}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 focus:ring-2 focus:ring-primary-300 focus:border-primary-300 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjdjQ3NTU2NyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem]"
-              >
-                {purposes.map((purpose) => (
-                  <option key={purpose} value={purpose}>
-                    {purpose}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="space-y-1">
-              <label
-                htmlFor="modal_education"
-                className="block text-sm font-medium text-neutral-700"
-              >
-                Education Level
-              </label>
-              <select
-                id="modal_education"
-                name="education"
-                value={formData.education}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 focus:ring-2 focus:ring-primary-300 focus:border-primary-300 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjdjQ3NTU2NyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem]"
-              >
-                {educationLevels.map((level) => (
-                  <option key={level} value={level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="space-y-1">
+            <label
+              htmlFor="modal_purpose"
+              className="block text-sm font-medium text-neutral-700"
+            >
+              Purpose
+            </label>
+            <select
+              id="modal_purpose"
+              name="purpose"
+              value={formData.purpose}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 focus:ring-2 focus:ring-primary-300 focus:border-primary-300 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjdjQ3NTU2NyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem]"
+            >
+              {purposes.map((purpose) => (
+                <option key={purpose} value={purpose}>
+                  {purpose}
+                </option>
+              ))}
+            </select>
+            {formData.purpose === "Other" && (
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="otherPurpose"
+                  value={formData.otherPurpose}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-2.5 rounded-xl border ${
+                    formErrors.otherPurpose
+                      ? "border-red-500"
+                      : "border-neutral-300"
+                  } focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-colors`}
+                  placeholder="Please specify your purpose"
+                />
+                {formErrors.otherPurpose && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {formErrors.otherPurpose}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="space-y-1">
+            <label
+              htmlFor="modal_education"
+              className="block text-sm font-medium text-neutral-700"
+            >
+              Education Level
+            </label>
+            <select
+              id="modal_education"
+              name="education"
+              value={formData.education}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2.5 rounded-xl border border-neutral-300 focus:ring-2 focus:ring-primary-300 focus:border-primary-300 appearance-none bg-white bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjdjQ3NTU2NyIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb24tZG93biI+PHBhdGggZD0ibTYgOSA2IDYgNi02Ii8+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem]"
+            >
+              {educationLevels.map((level) => (
+                <option key={level} value={level}>
+                  {level}
+                </option>
+              ))}
+            </select>
+            {formData.education === "Other" && (
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="otherEducation"
+                  value={formData.otherEducation}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-2.5 rounded-xl border ${
+                    formErrors.otherEducation
+                      ? "border-red-500"
+                      : "border-neutral-300"
+                  } focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-colors`}
+                  placeholder="Please specify your education"
+                />
+                {formErrors.otherEducation && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {formErrors.otherEducation}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="space-y-1">
@@ -313,28 +366,26 @@ const ContactForm = ({ isOpen, onClose }) => {
                 </option>
               ))}
             </select>
-          </div>
-
-          <div className="space-y-1">
-            <label
-              htmlFor="modal_subject"
-              className="block text-sm font-medium text-neutral-700"
-            >
-              Subject <span className="text-red-500">*</span>
-            </label>
-            <input
-              id="modal_subject"
-              type="text"
-              name="subject"
-              value={formData.subject}
-              onChange={handleInputChange}
-              className={`w-full px-4 py-2.5 rounded-xl border ${
-                formErrors.subject ? "border-red-500" : "border-neutral-300"
-              } focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-colors`}
-              placeholder="Briefly, what is this about?"
-            />
-            {formErrors.subject && (
-              <p className="text-red-500 text-xs mt-1">{formErrors.subject}</p>
+            {formData.studyDestination === "Other" && (
+              <div className="mt-2">
+                <input
+                  type="text"
+                  name="otherDestination"
+                  value={formData.otherDestination}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-2.5 rounded-xl border ${
+                    formErrors.otherDestination
+                      ? "border-red-500"
+                      : "border-neutral-300"
+                  } focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-colors`}
+                  placeholder="Please specify your study destination"
+                />
+                {formErrors.otherDestination && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {formErrors.otherDestination}
+                  </p>
+                )}
+              </div>
             )}
           </div>
 
@@ -343,18 +394,18 @@ const ContactForm = ({ isOpen, onClose }) => {
               htmlFor="modal_message"
               className="block text-sm font-medium text-neutral-700"
             >
-              Your Message <span className="text-red-500">*</span>
+              Your Message
             </label>
             <textarea
               id="modal_message"
               name="message"
-              rows={4}
+              rows={2}
               value={formData.message}
               onChange={handleInputChange}
               className={`w-full px-4 py-2.5 rounded-xl border ${
                 formErrors.message ? "border-red-500" : "border-neutral-300"
               } focus:ring-2 focus:ring-primary-300 focus:border-primary-300 transition-colors`}
-              placeholder="Please tell us more..."
+              placeholder="Please tell us more (optional)..."
             />
             {formErrors.message && (
               <p className="text-red-500 text-xs mt-1">{formErrors.message}</p>

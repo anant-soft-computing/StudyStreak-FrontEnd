@@ -91,16 +91,16 @@ const validateForm = (createCourseData, setFormError) => {
     setFormError("Enrollment End Date is Required");
     return false;
   }
-  if (!createCourseData.primary_instructor) {
-    setFormError("Primary Instructor is Required");
+  if (!createCourseData.faqs) {
+    setFormError("FAQs is Required");
     return false;
   }
-  if (!createCourseData.tutor) {
-    setFormError("Tutor is Required");
+  if (createCourseData.requirementId.length === 0) {
+    setFormError("Requirements is Required");
     return false;
   }
-  if (!createCourseData.max_enrollments) {
-    setFormError("Max Enrollments is Required");
+  if (createCourseData.outcomeId.length === 0) {
+    setFormError("Outcomes is Required");
     return false;
   }
   if (!createCourseData.Course_Thumbnail) {
@@ -109,18 +109,6 @@ const validateForm = (createCourseData, setFormError) => {
   }
   if (!createCourseData.course_banner) {
     setFormError("Course Banner is Required");
-    return false;
-  }
-  if (createCourseData.SEO_Meta_Keywords.length === 0) {
-    setFormError("SEO Meta Keywords URL is Required");
-    return false;
-  }
-  if (createCourseData.Meta_Description.length === 0) {
-    setFormError("Meta Description is Required");
-    return false;
-  }
-  if (createCourseData.lessonsId.length === 0) {
-    setFormError("Lessons is Required");
     return false;
   }
   return true;

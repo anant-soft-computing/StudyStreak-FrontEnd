@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
   BadgeCheck,
@@ -9,18 +8,18 @@ import {
   BadgeInfo,
   Check,
   Clock,
-  Hourglass,
-  AlarmClock,
-  CalendarDays,
-  ChevronUp,
-  ChevronDown,
   MessageSquare,
   Video,
+  Newspaper,
 } from "lucide-react";
-import ContactForm from "./ContactForm";
+import Faqs from "./components/Faqs";
+import Faculty from "./components/Faculty";
+import Benefits from "./components/Benefits";
+import ContactForm from "./components/ContactForm";
 import Testimonials from "../Testimonial/Testimonial";
 import bannerImg from "../../img/herobanner/about_10.png";
-import facultyImg from "../../img/faculty/faculty.png";
+import CountdownTimer from "./components/CountdownTimer";
+import FloatingCoupon from "./components/FloatingCoupon";
 
 // Reusable Components (same as before)
 const FeatureCard = ({ icon, title, description }) => (
@@ -32,187 +31,6 @@ const FeatureCard = ({ icon, title, description }) => (
     <p className="text-neutral-600">{description}</p>
   </div>
 );
-
-const FAQItem = ({ question, answer, index }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="border-b border-neutral-200 last:border-b-0">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex justify-between items-center w-full p-6 hover:bg-primary-50 transition-colors duration-300 text-left"
-        aria-expanded={isOpen}
-      >
-        <div className="flex items-center">
-          <div
-            className={`w-8 h-8 rounded-lg mr-4 flex items-center justify-center ${
-              isOpen
-                ? "bg-primary-100 text-primary-600"
-                : "bg-neutral-100 text-neutral-600"
-            }`}
-          >
-            {index + 1}
-          </div>
-          <span className="font-medium text-neutral-800">{question}</span>
-        </div>
-        {isOpen ? (
-          <ChevronUp className="w-5 h-5 text-primary-600" />
-        ) : (
-          <ChevronDown className="w-5 h-5 text-neutral-400" />
-        )}
-      </button>
-      {isOpen && (
-        <div className="bg-neutral-50 px-6 pb-6 pt-2 border-t border-neutral-200">
-          <div className="pl-12 text-neutral-600">{answer}</div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const CountdownTimer = ({ timeLeft }) => {
-  const formatTime = (num) => num.toString().padStart(2, "0");
-
-  return (
-    <div className="bg-neutral-50 rounded-xl p-6 text-center shadow-sm border border-neutral-200 max-w-md mx-auto w-full">
-      <p className="text-neutral-700 text-lg font-medium mb-4">Offer ends in</p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white rounded-lg p-3 border border-neutral-200">
-          <div className="flex items-center justify-center gap-1 text-neutral-500 mb-1">
-            <CalendarDays className="w-4 h-4" />
-            <span className="text-xs">Days</span>
-          </div>
-          <div className="text-2xl font-bold text-neutral-800">
-            {timeLeft.days}
-          </div>
-        </div>
-        <div className="bg-white rounded-lg p-3 border border-neutral-200">
-          <div className="flex items-center justify-center gap-1 text-neutral-500 mb-1">
-            <Hourglass className="w-4 h-4" />
-            <span className="text-xs">Hours</span>
-          </div>
-          <div className="text-2xl font-bold text-neutral-800">
-            {formatTime(timeLeft.hours)}
-          </div>
-        </div>
-        <div className="bg-white rounded-lg p-3 border border-neutral-200">
-          <div className="flex items-center justify-center gap-1 text-neutral-500 mb-1">
-            <AlarmClock className="w-4 h-4" />
-            <span className="text-xs">Minutes</span>
-          </div>
-          <div className="text-2xl font-bold text-neutral-800">
-            {formatTime(timeLeft.minutes)}
-          </div>
-        </div>
-        <div className="bg-white rounded-lg p-3 border border-neutral-200">
-          <div className="flex items-center justify-center gap-1 text-neutral-500 mb-1">
-            <Clock className="w-4 h-4" />
-            <span className="text-xs">Seconds</span>
-          </div>
-          <div className="text-2xl font-bold text-neutral-800">
-            {formatTime(timeLeft.seconds)}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const FloatingCoupon = ({ promoCode, originalPrice, discountedPrice }) => (
-  <div className="fixed bottom-4 right-4 z-50 bg-white rounded-lg shadow-xl p-4 flex items-center animate-fade-in">
-    <div>
-      <p className="text-neutral-600 text-sm">Use code:</p>
-      <p className="font-mono font-bold text-primary-700">{promoCode}</p>
-    </div>
-    <div className="ml-4 pl-4 border-l border-neutral-200">
-      <div className="text-2xl font-bold text-primary-700">
-        ₹{discountedPrice}
-      </div>
-      <div className="text-xs text-neutral-500 line-through">
-        ₹{originalPrice}
-      </div>
-    </div>
-  </div>
-);
-
-// Data for IELTS Practice Mastery Plan
-const faqs = [
-  {
-    question: "How do I access the practice materials?",
-    answer:
-      "Immediately after payment, you'll receive login details to access all practice tests and materials on our platform.",
-  },
-  {
-    question: "Can I retake the practice tests?",
-    answer:
-      "Yes, all practice tests can be taken multiple times to help you track your improvement over the 6-month period.",
-  },
-  {
-    question: "How do the doubt-clearing sessions work?",
-    answer:
-      "You can schedule your 30-minute session with an IELTS expert anytime during your access period through your dashboard.",
-  },
-  {
-    question: "Is mobile access included?",
-    answer:
-      "Yes, our platform works perfectly on all devices including smartphones, tablets, and computers.",
-  },
-  {
-    question: "What's the refund policy?",
-    answer:
-      "We offer a 7-day money-back guarantee if you're not satisfied with the practice materials.",
-  },
-  {
-    question: "Who are these video lessons meant for?",
-    answer:
-      "These lessons are specially designed for IELTS aspirants preparing for both the Academic and General Training modules. Whether you're a beginner or looking to sharpen your strategies, our content is tailored to boost your band score.",
-  },
-  {
-    question: "What do the video lessons cover?",
-    answer:
-      "Our library includes 50+ recorded video lectures covering all four IELTS sections—Listening, Reading, Writing, and Speaking—with a focus on exam strategies, scoring techniques, time management, and common pitfalls to avoid.",
-  },
-  {
-    question: "Are the videos live or recorded?",
-    answer:
-      "All lessons are pre-recorded, allowing you to learn at your own pace. Each video is followed by descriptions, examples, and practice assignments to help reinforce your understanding.",
-  },
-  {
-    question: "How much does it cost?",
-    answer:
-      "You get full access to 50+ video lessons and assignments for just ₹99—no hidden fees or recurring charges.",
-  },
-  {
-    question: "How long will I have access after purchasing?",
-    answer:
-      "Once you purchase, you get lifetime access to all the content. Revisit the lessons as many times as you like.",
-  },
-  {
-    question: "Can I access the lessons on mobile?",
-    answer:
-      "Yes! You can access StudyStreak on mobiles, tablets, laptops, and desktops. No app download is required—just log in from any device.",
-  },
-  {
-    question: "Do I need to create an account?",
-    answer:
-      "Yes, a quick sign-up is required to track your progress and unlock all the video lessons and assignments.",
-  },
-  {
-    question: "Are there any practice materials included?",
-    answer:
-      "Absolutely. Alongside each video, you'll find assignments and examples to practice what you’ve learned. These help you apply strategies effectively in a real-test context.",
-  },
-  {
-    question: "What makes StudyStreak different from other IELTS platforms?",
-    answer:
-      "StudyStreak focuses on practical exam strategies, not just theory. Our bite-sized lessons are designed for clarity, focus, and easy retention—ideal for busy learners aiming for high scores.",
-  },
-  {
-    question: "Who created the lessons?",
-    answer:
-      "The video content is curated and delivered by experienced IELTS educators with proven track records of helping students achieve band 7+ scores.",
-  },
-];
 
 const features = [
   {
@@ -234,49 +52,26 @@ const features = [
       "30-minute one-on-one session with an IELTS expert to clarify your questions.",
   },
   {
-    icon: <Video className="text-primary-600 w-6 h-6" />,
-    title: "33+ Lessons",
+    icon: <Newspaper className="text-primary-600 w-6 h-6" />,
+    title: "Free Unlimited Mock Tests",
     description:
-      "Best in class lessons with recorded videos to help you full grasp the IELTS Mastery",
+      "Access to unlimited mock tests to practice and improve your scores.",
+  },
+  {
+    icon: <Video className="text-primary-600 w-6 h-6" />,
+    title: "33+ Recorded Video Lessons",
+    description:
+      "Learn from expert IELTS instructors with over 33+ hours of video lessons.",
   },
   {
     icon: <BadgeInfo className="text-primary-600 w-6 h-6" />,
     title: "Ideal For",
     description:
-      "First time IELTS test trackers, Learners who prefer visual content, Student struggling with strategies, and understanding",
-  },
-];
-
-const benefits = [
-  {
-    title: "Real Exam Simulation",
-    description:
-      "Practice with tests that mirror the actual IELTS exam format and difficulty.",
-  },
-  {
-    title: "Detailed Feedback",
-    description:
-      "Get comprehensive scoring and feedback on all your practice tests.",
-  },
-  {
-    title: "Flexible Scheduling",
-    description:
-      "Practice anytime with 24/7 access to all materials for 6 months.",
-  },
-  {
-    title: "Performance Tracking",
-    description:
-      "Monitor your progress with detailed analytics and improvement reports.",
-  },
-  {
-    title: "Expert Strategies",
-    description:
-      "Learn time-saving techniques and strategies from IELTS professionals.",
+      "Students who are looking to improve their IELTS scores and achieve their academic goals.",
   },
 ];
 
 const packageIncludes = [
-  "Free Unlimited Mock Tests for all Modules",
   "2 Full Length Mock Tests",
   "12 Section-wise Practice Tests",
   "3 Personalized Doubt Session",
@@ -288,7 +83,6 @@ const packageIncludes = [
 ];
 
 const PackagePageTwo = () => {
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCoupon, setShowCoupon] = useState(false);
   const [wasManuallyClosed, setWasManuallyClosed] = useState(false);
@@ -301,13 +95,19 @@ const PackagePageTwo = () => {
   });
 
   // Package details
+  const originalPrice = 999;
+  const offerPrice = 900;
+
   const packageDetails = {
     title: "Guided Study Mode: IELTS Academic + Video Lectures",
     duration: "3 Months",
-    originalPrice: 999,
-    discountedPrice: 99,
+    originalPrice,
+    offerPrice,
+    discountedPrice: originalPrice - offerPrice,
     promoCode: "SCOREBIG99",
-    discountPercentage: `${Math.round(((999 - 99) / 999) * 100)}% OFF`,
+    discountPercentage: `${Math.round(
+      ((originalPrice - offerPrice) / originalPrice) * 100
+    )}% OFF`,
   };
 
   // Countdown timer effect
@@ -358,7 +158,6 @@ const PackagePageTwo = () => {
 
   return (
     <div className="overflow-hidden">
-      {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary-100 to-primary-50 py-12 md:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
           <div className="lg:w-1/2 flex flex-col order-2 lg:order-1">
@@ -368,25 +167,21 @@ const PackagePageTwo = () => {
                 Limited Time Offer
               </span>
             </div>
-
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight tracking-tight">
               {packageDetails.title} for Just{" "}
               <span className="text-primary-600">
                 ₹{packageDetails.discountedPrice}
               </span>
             </h1>
-
-            <p className="mt-4 text-lg sm:text-xl text-neutral-600 max-w-2xl">
+            <p className="mt-4 text-lg sm:text-xl text-neutral-900 max-w-2xl">
               {packageDetails.duration} Access -{" "}
               {packageDetails.discountPercentage} Today!
             </p>
-
-            <p className="text-neutral-700">
+            <p className="text-neutral-900">
               Combines the power of visual learning with the rigor of practice.
               The best starting point for those who want step-by-step
               instruction but still prefer self-paced learning.
             </p>
-
             <div className="mt-6 bg-white p-4 rounded-lg shadow-sm border border-neutral-200 inline-block">
               <div className="flex items-baseline">
                 <span className="text-neutral-500 line-through text-lg">
@@ -403,7 +198,6 @@ const PackagePageTwo = () => {
                 Offer ends soon
               </div>
             </div>
-
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <button
                 className="flex items-center justify-center gap-2 bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
@@ -412,7 +206,6 @@ const PackagePageTwo = () => {
                 Get Started Now
                 <ArrowRight className="w-4 h-4" />
               </button>
-
               <div className="flex items-center bg-white border border-neutral-200 rounded-lg px-4 py-3 shadow-sm">
                 <span className="text-neutral-600 text-sm sm:text-base">
                   Use code:{" "}
@@ -422,7 +215,6 @@ const PackagePageTwo = () => {
                 </span>
               </div>
             </div>
-
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-neutral-600">
               {[
                 `${packageDetails.duration} access`,
@@ -431,19 +223,16 @@ const PackagePageTwo = () => {
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary-500"></div>
-                  <span>{item}</span>
+                  <span className="text-primary-900">{item}</span>
                 </div>
               ))}
             </div>
           </div>
-
           <div className="lg:w-1/2 order-1 lg:order-2">
             <img src={bannerImg} alt="IELTS Practice Mastery" />
           </div>
         </div>
       </div>
-
-      {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-neutral-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -454,86 +243,16 @@ const PackagePageTwo = () => {
               Everything you need to master IELTS through targeted practice.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <FeatureCard key={index} {...feature} />
             ))}
           </div>
         </div>
       </section>
-
-      {/* Faculty Section */}
-            <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
-              <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-                  Meet Your Instructor
-                </h2>
-                <p className="text-xl text-neutral-600 mb-12">
-                  Learn from the best in the field with years of experience and proven
-                  success.
-                </p>
-      
-                <div className="flex flex-col md:flex-row items-center gap-8">
-                  <img
-                    src={facultyImg}
-                    alt="Faculty | Anand Shemrudkar"
-                    className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover shadow-lg"
-                  />
-                  <div className="text-left md:text-left">
-                    <h3 className="text-2xl font-bold text-neutral-900">
-                      Anand Shemrudkar
-                    </h3>
-                    <p className="text-primary-500 font-semibold mb-2">
-                      Head of Coaching | Study Streak
-                    </p>
-                    <p className="text-neutral-600">
-                      Anand Shemrudkar has over 15+ years of experience in English
-                      language training, helping thousands of students excel in IELTS,
-                      PTE, and TOEFL.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
-              Why This Practice Plan Works
-            </h2>
-            <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Scientifically designed practice system to maximize your IELTS
-              score.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="flex space-x-4">
-                <div className="flex-shrink-0 mt-1">
-                  <div className="w-6 h-6 rounded-full bg-primary-400 flex items-center justify-center text-white">
-                    <Check className="w-3 h-3" />
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-neutral-900 mb-2">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-neutral-600">{benefit.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
+      <Faculty />
+      <Benefits />
       <Testimonials />
-
-      {/* Pricing Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary-50">
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -543,7 +262,6 @@ const PackagePageTwo = () => {
                 {packageDetails.discountPercentage} Today!
               </p>
             </div>
-
             <div className="p-8">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-neutral-900 mb-2">
@@ -553,9 +271,7 @@ const PackagePageTwo = () => {
                   <Clock className="mr-2" />{" "}
                   <span>{packageDetails.duration} Access</span>
                 </div>
-
                 <CountdownTimer timeLeft={timeLeft} />
-
                 <div className="flex items-center justify-center mt-6">
                   <div className="text-neutral-500 line-through text-2xl mr-3">
                     ₹{packageDetails.originalPrice}
@@ -565,7 +281,6 @@ const PackagePageTwo = () => {
                   </div>
                 </div>
               </div>
-
               <div className="border-t border-b border-neutral-200 py-6 mb-6">
                 <h3 className="text-xl font-bold text-neutral-800 mb-4 text-center">
                   Package Includes:
@@ -579,11 +294,10 @@ const PackagePageTwo = () => {
                   ))}
                 </div>
               </div>
-
               <div className="text-center">
                 <button
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 text-xl"
-                  onClick={() => navigate("/login")}
+                  onClick={() => setIsModalOpen(true)}
                 >
                   Get Started for Just ₹{packageDetails.discountedPrice}
                 </button>
@@ -601,8 +315,6 @@ const PackagePageTwo = () => {
           </div>
         </div>
       </section>
-
-      {/* FAQ Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-neutral-50">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -610,21 +322,10 @@ const PackagePageTwo = () => {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Everything you need to know about our IELTS practice package.
+              Everything you need to know about our IELTS preparation package.
             </p>
           </div>
-
-          <div className="bg-white rounded-2xl shadow-md border border-neutral-200 overflow-hidden">
-            {faqs.map((faq, index) => (
-              <FAQItem
-                key={index}
-                question={faq.question}
-                answer={faq.answer}
-                index={index}
-              />
-            ))}
-          </div>
-
+          <Faqs />
           <div className="mt-12 text-center">
             <div className="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-neutral-200">
               <MessageSquare className="w-5 h-5 text-primary-600" />
@@ -641,17 +342,14 @@ const PackagePageTwo = () => {
           </div>
         </div>
       </section>
-
-      {/* Floating Coupon */}
       {showCoupon && (
         <FloatingCoupon
           promoCode={packageDetails.promoCode}
           originalPrice={packageDetails.originalPrice}
           discountedPrice={packageDetails.discountedPrice}
+          setIsModalOpen={setIsModalOpen}
         />
       )}
-
-      {/* Contact Form Modal */}
       {isModalOpen && (
         <ContactForm
           onClose={() => setIsModalOpen(false)}

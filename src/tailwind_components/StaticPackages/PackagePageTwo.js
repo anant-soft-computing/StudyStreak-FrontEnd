@@ -7,7 +7,6 @@ import {
   Headset,
   BadgeInfo,
   Check,
-  Clock,
   MessageSquare,
   Video,
   Newspaper,
@@ -17,8 +16,7 @@ import Faculty from "./components/Faculty";
 import Benefits from "./components/Benefits";
 import ContactForm from "./components/ContactForm";
 import Testimonials from "../Testimonial/Testimonial";
-import bannerImg from "../../img/herobanner/about_10.png";
-import CountdownTimer from "./components/CountdownTimer";
+import bannerImg from "../../img/herobanner/guidedStudyMode.png";
 import FloatingCoupon from "./components/FloatingCoupon";
 
 // Reusable Components (same as before)
@@ -59,15 +57,15 @@ const features = [
   },
   {
     icon: <Video className="text-primary-600 w-6 h-6" />,
-    title: "33+ Recorded Video Lessons",
+    title: "33+ Recorded Video Lessons & Lectures",
     description:
-      "Learn from expert IELTS instructors with over 33+ hours of video lessons.",
+      "Learn from expert IELTS instructors with over 33+ hours of video lessons & video lecture.",
   },
   {
     icon: <BadgeInfo className="text-primary-600 w-6 h-6" />,
     title: "Ideal For",
     description:
-      "Students who are looking to improve their IELTS scores and achieve their academic goals.",
+      "Ideal for first-time IELTS test takers, visual learners, and students seeking effective strategies or clearer understanding.",
   },
 ];
 
@@ -87,13 +85,6 @@ const PackagePageTwo = () => {
   const [showCoupon, setShowCoupon] = useState(false);
   const [wasManuallyClosed, setWasManuallyClosed] = useState(false);
 
-  const [timeLeft, setTimeLeft] = useState({
-    days: 2,
-    hours: 23,
-    minutes: 59,
-    seconds: 59,
-  });
-
   // Package details
   const originalPrice = 999;
   const offerPrice = 900;
@@ -109,32 +100,6 @@ const PackagePageTwo = () => {
       ((originalPrice - offerPrice) / originalPrice) * 100
     )}% OFF`,
   };
-
-  // Countdown timer effect
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        const { days, hours, minutes, seconds } = prev;
-
-        if (seconds > 0) return { ...prev, seconds: seconds - 1 };
-        if (minutes > 0) return { ...prev, minutes: minutes - 1, seconds: 59 };
-        if (hours > 0)
-          return { ...prev, hours: hours - 1, minutes: 59, seconds: 59 };
-        if (days > 0)
-          return {
-            ...prev,
-            days: days - 1,
-            hours: 23,
-            minutes: 59,
-            seconds: 59,
-          };
-
-        return prev;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   // Coupon visibility effect
   useEffect(() => {
@@ -267,23 +232,10 @@ const PackagePageTwo = () => {
                 <h2 className="text-3xl font-bold text-neutral-900 mb-2">
                   {packageDetails.title}
                 </h2>
-                <div className="flex items-center justify-center text-neutral-600 mb-4">
-                  <Clock className="mr-2" />{" "}
-                  <span>{packageDetails.duration} Access</span>
-                </div>
-                <CountdownTimer timeLeft={timeLeft} />
-                <div className="flex items-center justify-center mt-6">
-                  <div className="text-neutral-500 line-through text-2xl mr-3">
-                    ₹{packageDetails.originalPrice}
-                  </div>
-                  <div className="text-4xl font-bold text-primary-700">
-                    ₹{packageDetails.discountedPrice}
-                  </div>
-                </div>
               </div>
               <div className="border-t border-b border-neutral-200 py-6 mb-6">
                 <h3 className="text-xl font-bold text-neutral-800 mb-4 text-center">
-                  Package Includes:
+                  Package Includes
                 </h3>
                 <div className="grid md:grid-cols-2 gap-3">
                   {packageIncludes.map((feature, index) => (

@@ -14,10 +14,11 @@ import {
 import Faqs from "./components/Faqs";
 import Faculty from "./components/Faculty";
 import Benefits from "./components/Benefits";
+import ajaxCall from "../../helpers/ajaxCall";
 import ContactForm from "./components/ContactForm";
 import Testimonials from "../Testimonial/Testimonial";
-import bannerImg from "../../img/herobanner/mentorshipMode.png";
 import FloatingCoupon from "./components/FloatingCoupon";
+import bannerImg from "../../img/herobanner/mentorshipMode.png";
 
 const FeatureCard = ({ icon, title, description }) => (
   <div className="bg-white rounded-xl shadow-soft p-6 hover:shadow-card-hover transition-shadow duration-300 h-full">
@@ -29,80 +30,96 @@ const FeatureCard = ({ icon, title, description }) => (
   </div>
 );
 
-const features = [
-  {
-    icon: <ClipboardCheck className="text-primary-600 w-6 h-6" />,
-    title: "5 Full Length Tests",
-    description:
-      "Complete full length tests that simulate the actual IELTS test environment and scoring.",
-  },
-  {
-    icon: <BookOpen className="text-primary-600 w-6 h-6" />,
-    title: "20 Practice Tests",
-    description:
-      "Reading, Listening, Writing, and Speaking Tests with Band Score estimates",
-  },
-  {
-    icon: <Headset className="text-primary-600 w-6 h-6" />,
-    title: "6 Doubt Sessions",
-    description:
-      "One-on-one virtual sessions with IELTS experts to resolve your specific questions.",
-  },
-  {
-    icon: <Newspaper className="text-primary-600 w-6 h-6" />,
-    title: "Free Unlimited Mock Tests",
-    description:
-      "Access to unlimited mock tests to practice and improve your scores.",
-  },
-  {
-    icon: <Video className="text-primary-600 w-6 h-6" />,
-    title: "33+ Recorded Video Lessons & Lectures",
-    description:
-      "Learn from expert IELTS instructors with over 33+ hours of video lessons & video lecture.",
-  },
-  {
-    icon: <BadgeInfo className="text-primary-600 w-6 h-6" />,
-    title: "Ideal For",
-    description:
-      "Ideal for students targeting Band 7+, seeking real-time coaching, and needing accountability and structured learning.",
-  },
-];
-
-const packageIncludes = [
-  "Free Unlimited Mock Tests",
-  "5 Full Length Tests",
-  "20 Practice Tests",
-  "6 Doubt Sessions",
-  "Weekly Strategy Classes + Live Doubt Clearing",
-  "Complete E-Library Access",
-  "Performance Analytics",
-  "Mobile & Desktop Access",
-  "Downloadable Resources",
-  "24/7 Technical Support",
-];
-
 const PackagePageThree = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [showCoupon, setShowCoupon] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [packageDetails, setPackageDetails] = useState({});
   const [wasManuallyClosed, setWasManuallyClosed] = useState(false);
 
-  // Package details
-  const originalPrice = 2999;
-  const offerPrice = 2000;
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          "/package/noauth/32/",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          },
+          8000
+        );
 
-  const packageDetails = {
-    title: "Mentorship Mode: IELTS Academic + Video + Live Classes",
-    duration: "6 Months",
-    originalPrice,
-    offerPrice,
-    discountedPrice: originalPrice - offerPrice,
-    promoCode: "IELTSBOOST999",
-    discountPercentage: `${Math.round(
-      ((originalPrice - offerPrice) / originalPrice) * 100
-    )}% OFF`,
-  };
+        if (response?.status === 200) {
+          setPackageDetails(response.data);
+        } else if (
+          (response?.status === 400 || response?.status === 404) &&
+          response.isError
+        ) {
+          setPackageDetails({});
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
+  }, []);
 
-  // Coupon visibility effect
+  const features = [
+    packageDetails?.full_length_test && {
+      icon: <ClipboardCheck className="text-primary-600 w-6 h-6" />,
+      title: `${packageDetails?.full_length_test_count} Full Length Tests`,
+      description:
+        "Complete full length tests that simulate the actual IELTS test environment and scoring.",
+    },
+    packageDetails?.practice_test && {
+      icon: <BookOpen className="text-primary-600 w-6 h-6" />,
+      title: `${packageDetails?.practice_test_count} Practice Tests`,
+      description:
+        "Reading, Listening, Writing, and Speaking Tests with Band Score estimates",
+    },
+    packageDetails?.group_doubt_solving && {
+      icon: <Headset className="text-primary-600 w-6 h-6" />,
+      title: `${packageDetails?.group_doubt_solving_count} Doubt Sessions`,
+      description:
+        "One-on-one virtual sessions with IELTS experts to resolve your specific questions.",
+    },
+    {
+      icon: <Newspaper className="text-primary-600 w-6 h-6" />,
+      title: "Free Unlimited Mock Tests",
+      description:
+        "Access to unlimited mock tests to practice and improve your scores.",
+    },
+    {
+      icon: <Video className="text-primary-600 w-6 h-6" />,
+      title: "33+ Recorded Video Lessons & Lectures",
+      description:
+        "Learn from expert IELTS instructors with over 33+ hours of video lessons & video lecture.",
+    },
+    {
+      icon: <BadgeInfo className="text-primary-600 w-6 h-6" />,
+      title: "Ideal For",
+      description:
+        "Ideal for students targeting Band 7+, seeking real-time coaching, and needing accountability and structured learning.",
+    },
+  ];
+
+  const packageIncludes = [
+    "Free Unlimited Mock Tests",
+    packageDetails?.full_length_test &&
+      `${packageDetails?.full_length_test_count} Full Length Tests`,
+    packageDetails?.practice_test &&
+      `${packageDetails?.practice_test_count} Practice Tests`,
+    packageDetails?.group_doubt_solving &&
+      `${packageDetails?.group_doubt_solving_count} Doubt Sessions`,
+    "Weekly Strategy Classes + Live Doubt Clearing",
+    "Complete E-Library Access",
+    "Performance Analytics",
+    "Mobile & Desktop Access",
+    "Downloadable Resources",
+    "24/7 Technical Support",
+  ];
+
   useEffect(() => {
     const manuallyClosed =
       sessionStorage.getItem("couponManuallyClosed") === "true";
@@ -114,7 +131,7 @@ const PackagePageThree = () => {
       };
 
       window.addEventListener("scroll", handleScroll);
-      handleScroll(); // Initial check
+      handleScroll();
 
       return () => window.removeEventListener("scroll", handleScroll);
     }
@@ -134,16 +151,30 @@ const PackagePageThree = () => {
               </span>
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-900 leading-tight tracking-tight">
-              {packageDetails.title} for Just{" "}
+              {packageDetails?.package_name} for Just{" "}
               <span className="text-primary-600">
-                {" "}
-                ₹{packageDetails.discountedPrice}
+                ₹
+                {packageDetails?.package_price &&
+                packageDetails?.coupon_code?.discount
+                  ? packageDetails?.package_price -
+                    packageDetails?.coupon_code?.discount
+                  : packageDetails?.package_price}
               </span>
             </h1>
+
             <p className="mt-4 text-lg sm:text-xl text-neutral-900 max-w-2xl">
-              {packageDetails.duration} Access -{" "}
-              {packageDetails.discountPercentage} Today!
+              {packageDetails?.duration} Months Access -{" "}
+              {packageDetails?.package_price &&
+              packageDetails?.coupon_code?.discount
+                ? Math.round(
+                    (packageDetails?.coupon_code?.discount /
+                      packageDetails?.package_price) *
+                      100
+                  )
+                : 0}
+              % OFF Today!
             </p>
+
             <p className="text-neutral-900">
               A complete blended learning model with direct mentor support. Get
               strategic guidance, real interaction, and a support system to hit
@@ -152,14 +183,26 @@ const PackagePageThree = () => {
             <div className="mt-6 bg-white p-4 rounded-lg shadow-sm border border-neutral-200 inline-block">
               <div className="flex items-baseline">
                 <span className="text-neutral-500 line-through text-lg">
-                  ₹{packageDetails.originalPrice}
+                  ₹{packageDetails?.package_price}
                 </span>
                 <span className="ml-3 text-3xl font-bold text-primary-700">
-                  ₹{packageDetails.discountedPrice}
+                  ₹
+                  {packageDetails?.package_price &&
+                  packageDetails?.coupon_code?.discount
+                    ? packageDetails?.package_price -
+                      packageDetails?.coupon_code?.discount
+                    : packageDetails?.package_price}
                 </span>
-                <span className="ml-2 text-sm font-medium text-white bg-red-500 px-2 py-0.5 rounded-full">
-                  {packageDetails.discountPercentage}
-                </span>
+                {packageDetails?.coupon_code?.discount && (
+                  <span className="ml-2 text-sm font-medium text-white bg-red-500 px-2 py-0.5 rounded-full">
+                    {Math.round(
+                      (packageDetails?.coupon_code?.discount /
+                        packageDetails?.package_price) *
+                        100
+                    )}
+                    % OFF
+                  </span>
+                )}
               </div>
               <div className="text-sm text-neutral-500 mt-1">
                 Offer ends soon
@@ -173,19 +216,21 @@ const PackagePageThree = () => {
                 Get Started Now
                 <ArrowRight className="w-4 h-4" />
               </button>
-              <div className="flex items-center bg-white border border-neutral-200 rounded-lg px-4 py-3 shadow-sm">
-                <span className="text-neutral-600 text-sm sm:text-base">
-                  Use code:{" "}
-                  <span className="font-mono font-bold bg-primary-50 text-primary-700 px-2 py-1 rounded">
-                    {packageDetails.promoCode}
+              {packageDetails?.coupon_code?.cupon_code && (
+                <div className="flex items-center bg-white border border-neutral-200 rounded-lg px-4 py-3 shadow-sm">
+                  <span className="text-neutral-600 text-sm sm:text-base">
+                    Use code:{" "}
+                    <span className="font-mono font-bold bg-primary-50 text-primary-700 px-2 py-1 rounded">
+                      {packageDetails?.coupon_code?.cupon_code}
+                    </span>
                   </span>
-                </span>
-              </div>
+                </div>
+              )}
             </div>
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-neutral-600">
               {[
-                `${packageDetails.duration} access`,
-                "20+ practice tests",
+                `${packageDetails?.duration} months access`,
+                `${packageDetails?.practice_test_count}+ practice tests`,
                 "Expert feedback",
               ].map((item, i) => (
                 <div key={i} className="flex items-center gap-2">
@@ -207,7 +252,8 @@ const PackagePageThree = () => {
               Complete Self-Study Package
             </h2>
             <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-              Everything you need to prepare for Academic IELTS success.
+              Everything you need to prepare for{" "}
+              {packageDetails?.select_course?.Course_Title} success.
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
@@ -226,13 +272,21 @@ const PackagePageThree = () => {
             <div className="bg-primary-600 text-white text-center py-3">
               <p className="text-lg font-bold text-white mb-0">
                 Special Practice Package Offer -{" "}
-                {packageDetails.discountPercentage} Today!
+                {packageDetails?.package_price &&
+                packageDetails?.coupon_code?.discount
+                  ? Math.round(
+                      (packageDetails?.coupon_code?.discount /
+                        packageDetails?.package_price) *
+                        100
+                    )
+                  : 0}
+                % Today!
               </p>
             </div>
             <div className="p-8">
               <div className="text-center mb-8">
                 <h2 className="text-3xl font-bold text-neutral-900 mb-2">
-                  {packageDetails.title}
+                  {packageDetails?.package_name}
                 </h2>
               </div>
               <div className="border-t border-neutral-200 py-6 mb-6">
@@ -275,14 +329,21 @@ const PackagePageThree = () => {
                   className="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300 text-xl"
                   onClick={() => setIsModalOpen(true)}
                 >
-                  Get Started for Just ₹{packageDetails.discountedPrice}
+                  Get Started for Just ₹
+                  {packageDetails?.package_price &&
+                  packageDetails?.coupon_code?.discount
+                    ? packageDetails?.package_price -
+                      packageDetails?.coupon_code?.discount
+                    : packageDetails?.package_price}
                 </button>
-                <div className="mt-4 text-neutral-600">
-                  Use Promo Code:{" "}
-                  <span className="font-mono font-bold bg-primary-100 text-primary-700 px-3 py-1 rounded">
-                    {packageDetails.promoCode}
-                  </span>
-                </div>
+                {packageDetails?.coupon_code?.cupon_code && (
+                  <div className="mt-4 text-neutral-600">
+                    Use Promo Code:{" "}
+                    <span className="font-mono font-bold bg-primary-100 text-primary-700 px-3 py-1 rounded">
+                      {packageDetails?.coupon_code?.cupon_code}
+                    </span>
+                  </div>
+                )}
                 <p className="mt-6 text-sm text-neutral-500">
                   Limited time offer. Regular price will resume soon.
                 </p>
@@ -298,7 +359,8 @@ const PackagePageThree = () => {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
-              Everything you need to know about our IELTS preparation package.
+              Everything you need to know about our{" "}
+              {packageDetails?.PackageType?.name} preparation package.
             </p>
           </div>
           <Faqs />
@@ -318,11 +380,14 @@ const PackagePageThree = () => {
           </div>
         </div>
       </section>
-      {showCoupon && (
+      {showCoupon && packageDetails?.coupon_code?.cupon_code && (
         <FloatingCoupon
-          promoCode={packageDetails.promoCode}
-          originalPrice={packageDetails.originalPrice}
-          discountedPrice={packageDetails.discountedPrice}
+          promoCode={packageDetails?.coupon_code?.cupon_code}
+          originalPrice={packageDetails?.package_price}
+          discountedPrice={
+            packageDetails?.package_price -
+            packageDetails?.coupon_code?.discount
+          }
           setIsModalOpen={setIsModalOpen}
         />
       )}

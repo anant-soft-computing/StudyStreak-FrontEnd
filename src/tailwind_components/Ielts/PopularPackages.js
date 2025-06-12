@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ajaxCall from "../../helpers/ajaxCall";
+import { useNavigate } from "react-router-dom";
 import {
   Clock,
   Calendar,
@@ -11,22 +11,18 @@ import {
   Check,
   ShoppingBag,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import ajaxCall from "../../helpers/ajaxCall";
 
 const PopularPackages = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [coursePackages, setCoursePackages] = useState([]);
-
-  const popularPackages = coursePackages.filter(
-    (item) => item?.package_id === 31 || item?.package_id === 30
-  );
+  const [packages, setPackages] = useState([]);
 
   useEffect(() => {
-    const fetchCoursePackages = async (courseId) => {
+    const fetchPackages = async (packageId) => {
       try {
         const response = await ajaxCall(
-          `/course/${courseId}/packages/`,
+          `/package/noauth/${packageId}/`,
           {
             headers: {
               Accept: "application/json",
@@ -37,7 +33,7 @@ const PopularPackages = () => {
           8000
         );
         if (response.status === 200) {
-          return response.data.packages;
+          return response.data;
         } else {
           return [];
         }
@@ -49,11 +45,11 @@ const PopularPackages = () => {
     (async () => {
       setIsLoading(true);
       try {
-        const [packages11, packages24] = await Promise.all([
-          fetchCoursePackages(11),
-          fetchCoursePackages(24),
+        const [packages30, packages31] = await Promise.all([
+          fetchPackages(30),
+          fetchPackages(31),
         ]);
-        setCoursePackages([...packages11, ...packages24]);
+        setPackages([packages30, packages31]);
       } catch (error) {
         console.log("error", error);
       } finally {
@@ -76,7 +72,7 @@ const PopularPackages = () => {
     );
   }
 
-  if (popularPackages.length === 0) return null;
+  if (packages.length === 0) return null;
 
   return (
     <div className="w-full lg:w-1/1 xl:w-2/4 mt-8 lg:mt-0 lg:pl-8">
@@ -86,7 +82,7 @@ const PopularPackages = () => {
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {popularPackages?.map((pkg, index) => (
+        {packages?.map((pkg, index) => (
           <div
             key={index}
             className="bg-white/95 backdrop-blur rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl relative group"

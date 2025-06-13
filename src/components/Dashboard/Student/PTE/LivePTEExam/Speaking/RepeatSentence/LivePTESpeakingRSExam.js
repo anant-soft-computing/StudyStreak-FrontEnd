@@ -347,7 +347,7 @@ const LivePTESpeakingRSExam = () => {
         }}
       >
         <div style={{ fontSize: "18px", fontWeight: "500" }}>
-          {examData?.exam_category} / {examData?.name}
+          {examData?.exam_category} / Repeat sentence
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>

@@ -15,6 +15,14 @@ const instructions = {
   SMW: "You will hear a recording. At the end of the recording, the last word or group of words will be replaced by a beep. Select the correct option to complete the recording.",
 };
 
+const subCategory = {
+  CMA: "MC, choose multiple answers",
+  LFIB: "Fill in the blanks",
+  HCS: "Highlight correct summary",
+  CSA: "MC, choose single answers",
+  SMW: "Select missing words",
+};
+
 const LivePTEListeningExam = () => {
   const navigate = useNavigate();
   const examId = useLocation()?.pathname?.split("/")?.[5];
@@ -586,7 +594,7 @@ const LivePTEListeningExam = () => {
         }}
       >
         <div style={{ fontSize: "18px", fontWeight: "500" }}>
-          {examData?.exam_category} / {examData?.exam_name}
+          {examData?.exam_category} / {subCategory[examData?.sub_category]}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>

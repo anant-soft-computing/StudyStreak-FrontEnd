@@ -11,8 +11,13 @@ const instructions = {
   RWFIB:
     "Below is a text with blanks. Click on each blank, a list of choice will appear. Select the appropriate answer choice for each blank.",
   CMA: "Read the text and answer the multiple-choice question by selecting the correct response. More than one response is correct.",
-  RFIB: "In the text below some words are missing. Drag words from the box below to the appropriate place in the text. To undo an answer choice, drag the word back to the box below the text.",
   CSA: "Read the text and answer the multiple-choice question by selecting the correct response. Only one response is correct.",
+};
+
+const subCategory = {
+  RWFIB: "R&W: Fill in the blanks",
+  CMA: "MC, choose multiple answers",
+  CSA: "MC, choose single answers",
 };
 
 const LivePTEReadingsExam = () => {
@@ -509,7 +514,7 @@ const LivePTEReadingsExam = () => {
         }}
       >
         <div style={{ fontSize: "18px", fontWeight: "500" }}>
-          {examData?.exam_category} / {examData?.exam_name}
+          {examData?.exam_category} / {subCategory[examData?.sub_category]}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>

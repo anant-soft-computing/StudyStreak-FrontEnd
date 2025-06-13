@@ -28,7 +28,7 @@ const LivePTEWritingExam = () => {
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
   const timeTaken = `${Math.floor(timer / 60)}:${timer % 60}`;
-  
+
   const userData = JSON.parse(localStorage.getItem("loginInfo"));
   const studentId = JSON.parse(localStorage.getItem("StudentID"));
 
@@ -528,7 +528,10 @@ const LivePTEWritingExam = () => {
         }}
       >
         <div style={{ fontSize: "18px", fontWeight: "500" }}>
-          {examData?.exam_category} / {examData?.exam_name}
+          {examData?.exam_category} /{" "}
+          {examData?.sub_category === "SWT"
+            ? "Summarize written text"
+            : "Write essay"}
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <i className="icofont-stopwatch" style={{ fontSize: "20px" }}></i>

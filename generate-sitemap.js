@@ -32,7 +32,7 @@ async function generateSitemap() {
         url: `/blogs/${blog.slug}`,
         changefreq: "daily",
         priority: 0.9,
-        lastmod: blog.published_at,
+        lastmod: new Date().toISOString(),
       });
     });
 

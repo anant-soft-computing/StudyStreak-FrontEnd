@@ -194,7 +194,7 @@ const PTEListeningAnswer = () => {
       return <div dangerouslySetInnerHTML={{ __html: tempDiv.innerHTML }} />;
     }
 
-    // HCS (Highlight correct summar) & CSA (Choose Single Answer)
+    // HCS (Highlight correct summary) & CSA (Choose Single Answer)
     if (
       blockData.sub_category === "HCS" ||
       blockData.sub_category === "CSA" ||

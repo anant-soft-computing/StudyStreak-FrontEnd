@@ -40,7 +40,7 @@ const PackagePageThree = () => {
     (async () => {
       try {
         const response = await ajaxCall(
-          "/package/noauth/32/",
+          "/package/noauth/34/",
           {
             headers: {
               Accept: "application/json",

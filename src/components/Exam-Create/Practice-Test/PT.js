@@ -31,7 +31,7 @@ const pteListeningSubCategory = [
   { name: "Summarize spoken text [SST]", value: "SST" },
   { name: "MC, choose multiple answers", value: "CMA" },
   { name: "Fill in the blanks [LFIB]", value: "LFIB" },
-  { name: "Highlight correct summar", value: "HCS" },
+  { name: "Highlight correct summary", value: "HCS" },
   { name: "MC, choose single answer", value: "CSA" },
   { name: "Select missing words [SMW]", value: "SMW" },
   { name: "Highlight incorrect words", value: "HIW" },

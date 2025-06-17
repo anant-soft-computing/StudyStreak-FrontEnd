@@ -25,7 +25,7 @@ const pteSubCategory = [
     value: "LFIB",
   },
   {
-    name: "Highlight correct summar [HCS]",
+    name: "Highlight correct summary [HCS]",
     value: "HCS",
   },
   {

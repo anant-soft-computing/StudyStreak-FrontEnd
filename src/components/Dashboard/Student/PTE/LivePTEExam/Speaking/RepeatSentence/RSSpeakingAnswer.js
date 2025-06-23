@@ -13,6 +13,9 @@ const RSSpeakingAnswer = () => {
     sub_category: "",
     practice_test_type: "",
   });
+  const [blockData, setBlockData] = useState({
+    exam_name: "",
+  });
   const [assessment, setAssessment] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,6 +86,39 @@ const RSSpeakingAnswer = () => {
       }
     })();
   }, [examId]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/speaking-block/${selectedAssessment?.block_id}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setBlockData({
+            exam_name: response?.data?.name,
+          });
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [selectedAssessment?.block_id]);
 
   const extractScores = (aiAssessment) => {
     if (!aiAssessment) return null;
@@ -176,7 +212,7 @@ const RSSpeakingAnswer = () => {
       <SmallModal
         size="lg"
         centered
-        title="Your Score"
+        title={`Your Score For (${blockData?.exam_name})`}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >

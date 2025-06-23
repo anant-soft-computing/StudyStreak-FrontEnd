@@ -13,6 +13,9 @@ const PTESSTAnswer = () => {
     sub_category: "",
     practice_test_type: "",
   });
+  const [blockData, setBlockData] = useState({
+    exam_name: "",
+  });
   const [assessment, setAssessment] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,6 +64,39 @@ const PTESSTAnswer = () => {
   useEffect(() => {
     fetchExamData();
   }, [examId, fetchExamData]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/exam/block/${selectedAssessment?.block_id}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setBlockData({
+            exam_name: response?.data?.exam_name,
+          });
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [selectedAssessment?.block_id]);
 
   const tableData = (answerText) => {
     const paragraphs = answerText
@@ -175,7 +211,7 @@ const PTESSTAnswer = () => {
         <SmallModal
           size="lg"
           centered
-          title="Your Score"
+          title={`Your Score For ${blockData?.exam_name}`}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >
@@ -241,68 +277,68 @@ const PTESSTAnswer = () => {
             </div>
             <div className="progress-section mb-2">
               <h5>Your Score Details:</h5>
-                <div>
-                  <div className="mb-2">
-                    <div className="d-flex justify-content-between">
-                      <span>Content</span>
-                      <span>
-                        {scores?.content}/{scores?.maxContent}
-                      </span>
-                    </div>
-                    <ProgressBar
-                      variant="success"
-                      now={(scores?.content / scores?.maxContent) * 100}
-                    />
+              <div>
+                <div className="mb-2">
+                  <div className="d-flex justify-content-between">
+                    <span>Content</span>
+                    <span>
+                      {scores?.content}/{scores?.maxContent}
+                    </span>
                   </div>
-                  <div className="mb-2">
-                    <div className="d-flex justify-content-between">
-                      <span>Form</span>
-                      <span>
-                        {scores?.form}/{scores?.maxForm}
-                      </span>
-                    </div>
-                    <ProgressBar
-                      variant="success"
-                      now={(scores?.form / scores?.maxForm) * 100}
-                    />
-                  </div>
-                  <div className="mb-2">
-                    <div className="d-flex justify-content-between">
-                      <span>Grammar</span>
-                      <span>
-                        {scores?.grammar}/{scores?.maxGrammar}
-                      </span>
-                    </div>
-                    <ProgressBar
-                      variant="success"
-                      now={(scores?.grammar / scores?.maxGrammar) * 100}
-                    />
-                  </div>
-                  <div className="mb-2">
-                    <div className="d-flex justify-content-between">
-                      <span>Vocabulary</span>
-                      <span>
-                        {scores?.vocabulary}/{scores?.maxVocabulary}
-                      </span>
-                    </div>
-                    <ProgressBar
-                      variant="success"
-                      now={(scores?.vocabulary / scores?.maxVocabulary) * 100}
-                    />
-                  </div>
-                  <div className="mb-2">
-                    <div className="d-flex justify-content-between">
-                      <span>Spelling</span>
-                      <span>
-                        {scores?.spelling}/{scores?.maxSpelling}
-                      </span>
-                    </div>
-                    <ProgressBar
-                      variant="success"
-                      now={(scores?.spelling / scores?.maxSpelling) * 100}
-                    />
-                  </div>
+                  <ProgressBar
+                    variant="success"
+                    now={(scores?.content / scores?.maxContent) * 100}
+                  />
                 </div>
+                <div className="mb-2">
+                  <div className="d-flex justify-content-between">
+                    <span>Form</span>
+                    <span>
+                      {scores?.form}/{scores?.maxForm}
+                    </span>
+                  </div>
+                  <ProgressBar
+                    variant="success"
+                    now={(scores?.form / scores?.maxForm) * 100}
+                  />
+                </div>
+                <div className="mb-2">
+                  <div className="d-flex justify-content-between">
+                    <span>Grammar</span>
+                    <span>
+                      {scores?.grammar}/{scores?.maxGrammar}
+                    </span>
+                  </div>
+                  <ProgressBar
+                    variant="success"
+                    now={(scores?.grammar / scores?.maxGrammar) * 100}
+                  />
+                </div>
+                <div className="mb-2">
+                  <div className="d-flex justify-content-between">
+                    <span>Vocabulary</span>
+                    <span>
+                      {scores?.vocabulary}/{scores?.maxVocabulary}
+                    </span>
+                  </div>
+                  <ProgressBar
+                    variant="success"
+                    now={(scores?.vocabulary / scores?.maxVocabulary) * 100}
+                  />
+                </div>
+                <div className="mb-2">
+                  <div className="d-flex justify-content-between">
+                    <span>Spelling</span>
+                    <span>
+                      {scores?.spelling}/{scores?.maxSpelling}
+                    </span>
+                  </div>
+                  <ProgressBar
+                    variant="success"
+                    now={(scores?.spelling / scores?.maxSpelling) * 100}
+                  />
+                </div>
+              </div>
             </div>
             <div className="progress-section mb-2">
               <h5>Your Total Score:</h5>

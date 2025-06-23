@@ -13,6 +13,9 @@ const PTEWritingAnswer = () => {
     sub_category: "",
     practice_test_type: "",
   });
+  const [blockData, setBlockData] = useState({
+    exam_name: "",
+  });
   const [assessment, setAssessment] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,6 +64,39 @@ const PTEWritingAnswer = () => {
   useEffect(() => {
     fetchExamData();
   }, [examId, fetchExamData]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    (async () => {
+      try {
+        const response = await ajaxCall(
+          `/exam/block/${selectedAssessment?.block_id}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+        if (response.status === 200) {
+          setBlockData({
+            exam_name: response?.data?.exam_name,
+          });
+        } else {
+          console.log("error");
+        }
+      } catch (error) {
+        console.log("error", error);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [selectedAssessment?.block_id]);
 
   const tableData = (answerText) => {
     const paragraphs = answerText
@@ -208,7 +244,7 @@ const PTEWritingAnswer = () => {
         <SmallModal
           size="lg"
           centered
-          title="Your Score"
+          title={`Your Score For (${blockData?.exam_name})`}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
         >

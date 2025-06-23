@@ -16,6 +16,7 @@ const PTEHIWAnswer = () => {
   const [blockID, setBlockID] = useState(0);
   const [blockData, setBlockData] = useState({
     answer: [],
+    exam_name: "",
     audio_file: "",
     sub_category: "",
     question_other: "",
@@ -95,6 +96,7 @@ const PTEHIWAnswer = () => {
         if (response.status === 200) {
           setBlockData({
             answer: response?.data?.answers,
+            exam_name: response?.data?.exam_name,
             audio_file: response?.data?.audio_file,
             audio_transcript: response?.data?.passage,
             sub_category: response?.data?.sub_category,
@@ -291,7 +293,7 @@ const PTEHIWAnswer = () => {
       <SmallModal
         size="xl"
         centered
-        title="Your Score"
+        title={`Your Score For (${blockData?.exam_name})`}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >

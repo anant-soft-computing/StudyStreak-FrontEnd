@@ -140,7 +140,6 @@ import PTESSTAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listeni
 import PTEWFDAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/SSTWFD/PTEWFDAnswer";
 import PTEListeningAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/PTEListeningAnswer";
 import PTEHIWAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Listening/HIW/PTEHIWAnswer";
-import PTESpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/PTESpeakingAnswer";
 import ASQSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/AnswerShortQuestion/ASQSpeakingAnswer";
 import RASpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/ReadAloud/RASpeakingAnswer";
 import RSSpeakingAnswer from "./components/Dashboard/Student/PTE/LivePTEExam/Speaking/RepeatSentence/RSSpeakingAnswer";
@@ -396,10 +395,6 @@ const App = () => {
             <Route
               path="/PTE/Listening/WFD/:examId"
               Component={withBootstrap(PTEWFDAnswer)}
-            />
-            <Route
-              path="/PTE/Speaking/:examId"
-              Component={withBootstrap(PTESpeakingAnswer)}
             />
             <Route
               path="/PTE/Speaking/ASQ/:examId"

@@ -15,6 +15,7 @@ const PTEReadingAnswer = () => {
   });
   const [blockID, setBlockID] = useState(0);
   const [blockData, setBlockData] = useState({
+    exam_name:"",
     sub_category: "",
     question_other: "",
   });
@@ -101,6 +102,7 @@ const PTEReadingAnswer = () => {
         );
         if (response.status === 200) {
           setBlockData({
+            exam_name: response?.data?.exam_name,
             sub_category: response?.data?.sub_category,
             question_other: response?.data?.question_other,
           });
@@ -464,7 +466,7 @@ const PTEReadingAnswer = () => {
       <SmallModal
         size="xl"
         centered
-        title="Your Score"
+        title={`Your Score For (${blockData?.exam_name})`}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       >

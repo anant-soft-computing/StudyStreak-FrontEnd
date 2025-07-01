@@ -988,10 +988,17 @@ const FullLengthLiveExam = () => {
     temp[next].data[0].answer_text = answer_text;
     setExamAnswer(temp);
 
-    // Count the number of words
-    const words = answer_text.split(" ");
+    const words = answer_text.trim().split(/\s+/).filter(Boolean);
     setNumberOfWord(words.length);
   };
+
+  useEffect(() => {
+    if (examData?.exam_type === "Writing" && examAnswer[next]) {
+      const currentAnswer = examAnswer[next]?.data[0]?.answer_text || "";
+      const words = currentAnswer.trim().split(/\s+/).filter(Boolean);
+      setNumberOfWord(currentAnswer.trim() ? words.length : 0);
+    }
+  }, [next, examData?.exam_type, examAnswer]);
 
   const handleBackSectionClicked = () => {
     setReRenderAudio(false);

@@ -21,6 +21,9 @@ async function generateSitemap() {
       { url: "/about-us", changefreq: "daily", priority: 0.8 },
       { url: "/talk-to-us", changefreq: "daily", priority: 0.8 },
       { url: "/blogs", changefreq: "daily", priority: 0.8 },
+      { url: "/privacy-policy", changefreq: "daily", priority: 0.7 },
+      { url: "/terms-and-conditions", changefreq: "daily", priority: 0.7 },
+      { url: "/refund-policy", changefreq: "daily", priority: 0.7 },
     ];
 
     staticLinks.forEach((link) => sitemap.write(link));

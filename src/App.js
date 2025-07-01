@@ -27,6 +27,9 @@ import Podcast from "./tailwind_components/Podcast/Podcast";
 import PackagePageOne from "./tailwind_components/StaticPackages/PackagePageOne";
 import PackagePageTwo from "./tailwind_components/StaticPackages/PackagePageTwo";
 import PackagePageThree from "./tailwind_components/StaticPackages/PackagePageThree";
+import RefundPolicy from "./tailwind_components/CompanyPolicies/RefundPolicy";
+import PrivacyPolicy from "./tailwind_components/CompanyPolicies/PrivacyPolicy";
+import TermsAndConditions from "./tailwind_components/CompanyPolicies/TermsAndConditions";
 
 //-------------------------> Error Page <----------------------------------
 
@@ -189,6 +192,12 @@ const App = () => {
               path="/mentorship-mode-ielts-academic"
               element={<PackagePageThree />}
             />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route
+              path="/terms-and-conditions"
+              element={<TermsAndConditions />}
+            />
+            <Route path="/refund-policy" element={<RefundPolicy />} />
           </Route>
 
           <Route element={<AdminNavBarRoute isProtected={true} />}>

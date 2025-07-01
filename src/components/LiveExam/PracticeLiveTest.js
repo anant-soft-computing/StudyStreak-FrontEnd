@@ -988,10 +988,17 @@ const PracticeLiveExam = () => {
     temp[next].data[0].answer_text = answer_text;
     setExamAnswer(temp);
 
-    // Count the number of words
-    const words = answer_text.split(" ");
+    const words = answer_text.trim().split(/\s+/).filter(Boolean);
     setNumberOfWord(words.length);
   };
+
+  useEffect(() => {
+    if (examData?.exam_type === "Writing" && examAnswer[next]) {
+      const currentAnswer = examAnswer[next]?.data[0]?.answer_text || "";
+      const words = currentAnswer.trim().split(/\s+/).filter(Boolean);
+      setNumberOfWord(currentAnswer.trim() ? words.length : 0);
+    }
+  }, [next, examData?.exam_type, examAnswer]);
 
   return isLoading ? (
     <div className="mt-4">
@@ -1085,7 +1092,7 @@ const PracticeLiveExam = () => {
                     value={examAnswer[next]?.data[0]?.answer_text || ""}
                     onChange={(e) => handleWritingAnswer(e, next)}
                   />
-                  <span>{numberOfWord} Words</span>
+                  <span>Word Count : {numberOfWord}</span>
                 </div>
               )}
             </div>

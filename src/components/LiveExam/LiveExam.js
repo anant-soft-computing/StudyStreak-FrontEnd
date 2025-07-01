@@ -178,8 +178,11 @@ const LiveExam = () => {
     temp[next].answers[0].answer = answer;
     setExamAnswer(temp);
 
-    // Count the number of words
-    const words = answer.split(" ");
+    // Count the number of valid words
+    const words = answer
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word !== "");
     setNumberOfWord(words.length);
   };
 

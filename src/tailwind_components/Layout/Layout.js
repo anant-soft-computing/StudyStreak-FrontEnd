@@ -1,17 +1,10 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import {
-  User,
-  Menu,
-  X,
-  LogOut,
-  Linkedin,
-  Facebook,
-  Instagram,
-} from "lucide-react";
+import { User, Menu, X, LogOut } from "lucide-react";
 import "../tailwind.css";
 import logo from "../../img/logo/Logo.png";
 import { useCheckAuth } from "../../hooks/useCheckAuth";
+import Footer from "../Footer/Footer";
 
 const hideFooterPaths = ["/login", "/forgot-password"];
 
@@ -25,40 +18,6 @@ const navigationItems = [
   { name: "Contact Us", path: "/talk-to-us" },
   { name: "Become a Partner", path: "/become-a-partner" },
   { name: "Talk to Us", path: "/talk-to-us" },
-];
-
-const quickLinkes = [
-  ["Home", "/"],
-  ["Courses", "/courses"],
-  ["About Us", "/about-us"],
-  ["Contact", "/talk-to-us"],
-  ["Blog", "/blogs"],
-];
-
-const exams = [
-  ["IELTS", "/ielts"],
-  ["GRE", ""],
-  ["GMAT", ""],
-  ["TOEFL", ""],
-  ["PTE", ""],
-];
-
-const icons = [
-  {
-    name: "Facebook",
-    url: "https://www.facebook.com/profile.php?id=61569408541625",
-    icon: <Facebook size={24} />,
-  },
-  {
-    name: "Instagram",
-    url: "https://www.instagram.com/studystreak_coaching/",
-    icon: <Instagram size={24} />,
-  },
-  {
-    name: "Linkedin",
-    url: "https://www.linkedin.com/in/studystreak/",
-    icon: <Linkedin size={24} />,
-  },
 ];
 
 const Layout = () => {
@@ -261,118 +220,7 @@ const Layout = () => {
       <main className="flex-grow">
         <Outlet />
       </main>
-      {!hideFooterPaths.includes(location.pathname) && (
-        <footer className="bg-primary-900 text-white py-16">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-              <div className="space-y-4">
-                <h3
-                  className="text-xl font-heading font-bold"
-                  style={{ color: "white" }}
-                >
-                  About StudyStreak
-                </h3>
-                <p className="text-neutral-400 leading-relaxed">
-                  Empowering students worldwide to achieve their academic goals
-                  through expert-led courses and innovative learning techniques.
-                </p>
-              </div>
-              <div className="space-y-4">
-                <h3
-                  className="text-xl font-heading font-bold"
-                  style={{ color: "white" }}
-                >
-                  Exams We Cover
-                </h3>
-                <ul className="space-y-3">
-                  {exams.map(([exam, path], index) => (
-                    <li key={index} style={{ display: "block" }}>
-                      <Link
-                        to={path}
-                        className="text-neutral-400 hover:text-white transition-colors duration-300"
-                      >
-                        {exam}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-4">
-                <h3
-                  className="text-xl font-heading font-bold"
-                  style={{ color: "white" }}
-                >
-                  Quick Links
-                </h3>
-                <ul className="space-y-3">
-                  {quickLinkes.map(([name, path], index) => (
-                    <li key={index} style={{ display: "block" }}>
-                      <Link
-                        to={path}
-                        className="text-neutral-400 hover:text-white transition-colors duration-300"
-                      >
-                        {name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="space-y-4">
-                <h3
-                  className="text-xl font-heading font-bold"
-                  style={{ color: "white" }}
-                >
-                  Contact Us
-                </h3>
-                <div className="space-y-3 text-neutral-400">
-                  <p className="text-neutral-400">
-                    1st and 2nd Floor, Galav Chambers, Dairy Den Circle,
-                    Sayajigunj, Vadodara, Gujarat, India - 390020
-                  </p>
-                  <p className="text-neutral-400">
-                    Phone:{" "}
-                    <a
-                      className="text-neutral-400 hover:text-white transition-colors duration-300"
-                      href="tel:+918849650924"
-                    >
-                      (+91) 88496 50924
-                    </a>
-                  </p>
-                  <p className="text-neutral-400">
-                    Email:{" "}
-                    <a
-                      className="text-neutral-400 hover:text-white transition-colors duration-300"
-                      href="mailto:reachus@studystreak.io"
-                    >
-                      reachus@studystreak.io
-                    </a>
-                  </p>
-                </div>
-                <div className="flex space-x-4 pt-4">
-                  {icons.map((social, index) => (
-                    <a
-                      key={index}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-neutral-400 hover:text-white transition-colors duration-300 transform hover:-translate-y-1"
-                    >
-                      <div className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center hover:bg-neutral-700 transition-colors duration-300">
-                        {social.icon}
-                      </div>
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div className="border-t border-neutral-800 mt-12 pt-8 text-center text-neutral-400">
-              <p className="text-neutral-400">
-                © 2024 StudyStreak. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </footer>
-      )}
+      {!hideFooterPaths.includes(location.pathname) && <Footer />}
     </div>
   );
 };

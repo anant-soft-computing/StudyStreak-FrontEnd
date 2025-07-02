@@ -12,7 +12,7 @@ const TopBar = () => {
             <div className="topbar__left">
               <ul className="topbar_ul">
                 <li>Call Us: +91 91069 95326 </li>
-                <li>- Mail Us: reachus@studystreak.io</li>
+                <li>- Mail Us: noreply@studystreak.in</li>
               </ul>
             </div>
           </div>

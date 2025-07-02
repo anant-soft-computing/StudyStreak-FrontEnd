@@ -124,7 +124,10 @@ const AboutUsPage = () => {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://www.studystreak.in/about-us" />
+        <meta
+          name="twitter:url"
+          content="https://www.studystreak.in/about-us"
+        />
         <meta name="twitter:title" content="About Us | StudyStreak.in" />
         <meta
           name="twitter:description"
@@ -161,11 +164,15 @@ const AboutUsPage = () => {
                   hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
               >
                 <p className="text-neutral-600 text-lg">
-                  Welcome to StudyStreak.in, your dedicated partner in achieving
-                  your dreams of studying abroad. We are a premier Learning
-                  Management System (LMS) designed to help students prepare for
-                  various international courses and exams, including ielts, pte,
-                  toefl, oet, duolingo, gre, gmat, sat, and more.
+                  Welcome to StudyStreak.in manage and own by{" "}
+                  <strong className="text-primary-600">
+                    ESPI VISA CONSULTANTS PVT LTD
+                  </strong>
+                  , your dedicated partner in achieving your dreams of studying
+                  abroad. We are a premier Learning Management System (LMS)
+                  designed to help students prepare for various international
+                  courses and exams, including ielts, pte, toefl, oet, duolingo,
+                  gre, gmat, sat, and more.
                 </p>
               </div>
               <div
@@ -173,11 +180,15 @@ const AboutUsPage = () => {
                   hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1"
               >
                 <p className="text-neutral-600 text-lg">
-                  At StudyStreak.in, we understand the challenges and
-                  complexities involved in preparing for higher education
-                  abroad. Our mission is to simplify this journey by providing
-                  comprehensive, high-quality, and accessible learning resources
-                  that cater to the diverse needs of our students.
+                  At StudyStreak.in manage and own by{" "}
+                  <strong className="text-primary-600">
+                    ESPI VISA CONSULTANTS PVT LTD
+                  </strong>
+                  , we understand the challenges and complexities involved in
+                  preparing for higher education abroad. Our mission is to
+                  simplify this journey by providing comprehensive,
+                  high-quality, and accessible learning resources that cater to
+                  the diverse needs of our students.
                 </p>
               </div>
             </div>

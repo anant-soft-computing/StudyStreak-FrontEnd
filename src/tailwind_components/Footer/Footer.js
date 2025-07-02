@@ -21,7 +21,7 @@ const exams = [
 const companyPolicies = [
   ["Privacy Policy", "/privacy-policy"],
   ["Terms & Conditions", "/terms-and-conditions"],
-  ["Refund Policy", "/refund-policy"],
+  ["Refund & Cancellation Policy", "/refund-policy"],
 ];
 
 const socialIcons = [
@@ -143,10 +143,10 @@ const Footer = () => {
               <p className="text-neutral-400">
                 Email:{" "}
                 <a
-                  href="mailto:reachus@studystreak.io"
+                  href="mailto:noreply@studystreak.in"
                   className="text-neutral-400 hover:text-white transition-colors duration-300"
                 >
-                  reachus@studystreak.io
+                  noreply@studystreak.in
                 </a>
               </p>
             </address>

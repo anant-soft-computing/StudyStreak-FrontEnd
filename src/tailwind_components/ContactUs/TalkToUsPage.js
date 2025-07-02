@@ -26,7 +26,7 @@ const contactOptions = [
     icon: <Mail className="w-6 h-6" />,
     title: "Email Us",
     description: "Send us an email",
-    info: "reachus@studystreak.io",
+    info: "noreply@studystreak.in",
     action: "email",
   },
   {
@@ -71,7 +71,7 @@ const offices = [
     address:
       "1st and 2nd Floor, Galav Chambers, Dairy Den Circle, Sayajigunj, Vadodara, Gujarat, India - 390020",
     phone: "+91-88496 50924",
-    email: "reachus@studystreak.io",
+    email: "noreply@studystreak.in",
     timing: "Mon-Sat: 9:00 AM - 6:00 PM",
   },
 ];
@@ -353,14 +353,14 @@ const TalkToUsPage = () => {
               </h2>
               <div className="space-y-6">
                 {offices.map(
-                  ({ city, address, phone, email, timing }, index) => (
+                  ({ address, phone, email, timing }, index) => (
                     <div
                       key={index}
                       className="bg-white rounded-xl p-6 shadow-card hover:shadow-card-hover
                     transition-all duration-300"
                     >
                       <h3 className="text-xl font-bold text-neutral-800 mb-4">
-                        {city}
+                        ESPI VISA CONSULTANTS PVT LTD
                       </h3>
                       <div className="space-y-4">
                         <div className="flex items-start gap-3">

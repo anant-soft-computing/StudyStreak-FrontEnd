@@ -50,7 +50,7 @@ const RefundPolicy = () => {
             <CircleDollarSign className="w-12 h-12 text-white" />
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Refund Policy
+            Refund & Cancellation Policy
           </h1>
         </div>
       </header>
@@ -60,14 +60,18 @@ const RefundPolicy = () => {
           <div className="bg-white rounded-2xl shadow-card p-8 md:p-12 mx-auto">
             <Section id="introduction" title="1. Introduction">
               <p>
-                This Refund Policy outlines the terms and conditions under which
-                ESPI Consultants provides refunds for courses and services
-                purchased through StudyStreak.in. We are committed to student
-                satisfaction while maintaining fair business practices.
+                This Refund Policy outlines the terms and conditions under which{" "}
+                <strong>ESPI VISA CONSULTANTS PVT LTD</strong> provides refunds
+                for courses and services purchased through StudyStreak.in. We
+                are committed to student satisfaction while maintaining fair
+                business practices.
               </p>
               <InfoBox>
                 <p className="text-neutral-600">
-                  <strong>Company:</strong> ESPI Consultants
+                  <strong>Company:</strong>{" "}
+                  <span className="text-primary-600">
+                    ESPI VISA CONSULTANTS PVT LTD
+                  </span>
                 </p>
                 <p className="text-neutral-600">
                   <strong>Address:</strong> Sayajigunj, Vadodara, Gujarat, India
@@ -75,10 +79,10 @@ const RefundPolicy = () => {
                 <p className="text-neutral-600">
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:info@studystreak.in"
+                    href="mailto:noreply@studystreak.in"
                     className="text-primary-600 hover:underline"
                   >
-                    info@studystreak.in
+                    noreply@studystreak.in
                   </a>
                 </p>
               </InfoBox>
@@ -238,10 +242,10 @@ const RefundPolicy = () => {
               <p className="text-neutral-600">
                 To request a refund, email us at{" "}
                 <a
-                  href="mailto:refunds@studystreak.in"
+                  href="mailto:noreply@studystreak.in"
                   className="text-primary-600 font-medium hover:underline"
                 >
-                  refunds@studystreak.in
+                  noreply@studystreak.in
                 </a>{" "}
                 with your full name, registered email, course name, transaction
                 ID, a detailed reason for the request, and any supporting
@@ -375,10 +379,10 @@ const RefundPolicy = () => {
                 <p className="text-neutral-600">
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:refunds@studystreak.in"
+                    href="mailto:noreply@studystreak.in"
                     className="text-primary-600 hover:underline"
                   >
-                    refunds@studystreak.in
+                    noreply@studystreak.in
                   </a>
                 </p>
                 <p className="text-neutral-600">

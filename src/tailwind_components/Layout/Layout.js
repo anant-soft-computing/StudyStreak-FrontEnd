@@ -47,9 +47,9 @@ const Layout = () => {
                 <a
                   className="hover:text-white transition-colors duration-300"
                   style={{ color: "white" }}
-                  href="mailto:reachus@studystreak.io"
+                  href="mailto:noreply@studystreak.in"
                 >
-                  📧 reachus@studystreak.io
+                  📧 noreply@studystreak.in
                 </a>
                 <a
                   className="hover:text-white transition-colors duration-300"

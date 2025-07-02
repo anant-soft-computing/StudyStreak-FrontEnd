@@ -56,15 +56,18 @@ const PrivacyPolicy = () => {
           <div className="bg-white rounded-2xl shadow-card p-8 md:p-12 mx-auto">
             <Section id="introduction" title="1. Introduction">
               <p>
-                ESPI Consultants ("we," "our," or "us") operates the
-                StudyStreak.in website and Learning Management System (the
-                "Platform"). This Privacy Policy explains how we collect, use,
-                disclose, and safeguard your information when you visit our
-                website or use our services.
+                <strong>ESPI VISA CONSULTANTS PVT LTD</strong> ("we," "our," or
+                "us") operates the StudyStreak.in website and Learning
+                Management System (the "Platform"). This Privacy Policy explains
+                how we collect, use, disclose, and safeguard your information
+                when you visit our website or use our services.
               </p>
               <InfoBox>
                 <p className="text-neutral-600">
-                  <strong>Company:</strong> ESPI Consultants
+                  <strong>Company:</strong>{" "}
+                  <span className="text-primary-600">
+                    ESPI VISA CONSULTANTS PVT LTD
+                  </span>
                 </p>
                 <p className="text-neutral-600">
                   <strong>Address:</strong> Sayajigunj, Vadodara, Gujarat, India
@@ -72,10 +75,10 @@ const PrivacyPolicy = () => {
                 <p className="text-neutral-600">
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:info@studystreak.in"
+                    href="mailto:noreply@studystreak.in"
                     className="text-primary-600 hover:underline"
                   >
-                    info@studystreak.in
+                    noreply@studystreak.in
                   </a>
                 </p>
                 <p className="text-neutral-600">
@@ -344,8 +347,8 @@ const PrivacyPolicy = () => {
                 Privacy Policy or our data practices, please contact us:
               </p>
               <InfoBox>
-                <p className="text-neutral-600">
-                  <strong>ESPI Consultants</strong>
+                <p className="text-primary-600">
+                  <strong>ESPI VISA CONSULTANTS PVT LTD</strong>
                 </p>
                 <p className="text-neutral-600">
                   <strong>Address:</strong> Sayajigunj, Vadodara, Gujarat, India
@@ -353,10 +356,10 @@ const PrivacyPolicy = () => {
                 <p className="text-neutral-600">
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:privacy@studystreak.in"
+                    href="mailto:noreply@studystreak.in"
                     className="text-primary-600 hover:underline"
                   >
-                    privacy@studystreak.in
+                    noreply@studystreak.in
                   </a>
                 </p>
                 <p className="text-neutral-600">

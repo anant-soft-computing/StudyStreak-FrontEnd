@@ -54,15 +54,18 @@ const TermsAndConditions = () => {
           <div className="bg-white rounded-2xl shadow-card p-8 md:p-12  mx-auto">
             <Section id="introduction" title="1. Introduction and Acceptance">
               <p>
-                Welcome to StudyStreak.in, operated by ESPI Consultants. These
-                Terms and Conditions ("Terms") govern your use of our website,
-                Learning Management System (LMS), and related services. By
-                accessing or using our platform, you agree to be bound by these
-                Terms.
+                Welcome to StudyStreak.in, operated by{" "}
+                <strong>ESPI VISA CONSULTANTS PVT LTD</strong>. These Terms and
+                Conditions ("Terms") govern your use of our website, Learning
+                Management System (LMS), and related services. By accessing or
+                using our platform, you agree to be bound by these Terms.
               </p>
               <InfoBox>
                 <p className="text-neutral-600">
-                  <strong>Company:</strong> ESPI Consultants
+                  <strong>Company:</strong>{" "}
+                  <span className="text-primary-600">
+                    ESPI VISA CONSULTANTS PVT LTD
+                  </span>
                 </p>
                 <p className="text-neutral-600">
                   <strong>Address:</strong> Sayajigunj, Vadodara, Gujarat, India
@@ -70,10 +73,10 @@ const TermsAndConditions = () => {
                 <p className="text-neutral-600">
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:info@studystreak.in"
+                    href="mailto:noreply@studystreak.in"
                     className="text-primary-600 hover:underline"
                   >
-                    info@studystreak.in
+                    noreply@studystreak.in
                   </a>
                 </p>
                 <p className="text-neutral-600">
@@ -462,8 +465,8 @@ const TermsAndConditions = () => {
                 us:
               </p>
               <InfoBox>
-                <p className="text-neutral-600">
-                  <strong>ESPI Consultants</strong>
+                <p className="text-primary-600">
+                  <strong>ESPI VISA CONSULTANTS PVT LTD</strong>
                 </p>
                 <p className="text-neutral-600">
                   <strong>Address:</strong> Sayajigunj, Vadodara, Gujarat, India
@@ -471,10 +474,10 @@ const TermsAndConditions = () => {
                 <p className="text-neutral-600">
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:legal@studystreak.in"
+                    href="mailto:noreply@studystreak.in"
                     className="text-primary-600 hover:underline"
                   >
-                    legal@studystreak.in
+                    noreply@studystreak.in
                   </a>
                 </p>
                 <p className="text-neutral-600">

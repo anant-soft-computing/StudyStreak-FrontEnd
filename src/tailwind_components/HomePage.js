@@ -174,7 +174,7 @@ const HomePage = () => {
                         />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg text-neutral-800 group-hover:text-primary-600 transition-colors duration-300">
+                        <h3 className="font-semibold text-lg text-neutral-800 group-hover:text-primary-600 transition-colors duration-300 mb-0">
                           {feature.title}
                         </h3>
                         <p className="text-small text-neutral-700">

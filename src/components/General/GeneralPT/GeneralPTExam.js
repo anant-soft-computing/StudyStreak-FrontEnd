@@ -799,7 +799,7 @@ const GeneralPTExam = () => {
                 setNext(next - 1);
               }}
             >
-              <span>Back</span>
+              <i class="icofont-arrow-left" />
             </button>
             <button
               className="lv-footer-button"
@@ -815,7 +815,7 @@ const GeneralPTExam = () => {
                 setNext(next + 1);
               }}
             >
-              <span>&#10152;</span>
+              <i class="icofont-arrow-right" />
             </button>
             <button
               className="lv-footer-button"

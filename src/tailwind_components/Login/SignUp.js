@@ -187,7 +187,7 @@ const SignUp = () => {
               placeholder="First name"
             />
             <User
-              className="absolute left-3 top-2.5 text-neutral-400"
+              className="absolute left-3 top-3.5 text-neutral-400"
               size={20}
             />
           </div>
@@ -215,7 +215,7 @@ const SignUp = () => {
               placeholder="Last name"
             />
             <User
-              className="absolute left-3 top-2.5 text-neutral-400"
+              className="absolute left-3 top-3.5 text-neutral-400"
               size={20}
             />
           </div>
@@ -245,7 +245,7 @@ const SignUp = () => {
               placeholder="Email"
             />
             <Mail
-              className="absolute left-3 top-2.5 text-neutral-400"
+              className="absolute left-3 top-3.5 text-neutral-400"
               size={20}
             />
           </div>
@@ -272,7 +272,7 @@ const SignUp = () => {
               placeholder="Username"
             />
             <User
-              className="absolute left-3 top-2.5 text-neutral-400"
+              className="absolute left-3 top-3.5 text-neutral-400"
               size={20}
             />
           </div>
@@ -302,13 +302,13 @@ const SignUp = () => {
               placeholder="Password"
             />
             <Lock
-              className="absolute left-3 top-2.5 text-neutral-400"
+              className="absolute left-3 top-3.5 text-neutral-400"
               size={20}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-2.5 text-neutral-400 
+              className="absolute right-3 top-3.5 text-neutral-400 
                 hover:text-neutral-600 transition-colors duration-300"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -338,13 +338,13 @@ const SignUp = () => {
               placeholder="Confirm password"
             />
             <Lock
-              className="absolute left-3 top-2.5 text-neutral-400"
+              className="absolute left-3 top-3.5 text-neutral-400"
               size={20}
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-2.5 text-neutral-400 
+              className="absolute right-3 top-3.5 text-neutral-400 
                 hover:text-neutral-600 transition-colors duration-300"
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}

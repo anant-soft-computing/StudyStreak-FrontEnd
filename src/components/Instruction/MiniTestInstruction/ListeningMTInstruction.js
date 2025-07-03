@@ -10,7 +10,7 @@ const ListeningMTInstruction = ({ startTest }) => {
         total of 10 questions based on those tracks. Once you click on the
         ‘Start the test’ button, the audio will start automatically. Enter your
         responses/answers in the spaces given with the questions. On the top
-        right corner of this screen, you will find a Play button and a volume
+        left corner of this screen, you will find a Play button and a volume
         slider. Kindly click on Play and adjust the volume as per your comfort
         before starting the test.
       </div>

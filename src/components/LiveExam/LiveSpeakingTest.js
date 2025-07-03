@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import "../../css/LiveExam.css";
 import { useLocation, useNavigate } from "react-router-dom";
+import "../../css/LiveExam.css";
 import { toast } from "react-toastify";
-import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder";
 import { convert } from "html-to-text";
-import SpeakingMTInstruction from "../Instruction/MiniTestInstruction/SpeakingMTInstruction";
+import ajaxCall from "../../helpers/ajaxCall";
 import { formatTime } from "../../utils/timer/formateTime";
+import AudioRecorder from "../Exam-Create/AudioRecorder";
+import SpeakingMTInstruction from "../Instruction/MiniTestInstruction/SpeakingMTInstruction";
 
 const initialSpeakingSingleQuestionState = {
   // 0 for incoming, 1 for instruction on screen, 2 for completed

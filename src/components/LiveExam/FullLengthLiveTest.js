@@ -10,15 +10,15 @@ import { toast } from "react-toastify";
 import { convert } from "html-to-text";
 import { useNavigate, useParams } from "react-router-dom";
 import ajaxCall from "../../helpers/ajaxCall";
-import AudioRecorder from "../Exam-Create/AudioRecorder";
-import readingBandValues from "../../utils/bandValues/ReadingBandValues";
-import listeningBandValues from "../../utils/bandValues/listeningBandValues";
+import Loading from "../UI/Loading";
 import SmallModal from "../UI/Modal";
+import AudioRecorder from "../Exam-Create/AudioRecorder";
 import ReadingInstruction from "../Instruction/ReadingInstruction";
 import WritingInstruction from "../Instruction/WritingInstruction";
-import ListeningInstruction from "../Instruction/ListeningInstruction";
 import SpeakingInstruction from "../Instruction/SpeakingInstruction";
-import Loading from "../UI/Loading";
+import ListeningInstruction from "../Instruction/ListeningInstruction";
+import readingBandValues from "../../utils/bandValues/ReadingBandValues";
+import listeningBandValues from "../../utils/bandValues/listeningBandValues";
 const Cheerio = require("cheerio");
 
 const intialInstructionState = {
@@ -1512,7 +1512,7 @@ const FullLengthLiveExam = () => {
               }}
               onClick={handleBackSectionClicked}
             >
-              <span>Back</span>
+              <i class="icofont-arrow-left"/>
             </button>
             <button
               className="lv-footer-button"
@@ -1521,7 +1521,7 @@ const FullLengthLiveExam = () => {
               }}
               onClick={handleNextSectionClicked}
             >
-              <span>&#10152;</span>
+              <i class="icofont-arrow-right"/>
             </button>
             <button
               className="lv-footer-button"

@@ -238,7 +238,7 @@ const Login = () => {
             placeholder="Enter your username"
           />
           <Mail
-            className="absolute left-3 top-2.5 text-neutral-400"
+            className="absolute left-3 top-3.5 text-neutral-400"
             size={20}
           />
         </div>
@@ -258,13 +258,13 @@ const Login = () => {
             placeholder="Enter your password"
           />
           <Lock
-            className="absolute left-3 top-2.5 text-neutral-400"
+            className="absolute left-3 top-3.5 text-neutral-400"
             size={20}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-2.5 text-neutral-400 
+            className="absolute right-3 top-3.5 text-neutral-400 
               hover:text-neutral-600 transition-colors duration-300"
           >
             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}

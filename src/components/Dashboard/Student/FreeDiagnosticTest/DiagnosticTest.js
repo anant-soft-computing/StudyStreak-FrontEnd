@@ -1430,7 +1430,7 @@ const DiagnosticTest = () => {
               }}
               onClick={handleBackSectionClicked}
             >
-              <span>Back</span>
+              <i class="icofont-arrow-left" />
             </button>
             <button
               className="lv-footer-button"
@@ -1439,7 +1439,7 @@ const DiagnosticTest = () => {
               }}
               onClick={handleNextSectionClicked}
             >
-              <span>&#10152;</span>
+              <i class="icofont-arrow-right" />
             </button>
             <button
               className="lv-footer-button"

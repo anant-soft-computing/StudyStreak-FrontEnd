@@ -232,18 +232,55 @@ const FullLengthLiveExam = () => {
         if (response.status === 200) {
           const filteredData = response?.data;
           let pappers = [];
-          sortPapers(filteredData.listening_set.Listening).forEach((item) => {
-            pappers.push({
+          let listeningSerialNumber = 1;
+          let readingSerialNumber = 1;
+
+          const listeningPapers = sortPapers(
+            filteredData.listening_set.Listening
+          ).map((item) => {
+            const numberOfQuestions = item.question_structure.reduce(
+              (sum, qs) => sum + qs.numberOfQuestions,
+              0
+            );
+
+            const paperWithSerial = {
               ...item,
               paperId: filteredData.listening_set.id,
-            });
+              serialNumberStart: listeningSerialNumber,
+              serialNumberEnd: listeningSerialNumber + numberOfQuestions - 1,
+            };
+
+            listeningSerialNumber += numberOfQuestions;
+            return paperWithSerial;
           });
-          sortPapers(filteredData.reading_set.Reading).forEach((item) => {
-            pappers.push({ ...item, paperId: filteredData.reading_set.id });
+
+          pappers.push(...listeningPapers);
+
+          const readingPapers = sortPapers(
+            filteredData.reading_set.Reading
+          ).map((item) => {
+            const numberOfQuestions = item.question_structure.reduce(
+              (sum, qs) => sum + qs.numberOfQuestions,
+              0
+            );
+
+            const paperWithSerial = {
+              ...item,
+              paperId: filteredData.reading_set.id,
+              serialNumberStart: readingSerialNumber,
+              serialNumberEnd: readingSerialNumber + numberOfQuestions - 1,
+            };
+
+            readingSerialNumber += numberOfQuestions;
+            return paperWithSerial;
           });
+
+          pappers.push(...readingPapers);
+
           sortPapers(filteredData.writing_set.Writing).forEach((item) => {
             pappers.push({ ...item, paperId: filteredData.writing_set.id });
           });
+
           sortPapers(
             filteredData.speaking_set.Speaking.map((item) => ({
               ...item,
@@ -258,6 +295,7 @@ const FullLengthLiveExam = () => {
           ).forEach((item) => {
             pappers.push({ ...item, paperId: filteredData.speaking_set.id });
           });
+
           filteredData.papers = pappers;
           setFullPaper(pappers);
           setFullLengthId(filteredData.id);
@@ -650,15 +688,15 @@ const FullLengthLiveExam = () => {
 
       paginationsStrucutre = paginationsStrucutre.flat();
 
-      // Display questions for the first page initially
-      questionPassage += `<div className="mainContainer">${$.html()}</div>`;
+      let currentQuestionNumber = paperData.serialNumberStart;
+      const endQuestionNumber = paperData.serialNumberEnd;
 
-      // Replace ♫ with unique symbols
-      let serialNumber = tempQuestions;
-      questionPassage = questionPassage.replaceAll(
-        "++",
-        () => `${serialNumber++}`
-      );
+      questionPassage = $.html().replace(/\+{2}/g, () => {
+        if (currentQuestionNumber > endQuestionNumber) {
+          return currentQuestionNumber;
+        }
+        return currentQuestionNumber++;
+      });
 
       const tempPaginationStructure = paginationsStrucutre.map((item) => {
         return {
@@ -1512,7 +1550,7 @@ const FullLengthLiveExam = () => {
               }}
               onClick={handleBackSectionClicked}
             >
-              <i class="icofont-arrow-left"/>
+              <i class="icofont-arrow-left" />
             </button>
             <button
               className="lv-footer-button"
@@ -1521,7 +1559,7 @@ const FullLengthLiveExam = () => {
               }}
               onClick={handleNextSectionClicked}
             >
-              <i class="icofont-arrow-right"/>
+              <i class="icofont-arrow-right" />
             </button>
             <button
               className="lv-footer-button"

@@ -77,12 +77,22 @@ const LevelOfStudent = () => {
 
         const processAnswerSet = (set, key) =>
           set?.student_answers?.[key]?.reduce(
-            (acc, curr) => acc.concat(curr.answers),
+            (acc, curr) =>
+              acc.concat(
+                curr.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              ),
             []
           ) || [];
         const processCorrectSet = (set, key) =>
           set?.correct_answers?.[key]?.reduce(
-            (acc, curr) => acc.concat(curr.answers),
+            (acc, curr) =>
+              acc.concat(
+                curr.answers.sort(
+                  (a, b) => a.question_number - b.question_number
+                )
+              ),
             []
           ) || [];
 

@@ -192,7 +192,17 @@ const PTESSTAnswer = () => {
                                     View
                                   </button>
                                 ) : (
-                                  "-"
+                                  <button
+                                    className="take-test"
+                                    disabled
+                                    style={{
+                                      color: "white",
+                                      borderColor: "red",
+                                      backgroundColor: "red",
+                                    }}
+                                  >
+                                    Not Given
+                                  </button>
                                 )}
                               </td>
                             </tr>

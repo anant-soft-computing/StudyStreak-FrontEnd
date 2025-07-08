@@ -328,11 +328,23 @@ const LivePTESSTWFDExam = () => {
       await Promise.all(
         answersArray.map(async (item) => {
           let gptResponse = "";
-          let scoreValue = null;
+          let scoreValue = 0;
+
+          // Skip if the answer is empty
+          if (!item.data[0].answer_text) {
+            newAnswersArray.push({
+              exam_id: item.exam_id,
+              band: 0,
+              AI_Assessment: "",
+              data: item.data,
+            });
+            return;
+          }
 
           const transcript =
             examData?.passage && examData?.passage?.replace(/<img[^>]*>/g, "");
 
+          // Prompts are configured to request plain-text formatting
           const gptBody =
             examData?.sub_category === "WFD"
               ? {
@@ -349,33 +361,29 @@ const LivePTESSTWFDExam = () => {
                     },
                     {
                       role: "user",
-                      content: `Answer: ${item.data[0].answer_text}
-                          Question Type: Write From Dictation`,
+                      content: `Answer: ${item.data[0].answer_text}\nQuestion Type: Write From Dictation`,
                     },
                     {
                       role: "user",
                       content: `Evaluate based on: Write From Dictation:
-  
-                          **Correct Words (0-N):**
-                          - +1 point for each correctly transcribed word (including punctuation and capitalization).
-                          - 0 points for incorrect or missing words.
-  
-                          **Partial Credit:**
-                          - If more than 50% of the words are correct, partial credit may be awarded.
-  
-                          Provide:
-                          1. Detailed explanations with strengths, *weaknesses, and **improvements*
-                          2. Number of correct words
-                          3. Overall Score (0-N) based on the number of correct words
-  
-                          #Evaluation Format:
-  
-                          Correct Words: [Explanation]  
-                          Score: X/N
-  
-                          #Overall Score: X/N
-  
-                          Respond only with the evaluation up to the #Overall Score. Do not include any additional text or explanation beyond this point.`,
+
+                      Correct Words (0-N):
+                      - +1 point for each correctly transcribed word (including punctuation and capitalization).
+                      - 0 points for incorrect or missing words.
+
+                      Provide:
+                      1. Detailed explanations with strengths, weaknesses, and improvements.
+                      2. Number of correct words
+                      3. Overall Score (0-N) based on the number of correct words
+
+                      #Evaluation Format:
+
+                      Correct Words: [Explanation]
+                      Score: X/N
+
+                      Overall Score: X/N
+
+                      Respond only with the evaluation up to the Overall Score. Do not include any additional text or explanation beyond this point.`,
                     },
                   ],
                 }
@@ -393,65 +401,65 @@ const LivePTESSTWFDExam = () => {
                     },
                     {
                       role: "user",
-                      content: `Answer: ${item.data[0].answer_text}
-                            Question Type: Summarize Spoken Text`,
+                      content: `Answer: ${item.data[0].answer_text}\nQuestion Type: Summarize Spoken Text`,
                     },
                     {
                       role: "user",
                       content: `Evaluate based on: Summarize Spoken Text
-              
-                            Content (0-2):
-                            - 2: Includes all relevant key points and ideas from the spoken text.
-                            - 1: Includes only some key points or ideas but misses others.
-                            - 0: Fails to include any relevant key points or is off-topic.
-              
-                            Form (0-2):
-                            - 2: The response is one sentence, within the 50–70 word limit.
-                            - 1: The response is over or under the word limit or includes multiple sentences.
-                            - 0: The response does not meet the task requirements.
-              
-                            Grammar (0-2):
-                            - 2: The response has no grammatical errors and demonstrates complex sentence structures.
-                            - 1: The response has minor grammatical errors that do not affect meaning.
-                            - 0: Major grammatical errors that interfere with understanding.
-              
-                            Vocabulary (0-2):
-                            - 2: Demonstrates appropriate word choice and variety, with correct collocations.
-                            - 1: Limited vocabulary or minor errors in word choice.
-                            - 0: Frequent vocabulary errors that interfere with meaning.
-              
-                            Spelling (0-2):
-                            - 2: No spelling errors.
-                            - 1: One or two spelling errors.
-                            - 0: Frequent spelling errors.
-              
-                            Provide:
-                            1. **Detailed explanations** with strengths, weaknesses, and improvements.
-                            2. **Individual criterion scores**.
-                            3. **Total Score** using the exact format below:
-  
-                            **Total Score: X/10**
-  
-                            - The calculation must **always** be formatted exactly as above.
-                            - Do **not** simplify the fraction (e.g., display 8/10).
-                            #Evaluation Format:
-              
-                            Content: [Explanation]  
-                            Score: X/2
-              
-                            Form: [Explanation]  
-                            Score: X/2
-              
-                            Grammar: [Explanation]  
-                            Score: X/2
-              
-                            Vocabulary: [Explanation]  
-                            Score: X/2
-              
-                            Spelling: [Explanation]  
-                            Score: X/2
-              
-                            **Total Score: X/10**`,
+      
+                        Content (0-2):
+                        - 2: Includes all relevant key points and ideas from the spoken text.
+                        - 1: Includes only some key points or ideas but misses others.
+                        - 0: Fails to include any relevant key points or is off-topic.
+      
+                        Form (0-2):
+                        - 2: The response is one sentence, within the 50–70 word limit.
+                        - 1: The response is over or under the word limit or includes multiple sentences.
+                        - 0: The response does not meet the task requirements.
+      
+                        Grammar (0-2):
+                        - 2: The response has no grammatical errors and demonstrates complex sentence structures.
+                        - 1: The response has minor grammatical errors that do not affect meaning.
+                        - 0: Major grammatical errors that interfere with understanding.
+      
+                        Vocabulary (0-2):
+                        - 2: Demonstrates appropriate word choice and variety, with correct collocations.
+                        - 1: Limited vocabulary or minor errors in word choice.
+                        - 0: Frequent vocabulary errors that interfere with meaning.
+      
+                        Spelling (0-2):
+                        - 2: No spelling errors.
+                        - 1: One or two spelling errors.
+                        - 0: Frequent spelling errors.
+      
+                        Provide:
+                        1. Detailed explanations with strengths, weaknesses, and improvements.
+                        2. Individual criterion scores.
+                        3. Total Score using the exact format below:
+
+                        Total Score: X/10
+
+                        - The calculation must always be formatted exactly as above.
+                        - Do not simplify the fraction (e.g., display 8/10).
+
+                        #Evaluation Format:
+      
+                        Content: [Explanation]
+                        Score: X/2
+      
+                        Form: [Explanation]
+                        Score: X/2
+      
+                        Grammar: [Explanation]
+                        Score: X/2
+      
+                        Vocabulary: [Explanation]
+                        Score: X/2
+      
+                        Spelling: [Explanation]
+                        Score: X/2
+      
+                        Total Score: X/10`,
                     },
                   ],
                 };
@@ -473,13 +481,18 @@ const LivePTESSTWFDExam = () => {
           if (data?.choices?.[0]?.message?.content) {
             gptResponse = data.choices[0].message.content;
 
-            const scoreMatch =
+            // ⭐ Refined score extraction logic
+            const scoreRegex =
               examData?.sub_category === "WFD"
-                ? gptResponse.match(/Overall Score:\s*(\d+\/\d+)/)
-                : gptResponse.match(/Total Score:\s*(\d+)\/(10)/);
-            scoreValue = scoreMatch ? scoreMatch[1].split("/")[0] : null;
+                ? /Overall Score:\s*(\d+)\/\d+/
+                : /Total Score:\s*(\d+)\/\d+/;
 
-            // Convert GPT response to HTML format
+            const scoreMatch = gptResponse.match(scoreRegex);
+
+            // Directly assign the captured score (group 1)
+            scoreValue = scoreMatch ? scoreMatch[1] : null;
+
+            // Convert AI response to HTML format
             const formattedResponse = gptResponse
               .split("\n")
               .map((line) => `<p>${line}</p>`)

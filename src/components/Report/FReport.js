@@ -61,11 +61,21 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
             reading_set?.correct_answers?.Reading
           ) {
             rstudentAnswers = reading_set.student_answers.Reading.reduce(
-              (acc, curr) => acc.concat(curr.answers),
+              (acc, curr) =>
+                acc.concat(
+                  curr.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
+                ),
               []
             );
             rcorrectAnswer = reading_set.correct_answers.Reading.reduce(
-              (acc, curr) => acc.concat(curr.answers),
+              (acc, curr) =>
+                acc.concat(
+                  curr.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
+                ),
               []
             );
           }
@@ -76,11 +86,21 @@ const FReport = ({ fltID, setCounts, setExamName }) => {
             listening_set?.correct_answers?.Listening
           ) {
             lstudentAnswers = listening_set.student_answers.Listening.reduce(
-              (acc, curr) => acc.concat(curr.answers),
+              (acc, curr) =>
+                acc.concat(
+                  curr.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
+                ),
               []
             );
             lcorrectAnswer = listening_set.correct_answers.Listening.reduce(
-              (acc, curr) => acc.concat(curr.answers),
+              (acc, curr) =>
+                acc.concat(
+                  curr.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
+                ),
               []
             );
           }

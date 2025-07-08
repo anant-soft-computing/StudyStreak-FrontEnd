@@ -209,11 +209,15 @@ const ScoreCard = ({ course }) => {
               const { studentAnswers, correctAnswers } =
                 extractAnswers(reading_set);
               if (studentAnswers.Reading && correctAnswers.Reading) {
-                rStudentAnswers = studentAnswers.Reading.flatMap(
-                  (item) => item.answers
+                rStudentAnswers = studentAnswers.Reading.flatMap((item) =>
+                  item.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
                 );
-                rCorrectAnswers = correctAnswers.Reading.flatMap(
-                  (item) => item.answers
+                rCorrectAnswers = correctAnswers.Reading.flatMap((item) =>
+                  item.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
                 );
               }
             }
@@ -223,11 +227,15 @@ const ScoreCard = ({ course }) => {
               const { studentAnswers, correctAnswers } =
                 extractAnswers(listening_set);
               if (studentAnswers.Listening && correctAnswers.Listening) {
-                lStudentAnswers = studentAnswers.Listening.flatMap(
-                  (item) => item.answers
+                lStudentAnswers = studentAnswers.Listening.flatMap((item) =>
+                  item.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
                 );
-                lCorrectAnswers = correctAnswers.Listening.flatMap(
-                  (item) => item.answers
+                lCorrectAnswers = correctAnswers.Listening.flatMap((item) =>
+                  item.answers.sort(
+                    (a, b) => a.question_number - b.question_number
+                  )
                 );
               }
             }

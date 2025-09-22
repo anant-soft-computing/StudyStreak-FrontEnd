@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import Loading from "../../../UI/Loading";
@@ -44,10 +44,44 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [studentCourses, setStudentCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState({});
+  const [courseList, setCourseList] = useState([]);
+  const [expiryDate, setExpiryDate] = useState([]);
+  const [daysRemaining, setDaysRemaining] = useState(0);
 
   const category = selectedCourse?.course_category;
   const batchIds = JSON?.parse(localStorage.getItem("BatchIds"));
   const userData = JSON?.parse(localStorage.getItem("loginInfo"));
+  const courseIds = JSON.parse(localStorage.getItem("courses"));
+
+  const courses = courseList.filter((course) =>
+    courseIds.some(
+      (data) => data === course?.id && course?.Category?.name === category
+    )
+  );
+
+  const coursesWithExpiry = courses.map((course) => {
+    const expiry = expiryDate.find((exp) => exp.course_id === course.id);
+    return {
+      ...course,
+      expiryDate: expiry ? expiry.expiry_date : null,
+    };
+  });
+
+  // Function to calculate and set days remaining
+  const calculateDaysRemaining = useCallback(() => {
+    const validExpiryDates = coursesWithExpiry
+      .map((item) => item?.expiryDate)
+      .filter(Boolean);
+
+    if (validExpiryDates.length > 0) {
+      const minDaysRemaining = Math.min(
+        ...validExpiryDates.map((date) => getDaysRemaining(date))
+      );
+      setDaysRemaining(minDaysRemaining);
+    } else {
+      setDaysRemaining(0);
+    }
+  }, [coursesWithExpiry]);
 
   const cardList =
     category === "IELTS"
@@ -352,25 +386,98 @@ const Dashboard = () => {
     fetchStudentCourses();
   }, [category]);
 
+  const fetchCourses = useCallback(async () => {
+    try {
+      const response = await ajaxCall(
+        "/courselistview/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+
+      if (response.status === 200) {
+        setCourseList(response.data);
+      }
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchExpiryDates = useCallback(async () => {
+    try {
+      const response = await ajaxCall(
+        "/student/course-enrollment/",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${
+              JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+            }`,
+          },
+          method: "GET",
+        },
+        8000
+      );
+
+      if (response.status === 200) {
+        setExpiryDate(response.data);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  }, []);
+
+  useEffect(() => {
+    setIsLoading(true);
+    fetchCourses();
+  }, [fetchCourses]);
+
+  const getDaysRemaining = (endDate) => {
+    const end = moment(endDate);
+    const today = moment();
+    return end.diff(today, "days");
+  };
+
+  useEffect(() => {
+    fetchExpiryDates();
+  }, [fetchExpiryDates]);
+
+  useEffect(() => {
+    calculateDaysRemaining();
+  }, [calculateDaysRemaining]);
+
   if (isLoading) {
     return <Loading />;
   }
+
+  console.log(studentCourses);
 
   return isLoading ? (
     <Loading />
   ) : (
     <>
-      {count?.count !== 0 ? (
-        <div className="body__wrapper">
-          <div className="main_wrapper overflow-hidden">
-            <div className="dashboardarea sp_bottom_100">
-              <div className="dashboard">
-                <div className="container-fluid full__width__padding">
-                  <div className="row">
+      {count?.count !== 0 && daysRemaining > 0 ? (
+        <div className='body__wrapper'>
+          <div className='main_wrapper overflow-hidden'>
+            <div className='dashboardarea sp_bottom_100'>
+              <div className='dashboard'>
+                <div className='container-fluid full__width__padding'>
+                  <div className='row'>
                     <DSSidebar />
-                    <div className="col-xl-8 col-lg-8">
-                      <div className="blog__details__content__wraper">
-                        <div className="course__details__heading">
+                    <div className='col-xl-8 col-lg-8'>
+                      <div className='blog__details__content__wraper'>
+                        <div className='course__details__heading'>
                           <h3>Welcome, {userData?.username}</h3>
                         </div>
                         {(category === "IELTS" || category === "PTE") &&
@@ -390,29 +497,29 @@ const Dashboard = () => {
                             </h5>
                           )}
                         {(category === "IELTS" || category === "GENERAL") && (
-                          <div className="online__course__wrap mt-0">
-                            <div className="row instructor__slider__active row__custom__class">
+                          <div className='online__course__wrap mt-0'>
+                            <div className='row instructor__slider__active row__custom__class'>
                               <ScoreCard course={category} />
                             </div>
                           </div>
                         )}
-                        <div className="online__course__wrap mt-0">
-                          <div className="row instructor__slider__active row__custom__class">
-                            <div className="col-xl-6 column__custom__class">
-                              <div className="gridarea__wraper card-background">
-                                <div className="gridarea__content">
-                                  <div className="gridarea__content p-2 m-2">
+                        <div className='online__course__wrap mt-0'>
+                          <div className='row instructor__slider__active row__custom__class'>
+                            <div className='col-xl-6 column__custom__class'>
+                              <div className='gridarea__wraper card-background'>
+                                <div className='gridarea__content'>
+                                  <div className='gridarea__content p-2 m-2'>
                                     <Link
-                                      to="/diagnosticTest"
-                                      className="text-decoration-none"
+                                      to='/diagnosticTest'
+                                      className='text-decoration-none'
                                     >
-                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                      <div className='gridarea__heading d-flex justify-content-center align-items-center gap-4'>
                                         <NotepadTextDashed
                                           width={35}
                                           height={35}
-                                          color="black"
+                                          color='black'
                                         />
-                                        <h2 className="mt-2">
+                                        <h2 className='mt-2'>
                                           {category === "IELTS" ||
                                           category === "PTE"
                                             ? "Diagnostic Test"
@@ -428,22 +535,22 @@ const Dashboard = () => {
                               lesson.map((item, index) => (
                                 <div
                                   key={index}
-                                  className="col-xl-6 column__custom__class"
+                                  className='col-xl-6 column__custom__class'
                                 >
-                                  <div className="gridarea__wraper card-background">
-                                    <div className="gridarea__content">
-                                      <div className="gridarea__content p-2 m-2">
+                                  <div className='gridarea__wraper card-background'>
+                                    <div className='gridarea__content'>
+                                      <div className='gridarea__content p-2 m-2'>
                                         <Link
                                           to={`/courseLessons/${item.course_id}`}
-                                          className="text-decoration-none"
+                                          className='text-decoration-none'
                                         >
-                                          <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                          <div className='gridarea__heading d-flex justify-content-center align-items-center gap-4'>
                                             <Presentation
                                               width={35}
                                               height={35}
-                                              color="black"
+                                              color='black'
                                             />
-                                            <h2 className="mt-2">
+                                            <h2 className='mt-2'>
                                               Start Lesson
                                             </h2>
                                           </div>
@@ -456,22 +563,22 @@ const Dashboard = () => {
                           </div>
                         </div>
                         {category === "PTE" && (
-                          <div className="col-xl-12 column__custom__class">
-                            <div className="gridarea__wraper card-background">
-                              <div className="gridarea__content">
-                                <div className="gridarea__content p-2 m-2">
+                          <div className='col-xl-12 column__custom__class'>
+                            <div className='gridarea__wraper card-background'>
+                              <div className='gridarea__content'>
+                                <div className='gridarea__content p-2 m-2'>
                                   <Link
-                                    to="/PTE/Dashboard"
-                                    className="text-decoration-none"
+                                    to='/PTE/Dashboard'
+                                    className='text-decoration-none'
                                   >
-                                    <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                    <div className='gridarea__heading d-flex justify-content-center align-items-center gap-4'>
                                       <BookMarked
                                         width={35}
                                         height={35}
-                                        color="black"
+                                        color='black'
                                       />
 
-                                      <h2 className="mt-2">Reports</h2>
+                                      <h2 className='mt-2'>Reports</h2>
                                     </div>
                                   </Link>
                                 </div>
@@ -479,16 +586,16 @@ const Dashboard = () => {
                             </div>
                           </div>
                         )}
-                        <div className="row">
+                        <div className='row'>
                           {cardList.map(
                             ({ name, icon, link, state }, index) => (
                               <div
                                 key={index}
-                                className="col-xl-4 column__custom__class"
+                                className='col-xl-4 column__custom__class'
                               >
-                                <div className="gridarea__wraper text-center card-background">
+                                <div className='gridarea__wraper text-center card-background'>
                                   <div
-                                    className="gridarea__content p-3 m-2"
+                                    className='gridarea__content p-3 m-2'
                                     style={{
                                       cursor: link ? "pointer" : "default",
                                     }}
@@ -496,10 +603,10 @@ const Dashboard = () => {
                                     <Link
                                       to={link}
                                       state={state}
-                                      className="text-decoration-none"
+                                      className='text-decoration-none'
                                       style={{ color: "black" }}
                                     >
-                                      <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                      <div className='gridarea__heading d-flex justify-content-center align-items-center gap-4'>
                                         {icon}
                                         <h3>{name}</h3>
                                       </div>
@@ -509,21 +616,21 @@ const Dashboard = () => {
                               </div>
                             )
                           )}
-                          <div className="col-xl-12 column__custom__class">
-                            <div className="gridarea__wraper card-background">
-                              <div className="gridarea__content">
-                                <div className="gridarea__content p-2 m-2">
+                          <div className='col-xl-12 column__custom__class'>
+                            <div className='gridarea__wraper card-background'>
+                              <div className='gridarea__content'>
+                                <div className='gridarea__content p-2 m-2'>
                                   <Link
-                                    to="/recordedClasses"
-                                    className="text-decoration-none"
+                                    to='/recordedClasses'
+                                    className='text-decoration-none'
                                   >
-                                    <div className="gridarea__heading d-flex justify-content-center align-items-center gap-4">
+                                    <div className='gridarea__heading d-flex justify-content-center align-items-center gap-4'>
                                       <CassetteTape
                                         width={35}
                                         height={35}
-                                        color="black"
+                                        color='black'
                                       />
-                                      <h2 className="mt-2">Recorded Classes</h2>
+                                      <h2 className='mt-2'>Recorded Classes</h2>
                                     </div>
                                   </Link>
                                 </div>
@@ -533,13 +640,21 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-xl-4 col-lg-4">
-                      <div className="dashboard__form__wraper mb-3">
-                        <div className="dashboard__form__input">
-                          <h5>Course</h5>
+                    <div className='col-xl-4 col-lg-4'>
+                      <div className='dashboard__form__wraper mb-3'>
+                        <div className='dashboard__form__input'>
+                          <div className='dashboard__form__input d-flex align-items-center justify-content-between mb-2'>
+                            <h5 className='mb-0'>Course</h5>
+                            <div className='d-flex align-items-center gap-2 justify-content-center'>
+                              <i className='icofont-clock-time text-danger'></i>
+                              <h5 className='text-danger mb-0'>
+                                {daysRemaining || 0} days Left
+                              </h5>
+                            </div>
+                          </div>
                           <select
-                            className="form-select"
-                            aria-label="Select a course"
+                            className='form-select'
+                            aria-label='Select a course'
                             value={JSON.stringify(selectedCourse)}
                             onChange={(e) =>
                               handleCourse(JSON.parse(e.target.value))
@@ -571,7 +686,12 @@ const Dashboard = () => {
           </div>
         </div>
       ) : (
-        <UnPaidDashboard />
+        <UnPaidDashboard
+          daysRemaining={daysRemaining}
+          selectedCourse={selectedCourse}
+          studentCourses={studentCourses}
+          handleCourse={handleCourse}
+        />
       )}
       <TidioChat />
     </>

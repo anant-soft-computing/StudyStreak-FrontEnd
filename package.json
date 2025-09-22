@@ -2,6 +2,7 @@
   "name": "lms",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://cdn-gj9eufg9judx.vultrcdn.com/frontend",
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^40.2.0",
     "@ckeditor/ckeditor5-react": "^6.2.0",

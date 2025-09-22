@@ -107,70 +107,71 @@ const MyCourse = () => {
   };
 
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="dashboardarea sp_bottom_100">
-          <div className="dashboard">
-            <div className="container-fluid full__width__padding">
-              <div className="row">
+    <div className='body__wrapper'>
+      <div className='main_wrapper overflow-hidden'>
+        <div className='dashboardarea sp_bottom_100'>
+          <div className='dashboard'>
+            <div className='container-fluid full__width__padding'>
+              <div className='row'>
                 <DSSidebar />
-                <div className="col-xl-12 col-lg-12 col-md-12">
-                  <div className="dashboard__content__wraper common-background-color-across-app">
-                    <div className="dashboard__section__title flex-wrap gap-2">
+                <div className='col-xl-12 col-lg-12 col-md-12'>
+                  <div className='dashboard__content__wraper common-background-color-across-app'>
+                    <div className='dashboard__section__title flex-wrap gap-2'>
                       <h4>Courses</h4>
-                      <h5 className="text-danger">
+                      <h5 className='text-danger'>
                         {coursesWithExpiry?.length > 0 &&
                           coursesWithExpiry.map((item, index) => {
                             const daysRemaining = getDaysRemaining(
-                              item.expiryDate
+                              item?.expiryDate
                             );
                             return (
                               <span key={index}>
-                                {item.Course_Title} : {daysRemaining} days Left
+                                {item.Course_Title} : {daysRemaining || 0} days
+                                Left
                               </span>
                             );
                           })}
                       </h5>
                     </div>
-                    <div className="row">
+                    <div className='row'>
                       {isLoading ? (
                         <Loading />
                       ) : courses?.length > 0 ? (
                         courses?.map((item, index) => (
                           <div
-                            className="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12"
+                            className='col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12'
                             key={index}
                           >
-                            <div className="gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling">
-                              <div className="gridarea__img">
+                            <div className='gridarea__wraper gridarea__wraper__2 global-neomorphism-card-styling'>
+                              <div className='gridarea__img'>
                                 <img
                                   src={item?.Course_Thumbnail}
                                   alt={item?.Course_Title}
-                                  className="course__image"
+                                  className='course__image'
                                 />
                               </div>
-                              <div className="gridarea__content d-flex flex-column justify-content-between">
-                                <div className="gridarea__heading">
+                              <div className='gridarea__content d-flex flex-column justify-content-between'>
+                                <div className='gridarea__heading'>
                                   <h3>{item?.Course_Title}</h3>
                                 </div>
-                                <div className="gridarea__list">
-                                  <ul className="ps-0">
+                                <div className='gridarea__list'>
+                                  <ul className='ps-0'>
                                     <li>
-                                      <i className="icofont-book-alt"></i>{" "}
+                                      <i className='icofont-book-alt'></i>{" "}
                                       {item?.total_lesson} Lessons
                                     </li>
                                     <li>
-                                      <i className="icofont-clock-time"></i>{" "}
+                                      <i className='icofont-clock-time'></i>{" "}
                                       {formatDuration(item?.total_duration)}
                                     </li>
                                   </ul>
                                 </div>
-                                <div className="d-flex gap-2 align-items-center justify-content-center">
+                                <div className='d-flex gap-2 align-items-center justify-content-center'>
                                   <button
                                     onClick={() =>
                                       navigate(`/courseLessons/${item?.id}`)
                                     }
-                                    className="default__button"
+                                    className='default__button'
                                   >
                                     Start Lessons
                                   </button>
@@ -178,7 +179,7 @@ const MyCourse = () => {
                                     onClick={() =>
                                       navigate(`/courseMaterials/${item?.id}`)
                                     }
-                                    className="default__button"
+                                    className='default__button'
                                   >
                                     View Materials
                                   </button>
@@ -188,7 +189,7 @@ const MyCourse = () => {
                           </div>
                         ))
                       ) : (
-                        <BuyCourse message="No Courses Available, Please Buy a Course !!" />
+                        <BuyCourse message='No Courses Available, Please Buy a Course !!' />
                       )}
                     </div>
                   </div>

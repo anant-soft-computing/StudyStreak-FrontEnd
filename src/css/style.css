@@ -16955,7 +16955,7 @@ div.gridarea__wraper {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: radial-gradient(35% 35%, #0000 96%, #0003 97% 99%, #0000) var(--c);
+  background: radial-gradient(closest-side at 35% 35%, #0000 96%, #0003 97% 99%, #0000) var(--c);
   clip-path: polygon(
     100% 50%,
     89.23% 57.8%,

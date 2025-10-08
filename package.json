@@ -53,10 +53,10 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && node generate-sitemap.js",
+    "start": "GENERATE_SOURCEMAP=false react-app-rewired start",
+    "build": "GENERATE_SOURCEMAP=false react-app-rewired build && node generate-sitemap.js",
     "generate-sitemap": "node generate-sitemap.js",
-    "test": "react-scripts test",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

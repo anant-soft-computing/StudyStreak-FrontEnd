@@ -31,7 +31,7 @@ const getChatGPTResponse = async () => {
 */
 
 // NEW CODE (SECURE):
-import { assessSpeakingResponse } from "../../../../../../helpers/openAIHelper";
+import { secureOpenAIChatCompletion, rateLimiter } from "../../../../../../helpers/secureOpenAIService";
 
 // Replace the getChatGPTResponse function with:
 const getChatGPTResponse = async () => {

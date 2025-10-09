@@ -11,6 +11,14 @@ import SmallModal from "../../UI/Modal";
 import SkipIcon from "../../UI/SkipIcon";
 import CheckIcon from "../../UI/CheckIcon";
 import CancelIcon from "../../UI/CancelIcon";
+// Enhanced UI Components
+import SkeletonLoader from "../../UI/SkeletonLoader";
+import ErrorBoundary from "../../UI/ErrorBoundary";
+import ErrorDisplay from "../../UI/ErrorDisplay";
+import ExportFeatures from "../../UI/ExportFeatures";
+import ComparisonView from "../../UI/ComparisonView";
+import "../../UI/ComparisonModal.css";
+import { Eye, BarChart3, X } from "lucide-react";
 
 const PracticeTestAnswer = () => {
   const { examId, examType } = useParams();
@@ -29,6 +37,13 @@ const PracticeTestAnswer = () => {
     incorrectCount: 0,
   });
 
+  // Enhanced state management
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const [showComparisonView, setShowComparisonView] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
   const handleViewExam = () => {
     setIsModalOpen(true);
   };
@@ -37,9 +52,169 @@ const PracticeTestAnswer = () => {
     setIsModalOpen(false);
   };
 
+  // Enhanced handler functions
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1);
+  };
+
+  const handleShowComparison = () => {
+    setShowComparisonView(true);
+  };
+
+  const handleCloseComparison = () => {
+    setShowComparisonView(false);
+  };
+
+  const handleQuestionChange = (index) => {
+    setCurrentQuestionIndex(index);
+  };
+
+  // Handle ESC key to close modal and manage body scroll
+  useEffect(() => {
+    const handleEscKey = (event) => {
+      if (event.key === 'Escape' && showComparisonView) {
+        setShowComparisonView(false);
+      }
+    };
+
+    if (showComparisonView) {
+      document.addEventListener('keydown', handleEscKey);
+      document.body.style.overflow = 'hidden';
+      document.body.classList.add('modal-open');
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+      document.body.style.overflow = '';
+      document.body.classList.remove('modal-open');
+    };
+  }, [showComparisonView]);
+
+  // Helper function to extract individual questions from exam paper HTML
+  const extractQuestionsFromHTML = (htmlContent) => {
+    if (!htmlContent) return [];
+    
+    try {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = htmlContent;
+      
+      const questions = [];
+      const numberedQuestions = tempDiv.querySelectorAll('p, div, li');
+      numberedQuestions.forEach((element, index) => {
+        const text = element.textContent?.trim();
+        if (text && /^\d+\.\s/.test(text)) {
+          questions.push({
+            number: parseInt(text.match(/^(\d+)\./)[1]),
+            text: text,
+            html: element.outerHTML
+          });
+        }
+      });
+      
+      if (questions.length === 0) {
+        const allText = tempDiv.textContent || '';
+        const possibleQuestions = allText.split(/(?=\d+\.\s)|(?=Question\s+\d+)/i);
+        possibleQuestions.forEach((q, index) => {
+          if (q.trim()) {
+            questions.push({
+              number: index + 1,
+              text: q.trim(),
+              html: `<p>${q.trim()}</p>`
+            });
+          }
+        });
+      }
+      
+      return questions;
+    } catch (error) {
+      console.warn('Error extracting questions from HTML:', error);
+      return [];
+    }
+  };
+
+  // Prepare comparison data for all blocks
+  const getComparisonQuestions = () => {
+    const allQuestions = [];
+    
+    blocksData.forEach((block, blockIndex) => {
+      block.correctAnswers.forEach((correctAnswer, questionIndex) => {
+        const studentAnswer = block.studentAnswers[questionIndex];
+        const studentAnswerText = studentAnswer?.answer_text?.trim() || 'No answer provided';
+        const correctAnswerText = correctAnswer?.answer_text?.trim() || 'No correct answer available';
+        
+        // Determine if answer is correct based on the same logic as the table
+        let isCorrect = false;
+        if (studentAnswerText && studentAnswerText !== 'No answer provided') {
+          if (correctAnswerText?.includes(" OR ")) {
+            const correctOptions = correctAnswerText
+              .split(" OR ")
+              .map((option) => option.trim().toLowerCase());
+            isCorrect = correctOptions.includes(studentAnswerText.toLowerCase());
+          } else if (correctAnswerText?.includes(" AND ")) {
+            const correctOptions = correctAnswerText
+              .split(" AND ")
+              .map((option) => option.trim().toLowerCase());
+            isCorrect = correctOptions.every((option) =>
+              studentAnswerText.toLowerCase().includes(option)
+            );
+          } else {
+            isCorrect = studentAnswerText.toLowerCase() === correctAnswerText.toLowerCase();
+          }
+        }
+
+        allQuestions.push({
+          questionNumber: allQuestions.length + 1,
+          blockName: block.blockName,
+          blockIndex: blockIndex,
+          question: `${block.blockName} - Question ${questionIndex + 1}`,
+          userAnswer: studentAnswerText,
+          correctAnswer: correctAnswerText,
+          isCorrect: isCorrect,
+          explanation: correctAnswer?.explanation || null,
+          questionId: correctAnswer?.id,
+          hasMultipleCorrectAnswers: correctAnswerText?.includes(" OR ") || correctAnswerText?.includes(" AND "),
+          answerType: correctAnswerText?.includes(" OR ") ? "OR" : 
+                     correctAnswerText?.includes(" AND ") ? "AND" : "EXACT"
+        });
+      });
+    });
+    
+    return allQuestions;
+  };
+
+  // Prepare export data
+  const getExportData = () => {
+    const allQuestions = getComparisonQuestions();
+    
+    return {
+      stats: {
+        totalQuestions: allQuestions.length,
+        correctAnswers: overallStats.correctCount,
+        incorrectAnswers: overallStats.incorrectCount,
+        skippedAnswers: overallStats.skipCount,
+        accuracy: overallStats.correctCount > 0 ? 
+          ((overallStats.correctCount / allQuestions.length) * 100).toFixed(2) : 0,
+        totalScore: overallStats.correctCount,
+        maxScore: allQuestions.length,
+        band: band,
+        timeTaken: 'N/A',
+      },
+      questions: allQuestions,
+      blocks: blocksData.map(block => ({
+        name: block.blockName,
+        correct: block.stats.correct,
+        total: block.stats.total,
+        percentage: block.stats.percentage
+      }))
+    };
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError(null);
+        
         const response = await ajaxCall(
           `/practice-answers/${examId}/`,
           {
@@ -153,14 +328,23 @@ const PracticeTestAnswer = () => {
           } else if (examType === "Listening") {
             setBand(listeningBandValues[totalCorrect]);
           }
+        } else {
+          throw new Error(`Failed to load practice test data: ${response.statusText || 'Unknown error'}`);
         }
       } catch (error) {
-        console.log("error", error);
+        console.error("Practice test data fetch error:", error);
+        setError({
+          type: 'api',
+          message: error.message || 'Failed to load practice test results',
+          details: error
+        });
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [examType, examId]);
+  }, [examType, examId, retryCount]);
 
   const fetchExamPaper = async (blockId) => {
     try {
@@ -191,15 +375,83 @@ const PracticeTestAnswer = () => {
     handleViewExam();
   };
 
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="body__wrapper">
+        <div className="main_wrapper overflow-hidden">
+          <div className="blogarea__2 sp_top_100 sp_bottom_100">
+            <div className="container">
+              <div className="row">
+                <div className="col-xl-8 col-lg-8">
+                  <SkeletonLoader type="assessment" />
+                </div>
+                <div className="col-xl-4 col-lg-4">
+                  <SkeletonLoader type="stats" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="body__wrapper">
+        <div className="main_wrapper overflow-hidden">
+          <div className="blogarea__2 sp_top_100 sp_bottom_100">
+            <div className="container">
+              <div className="row">
+                <div className="col-12">
+                  <ErrorDisplay
+                    error={error}
+                    type={error.type || 'general'}
+                    onRetry={handleRetry}
+                    title="Failed to Load Practice Test Results"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="body__wrapper">
-      <div className="main_wrapper overflow-hidden">
-        <div className="blogarea__2 sp_top_100 sp_bottom_100">
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-8 col-lg-8 AnswerCard">
-                <div className="blog__details__content__wraper">
-                  <h4 className="sidebar__title">Solution For: {examName}</h4>
+    <ErrorBoundary>
+      <div className="body__wrapper practice-test-results-container">
+        <div className="main_wrapper overflow-hidden">
+          <div className="blogarea__2 sp_top_100 sp_bottom_100">
+            <div className="container">
+              <div className="row">
+                <div className="col-xl-8 col-lg-8 AnswerCard">
+                  <div className="blog__details__content__wraper">
+                    <div className="d-flex justify-content-between align-items-start mb-3">
+                      <h4 className="sidebar__title">Solution For: {examName}</h4>
+                      <div className="d-flex gap-2">
+                        <button
+                          onClick={handleShowComparison}
+                          className="btn btn-outline-primary btn-sm d-flex align-items-center gap-2"
+                        >
+                          <Eye size={16} />
+                          Detailed Comparison
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Export Features - Added for practice tests */}
+                    <div className="mb-4">
+                      <ExportFeatures
+                        data={getExportData()}
+                        examTitle={examName}
+                        studentName="Student"
+                        examDate={new Date().toLocaleDateString()}
+                      />
+                    </div>
                   {examType === "Writing" ? (
                     <>
                       <h4 className="sidebar__title">Band: {band}</h4>
@@ -490,7 +742,46 @@ const PracticeTestAnswer = () => {
           )}
         </div>
       </SmallModal>
-    </div>
+
+      {/* Comparison View Modal */}
+      {showComparisonView && (
+        <div 
+          className="comparison-modal-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              handleCloseComparison();
+            }
+          }}
+        >
+          <div className="comparison-modal-dialog">
+            <div className="comparison-modal-content">
+              <div className="comparison-modal-header">
+                <h5 className="modal-title mb-0">Detailed Answer Comparison - {examName}</h5>
+                <button
+                  type="button"
+                  className="comparison-modal-close"
+                  onClick={handleCloseComparison}
+                  aria-label="Close Modal"
+                  title="Close (ESC)"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="comparison-modal-body">
+                <ComparisonView
+                  questions={getComparisonQuestions()}
+                  currentQuestionIndex={currentQuestionIndex}
+                  onQuestionChange={handleQuestionChange}
+                  examTitle={examName}
+                  onViewExamPaper={handleViewExam}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      </div>
+    </ErrorBoundary>
   );
 };
 

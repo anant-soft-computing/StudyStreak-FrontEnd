@@ -7,6 +7,11 @@ import ajaxCall from "./ajaxCall";
 
 const openAICall = async (messages, model = "gpt-3.5-turbo", temperature = 0.7, maxTokens = null) => {
   try {
+    const authData = JSON.parse(localStorage.getItem("loginInfo"));
+    if (!authData?.accessToken) {
+      throw new Error("Authentication required");
+    }
+
     const requestBody = {
       model,
       messages,
@@ -15,22 +20,24 @@ const openAICall = async (messages, model = "gpt-3.5-turbo", temperature = 0.7, 
     };
 
     // Call your secure backend proxy instead of OpenAI directly
-    const response = await ajaxCall("/openai/chat-completion/", {
+    const response = await ajaxCall("/ai/chat-completion/", {
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${authData.accessToken}`,
       },
       method: "POST",
       body: JSON.stringify(requestBody),
     });
 
-    if (response.isError) {
-      throw new Error(response.data?.error || "OpenAI API call failed");
+    if (response.status !== 200) {
+      throw new Error(response.data?.error || "AI assessment service unavailable");
     }
 
     return response.data;
   } catch (error) {
     console.error("OpenAI API Error:", error);
-    throw error;
+    // Fallback to show user-friendly message
+    throw new Error("AI assessment service is temporarily unavailable. Please try again later.");
   }
 };
 

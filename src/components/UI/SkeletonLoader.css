@@ -1,0 +1,137 @@
+/* Skeleton Loader Styles */
+.skeleton-loader {
+  padding: 20px;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+.skeleton-line {
+  height: 20px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.skeleton-title {
+  height: 28px;
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+.skeleton-medium {
+  width: 75%;
+}
+
+.skeleton-short {
+  width: 40%;
+}
+
+.skeleton-shorter {
+  width: 25%;
+}
+
+/* Skeleton Table */
+.skeleton-table {
+  width: 100%;
+  border-spacing: 0;
+}
+
+.skeleton-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.skeleton-header .skeleton-cell {
+  height: 30px;
+  background: linear-gradient(90deg, #e0e0e0 25%, #d0d0d0 50%, #e0e0e0 75%);
+}
+
+.skeleton-cell {
+  flex: 1;
+  height: 24px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Skeleton Stats */
+.skeleton-stats {
+  margin: 20px 0;
+}
+
+.skeleton-stat-card {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  min-width: 150px;
+}
+
+.skeleton-stat-card .skeleton-line {
+  margin-bottom: 8px;
+}
+
+/* Skeleton Assessment */
+.skeleton-assessment {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  margin: 20px 0;
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: relative;
+}
+
+.loading-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Responsive Skeleton */
+@media (max-width: 768px) {
+  .skeleton-row {
+    flex-direction: column;
+  }
+  
+  .skeleton-cell {
+    width: 100%;
+  }
+  
+  .skeleton-stat-card {
+    min-width: 100%;
+  }
+}

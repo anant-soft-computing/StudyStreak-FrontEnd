@@ -159,10 +159,18 @@ const PracticeTest = () => {
     setActiveTab(tab);
   };
 
-  const givenTestOfType = (type) =>
-    testData[type].filter((item) =>
-      givenTest?.some((index) => index === item.id)
-    );
+  const givenTestOfType = (type) => {
+    return testData[type].filter((item) => {
+      return givenTest?.some((test) => {
+        // Try multiple matching strategies for better compatibility
+        return test?.id === item.id || 
+               test === item.id ||
+               test?.practice_test_id === item.id ||
+               test?.paper_id === item.id ||
+               (test?.IELTS && test.IELTS.id === item.id);
+      });
+    });
+  };
 
   return (
     <div className="body__wrapper">

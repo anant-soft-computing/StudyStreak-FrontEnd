@@ -1,24 +1,35 @@
 export const speakingApiService = async (formData) => {
   try {
-    const res = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+    const authData = JSON.parse(localStorage.getItem("loginInfo"));
+    if (!authData?.accessToken) {
+      throw new Error("Authentication required");
+    }
+
+    // Call secure backend proxy for audio transcription
+    const res = await fetch("https://studystreak.in/api/ai/audio-transcription/", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+        Authorization: `Bearer ${authData.accessToken}`,
       },
       body: formData,
     });
 
-    if (!res.ok) throw new Error("error");
+    if (!res.ok) throw new Error("Transcription service unavailable");
 
     return res.json();
   } catch (error) {
-    console.log("error", error);
-    throw error; // re-throw the error for the caller to handle
+    console.log("Transcription error:", error);
+    throw new Error("Audio transcription service is temporarily unavailable");
   }
 };
 
 export const writingApiService = async (questions, answer) => {
   try {
+    const authData = JSON.parse(localStorage.getItem("loginInfo"));
+    if (!authData?.accessToken) {
+      throw new Error("Authentication required");
+    }
+
     const gptBody = {
       model: "gpt-3.5-turbo",
       messages: [
@@ -42,17 +53,24 @@ export const writingApiService = async (questions, answer) => {
         },
       ],
     };
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+
+    // Call secure backend proxy instead of OpenAI directly
+    const res = await fetch("https://studystreak.in/api/ai/chat-completion/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
+        Authorization: `Bearer ${authData.accessToken}`,
       },
       body: JSON.stringify(gptBody),
     });
+
+    if (!res.ok) {
+      throw new Error("Writing assessment service unavailable");
+    }
+
     return await res.json();
   } catch (error) {
-    console.log("error", error);
-    throw error; // re-throw the error for the caller to handle
+    console.log("Writing assessment error:", error);
+    throw new Error("Writing assessment service is temporarily unavailable");
   }
 };

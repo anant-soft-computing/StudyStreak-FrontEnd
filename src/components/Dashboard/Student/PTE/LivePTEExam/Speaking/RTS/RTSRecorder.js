@@ -257,23 +257,10 @@ const RTSRecorder = ({
         };
         const getChatGPTResponse = async () => {
           try {
-            const gptResponse = await fetch(
-              "https://api.openai.com/v1/chat/completions",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-                },
-                body: JSON.stringify(gptBody),
-              }
-            );
-
-            if (!gptResponse.ok) {
-              throw new Error("error");
-            }
-
-            const data = await gptResponse.json();
+            // Use the enhanced temporary secure service
+            const { temporarySecureOpenAI } = await import("../../../../../../../helpers/temporarySecureOpenAI");
+            
+            const data = await temporarySecureOpenAI(gptBody);
             const assessment = data.choices[0].message.content;
 
             const scoreMatch = assessment.match(/#Total Score:\s*(\d+)/);

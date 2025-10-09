@@ -36,7 +36,16 @@ const PracticeTestTable = ({
   const testButton = (params) => {
     const { id: examId, exam_type, IELTS } = params.data;
     const paperId = IELTS?.id;
-    const isGiven = givenTest?.some((test) => test?.id === examId);
+    
+    // Try multiple matching strategies for better compatibility
+    const isGiven = givenTest?.some((test) => {
+      return test?.id === examId || 
+             test?.id === paperId || 
+             test === examId || 
+             test === paperId ||
+             test?.practice_test_id === examId ||
+             test?.paper_id === paperId;
+    });
 
     return isGiven ? (
       <button

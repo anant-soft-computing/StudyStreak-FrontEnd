@@ -5,8 +5,10 @@ export const speakingApiService = async (formData) => {
       throw new Error("Authentication required");
     }
 
-    // Call secure backend proxy for audio transcription
-    const res = await fetch("https://studystreak.in/api/ai/audio-transcription/", {
+    // Call Firebase Cloud Functions for secure audio transcription
+    const FIREBASE_FUNCTIONS_URL = 'https://us-central1-gazra-mitra.cloudfunctions.net';
+    
+    const res = await fetch(`${FIREBASE_FUNCTIONS_URL}/openaiAudioTranscription`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${authData.accessToken}`,
@@ -54,8 +56,10 @@ export const writingApiService = async (questions, answer) => {
       ],
     };
 
-    // Call secure backend proxy instead of OpenAI directly
-    const res = await fetch("https://studystreak.in/api/ai/chat-completion/", {
+    // Call Firebase Cloud Functions for secure OpenAI proxy
+    const FIREBASE_FUNCTIONS_URL = 'https://us-central1-gazra-mitra.cloudfunctions.net';
+    
+    const res = await fetch(`${FIREBASE_FUNCTIONS_URL}/openaiChatCompletion`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

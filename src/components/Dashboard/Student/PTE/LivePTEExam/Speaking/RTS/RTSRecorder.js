@@ -5,6 +5,7 @@ import SpeechRecognition, {
 import { ProgressBar, Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
+import { secureOpenAIChatCompletion } from "../../../../../../../helpers/secureOpenAIService";
 
 const RTSRecorder = ({
   setRecordedFilePath,
@@ -257,10 +258,7 @@ const RTSRecorder = ({
         };
         const getChatGPTResponse = async () => {
           try {
-            // Use the enhanced temporary secure service
-            const { temporarySecureOpenAI } = await import("../../../../../../../helpers/temporarySecureOpenAI");
-            
-            const data = await temporarySecureOpenAI(gptBody);
+            const data = await secureOpenAIChatCompletion(gptBody);
             const assessment = data.choices[0].message.content;
 
             const scoreMatch = assessment.match(/#Total Score:\s*(\d+)/);

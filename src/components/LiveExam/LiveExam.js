@@ -253,18 +253,10 @@ const LiveExam = () => {
       };
 
       try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-          },
-          body: JSON.stringify(gptBody),
-        });
-
-        if (!res.ok) throw new Error("error");
-
-        const data = await res.json();
+        // Import the secure service
+        const { secureOpenAIChatCompletion } = await import('../../helpers/secureOpenAIService');
+        
+        const data = await secureOpenAIChatCompletion(gptBody);
         gptResponse = data?.choices?.[0]?.message?.content || "";
 
         // Extract band value using regex

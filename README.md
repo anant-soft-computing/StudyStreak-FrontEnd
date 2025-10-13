@@ -1,4 +1,14 @@
-# Getting Started with Create React App
+# StudyStreak Frontend - Security Migration Complete ✅
+
+## Overview
+This repository contains the StudyStreak frontend application with enhanced security measures for OpenAI API integration.
+
+## Security Features Implemented
+- 🔐 **API Key Protection**: All OpenAI API keys removed from frontend
+- 🛡️ **Firebase Functions Proxy**: Secure backend proxy for all AI requests  
+- ⚡ **Rate Limiting**: 20 requests/hour, 100/day per authenticated user
+- 🔑 **JWT Authentication**: Required for all AI feature access
+- 📊 **Request Monitoring**: All AI requests logged and tracked
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

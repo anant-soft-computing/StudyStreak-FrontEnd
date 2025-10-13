@@ -8,6 +8,7 @@ import React, {
 import "../../../../css/LiveExam.css";
 import { toast } from "react-toastify";
 import { convert } from "html-to-text";
+import { secureOpenAIChatCompletion } from "../../../../helpers/secureOpenAIService";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../../../UI/Loading";
 import SmallModal from "../../../UI/Modal";
@@ -820,18 +821,7 @@ const DiagnosticTest = () => {
             };
 
             if (item.data[0].answer_text !== "") {
-              const res = await fetch(
-                "https://api.openai.com/v1/chat/completions",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-                  },
-                  body: JSON.stringify(gptBody),
-                }
-              );
-              const data = await res.json();
+              const data = await secureOpenAIChatCompletion(gptBody);
               if (data?.choices?.[0]?.message?.content) {
                 gptResponse = data.choices[0].message.content;
 

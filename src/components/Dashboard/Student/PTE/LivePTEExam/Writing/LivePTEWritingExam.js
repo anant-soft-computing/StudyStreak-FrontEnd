@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Loading from "../../../../../UI/Loading";
 import SmallModal from "../../../../../UI/Modal";
 import ajaxCall from "../../../../../../helpers/ajaxCall";
+import { secureOpenAIChatCompletion } from "../../../../../../helpers/secureOpenAIService";
 
 const instructions = {
   SWT: "Read the passage below and summarize it using one sentence. Type your response in the box at the bottom of your screen. You have 10 minutes to finish your task. Your response will be judged on the quality of your writing and how well your response presents the key points in the passage. Your response must be between 5 and 75 words.",
@@ -382,19 +383,7 @@ const LivePTEWritingExam = () => {
             ],
           };
 
-          const res = await fetch(
-            "https://api.openai.com/v1/chat/completions",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-              },
-              body: JSON.stringify(gptBody),
-            }
-          );
-
-          const data = await res.json();
+          const data = await secureOpenAIChatCompletion(gptBody);
 
           if (data?.choices?.[0]?.message?.content) {
             gptResponse = data.choices[0].message.content;

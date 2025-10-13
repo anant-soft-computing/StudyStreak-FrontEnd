@@ -5,6 +5,7 @@ import SpeechRecognition, {
 import { ProgressBar, Spinner } from "react-bootstrap";
 import ajaxCall from "../../../../../../../helpers/ajaxCall";
 import DisplayAudio from "../../../../../../UI/DisplayAudio";
+import { secureOpenAIChatCompletion } from "../../../../../../../helpers/secureOpenAIService";
 
 const DIRecorder = ({
   setRecordedFilePath,
@@ -246,23 +247,7 @@ const DIRecorder = ({
         };
         const getChatGPTResponse = async () => {
           try {
-            const gptResponse = await fetch(
-              "https://api.openai.com/v1/chat/completions",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-                },
-                body: JSON.stringify(gptBody),
-              }
-            );
-
-            if (!gptResponse.ok) {
-              throw new Error("error");
-            }
-
-            const data = await gptResponse.json();
+            const data = await secureOpenAIChatCompletion(gptBody);
             const assessment = data.choices[0].message.content;
 
             const scoreMatch = assessment.match(/#Total Score:\s*(\d+)/);

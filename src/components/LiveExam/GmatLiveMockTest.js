@@ -154,20 +154,17 @@ const GmatLiveMockTest = () => {
       let gptResponse;
       let bandValue;
       try {
-        const res = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-          },
-          body: JSON.stringify(gptBody),
-        });
-        const data = await res.json();
+        // Import the secure service at the top of file if not already imported
+        const { secureOpenAIChatCompletion } = await import('../../helpers/secureOpenAIService');
+        
+        const data = await secureOpenAIChatCompletion(gptBody);
         bandValue = data?.choices?.[0]?.message?.content
           ?.split("#Band:")[1]
           .split(" ")[1];
         gptResponse = data?.choices?.[0]?.message?.content;
-      } catch (error) {}
+      } catch (error) {
+        console.error("AI assessment error:", error);
+      }
 
       const data = JSON.stringify({
         student_exam: answersArray,

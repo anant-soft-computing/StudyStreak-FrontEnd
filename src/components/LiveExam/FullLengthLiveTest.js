@@ -13,6 +13,7 @@ import ajaxCall from "../../helpers/ajaxCall";
 import Loading from "../UI/Loading";
 import SmallModal from "../UI/Modal";
 import AudioRecorder from "../Exam-Create/AudioRecorder";
+import { secureOpenAIChatCompletion } from "../../helpers/secureOpenAIService";
 import ReadingInstruction from "../Instruction/ReadingInstruction";
 import WritingInstruction from "../Instruction/WritingInstruction";
 import SpeakingInstruction from "../Instruction/SpeakingInstruction";
@@ -892,18 +893,7 @@ const FullLengthLiveExam = () => {
             };
 
             if (item.data[0].answer_text !== "") {
-              const res = await fetch(
-                "https://api.openai.com/v1/chat/completions",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.REACT_APP_OPEN_AI_SECRET}`,
-                  },
-                  body: JSON.stringify(gptBody),
-                }
-              );
-              const data = await res.json();
+              const data = await secureOpenAIChatCompletion(gptBody);
               if (data?.choices?.[0]?.message?.content) {
                 gptResponse = data.choices[0].message.content;
 

@@ -3,11 +3,11 @@ node_modules
 
 # Environment variables (NEVER commit these)
 .env
-.env.local
+.env.local  
 .env.development.local
 .env.test.local
 .env.production.local
-.env.example
+# Note: .env.example is allowed as it contains no sensitive data
 
 # Build outputs
 build
@@ -45,5 +45,42 @@ coverage
 ehthumbs.db
 Thumbs.db
 
-# Security documentation
+# Firebase configuration
+.firebaserc
+firebase.json
+firebase-functions/.env
+firebase-functions/node_modules/
+
+# Security and API documentation (contains sensitive info)
+*SECURITY*.md
+*AUTHENTICATION*.md  
+*DEPLOYMENT*.md
+*FIREBASE*.md
+*BACKEND*.md
+QUICK_BACKEND_PROXY_OPTIONS.md
+IMMEDIATE_DEPLOYMENT_GUIDE.md
+COMPLETE_DEPLOYMENT_GUIDE.md
+FINAL_SECURITY_SCAN_REPORT.md
+docs/OPENAI_SECURITY_IMPLEMENTATION.md
 docs/OPENAI_SECURITY_SOLUTION.md
+
+# Temporary and helper files with API calls
+src/helpers/temporarySecureOpenAI.js
+src/helpers/superSecureOpenAI.js
+src/helpers/universalSecureOpenAI.js
+src/helpers/quickRateLimiter.js
+src/helpers/openAIMonitoring.js
+src/examples/SecureOpenAIExample.js
+
+# Debug and test files
+debug-token.js
+test-firebase-function.sh
+security-test.html
+deploy-firebase.sh
+
+# Scripts containing sensitive patterns
+scripts/emergency-security-fix.sh
+scripts/check-remaining-exposures.sh
+scripts/quick-security-fix.sh
+scripts/migrate-openai-security.sh
+scripts/secure-openai-calls.sh

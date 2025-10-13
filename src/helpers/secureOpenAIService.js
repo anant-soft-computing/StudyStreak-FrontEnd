@@ -17,40 +17,33 @@ export const secureOpenAIChatCompletion = async (gptBody) => {
       throw new Error("Authentication required for AI assessment");
     }
 
-    // Add user tracking for security and rate limiting
+    // Create secure request body without metadata (not supported by OpenAI unless store is enabled)
     const secureRequestBody = {
       ...gptBody,
-      user: authData.userId || "anonymous", // OpenAI supports user tracking
-      metadata: {
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        source: "StudyStreak-Frontend"
-      }
+      // Note: user tracking will be added by Firebase Functions
     };
 
-    const response = await ajaxCall("/ai/chat-completion/", {
+    // Use Firebase Cloud Functions for secure OpenAI proxy
+    const FIREBASE_FUNCTIONS_URL = 'https://us-central1-gazra-mitra.cloudfunctions.net';
+    
+    const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/openaiChatCompletion`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${authData.accessToken}`,
       },
-      method: "POST",
       body: JSON.stringify(secureRequestBody),
     });
 
-    if (response.status !== 200) {
-      throw new Error(response.data?.error || "AI assessment service unavailable");
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "AI assessment service unavailable");
     }
 
-    // Return in the same format as OpenAI API
-    return {
-      choices: [
-        {
-          message: {
-            content: response.data.assessment || response.data.choices?.[0]?.message?.content
-          }
-        }
-      ]
-    };
+    const data = await response.json();
+
+    // Return data from Firebase Function (already in correct OpenAI format)
+    return data;
 
   } catch (error) {
     console.error("Secure OpenAI Error:", error);
@@ -77,7 +70,10 @@ export const secureAudioTranscription = async (formData) => {
       throw new Error("Authentication required for audio transcription");
     }
 
-    const response = await fetch("https://studystreak.in/api/ai/audio-transcription/", {
+    // Use Firebase Cloud Functions for secure audio transcription
+    const FIREBASE_FUNCTIONS_URL = 'https://us-central1-gazra-mitra.cloudfunctions.net';
+    
+    const response = await fetch(`${FIREBASE_FUNCTIONS_URL}/openaiAudioTranscription`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${authData.accessToken}`,

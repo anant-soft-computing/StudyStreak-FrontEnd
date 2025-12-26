@@ -58,7 +58,7 @@ const AnswerTable = ({ correctAnswer, studentAnswer, tableTitle }) => {
                     );
                   } else {
                     icon =
-                      studentAnswerText === correctAnswerText ? (
+                      studentAnswerText.toLowerCase() === correctAnswerText.toLowerCase() ? (
                         <CheckIcon />
                       ) : (
                         <CancelIcon />

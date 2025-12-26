@@ -3,8 +3,10 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import ajaxCall from "../../../../../helpers/ajaxCall";
 
-const UpcomingRegularLiveClass = () => {
+const UpCommingRegularLiveClass = () => {
   const [upcomingClass, setUpcomingClass] = useState({});
+  const studentId = JSON.parse(localStorage.getItem("StudentID"));
+  const courseId = JSON.parse(localStorage.getItem("course"))?.id;
   const now = moment();
 
   const hasUpcomingClass =
@@ -14,7 +16,7 @@ const UpcomingRegularLiveClass = () => {
     const fetchUpcomingClassData = async () => {
       try {
         const response = await ajaxCall(
-          `/student/upcoming-class/?class_type=regular`,
+          "/liveclass/studentonly/?liveClassType=Regular Class",
           {
             headers: {
               Accept: "application/json",
@@ -28,10 +30,24 @@ const UpcomingRegularLiveClass = () => {
           8000
         );
         if (response?.status === 200) {
-          setUpcomingClass(response?.data);
+          console.log("Regular Classes Data:", response?.data);
+          // Find the next upcoming class (where start_time is in the future - hasn't started yet)
+          const upcomingClasses = response?.data
+            ?.filter((cls) => moment(cls.start_time).isAfter(now))
+            .sort((a, b) => moment(a.start_time).diff(moment(b.start_time)));
+          
+          console.log("Upcoming Regular Classes:", upcomingClasses);
+          
+          if (upcomingClasses && upcomingClasses.length > 0) {
+            const nextClass = upcomingClasses[0];
+            console.log("Next Upcoming Regular Class:", nextClass);
+            setUpcomingClass(nextClass);
+          }
+        } else {
+          console.log("Regular Classes - Non-200 response:", response);
         }
       } catch (error) {
-        console.log("error:", error);
+        console.error("Error fetching regular classes:", error);
       }
     };
     fetchUpcomingClassData();
@@ -81,4 +97,4 @@ const UpcomingRegularLiveClass = () => {
   );
 };
 
-export default UpcomingRegularLiveClass;
+export default UpCommingRegularLiveClass;

@@ -327,8 +327,9 @@ const FullLengthTestAnswer = () => {
     
     const total = studentAnswers.length;
     const percentage = total > 0 ? Math.round((correct / total) * 100) : 0;
+    const isAttempted = correct > 0 || incorrect > 0;
     
-    return { correct, incorrect, skipped, percentage, total };
+    return { correct, incorrect, skipped, percentage, total, isAttempted };
   };
 
   // Calculate average band for assessment modules
@@ -375,12 +376,12 @@ const FullLengthTestAnswer = () => {
               (acc, curr) => acc.concat(
                 curr.answers.sort((a, b) => a.question_number - b.question_number)
               ), []
-            );
+            ).sort((a, b) => a.question_number - b.question_number);
             readingCorrectAnswers = reading_set.correct_answers.Reading.reduce(
               (acc, curr) => acc.concat(
                 curr.answers.sort((a, b) => a.question_number - b.question_number)
               ), []
-            );
+            ).sort((a, b) => a.question_number - b.question_number);
           }
           
           // Extract reading exam questions
@@ -404,12 +405,12 @@ const FullLengthTestAnswer = () => {
               (acc, curr) => acc.concat(
                 curr.answers.sort((a, b) => a.question_number - b.question_number)
               ), []
-            );
+            ).sort((a, b) => a.question_number - b.question_number);
             listeningCorrectAnswers = listening_set.correct_answers.Listening.reduce(
               (acc, curr) => acc.concat(
                 curr.answers.sort((a, b) => a.question_number - b.question_number)
               ), []
-            );
+            ).sort((a, b) => a.question_number - b.question_number);
           }
           
           // Extract listening exam questions
@@ -464,12 +465,21 @@ const FullLengthTestAnswer = () => {
             speakingAnswers.length > 0 ? 1 : 0
           ].reduce((sum, val) => sum + val, 0);
           
-          const allBands = [
-            readingBandValues[readingStats.correct] || 0,
-            listeningBandValues[listeningStats.correct] || 0,
-            parseFloat(writingBand) || 0,
-            parseFloat(speakingBand) || 0
-          ].filter(band => band > 0);
+          const allBands = [];
+          
+          // Only include sections that were actually attempted
+          if (readingStats.isAttempted) {
+            allBands.push(readingBandValues[readingStats.correct] || 0);
+          }
+          if (listeningStats.isAttempted) {
+            allBands.push(listeningBandValues[listeningStats.correct] || 0);
+          }
+          if (writingAnswers.length > 0 && parseFloat(writingBand) > 0) {
+            allBands.push(parseFloat(writingBand));
+          }
+          if (speakingAnswers.length > 0 && parseFloat(speakingBand) > 0) {
+            allBands.push(parseFloat(speakingBand));
+          }
           
           const overallBand = allBands.length > 0 
             ? (allBands.reduce((sum, band) => sum + band, 0) / allBands.length).toFixed(1)
@@ -486,7 +496,7 @@ const FullLengthTestAnswer = () => {
               questions: readingQuestions,
               stats: {
                 ...readingStats,
-                band: readingBandValues[readingStats.correct] || 0
+                band: readingStats.isAttempted ? (readingBandValues[readingStats.correct] || 0) : 0
               }
             },
             listening: {
@@ -495,7 +505,7 @@ const FullLengthTestAnswer = () => {
               questions: listeningQuestions,
               stats: {
                 ...listeningStats,
-                band: listeningBandValues[listeningStats.correct] || 0
+                band: listeningStats.isAttempted ? (listeningBandValues[listeningStats.correct] || 0) : 0
               }
             },
             writing: {
@@ -829,26 +839,49 @@ const FullLengthTestAnswer = () => {
                                     <tbody>
                                       {examData.reading.studentAnswers.map((studentAnswer, index) => (
                                         <tr key={index}>
-                                          <td><strong>Q{studentAnswer.question_number}</strong></td>
+                                          <td><strong>Q{index + 1}</strong></td>
                                           <td>{studentAnswer?.answer_text || 'Not answered'}</td>
                                           <td className="text-success">
                                             {examData.reading.correctAnswers[index]?.answer_text || 'N/A'}
                                           </td>
                                           <td>
-                                            {examData.reading.correctAnswers[index]?.answer_text?.trim() ===
-                                            studentAnswer?.answer_text?.trim() ? (
-                                              <span className="badge bg-success">
-                                                <i className="fas fa-check me-1"></i>Correct
-                                              </span>
-                                            ) : studentAnswer?.answer_text?.trim() ? (
-                                              <span className="badge bg-danger">
-                                                <i className="fas fa-times me-1"></i>Incorrect
-                                              </span>
-                                            ) : (
-                                              <span className="badge bg-warning">
-                                                <i className="fas fa-minus me-1"></i>Skipped
-                                              </span>
-                                            )}
+                                            {(() => {
+                                              const correctAnswerText = examData.reading.correctAnswers[index]?.answer_text?.trim() || '';
+                                              const studentAnswerText = studentAnswer?.answer_text?.trim() || '';
+                                              
+                                              let isCorrect = false;
+                                              if (correctAnswerText && studentAnswerText) {
+                                                if (correctAnswerText.includes(' OR ')) {
+                                                  const correctOptions = correctAnswerText.split(' OR ').map(opt => opt.trim().toLowerCase());
+                                                  isCorrect = correctOptions.includes(studentAnswerText.toLowerCase());
+                                                } else if (correctAnswerText.includes(' AND ')) {
+                                                  const correctOptions = correctAnswerText.split(' AND ').map(opt => opt.trim().toLowerCase());
+                                                  isCorrect = correctOptions.every(opt => studentAnswerText.toLowerCase().includes(opt));
+                                                } else {
+                                                  isCorrect = correctAnswerText.toLowerCase() === studentAnswerText.toLowerCase();
+                                                }
+                                              }
+                                              
+                                              if (isCorrect) {
+                                                return (
+                                                  <span className="badge bg-success">
+                                                    <i className="fas fa-check me-1"></i>Correct
+                                                  </span>
+                                                );
+                                              } else if (studentAnswerText) {
+                                                return (
+                                                  <span className="badge bg-danger">
+                                                    <i className="fas fa-times me-1"></i>Incorrect
+                                                  </span>
+                                                );
+                                              } else {
+                                                return (
+                                                  <span className="badge bg-warning">
+                                                    <i className="fas fa-minus me-1"></i>Skipped
+                                                  </span>
+                                                );
+                                              }
+                                            })()}
                                           </td>
                                         </tr>
                                       ))}
@@ -909,26 +942,49 @@ const FullLengthTestAnswer = () => {
                                     <tbody>
                                       {examData.listening.studentAnswers.map((studentAnswer, index) => (
                                         <tr key={index}>
-                                          <td><strong>Q{studentAnswer.question_number}</strong></td>
+                                          <td><strong>Q{index + 1}</strong></td>
                                           <td>{studentAnswer?.answer_text || 'Not answered'}</td>
                                           <td className="text-success">
                                             {examData.listening.correctAnswers[index]?.answer_text || 'N/A'}
                                           </td>
                                           <td>
-                                            {examData.listening.correctAnswers[index]?.answer_text?.trim() ===
-                                            studentAnswer?.answer_text?.trim() ? (
-                                              <span className="badge bg-success">
-                                                <i className="fas fa-check me-1"></i>Correct
-                                              </span>
-                                            ) : studentAnswer?.answer_text?.trim() ? (
-                                              <span className="badge bg-danger">
-                                                <i className="fas fa-times me-1"></i>Incorrect
-                                              </span>
-                                            ) : (
-                                              <span className="badge bg-warning">
-                                                <i className="fas fa-minus me-1"></i>Skipped
-                                              </span>
-                                            )}
+                                            {(() => {
+                                              const correctAnswerText = examData.listening.correctAnswers[index]?.answer_text?.trim() || '';
+                                              const studentAnswerText = studentAnswer?.answer_text?.trim() || '';
+                                              
+                                              let isCorrect = false;
+                                              if (correctAnswerText && studentAnswerText) {
+                                                if (correctAnswerText.includes(' OR ')) {
+                                                  const correctOptions = correctAnswerText.split(' OR ').map(opt => opt.trim().toLowerCase());
+                                                  isCorrect = correctOptions.includes(studentAnswerText.toLowerCase());
+                                                } else if (correctAnswerText.includes(' AND ')) {
+                                                  const correctOptions = correctAnswerText.split(' AND ').map(opt => opt.trim().toLowerCase());
+                                                  isCorrect = correctOptions.every(opt => studentAnswerText.toLowerCase().includes(opt));
+                                                } else {
+                                                  isCorrect = correctAnswerText.toLowerCase() === studentAnswerText.toLowerCase();
+                                                }
+                                              }
+                                              
+                                              if (isCorrect) {
+                                                return (
+                                                  <span className="badge bg-success">
+                                                    <i className="fas fa-check me-1"></i>Correct
+                                                  </span>
+                                                );
+                                              } else if (studentAnswerText) {
+                                                return (
+                                                  <span className="badge bg-danger">
+                                                    <i className="fas fa-times me-1"></i>Incorrect
+                                                  </span>
+                                                );
+                                              } else {
+                                                return (
+                                                  <span className="badge bg-warning">
+                                                    <i className="fas fa-minus me-1"></i>Skipped
+                                                  </span>
+                                                );
+                                              }
+                                            })()}
                                           </td>
                                         </tr>
                                       ))}
@@ -1763,8 +1819,22 @@ const FullLengthTestAnswer = () => {
                                 <tbody>
                                   {examData[selectedSectionExam]?.studentAnswers?.map((studentAnswer, index) => {
                                     const correctAnswer = examData[selectedSectionExam]?.correctAnswers?.[index];
-                                    const isCorrect = studentAnswer?.answer_text?.toLowerCase()?.trim() === 
-                                                    correctAnswer?.answer_text?.toLowerCase()?.trim();
+                                    const correctAnswerText = correctAnswer?.answer_text?.trim() || '';
+                                    const studentAnswerText = studentAnswer?.answer_text?.trim() || '';
+                                    
+                                    let isCorrect = false;
+                                    if (correctAnswerText && studentAnswerText) {
+                                      if (correctAnswerText.includes(' OR ')) {
+                                        const correctOptions = correctAnswerText.split(' OR ').map(opt => opt.trim().toLowerCase());
+                                        isCorrect = correctOptions.includes(studentAnswerText.toLowerCase());
+                                      } else if (correctAnswerText.includes(' AND ')) {
+                                        const correctOptions = correctAnswerText.split(' AND ').map(opt => opt.trim().toLowerCase());
+                                        isCorrect = correctOptions.every(opt => studentAnswerText.toLowerCase().includes(opt));
+                                      } else {
+                                        isCorrect = correctAnswerText.toLowerCase() === studentAnswerText.toLowerCase();
+                                      }
+                                    }
+                                    
                                     return (
                                       <tr key={index}>
                                         <td><strong>Q{studentAnswer?.question_number || index + 1}</strong></td>
@@ -1777,9 +1847,13 @@ const FullLengthTestAnswer = () => {
                                             <span className="badge bg-success">
                                               <i className="fas fa-check me-1"></i>Correct
                                             </span>
-                                          ) : (
+                                          ) : studentAnswerText ? (
                                             <span className="badge bg-danger">
                                               <i className="fas fa-times me-1"></i>Incorrect
+                                            </span>
+                                          ) : (
+                                            <span className="badge bg-warning">
+                                              <i className="fas fa-minus me-1"></i>Skipped
                                             </span>
                                           )}
                                         </td>

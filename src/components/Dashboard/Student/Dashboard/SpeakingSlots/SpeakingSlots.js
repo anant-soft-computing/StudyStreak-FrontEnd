@@ -5,6 +5,7 @@ import ajaxCall from "../../../../../helpers/ajaxCall";
 
 const SpeakingSlots = () => {
   const [upcomingSSClass, setUpcomingSSClass] = useState({});
+  const courseId = JSON.parse(localStorage.getItem("course"))?.id;
   const now = moment();
 
   const hasUpcomingSSClass =
@@ -14,7 +15,7 @@ const SpeakingSlots = () => {
     const fetchUpcomingSSData = async () => {
       try {
         const response = await ajaxCall(
-          `/student/upcoming-class/?class_type=speaking-practice`,
+          "/liveclass/studentonly/?liveClassType=Speaking-Practice",
           {
             headers: {
               Accept: "application/json",
@@ -28,10 +29,24 @@ const SpeakingSlots = () => {
           8000
         );
         if (response?.status === 200) {
-          setUpcomingSSClass(response?.data);
+          console.log("Speaking Classes Data:", response?.data);
+          // Find the next upcoming class (where start_time is in the future - hasn't started yet)
+          const upcomingClasses = response?.data
+            ?.filter((cls) => moment(cls.start_time).isAfter(now))
+            .sort((a, b) => moment(a.start_time).diff(moment(b.start_time)));
+          
+          console.log("Upcoming Speaking Classes:", upcomingClasses);
+          
+          if (upcomingClasses && upcomingClasses.length > 0) {
+            const nextClass = upcomingClasses[0];
+            console.log("Next Upcoming Speaking Class:", nextClass);
+            setUpcomingSSClass(nextClass);
+          }
+        } else {
+          console.log("Speaking Classes - Non-200 response:", response);
         }
       } catch (error) {
-        console.log("error:", error);
+        console.error("Error fetching speaking classes:", error);
       }
     };
     fetchUpcomingSSData();

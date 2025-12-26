@@ -27,6 +27,7 @@ import Podcast from "./tailwind_components/Podcast/Podcast";
 import PackagePageOne from "./tailwind_components/StaticPackages/PackagePageOne";
 import PackagePageTwo from "./tailwind_components/StaticPackages/PackagePageTwo";
 import PackagePageThree from "./tailwind_components/StaticPackages/PackagePageThree";
+import ThankYouPage from "./tailwind_components/StaticPackages/ThankYouPage";
 import RefundPolicy from "./tailwind_components/CompanyPolicies/RefundPolicy";
 import PrivacyPolicy from "./tailwind_components/CompanyPolicies/PrivacyPolicy";
 import TermsAndConditions from "./tailwind_components/CompanyPolicies/TermsAndConditions";
@@ -180,18 +181,6 @@ const App = () => {
             <Route path="/english-test" element={<EnglishTest />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/podcast" element={<Podcast />} />
-            <Route
-              path="/self-study-mode-ielts-academic"
-              element={<PackagePageOne />}
-            />
-            <Route
-              path="/guided-study-mode-ielts-academic"
-              element={<PackagePageTwo />}
-            />
-            <Route
-              path="/mentorship-mode-ielts-academic"
-              element={<PackagePageThree />}
-            />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route
               path="/terms-and-conditions"
@@ -199,6 +188,21 @@ const App = () => {
             />
             <Route path="/refund-policy" element={<RefundPolicy />} />
           </Route>
+
+          {/* Package pages without header */}
+          <Route
+            path="/self-study-mode-ielts-academic"
+            element={<PackagePageOne />}
+          />
+          <Route
+            path="/guided-study-mode-ielts-academic"
+            element={<PackagePageTwo />}
+          />
+          <Route
+            path="/mentorship-mode-ielts-academic"
+            element={<PackagePageThree />}
+          />
+          <Route path="/thank-you" element={<ThankYouPage />} />
 
           <Route element={<AdminNavBarRoute isProtected={true} />}>
             <Route

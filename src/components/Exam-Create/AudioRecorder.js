@@ -104,27 +104,35 @@ const AudioRecorder = ({
         messages: [
           {
             role: "user",
-            content: `Analyse The Package For IELTS Speaking Task With Following Criteria. Be strict in your evaluation, and provide band scores in .5 increments (e.g., 3, 3.5, 4, 4.5, etc.)
+            content: `Analyse the IELTS Speaking Task with the following criteria. Provide a fair and encouraging assessment with band scores in .5 increments (e.g., 4.5, 5, 5.5, 6, etc.). Be supportive and recognize effort while providing constructive feedback.
       
               Assessment Criteria:
       
-              Task:
+              Fluency and Coherence:
+              - Evaluate the natural flow of speech and organization of ideas
+              - Minor pauses and hesitations are normal and acceptable in everyday speech
+              - Give credit for attempting to maintain continuity even if not perfect
+              - Recognize self-corrections as signs of language awareness
       
-              Fluency: Refers to the ability to speak at a natural pace without excessive pausing or hesitation. The speaker should be able to maintain a smooth flow of speech without too many self-corrections or repetition.
-      
-              Coherence: Involves logical organization of ideas, effective use of linking words, and the ability to convey information clearly. The speaker should be able to connect sentences and ideas in a way that makes their speech easy to follow.
-      
-              Range of Vocabulary: The use of a wide range of vocabulary relevant to the topic. The examiner looks for both everyday vocabulary and less common or idiomatic language.
-      
-              Accuracy and Appropriacy: The correct use of words and phrases, appropriate word choice for context, and the ability to paraphrase effectively when necessary. Minor errors are acceptable if they do not impede communication.
+              Lexical Resource (Vocabulary):
+              - Appreciate attempts to use varied vocabulary, even if not always perfect
+              - Common everyday vocabulary used appropriately shows good competence
+              - Give credit for trying to use topic-relevant words
+              - Minor vocabulary errors are acceptable if the meaning is clear
               
-              Range of Grammar: Use of various sentence structures, such as simple, compound, and complex sentences. The use of different grammatical forms, including tenses, conditionals, passive voice, and modal verbs.
+              Grammatical Range and Accuracy:
+              - Value attempts to use different sentence structures
+              - Simple sentences used correctly demonstrate solid foundation
+              - Occasional grammar errors are natural and acceptable if they don't block understanding
+              - Recognize effort to use complex grammar even if not always accurate
               
-              Accuracy: Correct use of grammar, with attention to verb forms, word order, and subject-verb agreement. Occasional errors are acceptable if they do not affect understanding.
+              Pronunciation:
+              - Focus on overall intelligibility rather than native-like perfection
+              - Accent is acceptable as long as speech can be understood
+              - Give credit for clear articulation and effort to communicate
+              - Recognize good use of stress and intonation patterns
               
-              Intelligibility: The ability to be understood throughout the speaking test. This includes clarity of speech, correct pronunciation of words, and consistent use of stress and intonation patterns.
-              
-              Range of Pronunciation Features: The use of features such as rhythm, intonation, stress patterns, and connected speech. Effective use of these features helps convey meaning and maintain the listener's interest.`,
+              Important: Be encouraging and fair. Most students are learning and improving. If they made a genuine attempt to answer and can be understood, they deserve recognition for their effort.`,
           },
           {
             role: "user",
@@ -158,16 +166,52 @@ const AudioRecorder = ({
           
           const gptResponse = await secureOpenAIChatCompletion(gptBody);
 
-          if (!gptResponse.choices) {
+          if (!gptResponse?.choices) {
             throw new Error("AI assessment service unavailable");
           }
 
-          const data = await gptResponse.json();
-          const aiAssessment = data?.choices?.[0]?.message?.content;
+          // gptResponse is already parsed JSON, no need to call .json() again
+          const aiAssessment = gptResponse?.choices?.[0]?.message?.content;
 
-          const pattern = /\b\d+(?:\.\d+)?\b/g;
-          const matches = aiAssessment.match(pattern);
-          const bandValue = matches ? matches[matches.length - 1] : 0;
+          if (!aiAssessment) {
+            throw new Error("No AI assessment content received");
+          }
+
+          // Function to round band score to nearest 0.5 (IELTS format)
+          const roundToNearestHalf = (score) => {
+            return Math.round(score * 2) / 2;
+          };
+          
+          // Extract band value using regex - try multiple patterns
+          let bandValue = 0;
+          
+          // Try pattern 1: Total Band Score: X.X (most common in responses)
+          let bandMatch = aiAssessment.match(/Total Band Score:\s*(\d+(?:\.\d+)?)/i);
+          
+          // Try pattern 2: #Band: X.X (as requested in prompt)
+          if (!bandMatch) {
+            bandMatch = aiAssessment.match(/#Band:\s*(\d+(?:\.\d+)?)/);
+          }
+          
+          // Try pattern 3: Overall Band: X.X
+          if (!bandMatch) {
+            bandMatch = aiAssessment.match(/Overall Band:\s*(\d+(?:\.\d+)?)/i);
+          }
+          
+          // Try pattern 4: Band: X.X at the end of the text
+          if (!bandMatch) {
+            bandMatch = aiAssessment.match(/Band:\s*(\d+(?:\.\d+)?)\s*$/i);
+          }
+          
+          if (bandMatch) {
+            const rawBandValue = parseFloat(bandMatch[1]);
+            bandValue = roundToNearestHalf(rawBandValue); // Round to nearest 0.5
+          }
+          
+          console.log("AudioRecorder - AI Assessment:", aiAssessment);
+          console.log("AudioRecorder - Band Match:", bandMatch);
+          console.log("AudioRecorder - Raw Band Value:", bandMatch ? parseFloat(bandMatch[1]) : 0);
+          console.log("AudioRecorder - Rounded Band Value:", bandValue);
 
           // Convert aiAssessment to HTML format
           const assessment = aiAssessment
@@ -177,6 +221,9 @@ const AudioRecorder = ({
 
           formData.append("AI_Assessment", assessment);
           formData.append("band", bandValue);
+          
+          console.log("AudioRecorder - FormData band:", formData.get("band"));
+          console.log("AudioRecorder - FormData AI_Assessment:", formData.get("AI_Assessment"));
 
           ajaxCall(
             "/speaking-answers/",
@@ -193,6 +240,8 @@ const AudioRecorder = ({
             8000
           )
             .then((response) => {
+              console.log("AudioRecorder - API Response Status:", response.status);
+              console.log("AudioRecorder - API Response Data:", response.data);
               if (response.status === 201) {
                 setRecordedFilePath({
                   recorderIndex,

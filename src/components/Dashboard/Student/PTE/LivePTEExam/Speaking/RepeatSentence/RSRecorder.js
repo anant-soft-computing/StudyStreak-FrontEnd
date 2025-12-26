@@ -260,12 +260,12 @@ const RSRecorder = ({
             
             const gptResponse = await secureOpenAIChatCompletion(gptBody);
 
-            if (!gptResponse.choices) {
-              throw new Error("error");
+            if (!gptResponse?.choices) {
+              throw new Error("AI assessment service unavailable");
             }
 
-            const data = await gptResponse.json();
-            const assessment = data.choices[0].message.content;
+            // gptResponse is already parsed JSON, no need to call .json() again
+            const assessment = gptResponse.choices[0].message.content;
 
             const scoreMatch = assessment.match(/#Total Score:\s*(\d+)/);
             const overallScore = scoreMatch ? parseFloat(scoreMatch[1]) : null;

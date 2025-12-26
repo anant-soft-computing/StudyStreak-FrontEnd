@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Send, X } from "lucide-react";
 
@@ -44,6 +45,7 @@ const initialFormData = {
 };
 
 const ContactForm = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [formErrors, setFormErrors] = useState({});
@@ -53,6 +55,12 @@ const ContactForm = ({ isOpen, onClose }) => {
     setIsMounted(true);
     return () => setIsMounted(false);
   }, []);
+
+  const handleClose = () => {
+    setFormData(initialFormData);
+    setFormErrors({});
+    onClose();
+  };
 
   const validateForm = () => {
     const errors = {};
@@ -126,8 +134,10 @@ const ContactForm = ({ isOpen, onClose }) => {
       if (!response.ok) throw new Error("Network response was not ok");
 
       setFormData(initialFormData);
-      toast.success("Your message has been sent successfully!");
       onClose();
+      // Set flag to indicate valid form submission
+      sessionStorage.setItem("formSubmitted", "true");
+      navigate("/thank-you", { replace: true });
     } catch (error) {
       console.error("Submission error:", error);
       toast.error(
@@ -147,14 +157,14 @@ const ContactForm = ({ isOpen, onClose }) => {
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity duration-300 ${
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 md:p-8 relative transform transition-all duration-300 ease-in-out"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-neutral-500 hover:text-neutral-700 transition-colors z-10 focus:outline-none focus:ring-2 focus:ring-primary-300 rounded-full p-1"
           aria-label="Close contact form"
         >
@@ -168,9 +178,9 @@ const ContactForm = ({ isOpen, onClose }) => {
           <p className="text-neutral-600">
             Fill out the form and we'll get back to you soon
           </p>
-        </div>
+            </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-1">
               <label

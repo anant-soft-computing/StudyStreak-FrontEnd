@@ -35,8 +35,12 @@ const ViewMTAAssessment = () => {
         8000
       );
       if (response.status === 200) {
+        console.log("ViewMTAAssessment - API Response:", response?.data);
+        console.log("ViewMTAAssessment - Exam Type:", examType);
         setExamData(response?.data);
-        setBand(calculateBand(response?.data, examType));
+        const calculatedBand = calculateBand(response?.data, examType);
+        console.log("ViewMTAAssessment - Calculated Band:", calculatedBand);
+        setBand(calculatedBand);
       } else {
         console.log("error");
       }
@@ -50,12 +54,32 @@ const ViewMTAAssessment = () => {
   }, [examId, examType, fetchExamData]);
 
   const calculateBand = (data, type) => {
+    console.log("calculateBand - Input Data:", data);
+    console.log("calculateBand - Type:", type);
+    
     if (type === "Writing") return data.band;
+    
+    console.log("calculateBand - Student Answers:", data.student_answers);
+    
+    if (!data.student_answers || data.student_answers.length === 0) {
+      console.log("calculateBand - No student answers found");
+      return 0;
+    }
+    
     const totalBand = data.student_answers?.reduce(
-      (sum, item) => sum + (parseFloat(item.band) || 0),
+      (sum, item) => {
+        console.log("calculateBand - Item:", item);
+        console.log("calculateBand - Item Band:", item.band);
+        return sum + (parseFloat(item.band) || 0);
+      },
       0
     );
-    return (totalBand / data.student_answers?.length).toFixed(1);
+    
+    const averageBand = (totalBand / data.student_answers?.length).toFixed(1);
+    console.log("calculateBand - Total Band:", totalBand);
+    console.log("calculateBand - Average Band:", averageBand);
+    
+    return averageBand;
   };
 
   const handleAIAssessment = (content) => {

@@ -181,31 +181,43 @@ const DIRecorder = ({
           messages: [
             {
               role: "user",
-              content: `Analyze the following PTE Speaking: Describe Image response using these criteria:
+              content: `Analyze the PTE Speaking: Describe Image response with these fair and encouraging criteria:
         
                 **Content (0–5 points):**
-                    - 5 Points: Includes all key points and relationships; the description is accurate, logical, and complete.
-                    - 4 Points: Includes most key points but misses some minor details or relationships.
-                    - 3 Points: Includes some key points but misses important details or relationships.
-                    - 2 Points: Mentions a few details but lacks coherence or misses most key points.
-                    - 1 Point: Mentions only one or two aspects of the image, with no meaningful description.
-                    - 0 Points: No meaningful attempt or description is entirely unrelated to the image.
+                    - 5 Points: Excellent description covering all key points and relationships
+                    - 4 Points: Good description with most key points covered
+                    - 3 Points: Satisfactory attempt covering main ideas (acceptable performance)
+                    - 2 Points: Basic attempt with some relevant details mentioned
+                    - 1 Point: Minimal attempt but shows some effort
+                    - 0 Points: No meaningful attempt
+                    
+                    Note: Give credit for trying to describe the image even if not all details are mentioned
         
                 **Pronunciation (0–5 points):**
-                    - 5 Points: Native-like pronunciation, easily understood.
-                    - 4 Points: Slight accent but clear and understandable.
-                    - 3 Points: Noticeable accent or mispronunciations but understandable.
-                    - 2 Points: Frequently unclear and difficult to understand.
-                    - 1 Point: Rarely understandable.
-                    - 0 Points: Not understandable.
+                    - 5 Points: Very clear pronunciation throughout
+                    - 4 Points: Clear and easily understood with minor accent
+                    - 3 Points: Generally understandable (acceptable performance)
+                    - 2 Points: Understandable with some effort
+                    - 1 Point: Difficult but partially understandable
+                    - 0 Points: Not understandable
+                    
+                    Note: Focus on clarity, not native accent. Accents are acceptable!
         
                 **Oral Fluency (0–5 points):**
-                    - 5 Points: Natural pace, smooth flow, no hesitations.
-                    - 4 Points: Minor hesitations or unnatural intonation.
-                    - 3 Points: Noticeable hesitations or uneven flow.
-                    - 2 Points: Frequent pauses, stuttering, or halting speech.
-                    - 1 Point: Speech is very disjointed and difficult to follow.
-                    - 0 Points: No attempt or incomprehensible delivery.
+                    - 5 Points: Smooth, natural flow throughout
+                    - 4 Points: Generally smooth with minor pauses
+                    - 3 Points: Reasonable pace with some hesitations (acceptable)
+                    - 2 Points: Slower pace but maintains communication
+                    - 1 Point: Halting but attempts to continue
+                    - 0 Points: No attempt or incomprehensible
+                    
+                    Note: Brief pauses for thinking are natural and acceptable
+        
+                Scoring Guidelines:
+                  - Be supportive and recognize effort
+                  - Most genuine attempts should score 40-70/90
+                  - Award 3/5 in each category for acceptable performance
+                  - Reserve low scores only for minimal/no attempts
         
                 Scoring Calculation:
                   1. Calculate subscore out of 15 (5 points per category)
@@ -217,15 +229,15 @@ const DIRecorder = ({
                 #Detailed_Analysis:
         
                 Content:
-                [Detailed analysis with specific examples from the response]
+                [Acknowledge what was described well, then suggest improvements]
                 Score: X/5
         
                 Pronunciation:
-                [Detailed analysis with specific examples from the response]
+                [Highlight clear parts, mention areas to practice]
                 Score: X/5
         
                 Oral Fluency:
-                [Detailed analysis with specific examples from the response]
+                [Note good flow, suggest ways to improve]
                 Score: X/5
         
                 #Subscore: X/15

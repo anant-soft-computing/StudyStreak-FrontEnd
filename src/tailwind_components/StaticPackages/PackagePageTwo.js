@@ -34,7 +34,6 @@ const PackagePageTwo = () => {
   const [showCoupon, setShowCoupon] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [packageDetails, setPackageDetails] = useState({});
-  const [wasManuallyClosed, setWasManuallyClosed] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -119,23 +118,15 @@ const PackagePageTwo = () => {
   ];
 
   useEffect(() => {
-    const manuallyClosed =
-      sessionStorage.getItem("couponManuallyClosed") === "true";
-    setWasManuallyClosed(manuallyClosed);
+    const handleScroll = () => {
+      setShowCoupon(window.scrollY > 1000);
+    };
 
-    if (!manuallyClosed) {
-      const handleScroll = () => {
-        setShowCoupon(window.scrollY > 1000);
-      };
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
 
-      window.addEventListener("scroll", handleScroll);
-      handleScroll();
-
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  if (wasManuallyClosed) return null;
 
   return (
     <div className="overflow-hidden">
@@ -214,16 +205,6 @@ const PackagePageTwo = () => {
                 Get Started Now
                 <ArrowRight className="w-4 h-4" />
               </button>
-              {packageDetails?.coupon_code?.cupon_code && (
-                <div className="flex items-center bg-white border border-neutral-200 rounded-lg px-4 py-3 shadow-sm">
-                  <span className="text-neutral-600 text-sm sm:text-base">
-                    Use code:{" "}
-                    <span className="font-mono font-bold bg-primary-50 text-primary-700 px-2 py-1 rounded">
-                      {packageDetails?.coupon_code?.cupon_code}
-                    </span>
-                  </span>
-                </div>
-              )}
             </div>
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-neutral-600">
               {[
@@ -312,14 +293,6 @@ const PackagePageTwo = () => {
                       packageDetails?.coupon_code?.discount
                     : packageDetails?.package_price}
                 </button>
-                {packageDetails?.coupon_code?.cupon_code && (
-                  <div className="mt-4 text-neutral-600">
-                    Use Promo Code:{" "}
-                    <span className="font-mono font-bold bg-primary-100 text-primary-700 px-3 py-1 rounded">
-                      {packageDetails?.coupon_code?.cupon_code}
-                    </span>
-                  </div>
-                )}
                 <p className="mt-6 text-sm text-neutral-500">
                   Limited time offer. Regular price will resume soon.
                 </p>
@@ -356,13 +329,15 @@ const PackagePageTwo = () => {
           </div>
         </div>
       </section>
-      {showCoupon && packageDetails?.coupon_code?.cupon_code && (
+      {showCoupon && (
         <FloatingCoupon
-          promoCode={packageDetails?.coupon_code?.cupon_code}
           originalPrice={packageDetails?.package_price}
           discountedPrice={
-            packageDetails?.package_price -
+            packageDetails?.package_price &&
             packageDetails?.coupon_code?.discount
+              ? packageDetails?.package_price -
+                packageDetails?.coupon_code?.discount
+              : packageDetails?.package_price
           }
           setIsModalOpen={setIsModalOpen}
         />

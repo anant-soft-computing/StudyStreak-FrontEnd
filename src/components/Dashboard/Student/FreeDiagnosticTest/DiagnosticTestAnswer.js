@@ -335,10 +335,32 @@ const DiagnosticTestAnswer = () => {
 
                                     if (!studentAnswerText) {
                                       icon = <SkipIcon />;
+                                    } else if (correctAnswerText.includes(" OR ")) {
+                                      const correctOptions = correctAnswerText
+                                        .split(" OR ")
+                                        .map((option) => option.trim().toLowerCase());
+                                      icon = correctOptions.includes(
+                                        studentAnswerText.toLowerCase()
+                                      ) ? (
+                                        <CheckIcon />
+                                      ) : (
+                                        <CancelIcon />
+                                      );
+                                    } else if (correctAnswerText.includes(" AND ")) {
+                                      const correctOptions = correctAnswerText
+                                        .split(" AND ")
+                                        .map((option) => option.trim().toLowerCase());
+                                      icon = correctOptions.every((option) =>
+                                        studentAnswerText.toLowerCase().includes(option)
+                                      ) ? (
+                                        <CheckIcon />
+                                      ) : (
+                                        <CancelIcon />
+                                      );
                                     } else {
                                       icon =
-                                        studentAnswerText ===
-                                        correctAnswerText ? (
+                                        studentAnswerText.toLowerCase() ===
+                                        correctAnswerText.toLowerCase() ? (
                                           <CheckIcon />
                                         ) : (
                                           <CancelIcon />
@@ -412,10 +434,32 @@ const DiagnosticTestAnswer = () => {
 
                                     if (!studentAnswerText) {
                                       icon = <SkipIcon />;
+                                    } else if (correctAnswerText.includes(" OR ")) {
+                                      const correctOptions = correctAnswerText
+                                        .split(" OR ")
+                                        .map((option) => option.trim().toLowerCase());
+                                      icon = correctOptions.includes(
+                                        studentAnswerText.toLowerCase()
+                                      ) ? (
+                                        <CheckIcon />
+                                      ) : (
+                                        <CancelIcon />
+                                      );
+                                    } else if (correctAnswerText.includes(" AND ")) {
+                                      const correctOptions = correctAnswerText
+                                        .split(" AND ")
+                                        .map((option) => option.trim().toLowerCase());
+                                      icon = correctOptions.every((option) =>
+                                        studentAnswerText.toLowerCase().includes(option)
+                                      ) ? (
+                                        <CheckIcon />
+                                      ) : (
+                                        <CancelIcon />
+                                      );
                                     } else {
                                       icon =
-                                        studentAnswerText ===
-                                        correctAnswerText ? (
+                                        studentAnswerText.toLowerCase() ===
+                                        correctAnswerText.toLowerCase() ? (
                                           <CheckIcon />
                                         ) : (
                                           <CancelIcon />

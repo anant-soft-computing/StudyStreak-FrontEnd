@@ -1410,7 +1410,7 @@ const Answer = () => {
                         <div style={{ maxHeight: "400px", overflowY: "auto" }}>
                           {examData.correctAnswers.slice(0, 8).map((item, index) => {
                             const studentAnswer = examData.studentAnswers?.[index];
-                            const isCorrect = studentAnswer?.answer_text?.trim() === item.answer_text?.trim();
+                            const isCorrect = studentAnswer?.answer_text?.trim().toLowerCase() === item.answer_text?.trim().toLowerCase();
                             
                             return (
                               <div key={item.id} className="mb-3 pb-3" style={{ borderBottom: index < Math.min(7, examData.correctAnswers.length - 1) ? "1px solid #eee" : "none" }}>

@@ -28,10 +28,13 @@ const UpcomingLiveClasses = () => {
           8000
         );
         if (response?.status === 200) {
+          console.log("Upcoming Other Classes Data:", response?.data);
           setUpcomingClass(response?.data);
+        } else {
+          console.log("Upcoming Other Classes - Non-200 response:", response);
         }
       } catch (error) {
-        console.log("error:", error);
+        console.error("Error fetching upcoming other classes:", error);
       }
     };
     fetchUpcomingClassData();

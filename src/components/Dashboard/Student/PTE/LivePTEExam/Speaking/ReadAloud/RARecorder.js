@@ -184,19 +184,31 @@ const RARecorder = ({
           messages: [
             {
               role: "user",
-              content: `Analyze the following PTE Speaking: Read Aloud response using these criteria:
+              content: `Analyze the PTE Speaking: Read Aloud response using these criteria. Be fair and encouraging while providing constructive feedback:
             
                 **Content (0-5 points):**
-                  - Accuracy in reproducing the text as displayed.
-                  - Deductions for missing words, incorrect words, or substitutions.
+                  - Give credit for overall accuracy in reproducing the text
+                  - Minor omissions or substitutions are acceptable if meaning is preserved
+                  - Recognize attempts to read all content even if not perfect
+                  - Award 3-4 points for reasonable coverage, 5 points for excellent accuracy
             
                 **Pronunciation (0-5 points):**
-                  - Clarity of speech and understandability to most English speakers.
-                  - Deductions for mispronunciations or heavy accents.
+                  - Focus on overall clarity and understandability
+                  - Accent is acceptable as long as words are recognizable
+                  - Minor mispronunciations are normal and acceptable
+                  - Award 3-4 points for generally clear speech, 5 points for very clear
             
                 **Oral Fluency (0-5 points):**
-                  - Smoothness and natural flow of speech.
-                  - Deductions for hesitations, repetitions, or unnatural pauses.
+                  - Value natural reading pace over perfect fluency
+                  - Brief pauses for breathing or comprehension are acceptable
+                  - Recognize effort to maintain flow
+                  - Award 3-4 points for reasonable flow, 5 points for smooth delivery
+            
+                Scoring Guidelines:
+                  - Be encouraging: Students are learning and practicing
+                  - Most genuine attempts should score 40-70/90 (good effort)
+                  - Reserve very low scores (below 30/90) only for incomplete attempts
+                  - Award higher scores (70+/90) for solid performances
             
                 Scoring Calculation:
                   1. Calculate subscore out of 15 (5 points per category)
@@ -208,15 +220,15 @@ const RARecorder = ({
                 #Detailed_Analysis:
             
                 Content:
-                [Detailed analysis with specific examples from the response]
+                [Provide positive feedback first, then constructive suggestions]
                 Score: X/5
             
                 Pronunciation:
-                [Detailed analysis with specific examples from the response]
+                [Acknowledge what was done well, then areas for improvement]
                 Score: X/5
             
                 Oral Fluency:
-                [Detailed analysis with specific examples from the response]
+                [Highlight strengths, mention areas to work on]
                 Score: X/5
 
                 #Subscore: X/15

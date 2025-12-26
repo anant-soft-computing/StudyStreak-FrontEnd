@@ -36,6 +36,7 @@ const RecordedClasses = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [recordClass, setRecordClass] = useState([]);
+  const [error, setError] = useState(null);
 
   const [activeTab, setActiveTab] = useState("Regular Class");
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -139,6 +140,7 @@ const RecordedClasses = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
+      setError(null);
       try {
         const response = await ajaxCall(
           `/liveclass/recording/?class_type=${activeTab}`,
@@ -154,17 +156,39 @@ const RecordedClasses = () => {
           },
           8000
         );
+        
+        console.log("Recorded Classes API Response:", response);
+        console.log("Response Status:", response?.status);
+        console.log("Response Data:", response?.data);
+        
         if (response.status === 200) {
+          console.log("Raw data before filtering:", response?.data);
           const recordData = response?.data.filter(
-            ({ recordings }) => recordings.length > 0
+            ({ recordings }) => recordings && recordings.length > 0
           );
+          console.log("Filtered record data:", recordData);
+          console.log("Number of classes with recordings:", recordData.length);
           handleDataFetch(recordData);
           setRecordClass(recordData);
+        } else if (response.status === 401) {
+          setError("Authentication failed. Please login again.");
+          console.error("Authentication error - Status 401");
+        } else if (response.status === 404) {
+          setError("Recorded classes endpoint not found. Please contact support.");
+          console.error("Endpoint not found - Status 404");
         } else {
-          console.log("error");
+          setError(`Error loading recorded classes (Status: ${response?.status})`);
+          console.error("Error fetching recorded classes - Status:", response?.status);
+          console.error("Error response:", response);
         }
       } catch (error) {
-        console.log("error", error);
+        setError("Failed to load recorded classes. Please try again later.");
+        console.error("Error fetching recorded classes:", error);
+        console.error("Error details:", {
+          message: error.message,
+          response: error.response,
+          stack: error.stack
+        });
       } finally {
         setIsLoading(false);
       }
@@ -176,19 +200,29 @@ const RecordedClasses = () => {
   };
 
   const formatRecordClasses = recordClass.flatMap((item, index) => {
+    console.log(`Processing class ${index + 1}:`, item);
+    
     const baseData = {
       no: `${index + 1}.`,
       title: item.meeting_title,
     };
 
-    return item.recordings.map((recording, recordingIndex) => ({
-      ...baseData,
-      no: `${index + 1}.${recordingIndex + 1}`,
-      start_time: moment(recording.recording_start).format("lll"),
-      end_time: moment(recording.recording_end).format("lll"),
-      playUrl: recording.play_url,
-      password: recording.password,
-    }));
+    if (!item.recordings || !Array.isArray(item.recordings)) {
+      console.warn(`Class "${item.meeting_title}" has invalid recordings:`, item.recordings);
+      return [];
+    }
+
+    return item.recordings.map((recording, recordingIndex) => {
+      console.log(`  Recording ${recordingIndex + 1}:`, recording);
+      return {
+        ...baseData,
+        no: `${index + 1}.${recordingIndex + 1}`,
+        start_time: moment(recording.recording_start).format("lll"),
+        end_time: moment(recording.recording_end).format("lll"),
+        playUrl: recording.play_url,
+        password: recording.password,
+      };
+    });
   });
 
   const recordClasses = formatRecordClasses.filter(({ start_time, end_time }) =>
@@ -269,6 +303,11 @@ const RecordedClasses = () => {
                         <BuyCourse message="No Recorded Classes Available, Please Buy a Course !!" />
                       ) : isLoading ? (
                         <Loading />
+                      ) : error ? (
+                        <div className="alert alert-danger text-center" role="alert">
+                          <h5>{error}</h5>
+                          <p className="mb-0">Please check the browser console for more details.</p>
+                        </div>
                       ) : recordClasses.length > 0 ? (
                         <Table rowData={recordClasses} columnDefs={columns} />
                       ) : (

@@ -191,31 +191,43 @@ const RLRecorder = ({
           messages: [
             {
               role: "user",
-              content: `Analyze the following PTE Speaking: Re-Tell Lecture response using these criteria:
+              content: `Analyze the PTE Speaking: Re-Tell Lecture response with fair and encouraging criteria:
         
                 **Content (0-5 points):**
-                  - 5 Points: Includes all main ideas and several supporting details.
-                  - 4 Points: Includes most main ideas and some supporting details.
-                  - 3 Points: Includes some main ideas but misses key supporting details.
-                  - 2 Points: Includes only one main idea with little or no supporting details.
-                  - 1 Point: Provides a vague or incomplete description of the lecture.
-                  - 0 Points: No meaningful attempt or response is unrelated to the lecture.
+                  - 5 Points: Excellent retelling covering all main ideas and several details
+                  - 4 Points: Good retelling with most main ideas and some details
+                  - 3 Points: Satisfactory retelling with main ideas covered (acceptable)
+                  - 2 Points: Basic retelling with at least one main idea mentioned
+                  - 1 Point: Minimal attempt but shows some understanding
+                  - 0 Points: No meaningful attempt
+                  
+                  Note: Re-telling lectures is challenging. Give credit for capturing the essence even if details are missed.
         
                 **Pronunciation (0-5 points):**
-                  - 5 Points: Native-like pronunciation, easily understandable.
-                  - 4 Points: Slight accent but clear and understandable.
-                  - 3 Points: Noticeable accent or mispronunciations but understandable.
-                  - 2 Points: Frequently unclear and difficult to understand.
-                  - 1 Point: Rarely understandable.
-                  - 0 Points: Not understandable.
+                  - 5 Points: Very clear pronunciation throughout
+                  - 4 Points: Clear and easily understood with minor accent
+                  - 3 Points: Generally understandable (acceptable performance)
+                  - 2 Points: Understandable with some effort
+                  - 1 Point: Partially understandable
+                  - 0 Points: Not understandable
+                  
+                  Note: Accent is acceptable. Focus on whether the speaker can be understood.
         
                 **Oral Fluency (0-5 points):**
-                  - 5 Points: Natural pace, smooth flow, no hesitations.
-                  - 4 Points: Minor hesitations or unnatural intonation.
-                  - 3 Points: Noticeable hesitations or uneven flow.
-                  - 2 Points: Frequent pauses, stuttering, or halting speech.
-                  - 1 Point: Speech is very disjointed and difficult to follow.
-                  - 0 Points: No attempt or incomprehensible delivery.
+                  - 5 Points: Smooth, natural flow throughout
+                  - 4 Points: Generally smooth with minor pauses
+                  - 3 Points: Reasonable pace with some hesitations (acceptable)
+                  - 2 Points: Slower pace but maintains communication
+                  - 1 Point: Halting but attempts to continue
+                  - 0 Points: No attempt
+                  
+                  Note: Pausing to recall information is natural when retelling
+        
+                Scoring Guidelines:
+                  - Recognize that retelling lectures from memory is difficult
+                  - Most genuine attempts should score 40-70/90
+                  - Award 3/5 in each category for acceptable performance
+                  - Be encouraging and supportive in feedback
         
                 Scoring Calculation:
                   1. Calculate subscore out of 15 (5 points per category)
@@ -227,15 +239,15 @@ const RLRecorder = ({
                 #Detailed_Analysis:
         
                 Content:
-                [Detailed analysis with specific examples from the response]
+                [Acknowledge what was remembered well, suggest improvements]
                 Score: X/5
         
                 Pronunciation:
-                [Detailed analysis with specific examples from the response]
+                [Highlight clear pronunciation, mention practice areas]
                 Score: X/5
         
                 Oral Fluency:
-                [Detailed analysis with specific examples from the response]
+                [Note good delivery, suggest fluency improvements]
                 Score: X/5
         
                 #Subscore: X/15

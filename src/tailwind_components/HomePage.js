@@ -119,7 +119,29 @@ const HomePage = () => {
   };
 
   const handlestartJourney = () => {
-    navigate("/login");
+    try {
+      const loginInfo = JSON.parse(localStorage.getItem("loginInfo"));
+      const userRole = loginInfo?.user_role;
+      const token = loginInfo?.accessToken;
+      
+      // Check if user is logged in (has both role and token)
+      if (token && userRole) {
+        // Redirect based on user role (matching exact values from backend)
+        if (userRole === "admin") {
+          navigate("/admin-dashboard");
+        } else if (userRole === "Tutor") {
+          navigate("/tutor-liveClass");
+        } else {
+          // Default to student dashboard for any other logged-in user
+          navigate("/studentDashboard");
+        }
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error checking login status:", error);
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -199,7 +221,7 @@ const HomePage = () => {
               with StudyStreak.
             </p>
             <button
-              onClick={() => navigate("/login")}
+              onClick={handlestartJourney}
               className="bg-white text-primary-600 px-8 py-3 rounded-xl hover:bg-primary-50
             transition-all duration-300 font-semibold shadow-elevated hover:shadow-hover
             transform hover:-translate-y-0.5 mt-3"

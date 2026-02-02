@@ -45,11 +45,26 @@ const PopularPackages = () => {
     (async () => {
       setIsLoading(true);
       try {
-        const [packages30, packages31] = await Promise.all([
-          fetchPackages(30),
-          fetchPackages(31),
-        ]);
-        setPackages([packages30, packages31]);
+        const packages30 = await fetchPackages(30);
+        
+        // Custom second package with specified data
+        const customPackage = {
+          package_name: "Mentorship Mode: IELTS Academic + Video + Live Classes",
+          package_price: 2999,
+          duration: 2,
+          full_length_test_count: 5,
+          practice_test_count: 20,
+          group_doubt_solving_count: 6,
+          PackageType: { name: "Mentorship Mode" },
+          coupon_code: {
+            discount: 2000,
+            cupon_code: "IELTS999"
+          },
+          select_course: { id: 24 },
+          has_live_classes: true
+        };
+        
+        setPackages([packages30, customPackage]);
       } catch (error) {
         console.log("error", error);
       } finally {
@@ -162,7 +177,9 @@ const PopularPackages = () => {
                 </div>
                 <div className="flex items-center text-gray-700">
                   <LibraryBig className="w-4 h-4 mr-2 text-primary-500 flex-shrink-0" />
-                  <span className="font-medium">E-Library</span>
+                  <span className="font-medium">
+                    {pkg?.has_live_classes ? "Live Classes" : "E-Library"}
+                  </span>
                 </div>
               </div>
 

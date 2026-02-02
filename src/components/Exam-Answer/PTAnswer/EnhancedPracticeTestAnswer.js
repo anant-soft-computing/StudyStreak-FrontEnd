@@ -45,6 +45,8 @@ const EnhancedPracticeTestAnswer = () => {
   const [showComparisonView, setShowComparisonView] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [currentBlockIndex, setCurrentBlockIndex] = useState(0);
+  const [examStructure, setExamStructure] = useState(null); // Store full exam structure
+  const [blockToSectionMap, setBlockToSectionMap] = useState({}); // Map block IDs to section data
 
   // Handle ESC key to close modal and manage body scroll
   useEffect(() => {
@@ -191,6 +193,78 @@ const EnhancedPracticeTestAnswer = () => {
         setLoading(true);
         setError(null);
         
+        // First, fetch the full practice test structure to get the correct section order
+        const structureResponse = await ajaxCall(
+          `/ct/ielts/practice-test/${examId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        let sectionOrder = [];
+        if (structureResponse.status === 200) {
+          const structureData = structureResponse.data;
+          setExamStructure(structureData);
+          
+          // Get the sections in the correct order from the structure
+          const sections = structureData?.IELTS?.[examType] || [];
+          
+          // Sort sections by exam_name to maintain proper order
+          sectionOrder = [...sections].sort((a, b) => {
+            const extractSortKey = (name) => {
+              if (!name) return 0;
+              
+              // Extract the last part of the name for sorting (e.g., "2.1", "2.2", "2.3")
+              const parts = name.trim().split(" ");
+              const lastPart = parts[parts.length - 1];
+              
+              // Try to match decimal pattern (e.g., "2.1", "10.3")
+              const decimalMatch = lastPart.match(/^(\d+)\.(\d+)$/);
+              if (decimalMatch) {
+                const major = parseInt(decimalMatch[1]);
+                const minor = parseInt(decimalMatch[2]);
+                return major * 1000 + minor;
+              }
+              
+              // Try to match simple number pattern (e.g., "1", "2", "10")
+              const numberMatch = lastPart.match(/^(\d+)$/);
+              if (numberMatch) {
+                return parseInt(numberMatch[1]) * 1000;
+              }
+              
+              // Fallback: try to extract any number from the entire name
+              const anyNumberMatch = name.match(/(\d+)/);
+              if (anyNumberMatch) {
+                return parseInt(anyNumberMatch[1]) * 1000;
+              }
+              
+              return 0;
+            };
+            
+            const keyA = extractSortKey(a.exam_name);
+            const keyB = extractSortKey(b.exam_name);
+            
+            console.log(`Comparing: "${a.exam_name}" (${keyA}) vs "${b.exam_name}" (${keyB})`);
+            return keyA - keyB;
+          });
+          
+          console.log('📋 Section order from structure (after sorting):', sectionOrder.map((s, idx) => ({
+            index: idx,
+            id: s.id,
+            name: s.exam_name,
+            blockId: s.id
+          })));
+        }
+        
+        // Now fetch the answers
         const response = await ajaxCall(
           `/practice-answers/${examId}/`,
           {
@@ -230,8 +304,21 @@ const EnhancedPracticeTestAnswer = () => {
           let totalIncorrect = 0;
           let totalSkipped = 0;
 
-          // Match student answers with correct answers by block_id
-          correctAnswersByType.forEach((correctBlock, index) => {
+          // Create a map of block_id to correct answers for easy lookup
+          const correctAnswersMap = {};
+          correctAnswersByType.forEach(correctBlock => {
+            correctAnswersMap[correctBlock.block_id] = correctBlock;
+          });
+
+          // Process blocks in the order they appear in sectionOrder
+          const blocksToProcess = sectionOrder.length > 0 
+            ? sectionOrder.map(section => ({
+                ...correctAnswersMap[section.id],
+                sectionName: section.exam_name
+              })).filter(b => b && b.block_id)
+            : correctAnswersByType;
+
+          blocksToProcess.forEach((correctBlock, index) => {
             const studentBlock = studentAnswersByType.find(
               (block) => block.block_id === correctBlock.block_id
             ) || { answers: [] };
@@ -275,9 +362,18 @@ const EnhancedPracticeTestAnswer = () => {
             totalIncorrect += incorrect;
             totalSkipped += skipped;
 
+            const blockName = correctBlock.sectionName || `Section ${index + 1}`;
+            console.log(`📦 Creating block ${index + 1}:`, {
+              blockId: correctBlock.block_id,
+              blockName: blockName,
+              sectionName: correctBlock.sectionName,
+              correct,
+              total: correctAnswers.length
+            });
+
             blocks.push({
               blockId: correctBlock.block_id,
-              blockName: `Section ${index + 1}`,
+              blockName: blockName,
               correctAnswers,
               studentAnswers,
               stats: {
@@ -291,6 +387,19 @@ const EnhancedPracticeTestAnswer = () => {
           });
 
           setBlocksData(blocks);
+          console.log('📚 Blocks data loaded in correct order:', blocks.map(b => ({
+            blockId: b.blockId,
+            blockName: b.blockName,
+            totalQuestions: b.stats.total
+          })));
+          
+          // Create block to section map for later use
+          const blockMap = {};
+          sectionOrder.forEach((section, index) => {
+            blockMap[section.id] = section;
+          });
+          setBlockToSectionMap(blockMap);
+          
           setOverallStats({
             skipCount: totalSkipped,
             correctCount: totalCorrect,
@@ -323,6 +432,32 @@ const EnhancedPracticeTestAnswer = () => {
 
   const fetchExamPaper = async (blockId) => {
     try {
+      console.log('📂 Fetching exam paper for block:', blockId);
+      
+      // Check if we have the section mapped
+      const mappedSection = blockToSectionMap[blockId];
+      if (mappedSection) {
+        console.log('✅ Using mapped section data:', {
+          blockId,
+          sectionId: mappedSection.id,
+          sectionName: mappedSection.exam_name,
+          hasPassage: !!mappedSection.passage,
+          hasQuestion: !!mappedSection.question_other,
+        });
+        
+        // Use the mapped section data directly
+        setExamPaperData({
+          passage: mappedSection.passage,
+          question_other: mappedSection.question_other,
+          passageImage: mappedSection.passage_image,
+          audio: mappedSection.audio_file,
+          exam_name: mappedSection.exam_name,
+          id: mappedSection.id
+        });
+        return;
+      }
+      
+      // Fallback to API call if no mapping exists
       const response = await ajaxCall(
         `/exam/block/${blockId}/`,
         {
@@ -338,10 +473,15 @@ const EnhancedPracticeTestAnswer = () => {
         8000
       );
       if (response.status === 200) {
+        console.log('✅ Exam paper data received from API:', {
+          blockId,
+          hasPassage: !!response.data?.passage,
+          hasQuestion: !!response.data?.question_other,
+        });
         setExamPaperData(response.data);
       }
     } catch (error) {
-      console.error("Exam paper fetch error:", error);
+      console.error("❌ Exam paper fetch error:", error);
     }
   };
 

@@ -126,6 +126,7 @@ const FullLengthLiveExam = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [fullPaper, setFullPaper] = useState([]);
   const [fullLengthId, setFullLengthId] = useState("");
   const [next, setNext] = useState(0);
@@ -818,6 +819,8 @@ const FullLengthLiveExam = () => {
   };
 
   const handleFLTSubmit = async () => {
+    setIsSubmitting(true);
+    setIsConfirmModalOpen(false);
     const answersArray = [];
     let bandValue = 0;
 
@@ -967,6 +970,7 @@ const FullLengthLiveExam = () => {
       );
     } catch (error) {
       isError = true;
+      setIsSubmitting(false);
       toast.error("Some Problem Occurred. Please try again.");
     }
 
@@ -1001,12 +1005,16 @@ const FullLengthLiveExam = () => {
         fullLengthTestSubmit();
         navigate(`/FullLengthTest/Answer/${examId}`);
       } else if (response.status === 400) {
+        setIsSubmitting(false);
         toast.error("Please Submit Your Exam Answer");
       } else {
+        setIsSubmitting(false);
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
+      setIsSubmitting(false);
       console.log("error", error);
+      toast.error("Some Problem Occurred. Please try again.");
     }
   };
 
@@ -1585,6 +1593,32 @@ const FullLengthLiveExam = () => {
             {reviewContent()}
           </SmallModal>
         )}
+        
+        {/* Loading Modal for AI Assessment */}
+        {isSubmitting && (
+          <SmallModal
+            size="md"
+            centered
+            title="Processing Your Exam"
+            isOpen={isSubmitting}
+            onClose={() => {}}
+            hideCloseButton={true}
+          >
+            <div className="text-center py-4">
+              <div className="spinner-border text-primary mb-3" style={{ width: '3rem', height: '3rem' }} role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <h5 className="mb-3">Generating AI Assessment...</h5>
+              <p className="text-muted">
+                Please wait while we evaluate your answers. This may take a few moments.
+              </p>
+              <p className="text-warning small">
+                <strong>Please do not close this window or refresh the page.</strong>
+              </p>
+            </div>
+          </SmallModal>
+        )}
+        
         {isModalOpen &&
           (examData?.exam_type === "Reading" ||
             examData?.exam_type === "Listening") && (

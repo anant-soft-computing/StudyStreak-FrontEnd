@@ -25,6 +25,7 @@ const LivePTEWritingExam = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [timerRunning, setTimerRunning] = useState(true);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // 0 means before start, 1 means after start, 2 means after finish
   const [next, setNext] = useState(0);
   const [linkAnswer, setLinkAnswer] = useState(false);
@@ -240,6 +241,8 @@ const LivePTEWritingExam = () => {
   };
 
   const handleSubmit = async () => {
+    setIsSubmitting(true);
+    setIsConfirmModalOpen(false); // Close confirmation modal
     const answersArray = [];
 
     examAnswer.forEach((item, index) => {
@@ -411,7 +414,9 @@ const LivePTEWritingExam = () => {
         })
       );
     } catch (error) {
+      setIsSubmitting(false);
       toast.error("Some Problem Occurred. Please try again.");
+      return;
     }
 
     try {
@@ -443,12 +448,16 @@ const LivePTEWritingExam = () => {
         submitExam();
         navigate(`/PTE/Writing/${fullPaper[0].IELTS.id}`);
       } else if (response.status === 400) {
+        setIsSubmitting(false);
         toast.error("Please Submit Your Exam Answer");
       } else {
+        setIsSubmitting(false);
         toast.error("Some Problem Occurred. Please try again.");
       }
     } catch (error) {
+      setIsSubmitting(false);
       console.log("error", error);
+      toast.error("Some Problem Occurred. Please try again.");
     }
   };
 
@@ -679,12 +688,17 @@ const LivePTEWritingExam = () => {
           isOpen={isConfirmModalOpen}
           footer={
             <div className="d-flex gap-2">
-              <button className="btn btn-success" onClick={handleSubmit}>
+              <button 
+                className="btn btn-success" 
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+              >
                 Yes
               </button>
               <button
                 className="btn btn-danger"
                 onClick={() => setIsConfirmModalOpen(false)}
+                disabled={isSubmitting}
               >
                 No
               </button>
@@ -695,6 +709,32 @@ const LivePTEWritingExam = () => {
           {reviewContent()}
         </SmallModal>
       )}
+      
+      {/* Loading Modal for AI Assessment */}
+      {isSubmitting && (
+        <SmallModal
+          size="md"
+          centered
+          title="Processing Your Exam"
+          isOpen={isSubmitting}
+          onClose={() => {}}
+          hideCloseButton={true}
+        >
+          <div className="text-center py-4">
+            <div className="spinner-border text-primary mb-3" style={{ width: '3rem', height: '3rem' }} role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+            <h5 className="mb-3">Generating AI Assessment...</h5>
+            <p className="text-muted">
+              Please wait while we evaluate your answers. This may take a few moments.
+            </p>
+            <p className="text-warning small">
+              <strong>Please do not close this window or refresh the page.</strong>
+            </p>
+          </div>
+        </SmallModal>
+      )}
+      
       {isModalOpen && (
         <SmallModal
           size="lg"

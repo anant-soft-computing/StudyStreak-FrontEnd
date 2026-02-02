@@ -115,6 +115,12 @@ const FullLengthTestAnswer = () => {
   };
 
   const handleViewSectionExam = (section) => {
+    console.log('📂 Opening View Exam modal for section:', section);
+    console.log('📊 Section data:', {
+      section,
+      questionsCount: examData[section]?.questions?.length || 0,
+      questions: examData[section]?.questions
+    });
     setSelectedSectionExam(section);
     setIsSectionExamModalOpen(true);
   };
@@ -386,14 +392,39 @@ const FullLengthTestAnswer = () => {
           
           // Extract reading exam questions
           if (reading_set?.Reading && Array.isArray(reading_set.Reading)) {
-            readingQuestions = reading_set.Reading.map(exam => ({
-              id: exam?.id || 'unknown',
-              name: exam?.exam_name || 'Reading Exam',
-              passage: exam?.passage || '',
-              question: exam?.question || '',
-              exam_type: exam?.exam_type || 'Reading',
-              passage_image: exam?.passage_image || null
-            }));
+            console.log('🔍 Reading set data:', reading_set.Reading);
+            // Sort by section number or ID to ensure correct order
+            const sortedReadingSet = [...reading_set.Reading].sort((a, b) => {
+              // Try to sort by section number if it exists
+              if (a.section_number && b.section_number) {
+                return a.section_number - b.section_number;
+              }
+              // Otherwise sort by ID
+              return (a.id || 0) - (b.id || 0);
+            });
+            readingQuestions = sortedReadingSet.map((exam, index) => {
+              console.log(`📖 Reading Section ${index + 1}:`, {
+                id: exam?.id,
+                name: exam?.exam_name,
+                sectionNumber: exam?.section_number,
+                order: exam?.order,
+                hasPassage: !!exam?.passage,
+                hasQuestion: !!exam?.question,
+                passageLength: exam?.passage?.length || 0,
+                questionLength: exam?.question?.length || 0
+              });
+              return {
+                id: exam?.id || 'unknown',
+                name: exam?.exam_name || `Reading Section ${index + 1}`,
+                passage: exam?.passage || '',
+                question: exam?.question || '',
+                exam_type: exam?.exam_type || 'Reading',
+                passage_image: exam?.passage_image || null,
+                section_number: exam?.section_number || index + 1,
+                order: exam?.order || index
+              };
+            });
+            console.log('✅ Total reading sections:', readingQuestions.length);
           }
           
           // Process Listening data
@@ -415,14 +446,40 @@ const FullLengthTestAnswer = () => {
           
           // Extract listening exam questions
           if (listening_set?.Listening && Array.isArray(listening_set.Listening)) {
-            listeningQuestions = listening_set.Listening.map(exam => ({
-              id: exam?.id || 'unknown',
-              name: exam?.exam_name || 'Listening Exam',
-              passage: exam?.passage || '',
-              question: exam?.question || '',
-              exam_type: exam?.exam_type || 'Listening',
-              audio_file: exam?.audio_file || null
-            }));
+            console.log('🔍 Listening set data:', listening_set.Listening);
+            // Sort by section number or ID to ensure correct order
+            const sortedListeningSet = [...listening_set.Listening].sort((a, b) => {
+              // Try to sort by section number if it exists
+              if (a.section_number && b.section_number) {
+                return a.section_number - b.section_number;
+              }
+              // Otherwise sort by ID
+              return (a.id || 0) - (b.id || 0);
+            });
+            listeningQuestions = sortedListeningSet.map((exam, index) => {
+              console.log(`🎧 Listening Section ${index + 1}:`, {
+                id: exam?.id,
+                name: exam?.exam_name,
+                sectionNumber: exam?.section_number,
+                order: exam?.order,
+                hasPassage: !!exam?.passage,
+                hasQuestion: !!exam?.question,
+                hasAudio: !!exam?.audio_file,
+                passageLength: exam?.passage?.length || 0,
+                questionLength: exam?.question?.length || 0
+              });
+              return {
+                id: exam?.id || 'unknown',
+                name: exam?.exam_name || `Listening Section ${index + 1}`,
+                passage: exam?.passage || '',
+                question: exam?.question || '',
+                exam_type: exam?.exam_type || 'Listening',
+                audio_file: exam?.audio_file || null,
+                section_number: exam?.section_number || index + 1,
+                order: exam?.order || index
+              };
+            });
+            console.log('✅ Total listening sections:', listeningQuestions.length);
           }
           
           // Calculate Reading stats
@@ -1446,12 +1503,21 @@ const FullLengthTestAnswer = () => {
                   
                   {selectedSectionExam === 'reading' && examData.reading.questions && examData.reading.questions.length > 0 && (
                     <div>
+                      {/* Debug information banner */}
+                      <div className="alert alert-warning mb-3">
+                        <i className="fas fa-info-circle me-2"></i>
+                        <strong>Debug Info:</strong> Displaying {examData.reading.questions.length} reading section(s). 
+                        If sections appear out of order, please check the console logs for data structure details.
+                      </div>
                       {examData.reading.questions.map((exam, index) => (
-                        <div key={index} className="mb-4">
+                        <div key={exam.id || index} className="mb-4">
                           <div className="alert alert-primary">
                             <h5 className="mb-0">
                               <i className="fas fa-book me-2"></i>
                               {exam.name || `Reading Section ${index + 1}`}
+                              <small className="text-muted ms-2">
+                                (ID: {exam.id}, Section #{exam.section_number || index + 1})
+                              </small>
                             </h5>
                           </div>
                           
@@ -1540,12 +1606,21 @@ const FullLengthTestAnswer = () => {
 
                   {selectedSectionExam === 'listening' && examData.listening.questions && examData.listening.questions.length > 0 && (
                     <div>
+                      {/* Debug information banner */}
+                      <div className="alert alert-warning mb-3">
+                        <i className="fas fa-info-circle me-2"></i>
+                        <strong>Debug Info:</strong> Displaying {examData.listening.questions.length} listening section(s). 
+                        If sections appear out of order, please check the console logs for data structure details.
+                      </div>
                       {examData.listening.questions.map((exam, index) => (
-                        <div key={index} className="mb-4">
+                        <div key={exam.id || index} className="mb-4">
                           <div className="alert alert-success">
                             <h5 className="mb-0">
                               <i className="fas fa-headphones me-2"></i>
                               {exam.name || `Listening Section ${index + 1}`}
+                              <small className="text-muted ms-2">
+                                (ID: {exam.id}, Section #{exam.section_number || index + 1})
+                              </small>
                             </h5>
                           </div>
                           
@@ -1635,11 +1710,14 @@ const FullLengthTestAnswer = () => {
                   {selectedSectionExam === 'writing' && examData.writing.questions && examData.writing.questions.length > 0 && (
                     <div>
                       {examData.writing.questions.map((task, index) => (
-                        <div key={index} className="mb-4">
+                        <div key={task.id || index} className="mb-4">
                           <div className="alert alert-warning">
                             <h5 className="mb-0">
                               <i className="fas fa-edit me-2"></i>
                               {task.name || `Writing Task ${index + 1}`}
+                              <small className="text-muted ms-2">
+                                (ID: {task.id}, Task #{index + 1})
+                              </small>
                             </h5>
                           </div>
                           
@@ -1707,11 +1785,14 @@ const FullLengthTestAnswer = () => {
                   {selectedSectionExam === 'speaking' && examData.speaking.questions && examData.speaking.questions.length > 0 && (
                     <div>
                       {examData.speaking.questions.map((part, index) => (
-                        <div key={index} className="mb-4">
+                        <div key={part.id || index} className="mb-4">
                           <div className="alert alert-danger text-white">
                             <h5 className="mb-0">
                               <i className="fas fa-microphone me-2"></i>
                               {part.name || `Speaking Part ${index + 1}`}
+                              <small className="text-muted ms-2">
+                                (ID: {part.id}, Part #{index + 1})
+                              </small>
                             </h5>
                           </div>
                           

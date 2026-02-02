@@ -241,8 +241,60 @@ const PT = ({ category, type, activeTab }) => {
 
   const handleRowSelection = (type) => (event) => {
     const selectedNodes = event.api?.getSelectedNodes() || [];
-    const selectedIds = selectedNodes.map((node) => node?.data?.id);
-    const total = selectedNodes.reduce((total, node) => {
+    
+    // Sort selected nodes by exam_name before extracting IDs
+    const sortedNodes = [...selectedNodes].sort((a, b) => {
+      const nameA = a?.data?.exam_name || a?.data?.name || "";
+      const nameB = b?.data?.exam_name || b?.data?.name || "";
+      
+      // Extract sort key from exam names (e.g., "2.1", "2.2", "2.3")
+      const extractSortKey = (name) => {
+        if (!name) return 0;
+        
+        // Extract the last part of the name for sorting
+        const parts = name.trim().split(" ");
+        const lastPart = parts[parts.length - 1];
+        
+        // Try to match decimal pattern (e.g., "2.1", "10.3")
+        const decimalMatch = lastPart.match(/^(\d+)\.(\d+)$/);
+        if (decimalMatch) {
+          const major = parseInt(decimalMatch[1]);
+          const minor = parseInt(decimalMatch[2]);
+          return major * 1000 + minor;
+        }
+        
+        // Try to match simple number pattern (e.g., "1", "2", "10")
+        const numberMatch = lastPart.match(/^(\d+)$/);
+        if (numberMatch) {
+          return parseInt(numberMatch[1]) * 1000;
+        }
+        
+        // Fallback: try to extract any number from the entire name
+        const anyNumberMatch = name.match(/(\d+)/);
+        if (anyNumberMatch) {
+          return parseInt(anyNumberMatch[1]) * 1000;
+        }
+        
+        return 0;
+      };
+      
+      const keyA = extractSortKey(nameA);
+      const keyB = extractSortKey(nameB);
+      
+      console.log(`🔀 Sorting: "${nameA}" (${keyA}) vs "${nameB}" (${keyB})`);
+      return keyA - keyB;
+    });
+    
+    // Extract IDs from sorted nodes
+    const selectedIds = sortedNodes.map((node) => node?.data?.id);
+    
+    console.log('✅ Sections selected in sorted order:', sortedNodes.map((node, idx) => ({
+      index: idx + 1,
+      id: node?.data?.id,
+      name: node?.data?.exam_name || node?.data?.name
+    })));
+    
+    const total = sortedNodes.reduce((total, node) => {
       return (
         total + (node.data.no_of_questions || node.data.questions?.length || 0)
       );

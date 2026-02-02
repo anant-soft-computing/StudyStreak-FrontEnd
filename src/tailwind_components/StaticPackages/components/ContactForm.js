@@ -123,16 +123,16 @@ const ContactForm = ({ isOpen, onClose }) => {
     });
 
     try {
-      const response = await fetch(
+      await fetch(
         "https://script.google.com/macros/s/AKfycbzSSFrnz1fpuggr3_C5_lllZgB44TcmfcK6fJAo6J_zjMA-aZAMFQU8myv2dso8kNHy/exec",
         {
           method: "POST",
+          mode: 'no-cors',
           body: formPayload,
         }
       );
 
-      if (!response.ok) throw new Error("Network response was not ok");
-
+      // With no-cors mode, we can't check response status, so we assume success
       setFormData(initialFormData);
       onClose();
       // Set flag to indicate valid form submission

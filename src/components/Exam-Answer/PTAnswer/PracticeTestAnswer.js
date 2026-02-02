@@ -28,6 +28,9 @@ const PracticeTestAnswer = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [examPaperData, setExamPaperData] = useState(null);
   const [writingAnswers, setWritingAnswers] = useState([]);
+  const [currentBlockInfo, setCurrentBlockInfo] = useState(null); // Store current block info for modal
+  const [examStructure, setExamStructure] = useState(null); // Store full exam structure
+  const [blockToSectionMap, setBlockToSectionMap] = useState({}); // Map block IDs to section data
 
   // Store answers by block
   const [blocksData, setBlocksData] = useState([]);
@@ -50,6 +53,30 @@ const PracticeTestAnswer = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setCurrentBlockInfo(null); // Clear block info when closing
+  };
+
+  // Helper function to process question HTML for the specific block
+  const processQuestionsForBlock = (questionHTML, blockInfo) => {
+    if (!questionHTML || !blockInfo) return questionHTML;
+    
+    try {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = questionHTML;
+      
+      // Log the original HTML structure
+      console.log('📝 Processing questions for block:', {
+        blockName: blockInfo.blockName,
+        questionRange: `${blockInfo.studentAnswers?.[0]?.question_number || 1} - ${blockInfo.studentAnswers?.[blockInfo.studentAnswers?.length - 1]?.question_number || blockInfo.stats?.total}`,
+        htmlLength: questionHTML.length
+      });
+      
+      // Return the original HTML for now - the backend should ideally return only the relevant questions
+      return questionHTML;
+    } catch (error) {
+      console.error('Error processing questions:', error);
+      return questionHTML;
+    }
   };
 
   // Enhanced handler functions
@@ -215,6 +242,78 @@ const PracticeTestAnswer = () => {
         setLoading(true);
         setError(null);
         
+        // First, fetch the full practice test structure to get the correct section order
+        const structureResponse = await ajaxCall(
+          `/ct/ielts/practice-test/${examId}/`,
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${
+                JSON.parse(localStorage.getItem("loginInfo"))?.accessToken
+              }`,
+            },
+            method: "GET",
+          },
+          8000
+        );
+
+        let sectionOrder = [];
+        if (structureResponse.status === 200) {
+          const structureData = structureResponse.data;
+          setExamStructure(structureData);
+          
+          // Get the sections in the correct order from the structure
+          const sections = structureData?.IELTS?.[examType] || [];
+          
+          // Sort sections by exam_name to maintain proper order
+          sectionOrder = [...sections].sort((a, b) => {
+            const extractSortKey = (name) => {
+              if (!name) return 0;
+              
+              // Extract the last part of the name for sorting (e.g., "2.1", "2.2", "2.3")
+              const parts = name.trim().split(" ");
+              const lastPart = parts[parts.length - 1];
+              
+              // Try to match decimal pattern (e.g., "2.1", "10.3")
+              const decimalMatch = lastPart.match(/^(\d+)\.(\d+)$/);
+              if (decimalMatch) {
+                const major = parseInt(decimalMatch[1]);
+                const minor = parseInt(decimalMatch[2]);
+                return major * 1000 + minor;
+              }
+              
+              // Try to match simple number pattern (e.g., "1", "2", "10")
+              const numberMatch = lastPart.match(/^(\d+)$/);
+              if (numberMatch) {
+                return parseInt(numberMatch[1]) * 1000;
+              }
+              
+              // Fallback: try to extract any number from the entire name
+              const anyNumberMatch = name.match(/(\d+)/);
+              if (anyNumberMatch) {
+                return parseInt(anyNumberMatch[1]) * 1000;
+              }
+              
+              return 0;
+            };
+            
+            const keyA = extractSortKey(a.exam_name);
+            const keyB = extractSortKey(b.exam_name);
+            
+            console.log(`Comparing: "${a.exam_name}" (${keyA}) vs "${b.exam_name}" (${keyB})`);
+            return keyA - keyB;
+          });
+          
+          console.log('📋 Section order from structure (after sorting):', sectionOrder.map((s, idx) => ({
+            index: idx,
+            id: s.id,
+            name: s.exam_name,
+            blockId: s.id
+          })));
+        }
+        
+        // Now fetch the answers
         const response = await ajaxCall(
           `/practice-answers/${examId}/`,
           {
@@ -236,10 +335,72 @@ const PracticeTestAnswer = () => {
 
           if (examType === "Writing") {
             const studentAnswers = data?.student_answers?.Writing || [];
-            const totalBand = studentAnswers.reduce((sum, item) => {
-              return sum + (item.band !== null ? parseFloat(item.band) : 0);
+            
+            // Helper function to extract band score from AI assessment if not in band field
+            const extractBandFromAssessment = (aiAssessment) => {
+              if (!aiAssessment) return null;
+              
+              // Try to find #Band: X.X pattern
+              const bandMatch = aiAssessment.match(/#Band:\s*([\d.]+)/i);
+              if (bandMatch) {
+                return parseFloat(bandMatch[1]);
+              }
+              
+              // Try to find overall band in different formats
+              const overallMatch = aiAssessment.match(/overall.*?band.*?:?\s*([\d.]+)/i);
+              if (overallMatch) {
+                return parseFloat(overallMatch[1]);
+              }
+              
+              return null;
+            };
+            
+            // Process each answer and extract band scores
+            const bandsWithSources = studentAnswers.map((item, index) => {
+              let bandScore = null;
+              let source = 'none';
+              
+              // First try the band field
+              if (item.band !== null && item.band !== undefined && item.band !== '') {
+                bandScore = parseFloat(item.band);
+                source = 'band_field';
+              } 
+              // If no band field, try to extract from AI assessment
+              else if (item.ai_assessment) {
+                bandScore = extractBandFromAssessment(item.ai_assessment);
+                source = 'ai_assessment';
+              }
+              
+              return {
+                index: index + 1,
+                bandScore,
+                source,
+                hasBand: bandScore !== null && !isNaN(bandScore)
+              };
+            });
+            
+            // Filter only items with valid band scores
+            const validBands = bandsWithSources.filter(item => item.hasBand);
+            
+            const totalBand = validBands.reduce((sum, item) => {
+              return sum + item.bandScore;
             }, 0);
-            setBand(totalBand / studentAnswers.length || 0);
+            
+            const avgBand = validBands.length > 0 ? totalBand / validBands.length : 0;
+            
+            // Round to nearest 0.5 for IELTS band score
+            const roundedBand = Math.round(avgBand * 2) / 2;
+            
+            console.log('Writing Band Calculation:', {
+              totalAnswers: studentAnswers.length,
+              bandsWithSources,
+              validBands,
+              totalBand,
+              avgBand,
+              roundedBand
+            });
+            
+            setBand(roundedBand);
             setWritingAnswers(studentAnswers);
             return;
           }
@@ -253,8 +414,21 @@ const PracticeTestAnswer = () => {
           let totalIncorrect = 0;
           let totalSkipped = 0;
 
-          // Match student answers with correct answers by block_id
-          correctAnswersByType.forEach((correctBlock, index) => {
+          // Create a map of block_id to correct answers for easy lookup
+          const correctAnswersMap = {};
+          correctAnswersByType.forEach(correctBlock => {
+            correctAnswersMap[correctBlock.block_id] = correctBlock;
+          });
+
+          // Process blocks in the order they appear in sectionOrder
+          const blocksToProcess = sectionOrder.length > 0 
+            ? sectionOrder.map(section => ({
+                ...correctAnswersMap[section.id],
+                sectionName: section.exam_name
+              })).filter(b => b && b.block_id)
+            : correctAnswersByType;
+
+          blocksToProcess.forEach((correctBlock, index) => {
             const studentBlock = studentAnswersByType.find(
               (block) => block.block_id === correctBlock.block_id
             ) || { answers: [] };
@@ -298,9 +472,18 @@ const PracticeTestAnswer = () => {
             totalIncorrect += incorrect;
             totalSkipped += skipped;
 
+            const blockName = correctBlock.sectionName || `Section ${index + 1}`;
+            console.log(`📦 Creating block ${index + 1}:`, {
+              blockId: correctBlock.block_id,
+              blockName: blockName,
+              sectionName: correctBlock.sectionName,
+              correct,
+              total: correctAnswers.length
+            });
+
             blocks.push({
               blockId: correctBlock.block_id,
-              blockName: `Section ${index + 1}`,
+              blockName: blockName,
               correctAnswers,
               studentAnswers,
               stats: {
@@ -316,6 +499,19 @@ const PracticeTestAnswer = () => {
           });
 
           setBlocksData(blocks);
+          console.log('📚 Blocks data loaded in correct order:', blocks.map(b => ({
+            blockId: b.blockId,
+            blockName: b.blockName,
+            totalQuestions: b.stats.total
+          })));
+          
+          // Create block to section map for later use
+          const blockMap = {};
+          sectionOrder.forEach((section, index) => {
+            blockMap[section.id] = section;
+          });
+          setBlockToSectionMap(blockMap);
+          
           setOverallStats({
             skipCount: totalSkipped,
             correctCount: totalCorrect,
@@ -346,8 +542,36 @@ const PracticeTestAnswer = () => {
     fetchData();
   }, [examType, examId, retryCount]);
 
+
+
   const fetchExamPaper = async (blockId) => {
     try {
+      console.log('📂 Fetching exam paper for block:', blockId);
+      
+      // Check if we have the section mapped
+      const mappedSection = blockToSectionMap[blockId];
+      if (mappedSection) {
+        console.log('✅ Using mapped section data:', {
+          blockId,
+          sectionId: mappedSection.id,
+          sectionName: mappedSection.exam_name,
+          hasPassage: !!mappedSection.passage,
+          hasQuestion: !!mappedSection.question_other,
+        });
+        
+        // Use the mapped section data directly
+        setExamPaperData({
+          passage: mappedSection.passage,
+          question_other: mappedSection.question_other,
+          passageImage: mappedSection.passage_image,
+          audio: mappedSection.audio_file,
+          exam_name: mappedSection.exam_name,
+          id: mappedSection.id
+        });
+        return;
+      }
+      
+      // Fallback to API call if no mapping exists
       const response = await ajaxCall(
         `/exam/block/${blockId}/`,
         {
@@ -363,14 +587,32 @@ const PracticeTestAnswer = () => {
         8000
       );
       if (response.status === 200) {
+        console.log('✅ Exam paper data received from API:', {
+          blockId,
+          hasPassage: !!response.data?.passage,
+          hasQuestion: !!response.data?.question_other,
+          hasAudio: !!response.data?.audio,
+          passageLength: response.data?.passage?.length || 0,
+          questionLength: response.data?.question_other?.length || 0,
+          dataKeys: Object.keys(response.data || {})
+        });
+        console.log('📄 Full exam paper data:', response.data);
         setExamPaperData(response.data);
       }
     } catch (error) {
-      console.log("error", error);
+      console.error("❌ Error fetching exam paper:", error);
     }
   };
 
   const handleBlockSelect = async (blockId) => {
+    const selectedBlock = blocksData.find(b => b.blockId === blockId);
+    console.log('🎯 Selected block for viewing:', {
+      blockId,
+      blockName: selectedBlock?.blockName,
+      questionRange: `Q${selectedBlock?.studentAnswers?.[0]?.question_number || 1} - Q${selectedBlock?.studentAnswers?.[selectedBlock?.studentAnswers?.length - 1]?.question_number || selectedBlock?.stats?.total || '?'}`,
+      expectedBlock: selectedBlock
+    });
+    setCurrentBlockInfo(selectedBlock); // Store for use in modal
     await fetchExamPaper(blockId);
     handleViewExam();
   };
@@ -454,7 +696,7 @@ const PracticeTestAnswer = () => {
                     </div>
                   {examType === "Writing" ? (
                     <>
-                      <h4 className="sidebar__title">Band: {band}</h4>
+                      <h4 className="sidebar__title">Overall Band Score: {band.toFixed(1)}</h4>
                       <WritingAnswerTable data={writingAnswers} />
                     </>
                   ) : (
@@ -490,10 +732,7 @@ const PracticeTestAnswer = () => {
                                   <button
                                     className="take-test"
                                     onClick={() =>
-                                      handleBlockSelect(
-                                        blocksData[activeTab.split("-")[1]]
-                                          ?.blockId
-                                      )
+                                      handleBlockSelect(block.blockId)
                                     }
                                   >
                                     View Exam
@@ -627,7 +866,7 @@ const PracticeTestAnswer = () => {
         onClose={handleCloseModal}
         size="xl"
         centered
-        title="Exam Review"
+        title={currentBlockInfo?.blockName || examPaperData?.exam_name || "Exam Review"}
         footer={
           <button className="btn btn-secondary" onClick={handleCloseModal}>
             Close
@@ -635,6 +874,34 @@ const PracticeTestAnswer = () => {
         }
       >
         <div className="container-fluid">
+          {/* Block Information Banner */}
+          {(currentBlockInfo || examPaperData) && (
+            <div className="alert alert-info mb-3">
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <i className="fas fa-info-circle me-2"></i>
+                  <strong>{currentBlockInfo?.blockName || examPaperData?.exam_name}</strong>
+                  {currentBlockInfo && (
+                    <span className="ms-2">
+                      - Questions {currentBlockInfo.studentAnswers?.[0]?.question_number || 1} to {currentBlockInfo.studentAnswers?.[currentBlockInfo.studentAnswers?.length - 1]?.question_number || currentBlockInfo.stats?.total}
+                    </span>
+                  )}
+                </div>
+                <div>
+                  {currentBlockInfo && (
+                    <span className="badge bg-primary">
+                      {currentBlockInfo.stats?.total} Questions
+                    </span>
+                  )}
+                  {(examPaperData?.id || currentBlockInfo?.blockId) && (
+                    <span className="badge bg-success ms-2">
+                      Section ID: {currentBlockInfo?.blockId || examPaperData?.id}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
           {examType === "Reading" ? (
             <div className="row">
               <div
@@ -685,17 +952,25 @@ const PracticeTestAnswer = () => {
                 }}
               >
                 {examPaperData?.question_other && (
-                  <div
-                    style={{
-                      backgroundColor: "white",
-                      padding: "15px",
-                      borderRadius: "5px",
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: examPaperData?.question_other,
-                    }}
-                  />
+                  <div>
+                    {currentBlockInfo?.blockName && (
+                      <div className="alert alert-success mb-3">
+                        <i className="fas fa-check-circle me-2"></i>
+                        <strong>Displaying:</strong> {currentBlockInfo.blockName} - This section contains only the questions for this specific part.
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        backgroundColor: "white",
+                        padding: "15px",
+                        borderRadius: "5px",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: processQuestionsForBlock(examPaperData?.question_other, currentBlockInfo),
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -725,17 +1000,25 @@ const PracticeTestAnswer = () => {
                 }}
               >
                 {examPaperData?.question_other && (
-                  <div
-                    style={{
-                      backgroundColor: "white",
-                      padding: "15px",
-                      borderRadius: "5px",
-                      boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: examPaperData?.question_other,
-                    }}
-                  />
+                  <div>
+                    {examPaperData?.exam_name && (
+                      <div className="alert alert-success mb-3">
+                        <i className="fas fa-check-circle me-2"></i>
+                        <strong>Displaying:</strong> {examPaperData.exam_name} - This section contains only the questions for this specific part.
+                      </div>
+                    )}
+                    <div
+                      style={{
+                        backgroundColor: "white",
+                        padding: "15px",
+                        borderRadius: "5px",
+                        boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: processQuestionsForBlock(examPaperData?.question_other, currentBlockInfo),
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             </div>

@@ -15,6 +15,7 @@ const PTEWritingAnswer = () => {
   });
   const [blockData, setBlockData] = useState({
     exam_name: "",
+    passage: "",
   });
   const [assessment, setAssessment] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,6 +87,7 @@ const PTEWritingAnswer = () => {
         if (response.status === 200) {
           setBlockData({
             exam_name: response?.data?.exam_name,
+            passage: response?.data?.passage || response?.data?.question || "",
           });
         } else {
           console.log("error");
@@ -249,13 +251,30 @@ const PTEWritingAnswer = () => {
           onClose={() => setIsModalOpen(false)}
         >
           <div>
+            {blockData?.passage && (
+              <div className="mb-4">
+                <h5>Question/Passage:</h5>
+                <div 
+                  className="border p-3 bg-light"
+                  dangerouslySetInnerHTML={{ __html: blockData.passage }}
+                />
+              </div>
+            )}
             <div className="mb-2">
-              <h5>Grammar, Style and Spell Check:</h5>
+              <h5>Your Answer:</h5>
               <div className="border p-2">
                 {selectedAssessment.answers &&
                   selectedAssessment.answers[0]?.answer_text && (
                     <p>{selectedAssessment.answers[0].answer_text}</p>
                   )}
+              </div>
+            </div>
+            <div className="mb-2">
+              <h5>Explanation:</h5>
+              <div className="border p-2 bg-light">
+                {selectedAssessment.ai_assessment && (
+                  <div dangerouslySetInnerHTML={{ __html: selectedAssessment.ai_assessment }} />
+                )}
               </div>
             </div>
             <div>

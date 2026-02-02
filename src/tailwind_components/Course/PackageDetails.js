@@ -178,7 +178,7 @@ const PackageDetails = ({ packages, courseName, courseType }) => {
                 },
               ].map(
                 (feature, i) =>
-                  feature.enabled && (
+                  feature.enabled && feature.count !== null && feature.count > 0 && (
                     <div key={i} className="flex items-start gap-3">
                       <div
                         className={`p-1 rounded-full ${

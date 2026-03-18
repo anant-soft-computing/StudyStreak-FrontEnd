@@ -37,8 +37,9 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
   useEffect(() => {
     if (token && role === "student") {
       const encryptedUserId = encrypt(String(userId), secretKey);
+      const baseUrl = process.env.REACT_APP_API_BASE_URL || "https://studystreak.in/api";
       const eventSource = new EventSource(
-        `https://studystreak.in/api/notification/streaming/${encryptedUserId}`
+        `${baseUrl}/notification/streaming/${encryptedUserId}`
       );
 
       eventSource.onmessage = (event) => {
@@ -58,8 +59,9 @@ const NavBar = ({ showNavBar, handleMouseEnter, handleMouseLeave }) => {
 
   const readNotification = async (notificationIds) => {
     try {
+      const baseUrl = process.env.REACT_APP_API_BASE_URL || "https://studystreak.in/api";
       const response = await fetch(
-        "https://studystreak.in/api/notification/mark-read/",
+        `${baseUrl}/notification/mark-read/`,
         {
           method: "POST",
           headers: {

@@ -255,7 +255,7 @@ const ASQRecorder = ({
         const getChatGPTResponse = async () => {
           try {
             // Import the secure service
-            const { secureOpenAIChatCompletion } = await import('../../../../../../helpers/secureOpenAIService');
+            const { secureOpenAIChatCompletion } = await import('../../../../../../../helpers/secureOpenAIService');
             
             const gptResponse = await secureOpenAIChatCompletion(gptBody);
 

@@ -27,7 +27,8 @@ const ajaxCall = async (
       }
     }
 
-    const response = await fetch(`https://studystreak.in/api${url}`, fetchObj);
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || "https://studystreak.in/api";
+    const response = await fetch(`${baseUrl}${url}`, fetchObj);
     clearTimeout(id);
     const data = await response.json();
 

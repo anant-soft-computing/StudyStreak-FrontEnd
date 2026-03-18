@@ -28,7 +28,8 @@ export const setupOpenAIMonitoring = () => {
           console.error('🚨 UNUSUAL OPENAI USAGE DETECTED!');
           
           // You could send this to your backend for alerts
-          fetch('https://studystreak.in/api/security/alert/', {
+          const baseUrl = process.env.REACT_APP_API_BASE_URL || "https://studystreak.in/api";
+          fetch(`${baseUrl}/security/alert/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

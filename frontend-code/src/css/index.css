@@ -1,0 +1,128 @@
+select {
+  color: #444;
+  background: #fcfcfc;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px;
+  margin: 0;
+}
+
+select > option {
+  font-size: 15px;
+  background: #fcfcfc;
+}
+
+textarea {
+  color: #444;
+  background: #fcfcfc;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px;
+  margin: 0;
+}
+
+input {
+  color: #444;
+  background: #fcfcfc;
+  border: 1px solid #a6a6a6;
+  border-radius: 3px;
+  margin: 0;
+}
+
+.box-left {
+  width: 15rem;
+  height: 100%;
+  float: left;
+  margin: 0;
+  padding: 0.5rem;
+}
+
+.header2Class {
+  background: #01579b36;
+  padding: 9px;
+  box-shadow: 1px 1px 2px 1px #01579b;
+  margin-bottom: 10px;
+}
+
+.header21Class {
+  background: #01579b36;
+  padding: 9px;
+  box-shadow: 1px 1px 2px 1px #01579b;
+  margin-bottom: 10px;
+}
+
+.box-right {
+  position: relative;
+  height: calc(1045px);
+  float: left;
+  margin: 0;
+  margin-bottom: 1em;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.box-left div {
+  display: block;
+  padding: 0.5rem;
+  border-radius: 15px;
+  margin: 0;
+  margin-bottom: 0.2em;
+  text-align: center;
+  line-height: 2.7rem;
+  background: #01579b;
+  border: 0px solid #252525;
+  color: white;
+  cursor: all-scroll;
+  text-align: left;
+}
+
+.box-left div:hover .box-left div:focus {
+  background: #333;
+}
+
+.reset,
+.save {
+  text-align: right;
+  padding: 0.5em 1em;
+  background: #cec3ff !important;
+  border: 1px solid #252525;
+  color: black !important;
+  margin: 0.8em 0.2em;
+  cursor: pointer;
+}
+
+.reset:focus,
+.save:focus {
+  background: #333;
+}
+
+.common-background-color-across-app {
+  background-color: #ebf2f5 !important;
+}
+
+.global-neomorphism-card-styling {
+  border-radius: 10px;
+  background: #ebf2f5 !important;
+  box-shadow: 5px 5px 12px #d8dfe1, -5px -5px 12px #feffff;
+}
+
+.body__wrapper {
+  margin-top: 110px;
+  min-height: calc(100vh - 260px);
+}
+
+@media (min-width: 1365px) and (max-width: 1499px) {
+  .body__wrapper {
+    margin-top: 160px;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1365px) {
+  .body__wrapper {
+    margin-top: 140px;
+  }
+}
+
+@media (min-width: 1px) and (max-width: 992px) {
+  .body__wrapper {
+    margin-top: 0px;
+  }
+}

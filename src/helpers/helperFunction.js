@@ -88,8 +88,9 @@ const getAndSetRefreshToken = async () => {
 
   if (refreshToken) {
     try {
+      const baseUrl = process.env.REACT_APP_API_BASE_URL || "https://studystreak.in/api";
       const response = await fetch(
-        "https://studystreak.in/api/token/refresh/",
+        `${baseUrl}/token/refresh/`,
         {
           headers: {
             Accept: "application/json",

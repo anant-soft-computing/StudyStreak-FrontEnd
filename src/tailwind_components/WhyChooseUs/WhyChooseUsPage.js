@@ -90,7 +90,10 @@ const WhyChooseUsPage = () => {
           8000
         );
         if (response?.status === 200) {
-          setTestimonials(response?.data);
+          const arr = Array.isArray(response.data)
+            ? response.data
+            : response.data?.results || [];
+          setTestimonials(arr);
         } else {
           console.log("error");
         }

@@ -113,7 +113,10 @@ const CourseDetailPage = () => {
           8000
         );
         if (response.status === 200) {
-          setCoursePackages(response.data);
+          const arr = Array.isArray(response.data)
+            ? response.data
+            : response.data?.results || [];
+          setCoursePackages(arr);
         } else {
           console.log("error");
         }

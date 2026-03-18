@@ -31,7 +31,10 @@ const BatchSelection = ({
         8000
       );
       if (response.status === 200) {
-        setBatches(response.data);
+        const arr = Array.isArray(response.data)
+          ? response.data
+          : response.data?.results || [];
+        setBatches(arr);
       } else {
         console.log("error");
       }

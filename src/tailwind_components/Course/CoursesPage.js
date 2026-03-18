@@ -100,7 +100,10 @@ const CoursesPage = () => {
         );
 
         if (response?.status === 200) {
-          setCategory([{ id: 0, name: "All" }, ...response.data]);
+          const arr = Array.isArray(response.data)
+            ? response.data
+            : response.data?.results || [];
+          setCategory([{ id: 0, name: "All" }, ...arr]);
         }
       } catch (error) {
         console.log("error", error);

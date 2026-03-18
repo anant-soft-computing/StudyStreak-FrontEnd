@@ -52,7 +52,10 @@ const BlogsPage = () => {
         );
 
         if (response?.status === 200) {
-          setCategory([{ id: 0, name: "All" }, ...response.data]);
+          const arr = Array.isArray(response.data)
+            ? response.data
+            : response.data?.results || [];
+          setCategory([{ id: 0, name: "All" }, ...arr]);
         }
       } catch (error) {
         console.log("error", error);
@@ -77,8 +80,11 @@ const BlogsPage = () => {
         );
 
         if (response.status === 200) {
-          setBlogs(response.data);
-          setFilteredBlogs(response.data);
+          const arr = Array.isArray(response.data)
+            ? response.data
+            : response.data?.results || [];
+          setBlogs(arr);
+          setFilteredBlogs(arr);
         }
       } catch (error) {
         console.log("error", error);

@@ -28,7 +28,10 @@ const Banner = () => {
           8000
         );
         if (response?.status === 200) {
-          setCategory(response.data);
+          const arr = Array.isArray(response.data)
+            ? response.data
+            : response.data?.results || [];
+          setCategory(arr);
         }
       } catch (error) {
         console.log("error", error);

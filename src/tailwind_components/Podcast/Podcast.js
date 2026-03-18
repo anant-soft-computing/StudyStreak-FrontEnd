@@ -221,9 +221,12 @@ const Podcast = () => {
           8000
         );
         if (response?.status === 200) {
-          setAllEpisodes(response.data);
-          if (response?.data?.length > 0) {
-            setCurrentEpisode(response?.data[0]);
+          const arr = Array.isArray(response.data)
+            ? response.data
+            : response.data?.results || [];
+          setAllEpisodes(arr);
+          if (arr.length > 0) {
+            setCurrentEpisode(arr[0]);
           }
         }
       } catch (error) {

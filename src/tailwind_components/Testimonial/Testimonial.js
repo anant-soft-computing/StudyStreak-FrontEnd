@@ -22,7 +22,15 @@ const Testimonial = () => {
           8000
         );
         if (response?.status === 200) {
-          setTestimonials(response?.data);
+          const data = response?.data;
+          // Django may return paginated { results: [...] } or a plain array
+          if (Array.isArray(data)) {
+            setTestimonials(data);
+          } else if (Array.isArray(data?.results)) {
+            setTestimonials(data.results);
+          } else {
+            setTestimonials([]);
+          }
         } else {
           console.log("error");
         }

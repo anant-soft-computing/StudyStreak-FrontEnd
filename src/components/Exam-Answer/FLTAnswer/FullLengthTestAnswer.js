@@ -222,12 +222,12 @@ const FullLengthTestAnswer = () => {
           userAnswer: "Written Response Submitted",
           correctAnswer: "AI Assessment Provided",
           isCorrect: true,
-          explanation: writing.ai_assessment?.feedback || "No assessment available",
+          explanation: (typeof writing.ai_assessment === 'string' ? writing.ai_assessment : writing.ai_assessment?.feedback) || "No assessment available",
           questionId: `writing-${index}`,
           hasMultipleCorrectAnswers: false,
           answerType: "ASSESSMENT",
           examType: "Writing",
-          band: writing.ai_assessment?.overall_band || examData.writing.stats.band
+          band: writing.band || extractBandFromAssessment(writing.ai_assessment) || examData.writing.stats.band
         });
       });
     }
@@ -242,12 +242,12 @@ const FullLengthTestAnswer = () => {
           userAnswer: "Audio Response Submitted",
           correctAnswer: "AI Assessment Provided",
           isCorrect: true,
-          explanation: speaking.ai_assessment?.feedback || "No assessment available",
+          explanation: (typeof speaking.ai_assessment === 'string' ? speaking.ai_assessment : speaking.ai_assessment?.feedback) || "No assessment available",
           questionId: `speaking-${index}`,
           hasMultipleCorrectAnswers: false,
           answerType: "ASSESSMENT",
           examType: "Speaking",
-          band: speaking.ai_assessment?.overall_band || examData.speaking.stats.band
+          band: speaking.band || extractBandFromAssessment(speaking.ai_assessment) || examData.speaking.stats.band
         });
       });
     }
@@ -338,12 +338,104 @@ const FullLengthTestAnswer = () => {
     return { correct, incorrect, skipped, percentage, total, isAttempted };
   };
 
+  // Extract band score from ai_assessment text string (e.g. "#Band: 6.5" or "Overall Band: 6.5")
+  const extractBandFromAssessment = (aiAssessment) => {
+    if (!aiAssessment || typeof aiAssessment !== 'string') return null;
+    const bandMatch = aiAssessment.match(/#Band:\s*([\d.]+)/i);
+    if (bandMatch) return parseFloat(bandMatch[1]);
+    const overallMatch = aiAssessment.match(/overall.*?band.*?:?\s*([\d.]+)/i);
+    if (overallMatch) return parseFloat(overallMatch[1]);
+    return null;
+  };
+
+  // Parse per-criterion band scores from writing AI assessment text
+  const parseWritingCriteria = (assessment) => {
+    if (!assessment || typeof assessment !== 'string') return {};
+    const criteria = {};
+    const plain = assessment.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+
+    // Find the nearest band value within a segment (supports "#Band: X" and "Band: X")
+    const segBand = (seg) => {
+      const m = seg.match(/#?\bBand:\s*([\d.]+)/i);
+      return m ? parseFloat(m[1]) : null;
+    };
+
+    // Split on criterion headers — with OR without leading # 
+    const headerRe = /#?(Task\s+(?:Achievement|Response)|Coherence(?:\s+and\s+Cohesion)?|Lexical\s+Resource|Grammatical(?:\s+Range(?:\s+and\s+Accuracy)?)?)/gi;
+    const parts = plain.split(headerRe);
+    for (let i = 1; i < parts.length - 1; i += 2) {
+      const header = parts[i].toLowerCase();
+      const body   = parts[i + 1] || '';
+      const score  = segBand(body);
+      if (score === null) continue;
+      if (/task/.test(header))           criteria.taskResponse = score;
+      else if (/coherence/.test(header)) criteria.coherence    = score;
+      else if (/lexical/.test(header))   criteria.lexical      = score;
+      else if (/gramm/.test(header))     criteria.grammar      = score;
+    }
+
+    // Fallback: look for "Criterion Name: X" or "Criterion Name ... Band X" anywhere
+    const findScore = (re) => { const m = plain.match(re); return m ? parseFloat(m[1]) : null; };
+    if (!criteria.taskResponse) criteria.taskResponse = findScore(/task\s+(?:achievement|response)[^\d]*(\d+(?:\.\d+)?)/i);
+    if (!criteria.coherence)    criteria.coherence    = findScore(/coherence[^\d]*(\d+(?:\.\d+)?)/i);
+    if (!criteria.lexical)      criteria.lexical      = findScore(/lexical\s+resource[^\d]*(\d+(?:\.\d+)?)/i);
+    if (!criteria.grammar)      criteria.grammar      = findScore(/grammatical[^\d]*(\d+(?:\.\d+)?)/i);
+    return criteria;
+  };
+
+  // Parse per-criterion band scores from speaking AI assessment text
+  const parseSpeakingCriteria = (assessment) => {
+    if (!assessment || typeof assessment !== 'string') return {};
+    const criteria = {};
+    const plain = assessment.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+
+    const segBand = (seg) => {
+      const m = seg.match(/#?\bBand:\s*([\d.]+)/i);
+      return m ? parseFloat(m[1]) : null;
+    };
+
+    // Split on criterion headers — with OR without leading #
+    const headerRe = /#?(Fluency(?:\s+and\s+Coherence)?|Lexical\s+Resource|Grammatical(?:\s+Range(?:\s+and\s+Accuracy)?)?|Pronunciation)/gi;
+    const parts = plain.split(headerRe);
+    for (let i = 1; i < parts.length - 1; i += 2) {
+      const header = parts[i].toLowerCase();
+      const body   = parts[i + 1] || '';
+      const score  = segBand(body);
+      if (score === null) continue;
+      if (/fluency/.test(header))        criteria.fluency       = score;
+      else if (/lexical/.test(header))   criteria.lexical       = score;
+      else if (/gramm/.test(header))     criteria.grammar       = score;
+      else if (/pronun/.test(header))    criteria.pronunciation = score;
+    }
+
+    // Fallback: look for "Criterion Name: X" or "Criterion Name ... Band X" anywhere
+    const findScore = (re) => { const m = plain.match(re); return m ? parseFloat(m[1]) : null; };
+    if (!criteria.fluency)       criteria.fluency       = findScore(/fluency[^\d]*(\d+(?:\.\d+)?)/i);
+    if (!criteria.lexical)       criteria.lexical       = findScore(/lexical\s+resource[^\d]*(\d+(?:\.\d+)?)/i);
+    if (!criteria.grammar)       criteria.grammar       = findScore(/grammatical[^\d]*(\d+(?:\.\d+)?)/i);
+    if (!criteria.pronunciation) criteria.pronunciation = findScore(/pronunciation[^\d]*(\d+(?:\.\d+)?)/i);
+    return criteria;
+  };
+
+  // Color for a band score circle
+  const getBandColor = (band) => {
+    if (!band) return '#9ca3af';
+    if (band >= 7) return '#16a34a';
+    if (band >= 5) return '#d97706';
+    return '#dc2626';
+  };
+
   // Calculate average band for assessment modules
+  // Falls back to extracting band from ai_assessment text when item.band is null/0
   const calculateAverageBand = (answers) => {
     if (!answers || answers.length === 0) return 0;
     const validBands = answers
-      .map(item => parseFloat(item.band))
-      .filter(band => !isNaN(band) && band > 0);
+      .map(item => {
+        const directBand = parseFloat(item.band);
+        if (!isNaN(directBand) && directBand > 0) return directBand;
+        return extractBandFromAssessment(item.ai_assessment);
+      })
+      .filter(band => band !== null && !isNaN(band) && band > 0);
     
     if (validBands.length === 0) return 0;
     return (validBands.reduce((sum, band) => sum + band, 0) / validBands.length).toFixed(1);
@@ -1131,90 +1223,108 @@ const FullLengthTestAnswer = () => {
                             </div>
                             <div className="card-body">
                               {examData.writing.answers && examData.writing.answers.length > 0 ? (
-                                <div className="accordion" id="writingAccordion">
-                                  {examData.writing.answers.map((task, index) => (
-                                    <div key={index} className="accordion-item mb-3">
-                                      <h2 className="accordion-header">
-                                        <button
-                                          className="accordion-button"
-                                          type="button"
-                                          data-bs-toggle="collapse"
-                                          data-bs-target={`#writingTask${index}`}
-                                        >
-                                          <i className="fas fa-edit me-2"></i>
-                                          Writing Task {index + 1}
-                                        </button>
-                                      </h2>
-                                      <div
-                                        id={`writingTask${index}`}
-                                        className="accordion-collapse collapse show"
-                                      >
-                                        <div className="accordion-body">
-                                          <div className="mb-3">
-                                            <h6><strong>Your Response:</strong></h6>
-                                            <div className="bg-light p-3 rounded">
-                                              <p className="mb-0">{task.answer_text || 'No response provided'}</p>
+                                <div>
+                                  {examData.writing.answers.map((task, index) => {
+                                    const criteria = parseWritingCriteria(task.ai_assessment);
+                                    const criteriaAvg = (() => {
+                                      const scores = Object.values(criteria).filter(v => v > 0);
+                                      return scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : null;
+                                    })();
+                                    const rawBand = parseFloat(task.band);
+                                    const band = (!isNaN(rawBand) && rawBand > 0 ? rawBand : null)
+                                      || extractBandFromAssessment(task.ai_assessment)
+                                      || criteriaAvg;
+                                    const studentText = task.answers?.[0]?.answer_text || task.answer_text;
+                                    return (
+                                      <div key={index} className="card border-0 shadow mb-4" style={{ borderRadius: '12px', overflow: 'hidden' }}>
+                                        {/* Task Header */}
+                                        <div className="d-flex justify-content-between align-items-center px-4 py-3"
+                                          style={{ background: 'linear-gradient(135deg, #f59e0b, #b45309)' }}>
+                                          <div className="d-flex align-items-center gap-3">
+                                            <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '8px', padding: '8px 12px' }}>
+                                              <i className="fas fa-pen text-white fs-5"></i>
+                                            </div>
+                                            <div>
+                                              <h5 className="text-white mb-0 fw-bold">Writing Task {index + 1}</h5>
+                                              <small style={{ color: 'rgba(255,255,255,0.8)' }}>IELTS Writing Assessment</small>
                                             </div>
                                           </div>
-                                          {task.ai_assessment && (
-                                            <div>
-                                              <h6><strong>AI Assessment:</strong></h6>
-                                              <div className="row">
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-warning">
-                                                        {task.ai_assessment.task_response || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Task Response</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-warning">
-                                                        {task.ai_assessment.coherence_cohesion || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Coherence</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-warning">
-                                                        {task.ai_assessment.lexical_resource || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Lexical Resource</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-warning">
-                                                        {task.ai_assessment.grammatical_range || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Grammar</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              {task.ai_assessment.feedback && (
-                                                <div className="mt-3">
-                                                  <h6><strong>Detailed Feedback:</strong></h6>
-                                                  <div className="alert alert-info">
-                                                    {task.ai_assessment.feedback}
-                                                  </div>
-                                                </div>
-                                              )}
+                                          {band && (
+                                            <div className="text-center px-3 py-2" style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '10px' }}>
+                                              <div className="text-white fw-bold" style={{ fontSize: '1.6rem', lineHeight: 1 }}>{band}</div>
+                                              <small style={{ color: 'rgba(255,255,255,0.8)' }}>Band Score</small>
                                             </div>
                                           )}
                                         </div>
+
+                                        <div className="card-body p-4">
+                                          {/* Your Response */}
+                                          <div className="mb-4">
+                                            <div className="d-flex align-items-center mb-2">
+                                              <i className="fas fa-user-edit text-warning me-2"></i>
+                                              <h6 className="fw-bold mb-0">Your Response</h6>
+                                            </div>
+                                            <div style={{ background: '#fffbf0', border: '1px solid #fde68a', borderRadius: '8px', padding: '16px', minHeight: '72px', lineHeight: '1.7', color: '#374151', maxHeight: '220px', overflowY: 'auto' }}>
+                                              {studentText
+                                                ? <p className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>{studentText}</p>
+                                                : <p className="mb-0 text-muted fst-italic">No response provided</p>
+                                              }
+                                            </div>
+                                          </div>
+
+                                          {task.ai_assessment && (
+                                            <>
+                                              <hr style={{ borderColor: '#f3f4f6', margin: '0 0 1.25rem' }} />
+
+                                              {/* Criterion Score Cards */}
+                                              <div className="mb-4">
+                                                <div className="d-flex align-items-center mb-3">
+                                                  <i className="fas fa-chart-bar text-warning me-2"></i>
+                                                  <h6 className="fw-bold mb-0">Assessment Scores</h6>
+                                                </div>
+                                                <div className="row g-3">
+                                                  {[
+                                                    { label: 'Task Response', key: 'taskResponse', icon: 'fa-tasks' },
+                                                    { label: 'Coherence & Cohesion', key: 'coherence', icon: 'fa-link' },
+                                                    { label: 'Lexical Resource', key: 'lexical', icon: 'fa-book' },
+                                                    { label: 'Grammar & Accuracy', key: 'grammar', icon: 'fa-spell-check' },
+                                                  ].map(criterion => {
+                                                    const score = criteria[criterion.key];
+                                                    const color = getBandColor(score);
+                                                    return (
+                                                      <div key={criterion.key} className="col-6 col-md-3">
+                                                        <div className="text-center p-3" style={{ background: '#fafafa', borderRadius: '10px', border: '1px solid #f0f0f0' }}>
+                                                          <div className="mx-auto mb-2 d-flex align-items-center justify-content-center fw-bold"
+                                                            style={{ width: '56px', height: '56px', borderRadius: '50%', background: color, color: '#fff', fontSize: '1.1rem' }}>
+                                                            {score || <i className={`fas ${criterion.icon}`} style={{ fontSize: '1rem' }}></i>}
+                                                          </div>
+                                                          <small className="text-muted fw-semibold d-block" style={{ fontSize: '0.71rem', lineHeight: '1.3' }}>
+                                                            {criterion.label}
+                                                          </small>
+                                                          {score && <small className="text-muted" style={{ fontSize: '0.65rem' }}>Band {score}</small>}
+                                                        </div>
+                                                      </div>
+                                                    );
+                                                  })}
+                                                </div>
+                                              </div>
+
+                                              {/* Detailed Feedback */}
+                                              <div>
+                                                <div className="d-flex align-items-center mb-2">
+                                                  <i className="fas fa-comments text-warning me-2"></i>
+                                                  <h6 className="fw-bold mb-0">Detailed Feedback</h6>
+                                                </div>
+                                                <div className="gptResponse" style={{ background: '#fffbf0', border: '1px solid #fde68a', borderRadius: '8px', padding: '16px' }}>
+                                                  <div dangerouslySetInnerHTML={{ __html: task.ai_assessment }} />
+                                                </div>
+                                              </div>
+                                            </>
+                                          )}
+                                        </div>
                                       </div>
-                                    </div>
-                                  ))}
+                                    );
+                                  })}
                                 </div>
                               ) : (
                                 <div className="text-center py-5">
@@ -1257,90 +1367,116 @@ const FullLengthTestAnswer = () => {
                             </div>
                             <div className="card-body">
                               {examData.speaking.answers && examData.speaking.answers.length > 0 ? (
-                                <div className="accordion" id="speakingAccordion">
-                                  {examData.speaking.answers.map((task, index) => (
-                                    <div key={index} className="accordion-item mb-3">
-                                      <h2 className="accordion-header">
-                                        <button
-                                          className="accordion-button"
-                                          type="button"
-                                          data-bs-toggle="collapse"
-                                          data-bs-target={`#speakingTask${index}`}
-                                        >
-                                          <i className="fas fa-microphone me-2"></i>
-                                          Speaking Task {index + 1}
-                                        </button>
-                                      </h2>
-                                      <div
-                                        id={`speakingTask${index}`}
-                                        className="accordion-collapse collapse show"
-                                      >
-                                        <div className="accordion-body">
-                                          <div className="mb-3">
-                                            <h6><strong>Your Response:</strong></h6>
-                                            <div className="bg-light p-3 rounded">
-                                              <p className="mb-0">{task.answer_text || 'No response provided'}</p>
+                                <div>
+                                  {examData.speaking.answers.map((task, index) => {
+                                    const criteria = parseSpeakingCriteria(task.ai_assessment);
+                                    const criteriaAvg = (() => {
+                                      const scores = Object.values(criteria).filter(v => v > 0);
+                                      return scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : null;
+                                    })();
+                                    const rawBand = parseFloat(task.band);
+                                    const band = (!isNaN(rawBand) && rawBand > 0 ? rawBand : null)
+                                      || extractBandFromAssessment(task.ai_assessment)
+                                      || criteriaAvg;
+                                    return (
+                                      <div key={index} className="card border-0 shadow mb-4" style={{ borderRadius: '12px', overflow: 'hidden' }}>
+                                        {/* Task Header */}
+                                        <div className="d-flex justify-content-between align-items-center px-4 py-3"
+                                          style={{ background: 'linear-gradient(135deg, #ef4444, #991b1b)' }}>
+                                          <div className="d-flex align-items-center gap-3">
+                                            <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '8px', padding: '8px 12px' }}>
+                                              <i className="fas fa-microphone text-white fs-5"></i>
+                                            </div>
+                                            <div>
+                                              <h5 className="text-white mb-0 fw-bold">Speaking Task {index + 1}</h5>
+                                              <small style={{ color: 'rgba(255,255,255,0.8)' }}>IELTS Speaking Assessment</small>
                                             </div>
                                           </div>
-                                          {task.ai_assessment && (
-                                            <div>
-                                              <h6><strong>AI Assessment:</strong></h6>
-                                              <div className="row">
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-danger">
-                                                        {task.ai_assessment.fluency_coherence || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Fluency</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-danger">
-                                                        {task.ai_assessment.lexical_resource || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Lexical Resource</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-danger">
-                                                        {task.ai_assessment.grammatical_range || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Grammar</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                                <div className="col-md-3">
-                                                  <div className="card bg-light">
-                                                    <div className="card-body text-center">
-                                                      <h5 className="card-title text-danger">
-                                                        {task.ai_assessment.pronunciation || 'N/A'}
-                                                      </h5>
-                                                      <p className="card-text small">Pronunciation</p>
-                                                    </div>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                              {task.ai_assessment.feedback && (
-                                                <div className="mt-3">
-                                                  <h6><strong>Detailed Feedback:</strong></h6>
-                                                  <div className="alert alert-info">
-                                                    {task.ai_assessment.feedback}
-                                                  </div>
-                                                </div>
-                                              )}
+                                          {band && (
+                                            <div className="text-center px-3 py-2" style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '10px' }}>
+                                              <div className="text-white fw-bold" style={{ fontSize: '1.6rem', lineHeight: 1 }}>{band}</div>
+                                              <small style={{ color: 'rgba(255,255,255,0.8)' }}>Band Score</small>
                                             </div>
                                           )}
                                         </div>
+
+                                        <div className="card-body p-4">
+                                          {/* Your Response */}
+                                          <div className="mb-4">
+                                            <div className="d-flex align-items-center mb-2">
+                                              <i className="fas fa-headphones text-danger me-2"></i>
+                                              <h6 className="fw-bold mb-0">Your Response</h6>
+                                            </div>
+                                            {task.answer_audio ? (
+                                              <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: '8px', padding: '16px' }}>
+                                                <audio controls className="w-100" style={{ borderRadius: '8px' }}>
+                                                  <source src={task.answer_audio} type="audio/mpeg" />
+                                                  Your browser does not support the audio element.
+                                                </audio>
+                                              </div>
+                                            ) : (
+                                              <div style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: '8px', padding: '16px' }}>
+                                                <p className="mb-0 text-muted fst-italic">
+                                                  <i className="fas fa-info-circle me-1"></i>
+                                                  No audio response recorded
+                                                </p>
+                                              </div>
+                                            )}
+                                          </div>
+
+                                          {task.ai_assessment && (
+                                            <>
+                                              <hr style={{ borderColor: '#f3f4f6', margin: '0 0 1.25rem' }} />
+
+                                              {/* Criterion Score Cards */}
+                                              <div className="mb-4">
+                                                <div className="d-flex align-items-center mb-3">
+                                                  <i className="fas fa-chart-bar text-danger me-2"></i>
+                                                  <h6 className="fw-bold mb-0">Assessment Scores</h6>
+                                                </div>
+                                                <div className="row g-3">
+                                                  {[
+                                                    { label: 'Fluency & Coherence', key: 'fluency', icon: 'fa-water' },
+                                                    { label: 'Lexical Resource', key: 'lexical', icon: 'fa-book' },
+                                                    { label: 'Grammar & Accuracy', key: 'grammar', icon: 'fa-spell-check' },
+                                                    { label: 'Pronunciation', key: 'pronunciation', icon: 'fa-volume-up' },
+                                                  ].map(criterion => {
+                                                    const score = criteria[criterion.key];
+                                                    const color = getBandColor(score);
+                                                    return (
+                                                      <div key={criterion.key} className="col-6 col-md-3">
+                                                        <div className="text-center p-3" style={{ background: '#fafafa', borderRadius: '10px', border: '1px solid #f0f0f0' }}>
+                                                          <div className="mx-auto mb-2 d-flex align-items-center justify-content-center fw-bold"
+                                                            style={{ width: '56px', height: '56px', borderRadius: '50%', background: color, color: '#fff', fontSize: '1.1rem' }}>
+                                                            {score || <i className={`fas ${criterion.icon}`} style={{ fontSize: '1rem' }}></i>}
+                                                          </div>
+                                                          <small className="text-muted fw-semibold d-block" style={{ fontSize: '0.71rem', lineHeight: '1.3' }}>
+                                                            {criterion.label}
+                                                          </small>
+                                                          {score && <small className="text-muted" style={{ fontSize: '0.65rem' }}>Band {score}</small>}
+                                                        </div>
+                                                      </div>
+                                                    );
+                                                  })}
+                                                </div>
+                                              </div>
+
+                                              {/* Detailed Feedback */}
+                                              <div>
+                                                <div className="d-flex align-items-center mb-2">
+                                                  <i className="fas fa-comments text-danger me-2"></i>
+                                                  <h6 className="fw-bold mb-0">Detailed Feedback</h6>
+                                                </div>
+                                                <div className="gptResponse" style={{ background: '#fff5f5', border: '1px solid #fecaca', borderRadius: '8px', padding: '16px' }}>
+                                                  <div dangerouslySetInnerHTML={{ __html: task.ai_assessment }} />
+                                                </div>
+                                              </div>
+                                            </>
+                                          )}
+                                        </div>
                                       </div>
-                                    </div>
-                                  ))}
+                                    );
+                                  })}
                                 </div>
                               ) : (
                                 <div className="text-center py-5">
